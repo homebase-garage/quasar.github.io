@@ -38,8 +38,10 @@ export default tseslint.config(
       ...tseslint.configs.recommended
     ],
 
-    parserOptions: {
-      sourceType: 'module',
-    },
+    languageOptions: {
+      parserOptions: {
+        sourceType: 'module',
+      }
+    }
   }
 )
