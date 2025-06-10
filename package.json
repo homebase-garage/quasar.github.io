@@ -1,7 +1,7 @@
 {
   "name": "quasar-monorepo",
   "private": true,
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "preinstall": "npx only-allow@1.2.1 pnpm",
     "prepare:types": "pnpm --recursive --parallel prepare:types",
