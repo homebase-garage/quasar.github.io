@@ -24,15 +24,9 @@ function logServerMessage (title, msg, additional) {
   info(`${ msg }${ additional !== void 0 ? ` ${ green(dot) } ${ additional }` : '' }`, title)
 }
 
+/** @type {import('@quasar/render-ssr-error').default} */
 let renderSSRError = null
 let vueRenderToString = null
-
-function renderError ({ err, req, res }) {
-  log()
-  warn(req.url, 'Render failed')
-
-  renderSSRError({ err, req, res })
-}
 
 function renderStoreState (ssrContext) {
   const nonce = ssrContext.nonce !== void 0
@@ -45,6 +39,7 @@ function renderStoreState (ssrContext) {
 
 export class QuasarModeDevserver extends AppDevserver {
   #webserver = null
+  /** @type {import('vite').ViteDevServer|null} */
   #viteClient = null
   #viteWatcherList = []
   #webserverWatcher = null
@@ -249,13 +244,15 @@ export class QuasarModeDevserver extends AppDevserver {
 
         let html = renderTemplate(ssrContext)
 
-        html = await viteClient.transformIndexHtml(ssrContext.req.url, html, ssrContext.req.url)
+        const url = ssrContext.url || ssrContext.req.url
+        const originalUrl = ssrContext.originalUrl || ssrContext.req.originalUrl
+        html = await viteClient.transformIndexHtml(url, html, originalUrl)
         html = html.replace(
           entryPointMarkup,
           `<div id="q-app">${ runtimePageContent }</div>`
         )
 
-        logServerMessage('Rendered', ssrContext.req.url, `${ Date.now() - startTime }ms`)
+        logServerMessage('Rendered', url, `${ Date.now() - startTime }ms`)
 
         return html
       }
@@ -283,7 +280,14 @@ export class QuasarModeDevserver extends AppDevserver {
       await this.#webserver.close()
     }
 
-    const { create, listen, close, injectMiddlewares, serveStaticContent } = await import(
+    const {
+      create,
+      injectDevMiddleware = ({ app }) => (middleware) => app.use(middleware),
+      listen,
+      close,
+      injectMiddlewares,
+      serveStaticContent
+    } = await import(
       pathToFileURL(this.#pathMap.serverFile) + '?t=' + Date.now()
     )
     const { publicPath } = this.#appOptions
@@ -310,17 +314,25 @@ export class QuasarModeDevserver extends AppDevserver {
     const serveStatic = await serveStaticContent(middlewareParams)
     middlewareParams.serve = {
       static: serveStatic,
-      error: renderError
+      error: ({ err, req, res }) => {
+        log()
+        warn(req.url, 'Render failed')
+
+        renderSSRError({ err, req, res, projectRootFolder: quasarConf.ctx.appPaths.appDir })
+      }
     }
 
-    // vite devmiddleware modifies req.url to account for publicPath
-    // but we'll break usage in the webserver if we do so
-    app.use((req, res, next) => {
+    /** @type {import('../../../types').SsrInjectDevMiddlewareFn} */
+    const registerDevMiddleware = await injectDevMiddleware(middlewareParams)
+
+    await registerDevMiddleware((req, res, next) => {
       if (this.#viteClient === null) {
         next()
         return
       }
 
+      // Vite dev middleware modifies req.url to account for publicPath
+      // but we'll break usage in the webserver if we do so
       const { url } = req
       this.#viteClient.middlewares.handle(req, res, err => {
         req.url = url
@@ -330,7 +342,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     await injectMiddlewares(middlewareParams)
 
-    publicPath !== '/' && app.use((req, res, next) => {
+    publicPath !== '/' && await registerDevMiddleware((req, res, next) => {
       const pathname = new URL(req.url, `http://${ req.headers.host }`).pathname || '/'
 
       if (pathname.startsWith(publicPath) === true) {
@@ -399,18 +411,20 @@ export class QuasarModeDevserver extends AppDevserver {
    * This allows the user to handle the devHttpsApp manually if they need to.
    * This is useful when they are using an custom SSR webserver such as Fastify and h3
    */
-  async #createLazyDevHttpsServer(httpsOptions, app) {
+  async #createLazyDevHttpsServer (httpsOptions, app) {
     const { createServer } = await import('node:https')
     const createInstance = () => {
       try {
         return createServer(httpsOptions, app)
-      } catch (error) {
+      }
+      catch (error) {
         if (error.code === 'ERR_INVALID_ARG_TYPE') {
           warn(
             'The SSR app instance is not compatible with automatic HTTPS support. '
             + 'Please use `devHttpsOptions` property from callback scope in `create` or `listen` to set up HTTPS manually.'
           )
-        } else {
+        }
+        else {
           warn(
             `An error occurred while setting up HTTPS for the SSR app instance, devHttpsApp won't be available. Error: ${ error.message }`
           )
@@ -429,14 +443,14 @@ export class QuasarModeDevserver extends AppDevserver {
           target.instance = createInstance()
         }
 
-        return target.instance?.[prop]
+        return target.instance?.[ prop ]
       },
       set: (target, prop, value) => {
         if (!target.instance) {
           target.instance = createInstance()
         }
 
-        target.instance[prop] = value
+        target.instance[ prop ] = value
         return true
       }
     })

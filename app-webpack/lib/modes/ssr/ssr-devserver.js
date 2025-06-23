@@ -25,15 +25,9 @@ function logServerMessage (title, msg, additional) {
   info(`${ msg }${ additional !== void 0 ? ` ${ green(dot) } ${ additional }` : '' }`, title)
 }
 
+/** @type {import('@quasar/render-ssr-error').default} */
 let renderSSRError = null
 let vueRenderToString = null
-
-function renderError ({ err, req, res }) {
-  log()
-  warn(req.url, 'Render failed')
-
-  renderSSRError({ err, req, res })
-}
 
 function getClientHMRScriptQuery (devServerCfg) {
   const { overlay } = devServerCfg.client
@@ -292,7 +286,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
 
       return renderer.renderToString(ssrContext)
         .then(html => {
-          logServerMessage('Rendered', ssrContext.req.url, `${ Date.now() - startTime }ms`)
+          logServerMessage('Rendered', ssrContext.url || ssrContext.req.url, `${ Date.now() - startTime }ms`)
           return html
         })
     }
@@ -339,7 +333,15 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
     const done = progress(`${ this.#closeWebserver !== void 0 ? 'Restarting' : 'Starting' } webserver...`)
 
     delete require.cache[ this.#pathMap.serverFile ]
-    const { create, listen, close, injectMiddlewares, serveStaticContent, renderPreloadTag } = require(this.#pathMap.serverFile)
+    const {
+      create,
+      injectDevMiddleware = ({ app }) => (middleware) => app.use(middleware),
+      listen,
+      close,
+      injectMiddlewares,
+      serveStaticContent,
+      renderPreloadTag
+    } = require(this.#pathMap.serverFile)
 
     this.#appOptions.renderer.updateRenderPreloadTag(renderPreloadTag)
 
@@ -373,19 +375,27 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
     const serveStatic = await serveStaticContent(middlewareParams)
     middlewareParams.serve = {
       static: serveStatic,
-      error: renderError
+      error: ({ err, req, res }) => {
+        log()
+        warn(req.url, 'Render failed')
+
+        renderSSRError({ err, req, res, projectRootFolder: quasarConf.ctx.appPaths.appDir })
+      }
     }
 
-    clientHMR === true && app.use(webpackClientHMRMiddleware)
-    app.use(webpackClientMiddleware)
+    /** @type {import('../../../types').SsrInjectDevMiddlewareFn} */
+    const registerDevMiddleware = await injectDevMiddleware(middlewareParams)
+
+    clientHMR === true && await registerDevMiddleware(webpackClientHMRMiddleware)
+    await registerDevMiddleware(webpackClientMiddleware)
 
     if (quasarConf.build.ignorePublicFolder !== true) {
-      serveStatic({ urlPath: '/', pathToServe: '.' })
+      await serveStatic({ urlPath: '/', pathToServe: '.' })
     }
 
     await injectMiddlewares(middlewareParams)
 
-    publicPath !== '/' && app.use((req, res, next) => {
+    publicPath !== '/' && await registerDevMiddleware((req, res, next) => {
       const pathname = new URL(req.url, `http://${ req.headers.host }`).pathname || '/'
 
       if (pathname.startsWith(publicPath) === true) {
@@ -398,7 +408,8 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
         res.end()
         return
       }
-      else if (req.headers.accept && req.headers.accept.includes('text/html')) {
+
+      if (req.headers.accept && req.headers.accept.includes('text/html')) {
         const parsedPath = pathname.slice(1)
         const redirectPaths = [ publicPath + parsedPath ]
         const splitted = parsedPath.split('/')
@@ -447,18 +458,20 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
    * This allows the user to handle the devHttpsApp manually if they need to.
    * This is useful when they are using an custom SSR webserver such as Fastify and h3
    */
-  #createLazyDevHttpsServer(httpsOptions, app) {
+  #createLazyDevHttpsServer (httpsOptions, app) {
     const { createServer } = require('node:https')
     const createInstance = () => {
       try {
         return createServer(httpsOptions, app)
-      } catch (error) {
+      }
+      catch (error) {
         if (error.code === 'ERR_INVALID_ARG_TYPE') {
           warn(
             'The SSR app instance is not compatible with automatic HTTPS support. '
             + 'Please use `devHttpsOptions` property from callback scope in `create` or `listen` to set up HTTPS manually.'
           )
-        } else {
+        }
+        else {
           warn(
             `An error occurred while setting up HTTPS for the SSR app instance, devHttpsApp won't be available. Error: ${ error.message }`
           )
@@ -477,14 +490,14 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
           target.instance = createInstance()
         }
 
-        return target.instance?.[prop]
+        return target.instance?.[ prop ]
       },
       set: (target, prop, value) => {
         if (!target.instance) {
           target.instance = createInstance()
         }
 
-        target.instance[prop] = value
+        target.instance[ prop ] = value
         return true
       }
     })

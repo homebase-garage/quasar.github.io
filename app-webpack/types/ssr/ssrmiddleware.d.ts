@@ -1,19 +1,18 @@
-import { Express, Application, Request, Response } from "express";
-import { Server } from "http";
-import { Server as HttpsServer } from "https";
-import { ServeStaticOptions } from "serve-static";
+import { IncomingMessage, ServerResponse } from "node:http";
+import { Http2ServerRequest, Http2ServerResponse } from "node:http2";
+import { Server as HttpsServer } from "node:https";
 import { ServerConfiguration } from "webpack-dev-server";
+import { SsrDriverTypes } from "./driver";
+import { QSsrContext } from "./context";
 
-interface RenderParams {
-  req: Request;
-  res: Response;
-}
+interface RenderParams
+  extends Pick<QSsrContext, "req" | "res" | "url" | "originalUrl"> {}
 
 interface RenderVueParams extends RenderParams, Record<string, any> {}
 
 interface RenderError extends Error {
-  code: Response["statusCode"];
-  url: Request["url"];
+  code: number;
+  url: string;
 }
 
 interface RenderErrorParams extends RenderParams {
@@ -61,40 +60,48 @@ interface SsrCreateParams {
   folders: SsrMiddlewareFolders;
   /**
    * Uses Vue and Vue Router to render the requested URL path.
+   *
    * @returns the rendered HTML string to return to the client
    */
   render: (ssrContext: RenderVueParams) => Promise<string>;
 }
 
 export type SsrCreateCallback = (
-  params: SsrCreateParams
-) => Express | Application | any | Promise<Express> | Promise<Application> | Promise<any>;
+  params: SsrCreateParams,
+) => SsrDriverTypes["app"] | Promise<SsrDriverTypes["app"]>;
 
-interface ssrServeStaticContentParams extends SsrCreateParams {
-  app: Express | Application | any;
+interface SsrServeStaticContentParams extends SsrCreateParams {
+  app: SsrDriverTypes["app"];
 }
 
 interface SsrServeStaticFnParams {
   /**
    * The URL path to serve the static content at (without publicPath).
-  * @default '/'
+   *
+   * @default '/'
    */
   urlPath?: string;
+
   /**
    * The sub-path from the publicFolder or an absolute path.
+   *
    * @default '.' (public folder itself)
    */
   pathToServe?: string;
+
   /**
    * Other custom options...
    */
-  opts?: ServeStaticOptions<Response>;
+  // Keep this in sync with ssr-prod-webserver
+  opts?: { maxAge?: number };
 }
 
-type SsrServeStaticFn = (params: SsrServeStaticFnParams) => void | Promise<void>;
+type SsrServeStaticFn = (
+  params: SsrServeStaticFnParams,
+) => void | Promise<void>;
 
 export type SsrServeStaticContentCallback = (
-  params: ssrServeStaticContentParams
+  params: SsrServeStaticContentParams,
 ) => SsrServeStaticFn;
 
 interface SsrMiddlewareServe {
@@ -112,7 +119,7 @@ interface SsrMiddlewareServe {
   error(ssrContext: RenderErrorParams): void;
 }
 
-interface SsrMiddlewareParams extends ssrServeStaticContentParams {
+interface SsrMiddlewareParams extends SsrServeStaticContentParams {
   serve: SsrMiddlewareServe;
   /**
    * If you use HTTPS in development, this will be the
@@ -123,24 +130,26 @@ interface SsrMiddlewareParams extends ssrServeStaticContentParams {
 }
 
 export type SsrMiddlewareCallback = (
-  params: SsrMiddlewareParams
+  params: SsrMiddlewareParams,
 ) => void | Promise<void>;
 
 interface SsrListenHandlerResult {
-  handler: Server | Application | void;
+  handler: SsrDriverTypes["listenResult"] | void;
 }
 
 export type SsrListenCallback = (
-  params: SsrMiddlewareParams
-) => Server | Application | SsrListenHandlerResult | any | Promise<Server> | Promise<Application> | Promise<SsrListenHandlerResult> | Promise<any>;
+  params: SsrMiddlewareParams,
+) =>
+  | SsrDriverTypes["listenResult"]
+  | SsrListenHandlerResult
+  | Promise<SsrDriverTypes["listenResult"]>
+  | Promise<SsrListenHandlerResult>;
 
 interface SsrCloseParams extends SsrMiddlewareParams {
-  listenResult: Server | Application | SsrListenHandlerResult | any;
+  listenResult: SsrDriverTypes["listenResult"];
 }
 
-export type SsrCloseCallback = (
-  params: SsrCloseParams
-) => Server | Application | SsrListenHandlerResult | any | Promise<Server> | Promise<Application> | Promise<SsrListenHandlerResult> | Promise<any>;
+export type SsrCloseCallback = (params: SsrCloseParams) => void;
 
 interface SsrRenderPreloadTagCallbackOptions {
   ssrContext: RenderVueParams;
@@ -148,5 +157,23 @@ interface SsrRenderPreloadTagCallbackOptions {
 
 export type SsrRenderPreloadTagCallback = (
   file: string,
-  options: SsrRenderPreloadTagCallbackOptions
+  options: SsrRenderPreloadTagCallbackOptions,
 ) => string;
+
+/**
+ * The middleware to inject into the SSR webserver.
+ * It is a Node.js middleware function that will be executed
+ * for every request that the SSR webserver receives.
+ */
+type SsrInjectDevMiddlewareParam = (
+  req: IncomingMessage | Http2ServerRequest,
+  res: ServerResponse | Http2ServerResponse,
+  next: (err?: Error) => void,
+) => unknown | Promise<unknown>;
+type SsrInjectDevMiddlewareFn = (
+  middleware: SsrInjectDevMiddlewareParam,
+) => void | Promise<void>;
+
+export type SsrInjectDevMiddlewareCallback = (
+  params: SsrMiddlewareParams,
+) => SsrInjectDevMiddlewareFn | Promise<SsrInjectDevMiddlewareFn>;
