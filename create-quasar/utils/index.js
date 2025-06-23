@@ -13,6 +13,11 @@ import logger from './logger.js'
 
 const TEMPLATING_FILE_EXTENSIONS = [ '', '.json', '.js', '.cjs', '.ts', '.vue', '.md', '.html', '.sass' ]
 
+/**
+ * @param {Record<string, any>} scope
+ * @param {promptUser.PromptObject[]} questions
+ * @param {promptUser.Options} opts
+ */
 async function prompts (scope, questions, opts) {
   const options = opts || {
     onCancel: () => {
