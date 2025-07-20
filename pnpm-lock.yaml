@@ -178,8 +178,8 @@ importers:
         specifier: workspace:^
         version: link:../utils/ssl-certificate
       '@quasar/ssr-helpers':
-        specifier: 3.0.1
-        version: 3.0.1
+        specifier: 3.0.2
+        version: 3.0.2
       '@rollup/pluginutils':
         specifier: ^5.1.0
         version: 5.1.4(rollup@4.42.0)
@@ -2028,8 +2028,8 @@ packages:
     resolution: {integrity: sha512-PYvVXU/TBwF1JU+nEKw8VTsbNi4mdhu7l+l9HIqfY0XZGWbDQLOGjBR8TO6A8dn5SUoilvRh85TG3ZQV01VCBQ==}
     engines: {node: '>= 10.0.0', npm: '>= 5.6.0', yarn: '>= 1.6.0'}
 
-  '@quasar/ssr-helpers@3.0.1':
-    resolution: {integrity: sha512-PcPgWElA+PeBTigWINq9rXm3LmUEROdiANizr6hEzVK1EwYzscmweXf0yCc31pbduEbTtTjl4Sr3VLW4e5l/Cg==}
+  '@quasar/ssr-helpers@3.0.2':
+    resolution: {integrity: sha512-JhHDk86o1ucR6toNkpIaAsgA0KuKKYDrOKJHN0O7IEvI2bQOCnmL9ttgRI/A4EeWOe4davqNFfwcwjuk0Ecv/w==}
     engines: {node: '>= 12.22.1'}
 
   '@rolldown/pluginutils@1.0.0-beta.19':
@@ -9677,9 +9677,10 @@ snapshots:
       - supports-color
       - webpack
 
-  '@quasar/ssr-helpers@3.0.1':
+  '@quasar/ssr-helpers@3.0.2':
     dependencies:
       serialize-javascript: 6.0.2
+      source-map: 0.7.4
 
   '@rolldown/pluginutils@1.0.0-beta.19': {}
 
