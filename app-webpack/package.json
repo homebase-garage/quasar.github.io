@@ -151,7 +151,7 @@
   },
   "devDependencies": {
     "@electron/packager": "^18.3.5",
-    "electron-builder": "^25.0.5",
+    "electron-builder": "^26.0.12",
     "eslint": "catalog:",
     "eslint-config-quasar": "workspace:*",
     "pinia": "^3.0.1",

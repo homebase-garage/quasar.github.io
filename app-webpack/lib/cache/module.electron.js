@@ -9,7 +9,7 @@ const bundlerMap = {
 
   builder: {
     pkg: 'electron-builder',
-    version: '24.3.0'
+    version: '26.0.12'
   }
 }
 

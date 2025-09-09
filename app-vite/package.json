@@ -122,7 +122,7 @@
   },
   "devDependencies": {
     "@electron/packager": "^18.3.5",
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^26.0.12",
     "eslint": "catalog:",
     "eslint-config-quasar": "workspace:*",
     "pinia": "^3.0.1",
