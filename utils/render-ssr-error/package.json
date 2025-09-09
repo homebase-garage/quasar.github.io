@@ -47,7 +47,7 @@
     "postcss": "^8.4.45",
     "prismjs": "^1.29.0",
     "quasar": "workspace:*",
-    "vite": "^6.0.3",
+    "vite": "^7.0.3",
     "vue": "^3.5.5",
     "vue-router": "^4.4.5"
   }
