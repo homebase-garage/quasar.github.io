@@ -399,7 +399,9 @@ module.exports.createWebpackChain = async function createWebpackChain (quasarCon
       if (quasarConf.build.analyze) {
         const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
         chain.plugin('bundle-analyzer')
-          .use(BundleAnalyzerPlugin, [ Object.assign({}, quasarConf.build.analyze) ])
+          .use(BundleAnalyzerPlugin, [
+            Object.assign({ analyzerMode: 'static' }, quasarConf.build.analyze)
+          ])
       }
     }
   }
