@@ -226,7 +226,7 @@ export default function (props, emit, emitValue, inputRef) {
     updateMaskInternalsFlag === true && updateMaskInternals()
 
     const
-      preMasked = maskValue(unmasked),
+      preMasked = maskValue(unmasked, updateMaskInternalsFlag),
       masked = props.fillMask !== false
         ? fillWithMask(preMasked)
         : preMasked,
@@ -481,11 +481,11 @@ export default function (props, emit, emitValue, inputRef) {
     }
   }
 
-  function maskValue (val) {
+  function maskValue (val, updateMaskInternalsFlag) {
     if (val === void 0 || val === null || val === '') { return '' }
 
     if (props.reverseFillMask === true) {
-      return maskValueReverse(val)
+      return maskValueReverse(val, updateMaskInternalsFlag)
     }
 
     const mask = computedMask
@@ -499,6 +499,10 @@ export default function (props, emit, emitValue, inputRef) {
 
       if (typeof maskDef === 'string') {
         output += maskDef
+
+        if (updateMaskInternalsFlag === true && valChar === maskDef) {
+          valIndex++
+        }
       }
       else if (valChar !== void 0 && maskDef.regex.test(valChar)) {
         output += maskDef.transform !== void 0
@@ -514,7 +518,7 @@ export default function (props, emit, emitValue, inputRef) {
     return output
   }
 
-  function maskValueReverse (val) {
+  function maskValueReverse (val, updateMaskInternalsFlag) {
     const
       mask = computedMask,
       firstTokenIndex = maskMarked.indexOf(MARKER)
@@ -528,6 +532,10 @@ export default function (props, emit, emitValue, inputRef) {
 
       if (typeof maskDef === 'string') {
         output = maskDef + output
+
+        if (updateMaskInternalsFlag === true && valChar === maskDef) {
+          valIndex--
+        }
       }
       else if (valChar !== void 0 && maskDef.regex.test(valChar)) {
         do {

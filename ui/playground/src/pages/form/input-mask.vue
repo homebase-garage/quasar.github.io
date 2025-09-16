@@ -3,8 +3,16 @@
     <div style="max-width: 600px" class="q-gutter-y-md">
       <h1>Input Mask</h1>
 
-      <div>Model: {{ text1 }}</div>
-      <q-input mask="date" v-model="text1" filled hint="Date ####/##/##" label="Label" />
+      <div>Model: {{ text1 }} | {{ maskedOrNotValue }}</div>
+      <q-toggle v-model="maskedOrNot" @update:model-value="toggleMask" label="Masked or not" />
+      <q-input :mask="maskedOrNotValue" v-model="text1" filled hint="Date ####/##/##" label="Label" />
+      <q-input
+        filled
+        v-model="id"
+        label="Special ID"
+        mask="#:0:0:##"
+        hint="Mask: #:0:0:##"
+      ></q-input>
 
       <div>Model: {{ text2 }}</div>
       <q-input mask="((###) ### - ####)" v-model="text2" filled hint="Phone ((###) ### - ####)" counter label="Label" />
@@ -108,7 +116,10 @@
 export default {
   data () {
     return {
-      text1: '',
+      maskedOrNot: true,
+      maskedOrNotValue: '##/##/####',
+      text1: '12/12/2023',
+      id: null,
       text2: '',
       text3: '',
       text4: '',
@@ -162,6 +173,12 @@ export default {
       else {
         return '###.#.###'
       }
+    }
+  },
+
+  methods: {
+    toggleMask () {
+      this.maskedOrNotValue = this.maskedOrNotValue ? '' : '##/##/####'
     }
   }
 }
