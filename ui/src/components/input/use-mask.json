@@ -30,7 +30,50 @@
 
     "mask-tokens": {
       "type": "Object",
-      "desc": "Object of custom mask tokens to be added on top of the default ones; Can also override any of the default ones; The 'transform' function is optional",
+      "desc": "Object of custom mask tokens to be added on top of the default ones; Can also override any of the default ones",
+      "definition": {
+        "...tokenCharacter": {
+          "type": "Object",
+          "desc": "The definition for the current custom mask token",
+          "required": true,
+          "definition": {
+            "pattern": {
+              "type": "String",
+              "required": true,
+              "desc": "A string representing a regular expression to match against a single character",
+              "examples": [ "'[0-9]'", "'[a-zA-Z]'" ]
+            },
+            "negate": {
+              "type": "String",
+              "required": true,
+              "desc": "A string representing a regular expression to NOT match against a single character",
+              "examples": [ "'[^0-9]'", "'[^a-zA-Z]'" ]
+            },
+            "transform": {
+              "type": "Function",
+              "required": false,
+              "desc": "A function that takes the character as argument and returns the transformed character",
+              "examples": [ "v => v.toLocaleUpperCase()" ],
+              "params": {
+                "char": {
+                  "type": "String",
+                  "required": true,
+                  "desc": "The character being transformed",
+                  "examples": [ "'a'", "'1'" ]
+                }
+              },
+              "returns": {
+                "type": "String",
+                "desc": "The transformed character"
+              }
+            }
+          },
+          "examples": [
+            "{ pattern: '[0-4a-eA-E]', negate: '[^0-4a-eA-E]', transform: v => v.toLocaleUpperCase() }",
+            "{ pattern: '[5-8]', negate: '[^5-8]' }"
+          ]
+        }
+      },
       "examples": [ "{ C: { pattern: '[0-4a-eA-E]', negate: '[^0-4a-eA-E]', transform: v => v.toLocaleUpperCase() } }" ],
       "category": "mask",
       "addedIn": "v2.18.4"
