@@ -6,26 +6,34 @@
       "examples": [
         "'###-##'", "'date'", "'datetime'", "'time'", "'fulltime'", "'phone'", "'card'"
       ],
-      "category": "behavior"
+      "category": "mask"
     },
 
     "fill-mask": {
       "type": [ "Boolean", "String" ],
       "desc": "Fills string with specified characters (or underscore if value is not string) to fill mask's length",
       "examples": [ "true", "'0'", "'_'" ],
-      "category": "behavior"
+      "category": "mask"
     },
 
     "reverse-fill-mask": {
       "type": "Boolean",
       "desc": "Fills string from the right side of the mask",
-      "category": "behavior"
+      "category": "mask"
     },
 
     "unmasked-value": {
       "type": "Boolean",
       "desc": "Model will be unmasked (won't contain tokens/separation characters)",
-      "category": "behavior"
+      "category": "mask"
+    },
+
+    "mask-tokens": {
+      "type": "Object",
+      "desc": "Object of custom mask tokens to be added on top of the default ones; Can also override any of the default ones; The 'transform' function is optional",
+      "examples": [ "{ C: { pattern: '[0-4a-eA-E]', negate: '[^0-4a-eA-E]', transform: v => v.toLocaleUpperCase() } }" ],
+      "category": "mask",
+      "addedIn": "v2.18.4"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ref, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 
 import { shouldIgnoreKey } from '../../utils/private.keyboard/key-composition.js'
 
@@ -12,7 +12,7 @@ const NAMED_MASKS = {
   card: '#### #### #### ####'
 }
 
-const TOKENS = {
+const { tokenMap: DEFAULT_TOKEN_MAP, tokenKeys: DEFAULT_TOKEN_MAP_KEYS } = getTokenMap({
   '#': { pattern: '[\\d]', negate: '[^\\d]' },
 
   S: { pattern: '[a-zA-Z]', negate: '[^a-zA-Z]' },
@@ -23,28 +23,61 @@ const TOKENS = {
 
   X: { pattern: '[0-9a-zA-Z]', negate: '[^0-9a-zA-Z]', transform: v => v.toLocaleUpperCase() },
   x: { pattern: '[0-9a-zA-Z]', negate: '[^0-9a-zA-Z]', transform: v => v.toLocaleLowerCase() }
-}
-
-const KEYS = Object.keys(TOKENS)
-KEYS.forEach(key => {
-  TOKENS[ key ].regex = new RegExp(TOKENS[ key ].pattern)
 })
 
-const
-  tokenRegexMask = new RegExp('\\\\([^.*+?^${}()|([\\]])|([.*+?^${}()|[\\]])|([' + KEYS.join('') + '])|(.)', 'g'),
-  escRegex = /[.*+?^${}()|[\]\\]/g
+function getTokenMap (tokens) {
+  const tokenKeys = Object.keys(tokens)
+  const tokenMap = {}
 
+  tokenKeys.forEach(key => {
+    const entry = tokens[ key ]
+    tokenMap[ key ] = {
+      ...entry,
+      regex: new RegExp(entry.pattern)
+    }
+  })
+
+  return { tokenMap, tokenKeys }
+}
+
+function getTokenRegexMask (keys) {
+  return new RegExp('\\\\([^.*+?^${}()|([\\]])|([.*+?^${}()|[\\]])|([' + keys.join('') + '])|(.)', 'g')
+}
+
+const escRegex = /[.*+?^${}()|[\]\\]/g
+const DEFAULT_TOKEN_REGEX_MASK = getTokenRegexMask(DEFAULT_TOKEN_MAP_KEYS)
 const MARKER = String.fromCharCode(1)
 
 export const useMaskProps = {
   mask: String,
   reverseFillMask: Boolean,
   fillMask: [ Boolean, String ],
-  unmaskedValue: Boolean
+  unmaskedValue: Boolean,
+  maskTokens: Object
 }
 
 export default function (props, emit, emitValue, inputRef) {
   let maskMarked, maskReplaced, computedMask, computedUnmask, pastedTextStart, selectionAnchor
+
+  const tokens = computed(() => {
+    if (props.maskTokens === void 0 || props.maskTokens === null) {
+      return {
+        tokenMap: DEFAULT_TOKEN_MAP,
+        tokenRegexMask: DEFAULT_TOKEN_REGEX_MASK
+      }
+    }
+
+    const { tokenMap: customTokens } = getTokenMap(props.maskTokens)
+    const tokenMap = {
+      ...DEFAULT_TOKEN_MAP,
+      ...customTokens
+    }
+
+    return {
+      tokenMap,
+      tokenRegexMask: getTokenRegexMask(Object.keys(tokenMap))
+    }
+  })
 
   const hasMask = ref(null)
   const innerValue = ref(getInitialMaskedValue())
@@ -137,9 +170,9 @@ export default function (props, emit, emitValue, inputRef) {
       unmaskChar = '',
       negateChar = ''
 
-    localComputedMask.replace(tokenRegexMask, (_, char1, esc, token, char2) => {
+    localComputedMask.replace(tokens.value.tokenRegexMask, (_, char1, esc, token, char2) => {
       if (token !== void 0) {
-        const c = TOKENS[ token ]
+        const c = tokens.value.tokenMap[ token ]
         mask.push(c)
         negateChar = c.negate
         if (firstMatch === true) {

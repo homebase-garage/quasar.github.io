@@ -5,7 +5,7 @@
 
       <div>Model: {{ text1 }} | {{ maskedOrNotValue }}</div>
       <q-toggle v-model="maskedOrNot" @update:model-value="toggleMask" label="Masked or not" />
-      <q-input :mask="maskedOrNotValue" v-model="text1" filled hint="Date ####/##/##" label="Label" />
+      <q-input :mask="maskedOrNotValue" v-model="text1" filled hint="Date ##/##/####" label="Label" />
       <q-input
         filled
         v-model="id"
@@ -61,6 +61,17 @@
         mask="NNNN - NNNN"
         hint="Mask: NNNN - NNNN"
       />
+
+      <div>Custom tokens ((C: 0-4a-eA-E, X override: 5-8))</div>
+      <q-input
+        filled
+        v-model="text10"
+        label="Custom tokens"
+        mask="AA-CC-XX-CC"
+        :mask-tokens="customTokens"
+        clearable
+        hint="Mask: AA-CC-XX-CC"
+       />
 
       <div class="text-h6">
         Live mask test: {{ textMask }}
@@ -128,6 +139,7 @@ export default {
       text7: '',
       text8: '',
       text9: '',
+      text10: 'KK-A4-76-1A',
       variableMaskValue1: '',
       variableMaskValue2: '',
       variableMaskValue3: '',
@@ -139,7 +151,12 @@ export default {
       fillRight: true,
       fillMask: true,
       fillUnmask: false,
-      fillMaskText: '0'
+      fillMaskText: '0',
+
+      customTokens: {
+        C: { pattern: '[0-4a-eA-E]', negate: '[^0-4a-eA-E]', transform: v => v.toLocaleUpperCase() },
+        X: { pattern: '[5-8]', negate: '[^5-8]' }
+      }
     }
   },
 

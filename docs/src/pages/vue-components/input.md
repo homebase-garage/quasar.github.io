@@ -163,7 +163,7 @@ You can force/help the user to input a specific format with help from `mask` pro
 Mask is only available if the `type` is one of 'text' (default), 'search', 'url', 'tel', or 'password'.
 :::
 
-Below are mask tokens:
+Below are the default mask tokens. To add your own, see the next section.
 
 | Token | Description |
 | --- | --- |
@@ -188,6 +188,14 @@ The `unmasked-value` is useful if for example you want to force the user type a 
 The `reverse-fill-mask` is useful if you want to force the user to fill the mask from the end and allow non-fixed length of input:
 
 <DocExample title="Filling the mask in reverse" file="MaskFillReverse" />
+
+### Custom mask tokens <q-badge label="v2.18.4+" />
+
+You can also define custom mask tokens on top of the default ones or even override some/all of the [default ones](https://github.com/quasarframework/quasar/blob/dev/ui/src/components/input/use-mask.js#L15).
+
+The custom mask tokens must have the same syntax as the [default ones](https://github.com/quasarframework/quasar/blob/dev/ui/src/components/input/use-mask.js#L15). Please note that the `transform` property is optional.
+
+<DocExample title="Custom tokens" file="MaskCustomTokens" />
 
 ### Using third party mask processors
 
