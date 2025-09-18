@@ -264,18 +264,19 @@ export default createComponent({
       model.value = model.value + offset
     }
 
-    const inputEvents = computed(() => {
-      function updateModel () {
-        model.value = newPage.value
-        newPage.value = null
-      }
+    function updateModel () {
+      model.value = newPage.value
+      newPage.value = null
+      $q.platform.is.mobile === true && document.activeElement.blur()
+    }
 
-      return {
-        'onUpdate:modelValue': val => { newPage.value = val },
-        onKeyup: e => { isKeyCode(e, 13) === true && updateModel() },
-        onBlur: updateModel
-      }
-    })
+    function onInputValue (val) {
+      newPage.value = val
+    }
+
+    function onKeyup (e) {
+      isKeyCode(e, 13) === true && updateModel()
+    }
 
     function getBtn (cfg, page, active) {
       const data = {
@@ -441,7 +442,9 @@ export default createComponent({
               placeholder: inputPlaceholder.value,
               min: minProp.value,
               max: maxProp.value,
-              ...inputEvents.value
+              'onUpdate:modelValue': onInputValue,
+              onKeyup,
+              onBlur: updateModel
             })
             : h('div', {
               class: 'q-pagination__middle row justify-center'
