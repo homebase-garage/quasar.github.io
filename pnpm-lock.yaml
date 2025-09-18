@@ -554,8 +554,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       vite-plugin-checker:
-        specifier: ^0.9.0
-        version: 0.9.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
+        specifier: ^0.10.3
+        version: 0.10.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
       workbox-build:
         specifier: ^7.1.1
         version: 7.3.0
@@ -660,8 +660,8 @@ importers:
         specifier: ~5.6.3
         version: 5.6.3
       vite-plugin-checker:
-        specifier: ^0.9.0
-        version: 0.9.3(eslint@9.28.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@20.19.0)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
+        specifier: ^0.10.3
+        version: 0.10.3(eslint@9.28.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@20.19.0)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
       vue-tsc:
         specifier: ^2.2.0
         version: 2.2.10(typescript@5.6.3)
@@ -757,8 +757,8 @@ importers:
         specifier: ^8.4.45
         version: 8.5.4
       vite-plugin-checker:
-        specifier: ^0.9.0
-        version: 0.9.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
+        specifier: ^0.10.3
+        version: 0.10.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
 
   ui/testing:
     dependencies:
@@ -803,8 +803,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4)
       vite-plugin-checker:
-        specifier: ^0.9.0
-        version: 0.9.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
+        specifier: ^0.10.3
+        version: 0.10.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.31)(@vitest/ui@3.2.4)(jiti@1.21.7)(jsdom@26.1.0)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4)
@@ -932,8 +932,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4)
       vite-plugin-checker:
-        specifier: ^0.10.0
-        version: 0.10.0(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
+        specifier: ^0.10.3
+        version: 0.10.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.15.31)(@vitest/ui@3.2.4)(jiti@1.21.7)(jsdom@26.1.0)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4)
@@ -3859,6 +3859,15 @@ packages:
       supports-color:
         optional: true
 
+  debug@4.4.3:
+    resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   decimal.js@10.5.0:
     resolution: {integrity: sha512-8vDa8Qxvr/+d94hSh5P3IJwI5t8/c0KsMp+g8bNw9cY2icONa5aPfvKeieW1WlG0WQYwwhJ7mjui2xtiePQSXw==}
 
@@ -3945,6 +3954,10 @@ packages:
 
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
+    engines: {node: '>=8'}
+
+  detect-libc@2.1.0:
+    resolution: {integrity: sha512-vEtk+OcP7VBRtQZ1EJ3bdgzSfBjgnEalLTp5zjJrS+2Z1w2KZly4SBdac/WDU3hhsNAZ9E8SC96ME4Ey8MZ7cg==}
     engines: {node: '>=8'}
 
   detect-node@2.1.0:
@@ -6224,6 +6237,10 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.3:
+    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
+    engines: {node: '>=12'}
+
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -7196,6 +7213,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   sourcemap-codec@1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
@@ -7819,8 +7837,8 @@ packages:
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
-  vite-plugin-checker@0.10.0:
-    resolution: {integrity: sha512-EcAi4M5mzayH386Hc1xWi+vnfl4a+1vrDP9PVEQImUR6tIjItNK6R/98YNnJkaAq1ond2qkA6f+H49aprUgzGA==}
+  vite-plugin-checker@0.10.3:
+    resolution: {integrity: sha512-f4sekUcDPF+T+GdbbE8idb1i2YplBAoH+SfRS0e/WRBWb2rYb1Jf5Pimll0Rj+3JgIYWwG2K5LtBPCXxoibkLg==}
     engines: {node: '>=14.16'}
     peerDependencies:
       '@biomejs/biome': '>=1.7'
@@ -7833,40 +7851,6 @@ packages:
       vls: '*'
       vti: '*'
       vue-tsc: ~2.2.10 || ^3.0.0
-    peerDependenciesMeta:
-      '@biomejs/biome':
-        optional: true
-      eslint:
-        optional: true
-      meow:
-        optional: true
-      optionator:
-        optional: true
-      stylelint:
-        optional: true
-      typescript:
-        optional: true
-      vls:
-        optional: true
-      vti:
-        optional: true
-      vue-tsc:
-        optional: true
-
-  vite-plugin-checker@0.9.3:
-    resolution: {integrity: sha512-Tf7QBjeBtG7q11zG0lvoF38/2AVUzzhMNu+Wk+mcsJ00Rk/FpJ4rmUviVJpzWkagbU13cGXvKpt7CMiqtxVTbQ==}
-    engines: {node: '>=14.16'}
-    peerDependencies:
-      '@biomejs/biome': '>=1.7'
-      eslint: '>=7'
-      meow: ^13.2.0
-      optionator: ^0.9.4
-      stylelint: '>=16'
-      typescript: '*'
-      vite: '>=2.0.0'
-      vls: '*'
-      vti: '*'
-      vue-tsc: ~2.2.10
     peerDependenciesMeta:
       '@biomejs/biome':
         optional: true
@@ -9189,8 +9173,8 @@ snapshots:
     dependencies:
       '@malept/cross-spawn-promise': 2.0.0
       chalk: 4.1.2
-      debug: 4.4.1
-      detect-libc: 2.0.4
+      debug: 4.4.3
+      detect-libc: 2.1.0
       fs-extra: 10.1.0
       got: 11.8.6
       node-abi: 3.77.0
@@ -10844,7 +10828,7 @@ snapshots:
       builder-util-runtime: 9.2.10
       chromium-pickle-js: 0.2.0
       config-file-ts: 0.2.8-rc1
-      debug: 4.4.1
+      debug: 4.4.3
       dmg-builder: 26.0.12(electron-builder-squirrel-windows@25.1.8)
       dotenv: 16.6.1
       dotenv-expand: 11.0.7
@@ -11255,7 +11239,7 @@ snapshots:
 
   builder-util-runtime@9.2.10:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       sax: 1.4.1
     transitivePeerDependencies:
       - supports-color
@@ -11276,7 +11260,7 @@ snapshots:
       builder-util-runtime: 9.2.10
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.1
+      debug: 4.4.3
       fs-extra: 10.1.0
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
@@ -11917,6 +11901,10 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  debug@4.4.3:
+    dependencies:
+      ms: 2.1.3
+
   decimal.js@10.5.0: {}
 
   decompress-response@6.0.0:
@@ -11985,6 +11973,8 @@ snapshots:
   destroy@1.2.0: {}
 
   detect-libc@2.0.4: {}
+
+  detect-libc@2.1.0: {}
 
   detect-node@2.1.0: {}
 
@@ -14577,6 +14567,8 @@ snapshots:
 
   picomatch@4.0.2: {}
 
+  picomatch@4.0.3: {}
+
   pify@2.3.0: {}
 
   pinia@3.0.3(typescript@5.6.3)(vue@3.5.16(typescript@5.6.3)):
@@ -16470,31 +16462,13 @@ snapshots:
       - tsx
       - yaml
 
-  vite-plugin-checker@0.10.0(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3)):
+  vite-plugin-checker@0.10.3(eslint@9.28.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@20.19.0)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3)):
     dependencies:
       '@babel/code-frame': 7.27.1
       chokidar: 4.0.3
       npm-run-path: 6.0.0
       picocolors: 1.1.1
-      picomatch: 4.0.2
-      strip-ansi: 7.1.0
-      tiny-invariant: 1.3.3
-      tinyglobby: 0.2.14
-      vite: 7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4)
-      vscode-uri: 3.1.0
-    optionalDependencies:
-      eslint: 9.29.0(jiti@1.21.7)
-      optionator: 0.9.4
-      typescript: 5.6.3
-      vue-tsc: 2.2.10(typescript@5.6.3)
-
-  vite-plugin-checker@0.9.3(eslint@9.28.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@20.19.0)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3)):
-    dependencies:
-      '@babel/code-frame': 7.27.1
-      chokidar: 4.0.3
-      npm-run-path: 6.0.0
-      picocolors: 1.1.1
-      picomatch: 4.0.2
+      picomatch: 4.0.3
       strip-ansi: 7.1.0
       tiny-invariant: 1.3.3
       tinyglobby: 0.2.14
@@ -16506,13 +16480,13 @@ snapshots:
       typescript: 5.6.3
       vue-tsc: 2.2.10(typescript@5.6.3)
 
-  vite-plugin-checker@0.9.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3)):
+  vite-plugin-checker@0.10.3(eslint@9.29.0(jiti@1.21.7))(optionator@0.9.4)(typescript@5.6.3)(vite@7.0.3(@types/node@22.15.31)(jiti@1.21.7)(sass-embedded@1.89.2)(terser@5.42.0)(tsx@4.19.4))(vue-tsc@2.2.10(typescript@5.6.3)):
     dependencies:
       '@babel/code-frame': 7.27.1
       chokidar: 4.0.3
       npm-run-path: 6.0.0
       picocolors: 1.1.1
-      picomatch: 4.0.2
+      picomatch: 4.0.3
       strip-ansi: 7.1.0
       tiny-invariant: 1.3.3
       tinyglobby: 0.2.14
