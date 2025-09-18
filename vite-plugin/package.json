@@ -51,10 +51,10 @@
     "pug": "^3.0.3",
     "quasar": "workspace:*",
     "rollup": "^4.24.2",
-    "vite": "^7.0.3",
+    "vite": "^7.1.6",
     "vite-plugin-checker": "^0.10.3",
     "vitest": "^3.2.4",
-    "vue": "^3.5.5"
+    "vue": "3.5.20"
   },
   "peerDependencies": {
     "@vitejs/plugin-vue": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0",

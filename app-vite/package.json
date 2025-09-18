@@ -117,7 +117,7 @@
     "serialize-javascript": "^6.0.2",
     "tinyglobby": "^0.2.10",
     "ts-essentials": "^9.4.2",
-    "vite": "^7.0.3",
+    "vite": "^7.1.6",
     "webpack-merge": "^6.0.1"
   },
   "devDependencies": {
@@ -128,7 +128,7 @@
     "pinia": "^3.0.1",
     "quasar": "workspace:^",
     "typescript": "^5.6.3",
-    "vue": "^3.5.12",
+    "vue": "3.5.20",
     "vue-router": "^4.4.5",
     "workbox-build": "^7.3.0"
   },
