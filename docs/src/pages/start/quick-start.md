@@ -25,7 +25,6 @@ $ npm init quasar@latest
 <<| bash PNPM |>>
 $ pnpm create quasar@latest
 <<| bash Bun |>>
-# experimental support
 $ bun create quasar@latest
 ```
 
@@ -42,7 +41,6 @@ $ npm i -g @quasar/cli
 <<| bash PNPM |>>
 $ pnpm add -g @quasar/cli
 <<| bash Bun |>>
-# experimental support
 $ bun install -g @quasar/cli
 ```
 

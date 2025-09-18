@@ -106,7 +106,6 @@ $ npm init quasar@latest
 $ pnpm create quasar@latest
 # then pick the AppExtension option
 <<| bash Bun |>>
-# experimental support
 $ bun create quasar@latest
 # then pick the AppExtension option
 ```

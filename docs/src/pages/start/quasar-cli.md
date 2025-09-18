@@ -39,7 +39,6 @@ $ npm init quasar@latest
 $ pnpm add -g @quasar/cli
 $ pnpm create quasar@latest
 <<| bash Bun |>>
-# experimental support
 $ bun install -g @quasar/cli
 $ bun create quasar@latest
 ```
@@ -69,7 +68,6 @@ Pick `Quasar CLI with Vite` if you want:
     <<| bash PNPM |>>
     $ pnpm create quasar@latest
     <<| bash Bun |>>
-    # experimental support
     $ bun create quasar@latest
     ```
 
@@ -104,7 +102,6 @@ Pick `Quasar CLI with Vite` if you want:
     <<| bash PNPM |>>
     $ pnpm add -g @quasar/cli
     <<| bash Bun |>>
-    # experimental support
     $ bun install -g @quasar/cli
     ```
 

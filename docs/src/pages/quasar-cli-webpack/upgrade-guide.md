@@ -161,7 +161,6 @@ $ npm init quasar@latest
 <<| bash PNPM |>>
 $ pnpm create quasar@latest
 <<| bash Bun |>>
-# experimental support
 $ bun create quasar@latest
 ```
 <br>
