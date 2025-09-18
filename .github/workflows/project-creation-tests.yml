@@ -76,7 +76,7 @@ jobs:
       matrix:
         script-type: [js, ts]
         app-engine: [vite-2, webpack-4]
-        node-version: [18, 20]
+        node-version: [20, 22]
         package-manager: [yarn, npm, pnpm]
 
     name: Test ${{ matrix.script-type }}-${{ matrix.app-engine }} (Node v${{ matrix.node-version }} - ${{ matrix.package-manager }})
