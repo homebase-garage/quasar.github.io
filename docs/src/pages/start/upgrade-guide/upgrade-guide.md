@@ -248,13 +248,14 @@ Before starting, it is highly suggested to make a copy of your current working p
   ```js
   "@babel/eslint-parser": "^7.13.14",  // replaces babel-eslint !
   "eslint": "^8.11.0",
-  "eslint-plugin-vue": "^9.0.0",
+  "eslint-plugin-vue": "^10.4.0",
   "eslint-webpack-plugin": "^3.1.1", // replaces eslint-loader !
   "eslint-config-standard": "^17.0.0",
   "eslint-plugin-import": "^2.19.1",
   "eslint-plugin-n": "^15.0.0",
   "eslint-plugin-promise": "^6.0.0",
-  "eslint-plugin-quasar": "^1.0.0"
+  "eslint-plugin-quasar": "^1.0.0",
+  "vue-eslint-parser": "^10.2.0"
   ```
 
   In the `/quasar.config` file, before the `module.exports = function (ctx)` add:

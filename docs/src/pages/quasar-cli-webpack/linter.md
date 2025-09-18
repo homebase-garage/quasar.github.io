@@ -13,13 +13,13 @@ When you scaffold a Quasar project folder it will ask you if you want ESLint (al
 
 ```tabs
 <<| bash Yarn |>>
-$ yarn add --dev @eslint/js eslint@9 eslint-plugin-vue globals eslint-webpack-plugin
+$ yarn add --dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals eslint-webpack-plugin
 <<| bash NPM |>>
-$ npm install --save-dev @eslint/js eslint@9 eslint-plugin-vue globals eslint-webpack-plugin
+$ npm install --save-dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals eslint-webpack-plugin
 <<| bash PNPM |>>
-$ pnpm add -D @eslint/js eslint@9 eslint-plugin-vue globals eslint-webpack-plugin
+$ pnpm add -D @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals eslint-webpack-plugin
 <<| bash Bun |>>
-$ bun add --dev @eslint/js eslint@9 eslint-plugin-vue globals eslint-webpack-plugin
+$ bun add --dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals eslint-webpack-plugin
 ```
 
 If you want `prettier` as a code formatter, then install these too:
