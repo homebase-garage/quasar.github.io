@@ -17,7 +17,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
     "pug": "^3.0.3",
-    "sass-embedded": "^1.80.2",
+    "sass-embedded": "^1.93.2",
     "vite": "^7.1.6"
   }
 }
