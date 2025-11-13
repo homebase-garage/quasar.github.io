@@ -109,7 +109,7 @@ export default function runSequentialPromises (
     runNextPromise()
   })
 
-  const threads = Array(threadsNumber)
+  const threads = Array(Math.min(totalJobs, threadsNumber))
     .fill(null)
     .map(getPromiseThread)
 
