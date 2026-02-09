@@ -21,7 +21,7 @@
     "@quasar/extras": "^1.16.4",
     "quasar": "^2.16.0",
     "vue": "^3.5.22",
-    "vue-router": "^4.0.12"
+    "vue-router": "^5.0.0"
   },
   "devDependencies": {
     <% if (preset.eslint) { %>
