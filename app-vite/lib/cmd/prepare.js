@@ -7,7 +7,7 @@ const argv = parseArgs(process.argv.slice(2), {
     s: 'silent',
     h: 'help'
   },
-  boolean: [ 'h' ]
+  boolean: [ 's', 'h' ]
 })
 
 if (argv.help) {
