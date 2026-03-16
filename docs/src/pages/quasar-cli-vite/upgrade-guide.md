@@ -19,7 +19,7 @@ api.compatibleWith(
 
 ### Notable breaking changes
 
-* Minimum Node.js version is now 20 (mainly due to Vite 7)
+* Minimum Node.js version is now 22 (mainly due to Vite 8)
 * We have shifted towards an ESM style for the whole Quasar project folder, so many default project files now require ESM code (although using `.cjs` as an extension for these files is supported, but you will most likely need to rename the extension should you not wish to change anything). One example is the `/quasar.config.js` file which now it's assumed to be ESM too (so change from `.js` to `.cjs` should you still want a CommonJs file).
 * The "test" cmd was removed due to latest updates for @quasar/testing-* packages. See [here](https://testing.quasar.dev/packages/testing/)
 * The "clean" cmd has been re-designed. Type "quasar clean -h" in your upgraded Quasar project folder for more info.
@@ -96,7 +96,7 @@ When asked to "Pick Quasar App CLI variant", answer with: "Quasar App CLI with V
 Preparations:
 
 * If using the global installation of Quasar CLI (`@quasar/cli`), make sure that you have the latest one. This is due to the support of quasar.config file in multiple formats.
-* Again, we highlight that the minimum supported version of Node.js is now v20 (always use the LTS versions of Node.js - the higher the version the better).
+* Again, we highlight that the minimum supported version of Node.js is now v22 (always use the LTS versions of Node.js - the higher the version the better).
 
 * Edit your `/package.json` on the `@quasar/app-vite` entry and assign it `^2.0.0`:
   ```diff /package.json

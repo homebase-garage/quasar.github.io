@@ -78,7 +78,7 @@ api.compatibleWith(
 ```
 
 ### Notable breaking changes
-* Minimum Node.js version is now 18.12
+* Minimum Node.js version is now 20
 * We have shifted towards an ESM style for the whole Quasar project folder, so many default project files now require ESM code (although using `.cjs` as an extension for these files is supported, but you will most likely need to rename the extension should you not wish to change anything). One example is the `/quasar.config.js` file which now it's assumed to be ESM too (so change from `.js` to `.cjs` should you still want a CommonJs file).
 * Ported and adapted the superior devserver implementation from @quasar/app-vite for all Quasar modes. The benefits are huge.
 * Ported the superior implementation of SSR, PWA, Electron & BEX modes from @quasar/app-vite. We will detail each Quasar mode changes on this docs page.
@@ -170,7 +170,7 @@ When asked to "Pick Quasar App CLI variant", answer with: "Quasar App CLI with W
 Preparations:
 
 * If using the global installation of Quasar CLI (`@quasar/cli`), make sure that you have the latest one. This is due to the support of quasar.config file in multiple formats.
-* Again, we highlight that the minimum supported version of Node.js is now v18 (always use the LTS versions of Node.js - the higher the version the better).
+* Again, we highlight that the minimum supported version of Node.js is now v20 (always use the LTS versions of Node.js - the higher the version the better).
 
 * Edit your `/package.json` on the `@quasar/app-webpack` entry and assign it `^4.0.0`:
   ```diff /package.json
