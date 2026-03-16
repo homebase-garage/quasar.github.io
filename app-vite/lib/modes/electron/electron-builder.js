@@ -137,7 +137,11 @@ export class QuasarModeBuilder extends AppBuilder {
 
     const { getBundler } = await cacheProxy.getModule('electron')
     const bundlerResult = await getBundler(bundlerName)
-    const bundler = bundlerResult.default || bundlerResult
+    const bundler = (
+      bundlerResult.packager /* @electron/packager v19+ */
+      || bundlerResult.default /* @electron/packager v18 */
+      || bundlerResult /* electron-builder */
+    )
     const pkgBanner = `electron/${ bundlerName }`
 
     return new Promise((resolve, reject) => {

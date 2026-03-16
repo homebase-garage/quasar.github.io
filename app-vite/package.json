@@ -121,16 +121,16 @@
     "webpack-merge": "^6.0.1"
   },
   "devDependencies": {
-    "@electron/packager": "^18.3.5",
-    "electron-builder": "^26.0.12",
+    "@electron/packager": "^19.1.0",
+    "electron-builder": "^26.8.1",
     "eslint": "catalog:",
     "eslint-config-quasar": "workspace:*",
-    "pinia": "^3.0.1",
+    "pinia": "^3.0.4",
     "quasar": "workspace:^",
     "typescript": "^5.6.3",
-    "vue": "3.5.20",
-    "vue-router": "^5.0.0",
-    "workbox-build": "^7.3.0"
+    "vue": "3.5.30",
+    "vue-router": "^5.0.3",
+    "workbox-build": "^7.4.0"
   },
   "peerDependencies": {
     "@electron/packager": ">= 18",
