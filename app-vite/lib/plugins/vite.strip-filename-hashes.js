@@ -7,7 +7,7 @@
  * it's not the case.
  *
  * Will not change anything if your Vite config already touches the
- * build.rollupOptions.output.entryFileNames/chunkFileNames/assetFileNames props.
+ * build.rolldownOptions.output.entryFileNames/chunkFileNames/assetFileNames props.
  *
  * Gets applied to production builds only.
  *
@@ -22,10 +22,10 @@ export function quasarViteStripFilenameHashesPlugin () {
     enforce: 'post',
 
     config: viteConf => {
-      viteConf.build.rollupOptions = viteConf.build.rollupOptions || {}
-      viteConf.build.rollupOptions.output = viteConf.build.rollupOptions.output || {}
+      viteConf.build.rolldownOptions = viteConf.build.rolldownOptions || {}
+      viteConf.build.rolldownOptions.output = viteConf.build.rolldownOptions.output || {}
 
-      const target = viteConf.build.rollupOptions.output
+      const target = viteConf.build.rolldownOptions.output
       const assetsDir = (viteConf.build.assetsDir || 'assets') + '/'
 
       if (!target.entryFileNames) { target.entryFileNames = `${ assetsDir }[name].js` }

@@ -13,6 +13,16 @@ import { quasarViteStripFilenameHashesPlugin } from './plugins/vite.strip-filena
 
 const cliPkgDependencies = Object.keys(cliPkg.dependencies || {})
 
+/* Should match Vite's own hard-coded values */
+export const BASELINE_WIDELY_AVAILABLE_TARGET_STRING = 'baseline-widely-available'
+const ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET = [
+  'chrome111',
+  'edge111',
+  'firefox114',
+  'safari16.4',
+  'ios16.4',
+]
+
 async function parseVitePlugins (entries, appDir, compileId) {
   const acc = []
   let showTip = false
@@ -300,9 +310,14 @@ export function createNodeEsbuildConfig (quasarConf, { format }) {
 }
 
 export function createBrowserEsbuildConfig (quasarConf) {
+  const { browser } = quasarConf.build.target
+  const target = browser === BASELINE_WIDELY_AVAILABLE_TARGET_STRING
+    ? ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET
+    : browser
+
   return {
     platform: 'browser',
-    target: quasarConf.build.target.browser,
+    target,
     format: 'iife',
     bundle: true,
     sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false,

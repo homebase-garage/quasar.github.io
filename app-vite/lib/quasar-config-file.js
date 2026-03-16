@@ -20,6 +20,7 @@ const urlRegex = /^http(s)?:\/\//i
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
 import { readFileEnv } from './utils/env.js'
+import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './config-tools.js'
 
 const defaultPortMapping = {
   spa: 9000,
@@ -797,11 +798,11 @@ export class QuasarConfigFile {
     temporaryFixVueFlags(cfg.build.rawDefine)
 
     if (!cfg.build.target.browser) {
-      cfg.build.target.browser = [ 'es2022', 'firefox115', 'chrome115', 'safari14' ]
+      cfg.build.target.browser = BASELINE_WIDELY_AVAILABLE_TARGET_STRING
     }
 
     if (!cfg.build.target.node) {
-      cfg.build.target.node = 'node18'
+      cfg.build.target.node = 'node22'
     }
 
     if (this.#ctx.mode.ssr) {

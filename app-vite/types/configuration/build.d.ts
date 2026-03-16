@@ -327,7 +327,7 @@ interface QuasarStaticBuildConfiguration {
    * it's not the case.
    *
    * Will not change anything if your Vite config already touches the
-   * build.rollupOptions.output.entryFileNames/chunkFileNames/assetFileNames props.
+   * build.rolldownOptions.output.entryFileNames/chunkFileNames/assetFileNames props.
    *
    * Gets applied to production builds only.
    *
@@ -393,12 +393,12 @@ interface QuasarStaticBuildConfiguration {
 interface QuasarDynamicBuildConfiguration {
   /**
    * Set to `false` to disable minification, or specify the minifier to use.
-   * Available options are 'terser' or 'esbuild'.
+   * Available options are 'oxc' (recommended) or 'terser'.
    * If set to anything but boolean false then it also applies to CSS.
    * For production only.
-   * @default 'esbuild'
+   * @default 'oxc'
    */
-  minify?: boolean | 'terser' | 'esbuild';
+  minify?: boolean | 'oxc' | 'terser';
   /**
    * Minification options for html-minifier-terser.
    *
