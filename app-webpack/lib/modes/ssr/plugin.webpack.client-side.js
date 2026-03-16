@@ -8,7 +8,7 @@ const { sources, Compilation } = require('webpack')
 const jsRE = /\.js(\?[^.]+)?$/
 const jsCssRE = /\.(js|css)($|\?)/
 const swRE = /\s\w+$/
-const hotUpdateRE = /\.hot-update\.js$/
+const hotUpdateRE = /\.hot-update\.js(on)?$/
 const trailingSlashRE = /([^/])$/
 
 const clientManifestFilename = '../quasar.manifest.json'
