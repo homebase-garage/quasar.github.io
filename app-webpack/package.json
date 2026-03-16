@@ -85,7 +85,7 @@
     "@quasar/babel-preset-app": "^2.0.3",
     "@quasar/render-ssr-error": "workspace:^",
     "@quasar/ssl-certificate": "workspace:^",
-    "@quasar/ssr-helpers": "3.0.2",
+    "@quasar/ssr-helpers": "3.0.3",
     "@rollup/pluginutils": "^5.1.0",
     "@types/chrome": "^0.0.271",
     "@types/compression": "^1.7.5",
