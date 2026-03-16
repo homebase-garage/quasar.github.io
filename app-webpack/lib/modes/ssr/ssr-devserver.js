@@ -149,9 +149,11 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends AppDevser
   run (quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
-    // also update ssr-devserver.js when changing here
-    if (diff('customServiceWorker', quasarConf) === true) {
-      return queue(() => this.#compileCustomServiceWorker(quasarConf, queue))
+    if (quasarConf.ssr.pwa === true) {
+      // also update pwa-devserver.js when changing here
+      if (diff('customServiceWorker', quasarConf) === true) {
+        return queue(() => this.#compileCustomServiceWorker(quasarConf, queue))
+      }
     }
 
     // also update pwa-devserver.js when changing here
