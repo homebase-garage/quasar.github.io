@@ -851,9 +851,6 @@ importers:
       '@quasar/vite-plugin':
         specifier: workspace:^
         version: link:../../vite-plugin
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.4.21(postcss@8.5.6)
       eslint:
         specifier: 'catalog:'
         version: 9.37.0(jiti@2.6.1)
@@ -863,9 +860,6 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.3.2
-      postcss:
-        specifier: ^8.4.45
-        version: 8.5.6
       prismjs:
         specifier: ^1.29.0
         version: 1.30.0
