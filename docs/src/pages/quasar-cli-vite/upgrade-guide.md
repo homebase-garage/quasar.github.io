@@ -472,7 +472,8 @@ $ bun add register-service-worker@^1.0.0
 Edit your `/src-pwa/custom-service-worker.js` file:
 
 ```diff /src-pwa/custom-service-worker.js
-if (process.env.MODE !== 'ssr' || process.env.PROD) {
+- if (process.env.MODE !== 'ssr' || process.env.PROD) {
++ if (process.env.PROD) {
   registerRoute(
     new NavigationRoute(
       createHandlerBoundToURL(process.env.PWA_FALLBACK_HTML),
