@@ -5,7 +5,7 @@
 export default ({ app, resolve, render, serve }) => {
   // we capture any other Express route and hand it
   // over to Vue and Vue Router to render our page
-  app.get(resolve.urlPath('*'), (req, res) => {
+  app.get(resolve.urlPath('{*path}'), (req, res) => {
     res.setHeader('Content-Type', 'text/html')
 
     render(/* the ssrContext: */ { req, res })

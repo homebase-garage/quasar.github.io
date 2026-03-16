@@ -792,7 +792,7 @@ For TS devs, you should also make a small change to your /src-ssr/middlewares fi
 + import { type Request, type Response } from 'express';
 // ...
 - app.get(resolve.urlPath('*'), (req, res) => {
-+ app.get(resolve.urlPath('*'), (req: Request, res: Response) => {
++ app.get(resolve.urlPath('{*path}'), (req: Request, res: Response) => {
 ```
 
 There are some additions to the `/quasar.config` file too:
