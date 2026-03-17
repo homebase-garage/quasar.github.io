@@ -28,16 +28,13 @@ export default function () {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  Router.beforeEach((to, _, next) => {
+  Router.beforeEach(to => {
     if (to.fullPath.startsWith('/quasar-cli/') === true) {
-      next({
+      return {
         path: to.fullPath.replace('/quasar-cli/', '/quasar-cli-webpack/'),
         query: to.query,
         hash: to.hash
-      })
-    }
-    else {
-      next()
+      }
     }
   })
 
