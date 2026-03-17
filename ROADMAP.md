@@ -35,14 +35,21 @@ We are updating this section constantly in order to keep you up to date with our
 ### Evergreens
 * 🚧 (WIP) Gradually add more automated tests to Quasar UI. **We're searching for contributors**, get in touch with the team on our [Discord server](https://chat.quasar.dev/) if you're willing to help!
 
-### Q1-Q2 2025
-* CLI Auto-routing
+### Q1 2026
+* Release of `@quasar/app-vite` with Vite 8.
 
-### Q3-Q4 2025
+### Q2 2026
+* Release of a new major version of `@quasar/app-vite` with rolldown replacing esbuild for all Quasar modes compilation threads.
+* Plans for Quasar v3. We will need your input on some of the decisions that we will be taking for the new major version.
+
+### Q3-Q4 2026
+* Quasar v3 release, hopefully in Q4.
 * CLI SSG mode ([#2299](https://github.com/quasarframework/quasar/issues/2299)) ([community support](https://github.com/freddy38510/quasar-app-extension-ssg))
-* Release of a new major version of `@quasar/app-vite` with Vite 7. Replace esbuild with rolldown for all Quasar modes compilation threads.
 
 ## Archive
+
+### Q1-Q4 2025
+* CLI Auto-routing -- our efforts are superseeded by Vue Router v5 having this out of the box
 
 ### Q2-Q4 2024
 * Release of the new major version of `@quasar/app-vite`
