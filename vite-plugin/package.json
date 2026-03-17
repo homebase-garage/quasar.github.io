@@ -15,7 +15,7 @@
   "scripts": {
     "lint": "eslint --cache --fix",
     "dev": "cd ./playground && pnpm dev",
-    "build": "node ./build/clean.js && rollup --config ./build/rollup.config.js",
+    "build": "node ./build/clean.js && rolldown --config ./build/rolldown.config.js",
     "test": "pnpm test:usage && pnpm test:runtime",
     "test:watch": "vitest run --watch --config ./testing/runtime/vitest.config.js",
     "test:usage": "vitest run --config ./testing/usage/vitest.config.js",
@@ -50,7 +50,7 @@
     "jsdom": "^26.1.0",
     "pug": "^3.0.3",
     "quasar": "workspace:*",
-    "rollup": "^4.24.2",
+    "rolldown": "1.0.0-rc.9",
     "vite": "^8.0.0",
     "vite-plugin-checker": "^0.10.3",
     "vitest": "^3.2.4",

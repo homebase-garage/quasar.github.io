@@ -12,7 +12,6 @@ export default {
   },
   external: [
     'vite',
-    /quasar[\\/][dist|package.json]/,
-    /node:/
+    /quasar[\\/][dist|package.json]/
   ]
 }
