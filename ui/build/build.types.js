@@ -2,7 +2,7 @@ import path from 'node:path'
 import fse from 'fs-extra'
 // eslint-disable-next-line import-x/default -- can't detect `as default`
 import prettier from 'prettier'
-import ts from 'typescript'
+import typescript from 'typescript'
 
 import { resolveToRoot, logError, writeFile, clone } from './build.utils.js'
 
@@ -703,28 +703,28 @@ function getIndexDts (apis, quasarLangIndex) {
  * @throws {Error} if TypeScript validation fails
  */
 function ensureTypeScriptValidity () {
-  const tsConfigPath = ts.findConfigFile(distRoot, ts.sys.fileExists, 'tsconfig.json')
+  const tsConfigPath = typescript.findConfigFile(distRoot, typescript.sys.fileExists, 'tsconfig.json')
   if (!tsConfigPath) {
     throw Error(resolvePath('tsconfig.json') + ' not found')
   }
-  const { config } = ts.readConfigFile(tsConfigPath, ts.sys.readFile)
+  const { config } = typescript.readConfigFile(tsConfigPath, typescript.sys.readFile)
   config.compilerOptions.noEmit = true
-  const { options, fileNames, errors } = ts.parseJsonConfigFileContent(config, ts.sys, distRoot)
+  const { options, fileNames, errors } = typescript.parseJsonConfigFileContent(config, typescript.sys, distRoot)
 
-  const program = ts.createProgram({ options, rootNames: fileNames, configFileParsingDiagnostics: errors })
+  const program = typescript.createProgram({ options, rootNames: fileNames, configFileParsingDiagnostics: errors })
   const emitResult = program.emit()
-  const diagnostics = [ ...ts.getPreEmitDiagnostics(program), ...emitResult.diagnostics ]
+  const diagnostics = [ ...typescript.getPreEmitDiagnostics(program), ...emitResult.diagnostics ]
   if (diagnostics.length === 0) {
     return
   }
 
-  /** @type {ts.FormatDiagnosticsHost} */
+  /** @type {typescript.FormatDiagnosticsHost} */
   const formatDiagnosticsHost = {
-    getCurrentDirectory: ts.sys.getCurrentDirectory,
+    getCurrentDirectory: typescript.sys.getCurrentDirectory,
     getCanonicalFileName: file => file,
-    getNewLine: () => ts.sys.newLine
+    getNewLine: () => typescript.sys.newLine
   }
-  const error = new Error(ts.formatDiagnosticsWithColorAndContext(diagnostics, formatDiagnosticsHost))
+  const error = new Error(typescript.formatDiagnosticsWithColorAndContext(diagnostics, formatDiagnosticsHost))
   error.name = 'TypeScriptError'
   throw error
 }
