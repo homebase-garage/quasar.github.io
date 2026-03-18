@@ -1,45 +1,19 @@
 process.env.BABEL_ENV = 'production'
 
 import fse from 'fs-extra'
-import { build as esBuild } from 'esbuild'
+import { build as rolldownBuild } from 'rolldown'
 
 import { version, banner, resolveToRoot, logError, writeFile } from './build.utils.js'
 import prepareDiff from './prepare-diff.js'
 
-const vueNamedImportsCode = (() => {
-  /**
-   * We could infer this automatically by reading and parsing each
-   * file for vue imports, but the runtime cost is too high and we
-   * want to achieve the best possible performance while building.
-   *
-   * Unfortunately, esbuild does not have an option to tell
-   * anything about what the named imports are from the target file.
-   *
-   * Add all the vue imports from the UI code to the list below
-   * otherwise the build will fail with the following error:
-   *   No matching export in "Search for vueNamedImportsCode in /ui/build :vue"
-   */
-  const namedImports = [
-    'h',
-    'ref', 'computed', 'watch',
-    'isRef', 'toRaw', 'unref', 'reactive', 'shallowReactive',
-    'nextTick',
-    'onActivated', 'onDeactivated',
-    'onBeforeMount', 'onMounted',
-    'onBeforeUnmount', 'onUnmounted',
-    'onBeforeUpdate', 'onUpdated',
-    'inject', 'provide',
-    'getCurrentInstance',
-    'markRaw',
-    'Transition', 'TransitionGroup', 'KeepAlive', 'Teleport',
-    'useSSRContext',
-    'withDirectives',
-    'vShow',
-    'defineComponent', 'createApp'
-  ].join(',')
-
-  return { contents: `const { ${ namedImports } } = window.Vue;export { ${ namedImports } };` }
-})()
+const NODE_TARGET = 'node22'
+const BROWSER_TARGET = [
+  'chrome111',
+  'edge111',
+  'firefox114',
+  'safari16.4',
+  'ios16.4'
+]
 
 const importRE = /import\s*\{([\w,\s]+)\}\s*from\s*(['"])([a-zA-Z0-9-@/]+)\2;?/g
 const umdTempFilesList = []
@@ -50,151 +24,155 @@ process.on('exit', () => {
   })
 })
 
-const quasarEsbuildPluginUmdGlobalExternals = {
-  name: 'quasar:umd-global-externals',
-  setup (build) {
-    const namespace = 'Search for vueNamedImportsCode in /ui/build '
-    build.onResolve({ filter: /^vue$/ }, (args) => ({
-      path: args.path,
-      namespace
-    }))
-
-    build.onLoad(
-      { filter: /.*/, namespace },
-      () => vueNamedImportsCode
-    )
-  }
-}
-
 const builds = [
   // Client entry-point used by @quasar/vite-plugin for DEV only.
   // Also used as entry-point in package.json.
   {
-    format: 'esm',
-    define: {
-      // Any change to the flags should be reflected
-      // to src/flags.dev.js as well.
-      __QUASAR_VERSION__: `'${ version }'`,
-      __QUASAR_SSR_SERVER__: 'false'
+    platform: 'browser',
+    input: resolveToRoot('src/index.dev.js'),
+    output: {
+      banner,
+      format: 'esm',
+      file: resolveToRoot('dist/quasar.client.js')
     },
-    entryPoints: [
-      resolveToRoot('src/index.dev.js')
+    external: [
+      'vue'
     ],
-    outfile: resolveToRoot('dist/quasar.client.js')
+    transform: {
+      target: BROWSER_TARGET,
+      define: {
+        // Any change to the flags should be reflected
+        // to src/flags.dev.js as well.
+        __QUASAR_VERSION__: `'${ version }'`,
+        __QUASAR_SSR_SERVER__: 'false'
+      }
+    }
   },
 
   // SSR server prod entry-point (ESM - used by @quasar/app-vite)
   // (no flags; not required to replace them)
   {
-    format: 'esm',
     platform: 'node',
-    minify: true,
-    define: {
-      __QUASAR_VERSION__: `'${ version }'`,
-      __QUASAR_SSR__: 'true',
-      __QUASAR_SSR_SERVER__: 'true',
-      __QUASAR_SSR_CLIENT__: 'false',
-      __QUASAR_SSR_PWA__: 'false'
+    input: resolveToRoot('src/index.ssr.js'),
+    output: {
+      banner,
+      format: 'esm',
+      minify: true,
+      file: resolveToRoot('dist/quasar.server.prod.js')
     },
-    entryPoints: [
-      resolveToRoot('src/index.ssr.js')
+    external: [
+      'vue'
     ],
-    outfile: resolveToRoot('dist/quasar.server.prod.js')
+    transform: {
+      target: NODE_TARGET,
+      define: {
+        __QUASAR_VERSION__: `'${ version }'`,
+        __QUASAR_SSR__: 'true',
+        __QUASAR_SSR_SERVER__: 'true',
+        __QUASAR_SSR_CLIENT__: 'false',
+        __QUASAR_SSR_PWA__: 'false'
+      }
+    }
   },
 
   // SSR server prod entry-point (CJS - used by @quasar/app-webpack)
   // (no flags; not required to replace them)
   {
-    format: 'cjs',
     platform: 'node',
-    minify: true,
-    define: {
-      __QUASAR_VERSION__: `'${ version }'`,
-      __QUASAR_SSR__: 'true',
-      __QUASAR_SSR_SERVER__: 'true',
-      __QUASAR_SSR_CLIENT__: 'false',
-      __QUASAR_SSR_PWA__: 'false'
+    input: resolveToRoot('src/index.ssr.js'),
+    output: {
+      banner,
+      format: 'cjs',
+      minify: true,
+      file: resolveToRoot('dist/quasar.server.prod.cjs')
     },
-    entryPoints: [
-      resolveToRoot('src/index.ssr.js')
+    external: [
+      'vue'
     ],
-    outfile: resolveToRoot('dist/quasar.server.prod.cjs')
+    transform: {
+      target: NODE_TARGET,
+      define: {
+        __QUASAR_VERSION__: `'${ version }'`,
+        __QUASAR_SSR__: 'true',
+        __QUASAR_SSR_SERVER__: 'true',
+        __QUASAR_SSR_CLIENT__: 'false',
+        __QUASAR_SSR_PWA__: 'false'
+      },
+    }
   },
 
   // UMD dev entry
   {
-    format: 'iife',
-    define: {
-      __QUASAR_VERSION__: `'${ version }'`,
-      __QUASAR_SSR__: 'false',
-      __QUASAR_SSR_SERVER__: 'false',
-      __QUASAR_SSR_CLIENT__: 'false',
-      __QUASAR_SSR_PWA__: 'false'
+    platform: 'browser',
+    input: resolveToRoot('src/index.umd.js'),
+    output: {
+      banner,
+      format: 'iife',
+      file: resolveToRoot('dist/quasar.umd.js'),
+      globals: {
+        vue: 'window.Vue'
+      }
     },
-    entryPoints: [
-      resolveToRoot('src/index.umd.js')
+    external: [
+      'vue'
     ],
-    outfile: resolveToRoot('dist/quasar.umd.js'),
-    plugins: [ quasarEsbuildPluginUmdGlobalExternals ]
+    transform: {
+      target: BROWSER_TARGET,
+      define: {
+        __QUASAR_VERSION__: `'${ version }'`,
+        __QUASAR_SSR__: 'false',
+        __QUASAR_SSR_SERVER__: 'false',
+        __QUASAR_SSR_CLIENT__: 'false',
+        __QUASAR_SSR_PWA__: 'false'
+      }
+    }
   },
 
   // UMD prod entry
   {
-    format: 'iife',
-    minify: true,
-    define: {
-      __QUASAR_VERSION__: `'${ version }'`,
-      __QUASAR_SSR__: 'false',
-      __QUASAR_SSR_SERVER__: 'false',
-      __QUASAR_SSR_CLIENT__: 'false',
-      __QUASAR_SSR_PWA__: 'false'
+    platform: 'browser',
+    input: resolveToRoot('src/index.umd.js'),
+    output: {
+      banner,
+      format: 'iife',
+      minify: true,
+      file: resolveToRoot('dist/quasar.umd.prod.js'),
+      globals: {
+        vue: 'window.Vue'
+      }
     },
-    entryPoints: [
-      resolveToRoot('src/index.umd.js')
+    external: [
+      'vue'
     ],
-    outfile: resolveToRoot('dist/quasar.umd.prod.js'),
-    plugins: [ quasarEsbuildPluginUmdGlobalExternals ]
+    transform: {
+      target: BROWSER_TARGET,
+      define: {
+        __QUASAR_VERSION__: `'${ version }'`,
+        __QUASAR_SSR__: 'false',
+        __QUASAR_SSR_SERVER__: 'false',
+        __QUASAR_SSR_CLIENT__: 'false',
+        __QUASAR_SSR_PWA__: 'false'
+      }
+    }
   }
 ]
 
-function genConfig (opts) {
-  return {
-    platform: 'browser',
-    packages: 'external',
-    target: [ 'es2022', 'firefox115', 'chrome115', 'safari14' ],
-    bundle: true,
-    banner: {
-      js: banner
-    },
-    write: false,
-    ...opts
-  }
-}
-
 function build (builds) {
-  const promiseList = builds.map(genConfig)
-    .map(esbuildConfig => {
-      return esBuild(esbuildConfig).then(result => {
-        if (result.errors.length !== 0 || result.warnings.length !== 0) {
-          logError(`Errors encountered for ${ esbuildConfig.entryPoints[ 0 ] }`)
-          process.exit(1)
-        }
-
+  return Promise.all(
+    builds.map(rolldownConfig => {
+      return rolldownBuild(rolldownConfig).then(result => {
         return writeFile(
-          esbuildConfig.outfile,
-          result.outputFiles[ 0 ].text,
-          esbuildConfig.minify === true
+          rolldownConfig.output.file,
+          result.output[ 0 ].code,
+          rolldownConfig.minify === true
         )
+      }).catch(err => {
+        logError(`Rolldown build failed for ${ rolldownConfig.input }`)
+        console.error(err)
+        process.exit(1)
       })
     })
-
-  return Promise
-    .all(promiseList)
-    .catch(err => {
-      console.error(err)
-      logError('Errors encountered during the esbuild compilation. Exiting...')
-      process.exit(1)
-    })
+  )
 }
 
 async function convertExternalImports (content) {
@@ -256,12 +234,17 @@ async function addUmdAssets (builds, type, injectName, convertImports) {
     )
 
     builds.push({
-      format: 'iife',
-      minify: true,
-      entryPoints: [
-        tempFile
-      ],
-      outfile: addExtension(resolveToRoot(`dist/${ type }/${ file }`), 'umd.prod')
+      platform: 'browser',
+      input: tempFile,
+      output: {
+        banner,
+        format: 'iife',
+        minify: true,
+        file: addExtension(resolveToRoot(`dist/${ type }/${ file }`), 'umd.prod')
+      },
+      transform: {
+        target: BROWSER_TARGET
+      }
     })
   }
 }
