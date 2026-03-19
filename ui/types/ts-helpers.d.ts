@@ -32,13 +32,8 @@ export type DeepPartial<T> = {
 // This type is compatible with the Vue private `ComponentPublicInstanceConstructor` type
 // https://github.com/vuejs/vue-next/blob/011dee8644bb52f5bdc6365c6e8404936d57e2cd/packages/runtime-core/src/componentPublicInstance.ts#L111
 export type ComponentConstructor<
-  Component extends ComponentPublicInstance<
-    Props,
-    RawBindings,
-    D,
-    C,
-    M
-  > = ComponentPublicInstance<any>,
+  Component extends ComponentPublicInstance<Props, RawBindings, D, C, M> =
+    ComponentPublicInstance<any>,
   Props = any,
   RawBindings = any,
   D = any,
