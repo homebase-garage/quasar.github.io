@@ -72,7 +72,7 @@ jobs:
 
       - if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo ${{ github.event.number }} > dist/.pr-number
+          echo "${{ github.event.number }}" > dist/.pr-number
 
       - name: Upload the build artifact
         uses: actions/upload-artifact@v7
