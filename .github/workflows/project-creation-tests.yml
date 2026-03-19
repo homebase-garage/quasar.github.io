@@ -13,6 +13,10 @@ on:
       - '.github/workflows/project-creation-tests.yml'
       - 'create-quasar/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     if: >-
