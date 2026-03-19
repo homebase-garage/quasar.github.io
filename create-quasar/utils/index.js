@@ -261,8 +261,19 @@ function initializeGit (projectFolder) {
   }
 
   try {
+    logger.log('Initializing Git repository...')
     exec('git init', { cwd: projectFolder })
     exec('git add -A', { cwd: projectFolder })
+
+    // Provide useful feedback to the user if they have GPG signing enabled to avoid feeling that the process is hanging
+    try {
+      const needsSigning = exec('git config --get commit.gpgsign', { cwd: projectFolder }).toString().trim()
+      if (needsSigning === 'true') {
+        logger.log('Creating initial commit (waiting for GPG signing)...')
+      }
+    }
+    catch (_) {}
+
     exec('git commit -m "Initialize the project 🚀" --no-verify', { cwd: projectFolder })
   }
   catch (_) {
