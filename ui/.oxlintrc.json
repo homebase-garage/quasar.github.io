@@ -1,0 +1,32 @@
+{
+  "extends": [ "../.oxlintrc.json" ],
+
+  "env": {
+    "browser": true
+  },
+
+  "globals": {
+    "cordova": "readonly",
+    "__QUASAR_VERSION__": "readonly",
+    "__QUASAR_SSR__": "readonly",
+    "__QUASAR_SSR_SERVER__": "readonly",
+    "__QUASAR_SSR_CLIENT__": "readonly",
+    "__QUASAR_SSR_PWA__": "readonly"
+  },
+
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "test",
+    "types",
+    "icon-set/*.js",
+    "icon-set/svg-*.mjs",
+    "lang/*.js",
+    "quasar.config.*.temporary.compiled*",
+    "playground/.quasar",
+    "playground/dist",
+    "playground/src-capacitor",
+    "playground/src-cordova",
+    "**/*.cy.js"
+  ]
+}

@@ -21,7 +21,9 @@ packages:
 # - utils/ssr-helpers
 
 catalog:
-  eslint: ^9.39.4
+  eslint: ^9.37.0
+  oxfmt: ^0.41.0
+  oxlint: ^1.56.0
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
