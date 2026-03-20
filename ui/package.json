@@ -80,12 +80,12 @@
     "autoprefixer": "^10.4.20",
     "cli-highlight": "^2.1.11",
     "cross-env": "^7.0.3",
-    "cssnano": "^7.0.6",
     "diff": "^5.2.0",
     "eslint": "catalog:",
     "eslint-config-quasar": "workspace:*",
     "fs-extra": "^11.2.0",
     "kolorist": "^1.8.0",
+    "lightningcss": "^1.32.0",
     "open": "^10.1.0",
     "postcss-rtlcss": "^5.4.0",
     "prettier": "^3.8.1",
@@ -101,16 +101,6 @@
     "attributes": "dist/vetur/quasar-attributes.json"
   },
   "web-types": "dist/web-types/web-types.json",
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 10 Edge versions",
-    "last 10 Safari versions",
-    "last 10 Android versions",
-    "last 10 ChromeAndroid versions",
-    "last 10 FirefoxAndroid versions",
-    "last 10 iOS versions"
-  ],
   "engines": {
     "node": ">= 10.18.1",
     "npm": ">= 6.13.4",

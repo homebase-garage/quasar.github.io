@@ -12,6 +12,35 @@ const jsonRE = /\.json$/
 
 const tableData = []
 
+export const BUILD_TARGETS = getBuildTargets()
+
+function getBuildTargets () {
+  const targets = [
+    { name: 'chrome', major: 111 },
+    { name: 'edge', major: 111 },
+    { name: 'firefox', major: 114 },
+    { name: 'safari', major: 16, minor: 4 },
+    { name: 'ios', major: 16, minor: 4 }
+  ]
+
+  return {
+    ROLLDOWN_NODE: 'node22',
+
+    ROLLDOWN_BROWSER: targets.map(target => {
+      return `${ target.name }${ target.major }${ target.minor ? `.${ target.minor }` : '' }`
+    }),
+
+    AUTOPREFIXER: targets.map(target => {
+      return `${ target.name } >= ${ target.major }${ target.minor ? `.${ target.minor }` : '' }`
+    }),
+
+    LIGHTNING_CSS: targets.reduce((acc, target) => {
+      acc[ target.name ] = (target.major << 16) + (target.minor ? target.minor << 8 : 0)
+      return acc
+    }, {})
+  }
+}
+
 export function plural (num) {
   return num === 1 ? '' : 's'
 }

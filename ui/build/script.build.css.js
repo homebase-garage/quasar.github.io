@@ -1,22 +1,11 @@
 import { compileAsync } from 'sass-embedded'
 import rtl from 'postcss-rtlcss'
 import postcss from 'postcss'
-import cssnano from 'cssnano'
 import autoprefixer from 'autoprefixer'
+import { transform } from 'lightningcss'
 
-import { banner, resolveToRoot, readFile, writeFile } from './build.utils.js'
+import { banner, resolveToRoot, readFile, writeFile, BUILD_TARGETS } from './build.utils.js'
 import prepareDiff from './prepare-diff.js'
-
-const nano = postcss([
-  cssnano({
-    preset: [ 'default', {
-      mergeLonghand: false,
-      convertValues: false,
-      cssDeclarationSorter: false,
-      reduceTransforms: false
-    } ]
-  })
-])
 
 const sassUseRE = /@use\s+['"][^'"]+['"]/g
 
@@ -63,12 +52,23 @@ function getConcatenatedContent (src, noBanner) {
 
 function generateUMD (code, middleName, ext = '') {
   return writeFile(`dist/quasar${ middleName }${ ext }.css`, code, true)
-    .then(code => nano.process(code, { from: void 0 }))
-    .then(code => writeFile(`dist/quasar${ middleName }${ ext }.prod.css`, code.css, true))
+    .then(code => {
+      const { code: transformedCode } = transform({
+        code: Buffer.from(code),
+        minify: true,
+        targets: BUILD_TARGETS.LIGHTNING_CSS
+      })
+      return transformedCode
+    })
+    .then(code => writeFile(`dist/quasar${ middleName }${ ext }.prod.css`, code, true))
 }
 
 function renderAsset (cssCode, middleName = '') {
-  return postcss([ autoprefixer ]).process(cssCode, { from: void 0 })
+  return postcss([
+    autoprefixer({
+      overrideBrowserslist: BUILD_TARGETS.AUTOPREFIXER
+    })
+  ]).process(cssCode, { from: void 0 })
     .then(code => {
       code.warnings().forEach(warn => {
         console.warn(warn.toString())

@@ -3,17 +3,8 @@ process.env.BABEL_ENV = 'production'
 import fse from 'fs-extra'
 import { build as rolldownBuild } from 'rolldown'
 
-import { version, banner, resolveToRoot, logError, writeFile } from './build.utils.js'
+import { version, banner, resolveToRoot, logError, writeFile, BUILD_TARGETS } from './build.utils.js'
 import prepareDiff from './prepare-diff.js'
-
-const NODE_TARGET = 'node22'
-const BROWSER_TARGET = [
-  'chrome111',
-  'edge111',
-  'firefox114',
-  'safari16.4',
-  'ios16.4'
-]
 
 const importRE = /import\s*\{([\w,\s]+)\}\s*from\s*(['"])([a-zA-Z0-9-@/]+)\2;?/g
 const umdTempFilesList = []
@@ -39,7 +30,7 @@ const builds = [
       'vue'
     ],
     transform: {
-      target: BROWSER_TARGET,
+      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
       define: {
         // Any change to the flags should be reflected
         // to src/flags.dev.js as well.
@@ -64,7 +55,7 @@ const builds = [
       'vue'
     ],
     transform: {
-      target: NODE_TARGET,
+      target: BUILD_TARGETS.ROLLDOWN_NODE,
       define: {
         __QUASAR_VERSION__: `'${ version }'`,
         __QUASAR_SSR__: 'true',
@@ -90,7 +81,7 @@ const builds = [
       'vue'
     ],
     transform: {
-      target: NODE_TARGET,
+      target: BUILD_TARGETS.ROLLDOWN_NODE,
       define: {
         __QUASAR_VERSION__: `'${ version }'`,
         __QUASAR_SSR__: 'true',
@@ -117,7 +108,7 @@ const builds = [
       'vue'
     ],
     transform: {
-      target: BROWSER_TARGET,
+      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
       define: {
         __QUASAR_VERSION__: `'${ version }'`,
         __QUASAR_SSR__: 'false',
@@ -145,7 +136,7 @@ const builds = [
       'vue'
     ],
     transform: {
-      target: BROWSER_TARGET,
+      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
       define: {
         __QUASAR_VERSION__: `'${ version }'`,
         __QUASAR_SSR__: 'false',
@@ -243,7 +234,7 @@ async function addUmdAssets (builds, type, injectName, convertImports) {
         file: addExtension(resolveToRoot(`dist/${ type }/${ file }`), 'umd.prod')
       },
       transform: {
-        target: BROWSER_TARGET
+        target: BUILD_TARGETS.ROLLDOWN_BROWSER
       }
     })
   }
