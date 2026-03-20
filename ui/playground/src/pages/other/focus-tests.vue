@@ -16,12 +16,8 @@
             </div>
           </q-card-section>
           <q-card-actions>
-            <q-btn :type="btnType" v-close-popup autofocus>
-              Close Popup
-            </q-btn>
-            <q-btn :type="btnType" @click="show = true">
-              Open dialog
-            </q-btn>
+            <q-btn :type="btnType" v-close-popup autofocus> Close Popup </q-btn>
+            <q-btn :type="btnType" @click="show = true"> Open dialog </q-btn>
           </q-card-actions>
         </q-card>
       </q-popup-proxy>
@@ -39,12 +35,8 @@
             </div>
           </q-card-section>
           <q-card-actions>
-            <q-btn :type="btnType" v-close-popup autofocus>
-              Close Menu
-            </q-btn>
-            <q-btn :type="btnType" @click="show = true">
-              Open dialog
-            </q-btn>
+            <q-btn :type="btnType" v-close-popup autofocus> Close Menu </q-btn>
+            <q-btn :type="btnType" @click="show = true"> Open dialog </q-btn>
           </q-card-actions>
         </q-card>
       </q-menu>
@@ -53,13 +45,9 @@
       Focus placeholder
     </div>
     <div>
-      <q-btn :type="btnType" @click="show = true">
-        Open dialog
-      </q-btn>
+      <q-btn :type="btnType" @click="show = true"> Open dialog </q-btn>
 
-      <q-btn :type="btnType">
-        Just click
-      </q-btn>
+      <q-btn :type="btnType"> Just click </q-btn>
 
       <q-toggle v-model="show" label="Toggle dialog" />
       <q-toggle v-model="toggle" label="Toggle nothing" />
@@ -70,8 +58,16 @@
     </div>
     <div class="row q-gutter-sm">
       <q-input v-model="text" label="QInput" />
-      <q-btn :type="btnType" label="Show QSelect" @click="$refs.sel.showPopup()" />
-      <q-checkbox v-model="forceMenu" toggle-indeterminate :label="forceMenuLabel" />
+      <q-btn
+        :type="btnType"
+        label="Show QSelect"
+        @click="$refs.sel.showPopup()"
+      />
+      <q-checkbox
+        v-model="forceMenu"
+        toggle-indeterminate
+        :label="forceMenuLabel"
+      />
       <q-select
         class="col"
         filled
@@ -85,9 +81,7 @@
       >
         <template v-slot:no-option>
           <q-item>
-            <q-item-section class="text-grey">
-              No results
-            </q-item-section>
+            <q-item-section class="text-grey"> No results </q-item-section>
           </q-item>
         </template>
       </q-select>
@@ -149,26 +143,28 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       show: false,
       toggle: false,
       forceMenu: false,
       forceA: false,
       model: null,
-      options: [ 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle' ],
+      options: ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       text: ''
     }
   },
 
   computed: {
-    behavior () {
+    behavior() {
       return this.forceMenu === null
         ? 'default'
-        : (this.forceMenu === true ? 'menu' : 'dialog')
+        : this.forceMenu === true
+          ? 'menu'
+          : 'dialog'
     },
 
-    forceMenuLabel () {
+    forceMenuLabel() {
       if (this.forceMenu === true) {
         return 'Force menu'
       }
@@ -176,11 +172,11 @@ export default {
       return this.forceMenu === false ? 'Force dialog' : 'Based on platform'
     },
 
-    btnType () {
+    btnType() {
       return this.forceA === true ? 'a' : 'button'
     },
 
-    forceALabel () {
+    forceALabel() {
       return this.forceA === true ? 'Force A' : 'Force Button'
     }
   }

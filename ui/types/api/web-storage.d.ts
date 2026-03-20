@@ -4,26 +4,26 @@ type WebStorageGetMethodReturnType =
   | number
   | boolean
   | string
-  | object;
+  | object
 
-type WebStorageGetKeyMethodReturnType = string;
+type WebStorageGetKeyMethodReturnType = string
 
 export type WebStorageGetItemMethodType = <
-  T extends WebStorageGetMethodReturnType = WebStorageGetMethodReturnType,
+  T extends WebStorageGetMethodReturnType = WebStorageGetMethodReturnType
 >(
-  key: string,
-) => T | null;
+  key: string
+) => T | null
 
 export type WebStorageGetIndexMethodType = <
-  T extends WebStorageGetMethodReturnType = WebStorageGetMethodReturnType,
+  T extends WebStorageGetMethodReturnType = WebStorageGetMethodReturnType
 >(
-  index: number,
-) => T | null;
+  index: number
+) => T | null
 
 export type WebStorageGetKeyMethodType = <
-  T extends WebStorageGetKeyMethodReturnType = WebStorageGetKeyMethodReturnType,
+  T extends WebStorageGetKeyMethodReturnType = WebStorageGetKeyMethodReturnType
 >(
-  index: number,
-) => T | null;
+  index: number
+) => T | null
 
-export type WebStorageGetAllKeysMethodType = () => string[];
+export type WebStorageGetAllKeysMethodType = () => string[]

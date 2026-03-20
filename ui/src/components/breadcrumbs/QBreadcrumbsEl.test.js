@@ -13,29 +13,23 @@ describe('[QBreadcrumbsEl API]', () => {
 
         const wrapper = mount(QBreadcrumbsEl, {
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: testRoute })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe(testRoute)
+        expect(wrapper.get('a').attributes('href')).toBe(testRoute)
 
         const routerFn = vi.spyOn(router, 'push')
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe(testRoute)
+        expect(router.currentRoute.value.path).toBe(testRoute)
 
         expect(routerFn).toHaveBeenCalledTimes(1)
         expect(routerFn).toHaveBeenCalledWith(testRoute)
@@ -48,29 +42,23 @@ describe('[QBreadcrumbsEl API]', () => {
 
         const wrapper = mount(QBreadcrumbsEl, {
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: propVal })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe(testRoute)
+        expect(wrapper.get('a').attributes('href')).toBe(testRoute)
 
         const routerFn = vi.spyOn(router, 'push')
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe(testRoute)
+        expect(router.currentRoute.value.path).toBe(testRoute)
 
         expect(routerFn).toHaveBeenCalledTimes(1)
         expect(routerFn).toHaveBeenCalledWith(propVal)
@@ -90,37 +78,27 @@ describe('[QBreadcrumbsEl API]', () => {
             exactActiveClass
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: '/route/subRoute' })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe('/route/subRoute')
+        expect(wrapper.get('a').attributes('href')).toBe('/route/subRoute')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(
-          expect.$any([ activeClass, exactActiveClass ])
+        expect(wrapper.get('a').classes()).not.toContain(
+          expect.$any([activeClass, exactActiveClass])
         )
 
         await router.push('/route')
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe('/route')
+        expect(router.currentRoute.value.path).toBe('/route')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(
-          expect.$any([ activeClass, exactActiveClass ])
+        expect(wrapper.get('a').classes()).not.toContain(
+          expect.$any([activeClass, exactActiveClass])
         )
 
         await router.push('/route/subRoute')
@@ -142,29 +120,23 @@ describe('[QBreadcrumbsEl API]', () => {
             replace: true
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: testRoute })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe(testRoute)
+        expect(wrapper.get('a').attributes('href')).toBe(testRoute)
 
         const routerFn = vi.spyOn(router, 'replace')
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe(testRoute)
+        expect(router.currentRoute.value.path).toBe(testRoute)
 
         expect(routerFn).toHaveBeenCalledTimes(1)
         expect(routerFn).toHaveBeenCalledWith(testRoute)
@@ -181,40 +153,28 @@ describe('[QBreadcrumbsEl API]', () => {
             activeClass
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: '/route' })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe('/route')
+        expect(wrapper.get('a').attributes('href')).toBe('/route')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(activeClass)
+        expect(wrapper.get('a').classes()).not.toContain(activeClass)
 
         await router.push('/route')
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe('/route')
+        expect(router.currentRoute.value.path).toBe('/route')
 
-        expect(
-          wrapper.get('a').classes()
-        ).toContain(activeClass)
+        expect(wrapper.get('a').classes()).toContain(activeClass)
 
         await router.push('/route/subRoute')
 
-        expect(
-          wrapper.get('a').classes()
-        ).toContain(activeClass)
+        expect(wrapper.get('a').classes()).toContain(activeClass)
       })
     })
 
@@ -231,46 +191,32 @@ describe('[QBreadcrumbsEl API]', () => {
             exactActiveClass
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ to: '/route/subRoute' })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe('/route/subRoute')
+        expect(wrapper.get('a').attributes('href')).toBe('/route/subRoute')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(exactActiveClass)
+        expect(wrapper.get('a').classes()).not.toContain(exactActiveClass)
 
         await router.push('/route')
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe('/route')
+        expect(router.currentRoute.value.path).toBe('/route')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(exactActiveClass)
+        expect(wrapper.get('a').classes()).not.toContain(exactActiveClass)
 
         await router.push('/route/subRoute')
 
-        expect(
-          wrapper.get('a').classes()
-        ).toContain(exactActiveClass)
+        expect(wrapper.get('a').classes()).toContain(exactActiveClass)
 
         await router.push('/route/subRoute/other')
 
-        expect(
-          wrapper.get('a').classes()
-        ).not.toContain(exactActiveClass)
+        expect(wrapper.get('a').classes()).not.toContain(exactActiveClass)
       })
     })
 
@@ -279,16 +225,12 @@ describe('[QBreadcrumbsEl API]', () => {
         const propVal = 'https://quasar.dev'
         const wrapper = mount(QBreadcrumbsEl)
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ href: propVal })
         await flushPromises()
 
-        expect(
-          wrapper.get('a').attributes('href')
-        ).toBe(propVal)
+        expect(wrapper.get('a').attributes('href')).toBe(propVal)
       })
     })
 
@@ -302,22 +244,16 @@ describe('[QBreadcrumbsEl API]', () => {
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.setProps({ href })
         await flushPromises()
 
         const link = wrapper.get('a')
 
-        expect(
-          link.attributes('href')
-        ).toBe(href)
+        expect(link.attributes('href')).toBe(href)
 
-        expect(
-          link.attributes('target')
-        ).toBe(propVal)
+        expect(link.attributes('target')).toBe(propVal)
       })
     })
 
@@ -331,27 +267,21 @@ describe('[QBreadcrumbsEl API]', () => {
             to: testRoute
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(true)
+        expect(wrapper.find('a').exists()).toBe(true)
 
         await wrapper.setProps({ disable: true })
         await flushPromises()
 
-        expect(
-          wrapper.find('a').exists()
-        ).toBe(false)
+        expect(wrapper.find('a').exists()).toBe(false)
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).not.toBe(testRoute)
+        expect(router.currentRoute.value.path).not.toBe(testRoute)
       })
     })
 
@@ -374,16 +304,12 @@ describe('[QBreadcrumbsEl API]', () => {
         const propVal = 'map'
         const wrapper = mount(QBreadcrumbsEl)
 
-        expect(
-          wrapper.find('.q-icon').exists()
-        ).toBe(false)
+        expect(wrapper.find('.q-icon').exists()).toBe(false)
 
         await wrapper.setProps({ icon: propVal })
         await flushPromises()
 
-        expect(
-          wrapper.get('.q-icon').text()
-        ).toContain(propVal)
+        expect(wrapper.get('.q-icon').text()).toContain(propVal)
       })
     })
 
@@ -400,9 +326,7 @@ describe('[QBreadcrumbsEl API]', () => {
         await wrapper.setProps({ tag: propVal })
         await flushPromises()
 
-        expect(
-          wrapper.element.tagName
-        ).toBe(propVal.toUpperCase())
+        expect(wrapper.element.tagName).toBe(propVal.toUpperCase())
       })
     })
   })
@@ -433,7 +357,7 @@ describe('[QBreadcrumbsEl API]', () => {
         expect(eventList).toHaveProperty('click')
         expect(eventList.click).toHaveLength(1)
 
-        const [ evt, go ] = eventList.click[ 0 ]
+        const [evt, go] = eventList.click[0]
         expect(evt).toBeInstanceOf(Event)
         expect(go).not.toBeDefined()
       })
@@ -447,7 +371,7 @@ describe('[QBreadcrumbsEl API]', () => {
             to: testRoute
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
@@ -457,7 +381,7 @@ describe('[QBreadcrumbsEl API]', () => {
         expect(eventList).toHaveProperty('click')
         expect(eventList.click).toHaveLength(1)
 
-        const [ evt, go ] = eventList.click[ 0 ]
+        const [evt, go] = eventList.click[0]
         expect(evt).toBeInstanceOf(Event)
         expect(go).toBeTypeOf('function')
       })
@@ -472,16 +396,14 @@ describe('[QBreadcrumbsEl API]', () => {
             onClick: e => e.preventDefault()
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).not.toBe(testRoute)
+        expect(router.currentRoute.value.path).not.toBe(testRoute)
       })
 
       test('can manually navigate by calling go()', async () => {
@@ -497,16 +419,14 @@ describe('[QBreadcrumbsEl API]', () => {
             }
           },
           global: {
-            plugins: [ router ]
+            plugins: [router]
           }
         })
 
         await wrapper.trigger('click')
         await flushPromises()
 
-        expect(
-          router.currentRoute.value.path
-        ).toBe(testRoute)
+        expect(router.currentRoute.value.path).toBe(testRoute)
       })
     })
   })

@@ -1,12 +1,16 @@
 {
   "name": "quasar-ui-test",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:watch:ui": "vitest watch --ui",
     "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "clipboardy": "^4.0.0",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "@quasar/extras": "workspace:*",
@@ -23,9 +27,5 @@
     "vite-plugin-checker": "^0.10.3",
     "vitest": "^3.2.4",
     "vue": "^3.5.30"
-  },
-  "dependencies": {
-    "clipboardy": "^4.0.0",
-    "minimist": "^1.2.8"
   }
 }

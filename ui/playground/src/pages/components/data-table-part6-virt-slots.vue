@@ -9,7 +9,11 @@
           outlined
           :min="0"
           :max="255"
-          @update:model-value="val => { table1.value !== null && table1.value.scrollTo(val) }"
+          @update:model-value="
+            val => {
+              table1.value !== null && table1.value.scrollTo(val)
+            }
+          "
         />
 
         <q-table
@@ -48,7 +52,12 @@
           outlined
           :min="0"
           :max="255"
-          @update:model-value="val => { table2.value !== null && table2.value.scrollTo(val, 'center-force') }"
+          @update:model-value="
+            val => {
+              table2.value !== null &&
+                table2.value.scrollTo(val, 'center-force')
+            }
+          "
         />
 
         <q-table
@@ -61,7 +70,11 @@
           :pagination="pagination"
           :rows-per-page-options="[]"
           virtual-scroll
-          @virtual-scroll="({ index }) => { index2 = index }"
+          @virtual-scroll="
+            ({ index }) => {
+              index2 = index
+            }
+          "
         >
           <template v-slot:top-row="{ cols }">
             <tr class="bg-red text-white">
@@ -88,7 +101,7 @@
 import { ref } from 'vue'
 
 export default {
-  setup () {
+  setup() {
     return {
       index1: 0,
       index2: 0,
@@ -112,7 +125,9 @@ export default {
         }
       ],
 
-      rows: Array(256).fill(null).map((_, i) => ({ id: '#' + i, ip: '10.0.0.' + i }))
+      rows: Array(256)
+        .fill(null)
+        .map((_, i) => ({ id: '#' + i, ip: '10.0.0.' + i }))
     }
   }
 }

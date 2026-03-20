@@ -1,11 +1,11 @@
 <template>
   <div class="q-layout-padding docs-touch row justify-center">
-    <div style="width: 500px; max-width: 90vw;">
+    <div style="width: 500px; max-width: 90vw">
       <p class="caption">
         <span class="desktop-only">Click and hold with your mouse</span>
         <span class="mobile-only">Touch and hold</span>
         on the area below to see it in action.
-        <br>
+        <br />
         Notice that on touch capable devices the scrolling is not blocked.
       </p>
 
@@ -73,9 +73,7 @@
         </div>
       </div>
 
-      <p class="caption">
-        test (preventing it from inner square)
-      </p>
+      <p class="caption"> test (preventing it from inner square) </p>
       <div
         v-touch-hold.mouse="holdTest"
         @click="onEvt('click')"
@@ -87,9 +85,19 @@
         @touchend="onEvt('touchend')"
         class="row flex-center"
       >
-        <div @touchstart="handleEvt" @mousedown="handleEvt" style="padding: 24px" class="cursor-pointer bg-primary text-white rounded-borders shadow-2">
+        <div
+          @touchstart="handleEvt"
+          @mousedown="handleEvt"
+          style="padding: 24px"
+          class="cursor-pointer bg-primary text-white rounded-borders shadow-2"
+        >
           <div>
-            <q-toggle dark color="black" v-model="holdTestStopPropagation" label="Stop propagation" />
+            <q-toggle
+              dark
+              color="black"
+              v-model="holdTestStopPropagation"
+              label="Stop propagation"
+            />
           </div>
           <div v-if="infoTest" class="custom-info">
             <pre>{{ infoTest }}</pre>
@@ -101,8 +109,7 @@
       </div>
 
       <p class="caption">
-        test (capture + preventing it from inner square)
-        -- should still work
+        test (capture + preventing it from inner square) -- should still work
       </p>
       <div
         v-touch-hold.capture.mouse.mouseCapture="holdTestCapture"
@@ -115,7 +122,12 @@
         @touchend="onEvt('touchend')"
         class="row flex-center"
       >
-        <div @touchstart.stop @mousedown.stop style="padding: 24px" class="cursor-pointer bg-primary text-white rounded-borders shadow-2">
+        <div
+          @touchstart.stop
+          @mousedown.stop
+          style="padding: 24px"
+          class="cursor-pointer bg-primary text-white rounded-borders shadow-2"
+        >
           <div v-if="infoTestCapture" class="custom-info">
             <pre>{{ infoTestCapture }}</pre>
           </div>
@@ -132,7 +144,7 @@
 import './touch-style.sass'
 
 export default {
-  data () {
+  data() {
     return {
       info: null,
       infoExtended: null,
@@ -147,52 +159,52 @@ export default {
   },
 
   computed: {
-    computedHandler () {
+    computedHandler() {
       return this.disable === true ? void 0 : this.handleHold
     }
   },
 
   methods: {
-    handleHold ({ evt, ...info }) {
+    handleHold({ evt, ...info }) {
       this.info = info
 
       // native Javascript event
       console.log('TRIGGER', evt)
     },
 
-    holdExtended ({ evt, ...info }) {
+    holdExtended({ evt, ...info }) {
       this.infoExtended = info
 
       // native Javascript event
       console.log('TRIGGER', evt)
     },
 
-    holdCustom ({ evt, ...info }) {
+    holdCustom({ evt, ...info }) {
       this.infoCustom = info
 
       // native Javascript event
       console.log('TRIGGER', evt)
     },
 
-    holdTest ({ evt, ...info }) {
+    holdTest({ evt, ...info }) {
       this.infoTest = info
 
       // native Javascript event
       console.log('TRIGGER', evt)
     },
 
-    holdTestCapture ({ evt, ...info }) {
+    holdTestCapture({ evt, ...info }) {
       this.infoTestCapture = info
 
       // native Javascript event
       console.log('TRIGGER', evt)
     },
 
-    onEvt (reason) {
+    onEvt(reason) {
       console.log('@' + reason)
     },
 
-    handleEvt (e) {
+    handleEvt(e) {
       if (this.holdTestStopPropagation) {
         e.stopPropagation()
       }

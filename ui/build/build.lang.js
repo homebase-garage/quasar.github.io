@@ -1,45 +1,45 @@
 import { globSync } from 'tinyglobby'
 import fse from 'fs-extra'
 
-import { rootFolder, resolveToRoot, logError, writeFileIfChanged } from './build.utils.js'
+import {
+  rootFolder,
+  resolveToRoot,
+  logError,
+  writeFileIfChanged
+} from './build.utils.js'
 
-function parse (prop, txt) {
-  const
-    propIndex = txt.indexOf(prop),
-    startIndex = txt.indexOf('\'', propIndex) + 1
+function parse(prop, txt) {
+  const propIndex = txt.indexOf(prop),
+    startIndex = txt.indexOf("'", propIndex) + 1
 
-  let stopIndex = txt.indexOf('\'', startIndex)
+  let stopIndex = txt.indexOf("'", startIndex)
 
   while (txt.charAt(stopIndex - 1) === '\\') {
-    stopIndex = txt.indexOf('\'', stopIndex + 1)
+    stopIndex = txt.indexOf("'", stopIndex + 1)
   }
 
   return txt.substring(startIndex, stopIndex).replace('\\', '')
 }
 
-export function generate () {
+export function generate() {
   const languages = []
   const promises = []
   try {
-    globSync('lang/*.js', { cwd: rootFolder, absolute: true })
-      .forEach(file => {
-        const content = fse.readFileSync(file, 'utf-8')
-        languages.push({
-          isoName: parse('isoName', content),
-          nativeName: parse('nativeName', content)
-        })
+    globSync('lang/*.js', { cwd: rootFolder, absolute: true }).forEach(file => {
+      const content = fse.readFileSync(file, 'utf-8')
+      languages.push({
+        isoName: parse('isoName', content),
+        nativeName: parse('nativeName', content)
       })
+    })
 
     const langFile = resolveToRoot('lang/index.json')
     const quasarLangIndex = JSON.stringify(languages)
 
-    promises.push(
-      writeFileIfChanged(langFile, quasarLangIndex)
-    )
+    promises.push(writeFileIfChanged(langFile, quasarLangIndex))
 
     return Promise.all(promises).then(() => languages)
-  }
-  catch (err) {
+  } catch (err) {
     logError('build.lang.js: something went wrong...')
     console.log()
     console.error(err)

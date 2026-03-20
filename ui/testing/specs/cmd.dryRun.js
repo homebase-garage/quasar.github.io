@@ -16,7 +16,7 @@ const ctxOverride = {
 /**
  * Initializes and returns a Dry-run test function of create + validate
  */
-export async function getDryRunCmd () {
+export function getDryRunCmd() {
   const result = {
     passed: 0,
     failed: 0,
@@ -28,20 +28,22 @@ export async function getDryRunCmd () {
     fse.removeSync(testFilePath)
 
     if (code !== 0) {
-      console.log(`\n\n  🔥 The dry-run testing failed (exit code ${ code }).\n`)
+      console.log(`\n\n  🔥 The dry-run testing failed (exit code ${code}).\n`)
       return
     }
 
-    console.log(`\n\n  🏁 Done dry-run testing: ${ result.passed } passed & ${ result.failed } failed\n`)
+    console.log(
+      `\n\n  🏁 Done dry-run testing: ${result.passed} passed & ${result.failed} failed\n`
+    )
     if (result.failList.length !== 0) {
       console.log('  Failed for:')
       for (const fail of result.failList) {
-        console.log(`    ❌ ${ fail }`)
+        console.log(`    ❌ ${fail}`)
       }
     }
   })
 
-  return async function cmdDryRun ({ ctx, testFile }) {
+  return async function cmdDryRun({ ctx, testFile }) {
     let testFileContent
     try {
       testFileContent = testFile.createContent()
@@ -50,11 +52,12 @@ export async function getDryRunCmd () {
       //   testFileContent,
       //   'utf-8'
       // )
-    }
-    catch (err) {
+    } catch (err) {
       result.failed++
       result.failList.push(ctx.targetRelative)
-      console.error(`\n  ❌ Failed ${ ctx.targetRelative }: createContent() threw an error`)
+      console.error(
+        `\n  ❌ Failed ${ctx.targetRelative}: createContent() threw an error`
+      )
       console.error(err)
       return
     }
@@ -63,7 +66,9 @@ export async function getDryRunCmd () {
     if (lintResult !== void 0) {
       result.failed++
       result.failList.push(ctx.targetRelative)
-      console.error(`\n  ❌ Failed ${ ctx.targetRelative }: linting after createContent()`)
+      console.error(
+        `\n  ❌ Failed ${ctx.targetRelative}: linting after createContent()`
+      )
       console.error(lintResult)
       return
     }
@@ -74,20 +79,17 @@ export async function getDryRunCmd () {
      * Their "ctx" will be overridden to point to
      * the temporary file.
      */
-    fse.writeFileSync(
-      testFilePath,
-      testFileContent,
-      'utf-8'
-    )
+    fse.writeFileSync(testFilePath, testFileContent, 'utf-8')
 
     let tempTestFile
     try {
       tempTestFile = getTestFile({ ...ctx, ...ctxOverride })
-    }
-    catch (err) {
+    } catch (err) {
       result.failed++
       result.failList.push(ctx.targetRelative)
-      console.error(`\n  ❌ Failed ${ ctx.targetRelative }: getTestFile() threw an error`)
+      console.error(
+        `\n  ❌ Failed ${ctx.targetRelative}: getTestFile() threw an error`
+      )
       console.error(err)
       return
     }
@@ -97,16 +99,19 @@ export async function getDryRunCmd () {
       if (errors.length !== 0 || warnings.length !== 0) {
         result.failed++
         result.failList.push(ctx.targetRelative)
-        console.error(`\n  ❌ Failed ${ ctx.targetRelative }: getMisconfiguration()`)
+        console.error(
+          `\n  ❌ Failed ${ctx.targetRelative}: getMisconfiguration()`
+        )
         console.error('errors', errors)
         console.error('warnings', warnings)
         return
       }
-    }
-    catch (err) {
+    } catch (err) {
       result.failed++
       result.failList.push(ctx.targetRelative)
-      console.error(`\n  ❌ Failed ${ ctx.targetRelative }: getMisconfiguration() threw an error`)
+      console.error(
+        `\n  ❌ Failed ${ctx.targetRelative}: getMisconfiguration() threw an error`
+      )
       console.error(err)
       return
     }
@@ -116,15 +121,16 @@ export async function getDryRunCmd () {
       if (missingTests !== null) {
         result.failed++
         result.failList.push(ctx.targetRelative)
-        console.error(`\n  ❌ Failed ${ ctx.targetRelative }: getMissingTests()`)
+        console.error(`\n  ❌ Failed ${ctx.targetRelative}: getMissingTests()`)
         console.error(missingTests)
         return
       }
-    }
-    catch (err) {
+    } catch (err) {
       result.failed++
       result.failList.push(ctx.targetRelative)
-      console.error(`\n  ❌ Failed ${ ctx.targetRelative }: getMissingTests() threw an error`)
+      console.error(
+        `\n  ❌ Failed ${ctx.targetRelative}: getMissingTests() threw an error`
+      )
       console.error(err)
       return
     }

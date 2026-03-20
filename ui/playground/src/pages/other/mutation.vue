@@ -20,7 +20,7 @@
       <q-separator />
       <q-card-section v-mutation="onMutation">
         <div v-for="n in nodesNumber2" :key="n" v-bind="attributes2">
-          Node {{ (n + 1) }}
+          Node {{ n + 1 }}
         </div>
         <div>
           {{ char2 }}
@@ -30,24 +30,18 @@
 
     <q-card flat bordered>
       <q-card-section>
-        <div class="text-h6">
-          childList
-        </div>
+        <div class="text-h6"> childList </div>
         <q-slider v-model="nodesNumber" :min="1" :max="10" />
       </q-card-section>
       <q-separator />
       <q-card-section v-mutation.childList="onMutation">
-        <div v-for="n in nodesNumber" :key="n">
-          Node {{ (n + 1) }}
-        </div>
+        <div v-for="n in nodesNumber" :key="n"> Node {{ n + 1 }} </div>
       </q-card-section>
     </q-card>
 
     <q-card flat bordered>
       <q-card-section>
-        <div class="text-h6">
-          attributes
-        </div>
+        <div class="text-h6"> attributes </div>
         <q-toggle v-model="attrs" val="first" label="First" />
         <q-toggle v-model="attrs" val="second" label="Second" />
         <q-toggle v-model="attrs" val="third" label="Third" />
@@ -60,9 +54,7 @@
 
     <q-card flat bordered>
       <q-card-section>
-        <div class="text-h6">
-          characterData
-        </div>
+        <div class="text-h6"> characterData </div>
         <q-toggle v-model="char" val="first" label="First" />
         <q-toggle v-model="char" val="second" label="Second" />
         <q-toggle v-model="char" val="third" label="Third" />
@@ -77,33 +69,37 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       nodesNumber: 3,
       nodesNumber2: 3,
-      attrs: [ 'third' ],
-      attrs2: [ 'third' ],
-      char: [ 'wee' ],
-      char2: [ 'wee' ]
+      attrs: ['third'],
+      attrs2: ['third'],
+      char: ['wee'],
+      char2: ['wee']
     }
   },
 
   computed: {
-    attributes () {
+    attributes() {
       const att = {}
-      this.attrs.forEach(a => { att[ a ] = 'yes' })
+      this.attrs.forEach(a => {
+        att[a] = 'yes'
+      })
       return att
     },
 
-    attributes2 () {
+    attributes2() {
       const att = {}
-      this.attrs2.forEach(a => { att[ a ] = 'yes' })
+      this.attrs2.forEach(a => {
+        att[a] = 'yes'
+      })
       return att
     }
   },
 
   methods: {
-    onMutation (mutationList) {
+    onMutation(mutationList) {
       console.log(mutationList)
     }
   }
