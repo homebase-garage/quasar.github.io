@@ -56,7 +56,7 @@ function onAppleScroll(e) {
   if (e.target === document) {
     // required, otherwise iOS blocks further scrolling
     // until the mobile scrollbar dissappears
-    document.scrollingElement.scrollTop = document.scrollingElement.scrollTop // eslint-disable-line
+    document.scrollingElement.scrollTop = document.scrollingElement.scrollTop // oxlint-disable-line
   }
 }
 

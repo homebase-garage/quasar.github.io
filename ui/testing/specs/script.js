@@ -63,7 +63,7 @@ if (targetList.length === 0) {
   process.exit(1)
 }
 
-const cmdDryRun = argv['dry-run'] === true ? await getDryRunCmd() : null
+const cmdDryRun = argv['dry-run'] === true ? getDryRunCmd() : null
 
 for (const target of targetList) {
   if (ignoredTestFiles.has(target) === true) {
@@ -77,7 +77,7 @@ for (const target of targetList) {
   const testFile = getTestFile(ctx)
 
   if (cmdDryRun !== null) {
-    await cmdDryRun({ ctx, testFile })
+    cmdDryRun({ ctx, testFile })
   } else if (argv.generate !== void 0) {
     await cmdGenerateSection({ ctx, testFile, jsonPath: argv.generate })
   } else if (testFile.content !== null) {

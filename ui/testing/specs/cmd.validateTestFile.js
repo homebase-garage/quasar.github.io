@@ -2,19 +2,11 @@ import { basename } from 'node:path'
 import prompts from 'prompts'
 
 import { plural } from './specs.utils.js'
-import lint from './lint.js'
 
 /**
  * Validates a test file
  */
 export async function cmdValidateTestFile({ ctx, testFile, argv }) {
-  const lintResult = await lint(ctx.testFileAbsolute)
-  if (lintResult !== void 0) {
-    console.error(`  ❌ ${ctx.testFileRelative} has linting issues:`)
-    console.error(lintResult)
-    process.exit(1)
-  }
-
   const { errors, warnings } = testFile.getMisconfiguration({
     disallowWorkInProgress: true
   })

@@ -46,7 +46,7 @@
                     "required": false,
                     "examples": [
                       "'Quasar Framework'",
-                      "[ 1, 2, 6, 3 ]",
+                      "[1, 2, 6, 3]",
                       "{ book: { id: 1, name: 'Lorem Ipsum' }, user: { name: 'Lorem J. Ipsum', role: 'admin' } }"
                     ]
                   }

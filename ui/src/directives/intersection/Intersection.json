@@ -186,7 +186,7 @@
           "threshold": {
             "type": "Array",
             "desc": "Threshold(s) at which to trigger callback, specified as a ratio, or list of ratios, of (visible area / total area) of the observed element",
-            "examples": ["[ 0, 0.25, 0.5, 0.75, 1 ]"]
+            "examples": ["[0, 0.25, 0.5, 0.75, 1]"]
           }
         }
       }

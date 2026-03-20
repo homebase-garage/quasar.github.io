@@ -21,7 +21,6 @@ export const testPattern = {
   // This is a basic helper validation.
   // For something more complex (like RFC 822) you should write and use your own rule.
   // We won't be accepting PRs to enhance the one below because of the reason above.
-  // eslint-disable-next-line
   email: v =>
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
       v

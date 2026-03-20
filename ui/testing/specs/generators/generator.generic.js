@@ -60,7 +60,7 @@ export function createClassTest({ testId, jsonEntry }) {
 
 export function createFunctionTest({ testId, jsonEntry }) {
   const lint = jsonEntry.params
-    ? `// eslint-disable-next-line no-undef\n${testIndent}`
+    ? `// oxlint-disable-next-line no-undef\n${testIndent}`
     : ''
 
   return `

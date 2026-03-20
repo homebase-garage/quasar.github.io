@@ -41,8 +41,8 @@
       "desc": "Array of objects with available options that the user can select from. For best performance freeze the list of options. Canonical form of each object is with 'label' (String), 'value' (Any) and optional 'disable' (Boolean) props (can be customized with options-value/option-label/option-disable props).",
       "default": "[]",
       "examples": [
-        "[ 'Tesla', 'iPhone' ]",
-        "[ { label: 'Tesla', value: 'car' }, { label: 'iPhone', value: 'phone' } ]"
+        "['Tesla', 'iPhone']",
+        "[{ label: 'Tesla', value: 'car' }, { label: 'iPhone', value: 'phone' }]"
       ],
       "category": "options"
     },
@@ -239,7 +239,7 @@
     "menu-offset": {
       "type": "Array",
       "desc": "An array of two numbers to offset the options list horizontally and vertically in pixels (only in menu mode)",
-      "examples": ["[ 8, 8 ]", "[ 5, 10 ]"],
+      "examples": ["[8, 8]", "[5, 10]"],
       "category": "position"
     },
 

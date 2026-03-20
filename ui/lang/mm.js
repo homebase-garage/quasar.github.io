@@ -48,7 +48,6 @@ export default {
       rows > 0 ? rows + ' တန်းရွေးချယ်ထားသည်' : 'ဘာမှ မရွေးချယ်ထားပါ',
     recordsPerPage: 'တစ်မျက်နှာခြင်း အတန်းရေတွက်',
     allRows: 'အားလုံး',
-    // eslint-disable-next-line no-useless-concat
     pagination: (start, end, total) =>
       start + 'မှ' + end + 'ထိ' + 'အားလုံး' + total + 'ရှိ',
     columns: 'ကော်လံ'

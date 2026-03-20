@@ -53,8 +53,8 @@
       "type": "Array",
       "desc": "Array of strings that are the message body. Strings are not sanitized (see details in docs)",
       "examples": [
-        "[ 'How are you?' ]",
-        "[ 'I\\'m good, thank you!', 'And you?' ]"
+        "['How are you?']",
+        "['I\\'m good, thank you!', 'And you?']"
       ],
       "category": "content"
     },

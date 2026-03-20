@@ -86,7 +86,7 @@ export default {
       script: {
         ldJson: {
           type: 'application/ld+json',
-          innerHTML: `{ "@context": "http://schema.org" }` // eslint-disable-line
+          innerHTML: `{ "@context": "http://schema.org" }`
         }
       }
     })

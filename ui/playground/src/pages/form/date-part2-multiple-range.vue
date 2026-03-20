@@ -63,7 +63,7 @@
 </template>
 
 <script>
-/* eslint-disable */
+/* oxlint-disable */
 
 export default {
   data() {

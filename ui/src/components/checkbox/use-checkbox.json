@@ -9,7 +9,7 @@
       "extends": "model-value",
       "type": ["Any", "Array"],
       "default": "null",
-      "examples": ["false", "[ 'car', 'building' ]"]
+      "examples": ["false", "['car', 'building']"]
     },
 
     "val": {

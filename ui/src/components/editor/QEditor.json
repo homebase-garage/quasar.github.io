@@ -165,8 +165,8 @@
     "toolbar": {
       "type": "Array",
       "desc": "An array of arrays of Objects/Strings that you use to define the construction of the elements and commands available in the toolbar",
-      "default": "[ [ 'left', 'center', 'right', 'justify' ], [ 'bold', 'italic', 'underline', 'strike' ], [ 'undo', 'redo' ] ]",
-      "examples": ["[ 'left', 'center', 'right', 'justify' ]"],
+      "default": "[['left', 'center', 'right', 'justify'], ['bold', 'italic', 'underline', 'strike'], ['undo', 'redo']]",
+      "examples": ["['left', 'center', 'right', 'justify']"],
       "category": "toolbar"
     },
 

@@ -1,5 +1,3 @@
-/* eslint no-fallthrough: 0 */
-
 import { isDate } from '../is/is.js'
 import { pad, capitalize } from '../format/format.js'
 import { jalaaliMonthLength } from './private.persian.js'

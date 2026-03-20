@@ -124,7 +124,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import {
   h,
   ref,

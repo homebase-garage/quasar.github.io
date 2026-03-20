@@ -54,11 +54,8 @@ export default createComponent({
       type: Array,
       validator: v => v.length === 0 || v.every(group => group.length),
       // long line on purpose for API validation purposes:
-      default: () => [
-        ['left', 'center', 'right', 'justify'],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['undo', 'redo']
-      ]
+      // oxfmt-ignore
+      default: () => [['left', 'center', 'right', 'justify'], ['bold', 'italic', 'underline', 'strike'], ['undo', 'redo']]
     },
     toolbarColor: String,
     toolbarBg: String,

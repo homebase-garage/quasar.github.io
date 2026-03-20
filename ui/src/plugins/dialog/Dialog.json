@@ -126,7 +126,7 @@
                   "type": "Array",
                   "desc": "The list of options to interact with; Equivalent to options prop of the QOptionGroup component",
                   "examples": [
-                    "[ { label: 'Option 1', value: 'op1' }, { label: 'Option 2', value: 'op2' }, { label: 'Option 3', value: 'op3' } ]"
+                    "[{ label: 'Option 1', value: 'op1' }, { label: 'Option 2', value: 'op2' }, { label: 'Option 3', value: 'op3' }]"
                   ]
                 },
 
@@ -140,9 +140,9 @@
                       "desc": "The current model (String if it's of type radio or Array otherwise)",
                       "examples": [
                         "'opt2'",
-                        "[ 'opt1' ]",
+                        "['opt1']",
                         "[]",
-                        "[ 'opt1', 'opt3' ]"
+                        "['opt1', 'opt3']"
                       ]
                     }
                   },

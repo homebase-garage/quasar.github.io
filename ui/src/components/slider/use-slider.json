@@ -201,7 +201,7 @@
       "category": "content",
       "examples": [
         "true",
-        "[ { value: 0, label: '0%' }, { value: 5, classes: 'my-class', style: { width: '24px' } } ]",
+        "[{ value: 0, label: '0%' }, { value: 5, classes: 'my-class', style: { width: '24px' } }]",
         "{ 0: '0%', 5: { label: '5%', classes: 'my-class', style: { width: '24px' } } }",
         "val => (10 * val) + '%'",
         "val => ({ label: (10 * val) + '%', classes: 'my-class', style: { width: '24px' } })"

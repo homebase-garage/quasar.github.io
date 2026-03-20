@@ -31,9 +31,9 @@
       "tsType": "ValidationRule",
       "desc": "Array of Functions/Strings; If String, then it must be a name of one of the embedded validation rules",
       "examples": [
-        "[ val => val.length <= 3 || 'Please use maximum 3 characters' ]",
-        "[ 'fulltime' ]",
-        "[ (val, rules) => rules.email(val) || 'Please enter a valid email address' ]"
+        "[val => val.length <= 3 || 'Please use maximum 3 characters']",
+        "['fulltime']",
+        "[(val, rules) => rules.email(val) || 'Please enter a valid email address']"
       ],
       "category": "validation"
     },

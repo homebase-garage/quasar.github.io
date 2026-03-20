@@ -16,7 +16,6 @@
 </template>
 
 <script setup>
-/* eslint-disable */
 import {
   h,
   ref,

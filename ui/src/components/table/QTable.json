@@ -363,7 +363,7 @@
       "type": "Array",
       "desc": "Array of Strings defining column names ('name' property of each column from 'columns' prop definitions); Columns marked as 'required' are not affected by this property",
       "examples": [
-        "[ 'desc', 'carbs', 'protein' ]",
+        "['desc', 'carbs', 'protein']",
         "# :visible-columns=\"myCols\""
       ],
       "category": "column"
@@ -790,8 +790,8 @@
     "rows-per-page-options": {
       "type": "Array",
       "desc": "Options for user to pick (Numbers); Number 0 means 'Show all rows in one page'",
-      "default": "[ 5, 7, 10, 15, 20, 25, 50, 0 ]",
-      "examples": ["[ 10, 20 ]"],
+      "default": "[5, 7, 10, 15, 20, 25, 50, 0]",
+      "examples": ["[10, 20]"],
       "category": "pagination"
     },
 
@@ -2137,7 +2137,7 @@
         "newSelected": {
           "type": "Array",
           "desc": "The updated selected array",
-          "examples": ["[ { name: 'Frozen Yogurt', calories: 159, fat: 6 } ]"]
+          "examples": ["[{ name: 'Frozen Yogurt', calories: 159, fat: 6 }]"]
         }
       }
     },
@@ -2148,7 +2148,7 @@
         "newExpanded": {
           "type": "Array",
           "desc": "The updated expanded array",
-          "examples": ["[ 'row-a', 'row-b' ]"]
+          "examples": ["['row-a', 'row-b']"]
         }
       }
     },
@@ -2387,7 +2387,7 @@
           "type": "Array",
           "required": true,
           "desc": "Array containing keys of the expanded rows",
-          "examples": ["[ 'row-a', 'row-b' ]"]
+          "examples": ["['row-a', 'row-b']"]
         }
       },
       "returns": null
@@ -2449,7 +2449,7 @@
       "desc": "The filtered and sorted rows (same as the rows prop if using server-side fetching)",
       "type": "Array",
       "examples": [
-        "[ { name: 'Ice Cream Sandwich', calories: 237, fat: 9.0, carbs: 37, protein: 4.3, sodium: 129, calcium: 8, iron: 1 }, ... ]"
+        "[{ name: 'Ice Cream Sandwich', calories: 237, fat: 9.0, carbs: 37, protein: 4.3, sodium: 129, calcium: 8, iron: 1 }, ...]"
       ]
     },
 
@@ -2457,7 +2457,7 @@
       "desc": "Paginated, filtered, and sorted rows (same as the rows prop if using server-side fetching)",
       "type": "Array",
       "examples": [
-        "[ { name: 'Ice Cream Sandwich', calories: 237, fat: 9.0, carbs: 37, protein: 4.3, sodium: 129, calcium: 8, iron: 1 }, ... ]"
+        "[{ name: 'Ice Cream Sandwich', calories: 237, fat: 9.0, carbs: 37, protein: 4.3, sodium: 129, calcium: 8, iron: 1 }, ...]"
       ]
     },
 

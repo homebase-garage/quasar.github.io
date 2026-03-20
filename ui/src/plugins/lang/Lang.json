@@ -152,28 +152,26 @@
               "type": "Array",
               "desc": "Label",
               "examples": [
-                "[ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ]"
+                "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
               ]
             },
             "daysShort": {
               "type": "Array",
               "desc": "Label",
-              "examples": [
-                "[ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]"
-              ]
+              "examples": ["['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"]
             },
             "months": {
               "type": "Array",
               "desc": "Label",
               "examples": [
-                "[ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]"
+                "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']"
               ]
             },
             "monthsShort": {
               "type": "Array",
               "desc": "Label",
               "examples": [
-                "[ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]"
+                "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
               ]
             },
             "firstDayOfWeek": {
@@ -679,7 +677,7 @@
                   "desc": "Label",
                   "required": true,
                   "examples": [
-                    "[ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ]"
+                    "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
                   ]
                 },
                 "daysShort": {
@@ -687,7 +685,7 @@
                   "desc": "Label",
                   "required": true,
                   "examples": [
-                    "[ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]"
+                    "['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"
                   ]
                 },
                 "months": {
@@ -695,7 +693,7 @@
                   "desc": "Label",
                   "required": true,
                   "examples": [
-                    "[ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]"
+                    "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']"
                   ]
                 },
                 "monthsShort": {
@@ -703,7 +701,7 @@
                   "desc": "Label",
                   "required": true,
                   "examples": [
-                    "[ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]"
+                    "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
                   ]
                 },
                 "firstDayOfWeek": {

@@ -1,7 +1,5 @@
 export function isDeepEqual(a, b) {
-  if (a === b) {
-    return true
-  }
+  if (a === b) return true
 
   if (
     a !== null &&
@@ -76,7 +74,8 @@ export function isDeepEqual(a, b) {
       return true
     }
 
-    if (a.buffer !== null && a.buffer.constructor === ArrayBuffer) {
+    // oxlint-disable-next-line eqeqeq
+    if (a.buffer != null && a.buffer.constructor === ArrayBuffer) {
       length = a.length
 
       if (length !== b.length) {

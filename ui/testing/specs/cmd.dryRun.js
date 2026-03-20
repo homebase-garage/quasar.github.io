@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url'
 import fse from 'fs-extra'
 
 import { getTestFile } from './testFile.js'
-import lint from './lint.js'
 
 const testFilePath = fileURLToPath(new URL('./__temp.js', import.meta.url))
 const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
@@ -43,7 +42,7 @@ export function getDryRunCmd() {
     }
   })
 
-  return async function cmdDryRun({ ctx, testFile }) {
+  return function cmdDryRun({ ctx, testFile }) {
     let testFileContent
     try {
       testFileContent = testFile.createContent()
@@ -59,17 +58,6 @@ export function getDryRunCmd() {
         `\n  ❌ Failed ${ctx.targetRelative}: createContent() threw an error`
       )
       console.error(err)
-      return
-    }
-
-    const lintResult = await lint(testFileContent, 'lintText')
-    if (lintResult !== void 0) {
-      result.failed++
-      result.failList.push(ctx.targetRelative)
-      console.error(
-        `\n  ❌ Failed ${ctx.targetRelative}: linting after createContent()`
-      )
-      console.error(lintResult)
       return
     }
 

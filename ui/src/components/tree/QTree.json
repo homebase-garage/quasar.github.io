@@ -9,7 +9,7 @@
       "tsType": "QTreeNode",
       "desc": "The array of nodes that designates the tree structure",
       "required": true,
-      "examples": ["[ {}, {} ]"],
+      "examples": ["[{}, {}]"],
       "category": "content"
     },
 
@@ -347,7 +347,7 @@
         "expanded": {
           "type": "Array",
           "desc": "The expanded node keys",
-          "examples": ["[ 'Node 1', 'Node 2' ]"]
+          "examples": ["['Node 1', 'Node 2']"]
         }
       }
     },
@@ -401,7 +401,7 @@
         "target": {
           "type": "Array",
           "desc": "The ticked node keys",
-          "examples": ["[ 'Node 1', 'Node 2' ]"]
+          "examples": ["['Node 1', 'Node 2']"]
         }
       }
     },
@@ -530,7 +530,7 @@
           "type": "Array",
           "required": true,
           "desc": "The keys of nodes to tick/untick",
-          "examples": ["[ 'Node 1', 'Node 2' ]"]
+          "examples": ["['Node 1', 'Node 2']"]
         },
         "state": {
           "type": "Boolean",

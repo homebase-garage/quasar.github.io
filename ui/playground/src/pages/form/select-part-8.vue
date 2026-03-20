@@ -337,7 +337,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 const quizOptions = [
   { label: 'Google', value: 1 },
   { label: 'Facebook', value: 2 }
