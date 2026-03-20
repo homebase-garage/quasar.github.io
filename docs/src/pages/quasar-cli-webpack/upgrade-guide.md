@@ -1138,7 +1138,7 @@ import { defineSsrMiddleware } from '#q-app/wrappers'
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
   // we capture any other Express route and hand it
   // over to Vue and Vue Router to render our page
-  app.get(resolve.urlPath('{*path}'), (req, res) => {
+  app.get(resolve.urlPath('*'), (req, res) => {
     res.setHeader('Content-Type', 'text/html')
 
     render(/* the ssrContext: */ { req, res })
@@ -1195,7 +1195,7 @@ For TS devs, you should also make a small change to your /src-ssr/middlewares fi
 + import { type Request, type Response } from 'express';
 // ...
 - app.get(resolve.urlPath('*'), (req, res) => {
-+ app.get(resolve.urlPath('{*path}'), (req: Request, res: Response) => {
++ app.get(resolve.urlPath('*'), (req: Request, res: Response) => {
 ```
 
 There are some additional changes to the `/quasar.config` file:
