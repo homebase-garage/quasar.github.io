@@ -4,14 +4,17 @@ import { generate } from 'selfsigned'
 
 const certPath = new URL('../ssl-server.pem', import.meta.url)
 
-export function generateCertificate({ log, fatal }) {
+export async function generateCertificate({ log, fatal }) {
   log('Generating self signed localhost SSL Certificate...')
 
   const attrs = [{ name: 'commonName', value: 'localhost' }]
 
-  const pems = generate(attrs, {
+  const notAfterDate = new Date()
+  notAfterDate.setDate(notAfterDate.getDate() + 30)
+
+  const pems = await generate(attrs, {
     algorithm: 'sha256',
-    days: 30,
+    notAfterDate,
     keySize: 2048,
     extensions: [
       {
@@ -84,7 +87,7 @@ export function generateCertificate({ log, fatal }) {
   return certContent
 }
 
-export function getCertificate({ log, fatal }) {
+export async function getCertificate({ log, fatal }) {
   let certExists = existsSync(certPath)
 
   if (certExists === true) {
@@ -102,5 +105,5 @@ export function getCertificate({ log, fatal }) {
 
   return certExists === true
     ? readFileSync(certPath, 'utf-8')
-    : generateCertificate({ log, fatal })
+    : await generateCertificate({ log, fatal })
 }

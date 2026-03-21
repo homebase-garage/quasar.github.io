@@ -237,7 +237,7 @@ if (ssrDetected === false) {
       }
     } else {
       const { getCertificate } = await import('@quasar/ssl-certificate')
-      fakeCert = getCertificate({ log, fatal })
+      fakeCert = await getCertificate({ log, fatal })
     }
 
     const https = await import('node:https')

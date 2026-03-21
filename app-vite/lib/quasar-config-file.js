@@ -1016,7 +1016,7 @@ export class QuasarConfigFile {
     if (this.#ctx.dev) {
       if (cfg.devServer.https === true) {
         const { getCertificate } = await import('@quasar/ssl-certificate')
-        const sslCertificate = getCertificate({ log, fatal })
+        const sslCertificate = await getCertificate({ log, fatal })
         cfg.devServer.https = {
           key: sslCertificate,
           cert: sslCertificate

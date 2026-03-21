@@ -1201,7 +1201,7 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
 
         if (options === void 0) {
           const { getCertificate } = await import('@quasar/ssl-certificate')
-          const sslCertificate = getCertificate({ log, fatal })
+          const sslCertificate = await getCertificate({ log, fatal })
           cfg.devServer.server.options = {
             key: sslCertificate,
             cert: sslCertificate
