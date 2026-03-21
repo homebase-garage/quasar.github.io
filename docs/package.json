@@ -21,8 +21,8 @@
     "prismjs": "^1.29.0",
     "quasar": "^2",
     "register-service-worker": "^1.7.2",
-    "vue": "^3.5.30",
-    "vue-router": "^5.0.4"
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
     "@quasar/app-vite": "^2.0.0",

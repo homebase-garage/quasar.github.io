@@ -42,8 +42,8 @@
     "prismjs": "^1.29.0",
     "quasar": "workspace:*",
     "vite": "^8.0.1",
-    "vue": "^3.5.30",
-    "vue-router": "^5.0.4"
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "engines": {
     "node": ">= 16"
