@@ -190,9 +190,6 @@
     "pinia": {
       "optional": true
     },
-    "workbox-build": {
-      "optional": true
-    },
     "workbox-webpack-plugin": {
       "optional": true
     }

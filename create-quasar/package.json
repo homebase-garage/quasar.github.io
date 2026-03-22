@@ -32,7 +32,7 @@
     "cross-spawn": "^7.0.6",
     "fs-extra": "^11.2.0",
     "kolorist": "^1.8.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2",
     "tinyglobby": "^0.2.10"
