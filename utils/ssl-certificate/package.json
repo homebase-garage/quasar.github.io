@@ -32,10 +32,6 @@
     "fs-extra": "^11.2.0",
     "selfsigned": "^2.4.1"
   },
-  "devDependencies": {
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:"
-  },
   "engines": {
     "node": ">= 16"
   }

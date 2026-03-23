@@ -156,8 +156,6 @@
   "devDependencies": {
     "@electron/packager": "^19.0.0",
     "electron-builder": "^26.8.1",
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:",
     "pinia": "^3.0.4",
     "quasar": "workspace:^",
     "ts-loader": "^9.5.1",

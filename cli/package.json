@@ -61,10 +61,6 @@
     "route-cache": "^0.5.0",
     "update-notifier": "^6.0.2"
   },
-  "devDependencies": {
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:"
-  },
   "engines": {
     "node": ">= 16",
     "npm": ">= 5.6.0",

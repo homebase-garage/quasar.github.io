@@ -85,8 +85,6 @@
     "kolorist": "^1.8.0",
     "lightningcss": "^1.32.0",
     "open": "^10.1.0",
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:",
     "postcss-rtlcss": "^5.4.0",
     "rolldown": "1.0.0-rc.10",
     "sass-embedded": "^1.98.0",

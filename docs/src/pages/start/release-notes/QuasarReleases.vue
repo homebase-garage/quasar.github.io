@@ -89,7 +89,7 @@ function queryReleases() {
       loading.value = false
     })
     .catch(err => {
-      console.error(err) // eslint-disable-line
+      console.error(err)
       error.value = true
     })
 }

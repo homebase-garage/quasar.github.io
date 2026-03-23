@@ -68,10 +68,6 @@
     "untildify": "^5.0.0",
     "update-notifier": "^7.0.0"
   },
-  "devDependencies": {
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:"
-  },
   "resolutions": {
     "minimist": "^1.2.8"
   },

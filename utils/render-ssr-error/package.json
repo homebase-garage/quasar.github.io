@@ -39,8 +39,6 @@
     "@quasar/extras": "workspace:*",
     "@quasar/vite-plugin": "workspace:^",
     "fs-extra": "^11.2.0",
-    "oxfmt": "catalog:",
-    "oxlint": "catalog:",
     "prismjs": "^1.29.0",
     "quasar": "workspace:*",
     "vite": "^8.0.1",
