@@ -1,11 +1,5 @@
 {
-  "ignorePatterns": [
-    "**/quasar.config.*.temporary.compiled*",
-    "**/.quasar/",
-
-    "extras/",
-    "create-quasar/"
-  ],
+  "ignorePatterns": ["**/quasar.config.*.temporary.compiled*", "**/.quasar/"],
 
   "plugins": ["vue", "import", "eslint"],
 
