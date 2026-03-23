@@ -588,7 +588,7 @@ export function getMaxDate(date /* , ...args */) {
   Array.prototype.slice.call(arguments, 1).forEach(d => {
     t = Math.max(t, new Date(d))
   })
-  return t
+  return new Date(t)
 }
 
 export function getMinDate(date /*, ...args */) {
@@ -596,7 +596,7 @@ export function getMinDate(date /*, ...args */) {
   Array.prototype.slice.call(arguments, 1).forEach(d => {
     t = Math.min(t, new Date(d))
   })
-  return t
+  return new Date(t)
 }
 
 function getDiff(t, sub, interval) {
