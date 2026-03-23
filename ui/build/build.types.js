@@ -1,6 +1,6 @@
 import path from 'node:path'
 import fse from 'fs-extra'
-import { format as prettierFormat } from 'prettier'
+import { format } from 'oxfmt'
 import typescript from 'typescript'
 
 import { resolveToRoot, logError, writeFile, clone } from './build.utils.js'
@@ -14,6 +14,15 @@ const extraInterfaces = {}
 
 // TODO: Consider removing the indenting logic as it's already handled better and gets overridden by prettier
 const INDENT_SPACE_COUNT = 2
+
+async function formatWithOxfmt(filePath, rawCode) {
+  try {
+    const { code } = await format(filePath, rawCode)
+    return code
+  } catch (error) {
+    console.error(`Failed to format ${filePath}:`, error)
+  }
+}
 
 function writeLine(fileContent, line = '', indent = 0) {
   fileContent.push(
@@ -872,16 +881,17 @@ export async function generate({ api, quasarLangIndex }) {
     await Promise.all(copyPredefinedTypes(typeRoot))
 
     const { header, body } = getIndexDts(apiList, quasarLangIndex)
-    const formattedBody = await prettierFormat(body, { parser: 'typescript' })
+    const filePath = resolvePath('index.d.ts')
+    const formattedBody = await formatWithOxfmt(filePath, body)
 
     // The header contains stuff that breaks TS checking.
     // So, write only the body at first to check the validity
-    await writeFile(resolvePath('index.d.ts'), formattedBody)
+    await writeFile(filePath, formattedBody)
 
     ensureTypeScriptValidity()
 
     // Write the final file
-    await writeFile(resolvePath('index.d.ts'), header + formattedBody)
+    await writeFile(filePath, header + formattedBody)
   } catch (err) {
     logError('build.types.js: something went wrong...')
     console.log()
