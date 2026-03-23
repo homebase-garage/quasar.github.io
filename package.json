@@ -21,7 +21,7 @@
     "oxlint": "^1.56.0"
   },
   "lint-staged": {
-    "*.{js,ts,mjs,cjs,json,css,sass,md}": [
+    "*.{js,ts,vue,mjs,cjs,json,css,sass,md}": [
       "oxfmt --no-error-on-unmatched-pattern",
       "oxlint --deny-warnings --fix"
     ]
