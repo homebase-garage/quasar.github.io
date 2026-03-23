@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     <% if (preset.eslint) { %>
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.0.3",
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
     "vue-tsc": "^3.2.6",
