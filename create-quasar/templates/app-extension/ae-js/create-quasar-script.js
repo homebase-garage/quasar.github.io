@@ -1,4 +1,4 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'confirm',
@@ -16,8 +16,9 @@ export async function createQuasarScript ({ scope, utils }) {
     {
       type: 'text',
       name: 'name',
-      message: 'Quasar App Extension ext-id (without "quasar-app-extension" prefix), eg. "my-ext"',
-      validate: (val) =>
+      message:
+        'Quasar App Extension ext-id (without "quasar-app-extension" prefix), eg. "my-ext"',
+      validate: val =>
         utils.isValidPackageName(val) || 'Invalid App Extension name'
     },
 
@@ -27,7 +28,11 @@ export async function createQuasarScript ({ scope, utils }) {
       message: 'Pick AE code format:',
       initial: 0,
       choices: [
-        { title: 'ESM (q/app-vite >= 1.5, q/app-webpack >= 3.10)', value: 'esm', description: 'recommended' },
+        {
+          title: 'ESM (q/app-vite >= 1.5, q/app-webpack >= 3.10)',
+          value: 'esm',
+          description: 'recommended'
+        },
         { title: 'CommonJS', value: 'commonjs' }
       ]
     },

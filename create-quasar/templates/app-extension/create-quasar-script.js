@@ -1,4 +1,4 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   /**
    * Temporarily disable scriptType prompt (TS not ready yet)
    */

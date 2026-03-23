@@ -1,12 +1,21 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'multiselect',
       name: 'preset',
       message: 'Check the features needed for your project:',
       choices: [
-        { title: 'Linting (ESLint)', value: 'eslint', description: 'recommended', selected: true },
-        { title: 'State Management (Pinia)', value: 'pinia', description: 'https://pinia.vuejs.org' },
+        {
+          title: 'Linting (ESLint)',
+          value: 'eslint',
+          description: 'recommended',
+          selected: true
+        },
+        {
+          title: 'State Management (Pinia)',
+          value: 'pinia',
+          description: 'https://pinia.vuejs.org'
+        },
         { title: 'axios', value: 'axios' },
         { title: 'vue-i18n', value: 'i18n' }
       ],

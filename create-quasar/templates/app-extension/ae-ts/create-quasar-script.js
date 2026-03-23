@@ -1,4 +1,4 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'confirm',
@@ -16,12 +16,13 @@ export async function createQuasarScript ({ scope, utils }) {
     {
       type: 'text',
       name: 'name',
-      message: 'Quasar App Extension ext-id (without "quasar-app-extension" prefix), eg. "my-ext"',
-      validate: (val) =>
+      message:
+        'Quasar App Extension ext-id (without "quasar-app-extension" prefix), eg. "my-ext"',
+      validate: val =>
         utils.isValidPackageName(val) || 'Invalid App Extension name'
     },
 
-    utils.commonPrompts.description,
+    utils.commonPrompts.description
   ])
 
   await utils.injectAuthor(scope)
@@ -55,10 +56,14 @@ export async function createQuasarScript ({ scope, utils }) {
     }
   ])
 
-  scope.pkgName = scope.needOrgName ? `@${scope.orgName}/quasar-app-extension-${scope.name}` : `quasar-app-extension-${scope.name}`
+  scope.pkgName = scope.needOrgName
+    ? `@${scope.orgName}/quasar-app-extension-${scope.name}`
+    : `quasar-app-extension-${scope.name}`
   const packageManager = utils.runningPackageManager
   scope.packageManager = packageManager
-  scope.packageManagerField = packageManager ? `${packageManager.name}@${packageManager.version}` : void 0
+  scope.packageManagerField = packageManager
+    ? `${packageManager.name}@${packageManager.version}`
+    : void 0
 
   utils.createTargetDir(scope)
   utils.renderTemplate('BASE', scope)

@@ -1,10 +1,11 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'text',
       name: 'name',
-      message: 'Project name (npm name, kebab-case, without "quasar-ui" prefix)',
-      validate: (val) =>
+      message:
+        'Project name (npm name, kebab-case, without "quasar-ui" prefix)',
+      validate: val =>
         utils.isValidPackageName(val) || 'Invalid package.json name'
     }
   ])

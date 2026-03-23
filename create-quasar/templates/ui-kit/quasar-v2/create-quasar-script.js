@@ -1,4 +1,4 @@
-export function createQuasarScript ({ scope, utils }) {
+export function createQuasarScript({ scope, utils }) {
   utils.createTargetDir(scope)
   utils.renderTemplate('BASE', scope)
 
@@ -12,7 +12,10 @@ export function createQuasarScript ({ scope, utils }) {
   if (scope.features.component) utils.renderTemplate('ui-component', scope)
   if (scope.features.directive) utils.renderTemplate('ui-directive', scope)
 
-  if (scope.features.ae && (scope.features.component || scope.features.directive)) {
+  if (
+    scope.features.ae &&
+    (scope.features.component || scope.features.directive)
+  ) {
     utils.renderTemplate('ui-ae', scope)
   }
 }

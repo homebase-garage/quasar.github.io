@@ -1,4 +1,4 @@
-export async function createQuasarScript ({ scope, utils }) {
+export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'select',
@@ -6,7 +6,11 @@ export async function createQuasarScript ({ scope, utils }) {
       message: 'Pick Quasar App CLI variant:',
       initial: 0,
       choices: [
-        { title: 'Quasar App CLI with Vite', value: 'vite-2', description: 'recommended' },
+        {
+          title: 'Quasar App CLI with Vite',
+          value: 'vite-2',
+          description: 'recommended'
+        },
         { title: 'Quasar App CLI with Webpack', value: 'webpack-4' }
       ]
     },
@@ -15,12 +19,12 @@ export async function createQuasarScript ({ scope, utils }) {
       name: 'name',
       message: 'Package name:',
       initial: () => utils.inferPackageName(scope.projectFolderName),
-      validate: (val) =>
+      validate: val =>
         utils.isValidPackageName(val) || 'Invalid package.json name'
     },
 
     utils.commonPrompts.productName,
-    utils.commonPrompts.description,
+    utils.commonPrompts.description
   ])
 
   await utils.injectAuthor(scope)
@@ -32,8 +36,16 @@ export async function createQuasarScript ({ scope, utils }) {
       message: 'Pick a Vue component style:',
       initial: 0,
       choices: [
-        { title: 'Composition API with <script setup>', value: 'composition-setup', description: 'recommended' },
-        { title: 'Composition API', value: 'composition', description: 'recommended' },
+        {
+          title: 'Composition API with <script setup>',
+          value: 'composition-setup',
+          description: 'recommended'
+        },
+        {
+          title: 'Composition API',
+          value: 'composition',
+          description: 'recommended'
+        },
         { title: 'Options API', value: 'options' }
       ]
     },
