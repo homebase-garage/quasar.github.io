@@ -229,10 +229,9 @@ export async function createViteConfig(quasarConf, { compileId }) {
 
     const analyze = quasarConf.build.analyze
     if (analyze) {
-      const { default: rollupPluginVisualizer } =
-        await import('rollup-plugin-visualizer')
+      const { visualizer } = await import('rollup-plugin-visualizer')
       viteConf.plugins.push(
-        rollupPluginVisualizer.visualizer({
+        visualizer({
           open: true,
           filename: appPaths.resolve.cache('stats.html'),
           ...(Object(analyze) === analyze ? analyze : {})
