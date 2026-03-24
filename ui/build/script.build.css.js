@@ -1,7 +1,6 @@
 import { compileAsync } from 'sass-embedded'
 import rtl from 'postcss-rtlcss'
 import postcss from 'postcss'
-import autoprefixer from 'autoprefixer'
 import { transform } from 'lightningcss'
 
 import {
@@ -13,6 +12,7 @@ import {
 } from './build.utils.js'
 import prepareDiff from './prepare-diff.js'
 
+const postCssRtl = postcss([rtl({})])
 const sassUseRE = /@use\s+['"][^'"]+['"]/g
 
 function moveUseStatementsToTop(code) {
@@ -73,28 +73,14 @@ function generateUMD(code, middleName, ext = '') {
 }
 
 function renderAsset(cssCode, middleName = '') {
-  return postcss([
-    autoprefixer({
-      overrideBrowserslist: BUILD_TARGETS.AUTOPREFIXER
-    })
+  return Promise.all([
+    generateUMD(cssCode, middleName),
+    postCssRtl
+      .process(cssCode, { from: void 0 })
+      .then(transformedCode =>
+        generateUMD(transformedCode.css, middleName, '.rtl')
+      )
   ])
-    .process(cssCode, { from: void 0 })
-    .then(code => {
-      code.warnings().forEach(warn => {
-        console.warn(warn.toString())
-      })
-      return code.css
-    })
-    .then(code =>
-      Promise.all([
-        generateUMD(code, middleName),
-        postcss([rtl({})])
-          .process(code, { from: void 0 })
-          .then(transformedCode =>
-            generateUMD(transformedCode.css, middleName, '.rtl')
-          )
-      ])
-    )
 }
 
 async function generateBase(source) {

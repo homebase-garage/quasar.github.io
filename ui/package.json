@@ -77,7 +77,6 @@
   },
   "devDependencies": {
     "@quasar/extras": "workspace:*",
-    "autoprefixer": "^10.4.27",
     "cli-highlight": "^2.1.11",
     "cross-env": "^10.1.0",
     "diff": "^8.0.3",

@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "workspace:*",
-    "autoprefixer": "^10.4.27",
     "postcss": "^8.5.8"
   },
   "engines": {

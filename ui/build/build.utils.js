@@ -31,11 +31,6 @@ function getBuildTargets() {
         `${target.name}${target.major}${target.minor ? `.${target.minor}` : ''}`
     ),
 
-    AUTOPREFIXER: targets.map(
-      target =>
-        `${target.name} >= ${target.major}${target.minor ? `.${target.minor}` : ''}`
-    ),
-
     LIGHTNING_CSS: targets.reduce((acc, target) => {
       acc[target.name] =
         (target.major << 16) + (target.minor ? target.minor << 8 : 0)
