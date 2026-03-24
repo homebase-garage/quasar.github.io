@@ -38,11 +38,12 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 
 ### Q1 2026
 
-- Release of `@quasar/app-vite` with Vite 8.
+- ✌️ (DONE) Release of `@quasar/app-vite` with Vite 8.
+- ✌️ (DONE) Replace internal build system: esbuild with Rolldown, cssnano with lightningcss, eslint with oxfmt & oxlint.
 
 ### Q2 2026
 
-- Release of a new major version of `@quasar/app-vite` with rolldown replacing esbuild for all Quasar modes compilation threads.
+- Release of a new major version of `@quasar/app-vite` with rolldown replacing esbuild for all Quasar modes compilation threads & further modernize the tooling.
 - Plans for Quasar v3. We will need your input on some of the decisions that we will be taking for the new major version.
 
 ### Q3-Q4 2026
