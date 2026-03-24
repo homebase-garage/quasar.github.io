@@ -24,7 +24,7 @@ function getBuildTargets() {
   ]
 
   return {
-    ROLLDOWN_NODE: 'node22',
+    ROLLDOWN_NODE: 'node20',
 
     ROLLDOWN_BROWSER: targets.map(
       target =>
