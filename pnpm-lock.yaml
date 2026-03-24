@@ -7,10 +7,10 @@ settings:
 catalogs:
   default:
     vue:
-      specifier: 3.5.30
+      specifier: ^3.5.30
       version: 3.5.30
     vue-router:
-      specifier: ^5.0.3
+      specifier: ^5.0.4
       version: 5.0.4
 
 importers:
@@ -498,10 +498,10 @@ importers:
         specifier: ^1.7.2
         version: 1.7.2
       vue:
-        specifier: 'catalog:'
+        specifier: ^3.5.30
         version: 3.5.30(typescript@5.9.3)
       vue-router:
-        specifier: 'catalog:'
+        specifier: ^5.0.4
         version: 5.0.4(@vue/compiler-sfc@3.5.30)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.30(typescript@5.9.3)))(vue@3.5.30(typescript@5.9.3))
     devDependencies:
       '@quasar/app-vite':
