@@ -182,17 +182,6 @@ async function onAddress({ host, port }, mode) {
   return { host, port }
 }
 
-// TODO: remove when https://github.com/vuejs/core/issues/12549 is fixed
-function temporaryFixVueFlags(rawDefine) {
-  if (rawDefine.__VUE_PROD_DEVTOOLS__ === false) {
-    delete rawDefine.__VUE_PROD_DEVTOOLS__
-  }
-
-  if (rawDefine.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ === false) {
-    delete rawDefine.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__
-  }
-}
-
 let wsToken = null
 function createWsToken() {
   if (wsToken === null) {
@@ -848,9 +837,6 @@ export class QuasarConfigFile {
       },
       cfg.build
     )
-
-    // TODO: remove when https://github.com/vuejs/core/issues/12549 is fixed
-    temporaryFixVueFlags(cfg.build.rawDefine)
 
     if (!cfg.build.target.browser) {
       cfg.build.target.browser = BASELINE_WIDELY_AVAILABLE_TARGET_STRING

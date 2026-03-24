@@ -1,14 +1,10 @@
-// https://github.com/michael-ciniawsky/postcss-load-config
+/**
+ * Change this file to postcss.config.js instead of __postcss.config.js
+ * if you want to use RTL for the devserver.
+ */
 
-// import rtlcss from 'postcss-rtlcss'
+import rtlcss from 'postcss-rtlcss'
 
 export default {
-  plugins: [
-    // https://github.com/elchininet/postcss-rtlcss
-    // If you want to support RTL css, then
-    // 1. yarn/pnpm/bun/npm install postcss-rtlcss
-    // 2. optionally set quasar.config.js > framework > lang to an RTL language
-    // 3. uncomment the following line (and its import statement above):
-    // rtlcss()
-  ]
+  plugins: [rtlcss()]
 }
