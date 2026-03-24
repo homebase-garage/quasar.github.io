@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import fse from 'fs-extra'
 
 import { build as viteBuild } from 'vite'
-import { build as esBuild, context as esContextBuild } from 'esbuild'
+import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
 
 import { progress } from './utils/logger.js'
 
@@ -31,58 +31,59 @@ export class AppTool {
     done('___ compiled with success by Vite')
   }
 
-  async watchWithEsbuild(threadName, esbuildConfig, onRebuildSuccess) {
-    let resolve
-
-    esbuildConfig.plugins.push({
-      name: 'quasar:on-rebuild',
-      setup(build) {
-        let isFirst = true
-        let done
-
-        build.onStart(() => {
-          done = progress(
-            'Compiling of ___ with Esbuild in progress...',
-            threadName
-          )
-        })
-
-        build.onEnd(result => {
-          if (result.errors.length !== 0) return
-
-          done('___ compiled with success by Esbuild')
-
-          if (isFirst === true) {
-            isFirst = false
-            resolve()
-            return
-          }
-
-          onRebuildSuccess()
-        })
+  watchWithRolldown(threadName, rolldownConfig, onRebuildSuccess) {
+    const watcher = rolldownWatch({
+      ...rolldownConfig,
+      watch: {
+        exclude: 'node_modules/**'
       }
     })
 
-    const esbuildCtx = await esContextBuild(esbuildConfig)
-    await esbuildCtx.watch()
+    let resolve
+    let isFirst = true
+    let done
+
+    watcher.on('event', event => {
+      if (event.code === 'BUNDLE_START') {
+        done = progress(
+          'Compiling of ___ with Rolldown in progress...',
+          threadName
+        )
+      } else if (event.code === 'BUNDLE_END') {
+        event.result.close()
+
+        done('___ compiled with success by Rolldown')
+
+        if (isFirst === true) {
+          isFirst = false
+          resolve()
+          return
+        }
+
+        onRebuildSuccess()
+      } else if (event.code === 'ERROR') {
+        console.error(event.error)
+        event.result.close()
+      }
+    })
 
     return new Promise(res => {
       resolve = () => {
-        res(esbuildCtx)
+        res(watcher)
       }
     })
   }
 
-  async buildWithEsbuild(threadName, esbuildConfig) {
+  async buildWithRolldown(threadName, rolldownConfig) {
     const done = progress(
-      'Compiling of ___ with Esbuild in progress...',
+      'Compiling of ___ with Rolldown in progress...',
       threadName
     )
 
-    const esbuildResult = await esBuild(esbuildConfig)
+    const rolldownResult = await rolldownBuild(rolldownConfig)
 
-    done('___ compiled with success by Esbuild')
-    return esbuildResult
+    done('___ compiled with success by Rolldown')
+    return rolldownResult
   }
 
   cleanArtifacts(dir) {

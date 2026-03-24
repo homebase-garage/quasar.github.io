@@ -53,7 +53,7 @@ export class AppDevserver extends AppTool {
       quasarConf.sourceFiles
     ])
 
-    this.registerDiff('esbuild', quasarConf => [
+    this.registerDiff('rolldown', quasarConf => [
       quasarConf.build.env,
       quasarConf.build.rawDefine,
       quasarConf.metaConf.fileEnv,

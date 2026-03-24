@@ -142,7 +142,7 @@ function getFileEnv(env) {
 
 /**
  * Get the final env definitions to supply to
- * the build system (Vite or Esbuild).
+ * the build system (Vite or Rolldown).
  */
 export function getBuildSystemDefine({
   fileEnv = {},

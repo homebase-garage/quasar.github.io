@@ -91,8 +91,8 @@ export class QuasarModeDevserver extends AppDevserver {
     this.registerDiff('webserver', (quasarConf, diffMap) => [
       quasarConf.ssr.extendSSRWebserverConf,
 
-      // extends 'esbuild' diff
-      ...diffMap.esbuild(quasarConf)
+      // extends 'rolldown' diff
+      ...diffMap.rolldown(quasarConf)
     ])
 
     this.registerDiff('viteSSR', (quasarConf, diffMap) => [
@@ -158,14 +158,15 @@ export class QuasarModeDevserver extends AppDevserver {
       await this.#webserverWatcher.close()
     }
 
-    const esbuildConfig = await quasarSsrConfig.webserver(quasarConf)
-    await this.watchWithEsbuild('SSR Webserver', esbuildConfig, () => {
+    const rolldownConfig = await quasarSsrConfig.webserver(quasarConf)
+
+    await this.watchWithRolldown('SSR Webserver', rolldownConfig, () => {
       queue(() => this.#bootWebserver(quasarConf))
-    }).then(esbuildCtx => {
+    }).then(watcher => {
       this.#webserverWatcher = {
         close: () => {
           this.#webserverWatcher = null
-          return esbuildCtx.dispose()
+          return watcher.close()
         }
       }
     })
@@ -537,15 +538,15 @@ export class QuasarModeDevserver extends AppDevserver {
     const workboxConfig = await quasarSsrConfig.workbox(quasarConf)
 
     if (quasarConf.pwa.workboxMode === 'InjectManifest') {
-      const esbuildConfig = await quasarSsrConfig.customSw(quasarConf)
-      await this.watchWithEsbuild(
+      const rolldownConfig = await quasarSsrConfig.customSw(quasarConf)
+      await this.watchWithRolldown(
         'InjectManifest Custom SW',
-        esbuildConfig,
+        rolldownConfig,
         () => {
           queue(() => buildPwaServiceWorker(quasarConf, workboxConfig))
         }
-      ).then(esbuildCtx => {
-        this.#pwaServiceWorkerWatcher = { close: esbuildCtx.dispose }
+      ).then(watcher => {
+        this.#pwaServiceWorkerWatcher = watcher
       })
     }
 

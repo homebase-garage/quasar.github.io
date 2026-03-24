@@ -94,7 +94,7 @@ print({ key: 'Important local packages', section: true })
   'vite',
   'vite-plugin-checker',
   'eslint',
-  'esbuild',
+  'rolldown',
   'typescript',
   'workbox-build',
   'register-service-worker',

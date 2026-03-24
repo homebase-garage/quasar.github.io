@@ -3,8 +3,8 @@ import { join, basename } from 'node:path'
 import {
   createViteConfig,
   extendViteConfig,
-  extendEsbuildConfig,
-  createNodeEsbuildConfig
+  extendRolldownConfig,
+  createNodeRolldownConfig
 } from '../../config-tools.js'
 import { getBuildSystemDefine } from '../../utils/env.js'
 
@@ -19,20 +19,20 @@ async function preloadScript(quasarConf, name) {
    */
 
   const scriptName = basename(name)
-  const cfg = createNodeEsbuildConfig(quasarConf, {
+  const cfg = createNodeRolldownConfig(quasarConf, {
     compileId: `node-electron-preload-${scriptName}`,
     format: 'cjs'
   })
   const { appPaths } = quasarConf.ctx
 
-  cfg.entryPoints = [appPaths.resolve.electron(name)]
-  cfg.outfile =
+  cfg.input = appPaths.resolve.electron(name)
+  cfg.output.file =
     quasarConf.ctx.dev === true
       ? appPaths.resolve.entry(`preload/${scriptName}.cjs`)
       : join(quasarConf.build.distDir, `UnPackaged/preload/${scriptName}.cjs`)
 
-  cfg.define = {
-    ...cfg.define,
+  cfg.transform.define = {
+    ...cfg.transform.define,
     ...getBuildSystemDefine({
       buildEnv: {
         QUASAR_PUBLIC_FOLDER:
@@ -43,7 +43,7 @@ async function preloadScript(quasarConf, name) {
 
   return {
     scriptName,
-    esbuildConfig: await extendEsbuildConfig(
+    rolldownConfig: await extendRolldownConfig(
       cfg,
       quasarConf.electron,
       quasarConf.ctx,
@@ -67,20 +67,20 @@ export const quasarElectronConfig = {
 
   // returns a Promise
   main: quasarConf => {
-    const cfg = createNodeEsbuildConfig(quasarConf, {
+    const cfg = createNodeRolldownConfig(quasarConf, {
       compileId: 'node-electron-main',
       format: 'esm'
     })
     const { appPaths } = quasarConf.ctx
 
-    cfg.entryPoints = [quasarConf.sourceFiles.electronMain]
-    cfg.outfile =
+    cfg.input = quasarConf.sourceFiles.electronMain
+    cfg.output.file =
       quasarConf.ctx.dev === true
         ? appPaths.resolve.entry('electron-main.js')
         : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
 
-    cfg.define = {
-      ...cfg.define,
+    cfg.transform.define = {
+      ...cfg.transform.define,
       ...getBuildSystemDefine({
         buildEnv:
           quasarConf.ctx.dev === true
@@ -98,7 +98,7 @@ export const quasarElectronConfig = {
       })
     }
 
-    return extendEsbuildConfig(
+    return extendRolldownConfig(
       cfg,
       quasarConf.electron,
       quasarConf.ctx,

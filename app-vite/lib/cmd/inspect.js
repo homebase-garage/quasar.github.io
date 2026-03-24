@@ -118,7 +118,7 @@ if (argv.path) {
 import util from 'node:util'
 
 cfgEntries.forEach(cfgEntry => {
-  const tool = cfgEntry.object.configFile !== void 0 ? 'Vite' : 'esbuild'
+  const tool = cfgEntry.object.configFile !== void 0 ? 'Vite' : 'Rolldown'
 
   console.log()
   log(`Showing "${cfgEntry.name}" config (for ${tool}) with depth of ${depth}`)

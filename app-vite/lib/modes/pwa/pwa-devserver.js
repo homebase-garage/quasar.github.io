@@ -134,15 +134,15 @@ export class QuasarModeDevserver extends AppDevserver {
     const workboxConfig = await quasarPwaConfig.workbox(quasarConf)
 
     if (quasarConf.pwa.workboxMode === 'InjectManifest') {
-      const esbuildConfig = await quasarPwaConfig.customSw(quasarConf)
-      await this.watchWithEsbuild(
+      const rolldownConfig = await quasarPwaConfig.customSw(quasarConf)
+      await this.watchWithRolldown(
         'InjectManifest Custom SW',
-        esbuildConfig,
+        rolldownConfig,
         () => {
           queue(() => buildPwaServiceWorker(quasarConf, workboxConfig))
         }
-      ).then(esbuildCtx => {
-        this.#pwaServiceWorkerWatcher = { close: esbuildCtx.dispose }
+      ).then(watcher => {
+        this.#pwaServiceWorkerWatcher = watcher
       })
     }
 

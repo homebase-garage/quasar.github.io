@@ -119,6 +119,9 @@ importers:
       open:
         specifier: ^11.0.0
         version: 11.0.0
+      rolldown:
+        specifier: ^1.0.0-rc.10
+        version: 1.0.0-rc.10
       rollup-plugin-visualizer:
         specifier: ^7.0.1
         version: 7.0.1(rolldown@1.0.0-rc.10)(rollup@2.80.0)

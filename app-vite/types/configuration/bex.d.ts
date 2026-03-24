@@ -1,4 +1,4 @@
-import { BuildOptions as EsbuildConfiguration } from "esbuild";
+import { RolldownOptions } from "rolldown";
 
 interface QuasarBexConfiguration {
   /**
@@ -12,10 +12,10 @@ interface QuasarBexConfiguration {
   extraScripts?: string[];
 
   /**
-   * Extend the Esbuild config that is used for the bex scripts
+   * Extend the Rolldown config that is used for the bex scripts
    * (background, content scripts, dom script)
    */
-  extendBexScriptsConf?: (config: EsbuildConfiguration) => void;
+  extendBexScriptsConf?: (config: RolldownOptions) => void;
 
   /**
    * Should you need some dynamic changes to the Browser Extension manifest file

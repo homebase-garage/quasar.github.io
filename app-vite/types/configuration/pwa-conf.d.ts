@@ -1,4 +1,4 @@
-import { BuildOptions as EsbuildConfiguration } from "esbuild";
+import { RolldownOptions } from "rolldown";
 import { GenerateSWOptions, InjectManifestOptions } from "workbox-build";
 
 // Derived from https://developer.mozilla.org/en-US/docs/Web/Manifest
@@ -113,10 +113,10 @@ export interface QuasarPwaConfiguration {
     | ((injectParam: InjectPwaMetaTagsParams) => string);
 
   /**
-   * Extend the Esbuild config that is used for the custom service worker
+   * Extend the Rolldown config that is used for the custom service worker
    * (if using it through workboxMode: 'InjectManifest')
    */
-  extendPWACustomSWConf?: (config: EsbuildConfiguration) => void;
+  extendPWACustomSWConf?: (config: RolldownOptions) => void;
 
   /**
    * Extend/configure the Workbox GenerateSW options

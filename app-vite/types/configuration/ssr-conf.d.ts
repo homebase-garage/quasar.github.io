@@ -1,4 +1,4 @@
-import { BuildOptions as EsbuildConfiguration } from "esbuild";
+import { RolldownOptions } from "rolldown";
 
 export interface QuasarSsrConfiguration {
   /**
@@ -82,8 +82,8 @@ export interface QuasarSsrConfiguration {
   extendPackageJson?: (pkg: { [index in string]: any }) => void;
 
   /**
-   * Extend the Esbuild config that is used for the SSR webserver
+   * Extend the Rolldown config that is used for the SSR webserver
    * (which includes the SSR middlewares)
    */
-  extendSSRWebserverConf?: (config: EsbuildConfiguration) => void;
+  extendSSRWebserverConf?: (config: RolldownOptions) => void;
 }

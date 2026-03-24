@@ -40,8 +40,8 @@ export class QuasarModeDevserver extends AppDevserver {
       quasarConf.bex.extraScripts,
       quasarConf.bex.extendBexScriptsConf,
 
-      // extends 'esbuild' diff
-      ...diffMap.esbuild(quasarConf)
+      // extends 'rolldown' diff
+      ...diffMap.rolldown(quasarConf)
     ])
   }
 
@@ -142,12 +142,12 @@ export class QuasarModeDevserver extends AppDevserver {
     for (const entry of this.#scriptList) {
       const contentConfig = await quasarBexConfig.bexScript(quasarConf, entry)
 
-      await this.watchWithEsbuild(
+      await this.watchWithRolldown(
         `Bex Script (${entry.name})`,
         contentConfig,
         onRebuild
-      ).then(esbuildCtx => {
-        this.#scriptWatcherList.push({ close: esbuildCtx.dispose })
+      ).then(watcher => {
+        this.#scriptWatcherList.push(watcher)
       })
     }
   }

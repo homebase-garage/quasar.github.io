@@ -61,8 +61,8 @@ export class QuasarModeBuilder extends AppBuilder {
 
       // also update pwa-builder.js when changing here
       if (this.quasarConf.pwa.workboxMode === 'InjectManifest') {
-        const esbuildConfig = await quasarSsrConfig.customSw(this.quasarConf)
-        await this.buildWithEsbuild('InjectManifest Custom SW', esbuildConfig)
+        const rolldownConfig = await quasarSsrConfig.customSw(this.quasarConf)
+        await this.buildWithRolldown('InjectManifest Custom SW', rolldownConfig)
       }
 
       // also update pwa-builder.js when changing here
@@ -80,8 +80,8 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   async #buildWebserver() {
-    const esbuildConfig = await quasarSsrConfig.webserver(this.quasarConf)
-    await this.buildWithEsbuild('SSR Webserver', esbuildConfig)
+    const rolldownConfig = await quasarSsrConfig.webserver(this.quasarConf)
+    await this.buildWithRolldown('SSR Webserver', rolldownConfig)
   }
 
   #copyWebserverFiles() {

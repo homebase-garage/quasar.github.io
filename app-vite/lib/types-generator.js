@@ -43,7 +43,7 @@ export function generateTypes(quasarConf) {
     writeFileSync(filename, content) {
       const file = join(tsConfigDir, filename)
 
-      // Avoid unnecessary writes which will trigger esbuild
+      // Avoid unnecessary writes which will trigger rolldown
       // to recompile & apply quasar.config file changes
       if (
         fse.existsSync(file) === false ||

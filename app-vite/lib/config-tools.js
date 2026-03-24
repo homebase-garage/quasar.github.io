@@ -16,7 +16,7 @@ const cliPkgDependencies = Object.keys(cliPkg.dependencies || {})
 /* Should match Vite's own hard-coded values */
 export const BASELINE_WIDELY_AVAILABLE_TARGET_STRING =
   'baseline-widely-available'
-const ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET = [
+const BASELINE_WIDELY_AVAILABLE = [
   'chrome111',
   'edge111',
   'firefox114',
@@ -266,7 +266,7 @@ export function extendViteConfig(viteConf, quasarConf, invokeParams) {
   return promise.then(() => viteConf)
 }
 
-export function createNodeEsbuildConfig(quasarConf, { format }) {
+export function createNodeRolldownConfig(quasarConf, { format }) {
   const {
     ctx: {
       pkg: { appPkg },
@@ -274,7 +274,7 @@ export function createNodeEsbuildConfig(quasarConf, { format }) {
     }
   } = quasarConf
 
-  const externalsList = cacheProxy.getRuntime('externalEsbuildParam', () =>
+  const externalsList = cacheProxy.getRuntime('externalRolldownParam', () =>
     [
       ...cliPkgDependencies,
       ...Object.keys(appPkg.dependencies || {}),
@@ -287,70 +287,91 @@ export function createNodeEsbuildConfig(quasarConf, { format }) {
 
   return {
     platform: 'node',
-    target: quasarConf.build.target.node,
-    format,
-    bundle: true,
-    sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false,
-    minify: quasarConf.build.minify !== false,
-    alias: {
-      ...quasarConf.build.alias
+
+    output: {
+      format,
+      codeSplitting: false,
+      sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false
     },
-    resolveExtensions:
-      format === 'esm'
-        ? ['.mjs', '.js', '.cjs', '.ts', '.json']
-        : ['.cjs', '.js', '.mjs', '.ts', '.json'],
+
+    resolve: {
+      alias: {
+        ...quasarConf.build.alias
+      },
+      extensions:
+        format === 'esm'
+          ? ['.mjs', '.js', '.cjs', '.ts', '.json']
+          : ['.cjs', '.js', '.mjs', '.ts', '.json']
+    },
+
+    transform: {
+      target: quasarConf.build.target.node,
+      minify: quasarConf.build.minify !== false,
+      define: getBuildSystemDefine({
+        buildEnv: quasarConf.build.env,
+        buildRawDefine: quasarConf.build.rawDefine,
+        fileEnv: quasarConf.metaConf.fileEnv
+      })
+    },
+
     // we use a fresh list since this can be tampered with by the user:
     external: [...externalsList],
-    define: getBuildSystemDefine({
-      buildEnv: quasarConf.build.env,
-      buildRawDefine: quasarConf.build.rawDefine,
-      fileEnv: quasarConf.metaConf.fileEnv
-    }),
+
     plugins: []
   }
 }
 
-export function createBrowserEsbuildConfig(quasarConf) {
+export function createBrowserRolldownConfig(quasarConf) {
   const { browser } = quasarConf.build.target
   const target =
     browser === BASELINE_WIDELY_AVAILABLE_TARGET_STRING
-      ? ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET
+      ? BASELINE_WIDELY_AVAILABLE
       : browser
 
   return {
     platform: 'browser',
-    target,
-    format: 'iife',
-    bundle: true,
-    sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false,
-    minify: quasarConf.build.minify !== false,
-    alias: {
-      ...quasarConf.build.alias
+
+    output: {
+      format: 'iife',
+      codeSplitting: false,
+      sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false
     },
-    define: getBuildSystemDefine({
-      buildEnv: quasarConf.build.env,
-      buildRawDefine: quasarConf.build.rawDefine,
-      fileEnv: quasarConf.metaConf.fileEnv
-    }),
+
+    resolve: {
+      alias: {
+        ...quasarConf.build.alias
+      }
+    },
+
+    transform: {
+      target,
+      minify: quasarConf.build.minify !== false,
+      define: getBuildSystemDefine({
+        buildEnv: quasarConf.build.env,
+        buildRawDefine: quasarConf.build.rawDefine,
+        fileEnv: quasarConf.metaConf.fileEnv
+      })
+    },
+
     plugins: []
   }
 }
 
-export function extendEsbuildConfig(
-  esbuildConf,
+export function extendRolldownConfig(
+  rolldownConfig,
   quasarConfTarget,
   ctx,
   methodName
 ) {
   // example: quasarConf.ssr.extendSSRWebserverConf
   if (typeof quasarConfTarget[methodName] === 'function') {
-    quasarConfTarget[methodName](esbuildConf)
+    quasarConfTarget[methodName](rolldownConfig)
   }
 
   const promise = ctx.appExt.runAppExtensionHook(methodName, async hook => {
-    log(`Extension(${hook.api.extId}): Running "${methodName}(esbuildConf)"`)
-    await hook.fn(esbuildConf, hook.api)
+    log(`Extension(${hook.api.extId}): Running "${methodName}(rolldownConfig)"`)
+    await hook.fn(rolldownConfig, hook.api)
   })
 
-  return promise.then(() => esbuildConf)
+  return promise.then(() => rolldownConfig)
 }

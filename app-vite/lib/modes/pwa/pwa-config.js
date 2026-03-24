@@ -4,8 +4,8 @@ import { escapeRegexString } from '../../utils/escape-regex-string.js'
 import {
   createViteConfig,
   extendViteConfig,
-  createBrowserEsbuildConfig,
-  extendEsbuildConfig
+  createBrowserRolldownConfig,
+  extendRolldownConfig
 } from '../../config-tools.js'
 
 import { quasarVitePluginPwaResources } from './vite-plugin.pwa-resources.js'
@@ -148,24 +148,21 @@ export const quasarPwaConfig = {
     const { ctx } = quasarConf
     const { appPaths } = ctx
 
-    const cfg = createBrowserEsbuildConfig(quasarConf, {
-      compileId: 'browser-custom-sw'
-    })
+    const cfg = createBrowserRolldownConfig(quasarConf)
 
-    cfg.define['process.env.PWA_FALLBACK_HTML'] = JSON.stringify(
+    cfg.transform.define['process.env.PWA_FALLBACK_HTML'] = JSON.stringify(
       ctx.mode.ssr === true && ctx.prod === true
         ? quasarConf.ssr.pwaOfflineHtmlFilename
         : 'index.html'
     )
 
-    cfg.define['process.env.PWA_SERVICE_WORKER_REGEX'] = JSON.stringify(
-      `${escapeRegexString(quasarConf.pwa.swFilename)}$`
-    )
+    cfg.transform.define['process.env.PWA_SERVICE_WORKER_REGEX'] =
+      JSON.stringify(`${escapeRegexString(quasarConf.pwa.swFilename)}$`)
 
-    cfg.entryPoints = [quasarConf.sourceFiles.pwaServiceWorker]
-    cfg.outfile = appPaths.resolve.entry('compiled-custom-sw.js')
+    cfg.input = quasarConf.sourceFiles.pwaServiceWorker
+    cfg.output.file = appPaths.resolve.entry('compiled-custom-sw.js')
 
-    return extendEsbuildConfig(
+    return extendRolldownConfig(
       cfg,
       quasarConf.pwa,
       ctx,

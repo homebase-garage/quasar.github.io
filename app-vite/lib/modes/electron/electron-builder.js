@@ -26,15 +26,15 @@ export class QuasarModeBuilder extends AppBuilder {
     await this.buildWithVite('Electron UI', viteConfig)
 
     const mainConfig = await quasarElectronConfig.main(this.quasarConf)
-    await this.buildWithEsbuild('Electron Main', mainConfig)
+    await this.buildWithRolldown('Electron Main', mainConfig)
 
     const preloadList = await quasarElectronConfig.preloadScriptList(
       this.quasarConf
     )
     for (const preloadScript of preloadList) {
-      await this.buildWithEsbuild(
+      await this.buildWithRolldown(
         `Electron Preload (${preloadScript.scriptName})`,
-        preloadScript.esbuildConfig
+        preloadScript.rolldownConfig
       )
     }
   }

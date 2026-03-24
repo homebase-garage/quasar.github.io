@@ -147,7 +147,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Extend Bex scripts (background/content-script) Esbuild config
+   * Extend Bex scripts (background/content-script) Rolldown config
    *
    * @param {function} fn
    *   (cfg: Object, api) => undefined
@@ -157,7 +157,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Extend Electron Main thread Esbuild config
+   * Extend Electron Main thread Rolldown config
    *
    * @param {function} fn
    *   (cfg: Object, api) => undefined
@@ -167,7 +167,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Extend Electron Preload thread Esbuild config
+   * Extend Electron Preload thread Rolldown config
    *
    * @param {function} fn
    *   (cfg: Object, api) => undefined
@@ -177,7 +177,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Extend PWA custom service worker Esbuild config
+   * Extend PWA custom service worker Rolldown config
    * (when using Workbox InjectManifest mode)
    *
    * @param {function} fn
@@ -188,7 +188,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Extend SSR Webserver Esbuild config
+   * Extend SSR Webserver Rolldown config
    *
    * @param {function} fn
    *   (cfg: Object, api) => undefined

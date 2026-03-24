@@ -20,7 +20,7 @@ export class QuasarModeBuilder extends AppBuilder {
         this.quasarConf,
         entry
       )
-      await this.buildWithEsbuild(`Bex Script (${entry.name})`, contentConfig)
+      await this.buildWithRolldown(`Bex Script (${entry.name})`, contentConfig)
     }
 
     copyBexAssets(this.quasarConf)

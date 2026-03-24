@@ -1,7 +1,7 @@
 import { IResolve } from "./app-paths";
 import { QuasarConf, ResolvedQuasarConfValue } from "./configuration/conf";
 import { QuasarContext } from "./configuration/context";
-import { BuildOptions as EsbuildConfiguration } from "esbuild";
+import { RolldownOptions } from "rolldown";
 
 type ExtendViteConfHandler = (
   fn: (
@@ -51,20 +51,18 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
 
   extendViteConf: ExtendViteConfHandler;
 
-  extendBexScriptsConf: Callback<
-    (cfg: EsbuildConfiguration, api: IndexAPI) => void
-  >;
+  extendBexScriptsConf: Callback<(cfg: RolldownOptions, api: IndexAPI) => void>;
   extendElectronMainConf: Callback<
-    (cfg: EsbuildConfiguration, api: IndexAPI) => void
+    (cfg: RolldownOptions, api: IndexAPI) => void
   >;
   extendElectronPreloadConf: Callback<
-    (cfg: EsbuildConfiguration, api: IndexAPI) => void
+    (cfg: RolldownOptions, api: IndexAPI) => void
   >;
   extendPWACustomSWConf: Callback<
-    (cfg: EsbuildConfiguration, api: IndexAPI) => void
+    (cfg: RolldownOptions, api: IndexAPI) => void
   >;
   extendSSRWebserverConf: Callback<
-    (cfg: EsbuildConfiguration, api: IndexAPI) => void
+    (cfg: RolldownOptions, api: IndexAPI) => void
   >;
 
   registerCommand: (

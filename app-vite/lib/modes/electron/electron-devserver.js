@@ -43,8 +43,8 @@ export class QuasarModeDevserver extends AppDevserver {
       quasarConf.electron.preloadScripts,
       quasarConf.sourceFiles.electronMain,
 
-      // extends 'esbuild' diff
-      ...diffMap.esbuild(quasarConf)
+      // extends 'rolldown' diff
+      ...diffMap.rolldown(quasarConf)
     ])
   }
 
@@ -87,15 +87,15 @@ export class QuasarModeDevserver extends AppDevserver {
       { banner: 'Electron Main', cfg: cfgMain },
       ...cfgPreloadList.map(preloadScript => ({
         banner: `Electron Preload (${preloadScript.scriptName})`,
-        cfg: preloadScript.esbuildConfig
+        cfg: preloadScript.rolldownConfig
       }))
     ].map(({ banner, cfg }) =>
-      this.watchWithEsbuild(banner, cfg, () => {
+      this.watchWithRolldown(banner, cfg, () => {
         if (isReady === true) {
           this.#runElectron(quasarConf)
         }
-      }).then(esbuildCtx => {
-        this.#watcherList.push({ close: esbuildCtx.dispose })
+      }).then(watcher => {
+        this.#watcherList.push(watcher)
       })
     )
 

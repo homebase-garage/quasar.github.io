@@ -227,7 +227,7 @@ appBuilder
 
     /**
      * We're done, but there may be some underlying tools which
-     * haven't freed up the Node's JS execution stack yet (like esbuild or Vite).
+     * haven't freed up the Node's JS execution stack yet (like Rolldown or Vite).
      * So, we're forcing the process to exit to avoid losing time.
      */
     process.exit(0)

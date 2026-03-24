@@ -4,8 +4,8 @@ import { mergeConfig as mergeViteConfig } from 'vite'
 import {
   createViteConfig,
   extendViteConfig,
-  createNodeEsbuildConfig,
-  extendEsbuildConfig
+  createNodeRolldownConfig,
+  extendRolldownConfig
 } from '../../config-tools.js'
 
 import { cliPkg } from '../../utils/cli-runtime.js'
@@ -102,14 +102,14 @@ export const quasarSsrConfig = {
 
   // returns a Promise
   webserver: quasarConf => {
-    const cfg = createNodeEsbuildConfig(quasarConf, {
+    const cfg = createNodeRolldownConfig(quasarConf, {
       compileId: 'node-ssr-webserver',
       format: 'esm'
     })
     const { appPaths } = quasarConf.ctx
 
     Object.assign(
-      cfg.define,
+      cfg.transform.define,
       getBuildSystemDefine({
         buildEnv: {
           CLIENT: false,
@@ -119,8 +119,8 @@ export const quasarSsrConfig = {
     )
 
     if (quasarConf.ctx.dev) {
-      cfg.entryPoints = [appPaths.resolve.entry('ssr-dev-webserver.js')]
-      cfg.outfile = appPaths.resolve.entry('compiled-dev-webserver.js')
+      cfg.input = appPaths.resolve.entry('ssr-dev-webserver.js')
+      cfg.output.file = appPaths.resolve.entry('compiled-dev-webserver.js')
     } else {
       cfg.external = [
         ...cfg.external,
@@ -131,11 +131,11 @@ export const quasarSsrConfig = {
         './server/server-entry.js'
       ]
 
-      cfg.entryPoints = [appPaths.resolve.entry('ssr-prod-webserver.js')]
-      cfg.outfile = join(quasarConf.build.distDir, 'index.js')
+      cfg.input = appPaths.resolve.entry('ssr-prod-webserver.js')
+      cfg.output.file = join(quasarConf.build.distDir, 'index.js')
     }
 
-    return extendEsbuildConfig(
+    return extendRolldownConfig(
       cfg,
       quasarConf.ssr,
       quasarConf.ctx,

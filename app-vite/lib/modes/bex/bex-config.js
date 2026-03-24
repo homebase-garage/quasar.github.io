@@ -5,8 +5,8 @@ import { mergeConfig as mergeViteConfig } from 'vite'
 import {
   createViteConfig,
   extendViteConfig,
-  createBrowserEsbuildConfig,
-  extendEsbuildConfig
+  createBrowserRolldownConfig,
+  extendRolldownConfig
 } from '../../config-tools.js'
 
 import { getBuildSystemDefine } from '../../utils/env.js'
@@ -57,9 +57,7 @@ export const quasarBexConfig = {
   },
 
   bexScript(quasarConf, entry = generateDefaultEntry(quasarConf)) {
-    const cfg = createBrowserEsbuildConfig(quasarConf, {
-      compileId: `bex:script:${entry.name}`
-    })
+    const cfg = createBrowserRolldownConfig(quasarConf)
     const buildEnv = {
       __QUASAR_BEX_SCRIPT_NAME__: entry.name
     }
@@ -70,15 +68,15 @@ export const quasarBexConfig = {
       buildEnv.__QUASAR_BEX_SERVER_PORT__ = quasarConf.devServer.port || 0
     }
 
-    cfg.define = {
-      ...cfg.define,
+    cfg.transform.define = {
+      ...cfg.transform.define,
       ...getBuildSystemDefine({ buildEnv })
     }
 
-    cfg.entryPoints = [entry.from]
-    cfg.outfile = entry.to
+    cfg.input = entry.from
+    cfg.output.file = entry.to
 
-    return extendEsbuildConfig(
+    return extendRolldownConfig(
       cfg,
       quasarConf.bex,
       quasarConf.ctx,
