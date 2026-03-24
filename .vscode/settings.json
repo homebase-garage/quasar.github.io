@@ -6,6 +6,15 @@
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.codeActionsOnSave": ["source.fixAll.oxc"],
 
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.formatOnSave": true
+  },
+
   "oxc.unusedDisableDirectives": "deny",
 
   "search.exclude": {
