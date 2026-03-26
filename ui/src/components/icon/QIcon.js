@@ -169,7 +169,7 @@ export default createComponent({
         const matMatches = icon.match(matRE)
         if (matMatches !== null) {
           icon = icon.substring(2)
-          cls += matMap[matches[1]]
+          cls += matMap[matMatches[1]]
         }
 
         content = icon
