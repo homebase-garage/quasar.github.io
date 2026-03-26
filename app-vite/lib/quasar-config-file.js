@@ -754,7 +754,7 @@ export class QuasarConfigFile {
             transformAssetUrls
           }
         },
-        vueOptionsAPI: true,
+        vueOptionsAPI: false,
         vueRouterMode: 'hash',
 
         minify:
@@ -785,7 +785,7 @@ export class QuasarConfigFile {
 
           // vue-i18n
           __VUE_I18N_FULL_INSTALL__: true,
-          __VUE_I18N_LEGACY_API__: true,
+          __VUE_I18N_LEGACY_API__: false,
           __VUE_I18N_PROD_DEVTOOLS__: cfg.metaConf.debugging,
           __INTLIFY_PROD_DEVTOOLS__: cfg.metaConf.debugging
         },
