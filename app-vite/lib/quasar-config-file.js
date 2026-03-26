@@ -1,23 +1,22 @@
 import { join, isAbsolute, basename, dirname, relative } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { existsSync, readFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
 import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
 import debounce from 'lodash/debounce.js'
-import { build as esBuild, context as esContextBuild } from 'esbuild'
+import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 
-import { log, warn, fatal, tip } from './utils/logger.js'
+import { log, warn, error, fatal, tip } from './utils/logger.js'
 import { appFilesValidations } from './utils/app-files-validations.js'
 import { getPackageMajorVersion } from './utils/get-package-major-version.js'
 import { resolveExtension } from './utils/resolve-extension.js'
 import { ensureElectronArgv } from './utils/ensure-argv.js'
+import { quasarRolldownVueShimPlugin } from './plugins/rolldown.vue-shim.js'
 import {
-  quasarEsbuildInjectReplacementsDefine,
-  quasarEsbuildInjectReplacementsPlugin
-} from './plugins/esbuild.inject-replacements.js'
-import { quasarEsbuildVueShimPlugin } from './plugins/esbuild.vue-shim.js'
+  quasarRolldownInjectReplacementsDefine,
+  quasarRolldownInjectReplacementsPlugin
+} from './plugins/rolldown.inject-replacements.js'
 
 const urlRegex = /^http(s)?:\/\//i
 import { findClosestOpenPort, localHostList } from './utils/net.js'
@@ -205,7 +204,6 @@ export class QuasarConfigFile {
   #address
   #isWatching = false
 
-  #require
   #tempFile
 
   #cssVariables
@@ -223,18 +221,8 @@ export class QuasarConfigFile {
 
     const { appPaths } = ctx
 
-    this.#require =
-      appPaths.quasarConfigOutputFormat === 'cjs'
-        ? createRequire(import.meta.url)
-        : () => {}
-
-    const quasarConfigFileExtension =
-      appPaths.quasarConfigOutputFormat === 'esm'
-        ? 'mjs'
-        : appPaths.quasarConfigOutputFormat
-
     // if filename syntax gets changed, then also update the "clean" cmd
-    this.#tempFile = `${appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.${quasarConfigFileExtension}`
+    this.#tempFile = `${appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
 
     log(
       `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format`
@@ -286,10 +274,10 @@ export class QuasarConfigFile {
   }
 
   read() {
-    const esbuildConfig = this.#createEsbuildConfig()
+    const rolldownConfig = this.#createRolldownConfig()
     return this.#opts.watch !== void 0
-      ? this.#buildAndWatch(esbuildConfig)
-      : this.#build(esbuildConfig)
+      ? this.#buildAndWatch(rolldownConfig)
+      : this.#build(rolldownConfig)
   }
 
   // start watching for changes
@@ -298,50 +286,55 @@ export class QuasarConfigFile {
   }
 
   /**
-   * @returns {import('esbuild').BuildOptions}
+   * @returns {import('rolldown').RolldownOptions}
    */
-  #createEsbuildConfig() {
+  #createRolldownConfig() {
     const { appPaths } = this.#ctx
 
     return {
       platform: 'node',
-      format: appPaths.quasarConfigOutputFormat,
-      bundle: true,
-      packages: 'external',
-      banner: {
-        js: quasarConfigBanner
+
+      input: appPaths.quasarConfigFilename,
+
+      output: {
+        file: this.#tempFile,
+        format: 'esm',
+        codeSplitting: false,
+        banner: quasarConfigBanner
       },
-      define: quasarEsbuildInjectReplacementsDefine,
-      // Define the aliases which have to be usable in the quasar.config file
-      alias: {
-        '#q-app': '@quasar/app-vite'
+
+      external: /node_modules/,
+
+      resolve: {
+        // Define the aliases which have to be usable in the quasar.config file
+        alias: {
+          '#q-app': '@quasar/app-vite'
+        },
+
+        extensions: ['.js', '.ts', '.mjs', '.mts', '.json']
       },
-      resolveExtensions: [
-        appPaths.quasarConfigOutputFormat === 'esm' ? '.mjs' : '.cjs',
-        '.js',
-        '.mts',
-        '.ts',
-        '.json'
-      ],
-      entryPoints: [appPaths.quasarConfigFilename],
-      outfile: this.#tempFile,
+
+      transform: {
+        target: 'node22',
+        define: quasarRolldownInjectReplacementsDefine
+      },
+
       plugins: [
-        quasarEsbuildInjectReplacementsPlugin,
-        quasarEsbuildVueShimPlugin
+        quasarRolldownInjectReplacementsPlugin(),
+        quasarRolldownVueShimPlugin()
       ],
-      logOverride: {
-        // .quasar/tsconfig.json won't be available for the first time executing dev/build/prepare.
-        // So, esbuild will show a warning saying it can't find the `extends` file.
-        // We need to suppress the warning. Otherwise, it will be noisy and cause a temp file to be created.
-        // tsconfig is not really important for the config file itself anyway.
-        'tsconfig.json': 'silent'
-      }
+
+      // .quasar/tsconfig.json won't be available for the first time executing dev/build/prepare.
+      // So, Rolldown will error out.
+      // We need to suppress the error. Otherwise, it will be noisy and cause a temp file to be created.
+      // tsconfig is not really important for the config file itself anyway.
+      tsconfig: false
     }
   }
 
-  async #build(esbuildConfig) {
+  async #build(rolldownConfig) {
     try {
-      await esBuild(esbuildConfig)
+      await rolldownBuild(rolldownConfig)
     } catch (e) {
       fse.removeSync(this.#tempFile)
       console.log()
@@ -355,7 +348,6 @@ export class QuasarConfigFile {
     let quasarConfigFn
     try {
       const fnResult = await import(pathToFileURL(this.#tempFile))
-
       quasarConfigFn = fnResult.default || fnResult
     } catch (e) {
       console.log()
@@ -371,103 +363,85 @@ export class QuasarConfigFile {
     return this.#computeConfig(quasarConfigFn, true)
   }
 
-  async #buildAndWatch(esbuildConfig) {
-    let firstBuildIsDone
-
-    const { appPaths } = this.#ctx
-    const tempFile = this.#tempFile
-
-    esbuildConfig.plugins.push({
-      name: 'quasar:watcher',
-      setup: build => {
-        let isFirst = true
-
-        build.onStart(() => {
-          if (isFirst === false) {
-            log()
-            log(
-              'The quasar.config file (or its dependencies) changed. Reading it again...'
-            )
-          }
-        })
-
-        build.onEnd(async result => {
-          // not ready yet; watch() has not been issued yet
-          if (isFirst === false && this.#isWatching === false) return
-
-          if (result.errors.length !== 0) {
-            fse.removeSync(tempFile)
-
-            const msg =
-              'Could not compile the quasar.config file because it has errors.'
-
-            if (isFirst === true) {
-              fatal(msg, 'FAIL')
-            }
-
-            warn(msg + ' Please fix them.\n')
-            return
-          }
-
-          let quasarConfigFn
-
-          // ensure we grab the latest version
-          if (appPaths.quasarConfigOutputFormat === 'cjs') {
-            delete this.#require.cache[tempFile]
-          }
-
-          try {
-            const res =
-              appPaths.quasarConfigOutputFormat === 'esm'
-                ? await import(pathToFileURL(tempFile) + '?t=' + Date.now()) // we also need to cache bust it, hence the ?t= param
-                : this.#require(tempFile)
-
-            quasarConfigFn = res.default || res
-          } catch (e) {
-            // free up memory immediately
-            if (appPaths.quasarConfigOutputFormat === 'cjs') {
-              delete this.#require.cache[tempFile]
-            }
-
-            console.log()
-            console.error(e)
-
-            const msg =
-              'Importing quasar.config file results in error. Please check the' +
-              ` Node.js stack above against the temporarily created ${basename(tempFile)} file` +
-              ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
-
-            if (isFirst === true) {
-              fatal(msg, 'FAIL')
-            }
-
-            warn(msg + '\n')
-            return
-          }
-
-          // free up memory immediately
-          if (appPaths.quasarConfigOutputFormat === 'cjs') {
-            delete this.#require.cache[tempFile]
-          }
-
-          const quasarConf = await this.#computeConfig(quasarConfigFn, isFirst)
-
-          if (quasarConf === void 0) return
-
-          if (isFirst === true) {
-            isFirst = false
-            firstBuildIsDone(quasarConf)
-            return
-          }
-
-          log('Scheduled to apply quasar.config changes in 550ms')
-          this.#opts.watch(quasarConf)
-        })
+  #buildAndWatch(rolldownConfig) {
+    const watcher = rolldownWatch({
+      ...rolldownConfig,
+      watch: {
+        exclude: 'node_modules/**'
       }
     })
 
-    const esbuildCtx = await esContextBuild(esbuildConfig)
-    await esbuildCtx.watch()
+    let isFirst = true
+    let firstBuildIsDone
+
+    const tempFile = this.#tempFile
+
+    watcher.on('event', async event => {
+      if (event.code === 'BUNDLE_START') {
+        if (isFirst === false) {
+          log()
+          log(
+            'The quasar.config file (or its dependencies) changed. Reading it again...'
+          )
+        }
+      } else if (event.code === 'BUNDLE_END') {
+        event.result.close()
+
+        // not ready yet; watch() has not been issued yet
+        if (isFirst === false && this.#isWatching === false) return
+
+        let quasarConfigFn
+
+        try {
+          const res = await import(pathToFileURL(tempFile) + '?t=' + Date.now()) // we also need to cache bust it, hence the ?t= param
+
+          quasarConfigFn = res.default || res
+        } catch (e) {
+          console.log()
+          console.error(e)
+
+          const msg =
+            'Importing quasar.config file results in error. Please check the' +
+            ` Node.js stack above against the temporarily created ${basename(tempFile)} file` +
+            ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
+
+          if (isFirst === true) {
+            fatal(msg, 'FAIL')
+          }
+
+          warn(msg + '\n')
+          return
+        }
+
+        const quasarConf = await this.#computeConfig(quasarConfigFn, isFirst)
+
+        if (quasarConf === void 0) return
+
+        if (isFirst === true) {
+          isFirst = false
+          firstBuildIsDone(quasarConf)
+          return
+        }
+
+        log('Scheduled to apply quasar.config changes in 550ms')
+        this.#opts.watch(quasarConf)
+      } else if (event.code === 'ERROR') {
+        fse.removeSync(tempFile)
+
+        const msg =
+          'Could not compile the quasar.config file because it has errors.'
+
+        if (isFirst === true) {
+          error(msg, 'FAIL')
+          console.error(event.error)
+          process.exit(1)
+        }
+
+        warn(msg + ' Please fix them.\n')
+        console.error(event.error)
+        event.result.close()
+      }
+    })
 
     return new Promise(res => {
       firstBuildIsDone = res
@@ -513,9 +487,9 @@ export class QuasarConfigFile {
       return
     }
 
-    if (Object(userCfg) !== userCfg) {
-      fse.removeSync(this.#tempFile)
+    fse.removeSync(this.#tempFile)
 
+    if (Object(userCfg) !== userCfg) {
       const msg = 'The quasar.config file does not default exports an Object.'
 
       if (failOnError === true) {
@@ -525,8 +499,6 @@ export class QuasarConfigFile {
       warn(msg + ' Please fix it.\n')
       return
     }
-
-    fse.removeSync(this.#tempFile)
 
     const { appPaths } = this.#ctx
 
@@ -899,7 +871,7 @@ export class QuasarConfigFile {
     // all impacted devserver diffs (look for this.registerDiff() calls)
     cfg.sourceFiles = merge(
       {
-        // For esbuild JS/TS entry points, make sure this
+        // For Rolldown JS/TS entry points, make sure this
         // gets appPaths.resolve.app() applied to it further down the line
 
         rootComponent: 'src/App.vue',

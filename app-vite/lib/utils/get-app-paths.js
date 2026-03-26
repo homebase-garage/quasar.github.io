@@ -5,22 +5,19 @@ import { fatal } from './logger.js'
 import { cliDir, resolveToCliDir } from './cli-runtime.js'
 
 const quasarConfigList = [
-  { name: 'quasar.config.js', inputFormat: 'esm', outputFormat: 'esm' },
-  { name: 'quasar.config.ts', inputFormat: 'ts', outputFormat: 'esm' },
-  { name: 'quasar.config.mjs', inputFormat: 'esm', outputFormat: 'esm' },
-  { name: 'quasar.config.cjs', inputFormat: 'cjs', outputFormat: 'cjs' }
+  { name: 'quasar.config.js', inputFormat: 'esm' },
+  { name: 'quasar.config.ts', inputFormat: 'ts' }
 ]
 
 function getAppInfo(appDir) {
   while (appDir.length && appDir[appDir.length - 1] !== sep) {
-    for (const { name, inputFormat, outputFormat } of quasarConfigList) {
+    for (const { name, inputFormat } of quasarConfigList) {
       const quasarConfigFilename = join(appDir, name)
       if (existsSync(quasarConfigFilename)) {
         return {
           appDir,
           quasarConfigFilename,
-          quasarConfigInputFormat: inputFormat,
-          quasarConfigOutputFormat: outputFormat
+          quasarConfigInputFormat: inputFormat
         }
       }
     }
@@ -48,12 +45,8 @@ function getPrefixDir(ctx) {
 }
 
 export function getAppPaths({ ctx, rootDir, defineHiddenProp } = {}) {
-  const {
-    appDir,
-    quasarConfigFilename,
-    quasarConfigInputFormat,
-    quasarConfigOutputFormat
-  } = getAppInfo(rootDir)
+  const { appDir, quasarConfigFilename, quasarConfigInputFormat } =
+    getAppInfo(rootDir)
 
   const publicDir = resolve(appDir, 'public')
   const srcDir = resolve(appDir, 'src')
@@ -78,7 +71,6 @@ export function getAppPaths({ ctx, rootDir, defineHiddenProp } = {}) {
 
     quasarConfigFilename,
     quasarConfigInputFormat,
-    quasarConfigOutputFormat,
 
     resolve: {
       cli: resolveToCliDir,

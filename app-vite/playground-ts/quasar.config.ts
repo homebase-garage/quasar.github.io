@@ -117,7 +117,7 @@ export default defineConfig((/* ctx */) => ({
     ],
 
     // extendPackageJson (json) {},
-    // extendSSRWebserverConf (esbuildConf) {},
+    // extendSSRWebserverConf (rolldownConf) {},
 
     // manualStoreSerialization: true,
     // manualStoreSsrContextInjection: true,
@@ -139,7 +139,7 @@ export default defineConfig((/* ctx */) => ({
     // extendManifestJson (json) {},
     // useCredentialsForManifestTag: true,
     // injectPwaMetaTags: false,
-    // extendPWACustomSWConf (esbuildConf) {},
+    // extendPWACustomSWConf (rolldownConf) {},
     // extendGenerateSWOptions (cfg) {},
     // extendInjectManifestOptions (cfg) {}
   },
@@ -156,8 +156,8 @@ export default defineConfig((/* ctx */) => ({
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
   electron: {
-    // extendElectronMainConf (esbuildConf) {},
-    // extendElectronPreloadConf (esbuildConf) {},
+    // extendElectronMainConf (rolldownConf) {},
+    // extendElectronPreloadConf (rolldownConf) {},
 
     // extendPackageJson (json) {},
 
@@ -189,7 +189,7 @@ export default defineConfig((/* ctx */) => ({
 
   // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
   bex: {
-    // extendBexScriptsConf (esbuildConf) {},
+    // extendBexScriptsConf (rolldownConf) {},
     // extendBexManifestJson (json) {},
 
     /**
