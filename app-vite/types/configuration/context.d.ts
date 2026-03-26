@@ -174,7 +174,6 @@ type CacheProxyModuleKey =
   | "capCli"
   | "cssVariables"
   | "electron"
-  | "eslint"
   | "hasTypescript"
   | "nodePackager"
   | "storeProvider"

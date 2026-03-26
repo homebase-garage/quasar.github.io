@@ -30,16 +30,6 @@ export class BaseAPI {
   }
 
   /**
-   * Is the host project using linting (ESLint)?
-   *
-   * @return {Promise<boolean>}
-   */
-  async hasLint() {
-    const { hasEslint } = await this.ctx.cacheProxy.getModule('eslint')
-    return hasEslint
-  }
-
-  /**
    * Get the installed and active store package name, if any
    *
    * @return {'pinia' | undefined}

@@ -46,17 +46,9 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
   log('Creating PWA source folder...')
 
   const hasTypescript = await cacheProxy.getModule('hasTypescript')
-  const { hasEslint } = await cacheProxy.getModule('eslint')
   const format = hasTypescript ? 'ts' : 'js'
 
-  fse.copySync(
-    appPaths.resolve.cli(`templates/pwa/${format}`),
-    appPaths.pwaDir,
-    // Copy .eslintrc.js only if the app has ESLint
-    hasEslint === true
-      ? { filter: src => !src.endsWith('/.eslintrc.cjs') }
-      : void 0
-  )
+  fse.copySync(appPaths.resolve.cli(`templates/pwa/${format}`), appPaths.pwaDir)
 
   log('Copying PWA icons to /public/icons/ (if they are not already there)...')
   fse.copySync(

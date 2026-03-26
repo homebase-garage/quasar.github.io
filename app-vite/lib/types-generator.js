@@ -182,7 +182,7 @@ function generateTsConfig(quasarConf, fsUtils) {
 // We rely on the wildcard entry, so we use a deep import, instead of let's say `quasar/feature-flags`
 // When using TypeScript `moduleResolution: "bundler"`, it requires the file extension.
 // This may sound unusual, but that's because it seems to treat wildcard entries differently.
-const featureFlagsTemplate = `/* eslint-disable */
+const featureFlagsTemplate = `/* oxlint-disable */
 import "quasar/dist/types/feature-flag.d.ts";
 
 declare module "quasar/dist/types/feature-flag.d.ts" {
@@ -232,14 +232,14 @@ function writeFeatureFlags(quasarConf, fsUtils) {
 
   Load Vite's client types, see https://vitejs.dev/guide/features#client-types
 */
-const declarationsTemplate = `/* eslint-disable */
+const declarationsTemplate = `/* oxlint-disable */
 /// <reference types="@quasar/app-vite" />
 
 /// <reference types="vite/client" />
 `
 
 // Mocks all files ending in `.vue` showing them as plain Vue instances
-const vueShimsTemplate = `/* eslint-disable */
+const vueShimsTemplate = `/* oxlint-disable */
 declare module '*.vue' {
   import { DefineComponent } from 'vue';
   const component: DefineComponent;
@@ -247,7 +247,7 @@ declare module '*.vue' {
 }
 `
 
-const piniaTemplate = `/* eslint-disable */
+const piniaTemplate = `/* oxlint-disable */
 import { Router } from 'vue-router';
 
 declare module 'pinia' {

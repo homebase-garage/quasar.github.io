@@ -69,11 +69,6 @@
       "types": "./types/bex/bex-bridge.d.ts",
       "import": "./exports/bex/private/bex-bridge.js"
     },
-    "./eslint": {
-      "require": "./exports/eslint/eslint.cjs",
-      "node": "./exports/eslint/eslint.js",
-      "import": "./exports/eslint/eslint.js"
-    },
     "./lib/testing.js": {
       "import": "./exports/testing/testing.js"
     }
@@ -157,9 +152,6 @@
       "optional": true
     },
     "@electron/packager": {
-      "optional": true
-    },
-    "eslint": {
       "optional": true
     },
     "pinia": {

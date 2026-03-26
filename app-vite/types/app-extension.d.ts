@@ -27,7 +27,6 @@ interface BaseAPI {
   hasWebpack: false;
 
   hasTypescript: () => Promise<boolean>;
-  hasLint: () => Promise<boolean>;
   getStorePackageName: () => "pinia" | undefined;
   getNodePackagerName: () => Promise<"npm" | "yarn" | "pnpm" | "bun">;
 }
