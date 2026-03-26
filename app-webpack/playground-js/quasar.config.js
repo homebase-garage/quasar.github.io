@@ -64,7 +64,9 @@ export default defineConfig((/* ctx */) => ({
     server: {
       type: 'http'
     },
-    open: true // opens browser window automatically
+    open: {
+      app: { name: 'google chrome' }
+    }
   },
 
   // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#framework
