@@ -163,7 +163,7 @@ const validServerKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 function parseEnv(env, regex) {
   const validKeys = Object.keys(env).filter(key => regex.test(key))
   return validKeys.reduce((acc, key) => {
-    acc[`import.meta.env.${key}`] = env[key]
+    acc[`import.meta.env.${key}`] = JSON.stringify(env[key])
     return acc
   }, {})
 }
