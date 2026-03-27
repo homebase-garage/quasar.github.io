@@ -280,6 +280,7 @@ export function createNodeRolldownConfig(quasarConf, { format }) {
 
   return {
     platform: 'node',
+    tsconfig: false,
 
     output: {
       format,
@@ -322,6 +323,7 @@ export function createBrowserRolldownConfig(quasarConf) {
 
   return {
     platform: 'browser',
+    tsconfig: false,
 
     output: {
       format: 'iife',
