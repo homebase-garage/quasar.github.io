@@ -43,7 +43,7 @@ export default {
 
   watch: {
     visible(val) {
-      if (process.env.MODE === 'ssr') {
+      if (import.meta.env.QUASAR_MODE === 'ssr') {
         this.$router.replace({
           name: this.$route.name,
           query: { ...this.$route.query, visible: String(val) }
@@ -52,7 +52,7 @@ export default {
     },
 
     once(val) {
-      if (process.env.MODE === 'ssr') {
+      if (import.meta.env.QUASAR_MODE === 'ssr') {
         this.$router.replace({
           name: this.$route.name,
           query: { ...this.$route.query, once: String(val) }

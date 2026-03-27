@@ -97,7 +97,7 @@ export function ensureElectronArgv(bundlerName, ctx) {
   } else {
     // electron-builder bundler
     if (
-      ![void 0, 'all', 'darwin', 'mac', 'win32', 'win', 'linux'].includes(
+      ![void 0, 'all', 'darwin', 'win32', 'linux', 'win', 'mac'].includes(
         ctx.targetName
       )
     ) {

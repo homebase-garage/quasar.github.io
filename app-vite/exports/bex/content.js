@@ -5,10 +5,13 @@ import { BexBridge } from './private/bex-bridge.js'
  * Only Chrome allows the background counterpart initialization
  * to take place in a service worker.
  */
-if (process.env.DEV === true && process.env.TARGET === 'chrome') {
+if (
+  import.meta.env.QUASAR_DEV === true &&
+  import.meta.env.QUASAR_TARGET === 'chrome'
+) {
   let scriptIsReloading = false
 
-  const scriptName = process.env.__QUASAR_BEX_SCRIPT_NAME__
+  const scriptName = import.meta.env.QUASAR_BEX_SCRIPT_NAME
   const portName = `quasar@hmr/content-script/${scriptName}`
   const banner = `[QBex|HMR] [${scriptName}]`
 
@@ -64,7 +67,7 @@ export function createBridge({ debug } = {}) {
   scriptHasBridge = true
   return new BexBridge({
     type: 'content',
-    name: process.env.__QUASAR_BEX_SCRIPT_NAME__,
+    name: import.meta.env.QUASAR_BEX_SCRIPT_NAME,
     debug
   })
 }

@@ -1,6 +1,6 @@
-import { type Request, type Response } from 'express';
-import { type RenderError } from '#q-app';
-import { defineSsrMiddleware } from '#q-app/wrappers';
+import { type Request, type Response } from "express";
+import { type RenderError } from "#q-app";
+import { defineSsrMiddleware } from "#q-app/wrappers";
 
 // This middleware should execute as last one
 // since it captures everything and tries to
@@ -9,11 +9,11 @@ import { defineSsrMiddleware } from '#q-app/wrappers';
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
   // we capture any other Express route and hand it
   // over to Vue and Vue Router to render our page
-  app.get(resolve.urlPath('{*path}'), (req: Request, res: Response) => {
-    res.setHeader('Content-Type', 'text/html');
+  app.get(resolve.urlPath("*"), (req: Request, res: Response) => {
+    res.setHeader("Content-Type", "text/html");
 
     render(/* the ssrContext: */ { req, res })
-      .then((html) => {
+      .then(html => {
         // now let's send the rendered html to the client
         res.send(html);
       })
@@ -32,8 +32,8 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
 
           // Should reach here only if no "catch-all" route
           // is defined in /src/routes
-          res.status(404).send('404 | Page Not Found');
-        } else if (process.env.DEV) {
+          res.status(404).send("404 | Page Not Found");
+        } else if (import.meta.env.QUASAR_DEV) {
           // well, we treat any other code as error;
           // if we're in dev mode, then we can use Quasar CLI
           // to display a nice error page that contains the stack
@@ -49,9 +49,9 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
 
           // Render Error Page on production or
           // create a route (/src/routes) for an error page and redirect to it
-          res.status(500).send('500 | Internal Server Error');
+          res.status(500).send("500 | Internal Server Error");
 
-          if (process.env.DEBUGGING) {
+          if (import.meta.env.QUASAR_DEBUG) {
             console.error(err.stack);
           }
         }

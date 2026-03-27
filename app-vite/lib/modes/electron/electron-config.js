@@ -6,7 +6,6 @@ import {
   extendRolldownConfig,
   createNodeRolldownConfig
 } from '../../config-tools.js'
-import { getBuildSystemDefine } from '../../utils/env.js'
 
 async function preloadScript(quasarConf, name) {
   /**
@@ -33,12 +32,8 @@ async function preloadScript(quasarConf, name) {
 
   cfg.transform.define = {
     ...cfg.transform.define,
-    ...getBuildSystemDefine({
-      buildEnv: {
-        QUASAR_PUBLIC_FOLDER:
-          quasarConf.ctx.dev === true ? appPaths.publicDir : '.'
-      }
-    })
+    'import.meta.env.QUASAR_PUBLIC_FOLDER':
+      quasarConf.ctx.dev === true ? JSON.stringify(appPaths.publicDir) : '"."'
   }
 
   return {
@@ -81,21 +76,21 @@ export const quasarElectronConfig = {
 
     cfg.transform.define = {
       ...cfg.transform.define,
-      ...getBuildSystemDefine({
-        buildEnv:
-          quasarConf.ctx.dev === true
-            ? {
-                QUASAR_ELECTRON_PRELOAD_FOLDER:
-                  appPaths.resolve.entry('preload'),
-                QUASAR_ELECTRON_PRELOAD_EXTENSION: '.cjs',
-                QUASAR_PUBLIC_FOLDER: appPaths.publicDir
-              }
-            : {
-                QUASAR_ELECTRON_PRELOAD_FOLDER: 'preload',
-                QUASAR_ELECTRON_PRELOAD_EXTENSION: '.cjs',
-                QUASAR_PUBLIC_FOLDER: '.'
-              }
-      })
+      ...(quasarConf.ctx.dev === true
+        ? {
+            'import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER': JSON.stringify(
+              appPaths.resolve.entry('preload')
+            ),
+            'import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION': '".cjs"',
+            'import.meta.env.QUASAR_PUBLIC_FOLDER': JSON.stringify(
+              appPaths.publicDir
+            )
+          }
+        : {
+            'import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER': '"preload"',
+            'import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION': '".cjs"',
+            'import.meta.env.QUASAR_PUBLIC_FOLDER': '"."'
+          })
     }
 
     return extendRolldownConfig(

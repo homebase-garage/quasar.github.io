@@ -32,7 +32,11 @@ export function readFileEnv({ ctx, quasarConf }) {
     })
 
     if (opts.envFilter !== void 0) {
-      result.fileEnv = opts.envFilter(result.fileEnv) || {}
+      result.fileClientEnv =
+        opts.envFilter(result.fileClientEnv, 'client') || {}
+
+      result.fileServerEnv =
+        opts.envFilter(result.fileServerEnv, 'server') || {}
     }
 
     cacheProxy.setRuntime(readFileEnvCacheKey, {
@@ -112,119 +116,30 @@ function getFileEnvResult({
     })
   )
 
-  if (Object.keys(env).length === 0) {
-    return {}
-  }
+  if (Object.keys(env).length === 0) return {}
 
   const { parsed: rawFileEnv } = dotEnvExpand({ parsed: env })
 
   return {
-    fileEnv: getFileEnv(rawFileEnv),
+    fileEnvClient: parseEnv(rawFileEnv, validClientKeyRE),
+    fileEnvServer: parseEnv(rawFileEnv, validServerKeyRE),
     usedEnvFiles,
     envFromCache: false
   }
 }
 
-const validKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
+const validClientKeyRE = /^QCLI_[a-zA-Z_$][a-zA-Z0-9_$]+/
+const validServerKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 
 /**
  * Filter out keys that cannot be used in JS
- * as process.env.[key]
+ * as import.meta.env.[key]
  * Examples: ProgramFiles(x86), BASH_FUNC_which%%
  */
-function getFileEnv(env) {
-  const validKeys = Object.keys(env).filter(key => validKeyRE.test(key))
+function parseEnv(env, regex) {
+  const validKeys = Object.keys(env).filter(key => regex.test(key))
   return validKeys.reduce((acc, key) => {
-    acc[key] = env[key]
+    acc[`import.meta.env.${key}`] = env[key]
     return acc
   }, {})
-}
-
-/**
- * Get the final env definitions to supply to
- * the build system (Vite or Rolldown).
- */
-export function getBuildSystemDefine({
-  fileEnv = {},
-  buildEnv = {},
-  buildRawDefine = {}
-}) {
-  const acc = {}
-
-  for (const key in fileEnv) {
-    const val = fileEnv[key]
-    acc[`process.env.${key}`] =
-      val === 'true' || val === 'false'
-        ? val // let's keep it as boolean and not transform it to string
-        : JSON.stringify(fileEnv[key])
-  }
-
-  const flatBuildEnv = flattenObject(buildEnv)
-  for (const key in flatBuildEnv) {
-    acc[`process.env.${key}`] = JSON.stringify(flatBuildEnv[key])
-  }
-
-  for (const key in buildRawDefine) {
-    const val = buildRawDefine[key]
-    acc[key] =
-      typeof val === 'string'
-        ? buildRawDefine[key]
-        : JSON.stringify(buildRawDefine[key])
-  }
-
-  return acc
-}
-
-/**
- * Flattens the object to a single level.
- * Keys of the result will be the keypaths of the properties of the parameter.
- * It will also preserve the original nested objects with their root keypath.
- *
- * @param {Object} obj
- *
- * @example
- * flattenObject({
- *   foo: 1,
- *   bar: {
- *     baz: 2,
- *     qux: {
- *       quux: {
- *         quuz: 3
- *       }
- *     }
- *   }
- * })
- * // Result:
- * // foo: 1
- * // bar: {baz: 2, qux: {…}, qux.quux: {…}, qux.quux.quuz: 3}
- * // bar.baz: 2
- * // bar.qux: {quux: {…}, quux.quuz: 3}
- * // bar.qux.quux: {quuz: 3}
- * // bar.qux.quux.quuz: 3
- */
-const flattenObject = obj => {
-  const result = {}
-
-  for (const key in obj) {
-    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
-
-    if (typeof obj[key] !== 'object') {
-      result[key] = obj[key]
-      continue
-    }
-
-    const flatObj = flattenObject(obj[key])
-
-    // Save the object itself to it's root key
-    result[key] = flatObj
-
-    // Save the child keys
-    for (const flatKey in flatObj) {
-      if (!Object.prototype.hasOwnProperty.call(flatObj, flatKey)) continue
-
-      result[`${key}.${flatKey}`] = flatObj[flatKey]
-    }
-  }
-
-  return result
 }

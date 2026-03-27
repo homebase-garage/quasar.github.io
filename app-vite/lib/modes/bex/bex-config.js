@@ -9,8 +9,6 @@ import {
   extendRolldownConfig
 } from '../../config-tools.js'
 
-import { getBuildSystemDefine } from '../../utils/env.js'
-
 function generateDefaultEntry(quasarConf) {
   return {
     name: 'file', // or subdir/file (regardless of OS)
@@ -58,19 +56,20 @@ export const quasarBexConfig = {
 
   bexScript(quasarConf, entry = generateDefaultEntry(quasarConf)) {
     const cfg = createBrowserRolldownConfig(quasarConf)
-    const buildEnv = {
-      __QUASAR_BEX_SCRIPT_NAME__: entry.name
+
+    cfg.transform.define = {
+      ...cfg.transform.define,
+      'import.meta.env.QUASAR_BEX_SCRIPT_NAME': `"${entry.name}"`
     }
 
     if (quasarConf.ctx.dev) {
       // Vite 6.0.9+ compat; we need the token!
-      buildEnv.__QUASAR_BEX_WS_TOKEN__ = quasarConf.metaConf.bexWsToken
-      buildEnv.__QUASAR_BEX_SERVER_PORT__ = quasarConf.devServer.port || 0
-    }
-
-    cfg.transform.define = {
-      ...cfg.transform.define,
-      ...getBuildSystemDefine({ buildEnv })
+      Object.assign(cfg.transform.define, {
+        'import.meta.env.QUASAR_BEX_WS_TOKEN': `"${quasarConf.metaConf.bexWsToken}"`,
+        'import.meta.env.QUASAR_BEX_SERVER_PORT': String(
+          quasarConf.devServer.port || 0
+        )
+      })
     }
 
     cfg.input = entry.from

@@ -266,7 +266,7 @@ interface QuasarStaticBuildConfiguration {
    * Should the Vue Options API be available? If all your components only use Composition API
    * it would make sense performance-wise to disable Vue Options API for a compile speedup.
    *
-   * @default true
+   * @default false
    */
   vueOptionsAPI?: boolean;
   /**
@@ -286,21 +286,14 @@ interface QuasarStaticBuildConfiguration {
   distDir?: string;
 
   /**
-   * Add properties to `process.env` that you can use in your website/app JS code.
+   * Replace global variables or property accessors with the provided values.
+   * Gets supplied to Rolldown's `define` option, which performs text replacements during the build.
    *
    * @see https://v2.quasar.dev/quasar-cli-vite/handling-process-env
    *
    * @example { SOMETHING: 'someValue' }
    */
-  env?: { [index: string]: string | boolean | undefined | null };
-  /**
-   * Defines constants that get replaced in your app.
-   * Unlike `env`, you will need to use JSON.stringify() on the values yourself except for booleans.
-   * Also, these will not be prefixed with `process.env.`.
-   *
-   * @example { SOMETHING: JSON.stringify('someValue') } -> console.log(SOMETHING) // console.log('someValue')
-   */
-  rawDefine?: { [index: string]: string | boolean | undefined | null };
+  define?: Record<string, string>;
   /**
    * Folder where Quasar CLI should look for .env* files.
    * Can be an absolute path or a relative path to project root directory.
@@ -320,11 +313,10 @@ interface QuasarStaticBuildConfiguration {
    * through the env files. This does not account also for the definitions
    * assigned directly to quasar.config > build > env prop.
    */
-  envFilter?: (env: {
-    [index: string]: string | boolean | undefined | null;
-  }) => {
-    [index: string]: string | boolean | undefined | null;
-  };
+  envFilter?: (
+    env: Record<string, string>,
+    target: "client" | "server"
+  ) => Record<string, string>;
 
   /**
    * Build production assets with or without the hash part in filenames.

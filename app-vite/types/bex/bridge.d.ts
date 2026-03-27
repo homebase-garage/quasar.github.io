@@ -70,7 +70,7 @@ type BexBridgeOptions = {
    * @see {@link BexBridge.log} for logging a message if the debug mode is enabled
    *
    * @example
-   * const bridge = useBridge({ debug: process.env.DEBUGGING });
+   * const bridge = useBridge({ debug: import.meta.env.QUASAR_DEBUG });
    */
   debug?: boolean;
 } & (

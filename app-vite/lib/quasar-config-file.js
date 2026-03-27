@@ -22,7 +22,7 @@ const urlRegex = /^http(s)?:\/\//i
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
 import { readFileEnv } from './utils/env.js'
-import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './config-tools.js'
+import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
 
 const defaultPortMapping = {
   spa: 9000,
@@ -530,8 +530,7 @@ export class QuasarConfigFile {
           target: {},
           viteVuePluginOptions: {},
           vitePlugins: [],
-          env: {},
-          rawDefine: {},
+          define: {},
           envFiles: [],
           resolve: {},
           htmlMinifyOptions: {}
@@ -754,6 +753,7 @@ export class QuasarConfigFile {
             transformAssetUrls
           }
         },
+
         vueOptionsAPI: false,
         vueRouterMode: 'hash',
 
@@ -777,17 +777,19 @@ export class QuasarConfigFile {
           // https://github.com/terser/html-minifier-terser?tab=readme-ov-file#options-quick-reference
         },
 
-        rawDefine: {
+        define: {
           // vue
-          __VUE_OPTIONS_API__: cfg.build.vueOptionsAPI !== false,
-          __VUE_PROD_DEVTOOLS__: cfg.metaConf.debugging,
-          __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: cfg.metaConf.debugging, // Vue 3.4+
+          __VUE_OPTIONS_API__: String(cfg.build.vueOptionsAPI !== false),
+          __VUE_PROD_DEVTOOLS__: String(cfg.metaConf.debugging),
+          __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: String(
+            cfg.metaConf.debugging
+          ), // Vue 3.4+
 
           // vue-i18n
-          __VUE_I18N_FULL_INSTALL__: true,
-          __VUE_I18N_LEGACY_API__: false,
-          __VUE_I18N_PROD_DEVTOOLS__: cfg.metaConf.debugging,
-          __INTLIFY_PROD_DEVTOOLS__: cfg.metaConf.debugging
+          __VUE_I18N_FULL_INSTALL__: 'true',
+          __VUE_I18N_LEGACY_API__: 'false',
+          __VUE_I18N_PROD_DEVTOOLS__: String(cfg.metaConf.debugging),
+          __INTLIFY_PROD_DEVTOOLS__: String(cfg.metaConf.debugging)
         },
 
         alias: {
@@ -1019,18 +1021,19 @@ export class QuasarConfigFile {
           `Workbox strategy "${cfg.pwa.workboxMode}" is invalid. ` +
           'Valid quasar.config file > pwa > workboxMode options are: GenerateSW or InjectManifest.'
 
-        if (failOnError === true) {
-          fatal(msg, 'FAIL')
-        }
+        if (failOnError === true) fatal(msg, 'FAIL')
 
         warn(msg + ' Please fix it.\n')
         return
       }
 
-      cfg.build.env.SERVICE_WORKER_FILE = `${cfg.build.publicPath}${cfg.pwa.swFilename}`
+      cfg.build.define['import.meta.env.QUASAR_SERVICE_WORKER_FILE'] =
+        `"${cfg.build.publicPath}${cfg.pwa.swFilename}"`
+
       cfg.metaConf.pwaManifestFile = appPaths.resolve.app(
         cfg.sourceFiles.pwaManifestFile
       )
+
       cfg.sourceFiles.pwaServiceWorker = appPaths.resolve.app(
         cfg.sourceFiles.pwaServiceWorker
       )
@@ -1058,16 +1061,18 @@ export class QuasarConfigFile {
       cfg.metaConf.APP_URL = 'index.html'
     }
 
-    Object.assign(cfg.build.env, {
-      NODE_ENV: this.#ctx.prod ? 'production' : 'development',
-      CLIENT: true,
-      SERVER: false,
-      DEV: this.#ctx.dev === true,
-      PROD: this.#ctx.prod === true,
-      DEBUGGING: cfg.metaConf.debugging === true,
-      MODE: this.#ctx.modeName,
-      VUE_ROUTER_MODE: cfg.build.vueRouterMode,
-      VUE_ROUTER_BASE: cfg.build.vueRouterBase
+    Object.assign(cfg.build.define, {
+      'import.meta.env.QUASAR_DEV': String(this.#ctx.dev === true),
+      'import.meta.env.QUASAR_PROD': String(this.#ctx.prod === true),
+      'import.meta.env.QUASAR_DEBUG': String(cfg.metaConf.debugging === true),
+
+      'import.meta.env.QUASAR_MODE': `"${this.#ctx.modeName}"`,
+
+      'import.meta.env.QUASAR_CLIENT': 'true',
+      'import.meta.env.QUASAR_SERVER': 'false',
+
+      'import.meta.env.QUASAR_VUE_ROUTER_MODE': `"${cfg.build.vueRouterMode}"`,
+      'import.meta.env.QUASAR_VUE_ROUTER_BASE': `"${cfg.build.vueRouterBase}"`
     })
 
     if (
@@ -1075,20 +1080,24 @@ export class QuasarConfigFile {
       this.#ctx.mode.capacitor ||
       this.#ctx.mode.cordova
     ) {
-      cfg.build.env.TARGET = this.#ctx.targetName
+      cfg.build.define['import.meta.env.QUASAR_TARGET'] =
+        `"${this.#ctx.targetName}"`
     }
 
     if (cfg.metaConf.APP_URL) {
-      cfg.build.env.APP_URL = cfg.metaConf.APP_URL
+      cfg.build.define['import.meta.env.QUASAR_APP_URL'] =
+        `"${cfg.metaConf.APP_URL}"`
     }
 
     // get the env variables from host project env files
-    const { fileEnv, usedEnvFiles, envFromCache } = readFileEnv({
-      ctx: this.#ctx,
-      quasarConf: cfg
-    })
+    const { fileClientEnv, fileServerEnv, usedEnvFiles, envFromCache } =
+      readFileEnv({
+        ctx: this.#ctx,
+        quasarConf: cfg
+      })
 
-    cfg.metaConf.fileEnv = fileEnv
+    cfg.metaConf.fileClientEnv = fileClientEnv
+    cfg.metaConf.fileServerEnv = fileServerEnv
 
     if (envFromCache === false && usedEnvFiles.length !== 0) {
       log(`Using .env files: ${usedEnvFiles.join(', ')}`)
@@ -1227,7 +1236,6 @@ export class QuasarConfigFile {
     cfg.htmlVariables = merge(
       {
         ctx: cfg.ctx,
-        process: { env: cfg.build.env },
         productName: escapeHTMLTagContent(this.#ctx.pkg.appPkg.productName),
         productDescription: escapeHTMLAttribute(
           this.#ctx.pkg.appPkg.description

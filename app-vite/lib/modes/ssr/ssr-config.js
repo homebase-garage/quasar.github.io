@@ -9,7 +9,6 @@ import {
 } from '../../config-tools.js'
 
 import { cliPkg } from '../../utils/cli-runtime.js'
-import { getBuildSystemDefine } from '../../utils/env.js'
 
 import { quasarPwaConfig } from '../pwa/pwa-config.js'
 import { quasarVitePluginPwaResources } from '../pwa/vite-plugin.pwa-resources.js'
@@ -22,15 +21,11 @@ export const quasarSsrConfig = {
     const { appPaths } = quasarConf.ctx
 
     cfg = mergeViteConfig(cfg, {
-      define: getBuildSystemDefine({
-        buildEnv: {
-          CLIENT: true,
-          SERVER: false
-        },
-        buildRawDefine: {
-          __QUASAR_SSR_PWA__: quasarConf.ssr.pwa === true
-        }
-      }),
+      define: {
+        'import.meta.env.QUASAR_CLIENT': 'true',
+        'import.meta.env.QUASAR_SERVER': 'false',
+        __QUASAR_SSR_PWA__: String(quasarConf.ssr.pwa === true)
+      },
       appType: 'custom',
       server: {
         middlewareMode: true
@@ -65,15 +60,11 @@ export const quasarSsrConfig = {
 
     cfg = mergeViteConfig(cfg, {
       target: quasarConf.build.target.node,
-      define: getBuildSystemDefine({
-        buildEnv: {
-          CLIENT: false,
-          SERVER: true
-        },
-        buildRawDefine: {
-          __QUASAR_SSR_PWA__: quasarConf.ssr.pwa === true
-        }
-      }),
+      define: {
+        'import.meta.env.QUASAR_CLIENT': 'false',
+        'import.meta.env.QUASAR_SERVER': 'true',
+        __QUASAR_SSR_PWA__: String(quasarConf.ssr.pwa === true)
+      },
       appType: 'custom',
       server: {
         ws: false, // let client config deal with it
@@ -108,15 +99,11 @@ export const quasarSsrConfig = {
     })
     const { appPaths } = quasarConf.ctx
 
-    Object.assign(
-      cfg.transform.define,
-      getBuildSystemDefine({
-        buildEnv: {
-          CLIENT: false,
-          SERVER: true
-        }
-      })
-    )
+    cfg.transform.define = {
+      ...cfg.transform.define,
+      'import.meta.env.QUASAR_CLIENT': 'false',
+      'import.meta.env.QUASAR_SERVER': 'true'
+    }
 
     if (quasarConf.ctx.dev) {
       cfg.input = appPaths.resolve.entry('ssr-dev-webserver.js')

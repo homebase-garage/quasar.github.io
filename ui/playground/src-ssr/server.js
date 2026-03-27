@@ -35,7 +35,7 @@ export const create = defineSsrCreate((/* { ... } */) => {
 
   // place here any middlewares that
   // absolutely need to run before anything else
-  if (process.env.PROD) {
+  if (import.meta.env.QUASAR_PROD) {
     app.use(compression())
   }
 
@@ -56,7 +56,7 @@ export const create = defineSsrCreate((/* { ... } */) => {
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
   const server = devHttpsApp || app
   return server.listen(port, () => {
-    if (process.env.PROD) {
+    if (import.meta.env.QUASAR_PROD) {
       console.log('Server listening at port ' + port)
     }
   })
@@ -74,7 +74,7 @@ export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
  */
 export const close = defineSsrClose(({ listenResult }) => listenResult.close())
 
-const maxAge = process.env.DEV ? 0 : 1000 * 60 * 60 * 24 * 30
+const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
 
 /**
  * Should return a function that will be used to configure the webserver

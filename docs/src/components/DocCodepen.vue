@@ -27,7 +27,7 @@ const jsResources = [
   `https://cdn.jsdelivr.net/npm/quasar@${Quasar.version}/dist/quasar.umd.prod.js`
 ].join(';')
 
-const replace = name =>  (_, p1) => {
+const replace = name => (_, p1) => {
   const parts = p1
     .split(',')
     .map(p => p.trim())

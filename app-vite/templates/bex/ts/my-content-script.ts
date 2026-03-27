@@ -19,9 +19,7 @@ const bridge = createBridge({ debug: false });
 
 declare module '@quasar/app-vite' {
   interface BexEventMap {
-    /* oxlint-disable typescript/no-explicit-any */
     'some.event': [{ someProp: string }, void];
-    /* oxlint-enable typescript/no-explicit-any */
   }
 }
 

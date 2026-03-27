@@ -87,7 +87,13 @@ export type QuasarElectronBundlers = QuasarElectronBundlersInternal;
 
 export type ElectronBuilderArchs = ElectronBuilderUtil.Arch;
 // ElectronBuilder doesn't export exact types for the target option
-export type ElectronBuilderTargets = string;
+export type ElectronBuilderTargets =
+  | "all"
+  | "darwin"
+  | "win32"
+  | "linux"
+  | "win"
+  | "mac";
 
 export type ElectronPackagerArchs = LiteralUnion<
   ElectronPackager.OfficialArch | "all"

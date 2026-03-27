@@ -5,24 +5,16 @@ import { merge } from 'webpack-merge'
 
 import { cliPkg } from './utils/cli-runtime.js'
 import { getPackage } from './utils/get-package.js'
-import { getBuildSystemDefine } from './utils/env.js'
 import { log, warn, tip } from './utils/logger.js'
+import {
+  BASELINE_WIDELY_AVAILABLE_TARGET_STRING,
+  BASELINE_WIDELY_AVAILABLE
+} from './utils/build-targets.js'
 
 import { quasarViteIndexHtmlTransformPlugin } from './plugins/vite.index-html-transform.js'
 import { quasarViteStripFilenameHashesPlugin } from './plugins/vite.strip-filename-hashes.js'
 
 const cliPkgDependencies = Object.keys(cliPkg.dependencies || {})
-
-/* Should match Vite's own hard-coded values */
-export const BASELINE_WIDELY_AVAILABLE_TARGET_STRING =
-  'baseline-widely-available'
-const BASELINE_WIDELY_AVAILABLE = [
-  'chrome111',
-  'edge111',
-  'firefox114',
-  'safari16.4',
-  'ios16.4'
-]
 
 async function parseVitePlugins(entries, appDir, compileId) {
   const acc = []
@@ -149,11 +141,12 @@ export async function createViteConfig(quasarConf, { compileId }) {
     logLevel: 'warn',
     mode: ctx.dev === true ? 'development' : 'production',
     cacheDir,
-    define: getBuildSystemDefine({
-      buildEnv: build.env,
-      buildRawDefine: build.rawDefine,
-      fileEnv: metaConf.fileEnv
-    }),
+    define: {
+      ...(compileId !== 'vite-ssr-server'
+        ? metaConf.fileClientEnv
+        : metaConf.fileServerEnv),
+      ...build.define
+    },
 
     resolve: {
       alias: {
@@ -307,11 +300,10 @@ export function createNodeRolldownConfig(quasarConf, { format }) {
     transform: {
       target: quasarConf.build.target.node,
       minify: quasarConf.build.minify !== false,
-      define: getBuildSystemDefine({
-        buildEnv: quasarConf.build.env,
-        buildRawDefine: quasarConf.build.rawDefine,
-        fileEnv: quasarConf.metaConf.fileEnv
-      })
+      define: {
+        ...quasarConf.metaConf.fileServerEnv,
+        ...quasarConf.build.define
+      }
     },
 
     // we use a fresh list since this can be tampered with by the user:
@@ -325,8 +317,8 @@ export function createBrowserRolldownConfig(quasarConf) {
   const { browser } = quasarConf.build.target
   const target =
     browser === BASELINE_WIDELY_AVAILABLE_TARGET_STRING
-      ? BASELINE_WIDELY_AVAILABLE
-      : browser
+      ? [...BASELINE_WIDELY_AVAILABLE]
+      : JSON.parse(JSON.stringify(browser))
 
   return {
     platform: 'browser',
@@ -346,11 +338,10 @@ export function createBrowserRolldownConfig(quasarConf) {
     transform: {
       target,
       minify: quasarConf.build.minify !== false,
-      define: getBuildSystemDefine({
-        buildEnv: quasarConf.build.env,
-        buildRawDefine: quasarConf.build.rawDefine,
-        fileEnv: quasarConf.metaConf.fileEnv
-      })
+      define: {
+        ...quasarConf.metaConf.fileClientEnv,
+        ...quasarConf.build.define
+      }
     },
 
     plugins: []

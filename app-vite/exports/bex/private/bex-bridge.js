@@ -1,5 +1,6 @@
 const portNameRE = /^background$|^app$|^content@/
-const { runtime } = process.env.TARGET === 'firefox' ? browser : chrome
+const { runtime } =
+  import.meta.env.QUASAR_TARGET === 'firefox' ? browser : chrome
 
 /**
  * @param {number} max

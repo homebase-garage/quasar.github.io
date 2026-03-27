@@ -25,14 +25,12 @@ chrome.action.onClicked.addListener(openExtension);
 
 declare module '@quasar/app-vite' {
   interface BexEventMap {
-    /* oxlint-disable typescript/no-explicit-any */
     log: [{ message: string; data?: any[] }, void];
     getTime: [never, number];
 
     'storage.get': [string | undefined, any];
     'storage.set': [{ key: string; value: any }, void];
     'storage.remove': [string, void];
-    /* oxlint-enable typescript/no-explicit-any */
   }
 }
 

@@ -90,12 +90,12 @@ const $q = useQuasar()
 const filterRef = ref(null)
 const store = ref({ filter: '' })
 
-if (process.env.MODE !== 'ssr') {
+if (import.meta.env.QUASAR_MODE !== 'ssr') {
   clientInitStore(store)
 }
 
 onMounted(() => {
-  if (process.env.MODE === 'ssr') {
+  if (import.meta.env.QUASAR_MODE === 'ssr') {
     clientInitStore(store)
   }
 

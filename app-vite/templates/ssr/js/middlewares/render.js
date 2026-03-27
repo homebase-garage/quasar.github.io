@@ -7,7 +7,7 @@ import { defineSsrMiddleware } from '#q-app/wrappers'
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
   // we capture any other Express route and hand it
   // over to Vue and Vue Router to render our page
-  app.get(resolve.urlPath('{*path}'), (req, res) => {
+  app.get(resolve.urlPath('*'), (req, res) => {
     res.setHeader('Content-Type', 'text/html')
 
     render(/* the ssrContext: */ { req, res })
@@ -31,7 +31,7 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
           // Should reach here only if no "catch-all" route
           // is defined in /src/routes
           res.status(404).send('404 | Page Not Found')
-        } else if (process.env.DEV) {
+        } else if (import.meta.env.QUASAR_DEV) {
           // well, we treat any other code as error;
           // if we're in dev mode, then we can use Quasar CLI
           // to display a nice error page that contains the stack
@@ -49,7 +49,7 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
           // create a route (/src/routes) for an error page and redirect to it
           res.status(500).send('500 | Internal Server Error')
 
-          if (process.env.DEBUGGING) {
+          if (import.meta.env.QUASAR_DEBUG) {
             console.error(err.stack)
           }
         }

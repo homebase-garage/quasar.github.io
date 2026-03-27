@@ -1,9 +1,4 @@
-/* oxlint-disable */
+/// <reference types="vite/client" />
+/// <reference types="@quasar/app-vite/client/pwa" />
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    SERVICE_WORKER_FILE: string;
-    PWA_FALLBACK_HTML: string;
-    PWA_SERVICE_WORKER_REGEX: string;
-  }
-}
+interface ImportMetaEnv {}

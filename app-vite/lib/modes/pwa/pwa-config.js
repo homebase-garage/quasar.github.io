@@ -150,13 +150,14 @@ export const quasarPwaConfig = {
 
     const cfg = createBrowserRolldownConfig(quasarConf)
 
-    cfg.transform.define['process.env.PWA_FALLBACK_HTML'] = JSON.stringify(
-      ctx.mode.ssr === true && ctx.prod === true
-        ? quasarConf.ssr.pwaOfflineHtmlFilename
-        : 'index.html'
-    )
+    cfg.transform.define['import.meta.env.QUASAR_PWA_FALLBACK_HTML'] =
+      JSON.stringify(
+        ctx.mode.ssr === true && ctx.prod === true
+          ? quasarConf.ssr.pwaOfflineHtmlFilename
+          : 'index.html'
+      )
 
-    cfg.transform.define['process.env.PWA_SERVICE_WORKER_REGEX'] =
+    cfg.transform.define['import.meta.env.QUASAR_PWA_SERVICE_WORKER_REGEX'] =
       JSON.stringify(`${escapeRegexString(quasarConf.pwa.swFilename)}$`)
 
     cfg.input = quasarConf.sourceFiles.pwaServiceWorker

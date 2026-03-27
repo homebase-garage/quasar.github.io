@@ -24,18 +24,18 @@ async function createWindow() {
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
       preload: path.resolve(
         currentDir,
-        path.join(process.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
+        path.join(import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
       ),
     },
   });
 
-  if (process.env.DEV) {
-    await mainWindow.loadURL(process.env.APP_URL);
+  if (import.meta.env.QUASAR_DEV) {
+    await mainWindow.loadURL(import.meta.env.QUASAR_APP_URL);
   } else {
     await mainWindow.loadFile('index.html');
   }
 
-  if (process.env.DEBUGGING) {
+  if (import.meta.env.QUASAR_DEBUG) {
     // if on DEV or Production with debug enabled
     mainWindow.webContents.openDevTools();
   } else {

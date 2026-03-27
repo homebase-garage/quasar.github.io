@@ -51,8 +51,7 @@ export default defineConfig((/* ctx */) => ({
 
     // publicPath: '/',
     // analyze: true,
-    // env: {},
-    // rawDefine: {}
+    // define: {},
     // ignorePublicFolder: true,
     // minify: false,
     // polyfillModulePreload: true,

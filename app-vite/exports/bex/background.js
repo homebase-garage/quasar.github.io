@@ -126,9 +126,12 @@ function connectToDevServer(devServerPort, wsToken) {
  * Only run these in development mode and in a background service worker.
  * Currently only Chrome supports this.
  */
-if (process.env.DEV === true && process.env.TARGET === 'chrome') {
-  const devServerPort = process.env.__QUASAR_BEX_SERVER_PORT__
-  const wsToken = process.env.__QUASAR_BEX_WS_TOKEN__
+if (
+  import.meta.env.QUASAR_DEV === true &&
+  import.meta.env.QUASAR_TARGET === 'chrome'
+) {
+  const devServerPort = import.meta.env.QUASAR_BEX_SERVER_PORT
+  const wsToken = import.meta.env.QUASAR_BEX_WS_TOKEN
 
   interceptRequests(devServerPort)
   connectToDevServer(devServerPort, wsToken)
