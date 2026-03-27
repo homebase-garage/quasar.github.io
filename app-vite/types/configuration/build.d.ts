@@ -309,6 +309,17 @@ interface QuasarStaticBuildConfiguration {
    */
   envFiles?: string[];
   /**
+   * For security reasons, only variables with this prefix from the env files
+   * will be exposed to the client through the env files.
+   * By doing this, we ensure clear intent from the user.
+   *
+   * Such variables exposed to the client files should not contain sensitive
+   * information such as API keys.
+   *
+   * @default 'QCLI_'
+   */
+  envClientPrefix?: string;
+  /**
    * Filter the env variables that are exposed to the client
    * through the env files. This does not account also for the definitions
    * assigned directly to quasar.config > build > env prop.

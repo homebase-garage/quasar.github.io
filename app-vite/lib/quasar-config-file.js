@@ -18,12 +18,16 @@ import {
   quasarRolldownInjectReplacementsPlugin
 } from './plugins/rolldown.inject-replacements.js'
 
-const urlRegex = /^http(s)?:\/\//i
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
-import { readQuasarConfFileEnv, readAppFileEnv } from './utils/env.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
+import {
+  readQuasarConfFileEnv,
+  readAppFileEnv,
+  ENV_CLIENT_PREFIX
+} from './utils/env.js'
 
+const urlRegex = /^http(s)?:\/\//i
 const defaultPortMapping = {
   spa: 9000,
   ssr: 9100, // 9150 for SSR + PWA
@@ -764,6 +768,8 @@ export class QuasarConfigFile {
         vueOptionsAPI: false,
         vueRouterMode: 'hash',
 
+        envClientPrefix: ENV_CLIENT_PREFIX,
+
         minify:
           cfg.metaConf.debugging !== true &&
           (this.#ctx.mode.bex !== true || cfg.bex.minify === true),
@@ -818,6 +824,11 @@ export class QuasarConfigFile {
       },
       cfg.build
     )
+
+    // We enforce a client prefix for security reasons
+    if (!cfg.build.envClientPrefix) {
+      cfg.build.envClientPrefix = ENV_CLIENT_PREFIX
+    }
 
     if (!cfg.build.target.browser) {
       cfg.build.target.browser = BASELINE_WIDELY_AVAILABLE_TARGET_STRING
