@@ -2,7 +2,6 @@
   "name": "quasar-monorepo",
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow@1.2.1 pnpm",
     "prepare:types": "pnpm --recursive --parallel prepare:types",
     "lint": "oxfmt && oxlint --fix",
     "lint:check": "oxfmt --check && oxlint",
