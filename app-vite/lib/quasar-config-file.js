@@ -21,7 +21,7 @@ import {
 const urlRegex = /^http(s)?:\/\//i
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
-import { readFileEnv } from './utils/env.js'
+import { readQuasarConfFileEnv, readAppFileEnv } from './utils/env.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
 
 const defaultPortMapping = {
@@ -205,6 +205,7 @@ export class QuasarConfigFile {
   #isWatching = false
 
   #tempFile
+  #rolldownConfigDefines
 
   #cssVariables
   #storeProvider
@@ -224,8 +225,14 @@ export class QuasarConfigFile {
     // if filename syntax gets changed, then also update the "clean" cmd
     this.#tempFile = `${appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
 
+    const { envDefineList, envBanner } = readQuasarConfFileEnv(this.#ctx)
+    this.#rolldownConfigDefines = {
+      ...envDefineList,
+      ...quasarRolldownInjectReplacementsDefine
+    }
+
     log(
-      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format`
+      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format ${envBanner}`
     )
   }
 
@@ -316,7 +323,7 @@ export class QuasarConfigFile {
 
       transform: {
         target: 'node22',
-        define: quasarRolldownInjectReplacementsDefine
+        define: this.#rolldownConfigDefines
       },
 
       plugins: [
@@ -1090,18 +1097,13 @@ export class QuasarConfigFile {
     }
 
     // get the env variables from host project env files
-    const { fileClientEnv, fileServerEnv, usedEnvFiles, envFromCache } =
-      readFileEnv({
-        ctx: this.#ctx,
-        quasarConf: cfg
-      })
+    const { clientEnvDefineList, serverEnvDefineList, envBanner } =
+      readAppFileEnv(this.#ctx, cfg)
 
-    cfg.metaConf.fileClientEnv = fileClientEnv
-    cfg.metaConf.fileServerEnv = fileServerEnv
+    cfg.metaConf.clientEnvDefineList = clientEnvDefineList
+    cfg.metaConf.serverEnvDefineList = serverEnvDefineList
 
-    if (envFromCache === false && usedEnvFiles.length !== 0) {
-      log(`Using .env files: ${usedEnvFiles.join(', ')}`)
-    }
+    if (envBanner !== null) log(envBanner)
 
     if (this.#ctx.mode.electron) {
       cfg.sourceFiles.electronMain = appPaths.resolve.app(

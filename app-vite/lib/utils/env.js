@@ -5,14 +5,36 @@ import { expand as dotEnvExpand } from 'dotenv-expand'
 
 import { encodeForDiff } from './encode-for-diff.js'
 
-const readFileEnvCacheKey = 'readFileEnv'
+const readAppFileEnvCacheKey = 'readAppFileEnv'
 
 /**
- * Get the raw env definitions from the host
- * project env files.
+ * Get the raw env definitions from the host project env files.
+ * Used for the Quasar config file.
  */
-export function readFileEnv({ ctx, quasarConf }) {
-  const { cacheProxy } = ctx
+export function readQuasarConfFileEnv(ctx) {
+  return ctx.cacheProxy.getRuntime('readQuasarConfFileEnv', () => {
+    const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
+      appPaths: ctx.appPaths,
+      fileList: ['.env', '.env.local']
+    })
+
+    return {
+      envDefineList: parseEnv(rawFileEnv, validServerKeyRE),
+      envBanner:
+        usedEnvFiles.length > 0
+          ? `(env files: ${usedEnvFiles.join(' | ')})`
+          : '(no env files used for it)'
+    }
+  })
+}
+
+/**
+ * Get the raw env definitions from the host project env files.
+ * Used for the App content.
+ */
+export function readAppFileEnv(ctx, quasarConf) {
+  const { cacheProxy, modeName: quasarMode, dev } = ctx
+  const buildType = dev === true ? 'dev' : 'prod'
 
   const opts = {
     envFolder: quasarConf.build.envFolder,
@@ -21,30 +43,72 @@ export function readFileEnv({ ctx, quasarConf }) {
   }
 
   const configHash = encodeForDiff(opts)
-  const cache = cacheProxy.getRuntime(readFileEnvCacheKey, () => ({}))
+  const cache = cacheProxy.getRuntime(readAppFileEnvCacheKey, () => ({}))
 
   if (cache.configHash !== configHash) {
-    const result = getFileEnvResult({
-      ...opts,
+    const fileList = [
+      // .env
+      // loaded in all cases
+      '.env',
+
+      // .env.local
+      // loaded in all cases, ignored by git
+      '.env.local',
+
+      // .env.[dev|prod]
+      // loaded for dev or prod only
+      `.env.${buildType}`,
+
+      // .env.local.[dev|prod]
+      // loaded for dev or prod only, ignored by git
+      `.env.local.${buildType}`,
+
+      // .env.[quasarMode]
+      // loaded for specific Quasar CLI mode only
+      `.env.${quasarMode}`,
+
+      // .env.local.[quasarMode]
+      // loaded for specific Quasar CLI mode only, ignored by git
+      `.env.local.${quasarMode}`,
+
+      // .env.[dev|prod].[quasarMode]
+      // loaded for specific Quasar CLI mode and dev|prod only
+      `.env.${buildType}.${quasarMode}`,
+
+      // .env.local.[dev|prod].[quasarMode]
+      // loaded for specific Quasar CLI mode and dev|prod only, ignored by git
+      `.env.local.${buildType}.${quasarMode}`,
+
+      // additional user-defined env files
+      ...(opts.envFiles || [])
+    ]
+
+    const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
       appPaths: ctx.appPaths,
-      quasarMode: ctx.modeName,
-      buildType: ctx.dev ? 'dev' : 'prod'
+      fileList,
+      ...opts
     })
 
-    if (opts.envFilter !== void 0) {
-      result.fileClientEnv =
-        opts.envFilter(result.fileClientEnv, 'client') || {}
-
-      result.fileServerEnv =
-        opts.envFilter(result.fileServerEnv, 'server') || {}
+    const result = {
+      clientEnvDefineList: parseEnv(rawFileEnv, validClientKeyRE),
+      serverEnvDefineList: parseEnv(rawFileEnv, validServerKeyRE),
+      envBanner:
+        usedEnvFiles.length !== 0
+          ? `App .env files: ${usedEnvFiles.join(' | ')}`
+          : null
     }
 
-    cacheProxy.setRuntime(readFileEnvCacheKey, {
+    if (opts.envFilter !== void 0) {
+      result.clientEnvDefineList =
+        opts.envFilter(result.clientEnvDefineList, 'client') || {}
+
+      result.serverEnvDefineList =
+        opts.envFilter(result.serverEnvDefineList, 'server') || {}
+    }
+
+    cacheProxy.setRuntime(readAppFileEnvCacheKey, {
       configHash,
-      result: {
-        ...result,
-        envFromCache: true
-      }
+      result
     })
 
     return result
@@ -53,50 +117,7 @@ export function readFileEnv({ ctx, quasarConf }) {
   return cache.result
 }
 
-function getFileEnvResult({
-  appPaths,
-  quasarMode,
-  buildType,
-  envFolder = appPaths.appDir,
-  envFiles = []
-}) {
-  const fileList = [
-    // .env
-    // loaded in all cases
-    '.env',
-
-    // .env.local
-    // loaded in all cases, ignored by git
-    '.env.local',
-
-    // .env.[dev|prod]
-    // loaded for dev or prod only
-    `.env.${buildType}`,
-
-    // .env.local.[dev|prod]
-    // loaded for dev or prod only, ignored by git
-    `.env.local.${buildType}`,
-
-    // .env.[quasarMode]
-    // loaded for specific Quasar CLI mode only
-    `.env.${quasarMode}`,
-
-    // .env.local.[quasarMode]
-    // loaded for specific Quasar CLI mode only, ignored by git
-    `.env.local.${quasarMode}`,
-
-    // .env.[dev|prod].[quasarMode]
-    // loaded for specific Quasar CLI mode and dev|prod only
-    `.env.${buildType}.${quasarMode}`,
-
-    // .env.local.[dev|prod].[quasarMode]
-    // loaded for specific Quasar CLI mode and dev|prod only, ignored by git
-    `.env.local.${buildType}.${quasarMode}`,
-
-    // additional user-defined env files
-    ...envFiles
-  ]
-
+function getFileEnvResult({ appPaths, fileList, envFolder = appPaths.appDir }) {
   const usedEnvFiles = []
   const folder =
     isAbsolute(envFolder) === true
@@ -116,15 +137,18 @@ function getFileEnvResult({
     })
   )
 
-  if (Object.keys(env).length === 0) return {}
+  if (Object.keys(env).length === 0) {
+    return {
+      rawFileEnv: {},
+      usedEnvFiles: []
+    }
+  }
 
   const { parsed: rawFileEnv } = dotEnvExpand({ parsed: env })
 
   return {
-    fileEnvClient: parseEnv(rawFileEnv, validClientKeyRE),
-    fileEnvServer: parseEnv(rawFileEnv, validServerKeyRE),
-    usedEnvFiles,
-    envFromCache: false
+    rawFileEnv,
+    usedEnvFiles
   }
 }
 
