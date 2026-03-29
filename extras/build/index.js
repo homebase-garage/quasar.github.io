@@ -74,7 +74,7 @@ async function generate() {
     './webfonts.js',
     './animate.js',
     './mdi-v7.js',
-    './fontawesome-v6.js',
+    './fontawesome-v7.js',
     './ionicons-v8.js',
     './eva-icons.js',
     './themify.js',
