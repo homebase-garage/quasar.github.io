@@ -2,6 +2,7 @@ const { cpus } = require('os')
 const { fork } = require('child_process')
 const { join } = require('path')
 const { Queue, sleep, retry } = require('./utils')
+const { generateReadme } = require('./readme')
 
 const startTime = Date.now() // Add timing start
 
@@ -11,6 +12,18 @@ const maxJobCount = Math.max(cpuCount * 2 - 1, 1)
 const runScript = isParallel ? fork : require
 
 const materialFontVersions = {}
+
+function collectFontVersions(text) {
+  text.split('\n').forEach(line => {
+    const versionMatch = line.match(/^QEXTRA_VERSION::([^:]+)::(v[^:\s]+)$/)
+
+    if (versionMatch) {
+      const [, name, version] = versionMatch
+      materialFontVersions[name] = version
+      return
+    }
+  })
+}
 
 function handleChild(child) {
   return new Promise(resolve => {
@@ -22,6 +35,8 @@ function handleChild(child) {
         if (!output.startsWith('.')) {
           console.log(output)
         }
+
+        collectFontVersions(output)
       })
     }
 
@@ -31,18 +46,8 @@ function handleChild(child) {
         if (!errorOutput.startsWith('.')) {
           console.error(errorOutput)
         }
-        errorOutput.split('\n').forEach(line => {
-          if (line.endsWith('.woff2') || line.endsWith('.woff')) {
-            const matches = line.match(/.*\/(.*?)/)
-            if (matches) {
-              const parts = matches[0].split('/')
-              if (parts.length >= 3) {
-                const [name, version] = parts.slice(-3, -1)
-                materialFontVersions[name] = version
-              }
-            }
-          }
-        })
+
+        collectFontVersions(errorOutput)
       })
     }
   })
@@ -97,6 +102,8 @@ async function generate() {
       await queue.wait({ empty: true })
     }
   }
+
+  generateReadme({ googleVersions: materialFontVersions })
 
   console.log(JSON.stringify(materialFontVersions, null, 2))
 
