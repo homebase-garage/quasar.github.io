@@ -18,6 +18,7 @@
   "oxc.unusedDisableDirectives": "deny",
 
   "search.exclude": {
-    "**/dist": true
+    "**/dist": true,
+    "**/.quasar": true
   }
 }
