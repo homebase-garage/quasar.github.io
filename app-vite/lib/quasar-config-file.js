@@ -24,7 +24,8 @@ import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.j
 import {
   readQuasarConfFileEnv,
   readAppFileEnv,
-  ENV_CLIENT_PREFIX
+  ENV_CLIENT_PREFIX,
+  validEnvKeyRE
 } from './utils/env.js'
 
 const urlRegex = /^http(s)?:\/\//i
@@ -768,7 +769,7 @@ export class QuasarConfigFile {
         vueOptionsAPI: false,
         vueRouterMode: 'hash',
 
-        envClientPrefix: ENV_CLIENT_PREFIX,
+        env: false,
 
         minify:
           cfg.metaConf.debugging !== true &&
@@ -825,9 +826,40 @@ export class QuasarConfigFile {
       cfg.build
     )
 
-    // We enforce a client prefix for security reasons
-    if (!cfg.build.envClientPrefix) {
-      cfg.build.envClientPrefix = ENV_CLIENT_PREFIX
+    if (cfg.build.env !== false) {
+      cfg.build.env = merge(
+        {
+          clientPrefix: ENV_CLIENT_PREFIX,
+          folder: appPaths.appDir,
+          files: []
+          // filter: (key, value) => true
+        },
+        cfg.build.env
+      )
+
+      // we enforce a clientPrefix for security reasons
+      // and we also filter it if it's an array, to make sure that it only contains valid keys
+
+      let { clientPrefix } = cfg.build.env
+      if (!clientPrefix) {
+        clientPrefix = ENV_CLIENT_PREFIX
+      } else if (Array.isArray(clientPrefix)) {
+        clientPrefix = clientPrefix.filter(p => validEnvKeyRE.test(p))
+        if (clientPrefix.length === 0) clientPrefix = ENV_CLIENT_PREFIX
+      }
+
+      const clientPrefixRE = Array.isArray(clientPrefix)
+        ? new RegExp(`^(${clientPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
+        : new RegExp(`^${clientPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+
+      // get the env variables from host project env files
+      const { clientEnvDefineList, serverEnvDefineList, envBanner } =
+        readAppFileEnv(this.#ctx, cfg.build.env, clientPrefixRE)
+
+      cfg.metaConf.clientEnvDefineList = clientEnvDefineList
+      cfg.metaConf.serverEnvDefineList = serverEnvDefineList
+
+      if (envBanner !== null) log(envBanner)
     }
 
     if (!cfg.build.target.browser) {
@@ -1106,15 +1138,6 @@ export class QuasarConfigFile {
       cfg.build.define['import.meta.env.QUASAR_APP_URL'] =
         `"${cfg.metaConf.APP_URL}"`
     }
-
-    // get the env variables from host project env files
-    const { clientEnvDefineList, serverEnvDefineList, envBanner } =
-      readAppFileEnv(this.#ctx, cfg)
-
-    cfg.metaConf.clientEnvDefineList = clientEnvDefineList
-    cfg.metaConf.serverEnvDefineList = serverEnvDefineList
-
-    if (envBanner !== null) log(envBanner)
 
     if (this.#ctx.mode.electron) {
       cfg.sourceFiles.electronMain = appPaths.resolve.app(

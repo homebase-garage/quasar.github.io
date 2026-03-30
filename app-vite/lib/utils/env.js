@@ -1,14 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { join, isAbsolute } from 'node:path'
+import { join, isAbsolute, relative } from 'node:path'
 import { parse as dotEnvParse } from 'dotenv'
 import { expand as dotEnvExpand } from 'dotenv-expand'
 
 import { encodeForDiff } from './encode-for-diff.js'
 
 export const ENV_CLIENT_PREFIX = 'QCLI_'
+export const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 
 const readAppFileEnvCacheKey = 'readAppFileEnv'
-const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 
 /**
  * Get the raw env definitions from the host project env files.
@@ -17,8 +17,9 @@ const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 export function readQuasarConfFileEnv(ctx) {
   return ctx.cacheProxy.getRuntime('readQuasarConfFileEnv', () => {
     const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
-      appPaths: ctx.appPaths,
-      fileList: ['.env', '.env.local']
+      appDir: ctx.appPaths.appDir,
+      fileList: ['.env', '.env.local'],
+      folderList: [ctx.appPaths.appDir]
     })
 
     return {
@@ -35,21 +36,14 @@ export function readQuasarConfFileEnv(ctx) {
  * Get the raw env definitions from the host project env files.
  * Used for the App content.
  */
-export function readAppFileEnv(ctx, quasarConf) {
-  const { cacheProxy, modeName: quasarMode, dev } = ctx
-  const buildType = dev === true ? 'dev' : 'prod'
-
-  const opts = {
-    clientPrefix: quasarConf.build.envClientPrefix,
-    folder: quasarConf.build.envFolder,
-    files: quasarConf.build.envFiles || [],
-    filter: quasarConf.build.envFilter
-  }
-
-  const configHash = encodeForDiff(opts)
-  const cache = cacheProxy.getRuntime(readAppFileEnvCacheKey, () => ({}))
+export function readAppFileEnv(ctx, env, clientPrefixRE) {
+  const configHash = encodeForDiff(env)
+  const cache = ctx.cacheProxy.getRuntime(readAppFileEnvCacheKey, () => ({}))
 
   if (cache.configHash !== configHash) {
+    const { modeName: quasarMode, dev } = ctx
+    const buildType = dev === true ? 'dev' : 'prod'
+
     const fileList = [
       // .env
       // loaded in all cases
@@ -84,20 +78,20 @@ export function readAppFileEnv(ctx, quasarConf) {
       `.env.local.${buildType}.${quasarMode}`,
 
       // additional user-defined env files
-      ...opts.files
+      ...(env.files || [])
     ]
 
+    const folder = env.folder || ctx.appPaths.appDir
+    const folderList = Array.isArray(folder) ? folder : [folder]
+
     const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
-      appPaths: ctx.appPaths,
+      appDir: ctx.appPaths.appDir,
       fileList,
-      folder: opts.folder
+      folderList
     })
 
-    const validClientEnvKeyRE = new RegExp(
-      `^${opts.clientPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`
-    )
     const result = {
-      clientEnvDefineList: parseEnv(rawFileEnv, validClientEnvKeyRE),
+      clientEnvDefineList: parseEnv(rawFileEnv, clientPrefixRE),
       serverEnvDefineList: parseEnv(rawFileEnv, validEnvKeyRE),
       envBanner:
         usedEnvFiles.length !== 0
@@ -105,15 +99,15 @@ export function readAppFileEnv(ctx, quasarConf) {
           : null
     }
 
-    if (typeof opts.filter === 'function') {
+    if (typeof env.filter === 'function') {
       result.clientEnvDefineList =
-        opts.filter(result.clientEnvDefineList, 'client') || {}
+        env.filter(result.clientEnvDefineList, 'client') || {}
 
       result.serverEnvDefineList =
-        opts.filter(result.serverEnvDefineList, 'server') || {}
+        env.filter(result.serverEnvDefineList, 'server') || {}
     }
 
-    cacheProxy.setRuntime(readAppFileEnvCacheKey, {
+    ctx.cacheProxy.setRuntime(readAppFileEnvCacheKey, {
       configHash,
       result
     })
@@ -124,18 +118,22 @@ export function readAppFileEnv(ctx, quasarConf) {
   return cache.result
 }
 
-function getFileEnvResult({ appPaths, fileList, folder = appPaths.appDir }) {
+function getFileEnvResult({ appDir, fileList, folderList }) {
   const usedEnvFiles = []
-  const envFolder =
-    isAbsolute(folder) === true ? folder : join(appPaths.appDir, folder)
+  const envFolderList = folderList.map(folder =>
+    isAbsolute(folder) === true ? folder : join(appDir, folder)
+  )
+
+  const list = fileList.flatMap(file => {
+    if (isAbsolute(file) === true) return file
+    return envFolderList.map(folder => join(folder, file))
+  })
 
   const env = Object.fromEntries(
-    fileList.flatMap(file => {
-      const filePath = isAbsolute(file) === true ? file : join(envFolder, file)
-
+    list.flatMap(filePath => {
       if (existsSync(filePath) === false) return []
 
-      usedEnvFiles.push(file)
+      usedEnvFiles.push(relative(appDir, filePath))
       return Object.entries(dotEnvParse(readFileSync(filePath, 'utf-8')))
     })
   )

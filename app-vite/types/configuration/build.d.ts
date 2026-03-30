@@ -101,6 +101,44 @@ type PluginEntry =
   | undefined
   | false;
 
+interface QuasarEnvConfig {
+  /**
+   * For security reasons, only variables with this prefix from the env files
+   * will be exposed to the client through the env files.
+   * By doing this, we ensure clear intent from the user.
+   *
+   * Such variables exposed to the client files should not contain sensitive
+   * information such as API keys.
+   *
+   * @default 'QCLI_'
+   */
+  clientPrefix?: string | string[];
+  /**
+   * Folder where Quasar CLI should look for .env* files.
+   * Can be an absolute path or a relative path to project root directory.
+   *
+   * @default appPaths.appDir
+   */
+  folder?: string | string[];
+  /**
+   * Additional .env* files to be loaded.
+   * Each entry can be an absolute path or a relative path to
+   * quasar.config > build > env > folder.
+   *
+   * @example ['.env.somefile', '../.env.someotherfile']
+   */
+  files?: string[];
+  /**
+   * Filter the env variables that are exposed to the client/server
+   * through the env files. This does not affects props
+   * assigned directly to the quasar.config > build > define prop.
+   */
+  filter?: (
+    env: Record<string, string>,
+    target: "client" | "server"
+  ) => Record<string, string>;
+}
+
 interface QuasarStaticBuildConfiguration {
   /**
    * @example
@@ -294,40 +332,15 @@ interface QuasarStaticBuildConfiguration {
    * @example { SOMETHING: 'someValue' }
    */
   define?: Record<string, string>;
+
   /**
-   * Folder where Quasar CLI should look for .env* files.
-   * Can be an absolute path or a relative path to project root directory.
+   * Whether to load environment variables from .env* files and expose
+   * them to the client/server code. This does not affects the quasar.config
+   * file itself, since that is loaded before this can be set.
    *
-   * @default project root directory
+   * @default false
    */
-  envFolder?: string;
-  /**
-   * Additional .env* files to be loaded.
-   * Each entry can be an absolute path or a relative path to quasar.config > build > envFolder.
-   *
-   * @example ['.env.somefile', '../.env.someotherfile']
-   */
-  envFiles?: string[];
-  /**
-   * For security reasons, only variables with this prefix from the env files
-   * will be exposed to the client through the env files.
-   * By doing this, we ensure clear intent from the user.
-   *
-   * Such variables exposed to the client files should not contain sensitive
-   * information such as API keys.
-   *
-   * @default 'QCLI_'
-   */
-  envClientPrefix?: string;
-  /**
-   * Filter the env variables that are exposed to the client
-   * through the env files. This does not account also for the definitions
-   * assigned directly to quasar.config > build > env prop.
-   */
-  envFilter?: (
-    env: Record<string, string>,
-    target: "client" | "server"
-  ) => Record<string, string>;
+  env?: boolean | QuasarEnvConfig;
 
   /**
    * Build production assets with or without the hash part in filenames.
