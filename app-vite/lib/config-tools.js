@@ -142,9 +142,7 @@ export async function createViteConfig(quasarConf, { compileId }) {
     mode: ctx.dev === true ? 'development' : 'production',
     cacheDir,
     define: {
-      ...(compileId !== 'vite-ssr-server'
-        ? metaConf.clientEnvDefineList
-        : metaConf.serverEnvDefineList),
+      ...metaConf.envDefineList,
       ...build.define
     },
 
@@ -302,7 +300,7 @@ export function createNodeRolldownConfig(quasarConf, { format }) {
       target: quasarConf.build.target.node,
       minify: quasarConf.build.minify !== false,
       define: {
-        ...quasarConf.metaConf.serverEnvDefineList,
+        ...quasarConf.metaConf.envDefineList,
         ...quasarConf.build.define
       }
     },
@@ -341,7 +339,7 @@ export function createBrowserRolldownConfig(quasarConf) {
       target,
       minify: quasarConf.build.minify !== false,
       define: {
-        ...quasarConf.metaConf.clientEnvDefineList,
+        ...quasarConf.metaConf.envDefineList,
         ...quasarConf.build.define
       }
     },

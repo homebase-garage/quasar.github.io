@@ -55,8 +55,7 @@ export class AppDevserver extends AppTool {
 
     this.registerDiff('rolldown', quasarConf => [
       quasarConf.build.define,
-      quasarConf.metaConf.clientEnvDefineList,
-      quasarConf.metaConf.serverEnvDefineList,
+      quasarConf.metaConf.envDefineList,
       quasarConf.build.alias,
       quasarConf.build.minify,
       quasarConf.build.target

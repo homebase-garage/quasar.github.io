@@ -5,7 +5,7 @@ import { expand as dotEnvExpand } from 'dotenv-expand'
 
 import { encodeForDiff } from './encode-for-diff.js'
 
-export const ENV_CLIENT_PREFIX = 'QCLI_'
+export const ENV_VAR_PREFIX = 'QCLI_'
 export const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
 
 const readAppFileEnvCacheKey = 'readAppFileEnv'
@@ -36,7 +36,7 @@ export function readQuasarConfFileEnv(ctx) {
  * Get the raw env definitions from the host project env files.
  * Used for the App content.
  */
-export function readAppFileEnv(ctx, env, clientPrefixRE) {
+export function readAppFileEnv(ctx, env, envPrefixRE) {
   const configHash = encodeForDiff(env)
   const cache = ctx.cacheProxy.getRuntime(readAppFileEnvCacheKey, () => ({}))
 
@@ -91,8 +91,7 @@ export function readAppFileEnv(ctx, env, clientPrefixRE) {
     })
 
     const result = {
-      clientEnvDefineList: parseEnv(rawFileEnv, clientPrefixRE),
-      serverEnvDefineList: parseEnv(rawFileEnv, validEnvKeyRE),
+      envDefineList: parseEnv(rawFileEnv, envPrefixRE),
       envBanner:
         usedEnvFiles.length !== 0
           ? `App .env files: ${usedEnvFiles.join(' | ')}`
@@ -100,11 +99,7 @@ export function readAppFileEnv(ctx, env, clientPrefixRE) {
     }
 
     if (typeof env.filter === 'function') {
-      result.clientEnvDefineList =
-        env.filter(result.clientEnvDefineList, 'client') || {}
-
-      result.serverEnvDefineList =
-        env.filter(result.serverEnvDefineList, 'server') || {}
+      result.envDefineList = env.filter(result.envDefineList, 'client') || {}
     }
 
     ctx.cacheProxy.setRuntime(readAppFileEnvCacheKey, {

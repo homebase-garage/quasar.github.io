@@ -104,15 +104,19 @@ type PluginEntry =
 interface QuasarEnvConfig {
   /**
    * For security reasons, only variables with this prefix from the env files
-   * will be exposed to the client through the env files.
+   * will be exposed to the app code through the env files.
    * By doing this, we ensure clear intent from the user.
    *
-   * Such variables exposed to the client files should not contain sensitive
+   * Such variables exposed to the app code should not contain sensitive
    * information such as API keys.
+   *
+   * Avoid setting it to 'QUASAR_' so it won't conflict with
+   * Quasar's own environment variables. Using it with 'QUASAR_' will make it
+   * default to 'QCLI_' prefix instead.
    *
    * @default 'QCLI_'
    */
-  clientPrefix?: string | string[];
+  prefix?: string | string[];
   /**
    * Folder where Quasar CLI should look for .env* files.
    * Can be an absolute path or a relative path to project root directory.
@@ -129,7 +133,7 @@ interface QuasarEnvConfig {
    */
   files?: string[];
   /**
-   * Filter the env variables that are exposed to the client/server
+   * Filter the env variables that are exposed to the app code
    * through the env files. This does not affects props
    * assigned directly to the quasar.config > build > define prop.
    */

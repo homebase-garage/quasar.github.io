@@ -24,7 +24,7 @@ import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.j
 import {
   readQuasarConfFileEnv,
   readAppFileEnv,
-  ENV_CLIENT_PREFIX,
+  ENV_VAR_PREFIX,
   validEnvKeyRE
 } from './utils/env.js'
 
@@ -829,7 +829,7 @@ export class QuasarConfigFile {
     if (cfg.build.env !== false) {
       cfg.build.env = merge(
         {
-          clientPrefix: ENV_CLIENT_PREFIX,
+          prefix: ENV_VAR_PREFIX,
           folder: appPaths.appDir,
           files: []
           // filter: (key, value) => true
@@ -837,27 +837,30 @@ export class QuasarConfigFile {
         cfg.build.env
       )
 
-      // we enforce a clientPrefix for security reasons
+      // we enforce a prefix (other than Quasar's own QUASAR_) for security reasons
       // and we also filter it if it's an array, to make sure that it only contains valid keys
 
-      let { clientPrefix } = cfg.build.env
-      if (!clientPrefix) {
-        clientPrefix = ENV_CLIENT_PREFIX
-      } else if (Array.isArray(clientPrefix)) {
-        clientPrefix = clientPrefix.filter(p => validEnvKeyRE.test(p))
-        if (clientPrefix.length === 0) clientPrefix = ENV_CLIENT_PREFIX
+      let { prefix } = cfg.build.env
+      if (!prefix || prefix === 'QUASAR_') {
+        prefix = ENV_VAR_PREFIX
+      } else if (Array.isArray(prefix)) {
+        prefix = prefix.filter(p => validEnvKeyRE.test(p) && p !== 'QUASAR_')
+        if (prefix.length === 0) prefix = ENV_VAR_PREFIX
       }
 
-      const clientPrefixRE = Array.isArray(clientPrefix)
-        ? new RegExp(`^(${clientPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-        : new RegExp(`^${clientPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+      cfg.build.env.prefix = prefix
+      const envPrefix = Array.isArray(prefix)
+        ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
+        : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
 
       // get the env variables from host project env files
-      const { clientEnvDefineList, serverEnvDefineList, envBanner } =
-        readAppFileEnv(this.#ctx, cfg.build.env, clientPrefixRE)
+      const { envDefineList, envBanner } = readAppFileEnv(
+        this.#ctx,
+        cfg.build.env,
+        envPrefix
+      )
 
-      cfg.metaConf.clientEnvDefineList = clientEnvDefineList
-      cfg.metaConf.serverEnvDefineList = serverEnvDefineList
+      cfg.metaConf.envDefineList = envDefineList
 
       if (envBanner !== null) log(envBanner)
     }
