@@ -99,212 +99,192 @@ function getAbsolutePath(pathParam) {
     : path.join(process.cwd(), pathParam)
 }
 
-const pkgFile = resolve('package.json')
-const indexFile = resolve('index.js')
-
-let ssrDetected = false
-
-if (existsSync(pkgFile) && existsSync(indexFile)) {
-  const pkg = JSON.parse(readFileSync(pkgFile, 'utf8'))
-
-  if (pkg.quasar && pkg.quasar.ssr) {
-    console.log('Quasar SSR folder detected.')
-    console.log('Yielding control to its own webserver.')
-    console.log()
-    ssrDetected = true
-
-    import(indexFile)
-  }
+if (!argv.colors) {
+  process.env.FORCE_COLOR = '0'
 }
 
-if (ssrDetected === false) {
-  if (!argv.colors) {
-    process.env.FORCE_COLOR = '0'
-  }
+const { default: express } = await import('express')
+const { green, gray, red } = await import('kolorist')
 
-  const { default: express } = await import('express')
-  const { green, gray, red } = await import('kolorist')
+const resolvedIndex = resolve(argv.index)
+const microCacheSeconds = argv.micro ? parseInt(argv.micro, 10) : false
 
-  const resolvedIndex = resolve(argv.index)
-  const microCacheSeconds = argv.micro ? parseInt(argv.micro, 10) : false
-
-  const serve = (servePath, cache) => {
-    const opts = {
-      maxAge: cache ? parseInt(argv.cache, 10) * 1000 : 0,
-      setHeaders(res, headersPath) {
-        if (res.req.method === 'GET' && headersPath === resolvedIndex) {
-          res.set(
-            'Cache-Control',
-            'no-store, no-cache, must-revalidate, proxy-revalidate'
-          )
-          res.set('Pragma', 'no-cache')
-          res.set('Expires', '0')
-          res.set('Surrogate-Control', 'no-store')
-        }
+const serve = (servePath, cache) => {
+  const opts = {
+    maxAge: cache ? parseInt(argv.cache, 10) * 1000 : 0,
+    setHeaders(res, headersPath) {
+      if (res.req.method === 'GET' && headersPath === resolvedIndex) {
+        res.set(
+          'Cache-Control',
+          'no-store, no-cache, must-revalidate, proxy-revalidate'
+        )
+        res.set('Pragma', 'no-cache')
+        res.set('Expires', '0')
+        res.set('Surrogate-Control', 'no-store')
       }
     }
-
-    if (argv.history !== true) {
-      opts.index = argv.index
-    }
-
-    return express.static(resolve(servePath), opts)
   }
 
-  const app = express()
-
-  if (argv.cors) {
-    const { default: cors } = await import('cors')
-    app.use(cors())
+  if (argv.history !== true) {
+    opts.index = argv.index
   }
 
+  return express.static(resolve(servePath), opts)
+}
+
+const app = express()
+
+if (argv.cors) {
+  const { default: cors } = await import('cors')
+  app.use(cors())
+}
+
+if (!argv.silent) {
+  app.get('{*path}', (req, _, next) => {
+    console.log(
+      `GET ${green(req.url)} ${gray('[' + req.ip + ']')} ${new Date()}`
+    )
+    next()
+  })
+}
+
+if (argv.gzip) {
+  const { default: compression } = await import('compression')
+  app.use(compression({ threshold: 0 }))
+}
+
+const serviceWorkerFile = resolve('service-worker.js')
+if (existsSync(serviceWorkerFile)) {
+  app.use('/service-worker.js', serve('service-worker.js'))
+}
+
+if (argv.proxy) {
+  let file = (argv.proxy = getAbsolutePath(argv.proxy))
+  if (!existsSync(file)) {
+    fatal('Proxy definition file not found! ' + file)
+  }
+  file = await import(file)
+
+  const { createProxyMiddleware } = await import('http-proxy-middleware')
+
+  ;(file.default || file).forEach(entry => {
+    app.use(entry.path, createProxyMiddleware(entry.rule))
+  })
+}
+
+if (argv.history) {
+  const { default: history } = await import('connect-history-api-fallback')
+  app.use(
+    history({
+      index: argv.index.startsWith('/') ? argv.index : '/' + argv.index
+    })
+  )
+}
+
+app.use('/', serve('.', true))
+
+if (microCacheSeconds) {
+  const { default: microcache } = await import('route-cache')
+  app.use(microcache.cacheSeconds(microCacheSeconds))
+}
+
+app.get('{*path}', (req, res) => {
+  res.setHeader('Content-Type', 'text/html')
+  res.status(404).send('404 | Page Not Found')
   if (!argv.silent) {
-    app.get('{*path}', (req, _, next) => {
-      console.log(
-        `GET ${green(req.url)} ${gray('[' + req.ip + ']')} ${new Date()}`
-      )
-      next()
-    })
+    console.log(red(`  404 on ${req.url}`))
   }
+})
 
-  if (argv.gzip) {
-    const { default: compression } = await import('compression')
-    app.use(compression({ threshold: 0 }))
-  }
+const getServer = async localApp => {
+  if (!argv.https) return localApp
 
-  const serviceWorkerFile = resolve('service-worker.js')
-  if (existsSync(serviceWorkerFile)) {
-    app.use('/service-worker.js', serve('service-worker.js'))
-  }
+  let fakeCert, key, cert
 
-  if (argv.proxy) {
-    let file = (argv.proxy = getAbsolutePath(argv.proxy))
-    if (!existsSync(file)) {
-      fatal('Proxy definition file not found! ' + file)
-    }
-    file = await import(file)
+  if (argv.key && argv.cert) {
+    key = getAbsolutePath(argv.key)
+    cert = getAbsolutePath(argv.cert)
 
-    const { createProxyMiddleware } = await import('http-proxy-middleware')
-
-    ;(file.default || file).forEach(entry => {
-      app.use(entry.path, createProxyMiddleware(entry.rule))
-    })
-  }
-
-  if (argv.history) {
-    const { default: history } = await import('connect-history-api-fallback')
-    app.use(
-      history({
-        index: argv.index.startsWith('/') ? argv.index : '/' + argv.index
-      })
-    )
-  }
-
-  app.use('/', serve('.', true))
-
-  if (microCacheSeconds) {
-    const { default: microcache } = await import('route-cache')
-    app.use(microcache.cacheSeconds(microCacheSeconds))
-  }
-
-  app.get('{*path}', (req, res) => {
-    res.setHeader('Content-Type', 'text/html')
-    res.status(404).send('404 | Page Not Found')
-    if (!argv.silent) {
-      console.log(red(`  404 on ${req.url}`))
-    }
-  })
-
-  const getServer = async localApp => {
-    if (!argv.https) return localApp
-
-    let fakeCert, key, cert
-
-    if (argv.key && argv.cert) {
-      key = getAbsolutePath(argv.key)
-      cert = getAbsolutePath(argv.cert)
-
-      if (existsSync(key)) {
-        key = readFileSync(key)
-      } else {
-        fatal('SSL key file not found!' + key)
-      }
-
-      if (existsSync(cert)) {
-        cert = readFileSync(cert)
-      } else {
-        fatal('SSL cert file not found!' + cert)
-      }
+    if (existsSync(key)) {
+      key = readFileSync(key)
     } else {
-      const { getCertificate } = await import('@quasar/ssl-certificate')
-      fakeCert = await getCertificate({ log, fatal })
+      fatal('SSL key file not found!' + key)
     }
 
-    const https = await import('node:https')
-    return https.createServer(
-      {
-        key: key || fakeCert,
-        cert: cert || fakeCert
-      },
-      localApp
-    )
+    if (existsSync(cert)) {
+      cert = readFileSync(cert)
+    } else {
+      fatal('SSL cert file not found!' + cert)
+    }
+  } else {
+    const { getCertificate } = await import('@quasar/ssl-certificate')
+    fakeCert = await getCertificate({ log, fatal })
   }
 
-  const server = await getServer(app)
-
-  const getListeningUrl = hostname =>
-    `http${argv.https ? 's' : ''}://${hostname}:${argv.port}`
-
-  const { getIPs } = await import('../net.js')
-
-  const getListeningBanner = () => {
-    let { hostname } = argv
-
-    if (hostname === '0.0.0.0') {
-      const acc = getIPs().map(ip => ['', getListeningUrl(ip)])
-      if (acc.length !== 0) {
-        acc[0][0] = 'Listening at'
-        return acc
-      }
-
-      hostname = 'localhost'
-    }
-
-    return [['Listening at', getListeningUrl(hostname)]]
-  }
-
-  server.listen(argv.port, argv.hostname, async () => {
-    const filler = ''.padEnd(20, ' ')
-    const info = [
-      ['Quasar CLI', `v${cliPkg.version}`],
-      ...getListeningBanner(),
-      ['Web server root', root],
-      argv.https ? ['HTTPS', 'enabled'] : '',
-      argv.gzip ? ['Gzip', 'enabled'] : '',
-      ['Cache (max-age)', argv.cache || 'disabled'],
-      microCacheSeconds ? ['Micro-cache', microCacheSeconds + 's'] : '',
-      argv.history ? ['History mode', 'enabled'] : '',
-      ['Index file', argv.index],
-      argv.cors ? ['CORS', 'enabled'] : '',
-      argv.proxy ? ['Proxy definitions', argv.proxy] : ''
-    ]
-      .filter(msg => msg)
-      .map(
-        msg =>
-          ' ' +
-          (msg[0] !== '' ? msg[0].padEnd(20, '.') : filler) +
-          ' ' +
-          green(msg[1])
-      )
-
-    console.log('\n' + info.join('\n') + '\n')
-
-    if (argv.open) {
-      const { isMinimalTerminal } = await import('../is-minimal-terminal.js')
-      if (!isMinimalTerminal) {
-        const { default: open } = await import('open')
-        open(getListeningUrl(argv.hostname), { url: true })
-      }
-    }
-  })
+  const https = await import('node:https')
+  return https.createServer(
+    {
+      key: key || fakeCert,
+      cert: cert || fakeCert
+    },
+    localApp
+  )
 }
+
+const server = await getServer(app)
+
+const getListeningUrl = hostname =>
+  `http${argv.https ? 's' : ''}://${hostname}:${argv.port}`
+
+const { getIPs } = await import('../net.js')
+
+const getListeningBanner = () => {
+  let { hostname } = argv
+
+  if (hostname === '0.0.0.0') {
+    const acc = getIPs().map(ip => ['', getListeningUrl(ip)])
+    if (acc.length !== 0) {
+      acc[0][0] = 'Listening at'
+      return acc
+    }
+
+    hostname = 'localhost'
+  }
+
+  return [['Listening at', getListeningUrl(hostname)]]
+}
+
+server.listen(argv.port, argv.hostname, async () => {
+  const filler = ''.padEnd(20, ' ')
+  const info = [
+    ['Quasar CLI', `v${cliPkg.version}`],
+    ...getListeningBanner(),
+    ['Web server root', root],
+    argv.https ? ['HTTPS', 'enabled'] : '',
+    argv.gzip ? ['Gzip', 'enabled'] : '',
+    ['Cache (max-age)', argv.cache || 'disabled'],
+    microCacheSeconds ? ['Micro-cache', microCacheSeconds + 's'] : '',
+    argv.history ? ['History mode', 'enabled'] : '',
+    ['Index file', argv.index],
+    argv.cors ? ['CORS', 'enabled'] : '',
+    argv.proxy ? ['Proxy definitions', argv.proxy] : ''
+  ]
+    .filter(msg => msg)
+    .map(
+      msg =>
+        ' ' +
+        (msg[0] !== '' ? msg[0].padEnd(20, '.') : filler) +
+        ' ' +
+        green(msg[1])
+    )
+
+  console.log('\n' + info.join('\n') + '\n')
+
+  if (argv.open) {
+    const { isMinimalTerminal } = await import('../is-minimal-terminal.js')
+    if (!isMinimalTerminal) {
+      const { default: open } = await import('open')
+      open(getListeningUrl(argv.hostname), { url: true })
+    }
+  }
+})
