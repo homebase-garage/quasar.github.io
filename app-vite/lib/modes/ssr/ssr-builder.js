@@ -118,8 +118,7 @@ export class QuasarModeBuilder extends AppBuilder {
         express: cliPkg.dependencies.express
       }),
       engines: localAppPkg.engines,
-      browserslist: localAppPkg.browserslist,
-      quasar: { ssr: true }
+      browserslist: localAppPkg.browserslist
     }
 
     if (this.quasarConf.ssr.manualStoreSerialization !== true) {

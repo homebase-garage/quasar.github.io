@@ -137,10 +137,7 @@ interface QuasarEnvConfig {
    * through the env files. This does not affects props
    * assigned directly to the quasar.config > build > define prop.
    */
-  filter?: (
-    env: Record<string, string>,
-    target: "client" | "server"
-  ) => Record<string, string>;
+  filter?: (env: Record<string, string>) => Record<string, string>;
 }
 
 interface QuasarStaticBuildConfiguration {

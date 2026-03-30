@@ -13,9 +13,7 @@ const urlRangePattern = /^[a-zA-Z]/
  * ```
  */
 export function getFixedDeps(deps, rootDir) {
-  if (!deps) {
-    return {}
-  }
+  if (!deps) return {}
 
   const appDeps = { ...deps }
 

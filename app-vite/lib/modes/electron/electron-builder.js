@@ -56,6 +56,7 @@ export class QuasarModeBuilder extends AppBuilder {
     delete pkg.devDependencies
     delete pkg.browserslist
     delete pkg.scripts
+    delete pkg.quasarCli
 
     pkg.main = './electron-main.js'
 

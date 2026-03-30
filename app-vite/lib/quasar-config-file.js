@@ -21,12 +21,7 @@ import {
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
-import {
-  readQuasarConfFileEnv,
-  readAppFileEnv,
-  ENV_VAR_PREFIX,
-  validEnvKeyRE
-} from './utils/env.js'
+import { readEnvFiles } from './utils/env.js'
 
 const urlRegex = /^http(s)?:\/\//i
 const defaultPortMapping = {
@@ -230,14 +225,21 @@ export class QuasarConfigFile {
     // if filename syntax gets changed, then also update the "clean" cmd
     this.#tempFile = `${appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
 
-    const { envDefineList, envBanner } = readQuasarConfFileEnv(this.#ctx)
+    const { quasarCli } = JSON.parse(
+      fse.readFileSync(appPaths.resolve.app('package.json'), 'utf-8')
+    )
+    const { envDefineList, envBanner } = readEnvFiles(
+      this.#ctx,
+      quasarCli?.quasarConfEnv,
+      true /* isQuasarConfFile */
+    )
     this.#rolldownConfigDefines = {
       ...envDefineList,
       ...quasarRolldownInjectReplacementsDefine
     }
 
     log(
-      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format ${envBanner}`
+      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format${envBanner}`
     )
   }
 
@@ -826,38 +828,10 @@ export class QuasarConfigFile {
       cfg.build
     )
 
-    if (cfg.build.env !== false) {
-      cfg.build.env = merge(
-        {
-          prefix: ENV_VAR_PREFIX,
-          folder: appPaths.appDir,
-          files: []
-          // filter: (key, value) => true
-        },
-        cfg.build.env
-      )
-
-      // we enforce a prefix (other than Quasar's own QUASAR_) for security reasons
-      // and we also filter it if it's an array, to make sure that it only contains valid keys
-
-      let { prefix } = cfg.build.env
-      if (!prefix || prefix === 'QUASAR_') {
-        prefix = ENV_VAR_PREFIX
-      } else if (Array.isArray(prefix)) {
-        prefix = prefix.filter(p => validEnvKeyRE.test(p) && p !== 'QUASAR_')
-        if (prefix.length === 0) prefix = ENV_VAR_PREFIX
-      }
-
-      cfg.build.env.prefix = prefix
-      const envPrefix = Array.isArray(prefix)
-        ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-        : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
-
-      // get the env variables from host project env files
-      const { envDefineList, envBanner } = readAppFileEnv(
+    if (cfg.build.env) {
+      const { envDefineList, envBanner } = readEnvFiles(
         this.#ctx,
-        cfg.build.env,
-        envPrefix
+        cfg.build.env
       )
 
       cfg.metaConf.envDefineList = envDefineList
