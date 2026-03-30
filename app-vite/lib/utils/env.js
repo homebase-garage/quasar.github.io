@@ -58,7 +58,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
       // .env.local
       // loaded in all cases, ignored by git
-      isCI ? null : '.env.local'
+      '.env.local'
     ]
 
     // if it's not for the Quasar config file,
@@ -74,7 +74,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[dev|prod]
         // loaded for dev or prod only, ignored by git
-        isCI ? null : `.env.local.${buildType}`,
+        `.env.${buildType}.local`,
 
         // .env.[quasarMode]
         // loaded for specific Quasar CLI mode only
@@ -82,7 +82,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[quasarMode]
         // loaded for specific Quasar CLI mode only, ignored by git
-        isCI ? null : `.env.local.${quasarMode}`,
+        `.env.${quasarMode}.local`,
 
         // .env.[dev|prod].[quasarMode]
         // loaded for specific Quasar CLI mode and dev|prod only
@@ -90,8 +90,13 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[dev|prod].[quasarMode]
         // loaded for specific Quasar CLI mode and dev|prod only, ignored by git
-        isCI ? null : `.env.local.${buildType}.${quasarMode}`
+        `.env.${buildType}.${quasarMode}.local`
       )
+    }
+
+    if (isCI) {
+      // in CI, we ignore all .local files, as they are meant to be used locally only
+      fileList = fileList.filter(entry => entry.endsWith('.local') === false)
     }
 
     if (Array.isArray(localEnv.files)) {
@@ -104,7 +109,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
     const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
       appDir: ctx.appPaths.appDir,
-      fileList: fileList.filter(Boolean),
+      fileList,
       folderList
     })
 

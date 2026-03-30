@@ -545,7 +545,7 @@ export class QuasarConfigFile {
           viteVuePluginOptions: {},
           vitePlugins: [],
           define: {},
-          envFiles: [],
+          envFiles: {},
           resolve: {},
           htmlMinifyOptions: {}
         },
@@ -770,8 +770,6 @@ export class QuasarConfigFile {
 
         vueOptionsAPI: false,
         vueRouterMode: 'hash',
-
-        envFiles: false,
 
         minify:
           cfg.metaConf.debugging !== true &&
