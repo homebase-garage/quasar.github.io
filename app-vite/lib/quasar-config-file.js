@@ -19,7 +19,7 @@ import {
 } from './plugins/rolldown.inject-replacements.js'
 
 import { findClosestOpenPort, localHostList } from './utils/net.js'
-import { isMinimalTerminal } from './utils/is-minimal-terminal.js'
+import { isMinimalTerminal } from './utils/is-terminal.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
 import { readEnvFiles } from './utils/env.js'
 

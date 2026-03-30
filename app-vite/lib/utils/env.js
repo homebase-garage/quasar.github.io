@@ -5,6 +5,7 @@ import { expand as dotEnvExpand } from 'dotenv-expand'
 import { merge } from 'webpack-merge'
 
 import { encodeForDiff } from './encode-for-diff.js'
+import { isCI } from './is-terminal.js'
 
 const DEFAULT_ENV_PREFIX = 'QCLI_'
 const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
@@ -50,14 +51,14 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
       ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
       : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
 
-    const fileList = [
+    let fileList = [
       // .env
       // loaded in all cases
       '.env',
 
       // .env.local
       // loaded in all cases, ignored by git
-      '.env.local'
+      isCI ? null : '.env.local'
     ]
 
     // if it's not for the Quasar config file,
@@ -73,7 +74,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[dev|prod]
         // loaded for dev or prod only, ignored by git
-        `.env.local.${buildType}`,
+        isCI ? null : `.env.local.${buildType}`,
 
         // .env.[quasarMode]
         // loaded for specific Quasar CLI mode only
@@ -81,7 +82,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[quasarMode]
         // loaded for specific Quasar CLI mode only, ignored by git
-        `.env.local.${quasarMode}`,
+        isCI ? null : `.env.local.${quasarMode}`,
 
         // .env.[dev|prod].[quasarMode]
         // loaded for specific Quasar CLI mode and dev|prod only
@@ -89,7 +90,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
         // .env.local.[dev|prod].[quasarMode]
         // loaded for specific Quasar CLI mode and dev|prod only, ignored by git
-        `.env.local.${buildType}.${quasarMode}`
+        isCI ? null : `.env.local.${buildType}.${quasarMode}`
       )
     }
 
@@ -103,7 +104,7 @@ export function readEnvFiles(ctx, env, isQuasarConfFile = false) {
 
     const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
       appDir: ctx.appPaths.appDir,
-      fileList,
+      fileList: fileList.filter(Boolean),
       folderList
     })
 
