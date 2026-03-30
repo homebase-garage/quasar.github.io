@@ -48,17 +48,13 @@
   "dependencies": {
     "@quasar/ssl-certificate": "workspace:^",
     "ci-info": "^4.4.0",
-    "compression": "^1.7.4",
-    "connect-history-api-fallback": "^2.0.0",
-    "cors": "^2.8.6",
     "cross-spawn": "^7.0.6",
-    "express": "^5.2.1",
     "fs-extra": "^11.3.4",
+    "h3": "2.0.1-rc.20",
     "http-proxy-middleware": "^3.0.5",
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
     "open": "^11.0.0",
-    "route-cache": "^0.7.0",
     "update-notifier": "^7.3.1"
   },
   "engines": {
