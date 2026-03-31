@@ -347,8 +347,7 @@ interface QuasarStaticBuildConfiguration {
    * This gets supplied to Vite's own `define` option, which in turn uses Oxc's
    * define feature to perform replacements, so value expressions must be a
    * string that contains a JSON-serializable value (null, boolean, number,
-   * string, array, or object) or a single identifier. For non-string values,
-   * Vite will automatically convert it to a string with JSON.stringify.
+   * string, array, or object) or a single identifier.
    *
    * @example { __APP_VERSION__: JSON.stringify('v1.0.0') }
    * @example { __API_URL__: 'window.__backend_api_url' }
