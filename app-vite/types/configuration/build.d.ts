@@ -101,22 +101,35 @@ type PluginEntry =
   | undefined
   | false;
 
-interface QuasarEnvFilesConfig {
+interface QuasarBuildEnv {
   /**
    * For security reasons, only variables with this prefix from the env files
-   * will be exposed to the app code through the env files.
-   * By doing this, we ensure clear intent from the user.
+   * and Node.js process.env will be exposed to the code shipped to the client.
+   * The client app code includes Electron main & preload scripts, as they get
+   * shipped to the client side as well.
    *
-   * Such variables exposed to the app code should not contain sensitive
+   * Such variables exposed to the client app code should not contain sensitive
    * information such as API keys.
    *
    * Avoid setting it to 'QUASAR_' so it won't conflict with
-   * Quasar's own environment variables. Using it with 'QUASAR_' will make it
-   * default to 'QCLI_' prefix instead.
+   * Quasar's own environment variables.
+   *
+   * Setting it to an empty string will default to
+   * the default value (QCLI_).
    *
    * @default 'QCLI_'
    */
-  prefix?: string | string[];
+  clientPrefix?: string | string[];
+  /**
+   * Setting this prefix will filter out env files variables and Node.js process.env
+   * variables that are exposed to the backend code (like the SSR server-side).
+   *
+   * Avoid setting it to 'QUASAR_' so it won't conflict with
+   * Quasar's own environment variables.
+   *
+   * @default ''
+   */
+  backendPrefix?: string | string[];
   /**
    * Folder where Quasar CLI should look for .env* files.
    * Can be an absolute path or a relative path to project root directory.
@@ -127,17 +140,20 @@ interface QuasarEnvFilesConfig {
   /**
    * Additional .env* files to be loaded.
    * Each entry can be an absolute path or a relative path to
-   * quasar.config > build > env > folder.
+   * quasar.config > build > folder.
    *
    * @example ['.env.somefile', '../.env.someotherfile']
    */
-  files?: string[];
+  file?: string | string[];
   /**
-   * Filter the env variables that are exposed to the app code
-   * through the env files. This does not affects props
+   * Filter the env files variables & Node.js process.env variables
+   * that are exposed to the app code. This does not affects props
    * assigned directly to the quasar.config > build > define prop.
    */
-  filter?: (env: Record<string, string>) => Record<string, string>;
+  filter?: (
+    env: Record<string, string>,
+    type: "client" | "backend"
+  ) => Record<string, string>;
 }
 
 interface QuasarStaticBuildConfiguration {
@@ -325,23 +341,25 @@ interface QuasarStaticBuildConfiguration {
   distDir?: string;
 
   /**
-   * Replace global variables or property accessors with the provided values.
-   * Gets supplied to Rolldown's `define` option, which performs text replacements during the build.
+   * Define global constant replacements. Entries will be defined as globals
+   * during dev and statically replaced during build.
    *
-   * @see https://v2.quasar.dev/quasar-cli-vite/handling-process-env
+   * This gets supplied to Vite's own `define` option, which in turn uses Oxc's
+   * define feature to perform replacements, so value expressions must be a
+   * string that contains a JSON-serializable value (null, boolean, number,
+   * string, array, or object) or a single identifier. For non-string values,
+   * Vite will automatically convert it to a string with JSON.stringify.
    *
-   * @example { SOMETHING: 'someValue' }
+   * @example { __APP_VERSION__: JSON.stringify('v1.0.0') }
+   * @example { __API_URL__: 'window.__backend_api_url' }
    */
-  define?: Record<string, string>;
+  define?: Record<string, any>;
 
   /**
-   * Whether to load environment variables from .env* files and expose
-   * them to the client/server code. This does not affects the quasar.config
-   * file itself, since that is loaded before this can be set.
-   *
-   * @default false
+   * Configuration related to the environment variables loaded from
+   * .env* files and Node.js process.env injections.
    */
-  envFiles?: boolean | QuasarEnvFilesConfig;
+  env?: QuasarBuildEnv;
 
   /**
    * Build production assets with or without the hash part in filenames.

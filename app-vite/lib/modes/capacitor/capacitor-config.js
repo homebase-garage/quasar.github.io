@@ -7,7 +7,8 @@ import { escapeRegexString } from '../../utils/escape-regex-string.js'
 export const quasarCapacitorConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
-      compileId: 'vite-capacitor'
+      compileId: 'vite-capacitor',
+      shippedToClient: true
     })
     const { appPaths, cacheProxy } = quasarConf.ctx
 

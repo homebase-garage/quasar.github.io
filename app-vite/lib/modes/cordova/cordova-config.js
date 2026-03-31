@@ -4,7 +4,8 @@ import { quasarVitePluginDevCordovaPlatformInject } from './vite-plugin.dev.cord
 const quasarCordovaConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
-      compileId: 'vite-cordova'
+      compileId: 'vite-cordova',
+      shippedToClient: true
     })
 
     if (quasarConf.ctx.dev === true) {

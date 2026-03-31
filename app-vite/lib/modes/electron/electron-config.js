@@ -19,8 +19,9 @@ async function preloadScript(quasarConf, name) {
 
   const scriptName = basename(name)
   const cfg = createNodeRolldownConfig(quasarConf, {
-    compileId: `node-electron-preload-${scriptName}`,
-    format: 'cjs'
+    compileId: `electron-preload-${scriptName}`,
+    format: 'cjs',
+    shippedToClient: true
   })
   const { appPaths } = quasarConf.ctx
 
@@ -50,7 +51,8 @@ async function preloadScript(quasarConf, name) {
 export const quasarElectronConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
-      compileId: 'vite-electron'
+      compileId: 'vite-electron',
+      shippedToClient: true
     })
 
     if (quasarConf.ctx.prod === true) {
@@ -63,8 +65,9 @@ export const quasarElectronConfig = {
   // returns a Promise
   main: quasarConf => {
     const cfg = createNodeRolldownConfig(quasarConf, {
-      compileId: 'node-electron-main',
-      format: 'esm'
+      compileId: 'electron-main',
+      format: 'esm',
+      shippedToClient: true
     })
     const { appPaths } = quasarConf.ctx
 

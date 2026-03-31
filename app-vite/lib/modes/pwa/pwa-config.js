@@ -12,7 +12,10 @@ import { quasarVitePluginPwaResources } from './vite-plugin.pwa-resources.js'
 
 export const quasarPwaConfig = {
   vite: async quasarConf => {
-    const cfg = await createViteConfig(quasarConf, { compileId: 'vite-pwa' })
+    const cfg = await createViteConfig(quasarConf, {
+      compileId: 'vite-pwa',
+      shippedToClient: true
+    })
 
     // also update ssr-config.js when changing here
     cfg.plugins.push(quasarVitePluginPwaResources(quasarConf))
@@ -148,7 +151,9 @@ export const quasarPwaConfig = {
     const { ctx } = quasarConf
     const { appPaths } = ctx
 
-    const cfg = createBrowserRolldownConfig(quasarConf)
+    const cfg = createBrowserRolldownConfig(quasarConf, {
+      shippedToClient: true
+    })
 
     cfg.transform.define['import.meta.env.QUASAR_PWA_FALLBACK_HTML'] =
       JSON.stringify(

@@ -21,7 +21,12 @@ import {
 import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-terminal.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
-import { readEnvFiles } from './utils/env.js'
+import {
+  getQuasarConfEnv,
+  getAppEnv,
+  defaultClientAppEnvPrefix,
+  defaultBackendAppEnvPrefix
+} from './utils/env.js'
 
 const urlRegex = /^http(s)?:\/\//i
 const defaultPortMapping = {
@@ -228,10 +233,9 @@ export class QuasarConfigFile {
     const { quasarCli } = JSON.parse(
       fse.readFileSync(appPaths.resolve.app('package.json'), 'utf-8')
     )
-    const { envDefineList, envBanner } = readEnvFiles(
+    const { envDefineList, envBanner } = getQuasarConfEnv(
       this.#ctx,
-      quasarCli?.quasarConfEnvFiles || {},
-      true /* isQuasarConfFile */
+      quasarCli?.quasarConfEnvFiles || {}
     )
     this.#rolldownConfigDefines = {
       ...envDefineList,
@@ -239,7 +243,7 @@ export class QuasarConfigFile {
     }
 
     log(
-      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format${envBanner || ''}`
+      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format ${envBanner}`
     )
   }
 
@@ -545,7 +549,7 @@ export class QuasarConfigFile {
           viteVuePluginOptions: {},
           vitePlugins: [],
           define: {},
-          envFiles: {},
+          env: {},
           resolve: {},
           htmlMinifyOptions: {}
         },
@@ -806,6 +810,11 @@ export class QuasarConfigFile {
           __INTLIFY_PROD_DEVTOOLS__: String(cfg.metaConf.debugging)
         },
 
+        env: {
+          clientPrefix: defaultClientAppEnvPrefix,
+          backendPrefix: defaultBackendAppEnvPrefix
+        },
+
         alias: {
           '#q-app': '@quasar/app-vite',
           src: appPaths.srcDir,
@@ -826,16 +835,15 @@ export class QuasarConfigFile {
       cfg.build
     )
 
-    if (cfg.build.envFiles) {
-      const { envDefineList, envBanner } = readEnvFiles(
-        this.#ctx,
-        cfg.build.envFiles
-      )
+    const { clientEnvDefineList, backendEnvDefineList, envBanner } = getAppEnv(
+      this.#ctx,
+      cfg.build.env
+    )
 
-      cfg.metaConf.envDefineList = envDefineList
+    cfg.metaConf.clientEnvDefineList = clientEnvDefineList
+    cfg.metaConf.backendEnvDefineList = backendEnvDefineList
 
-      if (envBanner !== null) log(envBanner)
-    }
+    log(envBanner)
 
     if (!cfg.build.target.browser) {
       cfg.build.target.browser = BASELINE_WIDELY_AVAILABLE_TARGET_STRING

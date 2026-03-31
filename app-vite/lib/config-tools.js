@@ -115,7 +115,10 @@ function getQuasarVitePluginRunMode(compileId) {
   return 'web-client'
 }
 
-export async function createViteConfig(quasarConf, { compileId }) {
+export async function createViteConfig(
+  quasarConf,
+  { compileId, shippedToClient }
+) {
   const { ctx, build, metaConf } = quasarConf
   const { appPaths } = ctx
 
@@ -123,9 +126,9 @@ export async function createViteConfig(quasarConf, { compileId }) {
 
   // protect against Vite mutating its own options and triggering endless cfg diff loop
   const vueVitePluginOptions = merge(
-    compileId !== 'vite-ssr-server'
-      ? {}
-      : { ssr: true, template: { ssr: true } },
+    compileId === 'vite-ssr-server'
+      ? { ssr: true, template: { ssr: true } }
+      : {},
     build.viteVuePluginOptions
   )
 
@@ -142,7 +145,11 @@ export async function createViteConfig(quasarConf, { compileId }) {
     mode: ctx.dev === true ? 'development' : 'production',
     cacheDir,
     define: {
-      ...metaConf.envDefineList,
+      ...metaConf[
+        shippedToClient === true
+          ? 'clientEnvDefineList'
+          : 'backendEnvDefineList'
+      ],
       ...build.define
     },
 
@@ -257,7 +264,10 @@ export function extendViteConfig(viteConf, quasarConf, invokeParams) {
   return promise.then(() => viteConf)
 }
 
-export function createNodeRolldownConfig(quasarConf, { format }) {
+export function createNodeRolldownConfig(
+  quasarConf,
+  { shippedToClient, format }
+) {
   const {
     ctx: {
       pkg: { appPkg },
@@ -300,7 +310,11 @@ export function createNodeRolldownConfig(quasarConf, { format }) {
       target: quasarConf.build.target.node,
       minify: quasarConf.build.minify !== false,
       define: {
-        ...quasarConf.metaConf.envDefineList,
+        ...quasarConf.metaConf[
+          shippedToClient === true
+            ? 'clientEnvDefineList'
+            : 'backendEnvDefineList'
+        ],
         ...quasarConf.build.define
       }
     },
@@ -312,7 +326,7 @@ export function createNodeRolldownConfig(quasarConf, { format }) {
   }
 }
 
-export function createBrowserRolldownConfig(quasarConf) {
+export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
   const { browser } = quasarConf.build.target
   const target =
     browser === BASELINE_WIDELY_AVAILABLE_TARGET_STRING
@@ -339,7 +353,11 @@ export function createBrowserRolldownConfig(quasarConf) {
       target,
       minify: quasarConf.build.minify !== false,
       define: {
-        ...quasarConf.metaConf.envDefineList,
+        ...quasarConf.metaConf[
+          shippedToClient === true
+            ? 'clientEnvDefineList'
+            : 'backendEnvDefineList'
+        ],
         ...quasarConf.build.define
       }
     },

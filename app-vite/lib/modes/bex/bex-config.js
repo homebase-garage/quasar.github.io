@@ -19,7 +19,10 @@ function generateDefaultEntry(quasarConf) {
 
 export const quasarBexConfig = {
   vite: async quasarConf => {
-    let cfg = await createViteConfig(quasarConf, { compileId: 'vite-bex' })
+    let cfg = await createViteConfig(quasarConf, {
+      compileId: 'vite-bex',
+      shippedToClient: true
+    })
 
     cfg = mergeViteConfig(cfg, {
       server: {
@@ -55,7 +58,9 @@ export const quasarBexConfig = {
   },
 
   bexScript(quasarConf, entry = generateDefaultEntry(quasarConf)) {
-    const cfg = createBrowserRolldownConfig(quasarConf)
+    const cfg = createBrowserRolldownConfig(quasarConf, {
+      shippedToClient: true
+    })
 
     cfg.transform.define = {
       ...cfg.transform.define,

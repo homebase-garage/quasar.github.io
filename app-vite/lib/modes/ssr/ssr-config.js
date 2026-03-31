@@ -16,7 +16,8 @@ import { quasarVitePluginPwaResources } from '../pwa/vite-plugin.pwa-resources.j
 export const quasarSsrConfig = {
   viteClient: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {
-      compileId: 'vite-ssr-client'
+      compileId: 'vite-ssr-client',
+      shippedToClient: true
     })
     const { appPaths } = quasarConf.ctx
 
@@ -53,8 +54,10 @@ export const quasarSsrConfig = {
 
   viteServer: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {
-      compileId: 'vite-ssr-server'
+      compileId: 'vite-ssr-server',
+      shippedToClient: false
     })
+
     const { appPaths } = quasarConf.ctx
     const ssrEntryFile = appPaths.resolve.entry('server-entry.js')
 
@@ -94,8 +97,9 @@ export const quasarSsrConfig = {
   // returns a Promise
   webserver: quasarConf => {
     const cfg = createNodeRolldownConfig(quasarConf, {
-      compileId: 'node-ssr-webserver',
-      format: 'esm'
+      compileId: 'ssr-webserver',
+      format: 'esm',
+      shippedToClient: false
     })
     const { appPaths } = quasarConf.ctx
 
