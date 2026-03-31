@@ -235,7 +235,7 @@ export class QuasarConfigFile {
     )
     const { envDefineList, envBanner } = getQuasarConfEnv(
       this.#ctx,
-      quasarCli?.quasarConfEnvFiles || {}
+      quasarCli?.quasarConfEnv || {}
     )
     this.#rolldownConfigDefines = {
       ...envDefineList,
@@ -411,7 +411,8 @@ export class QuasarConfigFile {
         let quasarConfigFn
 
         try {
-          const res = await import(pathToFileURL(tempFile) + '?t=' + Date.now()) // we also need to cache bust it, hence the ?t= param
+          // we also need to cache bust it, hence the ?t= param
+          const res = await import(pathToFileURL(tempFile) + '?t=' + Date.now())
 
           quasarConfigFn = res.default || res
         } catch (e) {
@@ -475,9 +476,7 @@ export class QuasarConfigFile {
       const msg =
         'The default export value of the quasar.config file is not a function.'
 
-      if (failOnError === true) {
-        fatal(msg, 'FAIL')
-      }
+      if (failOnError === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix it.\n')
       return
@@ -497,9 +496,7 @@ export class QuasarConfigFile {
         ` temporarily created ${basename(this.#tempFile)} file` +
         ' then DELETE it ("quasar clean --qconf" can be used).'
 
-      if (failOnError === true) {
-        fatal(msg, 'FAIL')
-      }
+      if (failOnError === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix the errors in the original file.\n')
       return
@@ -510,9 +507,7 @@ export class QuasarConfigFile {
     if (Object(userCfg) !== userCfg) {
       const msg = 'The quasar.config file does not default exports an Object.'
 
-      if (failOnError === true) {
-        fatal(msg, 'FAIL')
-      }
+      if (failOnError === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix it.\n')
       return
