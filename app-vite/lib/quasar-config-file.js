@@ -207,7 +207,10 @@ export class QuasarConfigFile {
   #opts
   #versions = {}
   #address
+
   #isWatching = false
+  #resolveBuildAndWatch = null
+  #shouldReadBuiltFileAgain = false
 
   #tempFile
   #rolldownConfigDefines
@@ -298,11 +301,6 @@ export class QuasarConfigFile {
       : this.#build(rolldownConfig)
   }
 
-  // start watching for changes
-  watch() {
-    this.#isWatching = true
-  }
-
   /**
    * @returns {import('rolldown').RolldownOptions}
    */
@@ -381,6 +379,15 @@ export class QuasarConfigFile {
     return this.#computeConfig(quasarConfigFn, true)
   }
 
+  // start watching for changes
+  watch() {
+    this.#isWatching = true
+    if (this.#shouldReadBuiltFileAgain === true) {
+      this.#shouldReadBuiltFileAgain = false
+      this.#readBuildResult()
+    }
+  }
+
   #buildAndWatch(rolldownConfig) {
     const watcher = rolldownWatch({
       ...rolldownConfig,
@@ -389,14 +396,9 @@ export class QuasarConfigFile {
       }
     })
 
-    let isFirst = true
-    let firstBuildIsDone
-
-    const tempFile = this.#tempFile
-
-    watcher.on('event', async event => {
+    watcher.on('event', event => {
       if (event.code === 'BUNDLE_START') {
-        if (isFirst === false) {
+        if (this.#resolveBuildAndWatch === null) {
           log()
           log(
             'The quasar.config file (or its dependencies) changed. Reading it again...'
@@ -406,51 +408,19 @@ export class QuasarConfigFile {
         event.result.close()
 
         // not ready yet; watch() has not been issued yet
-        if (isFirst === false && this.#isWatching === false) return
-
-        let quasarConfigFn
-
-        try {
-          // we also need to cache bust it, hence the ?t= param
-          const res = await import(pathToFileURL(tempFile) + '?t=' + Date.now())
-
-          quasarConfigFn = res.default || res
-        } catch (e) {
-          console.log()
-          console.error(e)
-
-          const msg =
-            'Importing quasar.config file results in error. Please check the' +
-            ` Node.js stack above against the temporarily created ${basename(tempFile)} file` +
-            ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
-
-          if (isFirst === true) {
-            fatal(msg, 'FAIL')
-          }
-
-          warn(msg + '\n')
+        if (this.#resolveBuildAndWatch === null && this.#isWatching === false) {
+          this.#shouldReadBuiltFileAgain = true
           return
         }
 
-        const quasarConf = await this.#computeConfig(quasarConfigFn, isFirst)
-
-        if (quasarConf === void 0) return
-
-        if (isFirst === true) {
-          isFirst = false
-          firstBuildIsDone(quasarConf)
-          return
-        }
-
-        log('Scheduled to apply quasar.config changes in 550ms')
-        this.#opts.watch(quasarConf)
+        this.#readBuildResult()
       } else if (event.code === 'ERROR') {
-        fse.removeSync(tempFile)
+        fse.removeSync(this.#tempFile)
 
         const msg =
           'Could not compile the quasar.config file because it has errors.'
 
-        if (isFirst === true) {
+        if (this.#resolveBuildAndWatch !== null) {
           error(msg, 'FAIL')
           console.error(event.error)
           process.exit(1)
@@ -463,8 +433,52 @@ export class QuasarConfigFile {
     })
 
     return new Promise(res => {
-      firstBuildIsDone = res
+      this.#resolveBuildAndWatch = quasarConf => {
+        this.#resolveBuildAndWatch = null
+        res(quasarConf)
+      }
     })
+  }
+
+  async #readBuildResult() {
+    let quasarConfigFn
+
+    try {
+      // we also need to cache bust it, hence the ?t= param
+      const res = await import(
+        pathToFileURL(this.#tempFile) + '?t=' + Date.now()
+      )
+
+      quasarConfigFn = res.default || res
+    } catch (e) {
+      console.log()
+      console.error(e)
+
+      const msg =
+        'Importing quasar.config file results in error. Please check the' +
+        ` Node.js stack above against the temporarily created ${basename(this.#tempFile)} file` +
+        ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
+
+      if (this.#resolveBuildAndWatch !== null) fatal(msg, 'FAIL')
+
+      warn(msg + '\n')
+      return
+    }
+
+    const quasarConf = await this.#computeConfig(
+      quasarConfigFn,
+      this.#resolveBuildAndWatch !== null
+    )
+
+    if (quasarConf === void 0) return
+
+    if (this.#resolveBuildAndWatch !== null) {
+      this.#resolveBuildAndWatch(quasarConf)
+      return
+    }
+
+    log('Scheduled to apply quasar.config changes in 550ms')
+    this.#opts.watch(quasarConf)
   }
 
   // return void 0 if it encounters errors

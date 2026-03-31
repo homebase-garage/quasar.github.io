@@ -12,8 +12,6 @@ const defaultQuasarConfEnvPrefix = ''
 export const defaultClientAppEnvPrefix = 'QCLI_'
 export const defaultBackendAppEnvPrefix = ''
 const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
-
-const quasarConfEnvCacheKey = 'QuasarConfEnv'
 const appEnvCacheKey = 'AppEnv'
 
 function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
@@ -81,70 +79,54 @@ function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
 }
 
 export function getQuasarConfEnv(ctx, quasarConfEnvCfg) {
-  const configHash = encodeForDiff(quasarConfEnvCfg)
-  const cache = ctx.cacheProxy.getRuntime(quasarConfEnvCacheKey, () => ({}))
+  const localEnv = merge(
+    {
+      // prefix: defaultQuasarConfEnvPrefix,
+      folder: ctx.appPaths.appDir
+      // file: []
+    },
+    quasarConfEnvCfg
+  )
 
-  if (cache.configHash !== configHash) {
-    const localEnv = merge(
-      {
-        // prefix: defaultQuasarConfEnvPrefix,
-        folder: ctx.appPaths.appDir
-        // file: []
-      },
-      quasarConfEnvCfg
-    )
+  const fileList = isCI === true ? ['.env'] : ['.env', '.env.local']
+  const additionalFiles = Array.isArray(localEnv.file)
+    ? localEnv.file
+    : localEnv.file
+      ? [localEnv.file]
+      : []
 
-    const fileList = isCI === true ? ['.env'] : ['.env', '.env.local']
-    const additionalFiles = Array.isArray(localEnv.file)
-      ? localEnv.file
-      : localEnv.file
-        ? [localEnv.file]
-        : []
-
-    if (additionalFiles.length !== 0) {
-      // additional user-defined env files
-      fileList.push(...additionalFiles)
-    }
-
-    const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
-      appDir: ctx.appPaths.appDir,
-      fileList,
-      folderList: Array.isArray(localEnv.folder)
-        ? localEnv.folder
-        : [localEnv.folder]
-    })
-
-    const prefix = getEnvFilesPrefix({
-      prefix: localEnv.prefix,
-      defaultPrefix: defaultQuasarConfEnvPrefix,
-      banner: 'quasar.config'
-    })
-
-    const prefixLabel = Array.isArray(prefix) ? prefix.join(' | ') : prefix
-    const prefixRE = Array.isArray(prefix)
-      ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-      : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
-
-    const result = {
-      envDefineList: parseEnvDefineList(rawFileEnv, prefixRE),
-      envBanner: `(${
-        prefix ? `env prefix: ${prefixLabel}` : 'no env prefix'
-      }; ${
-        usedEnvFiles.length > 0
-          ? `env files: ${usedEnvFiles.join(' | ')}`
-          : `no env files`
-      })`
-    }
-
-    ctx.cacheProxy.setRuntime(quasarConfEnvCacheKey, {
-      configHash,
-      result
-    })
-
-    return result
+  if (additionalFiles.length !== 0) {
+    // additional user-defined env files
+    fileList.push(...additionalFiles)
   }
 
-  return cache.result
+  const { rawFileEnv, usedEnvFiles } = getFileEnvResult({
+    appDir: ctx.appPaths.appDir,
+    fileList,
+    folderList: Array.isArray(localEnv.folder)
+      ? localEnv.folder
+      : [localEnv.folder]
+  })
+
+  const prefix = getEnvFilesPrefix({
+    prefix: localEnv.prefix,
+    defaultPrefix: defaultQuasarConfEnvPrefix,
+    banner: 'quasar.config'
+  })
+
+  const prefixLabel = Array.isArray(prefix) ? prefix.join(' | ') : prefix
+  const prefixRE = Array.isArray(prefix)
+    ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
+    : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+
+  return {
+    envDefineList: parseEnvDefineList(rawFileEnv, prefixRE),
+    envBanner: `(${prefix ? `env prefix: ${prefixLabel}` : 'no env prefix'}; ${
+      usedEnvFiles.length > 0
+        ? `env files: ${usedEnvFiles.join(' | ')}`
+        : `no env files`
+    })`
+  }
 }
 
 /**
