@@ -219,7 +219,7 @@ export class QuasarConfigFile {
     onEnvChange: null,
     shouldReadBuiltFileAgain: false,
     rolldownWatcher: null,
-    quasarConfEnvWatcher: null
+    envWatcher: null
   }
 
   #cssVariables
@@ -416,98 +416,96 @@ export class QuasarConfigFile {
     }
   }
 
-  async #watchBuild(onReady) {
+  // re-entrant method
+  #watchBuild(onReady) {
     const localBuildId = ++this.#watch.buildId
+    const { appDir, quasarConfigFilename } = this.#ctx.appPaths
 
-    await Promise.all([
-      this.#watch.quasarConfEnvWatcher?.close(),
-      this.#watch.rolldownWatcher?.close()
-    ])
+    if (this.#watch.envWatcher === null) {
+      const onEnvChange = debounce(changedFile => {
+        const env = this.#getEnv()
 
-    const { appPaths } = this.#ctx
-    const onEnvChange = debounce(changedFile => {
-      if (localBuildId !== this.#watch.buildId) return
-
-      const env = this.#getEnv()
-
-      if (env.snapshot.envDefineList !== this.#env.snapshot.envDefineList) {
-        log()
-        log(
-          `Detected quasar.config env change from ${relative(this.#ctx.appPaths.appDir, changedFile)}`
-        )
-        this.#env = env
-        this.#watchBuild(onReady)
-        return
-      }
-
-      if (env.snapshot.watchEnvFiles !== this.#env.snapshot.watchEnvFiles) {
-        const watcher = this.#watch.quasarConfEnvWatcher
-        watcher.unwatch(this.#env.watchEnvFiles)
-        watcher.add(env.watchEnvFiles)
-        this.#env = env
-      }
-    }, 300)
-
-    this.#watch.quasarConfEnvWatcher = chokidarWatch(
-      [this.#hostPackageJsonPath, ...this.#env.watchEnvFiles],
-      {
-        ignoreInitial: true
-      }
-    )
-      .on('add', onEnvChange)
-      .on('change', onEnvChange)
-      .on('unlink', onEnvChange)
-
-    this.#watch.rolldownWatcher = rolldownWatch(this.#getRolldownConfig())
-    this.#watch.rolldownWatcher.on('event', event => {
-      if (localBuildId !== this.#watch.buildId) {
-        event.result?.close?.()
-        return
-      }
-
-      if (event.code === 'START') {
-        log(
-          (onReady !== null ? 'Compiling' : 'Recompiling') +
-            ` ${basename(appPaths.quasarConfigFilename)} (${this.#env.envBanner})`
-        )
-      } else if (event.code === 'BUNDLE_END') {
-        event.result.close()
-
-        if (onReady !== null) {
-          onReady()
-          onReady = null
+        if (env.snapshot.envDefineList !== this.#env.snapshot.envDefineList) {
+          log()
+          log(
+            `Detected quasar.config env change from ${relative(appDir, changedFile)}`
+          )
+          this.#env = env
+          this.#watch.rolldownWatcher.close().then(() => {
+            this.#watchBuild(onReady)
+          })
           return
         }
 
-        if (this.#watch.onUpdate !== null) {
-          this.read()
-        } else {
-          this.#watch.shouldReadBuiltFileAgain = true
+        if (env.snapshot.watchEnvFiles !== this.#env.snapshot.watchEnvFiles) {
+          const watcher = this.#watch.envWatcher
+          watcher.unwatch(this.#env.watchEnvFiles)
+          watcher.add(env.watchEnvFiles)
+          this.#env = env
         }
-      } else if (event.code === 'ERROR') {
-        fse.removeSync(this.#tempFile)
+      }, 300)
 
-        const msg =
-          'Could not compile the quasar.config file because it has errors.'
+      this.#watch.envWatcher = chokidarWatch(
+        [this.#hostPackageJsonPath, ...this.#env.watchEnvFiles],
+        {
+          ignoreInitial: true
+        }
+      )
+        .on('add', onEnvChange)
+        .on('change', onEnvChange)
+        .on('unlink', onEnvChange)
+    }
 
-        if (this.#shouldFail === true) {
-          error(msg, 'FAIL')
+    this.#watch.rolldownWatcher = rolldownWatch(this.#getRolldownConfig()).on(
+      'event',
+      event => {
+        if (localBuildId !== this.#watch.buildId) {
+          event.result?.close?.()
+          return
+        }
+
+        if (event.code === 'START') {
+          log(
+            (onReady !== null ? 'Compiling' : 'Recompiling') +
+              ` ${basename(quasarConfigFilename)} (${this.#env.envBanner})`
+          )
+        } else if (event.code === 'BUNDLE_END') {
+          event.result.close()
+
+          if (onReady !== null) {
+            onReady()
+            onReady = null
+            return
+          }
+
+          if (this.#watch.onUpdate !== null) {
+            this.read()
+          } else {
+            this.#watch.shouldReadBuiltFileAgain = true
+          }
+        } else if (event.code === 'ERROR') {
+          fse.removeSync(this.#tempFile)
+
+          const msg =
+            'Could not compile the quasar.config file because it has errors.'
+
+          if (this.#shouldFail === true) {
+            error(msg, 'FAIL')
+            console.error(event.error)
+            process.exit(1)
+          }
+
+          warn(msg + ' Please fix them.\n')
           console.error(event.error)
-          process.exit(1)
+          event.result.close()
         }
-
-        warn(msg + ' Please fix them.\n')
-        console.error(event.error)
-        event.result.close()
       }
-    })
+    )
   }
 
   #build() {
-    const { appPaths } = this.#ctx
-
     log(
-      `Compiling ${basename(appPaths.quasarConfigFilename)} (${this.#env.envBanner})`
+      `Compiling ${basename(this.#ctx.appPaths.quasarConfigFilename)} (${this.#env.envBanner})`
     )
 
     try {
