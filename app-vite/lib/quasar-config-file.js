@@ -3,7 +3,6 @@ import { pathToFileURL } from 'node:url'
 import { existsSync, readFileSync } from 'node:fs'
 import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
-import debounce from 'lodash/debounce.js'
 import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 
@@ -207,47 +206,31 @@ export class QuasarConfigFile {
   #opts
   #versions = {}
   #address
-
-  #isWatching = false
-  #resolveBuildAndWatch = null
-  #shouldReadBuiltFileAgain = false
-
   #tempFile
-  #rolldownConfigDefines
+  #hostPackageJsonPath
+  #env
+  #shouldFail = true
+
+  #watch = {
+    onUpdate: null,
+    shouldReadBuiltFileAgain: false,
+    rolldownWatcher: null,
+    packageJsonWatcher: null
+  }
 
   #cssVariables
   #storeProvider
   #vueDevtools
   #electronInspectPort
 
-  constructor({ ctx, host, port, verifyAddress, watch }) {
+  constructor({ ctx, host, port, verifyAddress, watch = false }) {
     this.#ctx = ctx
-    this.#opts = { host, port, verifyAddress }
-
-    if (watch !== void 0) {
-      this.#opts.watch = debounce(watch, 550)
-    }
-
-    const { appPaths } = ctx
+    this.#opts = { host, port, verifyAddress, watch }
+    this.#hostPackageJsonPath = ctx.appPaths.resolve.app('package.json')
+    this.#env = this.#getEnv()
 
     // if filename syntax gets changed, then also update the "clean" cmd
-    this.#tempFile = `${appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
-
-    const { quasarCli } = JSON.parse(
-      fse.readFileSync(appPaths.resolve.app('package.json'), 'utf-8')
-    )
-    const { envDefineList, envBanner } = getQuasarConfEnv(
-      this.#ctx,
-      quasarCli?.quasarConfEnv || {}
-    )
-    this.#rolldownConfigDefines = {
-      ...envDefineList,
-      ...quasarRolldownInjectReplacementsDefine
-    }
-
-    log(
-      `Using ${basename(appPaths.quasarConfigFilename)} in "${appPaths.quasarConfigInputFormat}" format ${envBanner}`
-    )
+    this.#tempFile = `${ctx.appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
   }
 
   async init() {
@@ -292,19 +275,67 @@ export class QuasarConfigFile {
         )
       })
     }
+
+    return this.#opts.watch === true ? this.#watchBuild() : this.#build()
   }
 
-  read() {
-    const rolldownConfig = this.#createRolldownConfig()
-    return this.#opts.watch !== void 0
-      ? this.#buildAndWatch(rolldownConfig)
-      : this.#build(rolldownConfig)
+  async read() {
+    let quasarConfigFn
+
+    try {
+      // cache busting it, hence the ?t= param
+      const fnResult = await import(
+        pathToFileURL(this.#tempFile) + '?t=' + Date.now()
+      )
+      quasarConfigFn = fnResult.default || fnResult
+    } catch (e) {
+      console.log()
+      console.error(e)
+
+      if (this.#opts.watch === false) {
+        fatal(
+          'The quasar.config file has runtime errors. Please check the Node.js stack above against the' +
+            ` temporarily created ${basename(this.#tempFile)} file, fix the original file` +
+            ' then DELETE the temporary one ("quasar clean --qconf" can be used).',
+          'FAIL'
+        )
+      }
+
+      const msg =
+        'Importing quasar.config file results in error. Please check the' +
+        ` Node.js stack above against the temporarily created ${basename(this.#tempFile)} file` +
+        ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
+
+      if (this.#shouldFail === true) fatal(msg, 'FAIL')
+
+      warn(msg + '\n')
+      return
+    }
+
+    const quasarConf = await this.#computeConfig(quasarConfigFn)
+
+    if (this.#watch.onUpdate !== null) {
+      if (quasarConf !== void 0) {
+        this.#watch.onUpdate(quasarConf)
+      }
+    } else {
+      this.#shouldFail = false
+      return quasarConf
+    }
+  }
+
+  #getEnv() {
+    const { quasarCli } = JSON.parse(
+      fse.readFileSync(this.#hostPackageJsonPath, 'utf-8')
+    )
+
+    return getQuasarConfEnv(this.#ctx, quasarCli?.quasarConfEnv || {})
   }
 
   /**
    * @returns {import('rolldown').RolldownOptions}
    */
-  #createRolldownConfig() {
+  #getRolldownConfig() {
     const { appPaths } = this.#ctx
 
     return {
@@ -332,7 +363,10 @@ export class QuasarConfigFile {
 
       transform: {
         target: 'node22',
-        define: this.#rolldownConfigDefines
+        define: {
+          ...this.#env.envDefineList,
+          ...quasarRolldownInjectReplacementsDefine
+        }
       },
 
       plugins: [
@@ -344,89 +378,64 @@ export class QuasarConfigFile {
       // So, Rolldown will error out.
       // We need to suppress the error. Otherwise, it will be noisy and cause a temp file to be created.
       // tsconfig is not really important for the config file itself anyway.
-      tsconfig: false
-    }
-  }
+      tsconfig: false,
 
-  async #build(rolldownConfig) {
-    try {
-      await rolldownBuild(rolldownConfig)
-    } catch (e) {
-      fse.removeSync(this.#tempFile)
-      console.log()
-      console.error(e)
-      fatal(
-        'Could not compile the quasar.config file because it has errors.',
-        'FAIL'
-      )
-    }
-
-    let quasarConfigFn
-    try {
-      const fnResult = await import(pathToFileURL(this.#tempFile))
-      quasarConfigFn = fnResult.default || fnResult
-    } catch (e) {
-      console.log()
-      console.error(e)
-      fatal(
-        'The quasar.config file has runtime errors. Please check the Node.js stack above against the' +
-          ` temporarily created ${basename(this.#tempFile)} file, fix the original file` +
-          ' then DELETE the temporary one ("quasar clean --qconf" can be used).',
-        'FAIL'
-      )
-    }
-
-    return this.#computeConfig(quasarConfigFn, true)
-  }
-
-  // start watching for changes
-  watch() {
-    this.#isWatching = true
-    if (this.#shouldReadBuiltFileAgain === true) {
-      this.#shouldReadBuiltFileAgain = false
-      this.#readBuildResult()
-    }
-  }
-
-  #buildAndWatch(rolldownConfig) {
-    const { promise, resolve } = Promise.withResolvers()
-    this.#resolveBuildAndWatch = quasarConf => {
-      this.#resolveBuildAndWatch = null
-      resolve(quasarConf)
-    }
-
-    const watcher = rolldownWatch({
-      ...rolldownConfig,
       watch: {
         exclude: /node_modules/
       }
-    })
+    }
+  }
 
-    watcher.on('event', event => {
+  watch(onUpdate) {
+    if (this.#watch.onUpdate !== null) {
+      fatal(
+        'quasar.config file is already being watched. Only one watch can be active at a time.',
+        'FAIL'
+      )
+    }
+
+    this.#watch.onUpdate = onUpdate
+    if (this.#watch.shouldReadBuiltFileAgain === true) {
+      this.read()
+    }
+  }
+
+  #watchBuild() {
+    this.#watch.rolldownWatcher?.close()
+
+    const { appPaths } = this.#ctx
+    const { promise, resolve } = Promise.withResolvers()
+
+    this.#watch.rolldownWatcher = rolldownWatch(this.#getRolldownConfig())
+
+    let isFirstBuild = true
+    this.#watch.rolldownWatcher.on('event', event => {
       if (event.code === 'START') {
-        if (this.#resolveBuildAndWatch === null) {
-          log()
-          log(
-            'The quasar.config file (or its dependencies) changed. Reading it again...'
-          )
-        }
+        log(
+          (isFirstBuild === true ? 'Compiling' : 'Recompiling') +
+            ` ${basename(appPaths.quasarConfigFilename)} (${this.#env.envBanner})`
+        )
       } else if (event.code === 'BUNDLE_END') {
         event.result.close()
       } else if (event.code === 'END') {
-        // not ready yet; watch() has not been issued yet
-        if (this.#resolveBuildAndWatch === null && this.#isWatching === false) {
-          this.#shouldReadBuiltFileAgain = true
+        if (isFirstBuild === true) {
+          isFirstBuild = false
+          resolve()
           return
         }
 
-        this.#readBuildResult()
+        if (this.#watch.onUpdate !== null) {
+          this.read()
+        } else {
+          this.#watch.shouldReadBuiltFileAgain = true
+        }
       } else if (event.code === 'ERROR') {
         fse.removeSync(this.#tempFile)
 
         const msg =
           'Could not compile the quasar.config file because it has errors.'
 
-        if (this.#resolveBuildAndWatch !== null) {
+        if (this.#shouldFail === true) {
           error(msg, 'FAIL')
           console.error(event.error)
           process.exit(1)
@@ -441,57 +450,36 @@ export class QuasarConfigFile {
     return promise
   }
 
-  async #readBuildResult() {
-    let quasarConfigFn
+  #build() {
+    const { appPaths } = this.#ctx
 
-    try {
-      // we also need to cache bust it, hence the ?t= param
-      const res = await import(
-        pathToFileURL(this.#tempFile) + '?t=' + Date.now()
-      )
-
-      quasarConfigFn = res.default || res
-    } catch (e) {
-      console.log()
-      console.error(e)
-
-      const msg =
-        'Importing quasar.config file results in error. Please check the' +
-        ` Node.js stack above against the temporarily created ${basename(this.#tempFile)} file` +
-        ' and fix the original file then DELETE the temporary one ("quasar clean --qconf" can be used).'
-
-      if (this.#resolveBuildAndWatch !== null) fatal(msg, 'FAIL')
-
-      warn(msg + '\n')
-      return
-    }
-
-    const quasarConf = await this.#computeConfig(
-      quasarConfigFn,
-      this.#resolveBuildAndWatch !== null
+    log(
+      `Compiling ${basename(appPaths.quasarConfigFilename)} (${this.#env.envBanner})`
     )
 
-    if (quasarConf === void 0) return
-
-    if (this.#resolveBuildAndWatch !== null) {
-      this.#resolveBuildAndWatch(quasarConf)
-      return
+    try {
+      return rolldownBuild(this.#getRolldownConfig())
+    } catch (e) {
+      fse.removeSync(this.#tempFile)
+      console.log()
+      console.error(e)
+      fatal(
+        'Could not compile the quasar.config file because it has errors.',
+        'FAIL'
+      )
     }
-
-    log('Scheduled to apply quasar.config changes in 550ms')
-    this.#opts.watch(quasarConf)
   }
 
-  // return void 0 if it encounters errors
-  // and quasarConf otherwise
-  async #computeConfig(quasarConfigFn, failOnError) {
+  // exits process on first build, otherwise
+  // returns undefined if it encounters errors
+  async #computeConfig(quasarConfigFn) {
     if (typeof quasarConfigFn !== 'function') {
       fse.removeSync(this.#tempFile)
 
       const msg =
         'The default export value of the quasar.config file is not a function.'
 
-      if (failOnError === true) fatal(msg, 'FAIL')
+      if (this.#shouldFail === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix it.\n')
       return
@@ -511,7 +499,7 @@ export class QuasarConfigFile {
         ` temporarily created ${basename(this.#tempFile)} file` +
         ' then DELETE it ("quasar clean --qconf" can be used).'
 
-      if (failOnError === true) fatal(msg, 'FAIL')
+      if (this.#shouldFail === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix the errors in the original file.\n')
       return
@@ -522,7 +510,7 @@ export class QuasarConfigFile {
     if (Object(userCfg) !== userCfg) {
       const msg = 'The quasar.config file does not default exports an Object.'
 
-      if (failOnError === true) fatal(msg, 'FAIL')
+      if (this.#shouldFail === true) fatal(msg, 'FAIL')
 
       warn(msg + ' Please fix it.\n')
       return
@@ -612,7 +600,7 @@ export class QuasarConfigFile {
       console.log()
       console.error(e)
 
-      if (failOnError === true) {
+      if (this.#shouldFail === true) {
         fatal('One of your installed App Extensions failed to run', 'FAIL')
       }
 
@@ -685,7 +673,7 @@ export class QuasarConfigFile {
           const msg =
             'Network error encountered while following the quasar.config file host/port config.'
 
-          if (failOnError === true) {
+          if (this.#shouldFail === true) {
             fatal(msg, 'FAIL')
           }
 
@@ -932,7 +920,7 @@ export class QuasarConfigFile {
     )
 
     if (appFilesValidations(appPaths) === false) {
-      if (failOnError === true) {
+      if (this.#shouldFail === true) {
         fatal('Files validation not passed successfully', 'FAIL')
       }
 
@@ -1064,7 +1052,7 @@ export class QuasarConfigFile {
           `Workbox strategy "${cfg.pwa.workboxMode}" is invalid. ` +
           'Valid quasar.config file > pwa > workboxMode options are: GenerateSW or InjectManifest.'
 
-        if (failOnError === true) fatal(msg, 'FAIL')
+        if (this.#shouldFail === true) fatal(msg, 'FAIL')
 
         warn(msg + ' Please fix it.\n')
         return

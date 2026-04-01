@@ -121,11 +121,11 @@ export function getQuasarConfEnv(ctx, quasarConfEnvCfg) {
 
   return {
     envDefineList: parseEnvDefineList(rawFileEnv, prefixRE),
-    envBanner: `(${prefix ? `env prefix: ${prefixLabel}` : 'no env prefix'}; ${
+    envBanner: `${prefix ? `prefix ${prefixLabel}` : 'no env prefix'}; ${
       usedEnvFiles.length > 0
-        ? `env files: ${usedEnvFiles.join(' | ')}`
+        ? `files: ${usedEnvFiles.join(' | ')}`
         : `no env files`
-    })`
+    }`
   }
 }
 
