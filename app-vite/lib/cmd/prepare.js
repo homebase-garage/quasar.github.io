@@ -23,6 +23,7 @@ if (argv.help) {
 
   Options
     --silent, -s    Suppress the startup banner
+    --nocolor       Disable colored output
     --help, -h      Displays this message
   `)
   process.exit(0)

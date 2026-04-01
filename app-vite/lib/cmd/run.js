@@ -28,6 +28,7 @@ if (!extId || argv.help) {
         # with "pic" argument and "-s --mark some_file" params
 
   Options
+    --nocolor        Disable colored output
     --help, -h       Displays this message
   `)
   process.exit(0)

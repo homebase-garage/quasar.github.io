@@ -32,6 +32,7 @@ function showHelp() {
     $ quasar ext uninvoke <ext-id>
 
   Options
+    --nocolor        Disable colored output
     --help, -h       Displays this message
   `)
 }

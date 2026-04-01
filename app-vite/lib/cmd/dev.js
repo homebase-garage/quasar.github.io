@@ -55,6 +55,7 @@ if (argv.help) {
     --port, -p       A port number on which to start the application
     --hostname, -H   A hostname to use for serving the application
     --devtools, -d   Open remote Vue Devtools
+    --nocolor        Disable colored output
     --help, -h       Displays this message
 
     Only for Cordova mode:

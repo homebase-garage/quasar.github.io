@@ -74,6 +74,7 @@ if (!item || argv.help) {
     --injection, -i       Displays the API injection
     --quasar, -q          Displays the API quasar conf options
     --docs, -d            Opens the docs API URL
+    --nocolor             Disable colored output
     --help, -h            Displays this message
   `)
   process.exit(0)

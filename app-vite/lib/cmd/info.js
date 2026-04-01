@@ -19,6 +19,7 @@ if (argv.help) {
     $ quasar info
 
   Options
+    --nocolor      Disable colored output
     --help, -h     Displays this message
   `)
   process.exit(0)

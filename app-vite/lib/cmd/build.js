@@ -67,6 +67,7 @@ if (argv.help) {
                       - Cordova (it only fills in /src-cordova/www folder with the UI code)
                       - Capacitor (it only fills in /src-capacitor/www folder with the UI code)
                       - Electron (it only creates the /dist/electron/UnPackaged folder)
+    --nocolor       Disable colored output
     --help, -h      Displays this message
 
     ONLY for Cordova and Capacitor mode:

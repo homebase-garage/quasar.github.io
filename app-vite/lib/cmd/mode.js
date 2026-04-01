@@ -24,6 +24,7 @@ function showHelp() {
   Options
     --yes, -y     Skips the "Are you sure?" question
                   when removing a Quasar mode
+    --nocolor     Disable colored output
     --help, -h    Displays this message
   `)
   process.exit(0)

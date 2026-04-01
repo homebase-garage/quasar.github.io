@@ -34,6 +34,7 @@ if (argv.help) {
     --dist, -d     Cleans /dist folder only
     --qconf, -q    Cleans temporary compiled quasar.config files
                       (used for issue investigation)
+    --nocolor      Disable colored output
     --help, -h     Displays this message
   `)
   process.exit(0)

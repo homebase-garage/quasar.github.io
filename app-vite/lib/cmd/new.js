@@ -45,6 +45,7 @@ function showHelp(returnCode) {
     $ quasar new store -f ts myStore
 
   Options
+    --nocolor             Disable colored output
     --help, -h            Displays this message
 
     --format -f <option>  (optional) Use a supported format for the template.

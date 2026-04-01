@@ -40,6 +40,7 @@ if (argv.help) {
                           -p module.rules
                           -p plugins
     --thread, -t     Display only one specific app mode config thread
+    --nocolor        Disable colored output
     --help, -h       Displays this message
   `)
   process.exit(0)
