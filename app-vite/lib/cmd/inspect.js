@@ -83,8 +83,6 @@ const quasarConfFile = new QuasarConfigFile({
   host: argv.hostname
 })
 
-await quasarConfFile.init()
-
 const quasarConf = await quasarConfFile.read()
 
 const { modeConfig } = await import(
@@ -103,10 +101,13 @@ if (argv.thread) {
 }
 
 for (const name of threadList) {
-  cfgEntries.push({
-    name,
-    object: await modeConfig[name](quasarConf)
-  })
+  const object = await modeConfig[name](quasarConf)
+  if (object !== null) {
+    cfgEntries.push({
+      name,
+      object
+    })
+  }
 }
 
 if (argv.path) {
