@@ -60,8 +60,8 @@ export class QuasarModeDevserver extends AppDevserver {
   #appOptions = {}
 
   // also update pwa-devserver.js when changing here
-  #pwaManifestWatcher
-  #pwaServiceWorkerWatcher
+  #pwaManifestWatcher = null
+  #pwaServiceWorkerWatcher = null
 
   #pathMap = {}
 
@@ -153,8 +153,9 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #compileWebserver(quasarConf, queue) {
     if (this.#webserverWatcher !== null) {
-      await this.#webserverWatcher.close()
+      const watcher = this.#webserverWatcher
       this.#webserverWatcher = null
+      await watcher.close()
     }
 
     const rolldownConfig = await quasarSsrConfig.webserver(quasarConf)
@@ -494,7 +495,11 @@ export class QuasarModeDevserver extends AppDevserver {
 
   // also update pwa-devserver.js when changing here
   async #compilePwaManifest(quasarConf) {
-    await this.#pwaManifestWatcher?.close()
+    if (this.#pwaManifestWatcher !== null) {
+      const watcher = this.#pwaManifestWatcher
+      this.#pwaManifestWatcher = null
+      await watcher.close()
+    }
 
     function inject() {
       injectPwaManifest(quasarConf)
@@ -521,8 +526,10 @@ export class QuasarModeDevserver extends AppDevserver {
 
   // also update pwa-devserver.js when changing here
   async #compilePwaServiceWorker(quasarConf, queue) {
-    if (this.#pwaServiceWorkerWatcher) {
-      await this.#pwaServiceWorkerWatcher.close()
+    if (this.#pwaServiceWorkerWatcher !== null) {
+      const watcher = this.#pwaServiceWorkerWatcher
+      this.#pwaServiceWorkerWatcher = null
+      await watcher.close()
     }
 
     const workboxConfig = await quasarSsrConfig.workbox(quasarConf)

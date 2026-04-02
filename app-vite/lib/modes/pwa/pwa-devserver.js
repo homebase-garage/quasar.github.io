@@ -74,8 +74,9 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #runVite(quasarConf, urlDiffers) {
     if (this.#server !== null) {
-      await this.#server.close()
+      const watcher = this.#server
       this.#server = null
+      await watcher.close()
     }
 
     injectPwaManifest(quasarConf, true)
@@ -97,7 +98,9 @@ export class QuasarModeDevserver extends AppDevserver {
   // also update ssr-devserver.js when changing here
   async #compilePwaManifest(quasarConf) {
     if (this.#pwaManifestWatcher !== null) {
-      await this.#pwaManifestWatcher.close()
+      const watcher = this.#pwaManifestWatcher
+      this.#pwaManifestWatcher = null
+      await watcher.close()
     }
 
     function inject() {
@@ -126,8 +129,9 @@ export class QuasarModeDevserver extends AppDevserver {
   // also update ssr-devserver.js when changing here
   async #compilePwaServiceWorker(quasarConf, queue) {
     if (this.#pwaServiceWorkerWatcher !== null) {
-      await this.#pwaServiceWorkerWatcher.close()
+      const watcher = this.#pwaServiceWorkerWatcher
       this.#pwaServiceWorkerWatcher = null
+      await watcher.close()
     }
 
     const workboxConfig = await quasarPwaConfig.workbox(quasarConf)

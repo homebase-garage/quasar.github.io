@@ -91,7 +91,9 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #compileBexManifest(quasarConf, queue) {
     if (this.#manifestWatcher !== null) {
-      await this.#manifestWatcher.close()
+      const watcher = this.#manifestWatcher
+      this.#manifestWatcher = null
+      await watcher.close()
     }
 
     const { err: manifestErr, scriptList: manifestScriptList } =

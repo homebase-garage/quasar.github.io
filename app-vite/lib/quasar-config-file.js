@@ -524,8 +524,15 @@ export class QuasarConfigFile {
           log(
             `Detected quasar.config env change from ${relative(appDir, changedFile)}`
           )
+
           this.#confEnv = newConfEnv
-          this.#watch.rolldownWatcher.close()
+
+          if (this.#watch.rolldownWatcher !== null) {
+            const watcher = this.#watch.rolldownWatcher
+            this.#watch.rolldownWatcher = null
+            watcher.close() // don't wait for it, we're in a hurry
+          }
+
           this.#watchBuild(onReady)
           return
         }
