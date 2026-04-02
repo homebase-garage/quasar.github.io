@@ -42,6 +42,7 @@ export class QuasarModeDevserver extends AppDevserver {
       quasarConf.electron.inspectPort,
       quasarConf.electron.preloadScripts,
       quasarConf.sourceFiles.electronMain,
+      quasarConf.metaConf.clientEnvDefineList,
 
       // extends 'rolldown' diff
       ...diffMap.rolldown(quasarConf)
@@ -74,7 +75,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #runElectronFiles(quasarConf) {
     await this.clearWatcherList(this.#watcherList, () => {
-      this.#watcherList = []
+      this.#watcherList.length = 0
     })
 
     let isReady = false

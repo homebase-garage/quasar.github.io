@@ -12,8 +12,8 @@ export class QuasarModeDevserver extends AppDevserver {
   #server = null
 
   // also update ssr-devserver.js when changing here
-  #pwaManifestWatcher
-  #pwaServiceWorkerWatcher
+  #pwaManifestWatcher = null
+  #pwaServiceWorkerWatcher = null
 
   constructor(opts) {
     super(opts)
@@ -47,12 +47,10 @@ export class QuasarModeDevserver extends AppDevserver {
             quasarConf.pwa.extendInjectManifestOptions,
             quasarConf.pwa.swFilename,
             quasarConf.pwa.extendPWACustomSWConf,
-            quasarConf.sourceFiles.pwaServiceWorker
+            quasarConf.sourceFiles.pwaServiceWorker,
+            quasarConf.metaConf.clientEnvDefineList
           ]
     ])
-
-    // also update ssr-devserver.js when changing here
-    this.registerDiff('pwaFilenames', quasarConf => [quasarConf.pwa.swFilename])
   }
 
   run(quasarConf, __isRetry) {
@@ -98,7 +96,9 @@ export class QuasarModeDevserver extends AppDevserver {
 
   // also update ssr-devserver.js when changing here
   async #compilePwaManifest(quasarConf) {
-    await this.#pwaManifestWatcher?.close()
+    if (this.#pwaManifestWatcher !== null) {
+      await this.#pwaManifestWatcher.close()
+    }
 
     function inject() {
       injectPwaManifest(quasarConf)
@@ -125,8 +125,9 @@ export class QuasarModeDevserver extends AppDevserver {
 
   // also update ssr-devserver.js when changing here
   async #compilePwaServiceWorker(quasarConf, queue) {
-    if (this.#pwaServiceWorkerWatcher) {
+    if (this.#pwaServiceWorkerWatcher !== null) {
       await this.#pwaServiceWorkerWatcher.close()
+      this.#pwaServiceWorkerWatcher = null
     }
 
     const workboxConfig = await quasarPwaConfig.workbox(quasarConf)

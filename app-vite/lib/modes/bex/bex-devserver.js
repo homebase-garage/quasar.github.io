@@ -36,6 +36,7 @@ export class QuasarModeDevserver extends AppDevserver {
     this.registerDiff('bexScripts', (quasarConf, diffMap) => [
       quasarConf.build.distDir,
       quasarConf.devServer.port,
+      quasarConf.metaConf.clientEnvDefineList,
 
       quasarConf.bex.extraScripts,
       quasarConf.bex.extendBexScriptsConf,
@@ -67,15 +68,16 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #onDistDir(quasarConf) {
     if (this.#manifestWatcher !== null) {
-      this.#manifestWatcher.close()
+      const watcher = this.#manifestWatcher
       this.#manifestWatcher = null
+      await watcher.close()
     }
 
     await this.clearWatcherList(this.#viteWatcherList, () => {
-      this.#viteWatcherList = []
+      this.#viteWatcherList.length = 0
     })
     await this.clearWatcherList(this.#scriptWatcherList, () => {
-      this.#scriptWatcherList = []
+      this.#scriptWatcherList.length = 0
     })
 
     this.cleanArtifacts(quasarConf.build.distDir)
@@ -88,7 +90,9 @@ export class QuasarModeDevserver extends AppDevserver {
   }
 
   async #compileBexManifest(quasarConf, queue) {
-    await this.#manifestWatcher?.close()
+    if (this.#manifestWatcher !== null) {
+      await this.#manifestWatcher.close()
+    }
 
     const { err: manifestErr, scriptList: manifestScriptList } =
       createManifest(quasarConf)
@@ -107,8 +111,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.#manifestWatcher = chokidarWatch(quasarConf.metaConf.bexManifestFile, {
       ignoreInitial: true
-    })
-    this.#manifestWatcher.on(
+    }).on(
       'change',
       debounce(() => {
         const { err, scriptList } = createManifest(quasarConf)
@@ -129,7 +132,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #compileBexScripts(quasarConf) {
     await this.clearWatcherList(this.#scriptWatcherList, () => {
-      this.#scriptWatcherList = []
+      this.#scriptWatcherList.length = 0
     })
 
     const onRebuild = () => {
@@ -152,7 +155,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
   async #runVite(quasarConf, queue) {
     await this.clearWatcherList(this.#viteWatcherList, () => {
-      this.#viteWatcherList = []
+      this.#viteWatcherList.length = 0
     })
 
     const viteConfig = await quasarBexConfig.vite(quasarConf)

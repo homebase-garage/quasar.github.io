@@ -7,6 +7,12 @@ import {
   createNodeRolldownConfig
 } from '../../config-tools.js'
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 async function preloadScript(quasarConf, name) {
   /**
    * We will be compiling to commonjs format because Electron requires
@@ -48,6 +54,12 @@ async function preloadScript(quasarConf, name) {
   }
 }
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export const quasarElectronConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {

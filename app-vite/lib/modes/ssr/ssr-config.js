@@ -13,6 +13,12 @@ import { cliPkg } from '../../utils/cli-runtime.js'
 import { quasarPwaConfig } from '../pwa/pwa-config.js'
 import { quasarVitePluginPwaResources } from '../pwa/vite-plugin.pwa-resources.js'
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export const quasarSsrConfig = {
   viteClient: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {

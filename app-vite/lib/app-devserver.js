@@ -50,15 +50,34 @@ export class AppDevserver extends AppTool {
       quasarConf.htmlVariables,
       quasarConf.devServer,
       quasarConf.build,
-      quasarConf.sourceFiles
+      quasarConf.framework.autoImportComponentCase,
+      quasarConf.framework.autoImportVueExtensions,
+      quasarConf.framework.devTreeshaking,
+      quasarConf.sourceFiles,
+      quasarConf.metaConf.clientEnvDefineList
+      /**
+       * Warning!
+       *
+       * Remember to also extend and add quasarConf.metaConf.backendEnvDefineList
+       * if it becomes relevant to the respective use-case
+       */
     ])
 
+    /**
+     * To be extended only, depending on if it's shipped to client or backend
+     */
     this.registerDiff('rolldown', quasarConf => [
       quasarConf.build.define,
-      quasarConf.build.env,
       quasarConf.build.alias,
       quasarConf.build.minify,
       quasarConf.build.target
+      /**
+       * Warning!
+       *
+       * Remember to also extend and add
+       * quasarConf.metaConf.clientEnvDefineList and quasarConf.metaConf.backendEnvDefineList
+       * if they become relevant to the respective use-case
+       */
     ])
   }
 

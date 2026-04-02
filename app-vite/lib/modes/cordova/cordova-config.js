@@ -1,6 +1,12 @@
 import { createViteConfig, extendViteConfig } from '../../config-tools.js'
 import { quasarVitePluginDevCordovaPlatformInject } from './vite-plugin.dev.cordova-platform-inject.js'
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 const quasarCordovaConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {

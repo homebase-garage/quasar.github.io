@@ -10,6 +10,12 @@ import {
 
 import { quasarVitePluginPwaResources } from './vite-plugin.pwa-resources.js'
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export const quasarPwaConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {

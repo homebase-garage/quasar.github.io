@@ -17,6 +17,12 @@ function generateDefaultEntry(quasarConf) {
   }
 }
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export const quasarBexConfig = {
   vite: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {

@@ -4,6 +4,12 @@ import { readFileSync } from 'node:fs'
 import { createViteConfig, extendViteConfig } from '../../config-tools.js'
 import { escapeRegexString } from '../../utils/escape-regex-string.js'
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export const quasarCapacitorConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {

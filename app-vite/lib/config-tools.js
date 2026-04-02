@@ -115,6 +115,12 @@ function getQuasarVitePluginRunMode(compileId) {
   return 'web-client'
 }
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export async function createViteConfig(
   quasarConf,
   { compileId, shippedToClient }
@@ -136,7 +142,9 @@ export async function createViteConfig(
    * @type {import('vite').UserConfig}
    */
   const viteConf = {
+    // also used by "inspect" cmd to determine if it's a Vite config or not:
     configFile: false,
+
     root: appPaths.appDir,
     base: build.publicPath,
     publicDir: build.ignorePublicFolder === true ? false : appPaths.publicDir,
@@ -264,6 +272,12 @@ export function extendViteConfig(viteConf, quasarConf, invokeParams) {
   return promise.then(() => viteConf)
 }
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export function createNodeRolldownConfig(
   quasarConf,
   { shippedToClient, format }
@@ -326,6 +340,12 @@ export function createNodeRolldownConfig(
   }
 }
 
+/**
+ * Warning!
+ *
+ * Remember to update this.#registerDiff() calls when adding/removing quasarConf
+ * properties needed for the build.
+ */
 export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
   const { browser } = quasarConf.build.target
   const target =

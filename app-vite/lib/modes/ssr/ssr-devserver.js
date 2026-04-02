@@ -85,6 +85,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.registerDiff('webserver', (quasarConf, diffMap) => [
       quasarConf.ssr.extendSSRWebserverConf,
+      quasarConf.metaConf.backendEnvDefineList,
 
       // extends 'rolldown' diff
       ...diffMap.rolldown(quasarConf)
@@ -93,6 +94,7 @@ export class QuasarModeDevserver extends AppDevserver {
     this.registerDiff('viteSSR', (quasarConf, diffMap) => [
       quasarConf.ssr.pwa,
       quasarConf.ssr.pwa === true ? quasarConf.pwa.swFilename : '',
+      quasarConf.metaConf.backendEnvDefineList,
 
       // extends 'vite' diff
       ...diffMap.vite(quasarConf)
@@ -117,7 +119,8 @@ export class QuasarModeDevserver extends AppDevserver {
             quasarConf.pwa.extendInjectManifestOptions,
             quasarConf.pwa.extendPWACustomSWConf,
             quasarConf.sourceFiles.pwaServiceWorker,
-            quasarConf.ssr.pwaOfflineHtmlFilename
+            quasarConf.ssr.pwaOfflineHtmlFilename,
+            quasarConf.metaConf.clientEnvDefineList
           ]
     ])
   }
@@ -151,6 +154,7 @@ export class QuasarModeDevserver extends AppDevserver {
   async #compileWebserver(quasarConf, queue) {
     if (this.#webserverWatcher !== null) {
       await this.#webserverWatcher.close()
+      this.#webserverWatcher = null
     }
 
     const rolldownConfig = await quasarSsrConfig.webserver(quasarConf)
@@ -158,18 +162,13 @@ export class QuasarModeDevserver extends AppDevserver {
     await this.watchWithRolldown('SSR Webserver', rolldownConfig, () => {
       queue(() => this.#bootWebserver(quasarConf))
     }).then(watcher => {
-      this.#webserverWatcher = {
-        close: () => {
-          this.#webserverWatcher = null
-          return watcher.close()
-        }
-      }
+      this.#webserverWatcher = watcher
     })
   }
 
   async #runVite(quasarConf, urlDiffers) {
     await this.clearWatcherList(this.#viteWatcherList, () => {
-      this.#viteWatcherList = []
+      this.#viteWatcherList.length = 0
     })
 
     if (renderSSRError === null) {
