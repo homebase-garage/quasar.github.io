@@ -5,7 +5,6 @@ import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
 import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
 import { watch as chokidarWatch } from 'chokidar'
-import debounce from 'lodash/debounce.js'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 
 import { log, warn, error, fatal, tip } from './utils/logger.js'
@@ -23,6 +22,7 @@ import { findClosestOpenPort, localHostList } from './utils/net.js'
 import { isMinimalTerminal } from './utils/is-terminal.js'
 import { BASELINE_WIDELY_AVAILABLE_TARGET_STRING } from './utils/build-targets.js'
 import { encodeForDiff } from './utils/encode-for-diff.js'
+import { debounce } from './utils/rate-limit.js'
 import {
   getQuasarConfEnv,
   getAppEnv,
@@ -213,10 +213,13 @@ export class QuasarConfigFile {
   #hostPackageJsonPath
   #confEnv
   #appEnv = null
+  #appEnvFilesChanged = true
   #shouldFail = true
 
   #watch = {
     buildId: 0,
+    isBuilding: false,
+    resolveRead: null,
     onUpdate: null,
     shouldReadBuiltFileAgain: false,
     rolldownWatcher: null,
@@ -239,6 +242,73 @@ export class QuasarConfigFile {
 
     // if filename syntax gets changed, then also update the "clean" cmd
     this.#tempFile = `${ctx.appPaths.quasarConfigFilename}.temporary.compiled.${Date.now()}.js`
+  }
+
+  /**
+   * @returns {import('rolldown').RolldownOptions}
+   */
+  #getRolldownConfig() {
+    const { appPaths } = this.#ctx
+
+    return {
+      platform: 'node',
+
+      input: appPaths.quasarConfigFilename,
+
+      output: {
+        file: this.#tempFile,
+        format: 'esm',
+        codeSplitting: false,
+        banner: quasarConfigBanner
+      },
+
+      external: /node_modules/,
+
+      resolve: {
+        // Define the aliases which have to be usable in the quasar.config file
+        alias: {
+          '#q-app': '@quasar/app-vite'
+        },
+
+        extensions: ['.js', '.ts', '.mjs', '.mts', '.json']
+      },
+
+      transform: {
+        target: 'node22',
+        define: {
+          ...this.#confEnv.envDefineList,
+          ...quasarRolldownInjectReplacementsDefine
+        }
+      },
+
+      plugins: [
+        quasarRolldownInjectReplacementsPlugin(),
+        quasarRolldownVueShimPlugin()
+      ],
+
+      // .quasar/tsconfig.json won't be available for the first time executing dev/build/prepare.
+      // So, Rolldown will error out.
+      // We need to suppress the error. Otherwise, it will be noisy and cause a temp file to be created.
+      // tsconfig is not really important for the config file itself anyway.
+      tsconfig: false,
+
+      watch: {
+        exclude: /node_modules/
+      }
+    }
+  }
+
+  watch(onUpdate) {
+    this.#watch.onUpdate = debounce(onUpdate, 500)
+    if (
+      this.#watch.isBuilding === false &&
+      this.#watch.shouldReadBuiltFileAgain === true
+    ) {
+      this.#readBuiltFile().then(quasarConf => {
+        this.#injectAppEnv(quasarConf)
+        this.#watch.onUpdate(quasarConf)
+      })
+    }
   }
 
   async read() {
@@ -285,21 +355,23 @@ export class QuasarConfigFile {
     }
 
     const { promise, resolve } =
-      this.#opts.watch === false
-        ? {
+      this.#opts.watch === true
+        ? Promise.withResolvers()
+        : {
             promise: this.#build(),
             resolve: null
           }
-        : Promise.withResolvers()
 
     if (this.#opts.watch === true) {
-      this.#watchBuild(resolve)
+      this.#watch.resolveRead = resolve
+      this.#createConfEnvWatcher()
+      this.#watchBuild()
     }
 
     return promise
       .then(() => this.#readBuiltFile())
       .then(quasarConf => {
-        this.#injectAppEnv(quasarConf, true)
+        this.#injectAppEnv(quasarConf)
         this.#shouldFail = false
         return quasarConf
       })
@@ -360,11 +432,13 @@ export class QuasarConfigFile {
     })
   }
 
-  #injectAppEnv(quasarConf, envFilesChanged) {
+  #injectAppEnv(quasarConf) {
     if (
-      envFilesChanged === true ||
+      this.#appEnvFilesChanged === true ||
       this.#appEnv?.snapshot.envCfg !== encodeForDiff(quasarConf.build.env)
     ) {
+      this.#appEnvFilesChanged = false
+
       const newAppEnv = getAppEnv({
         ctx: this.#ctx,
         envCfg: quasarConf.build.env,
@@ -382,25 +456,7 @@ export class QuasarConfigFile {
 
       if (this.#opts.watch === true) {
         if (this.#watch.appEnvWatcher === null) {
-          const onEnvChange = debounce(() => {
-            if (
-              this.#watch.cachedQuasarConf !== null &&
-              this.#watch.shouldReadBuiltFileAgain === false
-            ) {
-              this.#injectAppEnv(this.#watch.cachedQuasarConf, true)
-              this.#watch.onUpdate?.(this.#watch.cachedQuasarConf)
-            }
-          }, 300)
-
-          this.#watch.appEnvWatcher = chokidarWatch(
-            [...newAppEnv.watchEnvFiles],
-            {
-              ignoreInitial: true
-            }
-          )
-            .on('add', onEnvChange)
-            .on('change', onEnvChange)
-            .on('unlink', onEnvChange)
+          this.#createAppEnvWatcher(newAppEnv)
         } else if (
           newAppEnv.snapshot.watchEnvFiles !==
           this.#appEnv.snapshot.watchEnvFiles
@@ -426,131 +482,99 @@ export class QuasarConfigFile {
     quasarConf.metaConf.backendEnvDefineList = this.#appEnv.backendEnvDefineList
   }
 
-  /**
-   * @returns {import('rolldown').RolldownOptions}
-   */
-  #getRolldownConfig() {
-    const { appPaths } = this.#ctx
-
-    return {
-      platform: 'node',
-
-      input: appPaths.quasarConfigFilename,
-
-      output: {
-        file: this.#tempFile,
-        format: 'esm',
-        codeSplitting: false,
-        banner: quasarConfigBanner
-      },
-
-      external: /node_modules/,
-
-      resolve: {
-        // Define the aliases which have to be usable in the quasar.config file
-        alias: {
-          '#q-app': '@quasar/app-vite'
-        },
-
-        extensions: ['.js', '.ts', '.mjs', '.mts', '.json']
-      },
-
-      transform: {
-        target: 'node22',
-        define: {
-          ...this.#confEnv.envDefineList,
-          ...quasarRolldownInjectReplacementsDefine
-        }
-      },
-
-      plugins: [
-        quasarRolldownInjectReplacementsPlugin(),
-        quasarRolldownVueShimPlugin()
-      ],
-
-      // .quasar/tsconfig.json won't be available for the first time executing dev/build/prepare.
-      // So, Rolldown will error out.
-      // We need to suppress the error. Otherwise, it will be noisy and cause a temp file to be created.
-      // tsconfig is not really important for the config file itself anyway.
-      tsconfig: false,
-
-      watch: {
-        exclude: /node_modules/
-      }
+  #handleAppEnvChange = debounce(() => {
+    if (
+      this.#watch.cachedQuasarConf !== null &&
+      this.#watch.shouldReadBuiltFileAgain === false &&
+      this.#watch.isBuilding === false
+    ) {
+      this.#injectAppEnv(this.#watch.cachedQuasarConf)
+      this.#watch.onUpdate?.(this.#watch.cachedQuasarConf)
     }
+  }, 300)
+
+  #createConfEnvWatcher() {
+    const { appDir } = this.#ctx.appPaths
+    const onEnvChange = debounce(changedFile => {
+      const newConfEnv = this.#getConfEnv()
+
+      if (
+        newConfEnv.snapshot.watchEnvFiles !==
+        this.#confEnv.snapshot.watchEnvFiles
+      ) {
+        const watcher = this.#watch.confEnvWatcher
+        watcher.unwatch(
+          Array.from(
+            this.#confEnv.watchEnvFiles.difference(newConfEnv.watchEnvFiles)
+          )
+        )
+        watcher.add(
+          Array.from(
+            newConfEnv.watchEnvFiles.difference(this.#confEnv.watchEnvFiles)
+          )
+        )
+      }
+
+      if (
+        newConfEnv.snapshot.envDefineList !==
+        this.#confEnv.snapshot.envDefineList
+      ) {
+        log()
+        log(
+          `Detected quasar.config env change from ${relative(appDir, changedFile)}`
+        )
+
+        this.#confEnv = newConfEnv
+
+        if (this.#watch.rolldownWatcher !== null) {
+          const watcher = this.#watch.rolldownWatcher
+          this.#watch.rolldownWatcher = null
+          watcher.close() // don't wait for it, we're in a hurry
+        }
+
+        // we're rebuilding everything anyway,
+        // so avoid currently scheduled app env changes
+        this.#handleAppEnvChange.cancel()
+
+        this.#watchBuild()
+        return
+      }
+
+      this.#confEnv = newConfEnv
+    }, 300)
+
+    this.#watch.confEnvWatcher = chokidarWatch(
+      [this.#hostPackageJsonPath, ...this.#confEnv.watchEnvFiles],
+      {
+        ignoreInitial: true
+      }
+    )
+      .on('add', onEnvChange)
+      .on('change', onEnvChange)
+      .on('unlink', onEnvChange)
   }
 
-  watch(onUpdate) {
-    this.#watch.onUpdate = debounce(onUpdate, 500)
-    if (this.#watch.shouldReadBuiltFileAgain === true) {
-      this.#readBuiltFile().then(quasarConf => {
-        this.#injectAppEnv(quasarConf, false)
-        this.#watch.onUpdate(quasarConf)
-      })
+  #createAppEnvWatcher(initialAppEnv) {
+    const onChange = () => {
+      this.#appEnvFilesChanged = true
+      this.#handleAppEnvChange()
     }
+    this.#watch.appEnvWatcher = chokidarWatch(
+      [...initialAppEnv.watchEnvFiles],
+      {
+        ignoreInitial: true
+      }
+    )
+      .on('add', onChange)
+      .on('change', onChange)
+      .on('unlink', onChange)
   }
 
   // re-entrant method
-  #watchBuild(onReady) {
+  #watchBuild() {
     const localBuildId = ++this.#watch.buildId
-    const { appDir, quasarConfigFilename } = this.#ctx.appPaths
 
-    if (this.#watch.confEnvWatcher === null) {
-      const onEnvChange = debounce(changedFile => {
-        const newConfEnv = this.#getConfEnv()
-
-        if (
-          newConfEnv.snapshot.watchEnvFiles !==
-          this.#confEnv.snapshot.watchEnvFiles
-        ) {
-          const watcher = this.#watch.confEnvWatcher
-          watcher.unwatch(
-            Array.from(
-              this.#confEnv.watchEnvFiles.difference(newConfEnv.watchEnvFiles)
-            )
-          )
-          watcher.add(
-            Array.from(
-              newConfEnv.watchEnvFiles.difference(this.#confEnv.watchEnvFiles)
-            )
-          )
-        }
-
-        if (
-          newConfEnv.snapshot.envDefineList !==
-          this.#confEnv.snapshot.envDefineList
-        ) {
-          log()
-          log(
-            `Detected quasar.config env change from ${relative(appDir, changedFile)}`
-          )
-
-          this.#confEnv = newConfEnv
-
-          if (this.#watch.rolldownWatcher !== null) {
-            const watcher = this.#watch.rolldownWatcher
-            this.#watch.rolldownWatcher = null
-            watcher.close() // don't wait for it, we're in a hurry
-          }
-
-          this.#watchBuild(onReady)
-          return
-        }
-
-        this.#confEnv = newConfEnv
-      }, 300)
-
-      this.#watch.confEnvWatcher = chokidarWatch(
-        [this.#hostPackageJsonPath, ...this.#confEnv.watchEnvFiles],
-        {
-          ignoreInitial: true
-        }
-      )
-        .on('add', onEnvChange)
-        .on('change', onEnvChange)
-        .on('unlink', onEnvChange)
-    }
-
+    this.#watch.isBuilding = true
     this.#watch.rolldownWatcher = rolldownWatch(this.#getRolldownConfig()).on(
       'event',
       event => {
@@ -560,8 +584,10 @@ export class QuasarConfigFile {
         }
 
         if (event.code === 'START') {
-          const banner = ` ${basename(quasarConfigFilename)} (${this.#confEnv.envBanner})`
-          if (onReady === null) {
+          const banner = ` ${basename(this.#ctx.appPaths.quasarConfigFilename)} (${this.#confEnv.envBanner})`
+          this.#watch.isBuilding = true
+
+          if (this.#watch.resolveRead === null) {
             log()
             log(`Recompiling${banner}...`)
           } else {
@@ -569,10 +595,11 @@ export class QuasarConfigFile {
           }
         } else if (event.code === 'BUNDLE_END') {
           event.result.close()
+          this.#watch.isBuilding = false
 
-          if (onReady !== null) {
-            onReady()
-            onReady = null
+          if (this.#watch.resolveRead !== null) {
+            this.#watch.resolveRead()
+            this.#watch.resolveRead = null
             return
           }
 
@@ -583,7 +610,7 @@ export class QuasarConfigFile {
 
           this.#readBuiltFile().then(quasarConf => {
             if (quasarConf !== void 0 && localBuildId === this.#watch.buildId) {
-              this.#injectAppEnv(quasarConf, false)
+              this.#injectAppEnv(quasarConf)
               this.#watch.onUpdate(quasarConf)
             }
           })

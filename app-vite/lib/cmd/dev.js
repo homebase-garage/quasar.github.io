@@ -173,6 +173,11 @@ await ctx.appExt.runAppExtensionHook('beforeDev', async hook => {
   await hook.fn(hook.api, { quasarConf })
 })
 
+const onQuasarConfChange = qConf => {
+  log('Applying quasar.config changes...')
+  devServer.run(qConf)
+}
+
 devServer.run(quasarConf).then(async () => {
   if (typeof quasarConf.build.afterDev === 'function') {
     await quasarConf.build.afterDev({ quasarConf })
@@ -184,8 +189,5 @@ devServer.run(quasarConf).then(async () => {
     await hook.fn(hook.api, { quasarConf })
   })
 
-  quasarConfFile.watch(qConf => {
-    log('Applying quasar.config file changes...')
-    devServer.run(qConf)
-  })
+  quasarConfFile.watch(onQuasarConfChange)
 })
