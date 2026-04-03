@@ -72,15 +72,6 @@ export async function addMode({
   globSync(['**/*'], {
     cwd: appPaths.resolve.cli('templates/capacitor')
   }).forEach(filePath => {
-    // TODO: remove, should be available for all since
-    // someone can later on switch to PNPM
-    if (
-      filePath.endsWith('pnpm-workspace.yaml') &&
-      nodePackager.name !== 'pnpm'
-    ) {
-      return
-    }
-
     const dest = appPaths.resolve.capacitor(filePath)
     const content = fse.readFileSync(
       appPaths.resolve.cli('templates/capacitor/' + filePath),
