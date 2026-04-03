@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import fse from 'fs-extra'
-import compileTemplate from 'lodash/template.js'
+
+import { compileTemplateToFn } from './utils/template.js'
 
 export class EntryFilesGenerator {
   #templateFiles // templated
@@ -34,7 +35,7 @@ export class EntryFilesGenerator {
       )
 
       return {
-        template: compileTemplate(content),
+        render: compileTemplateToFn(content, { varName: 'quasarConf' }),
         dest: appPaths.resolve.entry(file)
       }
     })
@@ -48,7 +49,7 @@ export class EntryFilesGenerator {
   generate(quasarConf) {
     this.#templateFiles.forEach(file => {
       fse.ensureFileSync(file.dest)
-      fse.writeFileSync(file.dest, file.template(quasarConf), 'utf-8')
+      fse.writeFileSync(file.dest, file.render(quasarConf), 'utf-8')
     })
 
     this.#regularFiles.forEach(file => {

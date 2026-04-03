@@ -1,5 +1,4 @@
 import fse from 'fs-extra'
-import compileTemplate from 'lodash/template.js'
 import inquirer from 'inquirer'
 import { globSync } from 'tinyglobby'
 
@@ -8,6 +7,7 @@ import { spawnSync } from '../../utils/spawn.js'
 
 import { ensureDeps, ensureConsistency } from './ensure-consistency.js'
 import { isModeInstalled } from '../modes-utils.js'
+import { renderTemplate } from '../../utils/template.js'
 
 /**
  * @param {{
@@ -72,6 +72,8 @@ export async function addMode({
   globSync(['**/*'], {
     cwd: appPaths.resolve.cli('templates/capacitor')
   }).forEach(filePath => {
+    // TODO: remove, should be available for all since
+    // someone can later on switch to PNPM
     if (
       filePath.endsWith('pnpm-workspace.yaml') &&
       nodePackager.name !== 'pnpm'
@@ -81,10 +83,11 @@ export async function addMode({
 
     const dest = appPaths.resolve.capacitor(filePath)
     const content = fse.readFileSync(
-      appPaths.resolve.cli('templates/capacitor/' + filePath)
+      appPaths.resolve.cli('templates/capacitor/' + filePath),
+      'utf-8'
     )
     fse.ensureFileSync(dest)
-    fse.writeFileSync(dest, compileTemplate(content)(scope), 'utf-8')
+    fse.writeFileSync(dest, renderTemplate(content, scope), 'utf-8')
   })
 
   await ensureDeps({ appPaths, cacheProxy })

@@ -1,8 +1,21 @@
-import compileTemplate from 'lodash/template.js'
 import { minify } from 'html-minifier-terser'
+import {
+  compileTemplateToFn,
+  compileTemplateToFile,
+  renderTemplate
+} from './template.js'
 
 const absoluteUrlRE = /^(https?:\/\/|\/|data:)/i
-const ssrInterpolationsRE = /{{([\s\S]+?)}}/g
+const ssrInterpolations = [/{{([\s\S]+?)}}/g]
+
+const templateCompileOpts = { varName: false }
+const ssrTemplateCompileOpts = {
+  varName: 'ssrContext',
+  tagStart: '{{',
+  tagEnd: '}}',
+  exec: false,
+  interpolate: ''
+}
 
 const htmlStartTagRE = /(<html[^>]*)(>)/i
 const headStartTagRE = /(<head[^>]*)(>)/i
@@ -72,9 +85,11 @@ function injectVueDevtools(html, { host, port }, nonce = '') {
 }
 
 export async function transformHtml(template, quasarConf) {
-  const compiled = compileTemplate(template)
-
-  let html = compiled(quasarConf.htmlVariables)
+  let html = renderTemplate(
+    template,
+    quasarConf.htmlVariables,
+    templateCompileOpts
+  )
 
   // should be dev only
   if (quasarConf.metaConf.vueDevtools !== false) {
@@ -125,9 +140,11 @@ export async function transformProdSsrPwaOfflineHtml(html, quasarConf) {
  * html = html.replace('<!-- quasar:entry-point -->', '<div id="q-app">...</div>')
  */
 export function getDevSsrTemplateFn(template, quasarConf) {
-  const compiled = compileTemplate(template)
-
-  let html = compiled(quasarConf.htmlVariables)
+  let html = renderTemplate(
+    template,
+    quasarConf.htmlVariables,
+    templateCompileOpts
+  )
 
   // publicPath will be handled by Vite middleware
   // if src/href are not relative, which is what we need
@@ -147,10 +164,7 @@ export function getDevSsrTemplateFn(template, quasarConf) {
     `${entryPointMarkup}${quasarConf.metaConf.entryScript.tag}`
   )
 
-  return compileTemplate(html, {
-    interpolate: ssrInterpolationsRE,
-    variable: 'ssrContext'
-  })
+  return compileTemplateToFn(html, ssrTemplateCompileOpts)
 }
 
 /**
@@ -159,12 +173,15 @@ export function getDevSsrTemplateFn(template, quasarConf) {
  * const viteHtmlContent = // ...vite client generated index.html
  *                         // which went through transformHtml() already
  *
- * const fn = await getProdSsrTemplateFn(viteHtmlContent, quasarConf)
+ * const fn = await getProdSsrRenderTemplateFileContent(viteHtmlContent, quasarConf)
  *
  * // ... at runtime:
  * const html = fn(ssrContext)
  */
-export async function getProdSsrTemplateFn(viteHtmlContent, quasarConf) {
+export async function getProdSsrRenderTemplateFileContent(
+  viteHtmlContent,
+  quasarConf
+) {
   let html = injectSsrRuntimeInterpolation(viteHtmlContent)
 
   html = html.replace(
@@ -175,12 +192,9 @@ export async function getProdSsrTemplateFn(viteHtmlContent, quasarConf) {
   if (quasarConf.build.minify !== false) {
     html = await minify(html, {
       ...quasarConf.build.htmlMinifyOptions,
-      ignoreCustomFragments: [ssrInterpolationsRE]
+      ignoreCustomFragments: ssrInterpolations
     })
   }
 
-  return compileTemplate(html, {
-    interpolate: ssrInterpolationsRE,
-    variable: 'ssrContext'
-  })
+  return compileTemplateToFile(html, ssrTemplateCompileOpts)
 }

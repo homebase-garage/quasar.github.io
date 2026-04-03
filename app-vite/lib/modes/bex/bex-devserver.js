@@ -1,12 +1,12 @@
 import { join } from 'node:path'
 import fse from 'fs-extra'
-import debounce from 'lodash/debounce.js'
 import { watch as chokidarWatch } from 'chokidar'
 import { createServer } from 'vite'
 
 import { AppDevserver } from '../../app-devserver.js'
 import { quasarBexConfig } from './bex-config.js'
 import { createManifest, copyBexAssets } from './bex-utils.js'
+import { debounce } from '../../utils/rate-limit.js'
 
 export class QuasarModeDevserver extends AppDevserver {
   #viteWatcherList = []

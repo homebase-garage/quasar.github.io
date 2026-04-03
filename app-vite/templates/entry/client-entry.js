@@ -11,59 +11,59 @@
  * Boot files are your "main.js"
  **/
 
-<% if (ctx.mode.ssr && ctx.mode.pwa) { %>
+<% if (quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa) { %>
 import { createSSRApp, createApp } from 'vue'
 <% } else { %>
-import { <%= ctx.mode.ssr ? 'createSSRApp' : 'createApp' %> } from 'vue'
+import { <%= quasarConf.ctx.mode.ssr ? 'createSSRApp' : 'createApp' %> } from 'vue'
 <% } %>
 
-<% if (ctx.mode.bex) { %>
+<% if (quasarConf.ctx.mode.bex) { %>
 import './bex-app.js'
 <% } %>
 
-<% const bootEntries = boot.filter(asset => asset.client !== false) %>
+<% const bootEntries = quasarConf.boot.filter(asset => asset.client !== false) %>
 
-<% extras.length !== 0 && extras.filter(asset => asset).forEach(asset => { %>
+<% quasarConf.extras.length !== 0 && quasarConf.extras.filter(asset => asset).forEach(asset => { %>
 import '@quasar/extras/<%= asset %>/<%= asset %>.css'
 <% }) %>
 
-<% animations.length !== 0 && animations.filter(asset => asset).forEach(asset => { %>
+<% quasarConf.animations.length !== 0 && quasarConf.animations.filter(asset => asset).forEach(asset => { %>
 import '@quasar/extras/animate/<%= asset %>.css'
 <% }) %>
 
 // We load Quasar stylesheet file
-import 'quasar/dist/quasar.<%= metaConf.css.quasarSrcExt %>'
+import 'quasar/dist/quasar.<%= quasarConf.metaConf.css.quasarSrcExt %>'
 
-<% if (framework.cssAddon) { %>
+<% if (quasarConf.framework.cssAddon) { %>
 // We add Quasar addons, if they were requested
 import 'quasar/src/css/flex-addon.sass'
 <% } %>
 
-<% css.length !== 0 && css.filter(asset => asset.client !== false).forEach(asset => { %>
+<% quasarConf.css.length !== 0 && quasarConf.css.filter(asset => asset.client !== false).forEach(asset => { %>
 import '<%= asset.path %>'
 <% }) %>
 
-import createQuasarApp<% if (ctx.mode.ssr && ctx.mode.pwa) { %>, { ssrIsRunningOnClientPWA }<% } %> from './app.js'
+import createQuasarApp<% if (quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa) { %>, { ssrIsRunningOnClientPWA }<% } %> from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
-<% if (ctx.mode.pwa) { %>
-import 'app/<%= sourceFiles.pwaRegisterServiceWorker %>'
+<% if (quasarConf.ctx.mode.pwa) { %>
+import 'app/<%= quasarConf.sourceFiles.pwaRegisterServiceWorker %>'
 <% } %>
 
-<% if (preFetch) { %>
+<% if (quasarConf.preFetch) { %>
 import { addPreFetchHooks } from './client-prefetch.js'
 <% } %>
 
-<% if (ctx.dev) { %>
-console.info('[Quasar] Running <%= ctx.modeName.toUpperCase() + (ctx.mode.ssr && ctx.mode.pwa ? ' + PWA' : '') %>.')
+<% if (quasarConf.ctx.dev) { %>
+console.info('[Quasar] Running <%= quasarConf.ctx.modeName.toUpperCase() + (quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa ? ' + PWA' : '') %>.')
 <% } %>
 
-const publicPath = `<%= build.publicPath %>`
+const publicPath = `<%= quasarConf.build.publicPath %>`
 
 async function start ({
   app,
   router
-  <%= metaConf.hasStore ? ', store' : '' %>
+  <%= quasarConf.metaConf.hasStore ? ', store' : '' %>
 }<%= bootEntries.length !== 0 ? ', bootFiles' : '' %>) {
   <% if (bootEntries.length !== 0) { %>
   let hasRedirected = false
@@ -88,7 +88,7 @@ async function start ({
     // continue if we didn't fail to resolve the url
     if (href !== null) {
       window.location.href = href
-      <%= build.vueRouterMode === 'hash' ? 'window.location.reload()' : '' %>
+      <%= quasarConf.build.vueRouterMode === 'hash' ? 'window.location.reload()' : '' %>
     }
   }
 
@@ -99,7 +99,7 @@ async function start ({
       await bootFiles[i]({
         app,
         router,
-        <%= metaConf.hasStore ? 'store,' : '' %>
+        <%= quasarConf.metaConf.hasStore ? 'store,' : '' %>
         ssrContext: null,
         redirect,
         urlPath,
@@ -122,11 +122,11 @@ async function start ({
 
   app.use(router)
 
-  <% if (ctx.mode.ssr) { %>
-    <% if (ctx.mode.pwa) { %>
+  <% if (quasarConf.ctx.mode.ssr) { %>
+    <% if (quasarConf.ctx.mode.pwa) { %>
       if (ssrIsRunningOnClientPWA === true) {
-        <% if (preFetch) { %>
-        addPreFetchHooks({ router, ssrIsRunningOnClientPWA<%= metaConf.hasStore ? ', store' : '' %> })
+        <% if (quasarConf.preFetch) { %>
+        addPreFetchHooks({ router, ssrIsRunningOnClientPWA<%= quasarConf.metaConf.hasStore ? ', store' : '' %> })
         <% } %>
         app.mount('#q-app')
       }
@@ -135,22 +135,22 @@ async function start ({
     // wait until router has resolved all async before hooks
     // and async components...
     router.isReady().then(() => {
-      <% if (preFetch) { %>
-      addPreFetchHooks({ router<%= metaConf.hasStore ? ', store' : '' %>, publicPath })
+      <% if (quasarConf.preFetch) { %>
+      addPreFetchHooks({ router<%= quasarConf.metaConf.hasStore ? ', store' : '' %>, publicPath })
       <% } %>
       app.mount('#q-app')
     })
-    <% if (ctx.mode.pwa) { %>
+    <% if (quasarConf.ctx.mode.pwa) { %>
     }
     <% } %>
 
   <% } else { // not SSR %>
 
-    <% if (preFetch) { %>
-    addPreFetchHooks({ router<%= metaConf.hasStore ? ', store' : '' %> })
+    <% if (quasarConf.preFetch) { %>
+    addPreFetchHooks({ router<%= quasarConf.metaConf.hasStore ? ', store' : '' %> })
     <% } %>
 
-    <% if (ctx.mode.cordova) { %>
+    <% if (quasarConf.ctx.mode.cordova) { %>
       document.addEventListener('deviceready', () => {
         app.config.globalProperties.$q.cordova = window.cordova
         app.mount('#q-app')
@@ -163,8 +163,8 @@ async function start ({
 }
 
 createQuasarApp(<%=
-  ctx.mode.ssr
-    ? (ctx.mode.pwa ? 'ssrIsRunningOnClientPWA ? createApp : createSSRApp' : 'createSSRApp')
+  quasarConf.ctx.mode.ssr
+    ? (quasarConf.ctx.mode.pwa ? 'ssrIsRunningOnClientPWA ? createApp : createSSRApp' : 'createSSRApp')
     : 'createApp'
 %>, quasarUserOptions)
 <% if (bootEntries.length !== 0) { %>

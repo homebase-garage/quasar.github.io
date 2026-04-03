@@ -3,15 +3,15 @@ import { pathToFileURL } from 'node:url'
 import fse from 'fs-extra'
 import inquirer from 'inquirer'
 import { isBinaryFileSync as isBinary } from 'isbinaryfile'
-import compileTemplate from 'lodash/template.js'
-
-import { log, warn, fatal } from '../utils/logger.js'
 
 import { IndexAPI } from './api-classes/IndexAPI.js'
 import { InstallAPI } from './api-classes/InstallAPI.js'
 import { UninstallAPI } from './api-classes/UninstallAPI.js'
 import { PromptsAPI } from './api-classes/PromptsAPI.js'
+
+import { log, warn, fatal } from '../utils/logger.js'
 import { getPackagePath } from '../utils/get-package-path.js'
+import { renderTemplate } from '../utils/template.js'
 
 async function promptOverwrite({ targetPath, options, ctx }) {
   const choices = [
@@ -55,10 +55,11 @@ async function renderFile(
     fse.copyFileSync(sourcePath, targetPath)
   } else {
     const rawContent = fse.readFileSync(sourcePath, 'utf-8')
-    const template = compileTemplate(rawContent, {
-      interpolate: /<%=([\s\S]+?)%>/g
-    })
-    fse.writeFileSync(targetPath, template(scope), 'utf-8')
+    fse.writeFileSync(
+      targetPath,
+      renderTemplate(rawContent, scope, { varName: false }),
+      'utf-8'
+    )
   }
 }
 

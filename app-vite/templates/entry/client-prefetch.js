@@ -10,12 +10,12 @@
  *
  * Boot files are your "main.js"
  **/
-<% if (metaConf.hasLoadingBarPlugin) { %>
+<% if (quasarConf.metaConf.hasLoadingBarPlugin) { %>
 import { LoadingBar } from 'quasar'
 <% } %>
 
-<% if (!ctx.mode.ssr || ctx.mode.pwa) { %>
-import App from 'app/<%= sourceFiles.rootComponent %>'
+<% if (!quasarConf.ctx.mode.ssr || quasarConf.ctx.mode.pwa) { %>
+import App from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
 let appPrefetch = typeof App.preFetch === 'function'
   ? App.preFetch
   : (
@@ -48,12 +48,12 @@ function getMatchedComponents (to, router) {
   }))
 }
 
-export function addPreFetchHooks ({ router<%= ctx.mode.ssr && ctx.mode.pwa ? ', ssrIsRunningOnClientPWA' : '' %><%= metaConf.hasStore ? ', store' : '' %>, publicPath }) {
+export function addPreFetchHooks ({ router<%= quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa ? ', ssrIsRunningOnClientPWA' : '' %><%= quasarConf.metaConf.hasStore ? ', store' : '' %>, publicPath }) {
   // Add router hook for handling preFetch.
   // Doing it after initial route is resolved so that we don't double-fetch
   // the data that we already have. Using router.beforeResolve() so that all
   // async components are resolved.
-  router.beforeResolve(async (to, from<%= metaConf.versions.vueRouter === 4 ? ', next' : '' %>) => {
+  router.beforeResolve(async (to, from<%= quasarConf.metaConf.versions.vueRouter === 4 ? ', next' : '' %>) => {
     const
       urlPath = window.location.href.replace(window.location.origin, ''),
       matched = getMatchedComponents(to, router),
@@ -75,29 +75,29 @@ export function addPreFetchHooks ({ router<%= ctx.mode.ssr && ctx.mode.pwa ? ', 
       ))
       .map(m => m.c.__c !== void 0 ? m.c.__c.preFetch : m.c.preFetch)
 
-    <% if (!ctx.mode.ssr || ctx.mode.pwa) { %>
-    if (<%= ctx.mode.ssr && ctx.mode.pwa ? 'ssrIsRunningOnClientPWA === true && ' : '' %>appPrefetch !== false) {
+    <% if (!quasarConf.ctx.mode.ssr || quasarConf.ctx.mode.pwa) { %>
+    if (<%= quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa ? 'ssrIsRunningOnClientPWA === true && ' : '' %>appPrefetch !== false) {
       preFetchList.unshift(appPrefetch)
       appPrefetch = false
     }
     <% } %>
 
     if (preFetchList.length === 0) {
-      <%= metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
+      <%= quasarConf.metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
       return
     }
 
     let redirectArg = null
     const redirect = url => { redirectArg = url }
 
-    <% if (metaConf.hasLoadingBarPlugin) { %>
+    <% if (quasarConf.metaConf.hasLoadingBarPlugin) { %>
     LoadingBar.start()
     <% } %>
 
     for (let i = 0; i < preFetchList.length; i++) {
       try {
         await preFetchList[i]({
-          <% if (metaConf.hasStore) { %>store,<% } %>
+          <% if (quasarConf.metaConf.hasStore) { %>store,<% } %>
           currentRoute: to,
           previousRoute: from,
           redirect,
@@ -106,24 +106,24 @@ export function addPreFetchHooks ({ router<%= ctx.mode.ssr && ctx.mode.pwa ? ', 
         })
       } catch (e) {
         console.error(e)
-        <% if (metaConf.hasLoadingBarPlugin) { %>
+        <% if (quasarConf.metaConf.hasLoadingBarPlugin) { %>
         LoadingBar.stop()
         <% } %>
-        <%= metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
+        <%= quasarConf.metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
         return
       }
 
       if (redirectArg !== null) {
-        <% if (metaConf.hasLoadingBarPlugin) { %>
+        <% if (quasarConf.metaConf.hasLoadingBarPlugin) { %>
         LoadingBar.stop()
         <% } %>
-        <%= metaConf.versions.vueRouter === 4 ? 'next(redirectArg); return' : 'return redirectArg' %>
+        <%= quasarConf.metaConf.versions.vueRouter === 4 ? 'next(redirectArg); return' : 'return redirectArg' %>
       }
     }
 
-    <% if (metaConf.hasLoadingBarPlugin) { %>
+    <% if (quasarConf.metaConf.hasLoadingBarPlugin) { %>
     LoadingBar.stop()
     <% } %>
-    <%= metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
+    <%= quasarConf.metaConf.versions.vueRouter === 4 ? 'next()' : '' %>
   })
 }

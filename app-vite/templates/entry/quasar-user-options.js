@@ -11,16 +11,16 @@
  * Boot files are your "main.js"
  **/
 <%
-const useStatement = [ `config: ${JSON.stringify(framework.config)}` ]
+const useStatement = [ `config: ${JSON.stringify(quasarConf.framework.config)}` ]
 
-if (framework.lang) { %>
-import lang from '<%= framework.lang %>'
+if (quasarConf.framework.lang) { %>
+import lang from '<%= quasarConf.framework.lang %>'
 <%
   useStatement.push('lang')
 }
 
-if (framework.iconSet) { %>
-import iconSet from '<%= framework.iconSet %>'
+if (quasarConf.framework.iconSet) { %>
+import iconSet from '<%= quasarConf.framework.iconSet %>'
 <%
   useStatement.push('iconSet')
 }
@@ -30,7 +30,7 @@ import iconSet from '<%= framework.iconSet %>'
   let importStatement = []
 
   ;['components', 'directives', 'plugins'].forEach(type => {
-    let items = framework[type]
+    let items = quasarConf.framework[type]
     if (items.length !== 0) {
       useStatement.push(type + ': {' + items.join(',') + '}')
       importStatement = importStatement.concat(items)
@@ -42,13 +42,13 @@ import iconSet from '<%= framework.iconSet %>'
 import <%= '{' + importStatement.join(',') + '}' %> from 'quasar'
 <% } %>
 
-<% if (framework.config.loading?.spinner || framework.config.notify?.spinner) { %>
+<% if (quasarConf.framework.config.loading?.spinner || quasarConf.framework.config.notify?.spinner) { %>
 const userOptions = { <%= useStatement.join(',') %> }
-  <% if (framework.config.loading?.spinner) { %>
-userOptions.config.loading.spinner = <%= framework.config.loading.spinner %>
+  <% if (quasarConf.framework.config.loading?.spinner) { %>
+userOptions.config.loading.spinner = <%= quasarConf.framework.config.loading.spinner %>
   <% } %>
-  <% if (framework.config.notify?.spinner) { %>
-userOptions.config.notify.spinner = <%= framework.config.notify.spinner %>
+  <% if (quasarConf.framework.config.notify?.spinner) { %>
+userOptions.config.notify.spinner = <%= quasarConf.framework.config.notify.spinner %>
   <% } %>
 export default userOptions
 <% } else { %>

@@ -3,7 +3,6 @@ import { join, isAbsolute } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createServer, createServerModuleRunner } from 'vite'
 import { watch as chokidarWatch } from 'chokidar'
-import debounce from 'lodash/debounce.js'
 import serialize from 'serialize-javascript'
 import { green } from 'kolorist'
 
@@ -11,6 +10,7 @@ import { AppDevserver } from '../../app-devserver.js'
 import { getPackage } from '../../utils/get-package.js'
 import { openBrowser } from '../../utils/open-browser.js'
 import { log, warn, info, dot, progress } from '../../utils/logger.js'
+import { debounce } from '../../utils/rate-limit.js'
 import {
   entryPointMarkup,
   getDevSsrTemplateFn

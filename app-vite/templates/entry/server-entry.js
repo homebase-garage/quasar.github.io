@@ -10,33 +10,33 @@
  *
  * Boot files are your "main.js"
  **/
-import { createApp<%= metaConf.hasStore && ssr.manualStoreSsrContextInjection !== true ? ', unref' : '' %> } from 'vue'
+import { createApp<%= quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true ? ', unref' : '' %> } from 'vue'
 
-<% extras.length !== 0 && extras.filter(asset => asset).forEach(asset => { %>
+<% quasarConf.extras.length !== 0 && quasarConf.extras.filter(asset => asset).forEach(asset => { %>
 import '@quasar/extras/<%= asset %>/<%= asset %>.css'
 <% }) %>
 
-<% animations.length !== 0 && animations.filter(asset => asset).forEach(asset => { %>
+<% quasarConf.animations.length !== 0 && quasarConf.animations.filter(asset => asset).forEach(asset => { %>
 import '@quasar/extras/animate/<%= asset %>.css'
 <% }) %>
 
 // We load Quasar stylesheet file
-import 'quasar/dist/quasar.<%= metaConf.css.quasarSrcExt %>'
+import 'quasar/dist/quasar.<%= quasarConf.metaConf.css.quasarSrcExt %>'
 
-<% if (framework.cssAddon) { %>
+<% if (quasarConf.framework.cssAddon) { %>
 // We add Quasar addons, if they were requested
 import 'quasar/src/css/flex-addon.sass'
 <% } %>
 
-<% css.length !== 0 && css.filter(asset => asset.server !== false).forEach(asset => { %>
+<% quasarConf.css.length !== 0 && quasarConf.css.filter(asset => asset.server !== false).forEach(asset => { %>
 import '<%= asset.path %>'
 <% }) %>
 
 import createQuasarApp from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
-<% if (preFetch) { %>
-import App from 'app/<%= sourceFiles.rootComponent %>'
+<% if (quasarConf.preFetch) { %>
+import App from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
 const appPrefetch = typeof App.preFetch === 'function'
   ? App.preFetch
   : (
@@ -47,8 +47,8 @@ const appPrefetch = typeof App.preFetch === 'function'
     )
 <% } %>
 
-const publicPath = `<%= build.publicPath %>`
-<% if (build.publicPath !== '/') { %>
+const publicPath = `<%= quasarConf.build.publicPath %>`
+<% if (quasarConf.build.publicPath !== '/') { %>
 const doubleSlashRE = /\/\//
 const addPublicPath = url => (publicPath + url).replace(doubleSlashRE, '/')
 <% } %>
@@ -83,7 +83,7 @@ function getUrlPath(ssrContext) {
 const { components, directives, ...qUserOptions } = quasarUserOptions
 
 <%
-  const bootEntries = boot.filter(asset => asset.server !== false)
+  const bootEntries = quasarConf.boot.filter(asset => asset.server !== false)
   if (bootEntries.length !== 0) { %>
 let bootFunctions = null
 let bootPromise = Promise.allSettled([
@@ -115,7 +115,7 @@ export default ssrContext => {
     <% } %>
 
     const {
-      app, router<%= metaConf.hasStore ? ', store' : '' %>
+      app, router<%= quasarConf.metaConf.hasStore ? ', store' : '' %>
     } = await createQuasarApp(createApp, qUserOptions, ssrContext)
 
     <% if (bootEntries.length !== 0) { %>
@@ -130,7 +130,7 @@ export default ssrContext => {
         await bootFunctions[ i ]({
           app,
           router,
-          <%= metaConf.hasStore ? 'store,' : '' %>
+          <%= quasarConf.metaConf.hasStore ? 'store,' : '' %>
           ssrContext,
           redirect,
           urlPath: getUrlPath(ssrContext),
@@ -148,11 +148,12 @@ export default ssrContext => {
 
     app.use(router)
 
-    const urlPath = getUrlPath(ssrContext)<% if (build.publicPath !== '/') { %>.replace(publicPath, '/')<% } %>
+    const urlPath = getUrlPath(ssrContext)<% if (quasarConf.build.publicPath !== '/') { %>.replace(publicPath, '/')<% } %>
+
     const { fullPath } = router.resolve(urlPath)
 
     if (fullPath !== urlPath) {
-      return reject({ url: <%= build.publicPath === '/' ? 'fullPath' : 'addPublicPath(fullPath)' %> })
+      return reject({ url: <%= quasarConf.build.publicPath === '/' ? 'fullPath' : 'addPublicPath(fullPath)' %> })
     }
 
     // set router's location
@@ -169,7 +170,7 @@ export default ssrContext => {
         return reject({ code: 404 })
       }
 
-      <% if (preFetch) { %>
+      <% if (quasarConf.preFetch) { %>
       let hasRedirected = false
       const redirect = (url, httpStatusCode) => {
         hasRedirected = true
@@ -196,7 +197,7 @@ export default ssrContext => {
       matchedComponents
       .reduce(
         (promise, preFetchFn) => promise.then(() => hasRedirected === false && preFetchFn({
-          <% if (metaConf.hasStore) { %>store,<% } %>
+          <% if (quasarConf.metaConf.hasStore) { %>store,<% } %>
           ssrContext,
           currentRoute: router.currentRoute.value,
           redirect,
@@ -208,7 +209,7 @@ export default ssrContext => {
       .then(() => {
         if (hasRedirected === true) return
 
-        <% if (metaConf.hasStore && ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
+        <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
 
         resolve(app)
       })
@@ -216,7 +217,7 @@ export default ssrContext => {
 
       <% } else { %>
 
-        <% if (metaConf.hasStore && ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
+        <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
 
         resolve(app)
 

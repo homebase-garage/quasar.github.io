@@ -6,8 +6,10 @@
 
 export default function injectMiddlewares (opts) {
   return Promise.all([
-    <% ssr.middlewares.forEach((asset, index) => { %>
-    import('<%= asset.path %>')<%= index < ssr.middlewares.length - 1 ? ',' : '' %>
+    <%
+    const upperLen = quasarConf.ssr.middlewares.length - 1
+    quasarConf.ssr.middlewares.forEach((asset, index) => { %>
+    import('<%= asset.path %>')<%= index < upperLen ? ',' : '' %>
     <% }) %>
   ]).then(async rawMiddlewares => {
     const middlewares = rawMiddlewares

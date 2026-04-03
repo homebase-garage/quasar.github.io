@@ -8,7 +8,7 @@ import { quasarSsrConfig } from './ssr-config.js'
 import { cliPkg } from '../../utils/cli-runtime.js'
 import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 import {
-  getProdSsrTemplateFn,
+  getProdSsrRenderTemplateFileContent,
   transformProdSsrPwaOfflineHtml
 } from '../../utils/html-template.js'
 
@@ -137,9 +137,10 @@ export class QuasarModeBuilder extends AppBuilder {
     const htmlFile = join(clientDir, 'index.html')
     const html = this.readFile(htmlFile)
 
-    const templateFn = await getProdSsrTemplateFn(html, this.quasarConf)
-
-    this.writeFile('render-template.js', `export default ${templateFn.source}`)
+    this.writeFile(
+      'render-template.js',
+      await getProdSsrRenderTemplateFileContent(html, this.quasarConf)
+    )
 
     if (this.quasarConf.ssr.pwa === true) {
       this.writeFile(
