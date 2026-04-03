@@ -122,7 +122,6 @@ interface QuasarMetaConf {
   needsAppMountHook: boolean;
   vueDevtools: boolean | Record<string, any>;
   versions: {
-    // workbox?: number
     capacitor?: number;
     capacitorPluginApp?: number | true;
     capacitorPluginSplashscreen?: number | true;

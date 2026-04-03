@@ -16,18 +16,13 @@ import { bex } from './bex-app.js'
 <% } %>
 
 <% if (quasarConf.ctx.mode.capacitor) { %>
-  <% if (quasarConf.metaConf.versions.capacitor <= 2) { %>
-  import { Plugins } from '@capacitor/core'
-  const { SplashScreen } = Plugins
-  <% } else /* Capacitor v3+ */ { %>
   import '@capacitor/core'
-    <% if (quasarConf.metaConf.versions.capacitorPluginApp) { %>
-    // importing it so it can install itself (used by Quasar UI)
-    import { App as CapApp } from '@capacitor/app'
-    <% } %>
-    <% if (quasarConf.metaConf.versions.capacitorPluginSplashscreen && quasarConf.capacitor.hideSplashscreen !== false) { %>
-    import { SplashScreen } from '@capacitor/splash-screen'
-    <% } %>
+  <% if (quasarConf.metaConf.versions.capacitorPluginApp) { %>
+  // importing it so it can install itself (used by Quasar UI)
+  import { App as CapApp } from '@capacitor/app'
+  <% } %>
+  <% if (quasarConf.metaConf.versions.capacitorPluginSplashscreen && quasarConf.capacitor.hideSplashscreen !== false) { %>
+  import { SplashScreen } from '@capacitor/splash-screen'
   <% } %>
 <% } %>
 

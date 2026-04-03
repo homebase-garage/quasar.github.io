@@ -325,22 +325,13 @@ export class QuasarConfigFile {
 
     await appExt.registerAppExtensions()
 
-    if (this.#ctx.mode.pwa) {
-      // Enable this when workbox bumps version (as of writing these lines, we're handling v6 & v7)
-      // this.#versions.workbox = getPackageMajorVersion('workbox-build', appPaths.appDir)
-    } else if (this.#ctx.mode.capacitor) {
+    if (this.#ctx.mode.capacitor) {
       const { capVersion } = await cacheProxy.getModule('capCli')
 
-      const getCapPluginVersion =
-        capVersion <= 2
-          ? () => true
-          : name => {
-              const version = getPackageMajorVersion(
-                name,
-                appPaths.capacitorDir
-              )
-              return version === void 0 ? false : version || true
-            }
+      const getCapPluginVersion = name => {
+        const version = getPackageMajorVersion(name, appPaths.capacitorDir)
+        return version === void 0 ? false : version || true
+      }
 
       Object.assign(this.#versions, {
         capacitor: capVersion,
