@@ -1,2 +1,3 @@
 .editorconfig
 .oxlintrc.json
+/pnpm-workspace.yaml
