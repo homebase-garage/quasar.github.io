@@ -1,4 +1,8 @@
-import { QuasarAnimations, QuasarFonts, QuasarIconSets } from "quasar";
+import {
+  QuasarFonts,
+  QuasarAnimations,
+  QuasarExtrasIcons
+} from "@quasar/extras";
 import { QuasarEslintConfiguration } from "./eslint";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import { Options as OpenOptions } from "open";
@@ -16,8 +20,6 @@ import { QuasarBexConfiguration } from "./bex";
 type DevServerOptions = Omit<WebpackDevServerConfiguration, "open"> & {
   open?: Omit<OpenOptions, "wait"> | boolean;
 };
-
-type QuasarAnimationsConfiguration = "all" | QuasarAnimations[];
 
 /**
  * Use this property to change the default names of some files of your website/app if you have to.
@@ -67,7 +69,7 @@ interface BaseQuasarConfiguration {
    * What to import from [@quasar/extras](https://github.com/quasarframework/quasar/tree/dev/extras) package.
    * @example ['material-icons', 'roboto-font', 'ionicons-v4']
    */
-  extras?: (QuasarIconSets | QuasarFonts)[];
+  extras?: (QuasarFonts | QuasarExtrasIcons)[];
   /** Add/remove files/3rd party libraries to/from vendor chunk. */
   vendor?: {
     add: string[];
@@ -84,7 +86,7 @@ interface BaseQuasarConfiguration {
    * What [CSS animations](https://v2.quasar.dev/options/animations) to import.
    * @example: [ 'bounceInLeft', 'bounceOutRight' ]
    */
-  animations?: QuasarAnimationsConfiguration | "all";
+  animations?: "all" | QuasarAnimations[];
   /**
    * Webpack dev server [options](https://webpack.js.org/configuration/dev-server/).
    * Some properties are overwritten based on the Quasar mode you're using in order

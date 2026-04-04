@@ -1,4 +1,4 @@
-import { QuasarIconSet } from "./extras/icon-set";
+import { QuasarIconSet } from "./icon-set";
 import { HasBex, HasCapacitor, HasCordova, HasSsr } from "./feature-flag";
 import { QuasarLanguage } from "./lang";
 

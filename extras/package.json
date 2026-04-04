@@ -34,6 +34,7 @@
     "LICENSE",
     "README.md",
     "index.js",
+    "index.d.ts",
     "animate",
     "bootstrap-icons",
     "eva-icons",
@@ -64,7 +65,11 @@
   ],
   "main": "index.js",
   "exports": {
-    ".": "./index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    },
     "./animate/animate-list.common": {
       "types": "./animate/animate-list.d.ts",
       "import": "./animate/animate-list.mjs",
