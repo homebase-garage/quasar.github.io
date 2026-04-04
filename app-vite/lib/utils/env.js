@@ -4,7 +4,8 @@ import { parse as dotEnvParse } from 'dotenv'
 import { expand as dotEnvExpand } from 'dotenv-expand'
 import { merge } from 'webpack-merge'
 
-import { warn } from './logger.js'
+import { dot, warn } from './logger.js'
+import { green } from 'kolorist'
 import { isCI } from './is-terminal.js'
 import { encodeForDiff } from './encode-for-diff.js'
 
@@ -12,6 +13,7 @@ const defaultQuasarConfEnvPrefix = ''
 export const defaultClientAppEnvPrefix = 'QCLI_'
 export const defaultBackendAppEnvPrefix = ''
 const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
+const appEnvBannerPrefix = green(`Env ${dot}`)
 
 function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
   if (!prefix) {
@@ -255,6 +257,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
   }
 
   result.envBanner =
+    `${appEnvBannerPrefix} ` +
     `${clientPrefix ? `Client code prefix: ${clientPrefixLabel}` : 'No client code prefix'}; ` +
     backendBanner +
     (usedEnvFiles.length !== 0
