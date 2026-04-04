@@ -117,7 +117,7 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0
       rolldown:
-        specifier: 1.0.0-rc.13
+        specifier: ^1.0.0-rc.13
         version: 1.0.0-rc.13
       rollup-plugin-visualizer:
         specifier: ^7.0.1
@@ -352,7 +352,7 @@ importers:
         specifier: ^5.4.0
         version: 5.7.1(postcss@8.5.8)
       rolldown:
-        specifier: 1.0.0-rc.13
+        specifier: ^1.0.0-rc.13
         version: 1.0.0-rc.13
       sass-embedded:
         specifier: ^1.98.0
@@ -503,7 +503,7 @@ importers:
         specifier: workspace:*
         version: link:../ui
       rolldown:
-        specifier: 1.0.0-rc.13
+        specifier: ^1.0.0-rc.13
         version: 1.0.0-rc.13
       vite:
         specifier: ^8.0.3

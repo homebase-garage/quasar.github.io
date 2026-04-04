@@ -59,7 +59,7 @@
     "jsdom": "^29.0.1",
     "pug": "^3.0.4",
     "quasar": "workspace:*",
-    "rolldown": "1.0.0-rc.13",
+    "rolldown": "^1.0.0-rc.13",
     "vite": "^8.0.3",
     "vitest": "^4.1.2",
     "vue": "catalog:"
