@@ -32,26 +32,6 @@ export async function createQuasarScript({ scope, utils }) {
   await utils.prompts(scope, [
     {
       type: 'select',
-      name: 'sfcStyle',
-      message: 'Pick a Vue component style:',
-      initial: 0,
-      choices: [
-        {
-          title: 'Composition API with <script setup>',
-          value: 'composition-setup',
-          description: 'recommended'
-        },
-        {
-          title: 'Composition API',
-          value: 'composition',
-          description: 'recommended'
-        },
-        { title: 'Options API', value: 'options' }
-      ]
-    },
-
-    {
-      type: 'select',
       name: 'css',
       message: 'Pick your CSS preprocessor:',
       initial: 0,

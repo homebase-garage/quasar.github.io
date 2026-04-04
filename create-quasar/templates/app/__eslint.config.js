@@ -55,7 +55,6 @@ export default defineConfig(
         'productName',
 
         // Quasar v2 - TS
-        'sfcStyle',
         'css',
         'preset',
         'prettier'

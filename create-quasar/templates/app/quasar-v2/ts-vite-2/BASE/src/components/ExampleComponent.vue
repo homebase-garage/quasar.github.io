@@ -11,7 +11,7 @@
     <p>Clicks on todos: {{ clickCount }}</p>
   </div>
 </template>
-<% if (scope.sfcStyle === 'composition-setup') { %>
+
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { Todo, Meta } from './models';
@@ -34,100 +34,4 @@ function increment() {
 }
 
 const todoCount = computed(() => props.todos.length);
-</script><% } else if (scope.sfcStyle === 'composition') { %>
-<script lang="ts">
-import {
-  defineComponent,
-  computed,
-  ref,
-  toRef,
-  type PropType,
-  type Ref,
-} from 'vue';
-import type { Todo, Meta } from './models';
-
-function useClickCount() {
-  const clickCount = ref(0);
-  function increment() {
-    clickCount.value += 1
-    return clickCount.value;
-  }
-
-  return { clickCount, increment };
-}
-
-function useDisplayTodo(todos: Ref<Todo[]>) {
-  const todoCount = computed(() => todos.value.length);
-  return { todoCount };
-}
-
-export default defineComponent({
-  name: 'ExampleComponent',
-
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    todos: {
-      type: Array as PropType<Todo[]>,
-      default: () => []
-    },
-    meta: {
-      type: Object as PropType<Meta>,
-      required: true
-    },
-    active: {
-      type: Boolean
-    }
-  },
-
-  setup (props) {
-    return { ...useClickCount(), ...useDisplayTodo(toRef(props, 'todos')) };
-  }
-});
-</script><% } else if (scope.sfcStyle === 'options') { %>
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import type { Todo, Meta } from './models';
-
-export default defineComponent({
-  name: 'ExampleComponent',
-
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    todos: {
-      type: Array as PropType<Todo[]>,
-      default: () => [] as Todo[]
-    },
-    meta: {
-      type: Object as PropType<Meta>,
-      required: true
-    },
-    active: {
-      type: Boolean
-    }
-  },
-
-  data(): { clickCount: number } {
-    return {
-      clickCount: 0
-    };
-  },
-
-  methods: {
-    increment (): void {
-      this.clickCount += 1;
-    }
-  },
-
-  computed: {
-    todoCount (): number {
-      return this.todos.length;
-    }
-  }
-});
-</script><% } %>
+</script>

@@ -12,7 +12,6 @@ module.exports = {
       'productName',
 
       // Quasar v2 - TS
-      'sfcStyle',
       'css',
       'preset',
       'prettier'

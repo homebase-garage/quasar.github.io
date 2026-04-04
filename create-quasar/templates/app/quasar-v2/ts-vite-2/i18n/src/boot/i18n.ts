@@ -23,8 +23,8 @@ declare module 'vue-i18n' {
 
 export default defineBoot(({ app }) => {
   const i18n = createI18n<{ message: MessageSchema }, MessageLanguages>({
-    locale: 'en-US',<% if (scope.sfcStyle === 'composition' || scope.sfcStyle === 'composition-setup') { %>
-    legacy: false,<% } %>
+    locale: 'en-US',
+    legacy: false,
     messages,
   });
 

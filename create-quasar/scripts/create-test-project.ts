@@ -36,7 +36,6 @@ export async function createProject({
     author: "Quasar Team (info@quasar.dev)",
 
     // The defaults
-    sfcStyle: "composition-setup",
     css: "scss",
 
     preset: ["eslint"],
