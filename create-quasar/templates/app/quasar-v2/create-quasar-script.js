@@ -11,7 +11,10 @@ export async function createQuasarScript({ scope, utils }) {
           value: 'vite-2',
           description: 'recommended'
         },
-        { title: 'Quasar App CLI with Webpack', value: 'webpack-4' }
+        {
+          title: 'Quasar App CLI with Webpack',
+          value: 'webpack-4'
+        }
       ]
     },
     {

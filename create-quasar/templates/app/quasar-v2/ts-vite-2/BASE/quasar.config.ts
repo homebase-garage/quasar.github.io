@@ -12,9 +12,8 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: [<% if (scope.preset.i18n) { %>
-      'i18n'<% } %><% if (scope.preset.axios) { %><%= scope.preset.i18n ? ',' : '' %>
-      'axios'<% } %>
+    boot: [
+      <% if (scope.preset.i18n) { %>'i18n'<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css

@@ -22,9 +22,8 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
-    boot: [<% if (scope.preset.i18n) { %>
-      'i18n'<% } %><% if (scope.preset.axios) { %><%= scope.preset.i18n ? ',' : '' %>
-      'axios'<% } %>
+    boot: [
+      <% if (scope.preset.i18n) { %>'i18n'<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css

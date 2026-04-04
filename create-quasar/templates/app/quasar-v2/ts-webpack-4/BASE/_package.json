@@ -15,7 +15,6 @@
     "postinstall": "quasar prepare"
   },
   "dependencies": {
-    <% if (scope.preset.axios) { %>"axios": "^1.13.6",<% } %>
     <% if (scope.preset.i18n) { %>"vue-i18n": "^11.3.0",<% } %>
     <% if (scope.preset.pinia) { %>"pinia": "^3.0.1",<% } %>
     "@quasar/extras": "^1.16.4",

@@ -21,8 +21,10 @@ export async function createQuasarScript({ scope, utils }) {
           value: 'pinia',
           description: 'https://pinia.vuejs.org'
         },
-        { title: 'axios', value: 'axios' },
-        { title: 'vue-i18n', value: 'i18n' }
+        {
+          title: 'Internationalization (vue-i18n)',
+          value: 'i18n'
+        }
       ],
       format: utils.convertArrayToObject
     },
@@ -44,7 +46,6 @@ export async function createQuasarScript({ scope, utils }) {
   const css = scope.preset.sass ? 'sass' : 'css'
   utils.renderTemplate(css, scope)
 
-  if (scope.preset.axios) utils.renderTemplate('axios', scope)
   if (scope.preset.i18n) utils.renderTemplate('i18n', scope)
   if (scope.preset.eslint) utils.renderTemplate('eslint', scope)
   if (scope.prettier) utils.renderTemplate('prettier', scope)
