@@ -5,6 +5,6 @@
  * Docs: https://quasar.dev/app-extensions/development-guide/index-api
  */
 
-<%= scope.codeFormat === 'esm' ? 'export default' : 'module.exports =' %> function (api) {
+export default function (api) {
   //
 }

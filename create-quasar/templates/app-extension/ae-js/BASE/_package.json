@@ -5,7 +5,7 @@
   "description": "<%= scope.description %>",
   "author": "<%= scope.author %>",
   "license": "<%= scope.license %>",
-  "type": "<%= scope.codeFormat === 'esm' ? 'module' : 'commonjs' %>",
+  "type": "module",
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
   },

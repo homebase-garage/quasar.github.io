@@ -27,9 +27,7 @@ export default defineConfig(
 
         'preset',
         'orgName',
-        'license',
-
-        'codeFormat'
+        'license'
       ]
     },
 
