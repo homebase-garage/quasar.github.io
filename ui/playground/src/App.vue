@@ -87,7 +87,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { Quasar, Dark, useQuasar, useMeta } from 'quasar'
 import { ref, watch, onMounted } from 'vue'
 import languages from 'quasar/lang/index.json'
@@ -95,100 +95,94 @@ import languages from 'quasar/lang/index.json'
 const langList = import.meta.glob('../../lang/*.js')
 const iconSetList = import.meta.glob('../../icon-set/*.js')
 
-export default {
-  setup() {
-    const $q = useQuasar()
-    useMeta({ title: 'Quasar Development' })
+const $q = useQuasar()
+useMeta({ title: 'Quasar Development' })
 
-    const lang = ref($q.lang.isoName)
-    const iconSet = ref($q.iconSet.name)
-    const showSelector = ref(false)
+const lang = ref($q.lang.isoName)
+const iconSet = ref($q.iconSet.name)
+const showSelector = ref(false)
 
-    watch(lang, val => {
-      langList[`../../lang/${val}.js`]().then(importLang => {
-        $q.lang.set(importLang.default)
-      })
-    })
+watch(lang, val => {
+  langList[`../../lang/${val}.js`]().then(importLang => {
+    $q.lang.set(importLang.default)
+  })
+})
 
-    watch(iconSet, val => {
-      iconSetList[`../../icon-set/${val}.js`]().then(importIconSet => {
-        $q.iconSet.set(importIconSet.default)
-      })
-    })
+watch(iconSet, val => {
+  iconSetList[`../../icon-set/${val}.js`]().then(importIconSet => {
+    $q.iconSet.set(importIconSet.default)
+  })
+})
 
-    function resetScroll(el, done) {
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-      done()
-    }
+function resetScroll(el, done) {
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+  done()
+}
 
-    function switchRTL() {
-      lang.value = lang.value === 'en-US' ? 'he' : 'en-US'
-    }
+function switchRTL() {
+  lang.value = lang.value === 'en-US' ? 'he' : 'en-US'
+}
 
-    function toggleSelector() {
-      showSelector.value = !showSelector.value
-    }
+function toggleSelector() {
+  showSelector.value = !showSelector.value
+}
 
-    onMounted(() => {
-      window.$q = $q
-      window.Quasar = Quasar
-      /*
+onMounted(() => {
+  window.$q = $q
+  window.Quasar = Quasar
+  /*
       nextTick(() => {
         Dark.set(false)
       })
       */
-    })
+})
 
-    // $q.dark.set('auto')
-    // $q.dark.set(false)
+// $q.dark.set('auto')
+// $q.dark.set(false)
 
-    return {
-      lang,
-      iconSet,
-      switchRTL,
-      toggleSelector,
-      showSelector,
-      resetScroll,
-      langOptions: languages.map(item => ({
-        label: item.nativeName,
-        value: item.isoName
-      })),
-      iconOptions: [
-        { label: 'Material', value: 'material-icons' },
-        { label: 'SVG Material', value: 'svg-material-icons' },
-        { label: 'Material Outlined', value: 'material-icons-outlined' },
-        { label: 'Material Round', value: 'material-icons-round' },
-        { label: 'Material Sharp', value: 'material-icons-sharp' },
-        {
-          label: 'Material Symbols Outlined',
-          value: 'material-symbols-outlined'
-        },
-        {
-          label: 'Material Symbols Rounded',
-          value: 'material-symbols-rounded'
-        },
-        { label: 'Material Symbols Sharp', value: 'material-symbols-sharp' },
-        { label: 'MDI v6', value: 'mdi-v6' },
-        { label: 'SVG MDI v6', value: 'svg-mdi-v6' },
-        { label: 'SVG Ionicons v6', value: 'svg-ionicons-v6' },
-        { label: 'SVG Ionicons v5', value: 'svg-ionicons-v5' },
-        { label: 'Ionicons v4', value: 'ionicons-v4' },
-        { label: 'SVG Ionicons v4', value: 'svg-ionicons-v4' },
-        { label: 'Fontawesome v6', value: 'fontawesome-v6' },
-        { label: 'SVG Fontawesome v6', value: 'svg-fontawesome-v6' },
-        { label: 'Eva Icons', value: 'eva-icons' },
-        { label: 'SVG Eva Icons', value: 'svg-eva-icons' },
-        { label: 'Themify', value: 'themify' },
-        { label: 'SVG Themify', value: 'svg-themify' },
-        { label: 'Line Awesome', value: 'line-awesome' },
-        { label: 'SVG Line Awesome', value: 'svg-line-awesome' },
-        { label: 'Bootstrap Icons', value: 'bootstrap-icons' },
-        { label: 'SVG Bootstrap Icons', value: 'svg-bootstrap-icons' }
-      ]
-    }
-  }
-}
+const langOptions = languages.map(item => ({
+  label: item.nativeName,
+  value: item.isoName
+}))
+const iconOptions = [
+  { label: 'Material', value: 'material-icons' },
+  { label: 'SVG Material', value: 'svg-material-icons' },
+  { label: 'Material Outlined', value: 'material-icons-outlined' },
+  { label: 'Material Round', value: 'material-icons-round' },
+  { label: 'Material Sharp', value: 'material-icons-sharp' },
+  {
+    label: 'Material Symbols Outlined',
+    value: 'material-symbols-outlined'
+  },
+  {
+    label: 'Material Symbols Rounded',
+    value: 'material-symbols-rounded'
+  },
+  { label: 'Material Symbols Sharp', value: 'material-symbols-sharp' },
+  { label: 'MDI v7', value: 'mdi-v7' },
+  { label: 'SVG MDI v7', value: 'svg-mdi-v7' },
+  { label: 'MDI v6', value: 'mdi-v6' },
+  { label: 'SVG MDI v6', value: 'svg-mdi-v6' },
+  { label: 'SVG Ionicons v8', value: 'svg-ionicons-v8' },
+  { label: 'SVG Ionicons v7', value: 'svg-ionicons-v7' },
+  { label: 'SVG Ionicons v6', value: 'svg-ionicons-v6' },
+  { label: 'SVG Ionicons v5', value: 'svg-ionicons-v5' },
+  { label: 'Ionicons v4', value: 'ionicons-v4' },
+  { label: 'SVG Ionicons v4', value: 'svg-ionicons-v4' },
+  { label: 'Fontawesome v7', value: 'fontawesome-v7' },
+  { label: 'SVG Fontawesome v7', value: 'svg-fontawesome-v7' },
+  { label: 'Fontawesome v6', value: 'fontawesome-v6' },
+  { label: 'SVG Fontawesome v6', value: 'svg-fontawesome-v6' },
+  { label: 'Eva Icons', value: 'eva-icons' },
+  { label: 'SVG Eva Icons', value: 'svg-eva-icons' },
+  { label: 'Themify', value: 'themify' },
+  { label: 'SVG Themify', value: 'svg-themify' },
+  { label: 'Line Awesome', value: 'line-awesome' },
+  { label: 'SVG Line Awesome', value: 'svg-line-awesome' },
+  { label: 'Bootstrap Icons', value: 'bootstrap-icons' },
+  { label: 'SVG Bootstrap Icons', value: 'svg-bootstrap-icons' }
+]
 </script>
 
 <style lang="sass">

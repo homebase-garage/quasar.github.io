@@ -6,7 +6,11 @@ import {
   ionArrowForward,
   ionArrowDown,
   ionArrowBack,
-  ionCaretDownOutline,
+  ionCaretDown,
+  ionChevronBack,
+  ionChevronDown,
+  ionChevronForward,
+  ionChevronUp,
   ionAperture,
   ionOptions,
   ionApps,
@@ -17,7 +21,6 @@ import {
   ionCalendar,
   ionLink,
   ionExpand,
-  ionChatboxEllipses,
   ionPrint,
   ionArrowUndo,
   ionArrowRedo,
@@ -26,6 +29,8 @@ import {
   ionClose,
   ionPlaySkipBackCircle,
   ionPlaySkipForwardCircle,
+  ionChevronBackCircle,
+  ionChevronForwardCircle,
   ionStar,
   ionCreate,
   ionWarning,
@@ -33,14 +38,8 @@ import {
   ionAddCircle,
   ionCloudUpload,
   ionTrash,
-  ionCheckmarkDone,
-  ionChevronDown,
-  ionChevronUp,
-  ionChevronBack,
-  ionChevronForward,
-  ionChevronBackCircle,
-  ionChevronForwardCircle
-} from '@quasar/extras/ionicons-v5'
+  ionCheckmarkDone
+} from '@quasar/extras/ionicons-v7'
 
 /* There are some icons that are needed but not available
    so we import them from MDI as svg */
@@ -62,6 +61,7 @@ import {
   mdiFormatIndentIncrease,
   mdiFormatClear,
   mdiFormatColorText,
+  mdiFormatQuoteClose,
   mdiFormatSize,
   mdiMinus,
   mdiFormatHeader1,
@@ -81,7 +81,7 @@ import {
 } from '@quasar/extras/mdi-v7'
 
 export default {
-  name: 'svg-ionicons-v5',
+  name: 'svg-ionicons-v7',
   type: {
     positive: ionCheckmark,
     negative: ionAlert,
@@ -93,7 +93,7 @@ export default {
     right: ionArrowForward,
     down: ionArrowDown,
     left: ionArrowBack,
-    dropdown: ionCaretDownOutline
+    dropdown: ionCaretDown
   },
   chevron: {
     left: ionArrowBack,
@@ -125,10 +125,9 @@ export default {
     today: ionCalendar
   },
   editor: {
-    // requires Material icons for some as Ionicons simply does not have everything needed
     hyperlink: ionLink,
     toggleFullscreen: ionExpand,
-    quote: ionChatboxEllipses,
+    quote: mdiFormatQuoteClose,
     print: ionPrint,
     undo: ionArrowUndo,
     redo: ionArrowRedo,
@@ -172,8 +171,8 @@ export default {
     font: mdiFormatFont
   },
   expansionItem: {
-    icon: ionCaretDownOutline,
-    denseIcon: ionCaretDownOutline
+    icon: ionCaretDown,
+    denseIcon: ionCaretDown
   },
   fab: {
     icon: ionAdd,

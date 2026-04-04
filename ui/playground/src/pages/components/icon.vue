@@ -52,7 +52,7 @@
     <q-btn id="showInfoBtn" no-caps class="q-ml-sm">
       <q-icon
         size="2em"
-        name="img:https://www.gfbr.global/wp-content/uploads/2015/10/TwitterLogo_55acee-49x49.png"
+        name="img:https://cdn.quasar.dev/logo-v2/svg/logo.svg"
       />
     </q-btn>
 
@@ -114,7 +114,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
 
@@ -125,8 +125,8 @@ import matSharpSet from 'quasar/icon-set/material-icons-sharp'
 import symOutlinedSet from 'quasar/icon-set/material-symbols-outlined'
 import symRoundedSet from 'quasar/icon-set/material-symbols-rounded'
 import symSharpSet from 'quasar/icon-set/material-symbols-sharp'
-import mdiSet from 'quasar/icon-set/mdi-v6'
-import fontawesomeSet from 'quasar/icon-set/fontawesome-v6'
+import mdiSet from 'quasar/icon-set/mdi-v7'
+import fontawesomeSet from 'quasar/icon-set/fontawesome-v7'
 import ioniconsV4Set from 'quasar/icon-set/ionicons-v4'
 import evaSet from 'quasar/icon-set/eva-icons'
 import themifySet from 'quasar/icon-set/themify'
@@ -140,23 +140,19 @@ import svgMatSharpSet from 'quasar/icon-set/svg-material-icons-sharp'
 import svgSymOutlinedSet from 'quasar/icon-set/svg-material-symbols-outlined'
 import svgSymRoundedSet from 'quasar/icon-set/svg-material-symbols-rounded'
 import svgSymSharpSet from 'quasar/icon-set/svg-material-symbols-sharp'
-import svgMdiSet from 'quasar/icon-set/svg-mdi-v6'
-import svgIoniconsV4Set from 'quasar/icon-set/svg-ionicons-v4'
-import svgIoniconsV5Set from 'quasar/icon-set/svg-ionicons-v5'
-import svgIoniconsV6Set from 'quasar/icon-set/svg-ionicons-v6'
-import svgFontawesomeV5Set from 'quasar/icon-set/svg-fontawesome-v5'
-import svgFontawesomeV6Set from 'quasar/icon-set/svg-fontawesome-v6'
+import svgMdiSet from 'quasar/icon-set/svg-mdi-v7'
+import svgIoniconsV8Set from 'quasar/icon-set/svg-ionicons-v8'
+import svgFontawesomeV7Set from 'quasar/icon-set/svg-fontawesome-v7'
 import svgEvaSet from 'quasar/icon-set/svg-eva-icons'
 import svgThemifySet from 'quasar/icon-set/svg-themify'
 import svgLineawesomeSet from 'quasar/icon-set/svg-line-awesome'
 import svgBootstrapiconsSet from 'quasar/icon-set/svg-bootstrap-icons'
 
 import { matAddBox } from '@quasar/extras/material-icons'
-import { mdiAirballoon } from '@quasar/extras/mdi-v6'
+import { mdiAirballoon } from '@quasar/extras/mdi-v7'
 import { ionMdAirplane, ionIosAirplane } from '@quasar/extras/ionicons-v4'
-import { ionCarOutline } from '@quasar/extras/ionicons-v6'
-import { ionAirplane } from '@quasar/extras/ionicons-v5'
-import { fabGithub } from '@quasar/extras/fontawesome-v6'
+import { ionCarOutline } from '@quasar/extras/ionicons-v8'
+import { fabGithub } from '@quasar/extras/fontawesome-v7'
 import { evaPaperPlaneOutline } from '@quasar/extras/eva-icons'
 import { tiFullscreen } from '@quasar/extras/themify'
 import { laAtomSolid } from '@quasar/extras/line-awesome'
@@ -228,122 +224,96 @@ const testSvgReGroups = [
   ['', '.'],
   ['0', '9']
 ]
-const testSvgReTexts = testSvgReFill(testSvgReGroups)
 
-export default {
-  setup() {
-    const useMapFn = ref(false)
-    const icon = ref(TOP_ICON)
+const useMapFn = ref(false)
+const icon = ref(TOP_ICON)
 
-    const $q = useQuasar()
+const $q = useQuasar()
 
-    watch(useMapFn, val => {
-      if (val === true) {
-        icon.value = TOP_ICON
-        // IconSet.iconMapFn = customIconMapFn
-        $q.iconMapFn = customIconMapFn
-      } else {
-        // IconSet.iconMapFn = null
-        $q.iconMapFn = null
-      }
-    })
-
-    const mRE = /^[Mm]\s?[-+]?\.?\d/
-
-    return {
-      testSvgReTexts: testSvgReTexts.map(text => ({
-        text,
-        ...(mRE.test(text)
-          ? { status: 'OK', class: 'text-positive' }
-          : { status: 'BAD', class: 'text-negative' })
-      })),
-      useMapFn,
-      icon,
-      text: ref('gigi'),
-      matAddBox,
-      mdiAirballoon,
-      ionMdAirplane,
-      ionIosAirplane,
-      fabGithub,
-      evaPaperPlaneOutline,
-      tiFullscreen,
-      laAtomSolid,
-      biBugFill,
-      suiAirplay,
-      suiAirplay2,
-      oiBatteryEmpty,
-
-      iconOptions: [
-        { value: '', label: 'Empty name' },
-        { value: TOP_ICON, label: 'A Material icon' },
-        { value: matAddBox, label: 'A Material SVG icon' },
-        { value: 'o_add_box', label: 'A Material Outlined icon' },
-        { value: 'r_add_box', label: 'A Material Round icon' },
-        { value: 's_add_box', label: 'A Material Sharp icon' },
-        { value: 'sym_o_search', label: 'A Material Symbols Outlined icon' },
-        { value: 'sym_r_search', label: 'A Material Symbols Rounded icon' },
-        { value: 'sym_s_search', label: 'A Material Symbols Sharp icon' },
-        { value: 'mdi-airballoon', label: 'A MDI v6 icon' },
-        { value: mdiAirballoon, label: 'A MDI v6 SVG icon' },
-        { value: 'fab fa-github', label: 'A Fontawesome v6 icon' },
-        { value: 'fa-brands fa-twitter', label: 'A Fontawesome v6 icon' },
-        { value: fabGithub, label: 'A Fontawesome SVG v6 icon' },
-        { value: ionCarOutline, label: 'A SVG Ionicon v6' },
-        { value: ionAirplane, label: 'A SVG Ionicon v5' },
-        { value: 'ion-airplane', label: 'A Ionicon v4 (platform dependent)' },
-        { value: 'ion-md-airplane', label: 'A Ionicon v4 (md)' },
-        { value: 'ion-ios-airplane', label: 'A Ionicon v4 (ios)' },
-        { value: ionMdAirplane, label: 'A SVG Ionicon v4 (md)' },
-        { value: ionIosAirplane, label: 'A SVG Ionicon v4 (ios)' },
-        { value: 'eva-paper-plane-outline', label: 'A Eva icon' },
-        { value: evaPaperPlaneOutline, label: 'A Eva SVG icon' },
-        { value: 'ti-fullscreen', label: 'A Themify icon' },
-        { value: tiFullscreen, label: 'A Themify SVG icon' },
-        { value: 'las la-atom', label: 'A Line Awesome icon' },
-        { value: laAtomSolid, label: 'A Line Awesome SVG icon' },
-        { value: 'bi-bug', label: 'A Bootstrap Icons icon' },
-        { value: biBugFill, label: 'A Bootstrap Icons SVG icon' }
-      ],
-
-      sets: [
-        matSet,
-        matOutlinedSet,
-        matRoundSet,
-        matSharpSet,
-        symOutlinedSet,
-        symRoundedSet,
-        symSharpSet,
-        mdiSet,
-        fontawesomeSet,
-        ioniconsV4Set,
-        evaSet,
-        themifySet,
-        lineawesomeSet,
-        bootstrapiconsSet,
-        svgMatSet,
-        svgMatOutlinedSet,
-        svgMatRoundSet,
-        svgMatSharpSet,
-        svgSymOutlinedSet,
-        svgSymRoundedSet,
-        svgSymSharpSet,
-        svgMdiSet,
-        svgIoniconsV4Set,
-        svgIoniconsV5Set,
-        svgIoniconsV6Set,
-        svgFontawesomeV5Set,
-        svgFontawesomeV6Set,
-        svgEvaSet,
-        svgThemifySet,
-        svgLineawesomeSet,
-        svgBootstrapiconsSet
-      ].map(({ name, ...set }) => parseSet(name, set)),
-
-      clicked() {
-        console.log('clicked')
-      }
-    }
+watch(useMapFn, val => {
+  if (val === true) {
+    icon.value = TOP_ICON
+    // IconSet.iconMapFn = customIconMapFn
+    $q.iconMapFn = customIconMapFn
+  } else {
+    // IconSet.iconMapFn = null
+    $q.iconMapFn = null
   }
+})
+
+const mRE = /^[Mm]\s?[-+]?\.?\d/
+const testSvgReTexts = testSvgReFill(testSvgReGroups).map(text => ({
+  text,
+  ...(mRE.test(text)
+    ? { status: 'OK', class: 'text-positive' }
+    : { status: 'BAD', class: 'text-negative' })
+}))
+
+const text = ref('gigi')
+const iconOptions = [
+  { value: '', label: 'Empty name' },
+  { value: TOP_ICON, label: 'A Material icon' },
+  { value: matAddBox, label: 'A Material SVG icon' },
+  { value: 'o_add_box', label: 'A Material Outlined icon' },
+  { value: 'r_add_box', label: 'A Material Round icon' },
+  { value: 's_add_box', label: 'A Material Sharp icon' },
+  { value: 'sym_o_search', label: 'A Material Symbols Outlined icon' },
+  { value: 'sym_r_search', label: 'A Material Symbols Rounded icon' },
+  { value: 'sym_s_search', label: 'A Material Symbols Sharp icon' },
+  { value: 'mdi-airballoon', label: 'A MDI v6 icon' },
+  { value: mdiAirballoon, label: 'A MDI v6 SVG icon' },
+  { value: 'fab fa-github', label: 'A Fontawesome v7 icon' },
+  { value: 'fa-brands fa-twitter', label: 'A Fontawesome v7 icon' },
+  { value: fabGithub, label: 'A Fontawesome SVG v7 icon' },
+  { value: ionCarOutline, label: 'A SVG Ionicon v8' },
+  { value: 'ion-airplane', label: 'A Ionicon v4 (platform dependent)' },
+  { value: 'ion-md-airplane', label: 'A Ionicon v4 (md)' },
+  { value: 'ion-ios-airplane', label: 'A Ionicon v4 (ios)' },
+  { value: ionMdAirplane, label: 'A SVG Ionicon v4 (md)' },
+  { value: ionIosAirplane, label: 'A SVG Ionicon v4 (ios)' },
+  { value: 'eva-paper-plane-outline', label: 'A Eva icon' },
+  { value: evaPaperPlaneOutline, label: 'A Eva SVG icon' },
+  { value: 'ti-fullscreen', label: 'A Themify icon' },
+  { value: tiFullscreen, label: 'A Themify SVG icon' },
+  { value: 'las la-atom', label: 'A Line Awesome icon' },
+  { value: laAtomSolid, label: 'A Line Awesome SVG icon' },
+  { value: 'bi-bug', label: 'A Bootstrap Icons icon' },
+  { value: biBugFill, label: 'A Bootstrap Icons SVG icon' }
+]
+
+const sets = [
+  matSet,
+  matOutlinedSet,
+  matRoundSet,
+  matSharpSet,
+  symOutlinedSet,
+  symRoundedSet,
+  symSharpSet,
+  mdiSet,
+  fontawesomeSet,
+  ioniconsV4Set,
+  evaSet,
+  themifySet,
+  lineawesomeSet,
+  bootstrapiconsSet,
+  svgMatSet,
+  svgMatOutlinedSet,
+  svgMatRoundSet,
+  svgMatSharpSet,
+  svgSymOutlinedSet,
+  svgSymRoundedSet,
+  svgSymSharpSet,
+  svgMdiSet,
+  svgIoniconsV8Set,
+  svgFontawesomeV7Set,
+  svgEvaSet,
+  svgThemifySet,
+  svgLineawesomeSet,
+  svgBootstrapiconsSet
+].map(({ name, ...set }) => parseSet(name, set))
+
+function clicked() {
+  console.log('clicked')
 }
 </script>
 

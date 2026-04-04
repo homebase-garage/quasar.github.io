@@ -75,6 +75,11 @@ const iconTypes = [
     convert: str => convert(str.replace(' fa-', '-'))
   },
   {
+    name: 'fontawesome-v7',
+    regex: /^fa[brs] fa-/,
+    convert: str => convert(str.replace(' fa-', '-'))
+  },
+  {
     name: 'eva-icons',
     regex: /^eva-/,
     convert
