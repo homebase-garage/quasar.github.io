@@ -1,10 +1,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
-import { defineConfig } from '#q-app/wrappers';<% if (preset.i18n) { %>
+import { defineConfig } from '#q-app/wrappers';<% if (scope.preset.i18n) { %>
 import { fileURLToPath } from 'node:url';<% } %>
 
-export default defineConfig((<% if (preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
+export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -12,14 +12,14 @@ export default defineConfig((<% if (preset.i18n) { %>ctx<% } else { %>/* ctx */<
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: [<% if (preset.i18n) { %>
-      'i18n'<% } %><% if (preset.axios) { %><%= preset.i18n ? ',' : '' %>
+    boot: [<% if (scope.preset.i18n) { %>
+      'i18n'<% } %><% if (scope.preset.axios) { %><%= scope.preset.i18n ? ',' : '' %>
       'axios'<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: [
-      'app.<%= css %>'
+      'app.<%= scope.css %>'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -67,8 +67,8 @@ export default defineConfig((<% if (preset.i18n) { %>ctx<% } else { %>/* ctx */<
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-      <% if (preset.i18n || preset.eslint) { %>
-      vitePlugins: [<% if (preset.i18n) { %>
+      <% if (scope.preset.i18n || scope.preset.eslint) { %>
+      vitePlugins: [<% if (scope.preset.i18n) { %>
         ['@intlify/unplugin-vue-i18n/vite', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
           // compositionOnly: false,
@@ -81,7 +81,7 @@ export default defineConfig((<% if (preset.i18n) { %>ctx<% } else { %>/* ctx */<
 
           // you need to set i18n resource including paths !
           include: [ fileURLToPath(new URL('./src/i18n', import.meta.url)) ]
-        }]<% } %><% if (preset.eslint) { %><% if (preset.i18n) { %>,
+        }]<% } %><% if (scope.preset.eslint) { %><% if (scope.preset.i18n) { %>,
 <% } %>
         ['vite-plugin-checker', {
           vueTsc: true,
@@ -215,7 +215,7 @@ export default defineConfig((<% if (preset.i18n) { %>ctx<% } else { %>/* ctx */<
       builder: {
         // https://www.electron.build/configuration
 
-        appId: '<%= name %>'
+        appId: '<%= scope.name %>'
       }
     },
 

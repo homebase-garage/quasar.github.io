@@ -3,22 +3,22 @@
     clickable
     tag="a"
     target="_blank"
-    :href="<% if (sfcStyle === 'composition-setup') { %>props.<% } %>link"
+    :href="<% if (scope.sfcStyle === 'composition-setup') { %>props.<% } %>link"
   >
     <q-item-section
-      v-if="<% if (sfcStyle === 'composition-setup') { %>props.<% } %>icon"
+      v-if="<% if (scope.sfcStyle === 'composition-setup') { %>props.<% } %>icon"
       avatar
     >
-      <q-icon :name="<% if (sfcStyle === 'composition-setup') { %>props.<% } %>icon" />
+      <q-icon :name="<% if (scope.sfcStyle === 'composition-setup') { %>props.<% } %>icon" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ <% if (sfcStyle === 'composition-setup') { %>props.<% } %>title }}</q-item-label>
-      <q-item-label caption>{{ <% if (sfcStyle === 'composition-setup') { %>props.<% } %>caption }}</q-item-label>
+      <q-item-label>{{ <% if (scope.sfcStyle === 'composition-setup') { %>props.<% } %>title }}</q-item-label>
+      <q-item-label caption>{{ <% if (scope.sfcStyle === 'composition-setup') { %>props.<% } %>caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup>
 const props = defineProps({
   title: {
@@ -41,7 +41,7 @@ const props = defineProps({
     default: ''
   }
 })
-</script><% } else if (sfcStyle === 'composition' || sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'composition' || scope.sfcStyle === 'options') { %>
 <script>
 import { defineComponent } from 'vue'
 

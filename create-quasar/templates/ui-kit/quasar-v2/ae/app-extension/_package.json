@@ -1,12 +1,12 @@
 {
-  "name": "quasar-app-extension-<%= name %>",
+  "name": "quasar-app-extension-<%= scope.name %>",
   "version": "0.0.1",
-  "description": "<%= aeDescription %>",
-  "author": "<%= author %>",
-  "license": "<%= license %>",
+  "description": "<%= scope.aeDescription %>",
+  "author": "<%= scope.author %>",
+  "license": "<%= scope.license %>",
   "type": "module",
   "dependencies": {
-    "quasar-ui-<%= name %>": "latest"
+    "quasar-ui-<%= scope.name %>": "latest"
   },
   "engines": {
     "node": ">= 8.9.0",

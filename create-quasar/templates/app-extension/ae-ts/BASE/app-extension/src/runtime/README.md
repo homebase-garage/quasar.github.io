@@ -12,10 +12,10 @@ This directory contains runtime files for your app extension. The code here will
 Use `index.ts` to export your runtime code as part of the library. The exported code can then be imported like so:
 
 ```js
-import { someFunction } from '<%= pkgName %>'
+import { someFunction } from '<%= scope.pkgName %>'
 ```
 
-If you need more entrypoints(e.g. `<%= pkgName %>/another`) for a good reason, you can create the respective files and add an entry to `package.json > exports`.
+If you need more entrypoints(e.g. `<%= scope.pkgName %>/another`) for a good reason, you can create the respective files and add an entry to `package.json > exports`.
 
 ### Boot files
 
@@ -39,7 +39,7 @@ Afterwards, you can use the Index API ([`src/index.ts`](../index.ts)) to registe
 export default function (api: IndexAPI) {
   // ...
   api.extendQuasarConf((conf, api) => {
-    conf.boot!.push('~<%= pkgName %>/boot/some-boot-file');
+    conf.boot!.push('~<%= scope.pkgName %>/boot/some-boot-file');
     // ...
   });
 }

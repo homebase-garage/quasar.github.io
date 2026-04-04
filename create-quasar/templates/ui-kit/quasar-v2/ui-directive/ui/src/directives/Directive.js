@@ -1,5 +1,5 @@
 export default {
-  name: '<%= directiveName %>',
+  name: '<%= scope.directiveName %>',
 
   mounted (_el) {
     //

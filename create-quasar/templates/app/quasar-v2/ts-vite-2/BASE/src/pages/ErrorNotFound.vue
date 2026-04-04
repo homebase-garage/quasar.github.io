@@ -21,10 +21,10 @@
     </div>
   </div>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup lang="ts">
 //
-</script><% } else if (sfcStyle === 'composition' || sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'composition' || scope.sfcStyle === 'options') { %>
 <script lang="ts">
 import { defineComponent } from 'vue';
 

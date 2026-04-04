@@ -11,7 +11,7 @@
     <p>Clicks on todos: {{ clickCount }}</p>
   </div>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { Todo, Meta } from './models';
@@ -34,7 +34,7 @@ function increment() {
 }
 
 const todoCount = computed(() => props.todos.length);
-</script><% } else if (sfcStyle === 'composition') { %>
+</script><% } else if (scope.sfcStyle === 'composition') { %>
 <script lang="ts">
 import {
   defineComponent,
@@ -86,7 +86,7 @@ export default defineComponent({
     return { ...useClickCount(), ...useDisplayTodo(toRef(props, 'todos')) };
   }
 });
-</script><% } else if (sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'options') { %>
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue';
 import type { Todo, Meta } from './models';

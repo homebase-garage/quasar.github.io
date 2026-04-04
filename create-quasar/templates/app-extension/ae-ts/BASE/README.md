@@ -14,17 +14,17 @@ Compatible with:
 # Development
 
 ```bash
-$ <%= packageManager?.name ?? 'pnpm' %> i # install the dependencies
+$ <%= scope.packageManager?.name ?? 'pnpm' %> i # install the dependencies
 
-$ <%= packageManager?.name ?? 'pnpm' %> build # build the app-extension. Run this after making any change in ./app-extension
+$ <%= scope.packageManager?.name ?? 'pnpm' %> build # build the app-extension. Run this after making any change in ./app-extension
 
-$ <%= packageManager?.name ?? 'pnpm' %> dev:vite # start the app-vite playground
-$ <%= packageManager?.name ?? 'pnpm' %> dev:webpack # start the app-webpack playground
+$ <%= scope.packageManager?.name ?? 'pnpm' %> dev:vite # start the app-vite playground
+$ <%= scope.packageManager?.name ?? 'pnpm' %> dev:webpack # start the app-webpack playground
 ```
 
 For more development-related explanation, see:
 - [`app-extension/src/runtime/README.md`](app-extension/src/runtime/README.md)
-<% if (preset.install) { %>- [`app-extension/src/templates/README.md`](app-extension/src/templates/README.md)<% } %>
+<% if (scope.preset.install) { %>- [`app-extension/src/templates/README.md`](app-extension/src/templates/README.md)<% } %>
 
 # Donate
 
@@ -32,4 +32,4 @@ If you appreciate the work that went into this project, please consider [donatin
 
 # License
 
-<%= license %> (c) <%= author %>
+<%= scope.license %> (c) <%= scope.author %>

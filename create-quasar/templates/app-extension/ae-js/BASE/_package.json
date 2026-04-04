@@ -1,11 +1,11 @@
 {
-  <% if (needOrgName) { %>"name": "@<%= orgName %>/quasar-app-extension-<%= name %>",
-  <% } else { %>"name": "quasar-app-extension-<%= name %>",<% } %>
+  <% if (scope.needOrgName) { %>"name": "@<%= scope.orgName %>/quasar-app-extension-<%= scope.name %>",
+  <% } else { %>"name": "quasar-app-extension-<%= scope.name %>",<% } %>
   "version": "0.0.1",
-  "description": "<%= description %>",
-  "author": "<%= author %>",
-  "license": "<%= license %>",
-  "type": "<%= codeFormat === 'esm' ? 'module' : 'commonjs' %>",
+  "description": "<%= scope.description %>",
+  "author": "<%= scope.author %>",
+  "license": "<%= scope.license %>",
+  "type": "<%= scope.codeFormat === 'esm' ? 'module' : 'commonjs' %>",
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
   },

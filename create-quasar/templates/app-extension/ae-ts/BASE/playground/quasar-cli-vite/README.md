@@ -1,11 +1,11 @@
-# Quasar AE <%= name %> Playground (quasar-cli-vite)
+# Quasar AE <%= scope.name %> Playground (quasar-cli-vite)
 
 Playground for Quasar AE <%= name %>
 
 ## Install the dependencies
 
-<% if (packageManager) { %>```bash
-<%= packageManager.name %> install
+<% if (scope.packageManager) { %>```bash
+<%= scope.packageManager.name %> install
 ```<% } else { %>```bash
 # One of the following, depending on your package manager
 npm install
@@ -16,8 +16,8 @@ bun install
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
-<% if (packageManager) { %>```bash
-<%= packageManager.name %> run dev
+<% if (scope.packageManager) { %>```bash
+<%= scope.packageManager.name %> run dev
 ```<% } else { %>```bash
 # One of the following, depending on your package manager
 npm run dev
@@ -28,8 +28,8 @@ bun dev
 
 ### Lint the files
 
-<% if (packageManager) { %>```bash
-<%= packageManager.name %> run lint
+<% if (scope.packageManager) { %>```bash
+<%= scope.packageManager.name %> run lint
 ```<% } else { %>```bash
 # One of the following, depending on your package manager
 npm run lint
@@ -40,8 +40,8 @@ bun lint
 
 ### Format the files
 
-<% if (packageManager) { %>```bash
-<%= packageManager.name %> run format
+<% if (scope.packageManager) { %>```bash
+<%= scope.packageManager.name %> run format
 ```<% } else { %>```bash
 # One of the following, depending on your package manager
 npm run format
@@ -52,8 +52,8 @@ bun format
 
 ### Build the app for production
 
-<% if (packageManager) { %>```bash
-<%= packageManager.name %> run build
+<% if (scope.packageManager) { %>```bash
+<%= scope.packageManager.name %> run build
 ```<% } else { %>```bash
 # One of the following, depending on your package manager
 npm run build

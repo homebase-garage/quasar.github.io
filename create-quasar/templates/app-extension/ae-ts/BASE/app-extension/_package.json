@@ -1,9 +1,9 @@
 {
-  "name": "<%= pkgName %>",
+  "name": "<%= scope.pkgName %>",
   "version": "0.0.1",
-  "description": "<%= description %>",
-  "author": "<%= author %>",
-  "license": "<%= license %>",
+  "description": "<%= scope.description %>",
+  "author": "<%= scope.author %>",
+  "license": "<%= scope.license %>",
   "type": "module",
   "main": "./dist/runtime/index.js",
   "module": "./dist/runtime/index.js",
@@ -14,17 +14,17 @@
       "import": "./dist/runtime/index.js"
     },
     "./package.json": "./package.json",
-    <% if (preset.prompts) { %>"./dist/prompts": "./dist/prompts.js",<% } %>
-    <% if (preset.install) { %>"./dist/install": "./dist/install.js",<% } %>
-    <% if (preset.uninstall) { %>"./dist/uninstall": "./dist/uninstall.js",<% } %>
+    <% if (scope.preset.prompts) { %>"./dist/prompts": "./dist/prompts.js",<% } %>
+    <% if (scope.preset.install) { %>"./dist/install": "./dist/install.js",<% } %>
+    <% if (scope.preset.uninstall) { %>"./dist/uninstall": "./dist/uninstall.js",<% } %>
     "./dist/index": "./dist/index.js",
     "./*": "./dist/runtime/*"
   },
   "scripts": {
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    <% if (preset.install) { %>"build:code": "mkdist ./ --ext=js --declaration --pattern='**' --pattern='!shims-vue.d.ts' --pattern='!templates/**'",
+    <% if (scope.preset.install) { %>"build:code": "mkdist ./ --ext=js --declaration --pattern='**' --pattern='!shims-vue.d.ts' --pattern='!templates/**'",
     "build:templates": "mkdist ./ --src ./src/templates --dist ./dist/templates --loaders='raw'",
-    "build": "<%= packageManager?.name ?? 'pnpm' %> run build:code && <%= packageManager?.name ?? 'pnpm' %> run build:templates"<% } else { %>"build": "mkdist ./ --ext=js --declaration --pattern='**' --pattern='!shims-vue.d.ts'"<% } %>
+    "build": "<%= scope.packageManager?.name ?? 'pnpm' %> run build:code && <%= scope.packageManager?.name ?? 'pnpm' %> run build:templates"<% } else { %>"build": "mkdist ./ --ext=js --declaration --pattern='**' --pattern='!shims-vue.d.ts'"<% } %>
   },
   "devDependencies": {
     "@quasar/app-vite": "^2.1.0",

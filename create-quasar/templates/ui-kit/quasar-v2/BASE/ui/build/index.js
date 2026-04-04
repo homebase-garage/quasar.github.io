@@ -8,7 +8,7 @@ const { green, blue } = require('chalk')
 
 console.log()
 
-<% if (features.ae) { %>require('./script.app-ext.js').syncAppExt()<% } %>
+<% if (scope.features.ae) { %>require('./script.app-ext.js').syncAppExt()<% } %>
 require('./script.clean.js')
 
 console.log(` 📦 Building ${green('v' + require('../package.json').version)}...${parallel ? blue(' [multi-threaded]') : ''}\n`)

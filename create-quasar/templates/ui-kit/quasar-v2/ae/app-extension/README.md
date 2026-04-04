@@ -1,13 +1,13 @@
-# Quasar App Extension <%= name %>
+# Quasar App Extension <%= scope.name %>
 
 > Add a short description of your App Extension. What does it do? How is it beneficial? Why would someone want to use it?
 
-[![npm](https://img.shields.io/npm/v/quasar-app-extension-<%= name %>.svg?label=quasar-app-extension-<%= name %>)](https://www.npmjs.com/package/quasar-app-extension-<%= name %>)
-[![npm](https://img.shields.io/npm/dt/quasar-app-extension-<%= name %>.svg)](https://www.npmjs.com/package/quasar-app-extension-<%= name %>)
+[![npm](https://img.shields.io/npm/v/quasar-app-extension-<%= scope.name %>.svg?label=quasar-app-extension-<%= scope.name %>)](https://www.npmjs.com/package/quasar-app-extension-<%= scope.name %>)
+[![npm](https://img.shields.io/npm/dt/quasar-app-extension-<%= scope.name %>.svg)](https://www.npmjs.com/package/quasar-app-extension-<%= scope.name %>)
 
 # Install
 ```bash
-quasar ext add <%= name %>
+quasar ext add <%= scope.name %>
 ```
 Quasar CLI will retrieve it from NPM and install the extension.
 
@@ -17,7 +17,7 @@ Quasar CLI will retrieve it from NPM and install the extension.
 
 # Uninstall
 ```bash
-quasar ext remove <%= name %>
+quasar ext remove <%= scope.name %>
 ```
 
 # Info
@@ -30,4 +30,4 @@ quasar ext remove <%= name %>
 If you appreciate the work that went into this App Extension, please consider [donating to Quasar](https://donate.quasar.dev).
 
 # License
-<%= license %> (c) <%= author %>
+<%= scope.license %> (c) <%= scope.author %>

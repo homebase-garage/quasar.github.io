@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url'
 import { sep, dirname, normalize, join, resolve, extname } from 'node:path'
 import { execSync as exec } from 'node:child_process'
 import { sync as spawnSync } from 'cross-spawn'
-
 import {
   emptyDirSync,
   ensureDirSync,
@@ -11,10 +10,10 @@ import {
   copySync
 } from 'fs-extra/esm'
 import promptUser from 'prompts'
-import compileTemplate from 'lodash/template.js'
 import { globSync } from 'tinyglobby'
 import { yellow, green } from 'kolorist'
 
+import { renderTemplate as renderTemplateFn } from './template.js'
 import logger from './logger.js'
 
 const TEMPLATING_FILE_EXTENSIONS = [
@@ -103,11 +102,8 @@ function renderTemplate(relativePath, scope) {
 
     if (TEMPLATING_FILE_EXTENSIONS.includes(extension)) {
       const rawContent = readFileSync(sourcePath, 'utf-8')
-      const template = compileTemplate(rawContent, {
-        interpolate: /<%=([\s\S]+?)%>/g
-      })
 
-      let newContent = template(scope)
+      let newContent = renderTemplateFn(rawContent, scope)
       if (extension === '.json') {
         try {
           // try to format the JSON

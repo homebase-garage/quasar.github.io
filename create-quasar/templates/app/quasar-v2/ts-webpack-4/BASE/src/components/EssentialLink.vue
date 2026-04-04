@@ -18,7 +18,7 @@
     </q-item-section>
   </q-item>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup lang="ts">
 export interface EssentialLinkProps {
   title: string;
@@ -32,7 +32,7 @@ withDefaults(defineProps<EssentialLinkProps>(), {
   link: '#',
   icon: '',
 });
-</script><% } else if (sfcStyle === 'composition' || sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'composition' || scope.sfcStyle === 'options') { %>
 <script lang="ts">
 import { defineComponent } from 'vue';
 

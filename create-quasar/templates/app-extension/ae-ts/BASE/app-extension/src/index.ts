@@ -23,13 +23,13 @@ export default function (api: IndexAPI) {
   }
 
   api.extendQuasarConf((conf, api) => {
-    conf.boot!.push('~<%= pkgName %>/boot/register');
+    conf.boot!.push('~<%= scope.pkgName %>/boot/register');
 
     // make sure app extension files get transpiled
     if (api.hasWebpack) {
       const config = conf as unknown as WebpackQuasarConfProxy;
       config.build.webpackTranspileDependencies.push(
-        /<%= pkgName.replace('/', '[\\\\/]') %>[\\/]dist/,
+        /<%= scope.pkgName.replace('/', '[\\\\/]') %>[\\/]dist/,
       );
     }
   });

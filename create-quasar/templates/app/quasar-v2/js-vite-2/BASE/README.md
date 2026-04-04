@@ -1,6 +1,6 @@
-# <%= productName %> (<%= name %>)
+# <%= scope.productName %> (<%= scope.name %>)
 
-<%= description %>
+<%= scope.description %>
 
 ## Install the dependencies
 ```bash
@@ -13,7 +13,7 @@ npm install
 ```bash
 quasar dev
 ```
-<% if (preset.eslint) { %>
+<% if (scope.preset.eslint) { %>
 
 ### Lint the files
 ```bash
@@ -21,7 +21,7 @@ yarn lint
 # or
 npm run lint
 ```
-<% if (prettier) { %>
+<% if (scope.prettier) { %>
 
 ### Format the files
 ```bash

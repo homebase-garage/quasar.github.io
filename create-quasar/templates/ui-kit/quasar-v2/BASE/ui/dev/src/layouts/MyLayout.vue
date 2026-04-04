@@ -11,7 +11,7 @@
         />
 
         <q-toolbar-title>
-          quasar-ui-<%= name %> v{{ version }}
+          quasar-ui-<%= scope.name %> v{{ version }}
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>

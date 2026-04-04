@@ -1,9 +1,9 @@
 {
   "name": "playground-quasar-cli-webpack",
   "version": "0.0.1",
-  "description": "Playground for Quasar AE <%= name %>",
-  "productName": "Quasar AE <%= name %> Playground",
-  "author": "<%= author %>",
+  "description": "Playground for Quasar AE <%= scope.name %>",
+  "productName": "Quasar AE <%= scope.name %> Playground",
+  "author": "<%= scope.author %>",
   "private": true,
   "scripts": {
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
@@ -17,7 +17,7 @@
     "quasar": "^2.16.7",
     "vue": "^3.4.36",
     "vue-router": "^5.0.3",
-    "<%= pkgName %>": <% if (!packageManager || ['pnpm', 'bun'].includes(packageManager?.name)) { %>"workspace:*"<% } else { %>"*"<% } %>
+    "<%= scope.pkgName %>": <% if (!scope.packageManager || ['pnpm', 'bun'].includes(scope.packageManager?.name)) { %>"workspace:*"<% } else { %>"*"<% } %>
   },
   "devDependencies": {
     "@quasar/app-webpack": "^4.1.0",

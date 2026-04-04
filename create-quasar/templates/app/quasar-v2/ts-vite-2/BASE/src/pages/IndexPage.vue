@@ -8,7 +8,7 @@
     ></example-component>
   </q-page>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Todo, Meta } from 'components/models';
@@ -40,7 +40,7 @@ const todos = ref<Todo[]>([
 const meta = ref<Meta>({
   totalCount: 1200
 });
-</script><% } else if (sfcStyle === 'composition') { %>
+</script><% } else if (scope.sfcStyle === 'composition') { %>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import type { Todo, Meta } from 'components/models';
@@ -84,7 +84,7 @@ export default defineComponent({
     return { todos, meta };
   }
 });
-</script><% } else if (sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'options') { %>
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { Todo, Meta } from 'components/models';

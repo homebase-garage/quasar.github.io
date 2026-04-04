@@ -1,31 +1,31 @@
 {
-  "name": "<%= name %>",
+  "name": "<%= scope.name %>",
   "version": "0.0.1",
-  "description": "<%= description %>",
-  "productName": "<%= productName %>",
-  "author": "<%= author %>",
+  "description": "<%= scope.description %>",
+  "productName": "<%= scope.productName %>",
+  "author": "<%= scope.author %>",
   "type": "module",
   "private": true,
   "scripts": {
-    <% if (preset.eslint) { %>"lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",<% } %>
-    <% if (prettier) { %>"format": "prettier --write \"**/*.{js,vue<% if (css !== 'sass') { %>,<%= css %><% } %>,html,md,json}\" --ignore-path .gitignore",<% } %>
+    <% if (scope.preset.eslint) { %>"lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",<% } %>
+    <% if (scope.prettier) { %>"format": "prettier --write \"**/*.{js,vue<% if (scope.css !== 'sass') { %>,<%= scope.css %><% } %>,html,md,json}\" --ignore-path .gitignore",<% } %>
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
     "postinstall": "quasar prepare"
   },
   "dependencies": {
-    <% if (preset.axios) { %>"axios": "^1.13.6",<% } %>
-    <% if (preset.i18n) { %>"vue-i18n": "^11.3.0",<% } %>
-    <% if (preset.pinia) { %>"pinia": "^3.0.1",<% } %>
+    <% if (scope.preset.axios) { %>"axios": "^1.13.6",<% } %>
+    <% if (scope.preset.i18n) { %>"vue-i18n": "^11.3.0",<% } %>
+    <% if (scope.preset.pinia) { %>"pinia": "^3.0.1",<% } %>
     "@quasar/extras": "^1.16.4",
     "quasar": "^2.16.0",
     "vue": "^3.5.22",
     "vue-router": "^5.0.3"
   },
   "devDependencies": {
-    <% if (preset.i18n) { %>"@intlify/unplugin-vue-i18n": "^11.0.0",<% } %>
-    <% if (preset.eslint) { %>
+    <% if (scope.preset.i18n) { %>"@intlify/unplugin-vue-i18n": "^11.0.0",<% } %>
+    <% if (scope.preset.eslint) { %>
     "@eslint/js": "^9.39.4",
     "eslint": "^9.39.4",
     "eslint-plugin-vue": "^10.8.0",
@@ -33,7 +33,7 @@
     "vite-plugin-checker": "^0.12.0",
     "vue-eslint-parser": "^10.4.0",
     <% } %>
-    <% if (prettier) { %>
+    <% if (scope.prettier) { %>
     "@vue/eslint-config-prettier": "^10.2.0",
     "prettier": "^3.8.1",
     <% } %>

@@ -7,7 +7,7 @@
 
 function extendConf (conf, api) {
   // register our boot file
-  conf.boot.push('~quasar-app-extension-<%= name %>/src/boot/register.js')
+  conf.boot.push('~quasar-app-extension-<%= scope.name %>/src/boot/register.js')
 
   if (api.hasWebpack) {
     // make sure app extension files & ui package gets transpiled
@@ -15,11 +15,11 @@ function extendConf (conf, api) {
       conf.build.webpackTranspileDependencies // q/app-webpack >= v4
       || conf.build.transpileDependencies // q/app-webpack v3
     )
-    transpileTarget.push(/quasar-app-extension-<%= name %>[\\/]src/)
+    transpileTarget.push(/quasar-app-extension-<%= scope.name %>[\\/]src/)
   }
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
-  conf.css.push('~quasar-ui-<%= name %>/src/index.sass')
+  conf.css.push('~quasar-ui-<%= scope.name %>/src/index.sass')
 }
 
 export default function (api) {
@@ -35,12 +35,12 @@ export default function (api) {
     api.compatibleWith('@quasar/app-webpack', '^3.10.0 || ^4.0.0')
   }
 
-<% if (features.component) { %>
+<% if (scope.features.component) { %>
   // Uncomment the line below if you provide a JSON API for your component
-  // api.registerDescribeApi('<%= componentName %>', '~quasar-ui-<%= name %>/src/components/<%= componentName %>.json')
-<% } %><% if (features.directive) { %>
+  // api.registerDescribeApi('<%= scope.componentName %>', '~quasar-ui-<%= scope.name %>/src/components/<%= scope.componentName %>.json')
+<% } %><% if (scope.features.directive) { %>
   // Uncomment the line below if you provide a JSON API for your directive
-  // api.registerDescribeApi('<%= directiveName %>', '~quasar-ui-<%= name %>/src/directives/<%= directiveName %>.json')
+  // api.registerDescribeApi('<%= scope.directiveName %>', '~quasar-ui-<%= scope.name %>/src/directives/<%= scope.directiveName %>.json')
 <% } %>
 
   // We extend /quasar.conf.js

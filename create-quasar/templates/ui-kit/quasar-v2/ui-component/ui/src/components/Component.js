@@ -2,12 +2,12 @@ import { h } from 'vue'
 import { QBadge } from 'quasar'
 
 export default {
-  name: '<%= componentName %>',
+  name: '<%= scope.componentName %>',
 
   setup () {
     return () => h(QBadge, {
-      class: '<%= componentName %>',
-      label: '<%= componentName %>'
+      class: '<%= scope.componentName %>',
+      label: '<%= scope.componentName %>'
     })
   }
 }

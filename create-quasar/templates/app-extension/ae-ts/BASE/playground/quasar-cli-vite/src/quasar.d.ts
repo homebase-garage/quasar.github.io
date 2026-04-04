@@ -7,4 +7,4 @@
 /// <reference types="@quasar/app-vite" />
 
 // Load global component typings
-/// <reference types="<%= pkgName %>" />
+/// <reference types="<%= scope.pkgName %>" />

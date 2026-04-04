@@ -1,14 +1,14 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file
 
-<% if (preset.eslint) { %>
+<% if (scope.preset.eslint) { %>
 /* eslint-disable @typescript-eslint/no-var-requires */
 <% } %>
 import { defineConfig } from '#q-app/wrappers';
 
 export default defineConfig((/* ctx */) => {
   return {
-    <% if (preset.eslint) { %>eslint: {
+    <% if (scope.preset.eslint) { %>eslint: {
       // fix: true,
       // include: [],
       // exclude: [],
@@ -25,13 +25,13 @@ export default defineConfig((/* ctx */) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
-      <% if (preset.i18n) { %>'i18n',<% } %>
-      <% if (preset.axios) { %>'axios',<% } %>
+      <% if (scope.preset.i18n) { %>'i18n',<% } %>
+      <% if (scope.preset.axios) { %>'axios',<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css
     css: [
-      'app.<%= css %>'
+      'app.<%= scope.css %>'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -207,7 +207,7 @@ export default defineConfig((/* ctx */) => {
       builder: {
         // https://www.electron.build/configuration
 
-        appId: '<%= name %>'
+        appId: '<%= scope.name %>'
       }
     },
 

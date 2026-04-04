@@ -1,4 +1,4 @@
-Quasar App Extension <%= name %>
+Quasar App Extension <%= scope.name %>
 ===
 
 _Be sure to change this readme as appropriate for your app extension._
@@ -7,15 +7,15 @@ _Think about the organization of this file and how the information will be benef
 
 > Add a short description of your App Extension. What does it do? How is it beneficial? Why would someone want to use it?
 
-<%= description %>
+<%= scope.description %>
 
 # Install
 ```bash
-quasar ext add <%= name %>
+quasar ext add <%= scope.name %>
 ```
 Quasar CLI will retrieve it from the NPM registry and install the extension to your project.
 
-<% if (preset.prompts) { %>
+<% if (scope.preset.prompts) { %>
 ## Prompts
 
 > Explain the prompts here
@@ -23,7 +23,7 @@ Quasar CLI will retrieve it from the NPM registry and install the extension to y
 <% } %>
 # Uninstall
 ```bash
-quasar ext remove <%= name %>
+quasar ext remove <%= scope.name %>
 ```
 
 # Info

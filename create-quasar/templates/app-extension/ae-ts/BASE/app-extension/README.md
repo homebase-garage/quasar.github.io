@@ -1,14 +1,14 @@
-# Quasar App Extension <%= name %> (<%= pkgName %>)
+# Quasar App Extension <%= scope.name %> (<%= scope.pkgName %>)
 
 > TODO: Add a short description of your App Extension. What does it do? How is it beneficial? Why would someone want to use it?
 
-[![npm](https://img.shields.io/npm/v/<%= pkgName %>.svg?label=<%= pkgName %>)](https://www.npmjs.com/package/<%= pkgName %>)
-[![npm](https://img.shields.io/npm/dt/<%= pkgName %>.svg)](https://www.npmjs.com/package/<%= pkgName %>)
+[![npm](https://img.shields.io/npm/v/<%= scope.pkgName %>.svg?label=<%= scope.pkgName %>)](https://www.npmjs.com/package/<%= scope.pkgName %>)
+[![npm](https://img.shields.io/npm/dt/<%= scope.pkgName %>.svg)](https://www.npmjs.com/package/<%= scope.pkgName %>)
 
 # Install
 
 ```bash
-quasar ext add <%= name %>
+quasar ext add <%= scope.name %>
 ```
 
 Quasar CLI will retrieve it from NPM and install the extension.
@@ -18,7 +18,7 @@ Quasar CLI will retrieve it from NPM and install the extension.
 Add this to `src/quasar.d.ts` to load the global component typings:
 ```ts
 // Load global component typings
-/// <reference types="<%= pkgName %>" />
+/// <reference types="<%= scope.pkgName %>" />
 ```
 
 ## Prompts
@@ -28,7 +28,7 @@ Add this to `src/quasar.d.ts` to load the global component typings:
 # Uninstall
 
 ```bash
-quasar ext remove <%= name %>
+quasar ext remove <%= scope.name %>
 ```
 
 # Info
@@ -49,4 +49,4 @@ If you appreciate the work that went into this App Extension, please consider [d
 
 # License
 
-<%= license %> (c) <%= author %>
+<%= scope.license %> (c) <%= scope.author %>

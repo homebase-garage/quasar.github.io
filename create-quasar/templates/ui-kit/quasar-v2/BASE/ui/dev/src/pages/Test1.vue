@@ -1,10 +1,10 @@
 <template>
   <q-page padding>
-    <% if (features.component) { %>
-    <<%= componentName %> />
+    <% if (scope.features.component) { %>
+    <<%= scope.componentName %> />
     <% } %>
-    <% if (features.directive) { %>
-    <div v-<%= directiveName %> class="directive-target">
+    <% if (scope.features.directive) { %>
+    <div v-<%= scope.directiveName %> class="directive-target">
       x
     </div>
     <% } %>

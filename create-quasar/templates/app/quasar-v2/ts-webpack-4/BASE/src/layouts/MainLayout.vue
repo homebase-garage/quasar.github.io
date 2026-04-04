@@ -44,7 +44,7 @@
     </q-page-container>
   </q-layout>
 </template>
-<% if (sfcStyle === 'composition-setup') { %>
+<% if (scope.sfcStyle === 'composition-setup') { %>
 <script setup lang="ts">
 import { ref } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
@@ -99,7 +99,7 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
-</script><% } else if (sfcStyle === 'composition') { %>
+</script><% } else if (scope.sfcStyle === 'composition') { %>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
@@ -168,7 +168,7 @@ export default defineComponent({
     };
   }
 });
-</script><% } else if (sfcStyle === 'options') { %>
+</script><% } else if (scope.sfcStyle === 'options') { %>
 <script lang="ts">
 import { defineComponent } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';

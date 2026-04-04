@@ -1,24 +1,24 @@
-# <% if (features.component) { %>Component <%= componentName %><% if (features.directive) { %> and <% } } %><% if (features.directive) { %>Directive v-<%= directiveName %><% } %>
+# <% if (scope.features.component) { %>Component <%= scope.componentName %><% if (scope.features.directive) { %> and <% } } %><% if (scope.features.directive) { %>Directive v-<%= scope.directiveName %><% } %>
 
-[![npm](https://img.shields.io/npm/v/quasar-ui-<%= name %>.svg?label=quasar-ui-<%= name %>)](https://www.npmjs.com/package/quasar-ui-<%= name %>)
-[![npm](https://img.shields.io/npm/dt/quasar-ui-<%= name %>.svg)](https://www.npmjs.com/package/quasar-ui-<%= name %>)
+[![npm](https://img.shields.io/npm/v/quasar-ui-<%= scope.name %>.svg?label=quasar-ui-<%= scope.name %>)](https://www.npmjs.com/package/quasar-ui-<%= scope.name %>)
+[![npm](https://img.shields.io/npm/dt/quasar-ui-<%= scope.name %>.svg)](https://www.npmjs.com/package/quasar-ui-<%= scope.name %>)
 
 **Compatible with Quasar UI v2 and Vue 3**.
 
-<% if (features.component) { %>
-# Component <%= componentName %>
+<% if (scope.features.component) { %>
+# Component <%= scope.componentName %>
 > Short description of the component
 <% } %>
 
-<% if (features.directive) { %>
-# Directive v-<%= directiveName %>
+<% if (scope.features.directive) { %>
+# Directive v-<%= scope.directiveName %>
 > Short description of the directive
 <% } %>
 
 # Usage
 
 ## Quasar CLI project
-<% if (features.ae) { %>
+<% if (scope.features.ae) { %>
 
 Install the [App Extension](../app-extension).
 
@@ -29,8 +29,8 @@ Create and register a boot file:
 
 ```js
 import Vue from 'vue'
-import Plugin from 'quasar-ui-<%= name %>'
-import 'quasar-ui-<%= name %>/dist/index.css'
+import Plugin from 'quasar-ui-<%= scope.name %>'
+import 'quasar-ui-<%= scope.name %>/dist/index.css'
 
 Vue.use(Plugin)
 ```
@@ -38,18 +38,18 @@ Vue.use(Plugin)
 **OR**:
 
 ```html
-<style src="quasar-ui-<%= name %>/dist/index.css"></style>
+<style src="quasar-ui-<%= scope.name %>/dist/index.css"></style>
 
 <script>
-import { <% if (features.component) { %>Component as <%= componentName %><% if (features.directive) { %>, <% } %><% } %><% if (features.directive) { %>Directive<% } %> } from 'quasar-ui-<%= name %>'
+import { <% if (scope.features.component) { %>Component as <%= scope.componentName %><% if (scope.features.directive) { %>, <% } %><% } %><% if (scope.features.directive) { %>Directive<% } %> } from 'quasar-ui-<%= scope.name %>'
 
 export default {
-  <% if (features.component) { %>
+  <% if (scope.features.component) { %>
   components: {
-    <%= componentName %>
-  }<% if (features.directive) { %>,<% } %>
+    <%= scope.componentName %>
+  }<% if (scope.features.directive) { %>,<% } %>
   <% } %>
-  <% if (features.directive) { %>
+  <% if (scope.features.directive) { %>
   directives: {
     Directive
   }
@@ -62,8 +62,8 @@ export default {
 
 ```js
 import Vue from 'vue'
-import Plugin from 'quasar-ui-<%= name %>'
-import 'quasar-ui-<%= name %>/dist/index.css'
+import Plugin from 'quasar-ui-<%= scope.name %>'
+import 'quasar-ui-<%= scope.name %>/dist/index.css'
 
 Vue.use(Plugin)
 ```
@@ -71,18 +71,18 @@ Vue.use(Plugin)
 **OR**:
 
 ```html
-<style src="quasar-ui-<%= name %>/dist/index.css"></style>
+<style src="quasar-ui-<%= scope.name %>/dist/index.css"></style>
 
 <script>
-import { <% if (features.component) { %>Component as <%= componentName %><% if (features.directive) { %>, <% } %><% } %><% if (features.directive) { %>Directive<% } %> } from 'quasar-ui-<%= name %>'
+import { <% if (scope.features.component) { %>Component as <%= scope.componentName %><% if (scope.features.directive) { %>, <% } %><% } %><% if (scope.features.directive) { %>Directive<% } %> } from 'quasar-ui-<%= scope.name %>'
 
 export default {
-  <% if (features.component) { %>
+  <% if (scope.features.component) { %>
   components: {
-    <%= componentName %>
-  }<% if (features.directive) { %>,<% } %>
+    <%= scope.componentName %>
+  }<% if (scope.features.directive) { %>,<% } %>
   <% } %>
-  <% if (features.directive) { %>
+  <% if (scope.features.directive) { %>
   directives: {
     Directive
   }
@@ -93,23 +93,23 @@ export default {
 
 ## UMD variant
 
-Exports `window.<%= umdExportName %>`.
+Exports `window.<%= scope.umdExportName %>`.
 
 Add the following tag(s) after the Quasar ones:
 
 ```html
 <head>
   <!-- AFTER the Quasar stylesheet tags: -->
-  <link href="https://cdn.jsdelivr.net/npm/quasar-ui-<%= name %>/dist/index.min.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/quasar-ui-<%= scope.name %>/dist/index.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
   <!-- at end of body, AFTER Quasar script(s): -->
-  <script src="https://cdn.jsdelivr.net/npm/quasar-ui-<%= name %>/dist/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quasar-ui-<%= scope.name %>/dist/index.umd.min.js"></script>
 </body>
 ```
 If you need the RTL variant of the CSS, then go for the following (instead of the above stylesheet link):
 ```html
-<link href="https://cdn.jsdelivr.net/npm/quasar-ui-<%= name %>/dist/index.rtl.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.jsdelivr.net/npm/quasar-ui-<%= scope.name %>/dist/index.rtl.min.css" rel="stylesheet" type="text/css">
 ```
 
 # Setup
@@ -153,4 +153,4 @@ If you have a component that has assets, like language or icon-sets, you will ne
 If you appreciate the work that went into this, please consider [donating to Quasar](https://donate.quasar.dev).
 
 # License
-<%= license %> (c) <%= author %>
+<%= scope.license %> (c) <%= scope.author %>
