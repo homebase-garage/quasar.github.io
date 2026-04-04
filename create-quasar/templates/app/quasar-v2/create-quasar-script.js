@@ -29,20 +29,6 @@ export async function createQuasarScript({ scope, utils }) {
 
   await utils.injectAuthor(scope)
 
-  await utils.prompts(scope, [
-    {
-      type: 'select',
-      name: 'css',
-      message: 'Pick your CSS preprocessor:',
-      initial: 0,
-      choices: [
-        { title: 'Sass with SCSS syntax', value: 'scss' },
-        { title: 'Sass with indented syntax', value: 'sass' },
-        { title: 'None (the others will still be available)', value: 'css' }
-      ]
-    }
-  ])
-
   const { createQuasarScript: create } = await import(
     `./${scope.scriptType}-${scope.engine}/create-quasar-script.js`
   )

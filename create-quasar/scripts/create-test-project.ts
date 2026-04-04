@@ -36,9 +36,8 @@ export async function createProject({
     author: "Quasar Team (info@quasar.dev)",
 
     // The defaults
-    css: "scss",
 
-    preset: ["eslint"],
+    preset: ["sass", "eslint"],
     prettier: true,
 
     packageManager

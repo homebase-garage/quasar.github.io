@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     <% if (scope.preset.eslint) { %>"lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",<% } %>
-    <% if (scope.prettier) { %>"format": "prettier --write \"**/*.{js,vue<% if (scope.css !== 'sass') { %>,<%= scope.css %><% } %>,html,md,json}\" --ignore-path .gitignore",<% } %>
+    <% if (scope.prettier) { %>"format": "prettier --write \"**/*.{js,vue,css<% if (scope.preset.sass) { %>,scss<% } %>,html,md,json}\" --ignore-path .gitignore",<% } %>
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",

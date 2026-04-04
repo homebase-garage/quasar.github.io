@@ -6,6 +6,11 @@ export async function createQuasarScript({ scope, utils }) {
       message: 'Check the features needed for your project:',
       choices: [
         {
+          title: 'Sass CSS preprocessor',
+          value: 'sass',
+          selected: true
+        },
+        {
           title: 'Linting (vite-plugin-checker + ESLint)',
           value: 'eslint',
           description: 'recommended',
@@ -35,7 +40,9 @@ export async function createQuasarScript({ scope, utils }) {
 
   utils.createTargetDir(scope)
   utils.renderTemplate('BASE', scope)
-  utils.renderTemplate(scope.css, scope)
+
+  const css = scope.preset.sass ? 'sass' : 'css'
+  utils.renderTemplate(css, scope)
 
   if (scope.preset.axios) utils.renderTemplate('axios', scope)
   if (scope.preset.i18n) utils.renderTemplate('i18n', scope)
