@@ -157,48 +157,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
     envCfg
   )
 
-  const { modeName: quasarMode, dev } = ctx
-  const buildType = dev === true ? 'dev' : 'prod'
-
-  let fileList = [
-    // .env
-    // loaded in all cases
-    '.env',
-
-    // .env.local
-    // loaded in all cases, ignored by git
-    '.env.local',
-
-    // .env.[dev|prod]
-    // loaded for dev or prod only
-    `.env.${buildType}`,
-
-    // .env.local.[dev|prod]
-    // loaded for dev or prod only, ignored by git
-    `.env.${buildType}.local`,
-
-    // .env.[quasarMode]
-    // loaded for specific Quasar CLI mode only
-    `.env.${quasarMode}`,
-
-    // .env.local.[quasarMode]
-    // loaded for specific Quasar CLI mode only, ignored by git
-    `.env.${quasarMode}.local`,
-
-    // .env.[dev|prod].[quasarMode]
-    // loaded for specific Quasar CLI mode and dev|prod only
-    `.env.${buildType}.${quasarMode}`,
-
-    // .env.local.[dev|prod].[quasarMode]
-    // loaded for specific Quasar CLI mode and dev|prod only, ignored by git
-    `.env.${buildType}.${quasarMode}.local`
-  ]
-
-  if (isCI === true) {
-    // in CI, we ignore all .local files, as they are meant to be used locally only
-    fileList = fileList.filter(entry => entry.endsWith('.local') === false)
-  }
-
+  const fileList = isCI === true ? ['.env'] : ['.env', '.env.local']
   const additionalFiles = Array.isArray(localEnv.file)
     ? localEnv.file
     : localEnv.file
