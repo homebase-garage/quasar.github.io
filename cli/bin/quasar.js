@@ -3,6 +3,13 @@
 // oxlint-disable-next-line import/no-unassigned-import
 import '../lib/node-version-check.js'
 
+if (
+  process.argv.includes('--nocolor') ||
+  (await import('../lib/is-terminal.js').then(({ isCI }) => isCI))
+) {
+  process.env.FORCE_COLOR = '0'
+}
+
 import { cliPkg } from '../lib/cli-pkg.js'
 import updateNotifier from 'update-notifier'
 

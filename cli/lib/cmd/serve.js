@@ -5,7 +5,6 @@ const argv = parseArgs(process.argv.slice(2), {
     p: 'port',
     H: 'hostname',
     s: 'silent',
-    colors: 'colors',
     cors: 'cors',
     o: 'open',
     i: 'index',
@@ -17,13 +16,12 @@ const argv = parseArgs(process.argv.slice(2), {
     P: 'proxy',
     h: 'help'
   },
-  boolean: ['https', 'colors', 'history', 'https', 'cors'],
-  string: ['H', 'C', 'K', 'i', 'sw'],
+  boolean: ['https', 'history', 'https', 'cors'],
+  string: ['H', 'C', 'K', 'i'],
   default: {
     p: process.env.PORT || 4000,
     H: process.env.HOSTNAME || '0.0.0.0',
-    i: 'index.html',
-    colors: true
+    i: 'index.html'
   }
 })
 
@@ -43,21 +41,20 @@ if (argv.help) {
     --port, -p              Port to use (default: 4000)
     --hostname, -H          Address to use (default: 0.0.0.0)
     --silent, -s            Suppress log message
-    --colors                Log messages with colors (default: true)
     --cors                  Enable CORS
     --open, -o              Open browser window after starting
 
-    --sw <path>             Service worker url path (default: sw.js)
     --index, -i <path>      Index url path (default: index.html)
     --history               Use history mode;
                               All requests fallback to /index.html,
-                              unless using "--index" parameter
+                              or whatever "--index" parameter specifies
                               (default: false)
 
     --https                 Enable HTTPS
     --cert, -C [path]       Path to SSL cert file (Optional)
     --key, -K [path]        Path to SSL key file (Optional)
 
+    --nocolor               Disable colored output
     --help, -h              Displays this message
 
   Proxy file example
@@ -73,79 +70,54 @@ if (argv.help) {
 }
 
 import { existsSync } from 'node:fs'
-import { stat, readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { join, isAbsolute } from 'node:path'
 
 import { cliPkg } from '../cli-pkg.js'
 import { log, fatal } from '../logger.js'
-import { defineEventHandler } from 'h3'
 
 const root = getAbsolutePath(argv._[0] || '.')
-const resolve = p => join(root, p)
+const resolve = path => join(root, path)
 
 function getAbsolutePath(pathParam) {
   return isAbsolute(pathParam) ? pathParam : join(process.cwd(), pathParam)
 }
 
-if (!argv.colors) {
-  process.env.FORCE_COLOR = '0'
-}
-
 const { green, gray, red } = await import('kolorist')
-const { H3, serve, serveStatic, onResponse, onError } = await import('h3')
+const { Hono } = await import('hono')
 
-const app = new H3()
+const app = new Hono()
 
 if (argv.cors) {
-  const { handleCors } = await import('h3')
+  const { cors } = await import('hono/cors')
+
   app.use(
-    defineEventHandler(event => {
-      handleCors(event, {
-        origin: '*',
-        preflight: {
-          statusCode: 204
-        },
-        methods: '*'
-      })
+    '/*',
+    cors({
+      origin: '*',
+      allowMethods: ['*'] // Allows all methods
     })
   )
 }
 
 if (!argv.silent) {
-  app.use(
-    onResponse((response, event) => {
+  app.use('*', async (c, next) => {
+    await next()
+
+    const ip =
+      c.env?.incoming?.socket?.remoteAddress ||
+      c.req.header('x-forwarded-for') ||
+      'unknown'
+
+    if (c.res.status >= 200 && c.res.status < 300) {
       console.log(
-        `${green(`[${event.req.method}]`)} ${event.url.pathname} ${green(response.status)} ${gray('[' + event.req.ip + ']')} ${new Date()}`
+        `${green(`[${c.req.method}]`)} ${c.req.path} ${green(c.res.status)} ${gray('[' + ip + ']')} ${new Date()}`
       )
-    })
-  )
-
-  app.use(
-    onError((error, event) => {
+    } else {
       console.log(
-        `${red(`[${event.req.method}]`)} ${event.url.pathname} ${red(`!! ${error.message}`)} ${gray('[' + event.req.ip + ']')} ${new Date()}`
+        `${red(`[${c.req.method}]`)} ${c.req.path} ${red(`!! ${c.res.status}`)} ${gray('[' + ip + ']')} ${new Date()}`
       )
-    })
-  )
-}
-
-const swFile = resolve(argv.sw || 'sw.js')
-if (!existsSync(swFile)) {
-  if (argv.sw) {
-    fatal(`Service worker file not found: ${swFile}`)
-  }
-} else {
-  const swFileContent = await readFile(swFile, 'utf-8')
-
-  app.use(event => {
-    if (event.req.method !== 'GET') return
-    if (event.url.pathname !== `/${argv.sw}`) return
-
-    event.res.status = 200
-    event.res.statusText = 'OK'
-    event.res.headers.set('Content-Type', 'application/javascript')
-
-    return swFileContent
+    }
   })
 }
 
@@ -155,13 +127,33 @@ if (argv.proxy) {
     fatal(`Proxy definition file not found: ${file}`)
   }
 
+  // Import the config file and proxy middleware
   file = await import(file)
-
-  const { fromNodeMiddleware } = await import('h3')
   const { createProxyMiddleware } = await import('http-proxy-middleware')
 
-  ;(file.default || file).forEach(entry => {
-    app.use(entry.path, fromNodeMiddleware(createProxyMiddleware(entry.rule)))
+  const proxyEntries = file.default || file
+
+  proxyEntries.forEach(entry => {
+    const proxyFn = createProxyMiddleware(entry.rule)
+
+    // Wrap the Node.js middleware for Hono
+    // Note: Hono requires a wildcard to prefix-match. e.g., '/api/*' instead of '/api'
+    const routePath = entry.path.endsWith('/*') ? entry.path : `${entry.path}/*`
+
+    app.use(
+      routePath,
+      (c, next) =>
+        new Promise((resolveEntry, rejectEntry) => {
+          // Pass the raw Node.js req/res objects to http-proxy-middleware
+          proxyFn(c.env.incoming, c.env.outgoing, err => {
+            if (err) {
+              return rejectEntry(err)
+            }
+            // If the proxy middleware skips/falls through, continue Hono's chain
+            resolveEntry(next())
+          })
+        })
+    )
   })
 }
 
@@ -173,35 +165,34 @@ if (argv.history) {
 
   const indexFileContent = await readFile(indexFile, 'utf-8')
 
-  app.use(event => {
-    if (event.req.method !== 'GET') return
+  app.use('*', async (c, next) => {
+    if (c.req.method !== 'GET') {
+      return await next()
+    }
 
-    const acceptHeader = event.req.headers.get('Accept')
-    if (!acceptHeader?.includes('text/html')) return
-    if (existsSync(resolve(event.url.pathname))) return
+    const acceptHeader = c.req.header('Accept')
+    if (!acceptHeader?.includes('text/html')) {
+      return await next()
+    }
 
-    event.res.status = 200
-    event.res.statusText = 'OK'
-    event.res.headers.set('Content-Type', 'text/html')
+    const requestedFile = resolve('.' + c.req.path)
+    if (existsSync(requestedFile)) {
+      return await next()
+    }
 
-    return indexFileContent
+    return c.html(indexFileContent)
   })
 }
 
-app.use(event =>
-  serveStatic(event, {
-    indexNames: [`${argv.index.startsWith('/') ? '' : '/'}${argv.index}`],
-    encodings: argv.gzip ? { gzip: '.gz', br: '.br' } : {},
-    getContents: id => readFile(resolve(id)),
-    getMeta: async id => {
-      const stats = await stat(resolve(id)).catch(() => {})
-      if (stats?.isFile()) {
-        return {
-          size: stats.size,
-          mtime: stats.mtimeMs
-        }
-      }
-    }
+import { serveStatic } from '@hono/node-server/serve-static'
+const indexFile = argv.index.startsWith('/') ? argv.index.slice(1) : argv.index
+
+app.use(
+  '/*',
+  serveStatic({
+    root,
+    index: indexFile,
+    precompressed: true
   })
 )
 
@@ -228,8 +219,13 @@ const getListeningBanner = () => {
 
 const getHttpOptions = async () => {
   if (!argv.https) {
+    const { createServer } = await import('node:http')
     return {
-      protocol: 'http'
+      createServer,
+      serverOptions: {
+        keepAlive: true,
+        keepAliveTimeout: 5000
+      }
     }
   }
 
@@ -255,22 +251,47 @@ const getHttpOptions = async () => {
     fakeCert = await getCertificate({ log, fatal })
   }
 
+  const { createServer } = await import('node:http2')
+
   return {
-    protocol: 'https',
-    tls: {
+    createServer,
+    serverOptions: {
+      keepAlive: true,
+      keepAliveTimeout: 5000,
       key: key || fakeCert,
       cert: cert || fakeCert
     }
   }
 }
 
-const server = serve(app, {
+import { serve } from '@hono/node-server'
+
+const server = serve({
+  fetch: app.fetch,
   port: argv.port,
   hostname: argv.hostname,
   ...(await getHttpOptions())
 })
 
-await server.ready()
+// graceful shutdown
+process.on('SIGINT', () => {
+  server.close()
+  process.exit(0)
+})
+process.on('SIGTERM', () => {
+  server.close(err => {
+    if (err) {
+      console.error(err)
+      process.exit(1)
+    }
+    process.exit(0)
+  })
+})
+
+await new Promise((resolveListen, rejectListen) => {
+  server.once('listening', resolveListen)
+  server.once('error', rejectListen)
+})
 
 const filler = ''.padEnd(20, ' ')
 const info = [
@@ -295,9 +316,17 @@ const info = [
 console.log('\n' + info.join('\n') + '\n')
 
 if (argv.open) {
-  const { isMinimalTerminal } = await import('../is-minimal-terminal.js')
+  const { isMinimalTerminal } = await import('../is-terminal.js')
   if (!isMinimalTerminal) {
+    const url = getListeningUrl(
+      argv.hostname === '0.0.0.0' ? 'localhost' : argv.hostname
+    )
+
+    log('Opening default browser at ' + url + '\n')
     const { default: open } = await import('open')
-    open(getListeningUrl(argv.hostname), { url: true })
+    open(url).catch(() => {
+      warn('Failed to open default browser')
+      warn()
+    })
   }
 }

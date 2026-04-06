@@ -45,6 +45,7 @@ if (argv.help) {
     --registry, -r    NPM registry URL
                         * default is taken from your machine's npm config
                         * example: https://registry.npmjs.org/
+    --nocolor         Disable colored output
     --help, -h        Displays this message
   `)
   process.exit(0)

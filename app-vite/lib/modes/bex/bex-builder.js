@@ -84,7 +84,7 @@ export class QuasarModeBuilder extends AppBuilder {
           } else {
             // Ignore things like sockets or symlinks and emit a warning
             if (typeof warn === 'function') {
-              warn(`Warning: Skipping unsupported entry type at ${fullPath}`)
+              warn(`Skipping unsupported entry type at ${fullPath}`)
             }
           }
         }
