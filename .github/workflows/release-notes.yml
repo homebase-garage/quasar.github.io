@@ -26,6 +26,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
+        working-directory: ./docs
         run: pnpm i
 
       - name: Generate Release Notes
