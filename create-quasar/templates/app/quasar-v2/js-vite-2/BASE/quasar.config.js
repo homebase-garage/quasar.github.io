@@ -18,7 +18,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: [
-      'app.<%= scope.preset.sass ? 'sass' : 'css' %>'
+      'app.<%= scope.preset.sass ? 'scss' : 'css' %>'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras

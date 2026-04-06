@@ -30,7 +30,7 @@ export default defineConfig((/* ctx */) => {
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css
     css: [
-      'app.<%= scope.preset.sass ? 'sass' : 'css' %>'
+      'app.<%= scope.preset.sass ? 'scss' : 'css' %>'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
