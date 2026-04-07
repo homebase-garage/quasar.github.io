@@ -22,7 +22,6 @@ const port = process.env.PORT || <%= quasarConf.ssr.prodPort %>
 
 const doubleSlashRE = /\/\//g
 const publicPath = `<%= quasarConf.build.publicPath %>`
-// backward compat (Express v5 vs v4):
 const resolveUrlPath = publicPath === '/'
   ? url => url || '/'
   : url => url ? (publicPath + url).replace(doubleSlashRE, '/') : publicPath
@@ -158,6 +157,7 @@ await serveStatic({ urlPath: '/', pathToServe: '.' })
 
 await injectMiddlewares(middlewareParams)
 
+export const renderSsrContext = render
 export const listenResult = await listen(middlewareParams)
 export const handler = listenResult?.handler
 export default app
