@@ -1,8 +1,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
-import { defineConfig } from '#q-app/wrappers';<% if (scope.preset.i18n) { %>
-import { fileURLToPath } from 'node:url';<% } %>
+import { defineConfig } from '#q-app/wrappers';
+<% if (scope.preset.i18n) { %>
+import { fileURLToPath } from 'node:url';
+<% } %>
 
 export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
   return {
@@ -13,7 +15,9 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      <% if (scope.preset.i18n) { %>'i18n'<% } %>
+<% if (scope.preset.i18n) { %>
+      'i18n'
+<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
@@ -66,8 +70,10 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-      <% if (scope.preset.i18n || scope.preset.eslint) { %>
-      vitePlugins: [<% if (scope.preset.i18n) { %>
+
+<% if (scope.preset.i18n || scope.preset.eslint) { %>
+      vitePlugins: [
+<% if (scope.preset.i18n) { %>
         ['@intlify/unplugin-vue-i18n/vite', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
           // compositionOnly: false,
@@ -80,19 +86,24 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
 
           // you need to set i18n resource including paths !
           include: [ fileURLToPath(new URL('./src/i18n', import.meta.url)) ]
-        }]<% } %><% if (scope.preset.eslint) { %><% if (scope.preset.i18n) { %>,
+        }]<% if (scope.preset.eslint) { %>,<% } %>
+
 <% } %>
+<% if (scope.preset.eslint) { %>
         ['vite-plugin-checker', {
           vueTsc: true,
           eslint: {
             lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{ts,js,mjs,cjs,vue}"',
             useFlatConfig: true
           }
-        }, { server: false }]<% } %>
-      ]<% } else { %>
+        }, { server: false }]
+<% } %>
+      ]
+<% } else { %>
       // vitePlugins: [
       //   [ 'package-name', { ..pluginOptions.. }, { server: true, client: true } ]
-      // ]<% } %>
+      // ]
+<% } %>
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver

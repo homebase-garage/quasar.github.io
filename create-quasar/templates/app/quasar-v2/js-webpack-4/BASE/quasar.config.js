@@ -4,7 +4,8 @@
 import { defineConfig } from '#q-app/wrappers'
 
 export default defineConfig((ctx) => {
-  return {<% if (scope.preset.eslint) { %>
+  return {
+<% if (scope.preset.eslint) { %>
     eslint: {
       // fix: true,
       // include: [],
@@ -15,6 +16,7 @@ export default defineConfig((ctx) => {
       warnings: true,
       errors: true
     },
+
 <% } %>
     // https://v2.quasar.dev/quasar-cli-webpack/prefetch-feature
     // preFetch: true,
@@ -23,7 +25,9 @@ export default defineConfig((ctx) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
-      <% if (scope.preset.i18n) { %>'i18n'<% } %>
+<% if (scope.preset.i18n) { %>
+      'i18n'
+<% } %>
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#css
