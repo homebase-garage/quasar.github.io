@@ -183,9 +183,7 @@ export default function useRouterLink({
       isSameRouteRecord.bind(null, routeMatched)
     )
 
-    if (index !== -1) {
-      return index
-    }
+    if (index !== -1) return index
 
     // possible parent record
     const parentRecordPath = getOriginalPath(matched[length - 2])

@@ -351,7 +351,7 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
   const target =
     browser === BASELINE_WIDELY_AVAILABLE_TARGET_STRING
       ? [...BASELINE_WIDELY_AVAILABLE]
-      : JSON.parse(JSON.stringify(browser))
+      : structuredClone(browser)
 
   return {
     platform: 'browser',

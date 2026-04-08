@@ -145,7 +145,7 @@
 
   "overrides": [
     {
-      "files": ["**/*.ts"],
+      "files": ["**/*.d.ts"],
       "rules": {
         "no-unassigned-import": "off"
       }

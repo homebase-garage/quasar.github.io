@@ -199,16 +199,12 @@ export default createDirective(
 
           const group = morphGroups[ctx.group]
 
-          if (group !== void 0) {
-            const index = group.queue.indexOf(ctx)
+          if (group?.queue.includes(ctx)) {
+            group.queue = group.queue.filter(item => item !== ctx)
 
-            if (index !== -1) {
-              group.queue = group.queue.filter(item => item !== ctx)
-
-              if (group.queue.length === 0) {
-                group.cancel?.()
-                delete morphGroups[ctx.group]
-              }
+            if (group.queue.length === 0) {
+              group.cancel?.()
+              delete morphGroups[ctx.group]
             }
           }
 

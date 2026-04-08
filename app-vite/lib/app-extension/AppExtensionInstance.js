@@ -276,7 +276,6 @@ export class AppExtensionInstance {
 
   #stripVersion(packageFullName) {
     const index = packageFullName.indexOf('@')
-
     return index !== -1 ? packageFullName.substring(0, index) : packageFullName
   }
 

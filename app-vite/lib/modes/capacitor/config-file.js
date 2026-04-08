@@ -265,7 +265,7 @@ export class CapacitorConfigFile {
 
     const originalContent = fs.readFileSync(file, 'utf8')
 
-    if (originalContent.indexOf(content) > -1) {
+    if (originalContent.includes(content)) {
       // it's already there
       return
     }
@@ -290,9 +290,7 @@ export class CapacitorConfigFile {
     if (!file) return
 
     const originalContent = fs.readFileSync(file, 'utf8')
-    const index = originalContent.indexOf(content)
-
-    if (index !== -1) {
+    if (originalContent.includes(content)) {
       const newContent = originalContent.replace(content, '')
       fs.writeFileSync(file, newContent, 'utf8')
     }

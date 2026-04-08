@@ -130,14 +130,15 @@ export class QuasarModeDevserver extends AppDevserver {
       code => {
         if (this.#killedPid === true) {
           this.#killedPid = false
-        } else if (code) {
-          warn()
-          fatal(`Electron process ended with error code: ${code}`)
-        } else {
-          // else it wasn't killed by us
-          warn()
-          fatal('Electron process was killed. Exiting...')
+          return
         }
+
+        warn()
+        fatal(
+          code
+            ? `Electron process ended with error code: ${code}`
+            : 'Electron process was killed. Exiting...'
+        )
       }
     )
   }

@@ -62,9 +62,9 @@ export default function mdParse(code, id) {
   }
 
   if (frontMatter.overline === void 0) {
-    if (id.indexOf('quasar-cli-webpack') !== -1) {
+    if (id.includes('quasar-cli-webpack')) {
       frontMatter.overline = 'Quasar CLI with Webpack - @quasar/app-webpack'
-    } else if (id.indexOf('quasar-cli-vite') !== -1) {
+    } else if (id.includes('quasar-cli-vite')) {
       frontMatter.overline = 'Quasar CLI with Vite - @quasar/app-vite'
     }
   }

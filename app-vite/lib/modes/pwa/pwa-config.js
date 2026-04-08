@@ -110,13 +110,6 @@ export const quasarPwaConfig = {
       ) {
         quasarConf.ssr.pwaExtendGenerateSWOptions(opts)
       }
-
-      opts.swDest =
-        ctx.dev === true
-          ? appPaths.resolve.entry(
-              `service-worker/${quasarConf.pwa.swFilename}`
-            )
-          : join(quasarConf.build.distDir, quasarConf.pwa.swFilename)
     } else {
       // else workboxMode is "InjectManifest"
       if (ctx.prod === true || quasarConf.build.ignorePublicFolder !== true) {
@@ -140,13 +133,12 @@ export const quasarPwaConfig = {
       }
 
       opts.swSrc = appPaths.resolve.entry('compiled-custom-sw.js')
-      opts.swDest =
-        ctx.dev === true
-          ? appPaths.resolve.entry(
-              `service-worker/${quasarConf.pwa.swFilename}`
-            )
-          : join(quasarConf.build.distDir, quasarConf.pwa.swFilename)
     }
+
+    opts.swDest =
+      ctx.dev === true
+        ? appPaths.resolve.entry(`service-worker/${quasarConf.pwa.swFilename}`)
+        : join(quasarConf.build.distDir, quasarConf.pwa.swFilename)
 
     return opts
   },

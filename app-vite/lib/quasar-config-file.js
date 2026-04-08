@@ -126,7 +126,7 @@ function uniquePathFilter(value, index, self) {
 
 const extRE = /\.[m|c]?[j|t]s$/
 function formatQuasarAssetPath(asset, type) {
-  return asset.indexOf('/') !== -1
+  return asset.includes('/')
     ? extRE.test(asset) === true
       ? asset
       : `${asset}.js`

@@ -60,7 +60,7 @@ function getAppExtJson({ file, json, onListUpdate }) {
 
     getPrompts(extId) {
       const { __internal, ...prompts } = json[extId] || {}
-      return JSON.parse(JSON.stringify(prompts))
+      return structuredClone(prompts)
     },
 
     getInternal(extId) {

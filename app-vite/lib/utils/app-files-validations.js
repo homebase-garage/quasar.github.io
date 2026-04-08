@@ -15,13 +15,13 @@ export function appFilesValidations(appPaths) {
 
   const content = fs.readFileSync(file, 'utf8')
 
-  if (content.indexOf(attachMarkup) !== -1) {
+  if (content.includes(attachMarkup)) {
     warn(`Please remove ${attachMarkup} from
     /index.html inside of <body>\n`)
     valid = false
   }
 
-  if (content.indexOf(entryPointMarkup) === -1) {
+  if (content.includes(entryPointMarkup) === false) {
     warn(`Please add ${entryPointMarkup} to
     /index.html inside of <body>\n`)
     valid = false

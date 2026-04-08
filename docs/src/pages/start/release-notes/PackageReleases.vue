@@ -94,8 +94,8 @@ const filteredReleases = computed(() => {
     const val = search.value.toLowerCase()
     return props.releases.filter(
       release =>
-        release.version.indexOf(val) !== -1 ||
-        release.body.toLowerCase().indexOf(val) !== -1
+        release.version.includes(val) ||
+        release.body.toLowerCase().includes(val)
     )
   }
 

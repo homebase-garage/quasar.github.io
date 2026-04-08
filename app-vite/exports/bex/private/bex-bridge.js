@@ -144,9 +144,7 @@ export class BexBridge {
 
       const onDisconnect = () => {
         if (
-          runtime.lastError?.message?.indexOf(
-            'Could not establish connection'
-          ) !== -1
+          runtime.lastError?.message?.includes('Could not establish connection')
         ) {
           this.isConnected = false
           portToBackground.onMessage.removeListener(onPacket)
@@ -441,7 +439,8 @@ export class BexBridge {
             listener: { type, callback }
           }
         )
-        return Promise.reject(err)
+
+        throw err
       }
     }
 

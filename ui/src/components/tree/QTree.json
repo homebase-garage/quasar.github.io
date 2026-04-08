@@ -158,7 +158,7 @@
         "desc": "Matches or not"
       },
       "examples": [
-        "(node, filter) => node.label.toLowerCase().indexOf(filter.toLowerCase()) !== -1"
+        "(node, filter) => node.label.toLowerCase().includes(filter.toLowerCase())"
       ],
       "category": "filter"
     },

@@ -136,8 +136,7 @@ watch([searchTerms, filterTag], () => {
 
     const results = quasarElements.filter(
       entry =>
-        (tag === null || entry.tag === tag) &&
-        entry.haystack.indexOf(needle) !== -1
+        (tag === null || entry.tag === tag) && entry.haystack.includes(needle)
     )
 
     if (results.length === 0) {

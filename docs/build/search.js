@@ -18,7 +18,7 @@ const mdPagesDir = join(thisFolder, '../src/pages')
 const mdPagesList = globSync('**/*.md', { cwd: mdPagesDir })
   .filter(file => hiddenPageRE.test(file) === false)
   .map(key => {
-    if (key.indexOf('elements') !== -1) {
+    if (key.includes('elements')) {
       console.error('Not element:', key)
     }
     const parts = key.substring(0, key.length - 3).split('/')

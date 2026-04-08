@@ -218,7 +218,7 @@ function printProperties({ props }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete props[key]
       }
     })
@@ -246,7 +246,7 @@ function printSlots({ slots }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete slots[key]
       }
     })
@@ -274,7 +274,7 @@ function printEvents({ events }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete events[key]
       }
     })
@@ -312,7 +312,7 @@ function printMethods({ methods }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete methods[key]
       }
     })
@@ -357,7 +357,7 @@ function printComputedProps({ computedProps }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete computedProps[key]
       }
     })
@@ -407,7 +407,7 @@ function printModifiers({ modifiers }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete modifiers[key]
       }
     })
@@ -448,7 +448,7 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete conf[key]
       }
     })
@@ -553,7 +553,7 @@ async function listElements() {
   if (filter) {
     const needle = filter.toLowerCase()
     const filterBanner = green(filter)
-    api = api.filter(entry => entry.toLowerCase().indexOf(needle) !== -1)
+    api = api.filter(entry => entry.toLowerCase().includes(needle))
 
     if (api.length === 0) {
       console.log(
