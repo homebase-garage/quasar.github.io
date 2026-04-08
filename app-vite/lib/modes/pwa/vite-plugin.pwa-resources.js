@@ -1,4 +1,4 @@
-import { static as serveStatic } from 'express'
+import serveStatic from 'serve-static'
 
 import { createHeadTags } from './utils.js'
 
