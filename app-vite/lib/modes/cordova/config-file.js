@@ -44,7 +44,7 @@ export class CordovaConfigFile {
     this.#ctx = ctx
     this.#filePath = appPaths.resolve.cordova('config.xml')
 
-    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf-8'))
+    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf8'))
     this.#appURL = quasarConf.metaConf.APP_URL
     this.#tamperedFiles = []
 
@@ -88,7 +88,7 @@ export class CordovaConfigFile {
   reset() {
     if (!this.#appURL || this.#appURL === 'index.html') return
 
-    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf-8'))
+    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf8'))
     const root = doc.getroot()
 
     root.find('content').set('src', 'index.html')
@@ -147,7 +147,7 @@ export class CordovaConfigFile {
         path: appDelegatePath
       }
 
-      tamperedFile.originalContent = fs.readFileSync(appDelegatePath, 'utf-8')
+      tamperedFile.originalContent = fs.readFileSync(appDelegatePath, 'utf8')
 
       // required for allowing devserver's SSL certificate on iOS
       if (
@@ -188,7 +188,7 @@ return YES;
 
         tamperedFile.originalContent = fs.readFileSync(
           wkWebViewEnginePath,
-          'utf-8'
+          'utf8'
         )
 
         // Credit: https://gist.github.com/PeterStegnar/63cb8c9a39a13265c3a855e24a33ca37#file-cdvwkwebviewengine-m-L68-L74

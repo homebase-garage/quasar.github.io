@@ -15,7 +15,7 @@ export async function getPackage(pkgName, dir) {
   try {
     const pkgPath = getPackagePath(pkgName, dir)
     return pkgPath.endsWith('.json') === true
-      ? JSON.parse(readFileSync(pkgPath, 'utf-8'))
+      ? JSON.parse(readFileSync(pkgPath, 'utf8'))
       : await import(pathToFileURL(pkgPath))
   } catch {
     /* do and return nothing */

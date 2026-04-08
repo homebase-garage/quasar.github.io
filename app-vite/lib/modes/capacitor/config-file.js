@@ -78,7 +78,7 @@ export class CapacitorConfigFile {
 
     // TODO: support other formats: .js and .ts
     const capJsonPath = appPaths.resolve.capacitor('capacitor.config.json')
-    const capJson = parseJSON(fs.readFileSync(capJsonPath, 'utf-8'))
+    const capJson = parseJSON(fs.readFileSync(capJsonPath, 'utf8'))
 
     const { capVersion } = await cacheProxy.getModule('capCli')
 
@@ -150,7 +150,7 @@ export class CapacitorConfigFile {
     } = this.#ctx
 
     const capPkgPath = appPaths.resolve.capacitor('package.json')
-    const capPkg = parseJSON(fs.readFileSync(capPkgPath, 'utf-8'))
+    const capPkg = parseJSON(fs.readFileSync(capPkgPath, 'utf8'))
 
     Object.assign(capPkg, {
       name: quasarConf.capacitor.appName || appPkg.name,
@@ -159,7 +159,7 @@ export class CapacitorConfigFile {
       author: appPkg.author
     })
 
-    fs.writeFileSync(capPkgPath, stringifyJSON(capPkg), 'utf-8')
+    fs.writeFileSync(capPkgPath, stringifyJSON(capPkg), 'utf8')
   }
 
   async #updateSSL(quasarConf, target, capVersion) {
@@ -263,7 +263,7 @@ export class CapacitorConfigFile {
       return
     }
 
-    const originalContent = fs.readFileSync(file, 'utf-8')
+    const originalContent = fs.readFileSync(file, 'utf8')
 
     if (originalContent.indexOf(content) > -1) {
       // it's already there
@@ -282,19 +282,19 @@ export class CapacitorConfigFile {
       content +
       originalContent.substring(index)
 
-    fs.writeFileSync(file, newContent, 'utf-8')
+    fs.writeFileSync(file, newContent, 'utf8')
   }
 
   // for Capacitor 1-3
   #removeFromFile(file, content) {
     if (!file) return
 
-    const originalContent = fs.readFileSync(file, 'utf-8')
+    const originalContent = fs.readFileSync(file, 'utf8')
     const index = originalContent.indexOf(content)
 
-    if (index > -1) {
+    if (index !== -1) {
       const newContent = originalContent.replace(content, '')
-      fs.writeFileSync(file, newContent, 'utf-8')
+      fs.writeFileSync(file, newContent, 'utf8')
     }
   }
 
@@ -310,7 +310,7 @@ export class CapacitorConfigFile {
       absolute: true
     })
 
-    if (mainActivityPath.length > 0) {
+    if (mainActivityPath.length !== 0) {
       if (mainActivityPath.length > 1) {
         warn(
           `Found multiple matches for MainActivity.java file, https might not work. Using file ${mainActivityPath[0]}.`
@@ -370,7 +370,7 @@ ${sslString}
         }
       }
 
-      fs.writeFileSync(mainActivityPath, mainActivity, 'utf-8')
+      fs.writeFileSync(mainActivityPath, mainActivity, 'utf8')
     }
   }
 }

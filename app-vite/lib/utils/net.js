@@ -45,7 +45,7 @@ export async function findClosestOpenPort(port, host) {
       return portProposal
     }
     portProposal++
-  } while (portProposal < 65535)
+  } while (portProposal < 65_535)
 
   throw new Error('ERROR_NETWORK_PORT_NOT_AVAIL')
 }

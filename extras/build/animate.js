@@ -25,9 +25,9 @@ function extract(file) {
   copySync(file, join(dist, name + '.css'))
   cssNames.add(name)
 
-  if (name.indexOf('In') > -1) {
+  if (name.includes('In')) {
     inAnimations.push(name)
-  } else if (name.indexOf('Out') > -1) {
+  } else if (name.includes('Out')) {
     outAnimations.push(name)
   } else {
     generalAnimations.push(name)
@@ -59,13 +59,13 @@ if (cssFiles.length === 0) {
 
   const common = getList('module.exports.')
 
-  writeFileSync(join(dist, 'animate-list.js'), common, 'utf-8')
+  writeFileSync(join(dist, 'animate-list.js'), common, 'utf8')
   writeFileSync(
     join(dist, 'animate-list.mjs'),
     getList('export const '),
-    'utf-8'
+    'utf8'
   )
-  writeFileSync(join(dist, 'animate-list.common.js'), common, 'utf-8')
+  writeFileSync(join(dist, 'animate-list.common.js'), common, 'utf8')
 
   writeFileSync(
     join(dist, 'animate-list.d.ts'),
@@ -74,7 +74,7 @@ if (cssFiles.length === 0) {
       .replace(/\]/g, ';')
       .replace(/ {2}'/g, "  | '")
       .replace(/,/g, ''),
-    'utf-8'
+    'utf8'
   )
   writeFileSync(
     join(dist, 'animate-list.common.d.ts'),
@@ -83,6 +83,6 @@ if (cssFiles.length === 0) {
       .replace(/\]/g, ';')
       .replace(/ {2}'/g, "  | '")
       .replace(/,/g, ''),
-    'utf-8'
+    'utf8'
   )
 }

@@ -10,7 +10,7 @@ import { getPackagePath } from './get-package-path.js'
 export function getPackageJson(pkgName, folder = appPaths.appDir) {
   try {
     return JSON.parse(
-      readFileSync(getPackagePath(`${pkgName}/package.json`, folder), 'utf-8')
+      readFileSync(getPackagePath(`${pkgName}/package.json`, folder), 'utf8')
     )
   } catch {
     /* do and return nothing */

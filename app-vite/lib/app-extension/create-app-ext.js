@@ -11,22 +11,22 @@ function readJson(file) {
   }
 
   try {
-    return parseJSON(readFileSync(file, 'utf-8'))
-  } catch (e) {
-    console.log(e)
+    return parseJSON(readFileSync(file, 'utf8'))
+  } catch (err) {
+    console.log(err)
     fatal('quasar.extensions.json is malformed', 'FAIL')
   }
 }
 
 function getAppExtJson({ file, json, onListUpdate }) {
-  const fileExists = Object.keys(json).length > 0
+  const fileExists = Object.keys(json).length !== 0
 
   function save() {
     writeFileSync(
       file,
       // if file exists, preserve indentation, otherwise use 2 spaces
       stringifyJSON(json, { indent: fileExists ? void 0 : 2 }),
-      'utf-8'
+      'utf8'
     )
   }
 

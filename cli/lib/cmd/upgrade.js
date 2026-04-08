@@ -211,24 +211,24 @@ if (removeDeprecatedAppPkg === true) {
 
   const tsConfigFile = appPaths.resolve.app('tsconfig.json')
   if (fs.existsSync(tsConfigFile) === true) {
-    const content = fs.readFileSync(tsConfigFile, 'utf-8')
+    const content = fs.readFileSync(tsConfigFile, 'utf8')
     fs.writeFileSync(
       tsConfigFile,
       content.replace(
         '"@quasar/app/tsconfig-preset"',
         '"@quasar/app-webpack/tsconfig-preset"'
       ),
-      'utf-8'
+      'utf8'
     )
   }
 
   const quasarDTsFile = appPaths.resolve.app('src/quasar.d.ts')
   if (fs.existsSync(quasarDTsFile) === true) {
-    const content = fs.readFileSync(quasarDTsFile, 'utf-8')
+    const content = fs.readFileSync(quasarDTsFile, 'utf8')
     fs.writeFileSync(
       quasarDTsFile,
       content.replace('"@quasar/app"', '"@quasar/app-webpack"'),
-      'utf-8'
+      'utf8'
     )
   }
 }

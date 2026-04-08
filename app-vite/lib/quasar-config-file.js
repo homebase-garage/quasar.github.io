@@ -100,7 +100,7 @@ function parseAssetProperty(prefix) {
   return asset => {
     if (typeof asset === 'string') {
       return {
-        path: asset[0] === '~' ? asset.substring(1) : prefix + `/${asset}`
+        path: asset[0] === '~' ? asset.slice(1) : prefix + `/${asset}`
       }
     }
 
@@ -109,7 +109,7 @@ function parseAssetProperty(prefix) {
       path:
         typeof asset.path === 'string'
           ? asset.path[0] === '~'
-            ? asset.path.substring(1)
+            ? asset.path.slice(1)
             : prefix + `/${asset.path}`
           : asset.path
     }
@@ -159,20 +159,20 @@ async function onAddress({ host, port }, mode) {
 
       port = openPort
     }
-  } catch (e) {
+  } catch (err) {
     warn()
 
-    if (e.message === 'ERROR_NETWORK_PORT_NOT_AVAIL') {
+    if (err.message === 'ERROR_NETWORK_PORT_NOT_AVAIL') {
       warn(
         'Could not find an open port. Please configure a lower one to start searching with.'
       )
-    } else if (e.message === 'ERROR_NETWORK_ADDRESS_NOT_AVAIL') {
+    } else if (err.message === 'ERROR_NETWORK_ADDRESS_NOT_AVAIL') {
       warn(
         'Invalid host specified. No network address matches. Please specify another one.'
       )
     } else {
       warn('Unknown network error occurred')
-      console.error(e)
+      console.error(err)
     }
 
     warn()
@@ -375,9 +375,9 @@ export class QuasarConfigFile {
         pathToFileURL(this.#tempFile) + '?t=' + Date.now()
       )
       quasarConfigFn = fnResult.default || fnResult
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
 
       if (this.#opts.watch === false) {
         fatal(
@@ -410,7 +410,7 @@ export class QuasarConfigFile {
 
   #getConfEnv() {
     const { quasarCli } = JSON.parse(
-      fse.readFileSync(this.#hostPackageJsonPath, 'utf-8')
+      fse.readFileSync(this.#hostPackageJsonPath, 'utf8')
     )
 
     return getQuasarConfEnv({
@@ -629,10 +629,10 @@ export class QuasarConfigFile {
 
     try {
       return rolldownBuild(this.#getRolldownConfig())
-    } catch (e) {
+    } catch (err) {
       fse.removeSync(this.#tempFile)
       console.log()
-      console.error(e)
+      console.error(err)
       fatal(
         'Could not compile the quasar.config file because it has errors.',
         'FAIL'
@@ -659,9 +659,9 @@ export class QuasarConfigFile {
 
     try {
       userCfg = await quasarConfigFn(this.#ctx)
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
 
       const msg =
         'The quasar.config file has runtime errors.' +
@@ -766,9 +766,9 @@ export class QuasarConfigFile {
           await hook.fn(rawQuasarConf, hook.api)
         }
       )
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
 
       if (this.#shouldFail === true) {
         fatal('One of your installed App Extensions failed to run', 'FAIL')
@@ -862,7 +862,7 @@ export class QuasarConfigFile {
       }
     }
 
-    if (cfg.css.length > 0) {
+    if (cfg.css.length !== 0) {
       cfg.css = cfg.css
         .filter(_ => _)
         .map(parseAssetProperty('src/css'))
@@ -870,7 +870,7 @@ export class QuasarConfigFile {
         .filter(uniquePathFilter)
     }
 
-    if (cfg.boot.length > 0) {
+    if (cfg.boot.length !== 0) {
       cfg.boot = cfg.boot
         .filter(_ => _)
         .map(parseAssetProperty('boot'))
@@ -878,11 +878,11 @@ export class QuasarConfigFile {
         .filter(uniquePathFilter)
     }
 
-    if (cfg.extras.length > 0) {
+    if (cfg.extras.length !== 0) {
       cfg.extras = getUniqueArray(cfg.extras)
     }
 
-    if (cfg.animations.length > 0) {
+    if (cfg.animations.length !== 0) {
       cfg.animations = getUniqueArray(cfg.animations)
     }
 
@@ -1113,7 +1113,7 @@ export class QuasarConfigFile {
         cfg.metaConf.needsAppMountHook = true
       }
 
-      if (cfg.ssr.middlewares.length > 0) {
+      if (cfg.ssr.middlewares.length !== 0) {
         cfg.ssr.middlewares = cfg.ssr.middlewares
           .filter(_ => _)
           .map(parseAssetProperty('app/src-ssr/middlewares'))
@@ -1142,7 +1142,7 @@ export class QuasarConfigFile {
 
           this.#vueDevtools = {
             host,
-            port: await findClosestOpenPort(11111, '0.0.0.0')
+            port: await findClosestOpenPort(11_111, '0.0.0.0')
           }
         }
 
@@ -1182,8 +1182,8 @@ export class QuasarConfigFile {
           if (typeof https[prop] === 'string') {
             try {
               https[prop] = readFileSync(https[prop])
-            } catch (e) {
-              console.error(e)
+            } catch (err) {
+              console.error(err)
               console.log()
               delete https[prop]
               warn(

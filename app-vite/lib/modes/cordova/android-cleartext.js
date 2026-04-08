@@ -22,7 +22,7 @@ export function fixAndroidCleartext(appPaths, action) {
         '<application\n        android:usesCleartextTraffic="true"'
       )
 
-      fs.writeFileSync(androidManifestPath, androidManifest, 'utf-8')
+      fs.writeFileSync(androidManifestPath, androidManifest, 'utf8')
     }
 
     return
@@ -35,6 +35,6 @@ export function fixAndroidCleartext(appPaths, action) {
       ''
     )
 
-    fs.writeFileSync(androidManifestPath, androidManifest, 'utf-8')
+    fs.writeFileSync(androidManifestPath, androidManifest, 'utf8')
   }
 }

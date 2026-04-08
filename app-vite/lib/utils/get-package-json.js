@@ -14,7 +14,7 @@ export function getPackageJson(pkgName, dir) {
 
   try {
     return JSON.parse(
-      readFileSync(getPackagePath(`${pkgName}/package.json`, dir), 'utf-8')
+      readFileSync(getPackagePath(`${pkgName}/package.json`, dir), 'utf8')
     )
   } catch {
     /* do and return nothing */

@@ -13,7 +13,7 @@ const quasarConfigFilenameList = [
 function getAppInfo() {
   let appDir = process.cwd()
 
-  while (appDir.length && appDir[appDir.length - 1] !== sep) {
+  while (appDir.length !== 0 && appDir[appDir.length - 1] !== sep) {
     for (const name of quasarConfigFilenameList) {
       const filename = join(appDir, name)
       if (existsSync(filename)) {

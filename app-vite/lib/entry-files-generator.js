@@ -31,7 +31,7 @@ export class EntryFilesGenerator {
     this.#templateFiles = templateFiles.map(file => {
       const content = readFileSync(
         appPaths.resolve.cli(`templates/entry/${file}`),
-        'utf-8'
+        'utf8'
       )
 
       return {
@@ -49,7 +49,7 @@ export class EntryFilesGenerator {
   generate(quasarConf) {
     this.#templateFiles.forEach(file => {
       fse.ensureFileSync(file.dest)
-      fse.writeFileSync(file.dest, file.render(quasarConf), 'utf-8')
+      fse.writeFileSync(file.dest, file.render(quasarConf), 'utf8')
     })
 
     this.#regularFiles.forEach(file => {

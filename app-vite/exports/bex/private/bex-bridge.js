@@ -682,7 +682,7 @@ export class BexBridge {
         )
       })
 
-      return Promise.reject(err)
+      throw err
     })
   }
 

@@ -74,7 +74,7 @@ const runningPackageManager = (() => {
 function getCallerPath() {
   const _prepareStackTrace = Error.prepareStackTrace
   Error.prepareStackTrace = (_, stack) => stack
-  const stack = new Error().stack.slice(1)
+  const stack = new Error('err').stack.slice(1)
   Error.prepareStackTrace = _prepareStackTrace
   const filename = stack[1].getFileName()
   return dirname(
@@ -101,7 +101,7 @@ function renderTemplate(relativePath, scope) {
     console.log(` ${green('-')} ${targetRelativePath}`)
 
     if (TEMPLATING_FILE_EXTENSIONS.includes(extension)) {
-      const rawContent = readFileSync(sourcePath, 'utf-8')
+      const rawContent = readFileSync(sourcePath, 'utf8')
 
       let newContent = renderTemplateFn(rawContent, scope)
       if (extension === '.json') {
@@ -113,7 +113,7 @@ function renderTemplate(relativePath, scope) {
         }
       }
 
-      writeFileSync(targetPath, newContent, 'utf-8')
+      writeFileSync(targetPath, newContent, 'utf8')
     } else {
       copySync(sourcePath, targetPath)
     }
@@ -307,7 +307,7 @@ const quasarConfigFilenameList = [
 function ensureOutsideProject() {
   let dir = process.cwd()
 
-  while (dir.length && dir[dir.length - 1] !== sep) {
+  while (dir.length !== 0 && dir[dir.length - 1] !== sep) {
     for (const name of quasarConfigFilenameList) {
       const filename = join(dir, name)
       if (existsSync(filename)) {
@@ -341,7 +341,7 @@ const commonPrompts = {
     message:
       'Project product name: (must start with letter if building mobile apps)',
     initial: 'Quasar App',
-    validate: val => (val && val.length > 0) || 'Invalid product name'
+    validate: val => (val && val.length !== 0) || 'Invalid product name'
   },
 
   description: {
@@ -350,7 +350,7 @@ const commonPrompts = {
     message: 'Project description:',
     initial: 'A Quasar Project',
     format: escapeString,
-    validate: val => val.length > 0 || 'Invalid project description'
+    validate: val => val.length !== 0 || 'Invalid project description'
   },
 
   license: {

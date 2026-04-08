@@ -184,7 +184,7 @@ class PackageManager {
     }
 
     const [, major, prerelease] = currentVersion.match(versionRegex)
-    const majorSyntax = majorVersion ? '(\\d+)' : major
+    const majorSyntax = majorVersion ? String.raw`(\d+)` : major
     const regex = new RegExp(
       prerelease || preReleaseVersion
         ? `^${majorSyntax}\\.(\\d+)\\.(\\d+)-?(alpha|beta|rc)?`
@@ -284,7 +284,7 @@ const packageManagersList = [new Yarn(), new Pnpm(), new Npm(), new Bun()]
 function getProjectPackageManager(folder) {
   // Recursively checks for presence of the lock file by traversing
   // the folder tree up to the root
-  while (folder.length && folder[folder.length - 1] !== sep) {
+  while (folder.length !== 0 && folder[folder.length - 1] !== sep) {
     for (const pm of packageManagersList) {
       if (
         pm.lockFiles.some(lockFile => fs.existsSync(join(folder, lockFile)))

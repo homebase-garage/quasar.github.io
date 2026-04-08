@@ -218,7 +218,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     const updateTemplate = () => {
       renderTemplate = getDevSsrTemplateFn(
-        readFileSync(this.#pathMap.templatePath, 'utf-8'),
+        readFileSync(this.#pathMap.templatePath, 'utf8'),
         quasarConf
       )
     }

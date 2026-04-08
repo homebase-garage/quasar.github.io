@@ -22,7 +22,7 @@ export const quasarCapacitorConfig = {
       'runtimeCapacitorConfig',
       () => {
         const { dependencies } = JSON.parse(
-          readFileSync(appPaths.resolve.capacitor('package.json'), 'utf-8')
+          readFileSync(appPaths.resolve.capacitor('package.json'), 'utf8')
         )
 
         const localTarget = appPaths.resolve.capacitor('node_modules')

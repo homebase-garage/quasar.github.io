@@ -128,7 +128,7 @@ async function run() {
 
       // write the JSON file
       const file = resolve(distFolder[theme], 'icons.json')
-      writeFileSync(file, JSON.stringify(iconNames[theme], null, 2), 'utf-8')
+      writeFileSync(file, JSON.stringify(iconNames[theme], null, 2), 'utf8')
     })
   } catch (err) {
     console.log('err', err)

@@ -49,7 +49,7 @@ export async function createQuasarScript({ scope, utils }) {
       type: 'text',
       name: 'umdExportName',
       message: 'UMD export name (global variable, camelCased)',
-      validate: val => val && val.length > 0
+      validate: val => val && val.length !== 0
     },
 
     {
@@ -57,7 +57,7 @@ export async function createQuasarScript({ scope, utils }) {
       name: 'componentName',
       message: 'Component name (PascalCase)',
       initial: 'MyComponent',
-      validate: val => val && val.length > 0
+      validate: val => val && val.length !== 0
     },
 
     {
@@ -65,7 +65,7 @@ export async function createQuasarScript({ scope, utils }) {
       name: 'directiveName',
       message: 'Directive name (kebab-case, without "v-" prefix)',
       initial: 'my-directive',
-      validate: val => val && val.length > 0
+      validate: val => val && val.length !== 0
     },
 
     {
@@ -73,7 +73,7 @@ export async function createQuasarScript({ scope, utils }) {
       name: 'aeDescription',
       message: 'App Extension description',
       initial: 'A Quasar App Extension',
-      validate: val => val && val.length > 0
+      validate: val => val && val.length !== 0
     },
 
     {

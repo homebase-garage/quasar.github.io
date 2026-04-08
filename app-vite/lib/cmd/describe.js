@@ -531,8 +531,8 @@ async function run() {
       describe(api)
       console.log()
     }
-  } catch (e) {
-    fatal(e)
+  } catch (err) {
+    fatal(err)
   }
 }
 

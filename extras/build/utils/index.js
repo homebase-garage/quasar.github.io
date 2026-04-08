@@ -17,16 +17,13 @@ const chunkArray = (arr, size = 2) =>
   )
 
 const calcValue = (val, base) =>
-  /%$/.test(val) ? (parseFloat(val) * base) / 100 : Number(val)
+  val.endsWith('%') ? (parseFloat(val) * base) / 100 : Number(val)
 
 const getAttributes = (el, list) =>
-  list.reduce(
-    (attrs, name) => ({
-      ...attrs,
-      [name]: parseFloat(el.getAttribute(name) || 0)
-    }),
-    {}
-  )
+  list.reduce((attrs, name) => {
+    attrs[name] = parseFloat(el.getAttribute(name) || 0)
+    return attrs
+  }, {})
 
 // function getCurvePath (x, y, rx, ry) {
 //   return `A${rx},${ry},0,0,1,${x},${y}`
@@ -193,8 +190,8 @@ function parseDom(name, el, pathsDefinitions) {
     // don't allow fill to be both 'none' and 'currentColor'
     // this is common because of the inheritance of 'fill:none' from an 'svg' tag
     if (
-      strAttributes.indexOf('fill:none;') >= 0 &&
-      strAttributes.indexOf('fill:currentColor;') >= 0
+      strAttributes.includes('fill:none;') &&
+      strAttributes.includes('fill:currentColor;')
     ) {
       strAttributes = strAttributes.replace(/fill:none;/, '')
     }
@@ -210,7 +207,7 @@ function parseDom(name, el, pathsDefinitions) {
       transform
     }
 
-    if (paths.path.length > 0) {
+    if (paths.path.length !== 0) {
       pathsDefinitions.push(paths)
     }
   }
@@ -332,7 +329,7 @@ function extractSvg(content, name) {
 module.exports.extractSvg = extractSvg
 
 module.exports.extract = (filePath, name) => {
-  const content = readFileSync(filePath, 'utf-8')
+  const content = readFileSync(filePath, 'utf8')
 
   return extractSvg(content, name)
 }
@@ -356,16 +353,16 @@ module.exports.writeExports = (
     writeFileSync(
       `${distIndex}.js`,
       content.replace(cjsReplaceRE, 'module.exports.'),
-      'utf-8'
+      'utf8'
     )
-    writeFileSync(`${distIndex}.mjs`, content, 'utf-8')
+    writeFileSync(`${distIndex}.mjs`, content, 'utf8')
     writeFileSync(
       `${distIndex}.d.ts`,
       banner + typeExports.sort().join('\n'),
-      'utf-8'
+      'utf8'
     )
 
-    if (skipped.length > 0) {
+    if (skipped.length !== 0) {
       console.log(`${iconSetName} - skipped (${skipped.length}): ${skipped}`)
     }
   }
@@ -460,7 +457,7 @@ class Queue {
         this.inFlight -= 1
       }
 
-      if (this.pendingEntries.length > 0) {
+      if (this.pendingEntries.length !== 0) {
         this.process()
       }
     })
@@ -494,8 +491,8 @@ module.exports.copyCssFile = function copyCssFile({ from, to, replaceFn }) {
     process.exit(1)
   }
 
-  const content = readFileSync(from, 'utf-8')
+  const content = readFileSync(from, 'utf8')
   const newContent = replaceFn !== void 0 ? replaceFn(content) : content
 
-  writeFileSync(to, newContent, 'utf-8')
+  writeFileSync(to, newContent, 'utf8')
 }

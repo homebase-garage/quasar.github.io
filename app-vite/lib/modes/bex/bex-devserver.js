@@ -86,7 +86,7 @@ export class QuasarModeDevserver extends AppDevserver {
     // will complain about it not being found
     const indexHtmlDir = join(quasarConf.build.distDir, 'www')
     fse.ensureDirSync(indexHtmlDir)
-    fse.writeFileSync(join(indexHtmlDir, 'index.html'), '', 'utf-8')
+    fse.writeFileSync(join(indexHtmlDir, 'index.html'), '', 'utf8')
   }
 
   async #compileBexManifest(quasarConf, queue) {

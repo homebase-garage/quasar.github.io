@@ -11,7 +11,7 @@ export async function createQuasarScript({ scope, utils }) {
       name: 'orgName',
       message: 'Organization name, eg. "my-org":',
       validate: val =>
-        (val && val.length > 0) || 'Please type the organization name'
+        (val && val.length !== 0) || 'Please type the organization name'
     },
     {
       type: 'text',

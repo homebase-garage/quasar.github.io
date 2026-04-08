@@ -47,9 +47,9 @@ export function generateTypes(quasarConf) {
       // to recompile & apply quasar.config file changes
       if (
         fse.existsSync(file) === false ||
-        fse.readFileSync(file, 'utf-8') !== content
+        fse.readFileSync(file, 'utf8') !== content
       ) {
-        fse.writeFileSync(file, content, 'utf-8')
+        fse.writeFileSync(file, content, 'utf8')
       }
     }
   }
@@ -98,7 +98,7 @@ function generateTsConfig(quasarConf, fsUtils) {
   if (isModeInstalled(appPaths, 'capacitor')) {
     const target = appPaths.resolve.capacitor('node_modules')
     const { dependencies } = JSON.parse(
-      fse.readFileSync(appPaths.resolve.capacitor('package.json'), 'utf-8')
+      fse.readFileSync(appPaths.resolve.capacitor('package.json'), 'utf8')
     )
 
     Object.keys(dependencies).forEach(dep => {

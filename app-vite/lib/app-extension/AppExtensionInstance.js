@@ -54,11 +54,11 @@ async function renderFile(
   if (rawCopy || isBinary(sourcePath)) {
     fse.copyFileSync(sourcePath, targetPath)
   } else {
-    const rawContent = fse.readFileSync(sourcePath, 'utf-8')
+    const rawContent = fse.readFileSync(sourcePath, 'utf8')
     fse.writeFileSync(
       targetPath,
       renderTemplate(rawContent, scope, { varName: false }),
-      'utf-8'
+      'utf8'
     )
   }
 }
@@ -133,9 +133,8 @@ export class AppExtensionInstance {
         'quasar-app-extension-' +
         extName.substring(slashIndex + 1)
 
-      this.packageName =
-        '@' + this.#stripVersion(this.packageFullName.substring(1))
-      this.extId = '@' + this.#stripVersion(extName.substring(1))
+      this.packageName = '@' + this.#stripVersion(this.packageFullName.slice(1))
+      this.extId = '@' + this.#stripVersion(extName.slice(1))
     } else {
       this.packageFullName = `quasar-app-extension-${extName}`
       this.packageName = this.#stripVersion(this.packageFullName)
@@ -206,7 +205,7 @@ export class AppExtensionInstance {
     log(`Quasar App Extension "${this.extId}" successfully installed.`)
     log()
 
-    if (hooks && hooks.exitLog.length > 0) {
+    if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
         console.log(msg)
       })
@@ -244,7 +243,7 @@ export class AppExtensionInstance {
     log(`Quasar App Extension "${this.extId}" successfully removed.`)
     log()
 
-    if (hooks && hooks.exitLog.length > 0) {
+    if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
         console.log(msg)
       })
@@ -278,7 +277,7 @@ export class AppExtensionInstance {
   #stripVersion(packageFullName) {
     const index = packageFullName.indexOf('@')
 
-    return index > -1 ? packageFullName.substring(0, index) : packageFullName
+    return index !== -1 ? packageFullName.substring(0, index) : packageFullName
   }
 
   getPrompts() {
@@ -405,13 +404,13 @@ export class AppExtensionInstance {
 
     const hooks = api.__getHooks(this.#appExtJson)
 
-    if (hooks.renderFolders.length > 0) {
+    if (hooks.renderFolders.length !== 0) {
       for (const entry of hooks.renderFolders) {
         await renderFolders(entry, this.#ctx)
       }
     }
 
-    if (hooks.renderFiles.length > 0) {
+    if (hooks.renderFiles.length !== 0) {
       for (const entry of hooks.renderFiles) {
         await renderFile(entry, this.#ctx)
       }

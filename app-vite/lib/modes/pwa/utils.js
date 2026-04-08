@@ -57,7 +57,7 @@ export function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
     description: appPkg.description,
     display: 'standalone',
     start_url: quasarConf.build.publicPath,
-    ...JSON.parse(readFileSync(quasarConf.metaConf.pwaManifestFile, 'utf-8'))
+    ...JSON.parse(readFileSync(quasarConf.metaConf.pwaManifestFile, 'utf8'))
   }
 
   if (typeof quasarConf.pwa.extendManifestJson === 'function') {

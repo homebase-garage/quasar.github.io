@@ -9,7 +9,7 @@ export function createManifest(quasarConf) {
   const bexManifestPath = quasarConf.metaConf.bexManifestFile
 
   try {
-    json = JSON.parse(fse.readFileSync(bexManifestPath, 'utf-8'))
+    json = JSON.parse(fse.readFileSync(bexManifestPath, 'utf8'))
   } catch (err) {
     warn('Could not read BEX manifest. Please check its syntax.')
     return { err }
@@ -71,7 +71,7 @@ export function createManifest(quasarConf) {
   fse.writeFileSync(
     join(quasarConf.build.distDir, 'manifest.json'),
     JSON.stringify(json, null, quasarConf.build.minify === true ? void 0 : 2),
-    'utf-8'
+    'utf8'
   )
 
   return { scriptList }

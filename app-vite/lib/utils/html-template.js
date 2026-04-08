@@ -66,7 +66,7 @@ function injectSsrRuntimeInterpolation(html) {
       const matches = found.match(/\sclass\s*=\s*['"]([^'"]*)['"]/i)
 
       if (matches) {
-        if (matches[1].length > 0) {
+        if (matches[1].length !== 0) {
           classes += ` ${matches[1]}`
         }
         start = start.replace(matches[0], '')

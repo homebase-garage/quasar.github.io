@@ -263,7 +263,7 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
       if (existsSync(filePath) === false) return []
 
       usedEnvFiles.push(relative(appDir, filePath))
-      return Object.entries(dotEnvParse(readFileSync(filePath, 'utf-8')))
+      return Object.entries(dotEnvParse(readFileSync(filePath, 'utf8')))
     })
   )
 

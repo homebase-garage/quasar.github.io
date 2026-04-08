@@ -76,7 +76,7 @@ export async function generateCertificate({ log, fatal }) {
 
   const certContent = pems.private + pems.cert
   try {
-    writeFileSync(certPath, certContent, 'utf-8')
+    writeFileSync(certPath, certContent, 'utf8')
   } catch (err) {
     console.error(err)
     fatal(
@@ -104,6 +104,6 @@ export async function getCertificate({ log, fatal }) {
   }
 
   return certExists === true
-    ? readFileSync(certPath, 'utf-8')
+    ? readFileSync(certPath, 'utf8')
     : await generateCertificate({ log, fatal })
 }

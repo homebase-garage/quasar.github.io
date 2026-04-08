@@ -75,7 +75,7 @@ function generateExports(folders) {
         return acc
       }, {})
 
-      if (Object.keys(exportDefinition).length) {
+      if (Object.keys(exportDefinition).length !== 0) {
         exports[`./${folder}`] = exportDefinition
       }
     }

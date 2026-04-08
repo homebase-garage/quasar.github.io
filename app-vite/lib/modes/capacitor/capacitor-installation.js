@@ -75,10 +75,10 @@ export async function addMode({
     const dest = appPaths.resolve.capacitor(filePath)
     const content = fse.readFileSync(
       appPaths.resolve.cli('templates/capacitor/' + filePath),
-      'utf-8'
+      'utf8'
     )
     fse.ensureFileSync(dest)
-    fse.writeFileSync(dest, renderTemplate(content, scope), 'utf-8')
+    fse.writeFileSync(dest, renderTemplate(content, scope), 'utf8')
   })
 
   await ensureDeps({ appPaths, cacheProxy })

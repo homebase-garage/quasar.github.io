@@ -21,7 +21,7 @@ function resolvePackageSpecVersion(name) {
 }
 
 function resolveFileVersion(path, pattern) {
-  const content = readFileSync(resolve(extrasRoot, path), 'utf-8')
+  const content = readFileSync(resolve(extrasRoot, path), 'utf8')
   const match = content.match(pattern)
 
   if (match === null) {
@@ -94,7 +94,7 @@ function renderRows(rows, googleVersions, type) {
 module.exports.generateReadme = function generateReadme({ googleVersions }) {
   const template = readFileSync(
     resolve(__dirname, 'README.template.md'),
-    'utf-8'
+    'utf8'
   )
   const webfontsTable = renderTable(
     [
@@ -123,5 +123,5 @@ module.exports.generateReadme = function generateReadme({ googleVersions }) {
     .replace('{{WEBFONTS_TABLE}}', webfontsTable)
     .replace('{{SVG_TABLE}}', svgTable)
 
-  writeFileSync(resolve(extrasRoot, 'README.md'), readme, 'utf-8')
+  writeFileSync(resolve(extrasRoot, 'README.md'), readme, 'utf8')
 }

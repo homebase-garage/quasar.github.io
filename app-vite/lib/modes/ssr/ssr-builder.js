@@ -56,7 +56,7 @@ export class QuasarModeBuilder extends AppBuilder {
           null,
           this.quasarConf.build.minify !== false ? void 0 : 2
         ),
-        'utf-8'
+        'utf8'
       )
 
       // also update pwa-builder.js when changing here

@@ -160,7 +160,7 @@ export class InstallAPI extends BaseAPI {
       }
 
       try {
-        extPkg = JSON.parse(fs.readFileSync(source, 'utf-8'))
+        extPkg = JSON.parse(fs.readFileSync(source, 'utf8'))
       } catch {
         warn(
           `Extension(${this.extId}): extendPackageJson() - "${extPkg}" is malformed`
@@ -177,7 +177,7 @@ export class InstallAPI extends BaseAPI {
     fs.writeFileSync(
       this.resolve.app('package.json'),
       stringifyJSON(pkg),
-      'utf-8'
+      'utf8'
     )
 
     if (
@@ -202,7 +202,7 @@ export class InstallAPI extends BaseAPI {
     if (
       newData !== void 0 &&
       Object(newData) === newData &&
-      Object.keys(newData).length > 0
+      Object.keys(newData).length !== 0
     ) {
       const filePath = this.resolve.app(file)
 
@@ -214,7 +214,7 @@ export class InstallAPI extends BaseAPI {
       // TODO: use parseJSONC/stringifyJSONC from confbox
       try {
         const existingData = fs.existsSync(filePath)
-          ? parseJSON(fs.readFileSync(filePath, 'utf-8'))
+          ? parseJSON(fs.readFileSync(filePath, 'utf8'))
           : {}
         const data = merge({}, existingData, newData)
 
@@ -222,9 +222,9 @@ export class InstallAPI extends BaseAPI {
           this.resolve.app(file),
           // if file exists, preserve indentation, otherwise use 2 spaces
           stringifyJSON(data, {
-            indent: Object.keys(existingData).length > 0 ? void 0 : 2
+            indent: Object.keys(existingData).length !== 0 ? void 0 : 2
           }),
-          'utf-8'
+          'utf8'
         )
       } catch {
         warn()

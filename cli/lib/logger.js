@@ -128,7 +128,7 @@ export function progress(msg, token) {
   const startTime = Date.now()
 
   return progressMessage => {
-    const diffTime = Number(new Date()) - startTime
+    const diffTime = Date.now() - startTime
     success(`${parseMsg(progressMessage)} ${dot} ${diffTime}ms`, 'DONE')
     log()
   }

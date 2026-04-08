@@ -163,7 +163,7 @@ if (argv.history) {
     fatal(`Index file not found: ${indexFile}`)
   }
 
-  const indexFileContent = await readFile(indexFile, 'utf-8')
+  const indexFileContent = await readFile(indexFile, 'utf8')
 
   app.use('*', async (c, next) => {
     if (c.req.method !== 'GET') {

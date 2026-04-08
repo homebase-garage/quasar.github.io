@@ -62,7 +62,7 @@ export async function getApi(item, ctx) {
 
     try {
       return {
-        api: JSON.parse(fs.readFileSync(file, 'utf-8')),
+        api: JSON.parse(fs.readFileSync(file, 'utf8')),
         supplier: ext.extId
       }
     } catch {

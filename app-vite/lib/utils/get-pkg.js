@@ -23,7 +23,7 @@ export function getPkg(appPaths) {
       lastAppPkgModifiedTime = mtime
       try {
         // This may get updated and written, so use parseJSON to preserve formatting
-        appPkg = parseJSON(readFileSync(appPkgPath, 'utf-8'))
+        appPkg = parseJSON(readFileSync(appPkgPath, 'utf8'))
       } catch (err) {
         warning("Could not parse app's package.json. The file is malformed:")
         console.error(err)

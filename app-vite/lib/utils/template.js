@@ -45,7 +45,7 @@ function throwParseError(message, str, index) {
 
 function escapeRegExp(str) {
   // From MDN
-  return str.replace(escapeRegexpRE, '\\$&') // $& means the whole matched string
+  return str.replace(escapeRegexpRE, String.raw`\$&`) // $& means the whole matched string
 }
 
 function trimWS(str, wsLeft, wsRight) {
@@ -103,7 +103,9 @@ function getAST(str, opts) {
         // replace \ with \\, ' with \'
         // we're going to convert all CRLF to LF so it doesn't take more than one replace
 
-        strng = strng.replace(/\\|'/g, '\\$&').replace(/\r\n|\n|\r/g, '\\n')
+        strng = strng
+          .replace(/\\|'/g, String.raw`\$&`)
+          .replace(/\r\n|\n|\r/g, String.raw`\n`)
 
         ast.push(strng)
       }
@@ -126,7 +128,10 @@ function getAST(str, opts) {
   )
 
   const parseOpenReg = new RegExp(
-    escapeRegExp(opts.tagStart) + '(-|_)?\\s*(' + prefixes + ')?\\s*',
+    escapeRegExp(opts.tagStart) +
+      String.raw`(-|_)?\s*(` +
+      prefixes +
+      String.raw`)?\s*`,
     'g'
   )
 
@@ -215,7 +220,7 @@ function getAST(str, opts) {
     }
   }
 
-  pushString(str.slice(lastIndex, str.length), false)
+  pushString(str.slice(lastIndex), false)
   return ast
 }
 

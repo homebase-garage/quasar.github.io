@@ -13,7 +13,7 @@ export function appFilesValidations(appPaths) {
     return false
   }
 
-  const content = fs.readFileSync(file, 'utf-8')
+  const content = fs.readFileSync(file, 'utf8')
 
   if (content.indexOf(attachMarkup) !== -1) {
     warn(`Please remove ${attachMarkup} from
