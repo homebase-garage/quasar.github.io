@@ -19,6 +19,12 @@ import {
   emptyRenderFn
 } from '../../utils/private.symbols/symbols.js'
 
+function updateLocal(prop, val) {
+  if (prop.value !== val) {
+    prop.value = val
+  }
+}
+
 export default createComponent({
   name: 'QFooter',
 
@@ -62,7 +68,7 @@ export default createComponent({
     const fixed = computed(
       () =>
         props.reveal === true ||
-        $layout.view.value.indexOf('F') !== -1 ||
+        $layout.view.value.includes('F') ||
         ($q.platform.is.ios && $layout.isContainer.value === true)
     )
 
@@ -86,7 +92,7 @@ export default createComponent({
         size.value -
         $layout.height.value
 
-      return localOffset > 0 ? localOffset : 0
+      return Math.max(localOffset, 0)
     })
 
     const hidden = computed(
@@ -130,12 +136,6 @@ export default createComponent({
 
     function updateLayout(prop, val) {
       $layout.update('footer', prop, val)
-    }
-
-    function updateLocal(prop, val) {
-      if (prop.value !== val) {
-        prop.value = val
-      }
     }
 
     function onResize({ height }) {

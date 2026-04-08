@@ -236,11 +236,11 @@ function d2j(jdn) {
 */
 function g2d(gy, gm, gd) {
   let d =
-    div((gy + div(gm - 8, 6) + 100100) * 1461, 4) +
+    div((gy + div(gm - 8, 6) + 100_100) * 1461, 4) +
     div(153 * mod(gm + 9, 12) + 2, 5) +
     gd -
-    34840408
-  d = d - div(div(gy + 100100 + div(gm - 8, 6), 100) * 3, 4) + 752
+    34_840_408
+  d = d - div(div(gy + 100_100 + div(gm - 8, 6), 100) * 3, 4) + 752
   return d
 }
 
@@ -256,12 +256,12 @@ function g2d(gy, gm, gd) {
     gd: Calendar day of the month M (1 to 28/29/30/31)
 */
 function d2g(jdn) {
-  let j = 4 * jdn + 139361631
-  j = j + div(div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908
+  let j = 4 * jdn + 139_361_631
+  j = j + div(div(4 * jdn + 183_187_720, 146_097) * 3, 4) * 4 - 3908
   const i = div(mod(j, 1461), 4) * 5 + 308,
     gd = div(mod(i, 153), 5) + 1,
     gm = mod(div(i, 153), 12) + 1,
-    gy = div(j, 1461) - 100100 + div(8 - gm, 6)
+    gy = div(j, 1461) - 100_100 + div(8 - gm, 6)
   return {
     gy,
     gm,

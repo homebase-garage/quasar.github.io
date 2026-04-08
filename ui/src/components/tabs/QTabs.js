@@ -27,6 +27,16 @@ function getIndicatorClass(color, top, vertical) {
   return `absolute-${top === true ? pos[0] : pos[1]}${color ? ` text-${color}` : ''}`
 }
 
+function hasQueryIncluded(targetQuery, matchingQuery) {
+  for (const key in targetQuery) {
+    if (targetQuery[key] !== matchingQuery[key]) {
+      return false
+    }
+  }
+
+  return true
+}
+
 const alignValues = ['left', 'center', 'right', 'justify']
 
 export default createComponent({
@@ -466,16 +476,6 @@ export default createComponent({
       updateArrows()
 
       return done
-    }
-
-    function hasQueryIncluded(targetQuery, matchingQuery) {
-      for (const key in targetQuery) {
-        if (targetQuery[key] !== matchingQuery[key]) {
-          return false
-        }
-      }
-
-      return true
     }
 
     // 1. Do not use directly; use verifyRouteModel() instead

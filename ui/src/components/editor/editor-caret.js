@@ -292,7 +292,7 @@ export default class Caret {
         const url = selection ? selection.toString() : ''
 
         if (
-          !url.length &&
+          url.length === 0 &&
           (!this.range || !this.range.cloneContents().querySelector('img'))
         ) {
           return

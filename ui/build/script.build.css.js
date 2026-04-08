@@ -117,8 +117,8 @@ export function buildCss(withDiff) {
   Promise.all([
     generateBase('src/css/index.sass'),
     generateAddon('src/css/flex-addon.sass')
-  ]).catch(e => {
-    console.error(e)
+  ]).catch(err => {
+    console.error(err)
     process.exit(1)
   })
 }

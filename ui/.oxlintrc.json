@@ -10,5 +10,14 @@
     "__QUASAR_SSR_PWA__": "readonly"
   },
 
-  "ignorePatterns": ["icon-set/svg-*.js", "lang/index.json"]
+  "ignorePatterns": ["icon-set/svg-*.js", "lang/index.json"],
+
+  "overrides": [
+    {
+      "files": ["**/*.test.js"],
+      "rules": {
+        "unicorn/consistent-function-scoping": "off"
+      }
+    }
+  ]
 }

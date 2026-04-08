@@ -2,14 +2,11 @@
  * Based on the work of https://github.com/jchook/uuid-random
  */
 
-let buf,
-  bufIdx = 0
-const hexBytes = new Array(256)
-
-// Pre-calculate toString(16) for speed
-for (let i = 0; i < 256; i++) {
-  hexBytes[i] = (i + 0x100).toString(16).substring(1)
-}
+let buf
+let bufIdx = 0
+const hexBytes = Array.from({ length: 256 }, (_, i) =>
+  (i + 0x1_00).toString(16).slice(1)
+)
 
 // Use best available PRNG
 const randomBytes = (() => {

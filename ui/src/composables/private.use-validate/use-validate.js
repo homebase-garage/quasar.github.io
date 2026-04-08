@@ -198,9 +198,9 @@ export default function useValidate(focused, innerLoading) {
         if (index === validateIndex) update(msg !== void 0, msg)
         return msg === void 0
       },
-      e => {
+      err => {
         if (index === validateIndex) {
-          console.error(e)
+          console.error(err)
           update(true)
         }
 

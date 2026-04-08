@@ -66,8 +66,8 @@ const Plugin = createReactivePlugin(
         stop() {
           barRef.value.stop()
         },
-        increment() {
-          barRef.value.increment.apply(null, arguments)
+        increment(...args) {
+          barRef.value.increment(...args)
         },
         setDefaults(opts) {
           if (isObject(opts) === true) {

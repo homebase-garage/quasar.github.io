@@ -155,7 +155,7 @@ export default {
     allTabs() {
       return allTabs.map(tab => ({
         tab,
-        selected: this.tabs.indexOf(tab) > -1
+        selected: this.tabs.includes(tab)
       }))
     }
   },
@@ -167,14 +167,14 @@ export default {
       } else {
         const index = this.tabs.indexOf(tab)
 
-        if (index > -1) {
+        if (index !== -1) {
           this.tabs.splice(index, 1)
         }
       }
     },
 
     toggleAll() {
-      if (this.tabs.length > 0) {
+      if (this.tabs.length !== 0) {
         this.tabs = []
       } else {
         this.tabs = this.allTabs.map(t => t.tab)

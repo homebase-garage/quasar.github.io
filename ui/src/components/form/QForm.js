@@ -16,6 +16,17 @@ import { hSlot } from '../../utils/private.render/render.js'
 import { formKey } from '../../utils/private.symbols/symbols.js'
 import { vmIsDestroyed } from '../../utils/private.vm/vm.js'
 
+function validateComponent(comp) {
+  const valid = comp.validate()
+
+  return typeof valid.then === 'function'
+    ? valid.then(
+        isValid => ({ valid: isValid, comp }),
+        err => ({ valid: false, comp, err })
+      )
+    : Promise.resolve({ valid, comp })
+}
+
 export default createComponent({
   name: 'QForm',
 
@@ -49,17 +60,6 @@ export default createComponent({
         emit(`validation${res === true ? 'Success' : 'Error'}`, compRef)
       }
 
-      const validateComponent = comp => {
-        const valid = comp.validate()
-
-        return typeof valid.then === 'function'
-          ? valid.then(
-              isValid => ({ valid: isValid, comp }),
-              err => ({ valid: false, comp, err })
-            )
-          : Promise.resolve({ valid, comp })
-      }
-
       const errorsPromise =
         props.greedy === true
           ? Promise.all(registeredComponents.map(validateComponent)).then(res =>
@@ -71,13 +71,13 @@ export default createComponent({
                   acc.then(() =>
                     validateComponent(comp).then(r => {
                       if (r.valid === false) {
-                        return Promise.reject(r)
+                        throw r
                       }
                     })
                   ),
                 Promise.resolve()
               )
-              .catch(error => [error])
+              .catch(err => [err])
 
       return errorsPromise.then(errors => {
         if (errors === void 0 || errors.length === 0) {

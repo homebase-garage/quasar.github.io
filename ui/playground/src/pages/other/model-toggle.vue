@@ -210,7 +210,7 @@ export default {
       return this.showHideSequence
         .toLowerCase()
         .split('')
-        .filter(v => ['s', 'h', 't'].indexOf(v) > -1)
+        .filter(v => ['s', 'h', 't'].includes(v))
     },
     showHideSequenceEndStatus() {
       const filtered = this.showHideSequenceArr.filter(v => v !== 't'),

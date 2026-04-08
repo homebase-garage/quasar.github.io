@@ -13,7 +13,7 @@ const svgIconSetBanner = setName => `
 const convert = str => str.replace(/(-\w)/g, m => m[1].toUpperCase())
 const materialConvert = (str, old, prefix) => {
   if (old !== '') {
-    str = str.substring(old.length)
+    str = str.slice(old.length)
   }
   return (prefix + str).replace(/(_\w)/g, m => m[1].toUpperCase())
 }
@@ -148,7 +148,7 @@ function splitContent(str) {
 function generateSvgFile(type) {
   const original = fse.readFileSync(
     resolveToRoot(`icon-set/${type.name}.js`),
-    'utf-8'
+    'utf8'
   )
   const { outsideOfExport, insideOfExport } = splitContent(original)
 
@@ -166,7 +166,7 @@ function generateSvgFile(type) {
     .replace(/name: ""/, `name: 'svg-${type.name}'`)
 
   const importString = Object.keys(importList)
-    .filter(listName => importList[listName].length > 0)
+    .filter(listName => importList[listName].length !== 0)
     .map(
       listName =>
         'import {\n  ' +
@@ -189,7 +189,7 @@ function generateSvgFile(type) {
   let oldContent = ''
 
   try {
-    oldContent = fse.readFileSync(iconFile, 'utf-8')
+    oldContent = fse.readFileSync(iconFile, 'utf8')
   } catch {}
 
   return content.split(/[\n\r]+/).join('\n') !==

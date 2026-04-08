@@ -94,7 +94,7 @@ export default {
   methods: {
     validateNameAsync(val) {
       return new Promise(function validateNameAsync(resolve) {
-        resolve((val && val.length > 0) || 'Please type something')
+        resolve((val && val.length !== 0) || 'Please type something')
       })
     },
 

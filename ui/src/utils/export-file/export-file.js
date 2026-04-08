@@ -2,7 +2,7 @@ function clean(link) {
   // allow time for iOS
   setTimeout(() => {
     window.URL.revokeObjectURL(link.href)
-  }, 10000)
+  }, 10_000)
 
   link.remove()
 }

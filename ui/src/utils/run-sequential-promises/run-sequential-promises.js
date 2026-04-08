@@ -92,13 +92,13 @@ export default function runSequentialPromises(
             // timeout so it doesn't interfere with the .catch() below
             setTimeout(runNextPromise)
           })
-          .catch(reason => {
+          .catch(err => {
             if (hasAborted === true) {
               resolve()
               return // early exit
             }
 
-            const result = { key, status: 'rejected', reason }
+            const result = { key, status: 'rejected', reason: err }
             resultAggregator[key] = result
 
             if (abortOnFail === true) {

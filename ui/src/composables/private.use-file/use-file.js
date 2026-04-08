@@ -56,7 +56,7 @@ export default function useFile({
             return '*/'
           } else if (ext.endsWith('/*')) {
             // support "image/*" or "*/*"
-            ext = ext.slice(0, ext.length - 1)
+            ext = ext.slice(0, -1)
           }
           return ext.toUpperCase()
         })
@@ -99,7 +99,7 @@ export default function useFile({
     }
 
     // filter file types
-    if (props.accept !== void 0 && extensions.value.indexOf('*/') === -1) {
+    if (props.accept !== void 0 && extensions.value.includes('*/') === false) {
       files = filterFiles(files, rejectedFiles, 'accept', file =>
         extensions.value.some(
           ext =>

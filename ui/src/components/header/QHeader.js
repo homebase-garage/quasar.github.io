@@ -17,6 +17,12 @@ import {
   emptyRenderFn
 } from '../../utils/private.symbols/symbols.js'
 
+function updateLocal(prop, val) {
+  if (prop.value !== val) {
+    prop.value = val
+  }
+}
+
 export default createComponent({
   name: 'QHeader',
 
@@ -58,7 +64,7 @@ export default createComponent({
     const fixed = computed(
       () =>
         props.reveal === true ||
-        $layout.view.value.indexOf('H') !== -1 ||
+        $layout.view.value.includes('H') ||
         ($q.platform.is.ios && $layout.isContainer.value === true)
     )
 
@@ -71,7 +77,7 @@ export default createComponent({
       }
 
       const localOffset = size.value - $layout.scroll.value.position
-      return localOffset > 0 ? localOffset : 0
+      return Math.max(localOffset, 0)
     })
 
     const hidden = computed(
@@ -113,12 +119,6 @@ export default createComponent({
 
     function updateLayout(prop, val) {
       $layout.update('header', prop, val)
-    }
-
-    function updateLocal(prop, val) {
-      if (prop.value !== val) {
-        prop.value = val
-      }
     }
 
     function onResize({ height }) {

@@ -56,7 +56,7 @@ export default {
 
       const filtered = this.log.filter(r => r[0] === evt.type)
 
-      if (filtered.length > 0) {
+      if (filtered.length !== 0) {
         const old = filtered[0]
 
         if (JSON.stringify(old[2]) === JSON.stringify(evtDump)) {

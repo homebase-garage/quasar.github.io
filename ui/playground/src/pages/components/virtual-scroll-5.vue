@@ -98,7 +98,7 @@
 <script>
 const heavyList = [],
   columns = [],
-  listSize = 10000
+  listSize = 10_000
 
 for (let i = 0; i < 30; i++) {
   columns.push('col' + (i + 1))

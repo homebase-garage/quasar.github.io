@@ -53,17 +53,17 @@ const seed = [
   {
     name: 'Frozen Yogurt',
     calories: 159,
-    fat: 6.0
+    fat: 6
   },
   {
     name: 'Ice cream sandwich',
     calories: 237,
-    fat: 9.0
+    fat: 9
   },
   {
     name: 'Eclair',
     calories: 262,
-    fat: 16.0
+    fat: 16
   },
   {
     name: 'Cupcake',
@@ -73,12 +73,12 @@ const seed = [
   {
     name: 'Gingerbread',
     calories: 356,
-    fat: 16.0
+    fat: 16
   },
   {
     name: 'Jelly bean',
     calories: 375,
-    fat: 0.0
+    fat: 0
   },
   {
     name: 'Lollipop',
@@ -93,12 +93,12 @@ const seed = [
   {
     name: 'Donut',
     calories: 452,
-    fat: 25.0
+    fat: 25
   },
   {
     name: 'KitKat',
     calories: 518,
-    fat: 26.0
+    fat: 26
   }
 ]
 

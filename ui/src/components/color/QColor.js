@@ -190,15 +190,11 @@ export default createComponent({
     const errorIconRef = ref(null)
 
     const forceHex = computed(() =>
-      props.formatModel === 'auto'
-        ? null
-        : props.formatModel.indexOf('hex') !== -1
+      props.formatModel === 'auto' ? null : props.formatModel.includes('hex')
     )
 
     const forceAlpha = computed(() =>
-      props.formatModel === 'auto'
-        ? null
-        : props.formatModel.indexOf('a') !== -1
+      props.formatModel === 'auto' ? null : props.formatModel.includes('a')
     )
 
     const topView = ref(
@@ -345,7 +341,7 @@ export default createComponent({
           ? forceAlpha.value
           : props.formatModel === 'auto'
             ? null
-            : props.formatModel.indexOf('a') !== -1
+            : props.formatModel.includes('a')
 
       if (
         typeof v !== 'string' ||

@@ -35,13 +35,7 @@
     "unicorn/consistent-existence-index-check": "error",
     "unicorn/empty-brace-spaces": "error",
     "unicorn/error-message": "error",
-    "unicorn/filename-case": [
-      "error",
-      {
-        "cases": { "camelCase": true, "pascalCase": true },
-        "ignore": ".d.ts$"
-      }
-    ],
+    "unicorn/filename-case": "off",
     "unicorn/no-await-expression-member": "error",
     "unicorn/no-console-spaces": "warn",
     "unicorn/numeric-separators-style": "error",

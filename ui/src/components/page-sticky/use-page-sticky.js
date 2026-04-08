@@ -45,10 +45,10 @@ export default function usePageSticky() {
     const pos = props.position
 
     return {
-      top: pos.indexOf('top') !== -1,
-      right: pos.indexOf('right') !== -1,
-      bottom: pos.indexOf('bottom') !== -1,
-      left: pos.indexOf('left') !== -1,
+      top: pos.includes('top'),
+      right: pos.includes('right'),
+      bottom: pos.includes('bottom'),
+      left: pos.includes('left'),
       vertical: pos === 'top' || pos === 'bottom',
       horizontal: pos === 'left' || pos === 'right'
     }

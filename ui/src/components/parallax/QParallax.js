@@ -8,6 +8,7 @@ import { hSlot } from '../../utils/private.render/render.js'
 import { listenOpts } from '../../utils/event/event.js'
 
 const { passive } = listenOpts
+const mediaEvents = ['load', 'loadstart', 'loadedmetadata']
 
 export default createComponent({
   name: 'QParallax',
@@ -132,7 +133,10 @@ export default createComponent({
           ? mediaParentRef.value.children[0]
           : mediaRef.value
 
-      mediaEl.onload = mediaEl.onloadstart = mediaEl.loadedmetadata = onResize
+      mediaEvents.forEach(evtName => {
+        mediaEl.addEventListener(evtName, onResize)
+      })
+
       onResize()
       mediaEl.style.display = 'initial'
 
@@ -151,7 +155,9 @@ export default createComponent({
     onBeforeUnmount(() => {
       stop()
       observer?.disconnect()
-      mediaEl.onload = mediaEl.onloadstart = mediaEl.loadedmetadata = null
+      mediaEvents.forEach(evtName => {
+        mediaEl.removeEventListener(evtName, onResize)
+      })
     })
 
     return () =>

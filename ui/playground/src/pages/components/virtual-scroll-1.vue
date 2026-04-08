@@ -176,7 +176,7 @@
 </template>
 
 <script>
-const maxSize = 100000
+const maxSize = 100_000
 const heavyList = []
 
 for (let i = 0; i < maxSize; i++) {

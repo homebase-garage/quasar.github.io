@@ -138,7 +138,7 @@ function getPlatform(UA) {
     browser['windows phone']
 
   // These are all considered mobile platforms, meaning they run a mobile browser
-  if (knownMobiles === true || userAgent.indexOf('mobile') !== -1) {
+  if (knownMobiles === true || userAgent.includes('mobile')) {
     browser.mobile = true
   }
   // If it's not mobile we should consider it's desktop platform, meaning it runs a desktop browser
@@ -220,9 +220,9 @@ function getPlatform(UA) {
   browser.platform = matched.platform
 
   if (__QUASAR_SSR_SERVER__ !== true) {
-    if (userAgent.indexOf('electron') !== -1) {
+    if (userAgent.includes('electron')) {
       browser.electron = true
-    } else if (document.location.href.indexOf('-extension://') !== -1) {
+    } else if (document.location.href.includes('-extension://')) {
       browser.bex = true
     } else {
       if (window.Capacitor !== void 0) {

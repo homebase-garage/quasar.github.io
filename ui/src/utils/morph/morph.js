@@ -3,6 +3,10 @@ import { isObject } from '../is/is.js'
 let id = 0
 let offsetBase = void 0
 
+function defaultCancel() {
+  return false
+}
+
 function getAbsolutePosition(el, resize) {
   if (offsetBase === void 0) {
     offsetBase = document.createElement('div')
@@ -67,9 +71,7 @@ function getComputedStyle(el, props) {
         }
 
         fixed[prop] = val
-      } else if (
-        ['borderWidth', 'borderStyle', 'borderColor'].indexOf(prop) !== -1
-      ) {
+      } else if (['borderWidth', 'borderStyle', 'borderColor'].includes(prop)) {
         const suffix = prop.replace('border', '')
         let val = ''
         for (let j = 0; j < styleEdges.length; j++) {
@@ -199,7 +201,7 @@ function isValidElement(element) {
 }
 
 export default function morph(_options) {
-  let cancel = () => false
+  let cancel = defaultCancel
   let cancelStatus = false
   let endElementTo = true
 
@@ -259,7 +261,7 @@ export default function morph(_options) {
     elFromTween.className = elFromTween.classList
       .toString()
       .split(' ')
-      .filter(c => /^bg-/.test(c) === false)
+      .filter(c => c.startsWith('bg-') === false)
       .join(' ')
   }
 
@@ -273,7 +275,7 @@ export default function morph(_options) {
   elFromClone.style.transition = 'none'
   elFromClone.style.animation = 'none'
   elFromClone.style.pointerEvents = 'none'
-  elFromParent.insertBefore(elFromClone, elFromNext)
+  elFromNext.before(elFromClone)
 
   // we mark the element with its cleanup function
   elFrom.qMorphCancel = () => {
@@ -393,7 +395,8 @@ export default function morph(_options) {
         elTo === elFrom && elFromParent === elToParent
           ? elFromClone
           : elTo.nextElementSibling
-      elToParent.insertBefore(elToClone, elToNext)
+
+      elToNext.before(elToClone)
 
       const {
         borderWidth: elToBorderWidth,
@@ -425,7 +428,7 @@ export default function morph(_options) {
       // we strip the background classes (background color can no longer be animated if !important is used)
       elTo.className = elToClassSaved
         .split(' ')
-        .filter(c => /^bg-/.test(c) === false)
+        .filter(c => c.startsWith('bg-') === false)
         .join(' ')
 
       const elToPosition = getAbsolutePosition(elTo, options.resize)
@@ -580,7 +583,7 @@ export default function morph(_options) {
         }
 
         if (elToClone.parentNode === elToParent) {
-          elToParent.insertBefore(elTo, elToClone)
+          elToClone.before(elTo)
         }
 
         // we clean the spacers
@@ -589,7 +592,7 @@ export default function morph(_options) {
         elFromTween?.remove()
 
         // cancel will be no longer available
-        cancel = () => false
+        cancel = defaultCancel
 
         elFrom.qMorphCancel = void 0
         elTo.qMorphCancel = void 0

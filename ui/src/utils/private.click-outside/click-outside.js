@@ -74,7 +74,7 @@ export function addClickOutside(clickOutsideProps) {
 }
 
 export function removeClickOutside(clickOutsideProps) {
-  const index = registeredList.findIndex(h => h === clickOutsideProps)
+  const index = registeredList.indexOf(clickOutsideProps)
 
   if (index !== -1) {
     registeredList.splice(index, 1)

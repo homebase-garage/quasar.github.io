@@ -226,7 +226,7 @@ const rulesAsync = computed(() => getRulesAsync(lang.value))
 function getRules(langRules) {
   return [
     val =>
-      (typeof val === 'string' && val.trim().length > 0) ||
+      (typeof val === 'string' && val.trim().length !== 0) ||
       langRules.value.required
   ]
 }
@@ -235,7 +235,7 @@ function getRulesAsync(langRules) {
   return [
     val =>
       Promise.resolve(
-        (typeof val === 'string' && val.trim().length > 0) ||
+        (typeof val === 'string' && val.trim().length !== 0) ||
           langRules.value.required
       )
   ]

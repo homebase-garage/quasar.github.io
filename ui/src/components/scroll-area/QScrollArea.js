@@ -149,7 +149,7 @@ export default createComponent({
         return 0
       }
       const p = between(scroll.vertical.position.value / diff, 0, 1)
-      return Math.round(p * 10000) / 10000
+      return Math.round(p * 10_000) / 10_000
     })
     scroll.vertical.thumbHidden = computed(
       () =>
@@ -202,7 +202,7 @@ export default createComponent({
         return 0
       }
       const p = between(Math.abs(scroll.horizontal.position.value) / diff, 0, 1)
-      return Math.round(p * 10000) / 10000
+      return Math.round(p * 10_000) / 10_000
     })
     scroll.horizontal.thumbHidden = computed(
       () =>

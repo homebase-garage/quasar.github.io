@@ -208,7 +208,7 @@ export default {
       // call fail() if any error occurs
 
       setTimeout(() => {
-        if (key.indexOf('Lazy load empty') > -1) {
+        if (key.includes('Lazy load empty')) {
           done([])
           return
         }

@@ -64,6 +64,10 @@ export const usePanelEmits = [
   'transition'
 ]
 
+function isValidPanelName(name) {
+  return name !== void 0 && name !== null && name !== ''
+}
+
 export default function usePanel() {
   const { props, emit, proxy } = getCurrentInstance()
   const { getCache } = useRenderCache()
@@ -165,10 +169,6 @@ export default function usePanel() {
 
   function goToPanel(name) {
     emit('update:modelValue', name)
-  }
-
-  function isValidPanelName(name) {
-    return name !== void 0 && name !== null && name !== ''
   }
 
   function getPanelIndex(name) {

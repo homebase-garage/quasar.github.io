@@ -240,7 +240,7 @@ export function getRenderer(getPlugin, expose) {
     }
 
     const localFiles = state.files.value.filter(f => {
-      if (statusList.indexOf(f.__status) === -1) {
+      if (statusList.includes(f.__status) === false) {
         return true
       }
 

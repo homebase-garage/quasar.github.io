@@ -10,9 +10,9 @@ function filterInvalidPath(path) {
 }
 
 function normalizeExitPath(path) {
-  if (path.startsWith('#') === true) path = path.substring(1)
+  if (path.startsWith('#') === true) path = path.slice(1)
   if (path.startsWith('/') === false) path = '/' + path
-  if (path.endsWith('/') === true) path = path.substring(0, path.length - 1)
+  if (path.endsWith('/') === true) path = path.slice(0, -1)
   return '#' + path
 }
 
@@ -74,7 +74,7 @@ export default {
 
     this.remove = entry => {
       const index = this.__history.indexOf(entry)
-      if (index >= 0) {
+      if (index !== -1) {
         this.__history.splice(index, 1)
       }
     }
@@ -84,7 +84,7 @@ export default {
     )
 
     const backHandler = () => {
-      if (this.__history.length) {
+      if (this.__history.length !== 0) {
         const entry = this.__history[this.__history.length - 1]
 
         if (entry.condition() === true) {

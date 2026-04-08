@@ -16,7 +16,7 @@ export function useTableFilter(props, setPagination) {
               const val = String(cellValue(col, row))
               const haystack =
                 val === 'undefined' || val === 'null' ? '' : val.toLowerCase()
-              return haystack.indexOf(lowerTerms) !== -1
+              return haystack.includes(lowerTerms)
             })
           )
         }

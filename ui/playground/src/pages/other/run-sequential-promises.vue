@@ -180,8 +180,8 @@ runTest(['list', 'resolve all', 'yes', '1 thread'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -199,8 +199,8 @@ runTest(['list', 'resolve all', '-', '1 thread'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -221,8 +221,8 @@ runTest(['list', 'resolve all', 'yes', '2 thread'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -243,8 +243,8 @@ runTest(['list', 'resolve all', '-', '2 thread'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -253,10 +253,10 @@ runTest(['list', 'reject 2nd', 'yes', '1 thread'], setResult => {
     .then(list => {
       setResult(list, false)
     })
-    .catch(result => {
+    .catch(err => {
       setResult(
-        result,
-        is.deepEqual(result, {
+        err,
+        is.deepEqual(err, {
           key: 1,
           status: 'rejected',
           reason: 'cannot settle promise 2',
@@ -286,8 +286,8 @@ runTest(['list', 'reject 2nd', '-', '1 thread'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -299,10 +299,10 @@ runTest(['list', 'reject 2nd', 'yes', '2 threads'], setResult => {
     .then(list => {
       setResult(list, false)
     })
-    .catch(result => {
+    .catch(err => {
       setResult(
-        result,
-        is.deepEqual(result, {
+        err,
+        is.deepEqual(err, {
           key: 1,
           status: 'rejected',
           reason: 'cannot settle promise 2',
@@ -335,8 +335,8 @@ runTest(['list', 'reject 2nd', '-', '2 threads'], setResult => {
         ])
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -416,8 +416,8 @@ runTest(['map', 'resolve all', 'yes', '1 thread'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -435,8 +435,8 @@ runTest(['map', 'resolve all', '-', '1 thread'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -457,8 +457,8 @@ runTest(['map', 'resolve all', 'yes', '2 thread'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -479,8 +479,8 @@ runTest(['map', 'resolve all', '-', '2 thread'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -489,10 +489,10 @@ runTest(['map', 'reject 2nd', 'yes', '1 thread'], setResult => {
     .then(resultAggregator => {
       setResult(resultAggregator, false)
     })
-    .catch(result => {
+    .catch(err => {
       setResult(
-        result,
-        is.deepEqual(result, {
+        err,
+        is.deepEqual(err, {
           key: 'two',
           status: 'rejected',
           reason: 'cannot settle promise 2',
@@ -530,8 +530,8 @@ runTest(['map', 'reject 2nd', '-', '1 thread'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 
@@ -543,10 +543,10 @@ runTest(['map', 'reject 2nd', 'yes', '2 threads'], setResult => {
     .then(resultAggregator => {
       setResult(resultAggregator, false)
     })
-    .catch(result => {
+    .catch(err => {
       setResult(
-        result,
-        is.deepEqual(result, {
+        err,
+        is.deepEqual(err, {
           key: 'two',
           status: 'rejected',
           reason: 'cannot settle promise 2',
@@ -587,8 +587,8 @@ runTest(['map', 'reject 2nd', '-', '2 threads'], setResult => {
         })
       )
     })
-    .catch(result => {
-      setResult(result, false)
+    .catch(err => {
+      setResult(err, false)
     })
 })
 </script>

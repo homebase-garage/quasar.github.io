@@ -6,7 +6,7 @@ function load(componentName) {
 
 function component(path) {
   return {
-    path: '/' + path.slice(9, path.length - 4),
+    path: '/' + path.slice(9, -4),
     component: pagesList[path]
   }
 }

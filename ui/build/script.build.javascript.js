@@ -204,13 +204,10 @@ async function addUmdAssets(buildList, type, injectName, convertImports) {
 
   for (const file of fileList) {
     const name = file
-      .substring(0, file.length - 3)
+      .slice(0, -3)
       .replace(/-([a-zA-Z])/g, g => g[1].toUpperCase())
 
-    const inputCode = fse.readFileSync(
-      resolveToRoot(`${type}/${file}`),
-      'utf-8'
-    )
+    const inputCode = fse.readFileSync(resolveToRoot(`${type}/${file}`), 'utf8')
     const tempFile = resolveToRoot(`dist/${type}/temp.${file}`)
 
     umdTempFilesList.push(tempFile)
@@ -221,7 +218,7 @@ async function addUmdAssets(buildList, type, injectName, convertImports) {
         ? await convertExternalImports(inputCode)
         : inputCode
       ).replace('export default ', `window.Quasar.${injectName}.${name} = `),
-      'utf-8'
+      'utf8'
     )
 
     buildList.push({

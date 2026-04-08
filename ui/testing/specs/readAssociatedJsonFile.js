@@ -18,5 +18,5 @@ export default function readAssociatedJsonFile(ctx) {
   const jsonFile = readJsonFile(ctx)
   return jsonFile === void 0
     ? void 0
-    : JSON.parse(fse.readFileSync(jsonFile, 'utf-8'))
+    : JSON.parse(fse.readFileSync(jsonFile, 'utf8'))
 }

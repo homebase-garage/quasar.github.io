@@ -313,7 +313,7 @@ export default function useSlider({
           : between((pos.left - draggingInfo.left) / draggingInfo.width, 0, 1)
 
     return between(
-      isReversed.value === true ? 1.0 - val : val,
+      isReversed.value === true ? 1 - val : val,
       innerMinRatio.value,
       innerMaxRatio.value
     )
@@ -361,7 +361,7 @@ export default function useSlider({
         (entry.classes !== void 0 ? ' ' + entry.classes : ''),
       style: {
         ...getMarkerLabelStyle(entry.value),
-        ...(entry.style || {})
+        ...entry.style
       }
     }))
   })

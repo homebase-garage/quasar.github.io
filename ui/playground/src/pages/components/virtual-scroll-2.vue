@@ -60,7 +60,7 @@
 <script>
 const heavyList = []
 
-for (let i = 0; i < 100000; i++) {
+for (let i = 0; i < 100_000; i++) {
   heavyList.push({
     label: 'Option ' + (i + 1),
     html: 'Option <em class="text-h6">' + (i + 1) + '</em>',

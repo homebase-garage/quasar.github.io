@@ -4,6 +4,7 @@
     "**/quasar.config.*.temporary.compiled*",
     "**/.quasar/",
 
+    "ui/dist/",
     "ui/icon-set/svg-*.js",
     "ui/lang/index.json",
 

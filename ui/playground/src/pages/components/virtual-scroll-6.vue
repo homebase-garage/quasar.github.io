@@ -106,7 +106,7 @@
 <script>
 const heavyList = [],
   columns = [],
-  listSize = 10000,
+  listSize = 10_000,
   lorem =
     'Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sumLorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum Lorem ipsum lorem ipsum lorem ipsum lorem ip sum'
 const getRandomInt = (min, max) => {

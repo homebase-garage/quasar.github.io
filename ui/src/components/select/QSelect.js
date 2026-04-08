@@ -748,7 +748,7 @@ export default createComponent({
 
           if (option === void 0) return false
 
-          if (innerValue.value.indexOf(option) === -1) {
+          if (innerValue.value.includes(option) === false) {
             toggleOption(option)
           } else {
             hidePopup()
@@ -908,7 +908,7 @@ export default createComponent({
           '^' +
             searchBuffer
               .split('')
-              .map(l => (reEscapeList.indexOf(l) !== -1 ? '\\' + l : l))
+              .map(l => (reEscapeList.includes(l) ? '\\' + l : l))
               .join('.*'),
           'i'
         )

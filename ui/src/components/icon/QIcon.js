@@ -120,7 +120,7 @@ export default createComponent({
       if (imgRE.test(icon) === true) {
         return {
           img: true,
-          src: icon.substring(4)
+          src: icon.slice(4)
         }
       }
 
@@ -129,7 +129,7 @@ export default createComponent({
 
         return {
           svguse: true,
-          src: def.substring(7),
+          src: def.slice(7),
           viewBox
         }
       }
@@ -142,7 +142,7 @@ export default createComponent({
       } else if (faRE.test(icon) === true) {
         cls = icon
       } else if (ionRE.test(icon) === true) {
-        cls = `ionicons ion-${$q.platform.is.ios === true ? 'ios' : 'md'}${icon.substring(3)}`
+        cls = `ionicons ion-${$q.platform.is.ios === true ? 'ios' : 'md'}${icon.slice(3)}`
       } else if (symRE.test(icon) === true) {
         // "notranslate" class is for Google Translate
         // to avoid tampering with Material Symbols ligature font
@@ -153,7 +153,7 @@ export default createComponent({
 
         const symMatches = icon.match(symRE)
         if (symMatches !== null) {
-          icon = icon.substring(6)
+          icon = icon.slice(6)
           cls += symMap[symMatches[1]]
         }
 
@@ -168,7 +168,7 @@ export default createComponent({
 
         const matMatches = icon.match(matRE)
         if (matMatches !== null) {
-          icon = icon.substring(2)
+          icon = icon.slice(2)
           cls += matMap[matMatches[1]]
         }
 

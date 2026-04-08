@@ -48,7 +48,7 @@
 
 <script>
 const optionNames = ['Google', 'Twitter', 'Facebook', 'Apple', 'Oracle']
-const options = Array(100000)
+const options = Array(100_000)
   .fill(null)
   .reduce((acc, _, i) => {
     optionNames.forEach(n => {
@@ -70,12 +70,12 @@ export default {
 
   computed: {
     filteredOptions() {
-      if (this.multiple1.some(x => x.indexOf('Google') > -1)) {
+      if (this.multiple1.some(x => x.includes('Google'))) {
         return options.filter(
           x =>
-            x.indexOf('Twitter') === -1 &&
-            x.indexOf('Apple') === -1 &&
-            x.indexOf('Oracle') === -1
+            x.includes('Twitter') === false &&
+            x.includes('Apple') === false &&
+            x.includes('Oracle') === false
         )
       }
       return options

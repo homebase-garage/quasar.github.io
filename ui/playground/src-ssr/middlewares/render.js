@@ -14,7 +14,6 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
       return c.html(html)
     } catch (err) {
       // oops, we had an error while rendering the page
-
       // we were told to redirect to another URL
       if (err.url) {
         const redirectCode = err.code || 302
@@ -27,10 +26,7 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
         return c.text('404 | Page Not Found')
       }
 
-      // we treat any other code as error
       if (import.meta.env.QUASAR_DEV) {
-        // In dev mode, Quasar CLI displays a nice error page.
-        // serve.error uses the native Node res to write the Vite overlay.
         const { html, headers } = serve.error({ err, req })
         return c.html(html, 500, headers)
       }
@@ -39,7 +35,6 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
         console.error(err.stack)
       }
 
-      // we're in production, render a generic error
       return c.text('500 | Internal Server Error', 500)
     }
   })

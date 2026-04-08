@@ -34,6 +34,12 @@ import {
 
 const duration = 150
 
+function updateLocal(prop, val) {
+  if (prop.value !== val) {
+    prop.value = val
+  }
+}
+
 export default createComponent({
   name: 'QDrawer',
 
@@ -226,7 +232,7 @@ export default createComponent({
       () =>
         props.overlay === true ||
         props.miniToOverlay === true ||
-        $layout.view.value.indexOf(rightSide.value ? 'R' : 'L') !== -1 ||
+        $layout.view.value.includes(rightSide.value ? 'R' : 'L') ||
         ($q.platform.is.ios === true && $layout.isContainer.value === true)
     )
 
@@ -622,12 +628,6 @@ export default createComponent({
 
     function updateLayout(prop, val) {
       $layout.update(props.side, prop, val)
-    }
-
-    function updateLocal(prop, val) {
-      if (prop.value !== val) {
-        prop.value = val
-      }
     }
 
     function updateSizeOnLayout(miniToOverlay, newSize) {

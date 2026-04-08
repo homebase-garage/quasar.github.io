@@ -182,9 +182,9 @@ export function lighten(color, percent) {
   return (
     '#' +
     (
-      0x1000000 +
-      (Math.round((t - R) * p) + R) * 0x10000 +
-      (Math.round((t - G) * p) + G) * 0x100 +
+      0x1_00_00_00 +
+      (Math.round((t - R) * p) + R) * 0x1_00_00 +
+      (Math.round((t - G) * p) + G) * 0x1_00 +
       (Math.round((t - B) * p) + B)
     )
       .toString(16)
@@ -201,9 +201,9 @@ export function luminosity(color) {
     r = rgb.r / 255,
     g = rgb.g / 255,
     b = rgb.b / 255,
-    R = r <= 0.03928 ? r / 12.92 : ((r + 0.055) / 1.055) ** 2.4,
-    G = g <= 0.03928 ? g / 12.92 : ((g + 0.055) / 1.055) ** 2.4,
-    B = b <= 0.03928 ? b / 12.92 : ((b + 0.055) / 1.055) ** 2.4
+    R = r <= 0.039_28 ? r / 12.92 : ((r + 0.055) / 1.055) ** 2.4,
+    G = g <= 0.039_28 ? g / 12.92 : ((g + 0.055) / 1.055) ** 2.4,
+    B = b <= 0.039_28 ? b / 12.92 : ((b + 0.055) / 1.055) ** 2.4
   return 0.2126 * R + 0.7152 * G + 0.0722 * B
 }
 

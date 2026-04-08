@@ -313,8 +313,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.filteredOptions = this.options.filter(
-          v => v.label.toLowerCase().indexOf(needle) > -1
+        this.filteredOptions = this.options.filter(v =>
+          v.label.toLowerCase().includes(needle)
         )
       })
     },

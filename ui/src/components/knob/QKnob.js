@@ -142,13 +142,15 @@ export default createComponent({
       if (event.isFinal) {
         updatePosition(event.evt, true)
         dragging.value = false
-      } else if (event.isFirst) {
+        return
+      }
+
+      if (event.isFirst) {
         updateCenterPosition()
         dragging.value = true
-        updatePosition(event.evt)
-      } else {
-        updatePosition(event.evt)
       }
+
+      updatePosition(event.evt)
     }
 
     const directives = computed(() => [

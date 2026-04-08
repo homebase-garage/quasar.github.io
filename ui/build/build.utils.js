@@ -86,7 +86,7 @@ export const banner =
   ' */\n'
 
 process.on('exit', code => {
-  if (code === 0 && tableData.length > 0) {
+  if (code === 0 && tableData.length !== 0) {
     tableData.sort((a, b) =>
       a[0] === b[0] ? (a[1] < b[1] ? -1 : 1) : a[0] < b[0] ? -1 : 1
     )
@@ -135,7 +135,7 @@ function getDestinationInfo(dest) {
     return {
       banner: green('[js]  '),
       tableEntryType: green('js'),
-      toTable: dest.indexOf('dist/quasar') !== -1
+      toTable: dest.includes('dist/quasar')
     }
   }
 
@@ -198,17 +198,17 @@ export function writeFile(dest, code, zip) {
 }
 
 export function readFile(file) {
-  return fse.readFileSync(file, 'utf-8')
+  return fse.readFileSync(file, 'utf8')
 }
 
 export function readJsonFile(file) {
-  return JSON.parse(fse.readFileSync(file, 'utf-8'))
+  return JSON.parse(fse.readFileSync(file, 'utf8'))
 }
 
 export function writeFileIfChanged(dest, newContent, zip) {
   let currentContent = ''
   try {
-    currentContent = fse.readFileSync(dest, 'utf-8')
+    currentContent = fse.readFileSync(dest, 'utf8')
   } catch {}
 
   return newContent.split(/[\n\r]+/).join('\n') !==

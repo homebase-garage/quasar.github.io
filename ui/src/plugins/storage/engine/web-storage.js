@@ -36,8 +36,8 @@ function decode(value) {
     return value
   }
 
-  const type = value.substring(0, 8)
-  const source = value.substring(9)
+  const type = value.slice(0, 8)
+  const source = value.slice(9)
 
   switch (type) {
     case '__q_date':
@@ -68,16 +68,14 @@ function decode(value) {
 }
 
 export function getEmptyStorage() {
-  const getVal = () => null
-
   return {
     has: () => false, // alias for hasItem; TODO: remove in Qv3
     hasItem: () => false,
     getLength: () => 0,
-    getItem: getVal,
-    getIndex: getVal,
-    getKey: getVal,
-    getAll: () => {},
+    getItem: () => null,
+    getIndex: () => null,
+    getKey: () => null,
+    getAll: () => ({}),
     getAllKeys: () => [],
     set: noop, // alias for setItem; TODO: remove in Qv3
     setItem: noop,

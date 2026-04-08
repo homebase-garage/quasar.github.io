@@ -28,6 +28,8 @@
 <script>
 import { clone, uid } from 'quasar'
 
+const rand = () => Math.floor((Math.random() % 450) * 450)
+
 export default {
   data() {
     return {
@@ -95,9 +97,9 @@ export default {
         {
           name: '1Frozen Yogurt',
           calories: 159,
-          fat: 6.0,
+          fat: 6,
           carbs: 24,
-          protein: 4.0,
+          protein: 4,
           sodium: 87,
           calcium: '14%',
           iron: '1%'
@@ -105,7 +107,7 @@ export default {
         {
           name: '2Ice cream sandwich',
           calories: 237,
-          fat: 9.0,
+          fat: 9,
           carbs: 37,
           protein: 4.3,
           sodium: 129,
@@ -115,9 +117,9 @@ export default {
         {
           name: '3Eclair',
           calories: 262,
-          fat: 16.0,
+          fat: 16,
           carbs: 23,
-          protein: 6.0,
+          protein: 6,
           sodium: 337,
           calcium: '6%',
           iron: '7%'
@@ -135,7 +137,7 @@ export default {
         {
           name: '5Gingerbread',
           calories: 356,
-          fat: 16.0,
+          fat: 16,
           carbs: 49,
           protein: 3.9,
           sodium: 327,
@@ -145,9 +147,9 @@ export default {
         {
           name: '6Jelly bean',
           calories: 375,
-          fat: 0.0,
+          fat: 0,
           carbs: 94,
-          protein: 0.0,
+          protein: 0,
           sodium: 50,
           calcium: '0%',
           iron: '0%'
@@ -175,7 +177,7 @@ export default {
         {
           name: '9Donut',
           calories: 452,
-          fat: 25.0,
+          fat: 25,
           carbs: 51,
           protein: 4.9,
           sodium: 326,
@@ -185,7 +187,7 @@ export default {
         {
           name: '10KitKat',
           calories: 518,
-          fat: 26.0,
+          fat: 26,
           carbs: 65,
           protein: 7,
           sodium: 54,
@@ -197,7 +199,6 @@ export default {
   },
   computed: {
     xxl() {
-      const rand = () => Math.floor((Math.random() % 450) * 450)
       const data = clone(this.data)
       for (let i = 0; i < 500; i++) {
         data.push({

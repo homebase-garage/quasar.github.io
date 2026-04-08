@@ -153,7 +153,7 @@ function getTestFileMisconfiguration({ ctx, generator, json, testFile, opts }) {
   }
 
   const targetImport = `from './${ctx.localName}'`
-  if (content.indexOf(targetImport) === -1) {
+  if (content.includes(targetImport) === false) {
     errors.push(`Should contain: import ${ctx.camelCaseName} ${targetImport}`)
   }
 
@@ -430,7 +430,7 @@ function getInitialState(file) {
     }
   }
 
-  const content = fse.readFileSync(file, 'utf-8')
+  const content = fse.readFileSync(file, 'utf8')
   const match = content.match(ignoreCommentRE)
   const ignoreComment = match?.[1]
 
@@ -459,7 +459,7 @@ export function getTestFile(ctx) {
 
   const save = content => {
     testFile.testTree = getTestTree(content)
-    fse.writeFileSync(file, content, 'utf-8')
+    fse.writeFileSync(file, content, 'utf8')
   }
 
   const testFile = {

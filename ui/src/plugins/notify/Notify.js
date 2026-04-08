@@ -248,14 +248,14 @@ function addNotification(config, $q, originalApi) {
       notif.meta.uid = uid++
       notif.meta.badge = 1
 
-      if (['left', 'right', 'center'].indexOf(notif.position) !== -1) {
+      if (['left', 'right', 'center'].includes(notif.position)) {
         notificationsList[notif.position].value.splice(
           Math.floor(notificationsList[notif.position].value.length / 2),
           0,
           notif
         )
       } else {
-        const action = notif.position.indexOf('top') !== -1 ? 'unshift' : 'push'
+        const action = notif.position.includes('top') ? 'unshift' : 'push'
         notificationsList[notif.position].value[action](notif)
       }
 
@@ -276,7 +276,7 @@ function addNotification(config, $q, originalApi) {
           return logError('wrong badgePosition', config)
         }
       } else {
-        notif.badgePosition = `top-${notif.position.indexOf('left') !== -1 ? 'right' : 'left'}`
+        notif.badgePosition = `top-${notif.position.includes('left') ? 'right' : 'left'}`
       }
 
       notif.meta.uid = original.meta.uid
@@ -572,15 +572,14 @@ export default {
         const vert =
             ['left', 'center', 'right'].includes(pos) === true
               ? 'center'
-              : pos.indexOf('top') !== -1
+              : pos.includes('top')
                 ? 'top'
                 : 'bottom',
-          align =
-            pos.indexOf('left') !== -1
-              ? 'start'
-              : pos.indexOf('right') !== -1
-                ? 'end'
-                : 'center',
+          align = pos.includes('left')
+            ? 'start'
+            : pos.includes('right')
+              ? 'end'
+              : 'center',
           classes = ['left', 'right'].includes(pos)
             ? `items-${pos === 'left' ? 'start' : 'end'} justify-center`
             : pos === 'center'

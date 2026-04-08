@@ -356,7 +356,7 @@ export default {
           message: 'Length > 0',
           prompt: {
             model: '',
-            isValid: val => val.length > 0,
+            isValid: val => val.length !== 0,
             type: 'text' // optional
           },
           cancel: true,

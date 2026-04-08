@@ -38,7 +38,7 @@ const autoInstalledPlugins = [
 
 function getInjectionTest({ jsonEntry, json, ctx }) {
   const ref = `wrapper.vm.${jsonEntry}`
-  const target = jsonEntry.substring(3) // strip '$q.'
+  const target = jsonEntry.slice(3) // strip '$q.'
 
   if (json.props?.[target] !== void 0) {
     return getTypeTest({

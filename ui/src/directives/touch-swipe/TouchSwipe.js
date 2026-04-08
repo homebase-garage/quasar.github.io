@@ -23,7 +23,7 @@ function parseArg(arg) {
   // desktop min distance until deciding if it's a swipe or not
   const data = [0.06, 6, 50]
 
-  if (typeof arg === 'string' && arg.length) {
+  if (typeof arg === 'string' && arg.length !== 0) {
     arg.split(':').forEach((val, index) => {
       const v = parseFloat(val)
       if (v) data[index] = v

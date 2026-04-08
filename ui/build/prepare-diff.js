@@ -35,7 +35,7 @@ export default function prepareDiff(locationPath) {
 
   // Read the current (old) contents
   originalFiles.forEach(filePath => {
-    originalsMap.set(filePath, fse.readFileSync(filePath, 'utf-8'))
+    originalsMap.set(filePath, fse.readFileSync(filePath, 'utf8'))
   })
 
   // Before exiting the process, read the new contents and output the diff
@@ -57,7 +57,7 @@ export default function prepareDiff(locationPath) {
         return
       }
 
-      const currentContent = fse.readFileSync(filePath, 'utf-8')
+      const currentContent = fse.readFileSync(filePath, 'utf8')
       const originalContent = originalsMap.get(filePath)
 
       if (originalContent !== currentContent) {

@@ -561,11 +561,11 @@ export default {
         square: this.square,
         style: { fontSize: `${this.fontSize}px` },
         color:
-          typeof this.textColor === 'string' && this.textColor.length > 0
+          typeof this.textColor === 'string' && this.textColor.length !== 0
             ? this.textColor
             : null,
         bgColor:
-          typeof this.bgColor === 'string' && this.bgColor.length > 0
+          typeof this.bgColor === 'string' && this.bgColor.length !== 0
             ? this.bgColor
             : null
       }

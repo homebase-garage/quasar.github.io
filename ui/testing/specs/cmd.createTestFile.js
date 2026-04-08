@@ -44,7 +44,7 @@ export async function cmdCreateTestFile({ ctx, testFile, ignoredTestFiles }) {
   if (confirm === void 0) process.exit(1)
 
   if (confirm === true) {
-    fse.writeFileSync(ctx.testFileAbsolute, testFileContent, 'utf-8')
+    fse.writeFileSync(ctx.testFileAbsolute, testFileContent, 'utf8')
     console.log(`  🎉 Created "${ctx.testFileRelative}"`)
   }
 }

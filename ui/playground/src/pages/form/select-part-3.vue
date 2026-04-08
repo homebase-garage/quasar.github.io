@@ -359,8 +359,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.options = stringOptions.filter(
-          v => v.toLowerCase().indexOf(needle) > -1
+        this.options = stringOptions.filter(v =>
+          v.toLowerCase().includes(needle)
         )
       })
     },
@@ -377,8 +377,8 @@ export default {
       setTimeout(() => {
         update(() => {
           const needle = val.toLowerCase()
-          this.objectOptions = objectOptions().filter(
-            v => v.label.toLowerCase().indexOf(needle) > -1
+          this.objectOptions = objectOptions().filter(v =>
+            v.label.toLowerCase().includes(needle)
           )
         })
       }, 100)
@@ -396,7 +396,7 @@ export default {
       update(() => {
         const needle = val.toLowerCase()
         this.lotsOptions = Object.freeze(
-          lotsOptions().filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          lotsOptions().filter(v => v.label.toLowerCase().includes(needle))
         )
       })
     }

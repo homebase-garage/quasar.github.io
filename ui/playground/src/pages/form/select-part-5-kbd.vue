@@ -516,9 +516,7 @@ export default {
       update(
         () => {
           const needle = val.toLowerCase()
-          this.options = options.filter(
-            v => v.toLowerCase().indexOf(needle) > -1
-          )
+          this.options = options.filter(v => v.toLowerCase().includes(needle))
         },
         ref => {
           ref.setOptionIndex(-1)
@@ -538,8 +536,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.objOptions = objOptions.filter(
-          v => v.label.toLowerCase().indexOf(needle) > -1
+        this.objOptions = objOptions.filter(v =>
+          v.label.toLowerCase().includes(needle)
         )
       })
     },

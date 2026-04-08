@@ -6,7 +6,7 @@ class IgnoredFilesList {
   #shouldSave = false
 
   constructor() {
-    const content = fse.readFileSync(this.#file, 'utf-8')
+    const content = fse.readFileSync(this.#file, 'utf8')
 
     this.#list = new Set(content.split('\n').filter(v => v))
 
@@ -27,7 +27,7 @@ class IgnoredFilesList {
   #save() {
     if (this.#shouldSave === true) {
       const content = Array.from(this.#list).sort().join('\n')
-      fse.writeFileSync(this.#file, content + '\n', 'utf-8')
+      fse.writeFileSync(this.#file, content + '\n', 'utf8')
     }
   }
 }

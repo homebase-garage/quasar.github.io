@@ -658,7 +658,7 @@ function encodeDefaultValue(val, isFunction) {
 
     const arrowMatch = fn.match(functionRE)
     if (arrowMatch !== null) {
-      return fn.substring(arrowMatch[1].length)
+      return fn.slice(arrowMatch[1].length)
     }
   }
 
@@ -737,11 +737,11 @@ function extractRuntimePropAttrs(runtimeProp) {
       runtimeTypes.push(capitalize(match[1]))
     }
 
-    if (fn.indexOf('Array.isArray') !== -1) {
+    if (fn.includes('Array.isArray')) {
       runtimeTypes.push('Array')
     }
 
-    if (fn.indexOf('Object') !== -1) {
+    if (fn.includes('Object')) {
       runtimeTypes.push('Object')
     }
 
@@ -1073,7 +1073,7 @@ function parseObject({
       )
     }
 
-    if (itemName.indexOf('class') !== -1) {
+    if (itemName.includes('class')) {
       if (obj.type === 'Object' && obj.tsType !== 'VueClassObjectProp') {
         printErrorAndExit(
           'object is class-type (Object form) but "tsType" prop is set to ' +
@@ -1088,7 +1088,7 @@ function parseObject({
             `is set to "${obj.tsType}" instead of "VueClassProp":`
         )
       }
-    } else if (itemName.indexOf('style') !== -1) {
+    } else if (itemName.includes('style')) {
       if (obj.type === 'Object' && obj.tsType !== 'VueStyleObjectProp') {
         printErrorAndExit(
           'object is style-type (Object form) but "tsType" prop is ' +
@@ -1206,7 +1206,7 @@ function parseAPI(file, apiType) {
   }
   handledTypes.push('value', 'arg')
 
-  const isComponent = banner.indexOf('component') !== -1
+  const isComponent = banner.includes('component')
 
   for (const type in api) {
     const targetApi = api[type]
@@ -1249,7 +1249,7 @@ function fillAPI(apiType, list, encodeFn) {
 
       const componentPath = file.replace('.json', '.js')
       const componentName = name.replace('.json', '.js')
-      const componentContent = fse.readFileSync(componentPath, 'utf-8')
+      const componentContent = fse.readFileSync(componentPath, 'utf8')
 
       let RuntimeComponent
 
@@ -1316,7 +1316,7 @@ function fillAPI(apiType, list, encodeFn) {
         const apiPropName = kebabCase(runtimePropName)
         const apiEntry = apiProps[apiPropName]
 
-        if (runtimePropName.indexOf('-') !== -1) {
+        if (runtimePropName.includes('-')) {
           logError(
             `${componentName}: prop "${runtimePropName}" should be ` +
               'in camelCase (found kebab-case)'
@@ -1439,7 +1439,7 @@ function fillAPI(apiType, list, encodeFn) {
                 if (isRuntimeFunction === true) {
                   const fn = runtimeDefaultValue.toString()
 
-                  if (fn.indexOf('\n') !== -1) {
+                  if (fn.includes('\n')) {
                     logError(
                       `${componentName}: prop "${runtimePropName}" -> "default" ` +
                         'should be a single line arrow function (found multiple lines)'
@@ -1555,7 +1555,7 @@ function fillAPI(apiType, list, encodeFn) {
           hasError = true
         }
 
-        if (runtimeEmitName.indexOf('-') !== -1) {
+        if (runtimeEmitName.includes('-')) {
           logError(
             `${componentName}: "emits" -> "${runtimeEmitName}" should be` +
               ' in camelCase (found kebab-case)'
@@ -1651,7 +1651,7 @@ function fillAPI(apiType, list, encodeFn) {
     // copy API file to dest
     writeFile(filePath, encodeFn(api))
 
-    const shortName = name.substring(0, name.length - 5)
+    const shortName = name.slice(0, -5)
     list.push(shortName)
 
     return {
@@ -1680,7 +1680,7 @@ function writeTransformAssetUrls(components, encodeFn) {
         propName => api.props[propName].transformAssetUrls === true
       )
 
-      if (props.length > 0) {
+      if (props.length !== 0) {
         props = props.length > 1 ? props : props[0]
 
         transformAssetUrls.tags[name] = props

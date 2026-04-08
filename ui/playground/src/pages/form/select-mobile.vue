@@ -19,6 +19,14 @@
 <script>
 import { defineComponent, ref, watch } from 'vue'
 
+function onUpdateModelValue(val) {
+  console.log(`onUpdateModelValue: ${val}`)
+}
+
+function onClear(val) {
+  console.log(`onClear: ${val}`)
+}
+
 export default defineComponent({
   name: 'PageIndex',
   setup() {
@@ -28,14 +36,6 @@ export default defineComponent({
     watch(model, val => {
       console.log(`Model changed: ${model.value}`)
     })
-
-    function onClear(val) {
-      console.log(`onClear: ${val}`)
-    }
-
-    function onUpdateModelValue(val) {
-      console.log(`onUpdateModelValue: ${val}`)
-    }
 
     return {
       model,

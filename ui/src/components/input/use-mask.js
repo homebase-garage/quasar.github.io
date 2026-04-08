@@ -199,7 +199,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
         typeof props.fillMask === 'string' && props.fillMask.length !== 0
           ? props.fillMask.slice(0, 1)
           : '_',
-      fillCharEscaped = fillChar.replace(escRegex, '\\$&'),
+      fillCharEscaped = fillChar.replace(escRegex, String.raw`\$&`),
       unmask = [],
       extract = [],
       mask = []
@@ -230,16 +230,22 @@ export default function useMask(props, emit, emitValue, inputRef) {
             firstMatch = false
           }
           extract.push('(?:' + negateChar + '+)?(' + c.pattern + ')?')
-        } else if (esc !== void 0) {
+          return
+        }
+
+        if (esc !== void 0) {
           unmaskChar = '\\' + (esc === '\\' ? '' : esc)
           mask.push(esc)
-          unmask.push('([^' + unmaskChar + ']+)?' + unmaskChar + '?')
         } else {
           const c = char1 !== void 0 ? char1 : char2
-          unmaskChar = c === '\\' ? '\\\\\\\\' : c.replace(escRegex, '\\\\$&')
+          unmaskChar =
+            c === '\\'
+              ? String.raw`\\\\`
+              : c.replace(escRegex, String.raw`\\$&`)
           mask.push(c)
-          unmask.push('([^' + unmaskChar + ']+)?' + unmaskChar + '?')
         }
+
+        unmask.push('([^' + unmaskChar + ']+)?' + unmaskChar + '?')
       }
     )
 
@@ -344,9 +350,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
         }
 
         if (
-          ['deleteContentBackward', 'deleteContentForward'].indexOf(
-            inputType
-          ) !== -1
+          ['deleteContentBackward', 'deleteContentForward'].includes(inputType)
         ) {
           const cursor =
             props.reverseFillMask === true
@@ -425,7 +429,8 @@ export default function useMask(props, emit, emitValue, inputRef) {
 
   const moveCursor = {
     left(inp, cursor) {
-      const noMarkBefore = maskMarked.slice(cursor - 1).indexOf(MARKER) === -1
+      const noMarkBefore =
+        maskMarked.slice(cursor - 1).includes(MARKER) === false
       let i = Math.max(0, cursor - 1)
 
       for (; i >= 0; i--) {
@@ -502,7 +507,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       const limit = inp.value.length,
         localMaskMarked = getPaddedMaskMarked(limit),
         noMarkBefore =
-          localMaskMarked.slice(0, cursor + 1).indexOf(MARKER) === -1
+          localMaskMarked.slice(0, cursor + 1).includes(MARKER) === false
       let i = Math.min(limit, cursor + 1)
 
       for (; i <= limit; i++) {

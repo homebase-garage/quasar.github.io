@@ -140,7 +140,7 @@ export default createComponent({
             const filt = filter.toLowerCase()
             return (
               node[props.labelKey] &&
-              node[props.labelKey].toLowerCase().indexOf(filt) !== -1
+              node[props.labelKey].toLowerCase().includes(filt)
             )
           }
     )
@@ -593,7 +593,7 @@ export default createComponent({
                 (m.selected === true ? ' q-tree__node--selected' : '') +
                 (m.disabled === true ? ' q-tree__node--disabled' : ''),
               tabindex: m.link === true ? 0 : -1,
-              ariaExpanded: children.length > 0 ? m.expanded : null,
+              ariaExpanded: children.length !== 0 ? m.expanded : null,
               role: 'treeitem',
               onClick: e => {
                 onClick(node, m, e)

@@ -45,6 +45,10 @@ function getMonthHash(date) {
   return date.year + '/' + pad(date.month)
 }
 
+function getShortDate(date) {
+  return { year: date.year, month: date.month, day: date.day }
+}
+
 export default createComponent({
   name: 'QDate',
 
@@ -987,10 +991,6 @@ export default createComponent({
         month?.includes(date.day) === true ? removeFromModel : addToModel
 
       fn(date)
-    }
-
-    function getShortDate(date) {
-      return { year: date.year, month: date.month, day: date.day }
     }
 
     function updateViewModel(year, month, time) {

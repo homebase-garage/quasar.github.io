@@ -755,7 +755,7 @@
 const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
   heavyList = []
 
-for (let i = 0; i <= 100000; i++) {
+for (let i = 0; i <= 100_000; i++) {
   heavyList.push(
     Object.freeze({
       label: 'Opt ' + i,
@@ -898,7 +898,7 @@ export default {
 
     createInputNewValue(val, done) {
       console.log('createInputValue', val)
-      if (val.length > 0) {
+      if (val.length !== 0) {
         done(val)
       }
     },
@@ -910,8 +910,8 @@ export default {
             this.createInputOptions = stringOptions
           } else {
             const needle = val.toLowerCase()
-            this.createInputOptions = stringOptions.filter(
-              v => v.toLowerCase().indexOf(needle) > -1
+            this.createInputOptions = stringOptions.filter(v =>
+              v.toLowerCase().includes(needle)
             )
           }
         })
@@ -939,8 +939,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.simpleFilterInputOptions = stringOptions.filter(
-          v => v.toLowerCase().indexOf(needle) > -1
+        this.simpleFilterInputOptions = stringOptions.filter(v =>
+          v.toLowerCase().includes(needle)
         )
       })
     },
@@ -966,8 +966,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.multipleFilterInputOptions = stringOptions.filter(
-          v => v.toLowerCase().indexOf(needle) > -1
+        this.multipleFilterInputOptions = stringOptions.filter(v =>
+          v.toLowerCase().includes(needle)
         )
       })
     },
@@ -980,8 +980,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.minFilterInputOptions = stringOptions.filter(
-          v => v.toLowerCase().indexOf(needle) > -1
+        this.minFilterInputOptions = stringOptions.filter(v =>
+          v.toLowerCase().includes(needle)
         )
       })
     },
@@ -992,8 +992,8 @@ export default {
           this.chipFilterInputOptions = stringOptions
         } else {
           const needle = val.toLowerCase()
-          this.chipFilterInputOptions = stringOptions.filter(
-            v => v.toLowerCase().indexOf(needle) > -1
+          this.chipFilterInputOptions = stringOptions.filter(v =>
+            v.toLowerCase().includes(needle)
           )
         }
       })
@@ -1009,8 +1009,8 @@ export default {
             this.delayedFilterInputOptions = stringOptions
           } else {
             const needle = val.toLowerCase()
-            this.delayedFilterInputOptions = stringOptions.filter(
-              v => v.toLowerCase().indexOf(needle) > -1
+            this.delayedFilterInputOptions = stringOptions.filter(v =>
+              v.toLowerCase().includes(needle)
             )
           }
         })
@@ -1029,7 +1029,7 @@ export default {
       update(() => {
         const needle = val.toLowerCase()
         this.heavyFilterInputOptions = Object.freeze(
-          heavyList.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+          heavyList.filter(v => v.label.toLowerCase().includes(needle))
         )
       })
     },

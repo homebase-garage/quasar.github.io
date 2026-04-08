@@ -62,8 +62,8 @@ export default {
           this.filteredOptions = options.slice()
         } else {
           const needle = val.toLocaleLowerCase()
-          this.filteredOptions = options.filter(
-            v => v.toLocaleLowerCase().indexOf(needle) > -1
+          this.filteredOptions = options.filter(v =>
+            v.toLocaleLowerCase().includes(needle)
           )
         }
       })

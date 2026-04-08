@@ -63,7 +63,7 @@ const STORAGE_KEY = 'index-filter'
 const list = {}
 
 pagesRoutes
-  .map(page => page.slice(1, page.length - 4))
+  .map(page => page.slice(1, -4))
   .forEach(page => {
     const [folder, file] = page.split('/')
     if (!list[folder]) {
@@ -119,11 +119,11 @@ const filteredList = computed(() => {
   const localFilter = filter.value.toLowerCase()
 
   Object.keys(list).forEach(categName => {
-    const filtered = list[categName].filter(
-      feature => feature.title.toLowerCase().indexOf(localFilter) > -1
+    const filtered = list[categName].filter(feature =>
+      feature.title.toLowerCase().includes(localFilter)
     )
 
-    if (filtered.length > 0) {
+    if (filtered.length !== 0) {
       newList[categName] = filtered
     }
   })
@@ -164,7 +164,7 @@ function moveSelection(evt, op) {
       nextEl = document.querySelector('.q-item')
     } else {
       const nodes = document.querySelectorAll('.q-item')
-      if (nodes.length > 0) {
+      if (nodes.length !== 0) {
         nextEl = nodes[nodes.length - 1]
       }
     }

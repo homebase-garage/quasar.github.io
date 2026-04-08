@@ -226,7 +226,7 @@ function getEventParamsTest(jsonEntry, varName) {
 
 function createEventTest({ camelCaseName, testId, jsonEntry, json, ctx }) {
   const emitAccessor =
-    camelCaseName.indexOf(':') === -1
+    camelCaseName.includes(':') === false
       ? `.${camelCaseName}`
       : // example: 'update:modelValue'
         `[ '${camelCaseName}' ]`

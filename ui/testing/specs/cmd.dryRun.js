@@ -67,7 +67,7 @@ export function getDryRunCmd() {
      * Their "ctx" will be overridden to point to
      * the temporary file.
      */
-    fse.writeFileSync(testFilePath, testFileContent, 'utf-8')
+    fse.writeFileSync(testFilePath, testFileContent, 'utf8')
 
     let tempTestFile
     try {

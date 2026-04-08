@@ -58,7 +58,7 @@ export function extend<R>(target: object, ...sources: any[]): R;
 export function openURL<F extends (...args: any[]) => any>(
   url: string,
   reject?: F,
-  windowFeatures?: Object
+  windowFeatures?: object
 ): void;
 
 export function throttle<F extends (...args: any[]) => any>(

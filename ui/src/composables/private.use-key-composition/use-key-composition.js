@@ -1,10 +1,10 @@
 import { client } from '../../plugins/platform/Platform.js'
 
 const isJapanese =
-  /[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]/
+  /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFF9F\u4E00-\u9FAF\u3400-\u4DBF]/
 const isChinese =
-  /[\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2b73f}\u{2b740}-\u{2b81f}\u{2b820}-\u{2ceaf}\uf900-\ufaff\u3300-\u33ff\ufe30-\ufe4f\uf900-\ufaff\u{2f800}-\u{2fa1f}]/u
-const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/
+  /[\u4E00-\u9FFF\u3400-\u4DBF\u{20000}-\u{2A6DF}\u{2A700}-\u{2B73F}\u{2B740}-\u{2B81F}\u{2B820}-\u{2CEAF}\uF900-\uFAFF\u3300-\u33FF\uFE30-\uFE4F\uF900-\uFAFF\u{2F800}-\u{2FA1F}]/u
+const isKorean = /[\u3131-\u314E\u314F-\u3163\uAC00-\uD7A3]/
 const isPlainText = /[a-z0-9_ -]$/i
 
 export default function useKeyComposition(onInput) {

@@ -520,7 +520,7 @@
 
 <script>
 const heavyList = []
-for (let i = 0; i <= 100000; i++) {
+for (let i = 0; i <= 100_000; i++) {
   heavyList.push({
     label: 'Opt ' + i,
     value: Math.random()

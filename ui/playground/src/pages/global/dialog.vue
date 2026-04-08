@@ -1107,8 +1107,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
-        this.selectOptionsFiltered = this.selectOptions.filter(
-          v => v.toLowerCase().indexOf(needle) > -1
+        this.selectOptionsFiltered = this.selectOptions.filter(v =>
+          v.toLowerCase().includes(needle)
         )
       })
     },

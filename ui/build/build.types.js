@@ -19,8 +19,8 @@ async function formatWithOxfmt(filePath, rawCode) {
   try {
     const { code } = await format(filePath, rawCode)
     return code
-  } catch (error) {
-    console.error(`Failed to format ${filePath}:`, error)
+  } catch (err) {
+    console.error(`Failed to format ${filePath}:`, err)
     process.exit(1)
   }
 }
@@ -63,7 +63,7 @@ function convertTypeVal(type, def) {
   if (def.values && type === 'String') {
     const narrowedValues = def.values.filter(v => !dontNarrowValues.includes(v))
 
-    if (narrowedValues.length) {
+    if (narrowedValues.length !== 0) {
       return narrowedValues.join(' | ')
     }
   }
@@ -80,7 +80,7 @@ function convertTypeVal(type, def) {
       const lines = []
       propDefinitions.forEach(propDef => writeLines(lines, propDef, 2))
 
-      if (lines.length > 0) {
+      if (lines.length !== 0) {
         return `{ ${lines.join('')} }${type === 'Array' ? '[]' : ''}`
       }
     }
@@ -152,7 +152,7 @@ function getPropDefinition({
     (isCompProps === true || isRestParam) &&
     name !== 'model-value' &&
     !definition.required &&
-    propType.indexOf(' undefined') === -1
+    !propType.includes(' undefined')
   ) {
     propType += ' | undefined;'
   }
@@ -179,7 +179,7 @@ function getPropDefinition({
       jsDoc += ` * @returns ${returns.desc}\n`
     }
 
-    if (jsDoc.length > 0) {
+    if (jsDoc.length !== 0) {
       jsDoc = '/**\n' + jsDoc + ' */\n'
     }
   }
@@ -328,6 +328,8 @@ function transformObject(definition, handler) {
   return result
 }
 
+const getSafeInjectionKey = key => key.toUpperCase().replace('$', '')
+
 function getIndexDts(apis, quasarLangIndex) {
   const contents = []
   const quasarTypeContents = []
@@ -439,7 +441,7 @@ function getIndexDts(apis, quasarLangIndex) {
                 ' *  - ' + name + ':',
                 ' *    - type: ' + getTypeVal(modifier),
                 ' *    - description: ' + modifier.desc,
-                ...(modifier.examples && modifier.examples.length > 0
+                ...(modifier.examples && modifier.examples.length !== 0
                   ? [
                       ' *    - examples:',
                       ...modifier.examples.map(
@@ -695,8 +697,6 @@ function getIndexDts(apis, quasarLangIndex) {
     }
   })
 
-  const getSafeInjectionKey = key => key.toUpperCase().replace('$', '')
-
   // Write injection types
   for (const key in injections) {
     const injectionKey = getSafeInjectionKey(key)
@@ -832,7 +832,7 @@ function ensureTypeScriptValidity() {
     'tsconfig.json'
   )
   if (!tsConfigPath) {
-    throw Error(resolvePath('tsconfig.json') + ' not found')
+    throw new Error(resolvePath('tsconfig.json') + ' not found')
   }
   const { config } = typescript.readConfigFile(
     tsConfigPath,

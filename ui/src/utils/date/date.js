@@ -3,9 +3,9 @@ import { pad, capitalize } from '../format/format.js'
 import { jalaaliMonthLength } from './private.persian.js'
 import Lang, { defaultLang } from '../../plugins/lang/Lang.js'
 
-const MILLISECONDS_IN_DAY = 86400000,
-  MILLISECONDS_IN_HOUR = 3600000,
-  MILLISECONDS_IN_MINUTE = 60000,
+const MILLISECONDS_IN_DAY = 86_400_000,
+  MILLISECONDS_IN_HOUR = 3_600_000,
+  MILLISECONDS_IN_MINUTE = 60_000,
   defaultMask = 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   token =
     /\[((?:[^\]\\]|\\]|\\)*)\]|do|d{1,4}|Mo|M{1,4}|m{1,2}|wo|w{1,2}|Qo|Do|DDDo|D{1,4}|YY(?:YY)?|H{1,2}|h{1,2}|s{1,2}|S{1,3}|Z{1,2}|a{1,2}|[AQExX]/g,
@@ -33,19 +33,19 @@ function getRegexData(mask, dateLocale) {
     switch (match) {
       case 'YY':
         map.YY = index
-        return '(-?\\d{1,2})'
+        return String.raw`(-?\d{1,2})`
       case 'YYYY':
         map.YYYY = index
-        return '(-?\\d{1,4})'
+        return String.raw`(-?\d{1,4})`
       case 'M':
         map.M = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'Mo':
         map.M = index++ // bumping to M
-        return '(\\d{1,2}(st|nd|rd|th))'
+        return String.raw`(\d{1,2}(st|nd|rd|th))`
       case 'MM':
         map.M = index // bumping to M
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'MMM':
         map.MMM = index
         return monthsShort
@@ -54,46 +54,46 @@ function getRegexData(mask, dateLocale) {
         return months
       case 'D':
         map.D = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'Do':
         map.D = index++ // bumping to D
-        return '(\\d{1,2}(st|nd|rd|th))'
+        return String.raw`(\d{1,2}(st|nd|rd|th))`
       case 'DD':
         map.D = index // bumping to D
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'H':
         map.H = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'HH':
         map.H = index // bumping to H
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'h':
         map.h = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'hh':
         map.h = index // bumping to h
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'm':
         map.m = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'mm':
         map.m = index // bumping to m
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 's':
         map.s = index
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'ss':
         map.s = index // bumping to s
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'S':
         map.S = index
-        return '(\\d{1})'
+        return String.raw`(\d{1})`
       case 'SS':
         map.S = index // bump to S
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
       case 'SSS':
         map.S = index // bump to S
-        return '(\\d{3})'
+        return String.raw`(\d{3})`
       case 'A':
         map.A = index
         return '(AM|PM)'
@@ -102,7 +102,7 @@ function getRegexData(mask, dateLocale) {
         return '(am|pm)'
       case 'aa':
         map.aa = index
-        return '(a\\.m\\.|p\\.m\\.)'
+        return String.raw`(a\.m\.|p\.m\.)`
 
       case 'ddd':
         return daysShort
@@ -111,46 +111,46 @@ function getRegexData(mask, dateLocale) {
       case 'Q':
       case 'd':
       case 'E':
-        return '(\\d{1})'
+        return String.raw`(\d{1})`
       case 'do':
         index++
-        return '(\\d{1}(st|nd|rd|th))'
+        return String.raw`(\d{1}(st|nd|rd|th))`
       case 'Qo':
         return '(1st|2nd|3rd|4th)'
       case 'DDD':
       case 'DDDD':
-        return '(\\d{1,3})'
+        return String.raw`(\d{1,3})`
       case 'DDDo':
         index++
-        return '(\\d{1,3}(st|nd|rd|th))'
+        return String.raw`(\d{1,3}(st|nd|rd|th))`
       case 'w':
-        return '(\\d{1,2})'
+        return String.raw`(\d{1,2})`
       case 'wo':
         index++
-        return '(\\d{1,2}(st|nd|rd|th))'
+        return String.raw`(\d{1,2}(st|nd|rd|th))`
       case 'ww':
-        return '(\\d{2})'
+        return String.raw`(\d{2})`
 
       case 'Z': // to split: (?:(Z)()()|([+-])?(\\d{2}):?(\\d{2}))
         map.Z = index
-        return '(Z|[+-]\\d{2}:\\d{2})'
+        return String.raw`(Z|[+-]\d{2}:\d{2})`
       case 'ZZ':
         map.ZZ = index
-        return '(Z|[+-]\\d{2}\\d{2})'
+        return String.raw`(Z|[+-]\d{2}\d{2})`
 
       case 'X':
         map.X = index
-        return '(-?\\d+)'
+        return String.raw`(-?\d+)`
       case 'x':
         map.x = index
-        return '(-?\\d{4,})'
+        return String.raw`(-?\d{4,})`
 
       default:
         index--
         if (match[0] === '[') {
-          match = match.substring(1, match.length - 1)
+          match = match.slice(1, -1)
         }
-        return match.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        return match.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
     }
   })
 
@@ -501,7 +501,7 @@ export function getWeekOfYear(date) {
 }
 
 function getDayIdentifier(date) {
-  return date.getFullYear() * 10000 + date.getMonth() * 100 + date.getDate()
+  return date.getFullYear() * 10_000 + date.getMonth() * 100 + date.getDate()
 }
 
 function getDateIdentifier(date, onlyDate /* = false */) {
@@ -1007,7 +1007,7 @@ export function formatDate(
       ? formatter[match](date, locale, __forcedYear, __forcedTimezoneOffset)
       : text === void 0
         ? match
-        : text.split('\\]').join(']')
+        : text.split(String.raw`\]`).join(']')
   )
 }
 

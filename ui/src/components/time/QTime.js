@@ -56,6 +56,31 @@ function getCurrentTime() {
   }
 }
 
+function getWheelDist(a, b, threshold) {
+  const diff = Math.abs(a - b)
+  return Math.min(diff, threshold - diff)
+}
+
+function getValidValues(start, count, testFn) {
+  const values = Array.apply(null, { length: count + 1 })
+    .map((_, index) => {
+      const i = index + start
+      return {
+        index: i,
+        val: testFn(i) === true // force boolean
+      }
+    })
+    .filter(v => v.val === true)
+    .map(v => v.index)
+
+  return {
+    min: values[0],
+    max: values[values.length - 1],
+    values,
+    threshold: count + 1
+  }
+}
+
 export default createComponent({
   name: 'QTime',
 
@@ -253,8 +278,7 @@ export default createComponent({
     })
 
     const positions = computed(() => {
-      let start,
-        end,
+      let end,
         offset = 0,
         step = 1
       const values =
@@ -262,10 +286,8 @@ export default createComponent({
 
       if (view.value === 'hour') {
         if (computedFormat24h.value === true) {
-          start = 0
           end = 23
         } else {
-          start = 0
           end = 11
 
           if (isAM.value === false) {
@@ -273,14 +295,13 @@ export default createComponent({
           }
         }
       } else {
-        start = 0
         end = 55
         step = 5
       }
 
       const pos = []
 
-      for (let val = start, index = start; val <= end; val += step, index++) {
+      for (let val = 0, index = 0; val <= end; val += step, index++) {
         const actualVal = val + offset,
           disable = values?.includes(actualVal) === false,
           label =
@@ -351,31 +372,6 @@ export default createComponent({
       Object.assign(innerModel.value, date) // reset any pending changes to innerModel
 
       view.value = 'hour'
-    }
-
-    function getValidValues(start, count, testFn) {
-      const values = Array.apply(null, { length: count + 1 })
-        .map((_, index) => {
-          const i = index + start
-          return {
-            index: i,
-            val: testFn(i) === true // force boolean
-          }
-        })
-        .filter(v => v.val === true)
-        .map(v => v.index)
-
-      return {
-        min: values[0],
-        max: values[values.length - 1],
-        values,
-        threshold: count + 1
-      }
-    }
-
-    function getWheelDist(a, b, threshold) {
-      const diff = Math.abs(a - b)
-      return Math.min(diff, threshold - diff)
     }
 
     function getNormalizedClockValue(val, { min, max, values, threshold }) {

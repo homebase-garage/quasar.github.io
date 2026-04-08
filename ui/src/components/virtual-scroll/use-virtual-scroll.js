@@ -353,7 +353,7 @@ export function useVirtualScroll({
         Math.max(0, parseInt(toIndex, 10) || 0)
       ),
       0,
-      scrollToEdges.indexOf(edge) !== -1
+      scrollToEdges.includes(edge)
         ? edge
         : prevToIndex !== -1 && toIndex > prevToIndex
           ? 'end'
@@ -466,8 +466,7 @@ export function useVirtualScroll({
     offset,
     align
   ) {
-    const alignForce =
-      typeof align === 'string' && align.indexOf('-force') !== -1
+    const alignForce = typeof align === 'string' && align.includes('-force')
     const alignEnd = alignForce === true ? align.replace('-force', '') : align
     const alignRange = alignEnd !== void 0 ? alignEnd : 'start'
 

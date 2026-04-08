@@ -76,8 +76,8 @@ export default {
           this.filteredCountryOptions = this.countryOptions
         } else {
           const needle = val.toLowerCase()
-          this.filteredCountryOptions = this.countryOptions.filter(
-            v => v.label.toLowerCase().indexOf(needle) > -1
+          this.filteredCountryOptions = this.countryOptions.filter(v =>
+            v.label.toLowerCase().includes(needle)
           )
         }
       })

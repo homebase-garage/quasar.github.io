@@ -77,7 +77,7 @@ export default {
 
     triggerXhr() {
       sendXhr(
-        `https://deelay.me/${Math.ceil(5000 + Math.random() * 20000)}/server`
+        `https://deelay.me/${Math.ceil(5000 + Math.random() * 20_000)}/server`
       )
     }
   }

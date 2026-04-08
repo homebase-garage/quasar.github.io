@@ -57,6 +57,6 @@ export function shouldStart(evt, ctx) {
     evt.target.draggable !== true &&
     typeof ctx.handler === 'function' &&
     avoidNodeNamesList.includes(evt.target.nodeName.toUpperCase()) === false &&
-    (evt.qClonedBy === void 0 || evt.qClonedBy.indexOf(ctx.uid) === -1)
+    (evt.qClonedBy === void 0 || evt.qClonedBy.includes(ctx.uid) === false)
   )
 }

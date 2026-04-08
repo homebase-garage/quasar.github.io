@@ -1006,7 +1006,10 @@ export default {
           this.textFillCancelled = true
         }
       } else if (e.keyCode === 9) {
-        if (this.textFillCancelled !== true && this.textFillValue.length > 0) {
+        if (
+          this.textFillCancelled !== true &&
+          this.textFillValue.length !== 0
+        ) {
           stopAndPrevent(e)
           this.textFill += this.textFillValue
         }

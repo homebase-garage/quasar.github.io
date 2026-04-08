@@ -31,7 +31,7 @@ export function createCtx(target) {
     enumerable: true,
     get() {
       if (cachedTargetContent === void 0) {
-        cachedTargetContent = fse.readFileSync(ctx.targetAbsolute, 'utf-8')
+        cachedTargetContent = fse.readFileSync(ctx.targetAbsolute, 'utf8')
       }
       return cachedTargetContent
     }

@@ -119,6 +119,10 @@ function getChanges(evt, ctx, isFinal) {
   }
 }
 
+function removeChildrenNoPointerEvents() {
+  document.body.classList.remove('no-pointer-events--children')
+}
+
 let uid = 0
 
 export default createDirective(
@@ -193,10 +197,9 @@ export default createDirective(
                     (ctx.modifiers.mouseAllDir !== true &&
                       ctx.modifiers.mousealldir !== true))
                 ) {
-                  const clone =
-                    evt.type.indexOf('mouse') !== -1
-                      ? new MouseEvent(evt.type, evt)
-                      : new TouchEvent(evt.type, evt)
+                  const clone = evt.type.includes('mouse')
+                    ? new MouseEvent(evt.type, evt)
+                    : new TouchEvent(evt.type, evt)
 
                   if (evt.defaultPrevented === true) prevent(clone)
                   if (evt.cancelBubble === true) stop(clone)
@@ -280,19 +283,13 @@ export default createDirective(
                   document.body.classList.remove('non-selectable')
 
                   if (isMouseEvt === true) {
-                    const remove = () => {
-                      document.body.classList.remove(
-                        'no-pointer-events--children'
-                      )
-                    }
-
                     if (withDelayedFn !== void 0) {
                       setTimeout(() => {
-                        remove()
+                        removeChildrenNoPointerEvents()
                         withDelayedFn()
                       }, 50)
                     } else {
-                      remove()
+                      removeChildrenNoPointerEvents()
                     }
                   } else if (withDelayedFn !== void 0) {
                     withDelayedFn()
