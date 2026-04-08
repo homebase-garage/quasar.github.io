@@ -116,7 +116,7 @@
     "fflate": "^0.8.2",
     "fs-extra": "^11.3.4",
     "html-minifier-terser": "^7.2.0",
-    "inquirer": "^13.4.0",
+    "inquirer": "^13.4.1",
     "isbinaryfile": "^5.0.2",
     "kolorist": "^1.8.0",
     "magic-string": "^0.30.21",
@@ -129,9 +129,9 @@
     "semver": "^7.7.4",
     "serialize-javascript": "^7.0.5",
     "serve-static": "^2.2.1",
-    "tinyglobby": "^0.2.10",
+    "tinyglobby": "^0.2.16",
     "ts-essentials": "^10.1.1",
-    "vite": "^8.0.5",
+    "vite": "^8.0.7",
     "webpack-merge": "^6.0.1"
   },
   "devDependencies": {

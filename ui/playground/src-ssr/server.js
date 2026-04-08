@@ -9,9 +9,13 @@
  * Make sure to yarn add / npm install (in your project root)
  * anything you import here (except for express and compression).
  */
-import express from 'express'
+import { Hono } from 'hono'
+import { serve } from '@hono/node-server'
+import { serveStatic } from '@hono/node-server/serve-static'
+import { lstatSync } from 'node:fs'
 import {
   defineSsrCreate,
+  defineSsrInjectDevMiddleware,
   defineSsrListen,
   defineSsrClose,
   defineSsrServeStaticContent,
@@ -23,9 +27,49 @@ import {
  * If needed, prepare your webserver to receive
  * connect-like middlewares.
  *
- * Should NOT be async!
+ * Can be async: defineSsrCreate(async ({ ... }) => { ... })
  */
-export const create = defineSsrCreate((/* { ... } */) => express())
+export const create = defineSsrCreate(async (/* { ... } */) => {
+  const app = new Hono()
+
+  // place here any middlewares that
+  // absolutely need to run before anything else
+  if (import.meta.env.QUASAR_PROD) {
+    const { compress } = await import('hono/compress')
+    app.use(compress())
+  }
+
+  return app
+})
+
+/**
+ * Used by Quasar SSR dev server to inject middleware into the webserver.
+ * It uses it to handle Vite dev server, handle public paths, etc.
+ * The given middleware is compatible with `node:http`'s Server, Express, Connect, etc.
+ *
+ * Can be async: defineSsrInjectDevMiddleware(async ({ app }) => { ... })
+ */
+export const injectDevMiddleware = defineSsrInjectDevMiddleware(
+  ({ app }) =>
+    middleware => {
+      app.use('*', async (c, next) => {
+        // @hono/node-server exposes the raw Node.js req and res objects
+        const req = c.env.incoming
+        const res = c.env.outgoing
+
+        // Run the connect-style middleware (Vite Dev Server)
+        const passed = await new Promise(resolve => {
+          middleware(req, res, () => resolve(true))
+        })
+
+        // If the Vite middleware calls next(), it didn't handle the request,
+        // so we let Hono continue down the chain.
+        if (passed) {
+          await next()
+        }
+      })
+    }
+)
 
 /**
  * You need to make the server listen to the indicated port
@@ -37,15 +81,37 @@ export const create = defineSsrCreate((/* { ... } */) => express())
  *
  * For production, you can instead export your
  * handler for serverless use or whatever else fits your needs.
+ *
+ * Can be async: defineSsrListen(async ({ app, devHttpsApp, port }) => { ... })
  */
-export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
-  const server = devHttpsApp || app
-  return server.listen(port, () => {
-    if (import.meta.env.QUASAR_PROD) {
-      console.log('Server listening at port ' + port)
+export const listen = defineSsrListen(
+  async ({ app, devHttpsOptions, port }) => {
+    const opts = {
+      fetch: app.fetch,
+      port
     }
-  })
-})
+
+    /**
+     * For production HTTPS you can use the /src-ssr/server-assets folder
+     * to place your certificates and then read them here to create the server.
+     */
+
+    if (import.meta.env.QUASAR_DEV && devHttpsOptions) {
+      const { createServer } = await import('node:https')
+      opts.createServer = createServer
+      opts.serverOptions = { ...devHttpsOptions }
+    } else {
+      const { createServer } = await import('node:http')
+      opts.createServer = createServer
+    }
+
+    return serve(opts, info => {
+      if (import.meta.env.QUASAR_PROD) {
+        console.log(`🚀 Server listening at port ${info.port}`)
+      }
+    })
+  }
+)
 
 /**
  * Should close the server and free up any resources.
@@ -55,7 +121,7 @@ export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
  * Should you need the result of the "listen()" call above,
  * you can use the "listenResult" param.
  *
- * Can be async.
+ * Can be async: defineSsrClose(async ({ listenResult }) => { ... })
  */
 export const close = defineSsrClose(({ listenResult }) => listenResult.close())
 
@@ -66,15 +132,40 @@ const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
  * to serve static content at "urlPath" from "pathToServe" folder/file.
  *
  * Notice resolve.urlPath(urlPath) and resolve.public(pathToServe) usages.
+ *
+ * Can be async: defineSsrServeStaticContent(async ({ app, resolve }) => {
+ * Can return an async function: return async ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
  */
 export const serveStaticContent = defineSsrServeStaticContent(
-  ({ app, resolve }) =>
-    ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
-      const serveFn = express.static(resolve.public(pathToServe), {
-        maxAge,
-        ...opts
-      })
-      app.use(resolve.urlPath(urlPath), serveFn)
+  ({ app, publicPath, resolve }) =>
+    ({ urlPath, pathToServe, opts = {} }) => {
+      const pubPath = resolve.public(pathToServe)
+      const isDir = lstatSync(publicPath).isDirectory()
+
+      const resolvedUrlPath = resolve.urlPath(urlPath)
+      const routePath = isDir
+        ? resolvedUrlPath.endsWith('*')
+          ? resolvedUrlPath
+          : `${resolvedUrlPath}*`
+        : resolvedUrlPath
+
+      const { maxAge: maxAgeOpt, ...serveOpts } = opts
+      const cacheAge = maxAgeOpt !== void 0 ? maxAgeOpt : maxAge
+
+      if (cacheAge > 0) {
+        app.get(routePath, async (c, next) => {
+          c.header('Cache-Control', `public, max-age=${cacheAge}`)
+          await next()
+        })
+      }
+
+      app.use(
+        routePath,
+        serveStatic({
+          [isDir ? 'root' : 'path']: pubPath,
+          ...serveOpts
+        })
+      )
     }
 )
 

@@ -5,56 +5,42 @@ import { defineSsrMiddleware } from '#q-app/wrappers'
 // render the page with Vue
 
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
-  // we capture any other Express route and hand it
-  // over to Vue and Vue Router to render our page
-  app.get(resolve.urlPath('{*path}'), (req, res) => {
-    res.setHeader('Content-Type', 'text/html')
+  app.get(resolve.urlPath('/*'), async c => {
+    const req = c.env?.incoming
+    const res = c.env?.outgoing
 
-    render(/* the ssrContext: */ { req, res })
-      .then(html => {
-        // now let's send the rendered html to the client
-        res.send(html)
-      })
-      .catch(err => {
-        // oops, we had an error while rendering the page
+    try {
+      const html = await render({ req, res })
+      return c.html(html)
+    } catch (err) {
+      // oops, we had an error while rendering the page
 
-        // we were told to redirect to another URL
-        if (err.url) {
-          if (err.code) {
-            res.redirect(err.code, err.url)
-          } else {
-            res.redirect(err.url)
-          }
-        } else if (err.code === 404) {
-          // hmm, Vue Router could not find the requested route
+      // we were told to redirect to another URL
+      if (err.url) {
+        const redirectCode = err.code || 302
+        return c.redirect(err.url, redirectCode)
+      }
 
-          // Should reach here only if no "catch-all" route
-          // is defined in /src/routes
-          res.status(404).send('404 | Page Not Found')
-        } else if (import.meta.env.QUASAR_DEV) {
-          // well, we treat any other code as error;
-          // if we're in dev mode, then we can use Quasar CLI
-          // to display a nice error page that contains the stack
-          // and other useful information
+      // hmm, Vue Router could not find the requested route
+      if (err.code === 404) {
+        c.status(404)
+        return c.text('404 | Page Not Found')
+      }
 
-          // serve.error is available on dev only
-          const { headers, html } = serve.error({ err, req })
-          res.writeHead(500, headers)
-          res.end(html)
-        } else {
-          // we're in production, so we should have another method
-          // to display something to the client when we encounter an error
-          // (for security reasons, it's not ok to display the same wealth
-          // of information as we do in development)
+      // we treat any other code as error
+      if (import.meta.env.QUASAR_DEV) {
+        // In dev mode, Quasar CLI displays a nice error page.
+        // serve.error uses the native Node res to write the Vite overlay.
+        const { html, headers } = serve.error({ err, req })
+        return c.html(html, 500, headers)
+      }
 
-          // Render Error Page on production or
-          // create a route (/src/routes) for an error page and redirect to it
-          res.status(500).send('500 | Internal Server Error')
+      if (import.meta.env.QUASAR_DEBUG) {
+        console.error(err.stack)
+      }
 
-          if (import.meta.env.QUASAR_DEBUG) {
-            console.error(err.stack)
-          }
-        }
-      })
+      // we're in production, render a generic error
+      return c.text('500 | Internal Server Error', 500)
+    }
   })
 })

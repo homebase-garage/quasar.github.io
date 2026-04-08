@@ -18,9 +18,10 @@
     "vue-router": "catalog:"
   },
   "devDependencies": {
+    "@hono/node-server": "^1.19.13",
     "@quasar/app-vite": "workspace:*",
-    "express": "^5.0.0",
-    "postcss": "^8.5.8"
+    "hono": "^4.12.12",
+    "postcss": "^8.5.9"
   },
   "engines": {
     "node": "^24 || ^22 || ^20",
