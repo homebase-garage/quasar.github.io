@@ -337,7 +337,7 @@ export class QuasarModeDevserver extends AppDevserver {
       render: this.#appOptions.render
     }
 
-    const app = (middlewareParams.app = await create(middlewareParams))
+    middlewareParams.app = await create(middlewareParams)
 
     const serveStatic = await serveStaticContent(middlewareParams)
     middlewareParams.serve = {
@@ -375,58 +375,6 @@ export class QuasarModeDevserver extends AppDevserver {
 
     await injectMiddlewares(middlewareParams)
 
-    if (publicPath !== '/') {
-      await registerDevMiddleware((req, res, next) => {
-        const pathname =
-          new URL(req.url, `http://${req.headers.host}`).pathname || '/'
-
-        if (pathname.startsWith(publicPath) === true) {
-          next()
-          return
-        }
-
-        if (req.url === '/' || req.url === '/index.html') {
-          res.writeHead(302, { Location: publicPath })
-          res.end()
-          return
-        }
-
-        if (req.headers.accept && req.headers.accept.includes('text/html')) {
-          const parsedPath = pathname.slice(1)
-          const redirectPaths = [publicPath + parsedPath]
-          const splitted = parsedPath.split('/')
-
-          if (splitted.length > 1) {
-            redirectPaths.push(publicPath + splitted.slice(1).join('/'))
-          }
-
-          if (redirectPaths[redirectPaths.length - 1] !== publicPath) {
-            redirectPaths.push(publicPath)
-          }
-
-          const linkList = redirectPaths
-            .map(link => `<a href="${link}">${link}</a>`)
-            .join(' or ')
-
-          res.writeHead(404, { 'Content-Type': 'text/html' })
-          res.end(
-            `<div>The Quasar CLI devserver is configured with a publicPath of "${publicPath}"</div>` +
-              `<div> - Did you mean to visit ${linkList} instead?</div>`
-          )
-          return
-        }
-
-        next()
-      })
-    }
-
-    if (quasarConf.devServer.https) {
-      middlewareParams.devHttpsApp = await this.#createLazyDevHttpsServer(
-        quasarConf.devServer.https,
-        app
-      )
-    }
-
     middlewareParams.listenResult = await listen(middlewareParams)
 
     this.#webserver = {
@@ -440,57 +388,6 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.printBanner(quasarConf)
     this.#viteClient?.ws.send({ type: 'full-reload' })
-  }
-
-  /**
-   * Lazily create the devHttpsApp proxy when it's first accessed.
-   * This allows the user to handle the devHttpsApp manually if they need to.
-   * This is useful when they are using an custom SSR webserver such as Fastify and h3
-   */
-  async #createLazyDevHttpsServer(httpsOptions, app) {
-    const { createServer: createHttpsServer } = await import('node:https')
-    const createInstance = () => {
-      try {
-        return createHttpsServer(httpsOptions, app)
-      } catch (error) {
-        if (error.code === 'ERR_INVALID_ARG_TYPE') {
-          warn(
-            'The SSR app instance is not compatible with automatic HTTPS support. ' +
-              'Please use `devHttpsOptions` property from callback scope in `create` or `listen` to set up HTTPS manually.'
-          )
-        } else {
-          warn(
-            `An error occurred while setting up HTTPS for the SSR app instance, devHttpsApp won't be available. Error: ${error.message}`
-          )
-        }
-      }
-    }
-
-    return new Proxy(
-      {},
-      {
-        get: (target, prop) => {
-          // If handling the result of this function as a Promise, we don't want to do anything
-          if (prop === 'then' || prop === 'catch' || prop === 'finally') {
-            return
-          }
-
-          if (!target.instance) {
-            target.instance = createInstance()
-          }
-
-          return target.instance?.[prop]
-        },
-        set: (target, prop, value) => {
-          if (!target.instance) {
-            target.instance = createInstance()
-          }
-
-          target.instance[prop] = value
-          return true
-        }
-      }
-    )
   }
 
   // also update pwa-devserver.js when changing here

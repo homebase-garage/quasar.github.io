@@ -85,10 +85,12 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #copyWebserverFiles() {
-    const patterns = ['.npmrc', '.yarnrc'].map(filename => ({
-      from: filename,
-      to: '.'
-    }))
+    const patterns = ['.npmrc', '.yarnrc', 'src-ssr/server-assets'].map(
+      filename => ({
+        from: filename,
+        to: '.'
+      })
+    )
 
     this.copyFiles(patterns)
   }
@@ -113,10 +115,7 @@ export class QuasarModeBuilder extends AppBuilder {
       scripts: {
         start: 'node index.js'
       },
-      dependencies: Object.assign(appDeps, {
-        compression: cliPkg.dependencies.compression,
-        express: cliPkg.dependencies.express
-      }),
+      dependencies: appDeps,
       engines: localAppPkg.engines,
       browserslist: localAppPkg.browserslist
     }
