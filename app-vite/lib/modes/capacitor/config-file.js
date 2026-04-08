@@ -278,9 +278,7 @@ export class CapacitorConfigFile {
     }
 
     const newContent =
-      originalContent.substring(0, index) +
-      content +
-      originalContent.substring(index)
+      originalContent.slice(0, index) + content + originalContent.slice(index)
 
     fs.writeFileSync(file, newContent, 'utf8')
   }

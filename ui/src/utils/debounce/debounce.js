@@ -2,9 +2,7 @@
 export default function debounce(fn, wait = 250, immediate) {
   let timer = null
 
-  function debounced(/* ...args */) {
-    const args = arguments
-
+  function debounced(...args) {
     const later = () => {
       timer = null
       if (immediate !== true) {

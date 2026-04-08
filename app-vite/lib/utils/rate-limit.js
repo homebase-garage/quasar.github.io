@@ -2,9 +2,7 @@
 export function debounce(fn, wait = 250, immediate) {
   let timer = null
 
-  function debounced(/* ...args */) {
-    const args = arguments
-
+  function debounced(...args) {
     const later = () => {
       timer = null
       if (immediate !== true) {
@@ -32,13 +30,14 @@ export default function throttle(fn, limit = 250) {
   let wait = false,
     result
 
-  return function runThrottle(/* ...args */) {
+  return function runThrottle(...args) {
     if (wait === false) {
       wait = true
       setTimeout(() => {
         wait = false
       }, limit)
-      result = fn.apply(this, arguments)
+
+      result = fn.apply(this, args)
     }
 
     return result

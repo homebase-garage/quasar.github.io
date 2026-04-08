@@ -129,9 +129,9 @@ export class AppExtensionInstance {
       }
 
       this.packageFullName =
-        extName.substring(0, slashIndex + 1) +
+        extName.slice(0, slashIndex + 1) +
         'quasar-app-extension-' +
-        extName.substring(slashIndex + 1)
+        extName.slice(slashIndex + 1)
 
       this.packageName = '@' + this.#stripVersion(this.packageFullName.slice(1))
       this.extId = '@' + this.#stripVersion(extName.slice(1))
@@ -276,7 +276,7 @@ export class AppExtensionInstance {
 
   #stripVersion(packageFullName) {
     const index = packageFullName.indexOf('@')
-    return index !== -1 ? packageFullName.substring(0, index) : packageFullName
+    return index !== -1 ? packageFullName.slice(0, index) : packageFullName
   }
 
   getPrompts() {

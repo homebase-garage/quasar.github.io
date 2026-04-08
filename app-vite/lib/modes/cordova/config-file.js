@@ -204,7 +204,7 @@ return YES;
             lookupString.length
 
           tamperedFile.content =
-            tamperedFile.originalContent.substring(0, insertIndex) +
+            tamperedFile.originalContent.slice(0, insertIndex) +
             `
 
   - (void)webView:(WKWebView *)webView
@@ -214,7 +214,7 @@ return YES;
   completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:serverTrust]);
   }
   ` +
-            tamperedFile.originalContent.substring(insertIndex)
+            tamperedFile.originalContent.slice(insertIndex)
 
           this.#tamperedFiles.push(tamperedFile)
         }
