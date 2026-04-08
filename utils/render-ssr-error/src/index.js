@@ -18,14 +18,12 @@ const after = readFile('after')
  * @param {{
  *  err: Error;
  *  req: import('node:http').IncomingMessage | import('node:http2').Http2ServerRequest;
- *  res: import('node:http').ServerResponse | import('node:http2').Http2ServerResponse;
  *  projectRootFolder?: string;
  * }} params
  */
 export default function renderSSRError({
   err,
   req,
-  res,
   projectRootFolder = process.cwd()
 }) {
   const data = {
@@ -42,13 +40,19 @@ export default function renderSSRError({
   //   new URL('./data.json', import.meta.url), JSON.stringify(data, null, 2), 'utf8'
   // )
 
-  res.writeHead(500, {
-    'Content-Type': 'text/html; charset=utf-8',
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    Pragma: 'no-cache',
-    Expires: '0'
-  })
-  res.end(
-    before + JSON.stringify(data).replace(/<\/script>/g, '<\\/script>') + after
-  )
+  return {
+    statusCode: 500,
+
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Pragma: 'no-cache',
+      Expires: '0'
+    },
+
+    html:
+      before +
+      JSON.stringify(data).replace(/<\/script>/g, '<\\/script>') +
+      after
+  }
 }
