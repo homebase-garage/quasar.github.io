@@ -104,7 +104,7 @@ function createEvaluateModule(files, basedir) {
       path.dirname(filename)
     )
 
-    const res = Object.prototype.hasOwnProperty.call(module.exports, 'default')
+    const res = Object.hasOwn(module.exports, 'default')
       ? module.exports.default
       : module.exports
 

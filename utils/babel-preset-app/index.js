@@ -57,7 +57,7 @@ module.exports = (_, opts = {}) => {
     version = runtimeVersion
   } = opts
 
-  let targets = getTargets(rawTargets)
+  const targets = getTargets(rawTargets)
   let polyfills = []
 
   if (useBuiltIns === 'usage') {
