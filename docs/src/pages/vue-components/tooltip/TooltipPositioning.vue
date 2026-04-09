@@ -136,7 +136,7 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
+import { computed, reactive } from 'vue'
 
 import DocCode from 'src/components/DocCode.vue'
 

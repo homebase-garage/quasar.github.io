@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { ref, computed, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 
 export default {
   setup() {

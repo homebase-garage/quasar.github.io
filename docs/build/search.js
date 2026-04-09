@@ -5,8 +5,7 @@ import { globSync } from 'tinyglobby'
 import md from 'markdown-ast'
 
 import { parseFrontMatter } from './md/md-parse-utils.js'
-
-import { slugify, capitalize } from './utils.js'
+import { capitalize, slugify } from './utils.js'
 
 const apiRE = /<DocApi .*file="([^"]+)".*\n/
 const installationRE = /<DocInstallation /

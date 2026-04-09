@@ -11,11 +11,11 @@
  */
 import express from 'express'
 import {
+  defineSsrClose,
   defineSsrCreate,
   defineSsrListen,
-  defineSsrClose,
-  defineSsrServeStaticContent,
-  defineSsrRenderPreloadTag
+  defineSsrRenderPreloadTag,
+  defineSsrServeStaticContent
 } from '#q-app/wrappers'
 
 /**

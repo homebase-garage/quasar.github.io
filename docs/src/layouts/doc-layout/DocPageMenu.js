@@ -1,15 +1,15 @@
 import {
+  QBadge,
   QExpansionItem,
-  QList,
+  QIcon,
   QItem,
   QItemSection,
-  QIcon,
-  QBadge,
+  QList,
   Ripple
 } from 'quasar'
 
 import { mdiMenuDown } from '@quasar/extras/mdi-v7'
-import { h, ref, watch, onBeforeUpdate, withDirectives } from 'vue'
+import { h, onBeforeUpdate, ref, watch, withDirectives } from 'vue'
 import { useRoute } from 'vue-router'
 
 import Menu from 'assets/menu.js'

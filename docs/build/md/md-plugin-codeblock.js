@@ -145,6 +145,7 @@ function parseCodeLine(content, attrs) {
     const target = props[type]
 
     for (const value of target) {
+      // oxlint-disable-next-line prefer-const
       let [from, to] = value.split('-').map(i => parseInt(i, 10))
       if (to === void 0) to = from
 

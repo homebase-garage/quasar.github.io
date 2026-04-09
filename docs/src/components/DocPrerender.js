@@ -1,5 +1,5 @@
-import { h, ref, computed } from 'vue'
-import { QCard, QTabs, QTab, QTabPanels, QSeparator } from 'quasar'
+import { computed, h, ref } from 'vue'
+import { QCard, QSeparator, QTab, QTabPanels, QTabs } from 'quasar'
 
 export default {
   props: {

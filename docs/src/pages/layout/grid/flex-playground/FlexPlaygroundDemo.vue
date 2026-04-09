@@ -215,9 +215,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUpdate } from 'vue'
+import { computed, onBeforeUpdate, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useQuasar, copyToClipboard } from 'quasar'
+import { copyToClipboard, useQuasar } from 'quasar'
 import { fabCodepen } from '@quasar/extras/fontawesome-v6'
 import { mdiPlus, mdiShareVariant } from '@quasar/extras/mdi-v7'
 

@@ -48,7 +48,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { computed, ref, watch, markRaw, onMounted, onBeforeUnmount } from 'vue'
+import { computed, markRaw, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import AppSearchResults from './search/SearchResults.vue'

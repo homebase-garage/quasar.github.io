@@ -1,5 +1,5 @@
 import { scroll } from 'quasar'
-import { watch, onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
 
 const { setVerticalScrollPosition, getVerticalScrollPosition } = scroll
 

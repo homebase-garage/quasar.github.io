@@ -44,7 +44,7 @@
 
 <script>
 import { event } from 'quasar'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const { stopAndPrevent } = event
 

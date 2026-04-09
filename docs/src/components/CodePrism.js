@@ -1,6 +1,6 @@
 // oxlint-disable-next-line import/no-unassigned-import
 import 'prismjs'
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 export default {
   name: 'CodePrism',

@@ -518,13 +518,13 @@
 
 <script setup>
 import { useMeta, useQuasar } from 'quasar'
-import { ref, reactive, computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import {
-  mdiMenu,
-  mdiViewDashboard,
   mdiCog,
-  mdiPlayCircleOutline
+  mdiMenu,
+  mdiPlayCircleOutline,
+  mdiViewDashboard
 } from '@quasar/extras/mdi-v7'
 
 import getMeta from 'assets/get-meta.js'

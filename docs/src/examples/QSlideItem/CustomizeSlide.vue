@@ -29,7 +29,7 @@
 
 <script>
 import { useQuasar } from 'quasar'
-import { ref, computed, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 
 export default {
   setup() {

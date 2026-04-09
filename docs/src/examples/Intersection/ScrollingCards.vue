@@ -28,7 +28,7 @@ import { ref } from 'vue'
 
 export default {
   setup() {
-    const inView = ref(Array.apply(null, Array(50)).map(_ => false))
+    const inView = ref(Array(50).fill(false))
 
     return {
       inView,

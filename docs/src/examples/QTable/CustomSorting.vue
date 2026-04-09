@@ -168,13 +168,15 @@ export default {
             const x = descending ? b : a
             const y = descending ? a : b
 
-            if (sortBy === 'name') {
-              // string sort
-              return x[sortBy] > y[sortBy] ? 1 : x[sortBy] < y[sortBy] ? -1 : 0
-            } else {
-              // numeric sort
-              return parseFloat(x[sortBy]) - parseFloat(y[sortBy])
-            }
+            return sortBy === 'name'
+              ? // string sort
+                x[sortBy] > y[sortBy]
+                ? 1
+                : x[sortBy] < y[sortBy]
+                  ? -1
+                  : 0
+              : // numeric sort
+                parseFloat(x[sortBy]) - parseFloat(y[sortBy])
           })
         }
 

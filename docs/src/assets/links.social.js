@@ -1,8 +1,8 @@
 import {
+  fabDiscord,
   fabFacebook,
   fabGithub,
-  fabXTwitter,
-  fabDiscord
+  fabXTwitter
 } from '@quasar/extras/fontawesome-v6'
 import { mdiForum } from '@quasar/extras/mdi-v7'
 

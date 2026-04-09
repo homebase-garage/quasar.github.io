@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import { copyToClipboard } from 'quasar'
 
 const props = defineProps({

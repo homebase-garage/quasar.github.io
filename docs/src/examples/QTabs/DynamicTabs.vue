@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const tabsDefinition = [
   { name: 'mails', icon: 'mail', label: 'Mails' },

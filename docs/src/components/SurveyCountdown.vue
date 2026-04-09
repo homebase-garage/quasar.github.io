@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { mdiFileDocumentEditOutline } from '@quasar/extras/mdi-v7'
 
 const confDate = new Date('2022-07-09T15:00:00.000Z').getTime()

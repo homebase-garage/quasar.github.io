@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { ref, computed, nextTick } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 const columns = [
   {

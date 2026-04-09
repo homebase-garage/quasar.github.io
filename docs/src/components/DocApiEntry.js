@@ -1,5 +1,5 @@
 import { h, ref } from 'vue'
-import { QBadge, QBtn, Notify, QBtnToggle } from 'quasar'
+import { Notify, QBadge, QBtn, QBtnToggle } from 'quasar'
 import { copyToClipboard } from 'assets/page-utils.js'
 import { mdiMinusBox, mdiPlusBox } from '@quasar/extras/mdi-v7'
 
@@ -144,9 +144,9 @@ function getExpandable(openState, desc, isExpandable, key, getDetails) {
     ]
 
     return expanded === true ? child.concat(getDetails()) : child
-  } else {
-    return [getDiv(12, 'Description', desc)]
   }
+
+  return [getDiv(12, 'Description', desc)]
 }
 
 function getPropDetails(openState, masterKey, prop, level) {

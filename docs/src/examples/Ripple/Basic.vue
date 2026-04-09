@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const colors = [
   'primary',

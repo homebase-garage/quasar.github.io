@@ -26,9 +26,9 @@
 
 <script>
 import {
+  fasBatteryFull,
   fasSignal,
-  fasWifi,
-  fasBatteryFull
+  fasWifi
 } from '@quasar/extras/fontawesome-v6'
 
 export default {

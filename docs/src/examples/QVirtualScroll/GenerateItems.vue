@@ -17,7 +17,7 @@
 
 <script>
 import { QChatMessage, QSkeleton } from 'quasar'
-import { h, defineComponent, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { defineComponent, h, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 
 const AsyncComponent = defineComponent({
   props: {

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, onBeforeUpdate } from 'vue'
+import { onBeforeUpdate, ref } from 'vue'
 import { morph } from 'quasar'
 
 export default {

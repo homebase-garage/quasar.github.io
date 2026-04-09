@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import DocCode from './DocCode.vue'
 import DocCardTitle from './DocCardTitle.vue'

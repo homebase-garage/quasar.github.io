@@ -90,7 +90,7 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { ref, reactive, computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import languages from 'quasar/lang/index.json'
 
 import DocCode from 'src/components/DocCode.vue'

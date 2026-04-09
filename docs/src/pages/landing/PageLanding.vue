@@ -173,7 +173,7 @@
 </template>
 
 <script setup>
-import { useMeta, scroll } from 'quasar'
+import { scroll, useMeta } from 'quasar'
 
 import DocStars from 'src/components/DocStars.vue'
 import SponsorList from './SponsorList.vue'

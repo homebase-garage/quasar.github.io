@@ -1,6 +1,6 @@
 /* global gtag */
 
-import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 
 import routes from './routes'
 

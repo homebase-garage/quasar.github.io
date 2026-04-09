@@ -180,7 +180,7 @@
 
 <script>
 import { useQuasar } from 'quasar'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const conversations = [
   {

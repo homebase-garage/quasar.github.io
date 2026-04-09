@@ -27,6 +27,7 @@ export default async (packages, versionRE) => {
         continue
       }
 
+      // oxlint-disable-next-line prefer-const
       let [, packageName, version] = matchesList
 
       if (!version) {

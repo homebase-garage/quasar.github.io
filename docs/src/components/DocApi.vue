@@ -150,7 +150,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { mdiClose, mdiMagnify } from '@quasar/extras/mdi-v7'
 
 import DocCardTitle from './DocCardTitle.vue'

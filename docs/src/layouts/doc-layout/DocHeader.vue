@@ -115,10 +115,10 @@ import { computed } from 'vue'
 import { mdiCompare, mdiFolderPound } from '@quasar/extras/mdi-v7'
 
 import {
-  versionLinks,
+  moreLinks,
   primaryToolbarLinks,
   secondaryToolbarLinks,
-  moreLinks
+  versionLinks
 } from 'src/assets/links.header.js'
 import { socialLinks } from 'src/assets/links.social.js'
 

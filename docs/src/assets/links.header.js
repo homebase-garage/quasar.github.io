@@ -1,6 +1,6 @@
 import { Quasar } from 'quasar'
 
-import { fasCubes, fasBolt } from '@quasar/extras/fontawesome-v5'
+import { fasBolt, fasCubes } from '@quasar/extras/fontawesome-v5'
 
 import {
   mdiBug,
@@ -10,14 +10,14 @@ import {
   mdiFlask,
   mdiGithub,
   mdiJsfiddle,
+  mdiMathIntegralBox,
   mdiPaletteSwatch,
   mdiPuzzle,
+  mdiSecurity,
   mdiShoppingMusic,
   mdiStarCircle,
   mdiThemeLightDark,
-  mdiViewDashboard,
-  mdiSecurity,
-  mdiMathIntegralBox
+  mdiViewDashboard
 } from '@quasar/extras/mdi-v7'
 
 import { socialLinks } from './links.social.js'

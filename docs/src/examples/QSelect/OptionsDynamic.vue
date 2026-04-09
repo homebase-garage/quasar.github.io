@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { ref, computed, nextTick } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 const allOptions = []
 for (let i = 0; i <= 100000; i++) {

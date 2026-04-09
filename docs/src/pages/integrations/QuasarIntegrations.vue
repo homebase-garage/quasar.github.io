@@ -102,9 +102,9 @@
 <script setup>
 import DocCardLink from 'components/DocCardLink.vue'
 import {
-  platformIcons,
   buildTargets,
-  ecosystemParts
+  ecosystemParts,
+  platformIcons
 } from 'src/assets/links.integrations.js'
 </script>
 

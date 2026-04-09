@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import languages from 'quasar/lang/index.json'
 
 import DocCode from 'src/components/DocCode.vue'

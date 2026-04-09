@@ -93,7 +93,7 @@
 import { useMeta } from 'quasar'
 import { computed } from 'vue'
 
-import { mdiPencil, mdiFlash, mdiLaunch } from '@quasar/extras/mdi-v7'
+import { mdiFlash, mdiLaunch, mdiPencil } from '@quasar/extras/mdi-v7'
 
 import DocLink from 'src/components/DocLink.vue'
 import DocPageToc from './DocPageToc.vue'

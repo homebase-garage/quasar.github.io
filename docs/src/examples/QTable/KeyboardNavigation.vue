@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, computed, nextTick, toRaw } from 'vue'
+import { computed, nextTick, ref, toRaw } from 'vue'
 
 const columns = [
   {

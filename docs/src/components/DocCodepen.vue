@@ -13,7 +13,7 @@
 
 <script setup>
 import { Quasar } from 'quasar'
-import { ref, reactive, computed, nextTick } from 'vue'
+import { computed, nextTick, reactive, ref } from 'vue'
 
 import { slugify } from 'assets/page-utils.js'
 

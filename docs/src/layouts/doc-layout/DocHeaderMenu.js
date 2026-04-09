@@ -1,10 +1,10 @@
 import {
-  QMenu,
   QIcon,
-  QList,
   QItem,
-  QItemSection,
   QItemLabel,
+  QItemSection,
+  QList,
+  QMenu,
   QSeparator,
   Screen
 } from 'quasar'

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const maxSize = 10000
 const heavyList = []

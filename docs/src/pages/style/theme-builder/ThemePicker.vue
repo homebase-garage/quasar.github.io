@@ -171,16 +171,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { colors as quasarColors, setCssVar } from 'quasar'
 
-import { fasSquare, fasCircle, fasPlay } from '@quasar/extras/fontawesome-v6'
+import { fasCircle, fasPlay, fasSquare } from '@quasar/extras/fontawesome-v6'
 
 import {
   mdiArrowLeft,
   mdiMagnify,
-  mdiMenu,
-  mdiMapMarkerRadius
+  mdiMapMarkerRadius,
+  mdiMenu
 } from '@quasar/extras/mdi-v7'
 
 import DocCode from 'src/components/DocCode.vue'
