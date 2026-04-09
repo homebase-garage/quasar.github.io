@@ -1,8 +1,8 @@
-export function mergeObjects() {
+export function mergeObjects(...args) {
   const base = {}
 
-  for (let i = 0; i < arguments.length; i++) {
-    const obj = arguments[i]
+  for (let i = 0; i < args.length; i++) {
+    const obj = args[i]
 
     Object.keys(obj).forEach(key => {
       if (obj[key] !== void 0) {

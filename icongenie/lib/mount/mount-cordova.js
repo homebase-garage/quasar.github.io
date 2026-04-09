@@ -1,9 +1,9 @@
 // oxlint-disable new-cap
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import elementTree from 'elementtree'
 import { relative } from 'node:path'
-import { red, green } from 'kolorist'
+import { green, red } from 'kolorist'
 
 import { resolveDir } from '../utils/app-paths.js'
 import { log, warn } from '../utils/logger.js'
@@ -112,11 +112,11 @@ function updateConfigXml(cordovaFiles, hasSplashscreen) {
   log(`Updated src-cordova/config.xml`)
 }
 
-function hasDeepProp(target /* , param1, param2, ... */) {
+function hasDeepProp(target, ...args) {
   let obj = target
 
-  for (let i = 1; i < arguments.length; i++) {
-    const prop = arguments[i]
+  for (let i = 0; i < args.length; i++) {
+    const prop = args[i]
     obj = obj[prop]
 
     if (obj === void 0) {
