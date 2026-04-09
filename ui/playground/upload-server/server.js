@@ -1,10 +1,10 @@
-const express = require('express')
-const app = express()
-const formidable = require('formidable')
-const path = require('path')
-const fse = require('fs-extra')
-const throttle = require('express-throttle-bandwidth')
+import express from 'express'
+import formidable from 'formidable'
+import path from 'node:path'
+import fse from 'fs-extra'
+import throttle from 'express-throttle-bandwidth'
 
+const app = express()
 const port = process.env.PORT || 4444,
   folder = path.join(__dirname, 'files')
 

@@ -9,7 +9,7 @@ const requestShortener = new RequestShortener(process.cwd())
 */
 
 function getOriginalErrorStack(e) {
-  // oxlint-disable-next-line eqeqeq
+  // oxlint-disable-next-line eqeqeq no-eq-null
   while (e.error != null) {
     e = e.error
   }

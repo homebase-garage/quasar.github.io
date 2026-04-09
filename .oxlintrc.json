@@ -25,13 +25,13 @@
 
   "plugins": ["vue", "import", "eslint"],
 
-  // Enable all rules in the `correctness` and `suspicious` categories
   "categories": {
     "style": "error",
     "pedantic": "warn",
     "correctness": "error",
     "suspicious": "error",
-    "perf": "error"
+    "perf": "error",
+    "restriction": "error"
   },
 
   "rules": {
@@ -105,7 +105,23 @@
     ],
 
     /** Restriction rule overrides */
+    "no-void": "off",
+    "no-plusplus": "off",
+    "no-param-reassign": "off",
+    "no-console": "off",
+    "complexity": "off",
+    "no-empty-function": "off",
+    "no-empty": "off",
+    "no-relative-parent-imports": "off",
+    "class-methods-use-this": "off",
+    "no-bitwise": "off",
+    "max-props": "off",
+    "default-case": "off",
+    "no-div-regex": "off",
     "import/no-cycle": ["error", { "maxDepth": 3 }],
+    "import/no-default-export": "off",
+    "import/no-dynamic-require": "off",
+    "import/unambiguous": "off",
 
     /** Pedantic rule overrides */
     "unicorn/explicit-length-check": [
@@ -135,14 +151,10 @@
     },
 
     {
-      "files": [
-        "{app-vite,cli,create-quasar,extras,icongenie,app-webpack}/**/*"
-      ],
-
+      "files": ["{app-vite,cli,create-quasar,extras,icongenie,app-webpack}/**"],
       "env": {
         "node": true
       },
-
       "rules": {
         "import/first": "off"
       }
@@ -150,7 +162,6 @@
 
     {
       "files": ["ui/src/**/*.js"],
-
       "globals": {
         "__QUASAR_VERSION__": "readonly",
         "__QUASAR_SSR__": "readonly",
@@ -164,6 +175,23 @@
       "files": ["**/*.test.js"],
       "rules": {
         "unicorn/consistent-function-scoping": "off"
+      }
+    },
+
+    {
+      "files": [
+        "{extras,app-webpack,utils/babel-preset-app,utils/ssr-helpers}/**",
+        "**/*.cjs"
+      ],
+      "rules": {
+        "no-commonjs": "off"
+      }
+    },
+
+    {
+      "files": ["docs/src/examples/**"],
+      "rules": {
+        "no-alert": "off"
       }
     }
   ]

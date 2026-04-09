@@ -65,7 +65,7 @@ export default function viteSingleFile() {
 
         for (const jsName of jsAssets) {
           const jsChunk = bundle[jsName]
-          // oxlint-disable-next-line eqeqeq
+          // oxlint-disable-next-line eqeqeq no-eq-null
           if (jsChunk.code != null) {
             deleteList.push(jsName)
             replacedHtml = replaceScript(
