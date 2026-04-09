@@ -417,6 +417,7 @@ const retry = async (tryFunction, options = {}) => {
   }
 
   if (exitErr) {
+    // oxlint-disable-next-line no-throw-literal
     throw exitErr
   }
 

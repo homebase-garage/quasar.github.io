@@ -79,7 +79,7 @@ async function run() {
       `${icons.length} * ${Object.keys(themeMap).length} icons to download...(${icons.length * Object.keys(themeMap).length})`
     )
 
-    Object.keys(themeMap).map(theme => {
+    Object.keys(themeMap).forEach(theme => {
       if (skipped[theme] === void 0) skipped[theme] = []
       if (svgExports[theme] === void 0) svgExports[theme] = []
       if (typeExports[theme] === void 0) typeExports[theme] = []
@@ -106,7 +106,7 @@ async function run() {
 
     console.log('')
 
-    Object.keys(themeMap).map(theme => {
+    Object.keys(themeMap).forEach(theme => {
       // convert from Set to an array
       iconNames[theme] = [...iconNames[theme]]
 
