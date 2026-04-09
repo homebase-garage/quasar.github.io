@@ -1,7 +1,7 @@
 import { IResolve } from "./app-paths";
 import { QuasarConf } from "./configuration/conf";
 import { QuasarContext } from "./configuration/context";
-import { DeepRequired, DeepNonNullable } from "ts-essentials";
+import { DeepNonNullable, DeepRequired } from "ts-essentials";
 import { BuildOptions as EsbuildConfiguration } from "esbuild";
 
 type QuasarConfProxy = DeepRequired<DeepNonNullable<QuasarConf>>;

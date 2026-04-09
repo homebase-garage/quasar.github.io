@@ -206,7 +206,7 @@ const flattenObject = obj => {
   const result = {}
 
   for (const key in obj) {
-    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+    if (!Object.hasOwn(obj, key)) continue
 
     if (typeof obj[key] !== 'object') {
       result[key] = obj[key]
@@ -220,7 +220,7 @@ const flattenObject = obj => {
 
     // Save the child keys
     for (const flatKey in flatObj) {
-      if (!Object.prototype.hasOwnProperty.call(flatObj, flatKey)) continue
+      if (!Object.hasOwn(flatObj, flatKey)) continue
 
       result[`${key}.${flatKey}`] = flatObj[flatKey]
     }

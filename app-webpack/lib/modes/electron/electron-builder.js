@@ -171,7 +171,7 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
           warn(`${pkgBanner} could not build`, 'FAIL')
           log()
           console.error(err + '\n')
-          reject()
+          reject(err)
         })
     })
   }

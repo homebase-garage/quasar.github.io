@@ -18,21 +18,21 @@ progressLog.start = function start() {
   consoleWarn = console.warn
   consoleError = console.error
 
-  console.log = function log() {
+  console.log = function log(...args) {
     logLine.clear()
-    consoleLog.apply(console, arguments)
+    consoleLog.apply(console, args)
     progressLog(lastLog)
   }
 
-  console.warn = function warn() {
+  console.warn = function warn(...args) {
     logLine.clear()
-    consoleWarn.apply(console, arguments)
+    consoleWarn.apply(console, args)
     progressLog(lastLog)
   }
 
-  console.error = function error() {
+  console.error = function error(...args) {
     logLine.clear()
-    consoleError.apply(console, arguments)
+    consoleError.apply(console, args)
     progressLog(lastLog)
   }
 }

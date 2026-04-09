@@ -73,7 +73,7 @@ function getClientManifest(compilation) {
       // find all asset modules associated with the same chunk
       assetModules.forEach(mod => {
         if (mod.chunks.some(item => item === cid)) {
-          files.push.apply(files, mod.assets)
+          files.push(...mod.assets)
         }
       })
     }

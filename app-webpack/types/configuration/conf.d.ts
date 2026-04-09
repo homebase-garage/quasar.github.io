@@ -1,7 +1,7 @@
 import {
-  QuasarFonts,
   QuasarAnimations,
-  QuasarExtrasIcons
+  QuasarExtrasIcons,
+  QuasarFonts
 } from "@quasar/extras";
 import { QuasarEslintConfiguration } from "./eslint";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";

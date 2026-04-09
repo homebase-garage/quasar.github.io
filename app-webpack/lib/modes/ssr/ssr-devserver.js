@@ -63,7 +63,10 @@ function injectHMREntryPoints(webpackConf, devServerCfg) {
 }
 
 function promisify(fn) {
-  return () => new Promise(resolve => fn(resolve))
+  return () =>
+    new Promise(resolve => {
+      fn(resolve)
+    })
 }
 
 module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
@@ -96,8 +99,8 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       publicFolder,
       serverFile: appPaths.resolve.entry('compiled-dev-webserver.cjs'),
       serverEntryFile: appPaths.resolve.entry('server-entry.js'),
-      resolvePublicFolder() {
-        return join(publicFolder, ...arguments)
+      resolvePublicFolder(...args) {
+        return join(publicFolder, ...args)
       }
     }
 

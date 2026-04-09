@@ -54,7 +54,7 @@ function createState(name) {
 
 const barLength = 20
 const barProgressFactor = barLength / 100
-const barString = Array.apply(null, { length: barLength }).map((_, index) => {
+const barString = Array.from({ length: barLength }, (_, index) => {
   const p = index / barLength
   const colorize =
     p <= 0.5

@@ -95,7 +95,9 @@ function connectToDevServer(devServerPort) {
         break
       } catch {
         console.log('[QBex|HMR] Could not re-connect. Retrying...')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise(resolve => {
+          setTimeout(resolve, 1000)
+        })
         tries++
       }
     }

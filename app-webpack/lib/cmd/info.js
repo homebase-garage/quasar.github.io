@@ -47,17 +47,15 @@ function getSpawnOutput(command) {
 function safePkgInfo(pkg, dir) {
   const json = getPackageJson(pkg, dir)
 
-  if (json !== void 0) {
-    return {
-      key: `  ${String(json.name).trim()}`,
-      value: `${green(String(json.version).trim())}${json.description ? ` -- ${json.description}` : ''}`
-    }
-  } else {
-    return {
-      key: `  ${pkg}`,
-      value: gray('Not installed')
-    }
-  }
+  return json !== void 0
+    ? {
+        key: `  ${String(json.name).trim()}`,
+        value: `${green(String(json.version).trim())}${json.description ? ` -- ${json.description}` : ''}`
+      }
+    : {
+        key: `  ${pkg}`,
+        value: gray('Not installed')
+      }
 }
 
 function print(m) {

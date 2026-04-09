@@ -23,6 +23,7 @@ function getDependenciesRegex(list) {
       if (typeof dep === 'string') {
         return join('node_modules', dep, '/').replace(/\\/g, '[\\\\/]') // windows support
       }
+      // oxlint-disable-next-line array-callback-return
       if (dep instanceof RegExp) {
         return dep.source
       }
@@ -419,7 +420,7 @@ module.exports.createWebpackChain = async function createWebpackChain(
         chain
           .plugin('bundle-analyzer')
           .use(BundleAnalyzerPlugin, [
-            Object.assign({ analyzerMode: 'static' }, quasarConf.build.analyze)
+            { analyzerMode: 'static', ...quasarConf.build.analyze }
           ])
       }
     }
