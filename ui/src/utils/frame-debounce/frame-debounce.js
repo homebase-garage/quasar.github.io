@@ -1,23 +1,33 @@
 export default function frameDebounce(fn) {
-  let wait = false,
-    frame,
-    callArgs
+  let frame = null
+  let callArgs = null
+  let context = null
 
-  function debounced(/* ...args */) {
-    callArgs = arguments
-    if (wait === true) return
+  function debounced(...args) {
+    // Always capture the latest arguments and context
+    callArgs = args
+    context = this
 
-    wait = true
+    // If a frame is already requested, just update the args/context and wait
+    if (frame !== null) return
+
     frame = window.requestAnimationFrame(() => {
-      fn.apply(this, callArgs)
-      callArgs = void 0
-      wait = false
+      fn.apply(context, callArgs)
+
+      // Clean up state so the next call triggers a new frame
+      frame = null
+      callArgs = null
+      context = null
     })
   }
 
   debounced.cancel = () => {
-    window.cancelAnimationFrame(frame)
-    wait = false
+    if (frame !== null) {
+      window.cancelAnimationFrame(frame)
+      frame = null
+    }
+    callArgs = null
+    context = null
   }
 
   return debounced
