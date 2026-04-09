@@ -71,6 +71,10 @@ function getAstParam(param, canComment) {
     return getAstAssignmentPattern(param, canComment)
   }
 
+  if (param.type === 'RestElement') {
+    return `...${getAstParam(param.argument, canComment)}`
+  }
+
   console.error('param:', param)
   throw new Error('astParser - getAstParam(): unknown param case')
 }
