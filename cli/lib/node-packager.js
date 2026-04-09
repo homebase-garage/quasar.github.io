@@ -1,10 +1,10 @@
 import fs from 'node:fs'
-import { normalize, join, sep } from 'node:path'
+import { join, normalize, sep } from 'node:path'
 import { sync as crossSpawnSync } from 'cross-spawn'
 import { execSync } from 'node:child_process'
 
 import appPaths from './app-paths.js'
-import { log, fatal } from './logger.js'
+import { fatal, log } from './logger.js'
 import { spawnSync } from './spawn.js'
 
 const versionRegex = /^(\d+)\.[\d]+\.[\d]+-?(alpha|beta|rc)?/

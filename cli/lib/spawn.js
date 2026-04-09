@@ -1,5 +1,5 @@
 import crossSpawn from 'cross-spawn'
-import { log, warn, fatal } from './logger.js'
+import { fatal, log, warn } from './logger.js'
 
 /*
  Returns pid, takes onClose
