@@ -1,4 +1,4 @@
-import { h, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h } from 'vue'
 
 import useSize from '../../composables/private.use-size/use-size.js'
 import { useCircularCommonProps } from './circular-progress.js'

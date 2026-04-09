@@ -50,11 +50,11 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import {
-  version as vueVersion,
-  ref,
   computed,
+  onBeforeUnmount,
   onMounted,
-  onBeforeUnmount
+  ref,
+  version as vueVersion
 } from 'vue'
 
 import { pagesRoutes } from 'src/router/pages'

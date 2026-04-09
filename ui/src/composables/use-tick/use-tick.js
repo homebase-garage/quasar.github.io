@@ -1,8 +1,8 @@
 import {
+  getCurrentInstance,
   nextTick,
-  onDeactivated,
   onBeforeUnmount,
-  getCurrentInstance
+  onDeactivated
 } from 'vue'
 
 import { vmIsDestroyed } from '../../utils/private.vm/vm.js'

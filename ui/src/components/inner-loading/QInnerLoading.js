@@ -1,4 +1,4 @@
-import { h, computed, Transition, getCurrentInstance } from 'vue'
+import { Transition, computed, getCurrentInstance, h } from 'vue'
 
 import QSpinner from '../spinner/QSpinner.js'
 

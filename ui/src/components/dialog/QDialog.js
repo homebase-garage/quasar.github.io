@@ -1,19 +1,19 @@
 import {
-  h,
-  ref,
-  computed,
-  watch,
-  onBeforeUnmount,
   Transition,
-  getCurrentInstance
+  computed,
+  getCurrentInstance,
+  h,
+  onBeforeUnmount,
+  ref,
+  watch
 } from 'vue'
 
 import useHistory from '../../composables/private.use-history/use-history.js'
 import useTimeout from '../../composables/use-timeout/use-timeout.js'
 import useTick from '../../composables/use-tick/use-tick.js'
 import useModelToggle, {
-  useModelToggleProps,
-  useModelToggleEmits
+  useModelToggleEmits,
+  useModelToggleProps
 } from '../../composables/private.use-model-toggle/use-model-toggle.js'
 import useTransition, {
   useTransitionProps

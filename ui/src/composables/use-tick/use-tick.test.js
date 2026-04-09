@@ -1,5 +1,5 @@
-import { describe, test, expect, vi, afterEach } from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
 import { defineComponent } from 'vue'
 
 import useTick from './use-tick.js'

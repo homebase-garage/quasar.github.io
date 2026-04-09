@@ -1,4 +1,4 @@
-import { h, ref, onUnmounted, Teleport } from 'vue'
+import { Teleport, h, onUnmounted, ref } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { noop } from '../../utils/event/event.js'

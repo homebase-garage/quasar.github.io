@@ -1,4 +1,4 @@
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { hSlot } from '../../utils/private.render/render.js'

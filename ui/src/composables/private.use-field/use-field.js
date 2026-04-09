@@ -1,14 +1,14 @@
 import {
-  h,
-  ref,
-  computed,
   Transition,
+  computed,
+  getCurrentInstance,
+  h,
   nextTick,
   onActivated,
-  onDeactivated,
   onBeforeUnmount,
+  onDeactivated,
   onMounted,
-  getCurrentInstance
+  ref
 } from 'vue'
 
 import QIcon from '../../components/icon/QIcon.js'

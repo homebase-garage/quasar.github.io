@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
-  computed,
-  watch,
-  onBeforeUnmount,
   Transition,
-  getCurrentInstance
+  computed,
+  getCurrentInstance,
+  h,
+  onBeforeUnmount,
+  ref,
+  watch
 } from 'vue'
 
 import useAnchor, {
@@ -13,8 +13,8 @@ import useAnchor, {
 } from '../../composables/private.use-anchor/use-anchor.js'
 import useScrollTarget from '../../composables/private.use-scroll-target/use-scroll-target.js'
 import useModelToggle, {
-  useModelToggleProps,
-  useModelToggleEmits
+  useModelToggleEmits,
+  useModelToggleProps
 } from '../../composables/private.use-model-toggle/use-model-toggle.js'
 import usePortal from '../../composables/private.use-portal/use-portal.js'
 import useTransition, {
@@ -25,7 +25,7 @@ import useTimeout from '../../composables/use-timeout/use-timeout.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { getScrollTarget, scrollTargetProp } from '../../utils/scroll/scroll.js'
-import { stopAndPrevent, addEvt, cleanEvt } from '../../utils/event/event.js'
+import { addEvt, cleanEvt, stopAndPrevent } from '../../utils/event/event.js'
 import { clearSelection } from '../../utils/private.selection/selection.js'
 import { hSlot } from '../../utils/private.render/render.js'
 import {
@@ -33,10 +33,10 @@ import {
   removeClickOutside
 } from '../../utils/private.click-outside/click-outside.js'
 import {
-  validatePosition,
-  validateOffset,
+  parsePosition,
   setPosition,
-  parsePosition
+  validateOffset,
+  validatePosition
 } from '../../utils/private.position-engine/position-engine.js'
 
 export default createComponent({

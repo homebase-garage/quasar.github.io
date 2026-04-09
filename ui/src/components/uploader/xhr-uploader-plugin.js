@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 function getFn(prop) {
   return typeof prop === 'function' ? prop : () => prop

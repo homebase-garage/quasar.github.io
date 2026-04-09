@@ -3,15 +3,15 @@
  * [(prop)backdrop-filter]
  */
 
-import { mount, flushPromises } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import {
-  describe,
-  test,
-  expect,
-  vi,
-  beforeEach,
   afterEach,
-  onTestFinished
+  beforeEach,
+  describe,
+  expect,
+  onTestFinished,
+  test,
+  vi
 } from 'vitest'
 
 import QDialog from './QDialog.js'

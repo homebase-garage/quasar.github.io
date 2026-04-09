@@ -1,5 +1,5 @@
-import { mount, flushPromises } from '@vue/test-utils'
-import { describe, test, expect, vi } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, test, vi } from 'vitest'
 
 import QBtn from './QBtn.js'
 

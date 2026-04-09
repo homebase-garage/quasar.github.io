@@ -1,9 +1,9 @@
-import { describe, test, expect, afterEach } from 'vitest'
+import { afterEach, describe, expect, test } from 'vitest'
 
 import {
+  changeGlobalNodesTarget,
   createGlobalNode,
-  removeGlobalNode,
-  changeGlobalNodesTarget
+  removeGlobalNode
 } from './nodes.js'
 import { globalConfig } from './instance-config.js'
 

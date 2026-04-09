@@ -1,11 +1,11 @@
-import { h, ref, computed, watch, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, watch } from 'vue'
 
 import { useFormAttrs } from '../../composables/use-form/private.use-form.js'
 
 import useSlider, {
-  useSliderProps,
+  keyCodes,
   useSliderEmits,
-  keyCodes
+  useSliderProps
 } from './use-slider.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

@@ -1,9 +1,9 @@
 import fse from 'fs-extra'
-import { globSync, convertPathToPattern } from 'tinyglobby'
+import { convertPathToPattern, globSync } from 'tinyglobby'
 import { createPatch } from 'diff'
 import { highlight } from 'cli-highlight'
 
-import { resolveToRoot, relativeToRoot } from './build.utils.js'
+import { relativeToRoot, resolveToRoot } from './build.utils.js'
 
 /**
  * Call this with the path to file (or folder) you want to track, before the file gets updated.

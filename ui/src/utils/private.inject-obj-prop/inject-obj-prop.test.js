@@ -1,6 +1,6 @@
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
-import { injectProp, injectMultipleProps } from './inject-obj-prop.js'
+import { injectMultipleProps, injectProp } from './inject-obj-prop.js'
 
 describe('[injectObjProp API]', () => {
   describe('[Functions]', () => {

@@ -1,3 +1,4 @@
+// oxlint-disable-next-line import/no-mutable-exports
 let rtlHasScrollBug = false
 
 // mobile Chrome takes the crown for this

@@ -1,4 +1,4 @@
-import { h, ref, nextTick } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import { createChildApp } from '../../install-quasar.js'
 import { createGlobalNode, removeGlobalNode } from '../private.config/nodes.js'

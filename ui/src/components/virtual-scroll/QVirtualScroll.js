@@ -1,13 +1,13 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
-  onBeforeMount,
-  onMounted,
-  onBeforeUnmount,
+  h,
   onActivated,
-  onDeactivated
+  onBeforeMount,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import QList from '../item/QList.js'

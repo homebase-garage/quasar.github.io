@@ -1,5 +1,5 @@
 import { QInputProps, QOptionGroupProps } from "quasar";
-import { InputHTMLAttributes, HTMLAttributes } from "vue";
+import { HTMLAttributes, InputHTMLAttributes } from "vue";
 
 // https://html.spec.whatwg.org/multipage/input.html#attr-input-type
 type InputType =

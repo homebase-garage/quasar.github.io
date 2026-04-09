@@ -1,4 +1,4 @@
-import { h, computed, provide, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, provide } from 'vue'
 
 import StepHeader from './StepHeader.js'
 
@@ -6,13 +6,13 @@ import useDark, {
   useDarkProps
 } from '../../composables/private.use-dark/use-dark.js'
 import usePanel, {
-  usePanelProps,
-  usePanelEmits
+  usePanelEmits,
+  usePanelProps
 } from '../../composables/private.use-panel/use-panel.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { stepperKey } from '../../utils/private.symbols/symbols.js'
-import { hSlot, hMergeSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hMergeSlot, hSlot } from '../../utils/private.render/render.js'
 
 const camelRE = /(-\w)/g
 

@@ -1,10 +1,10 @@
 import {
-  ref,
-  watch,
+  getCurrentInstance,
   onBeforeMount,
-  onMounted,
   onBeforeUnmount,
-  getCurrentInstance
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import History from '../../plugins/private.history/History.js'

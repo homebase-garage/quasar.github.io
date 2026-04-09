@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
-  computed,
   Transition,
+  computed,
+  getCurrentInstance,
+  h,
   onBeforeUnmount,
-  withDirectives,
-  getCurrentInstance
+  ref,
+  withDirectives
 } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
@@ -18,10 +18,10 @@ import useBtn, { useBtnProps } from './use-btn.js'
 import { createComponent } from '../../utils/private.create/create.js'
 import { hMergeSlot } from '../../utils/private.render/render.js'
 import {
-  stop,
+  listenOpts,
   prevent,
-  stopAndPrevent,
-  listenOpts
+  stop,
+  stopAndPrevent
 } from '../../utils/event/event.js'
 import { isKeyCode } from '../../utils/private.keyboard/key-composition.js'
 

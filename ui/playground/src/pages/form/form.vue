@@ -207,7 +207,7 @@
 
 <script>
 import { h } from 'vue'
-import { QField, QCard, QCardSection, QFormChildMixin } from 'quasar'
+import { QCard, QCardSection, QField, QFormChildMixin } from 'quasar'
 
 export default {
   components: {

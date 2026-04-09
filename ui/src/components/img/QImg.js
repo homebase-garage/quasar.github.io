@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
-  computed,
-  watch,
-  onMounted,
   Transition,
-  getCurrentInstance
+  computed,
+  getCurrentInstance,
+  h,
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import QSpinner from '../spinner/QSpinner.js'
@@ -274,7 +274,7 @@ export default createComponent({
     }
 
     if (__QUASAR_SSR_SERVER__ !== true) {
-      function watchSrc() {
+      const watchSrc = () => {
         watch(
           () =>
             props.src || props.srcset || props.sizes

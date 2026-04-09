@@ -1,9 +1,9 @@
 // oxlint-disable eslint-plugin-import/no-named-as-default-member
 
-import { describe, test, expect, vi, onTestFinished } from 'vitest'
+import { describe, expect, onTestFinished, test, vi } from 'vitest'
 import { ref } from 'vue'
 
-import dom, { getElement, childHasFocus } from './dom.js'
+import dom, { childHasFocus, getElement } from './dom.js'
 
 function createEl({ top, left } = {}) {
   const el = document.createElement('div')

@@ -1,6 +1,6 @@
 import {
-  coreProps,
   coreEmits,
+  coreProps,
   getRenderer
 } from '../../components/uploader/uploader-core.js'
 

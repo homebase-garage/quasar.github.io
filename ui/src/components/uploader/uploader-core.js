@@ -1,12 +1,12 @@
 import {
-  h,
-  ref,
-  isRef,
   computed,
-  watch,
-  provide,
+  getCurrentInstance,
+  h,
+  isRef,
   onBeforeUnmount,
-  getCurrentInstance
+  provide,
+  ref,
+  watch
 } from 'vue'
 
 import QBtn from '../btn/QBtn.js'
@@ -18,16 +18,16 @@ import useDark, {
   useDarkProps
 } from '../../composables/private.use-dark/use-dark.js'
 import useFile, {
-  useFileProps,
-  useFileEmits
+  useFileEmits,
+  useFileProps
 } from '../../composables/private.use-file/use-file.js'
 
 import { stop } from '../../utils/event/event.js'
 import { humanStorageSize } from '../../utils/format/format.js'
 import { uploaderKey } from '../../utils/private.symbols/symbols.js'
 import {
-  injectProp,
-  injectMultipleProps
+  injectMultipleProps,
+  injectProp
 } from '../../utils/private.inject-obj-prop/inject-obj-prop.js'
 import { vmIsDestroyed } from '../../utils/private.vm/vm.js'
 

@@ -1,4 +1,4 @@
-import { ref, onBeforeUpdate, getCurrentInstance } from 'vue'
+import { getCurrentInstance, onBeforeUpdate, ref } from 'vue'
 
 const listenerRE = /^on[A-Z]/
 

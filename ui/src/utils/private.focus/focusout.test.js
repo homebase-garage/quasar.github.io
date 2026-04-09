@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, afterEach } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import { addFocusout, removeFocusout } from './focusout.js'
 

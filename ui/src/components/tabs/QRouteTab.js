@@ -3,7 +3,7 @@ import { computed, watch } from 'vue'
 import useRouterLink, {
   useRouterLinkProps
 } from '../../composables/private.use-router-link/use-router-link.js'
-import useTab, { useTabProps, useTabEmits } from './use-tab.js'
+import useTab, { useTabEmits, useTabProps } from './use-tab.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 

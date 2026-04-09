@@ -73,7 +73,7 @@ if (__QUASAR_SSR_SERVER__ === true) {
 
   if (Plugin.isCapable === false) {
     // it means the browser does NOT support it
-    assignFn(() => Promise.reject('Not capable'))
+    assignFn(() => Promise.reject(new Error('Not capable')))
   } else {
     Object.assign(Plugin, {
       request(target) {

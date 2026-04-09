@@ -1,7 +1,7 @@
 import useField, {
-  useFieldState,
+  useFieldEmits,
   useFieldProps,
-  useFieldEmits
+  useFieldState
 } from '../../composables/private.use-field/use-field.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

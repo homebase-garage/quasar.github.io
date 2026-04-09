@@ -70,10 +70,12 @@
 
 <script>
 import { useMeta } from 'quasar'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
 }
 
 export default {

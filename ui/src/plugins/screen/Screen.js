@@ -1,4 +1,4 @@
-import { isRuntimeSsrPreHydration, client } from '../platform/Platform.js'
+import { client, isRuntimeSsrPreHydration } from '../platform/Platform.js'
 
 import { createReactivePlugin } from '../../utils/private.create/create.js'
 import { listenOpts, noop } from '../../utils/event/event.js'

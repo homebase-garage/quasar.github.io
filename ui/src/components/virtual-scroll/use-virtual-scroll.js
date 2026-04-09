@@ -1,14 +1,14 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
+  getCurrentInstance,
+  h,
+  nextTick,
   onActivated,
-  onDeactivated,
   onBeforeMount,
   onBeforeUnmount,
-  nextTick,
-  getCurrentInstance
+  onDeactivated,
+  ref,
+  watch
 } from 'vue'
 
 import debounce from '../../utils/debounce/debounce.js'

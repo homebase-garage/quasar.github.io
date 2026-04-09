@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import getCssVar from './get-css-var.js'
 

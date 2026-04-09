@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { runSequentialPromises, is, copyToClipboard, Notify } from 'quasar'
+import { Notify, copyToClipboard, is, runSequentialPromises } from 'quasar'
 import { ref } from 'vue'
 
 const testList = ref([])

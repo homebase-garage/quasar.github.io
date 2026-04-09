@@ -1,11 +1,11 @@
 import {
+  AllowedComponentProps,
+  ComponentCustomProps,
   ComponentOptions,
   ComponentPublicInstance,
   ComputedOptions,
   MethodOptions,
-  VNodeProps,
-  AllowedComponentProps,
-  ComponentCustomProps
+  VNodeProps
 } from "vue";
 
 export type StringDictionary<T extends string> = Required<{

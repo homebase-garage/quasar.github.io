@@ -1,10 +1,10 @@
-import { describe, test, expect } from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
-import { h, getCurrentInstance } from 'vue'
+import { describe, expect, test } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { getCurrentInstance, h } from 'vue'
 
 import {
-  getParentProxy,
   getNormalizedVNodes,
+  getParentProxy,
   vmHasRouter,
   vmIsDestroyed
 } from './vm.js'

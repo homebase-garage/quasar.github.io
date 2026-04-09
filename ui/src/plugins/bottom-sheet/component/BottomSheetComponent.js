@@ -1,4 +1,4 @@
-import { h, ref, getCurrentInstance } from 'vue'
+import { getCurrentInstance, h, ref } from 'vue'
 
 import QDialog from '../../../components/dialog/QDialog.js'
 

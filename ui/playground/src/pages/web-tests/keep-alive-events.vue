@@ -86,11 +86,11 @@
 <script>
 import {
   h,
-  onBeforeMount,
-  onMounted,
   onActivated,
-  onDeactivated,
+  onBeforeMount,
   onBeforeUnmount,
+  onDeactivated,
+  onMounted,
   onUnmounted
 } from 'vue'
 

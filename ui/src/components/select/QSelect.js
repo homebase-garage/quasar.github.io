@@ -1,13 +1,13 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
+  getCurrentInstance,
+  h,
+  nextTick,
+  onBeforeUnmount,
   onBeforeUpdate,
   onUpdated,
-  onBeforeUnmount,
-  nextTick,
-  getCurrentInstance
+  ref,
+  watch
 } from 'vue'
 
 import QField from '../field/QField.js'
@@ -22,32 +22,33 @@ import QMenu from '../menu/QMenu.js'
 import QDialog from '../dialog/QDialog.js'
 
 import useField, {
-  useFieldState,
-  useFieldProps,
+  fieldValueIsFilled,
   useFieldEmits,
-  fieldValueIsFilled
+  useFieldProps,
+  useFieldState
 } from '../../composables/private.use-field/use-field.js'
 import {
   useVirtualScroll,
   useVirtualScrollProps
 } from '../virtual-scroll/use-virtual-scroll.js'
 import {
-  useFormProps,
-  useFormInputNameAttr
+  useFormInputNameAttr,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 import useKeyComposition from '../../composables/private.use-key-composition/use-key-composition.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { isDeepEqual } from '../../utils/is/is.js'
-import { stop, prevent, stopAndPrevent } from '../../utils/event/event.js'
+import { prevent, stop, stopAndPrevent } from '../../utils/event/event.js'
 import { normalizeToInterval } from '../../utils/format/format.js'
 import {
-  shouldIgnoreKey,
-  isKeyCode
+  isKeyCode,
+  shouldIgnoreKey
 } from '../../utils/private.keyboard/key-composition.js'
 import { hMergeSlot } from '../../utils/private.render/render.js'
 
 const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v)
+// oxlint-disable-next-line no-template-curly-in-string
 const reEscapeList = '.*+?^${}()|[]\\'
 const fieldPropsList = Object.keys(useFieldProps)
 

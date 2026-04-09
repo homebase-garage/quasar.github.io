@@ -1,4 +1,4 @@
-import { Ref, ComponentPublicInstance } from "vue";
+import { ComponentPublicInstance, Ref } from "vue";
 
 export namespace scroll {
   function getScrollTarget(

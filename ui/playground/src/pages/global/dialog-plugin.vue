@@ -234,7 +234,7 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 
-import { QSpinnerGears, QSpinnerCube } from 'quasar'
+import { QSpinnerCube, QSpinnerGears } from 'quasar'
 
 import DialogComponentOptionsApi from './dialog-component-options-api.js'
 import DialogComponentCompositionApi from './dialog-component-composition-api.js'

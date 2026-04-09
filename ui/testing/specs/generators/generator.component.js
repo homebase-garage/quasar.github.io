@@ -7,14 +7,14 @@
 
 import readAssociatedJsonFile from '../readAssociatedJsonFile.js'
 import {
-  testIndent,
-  kebabCase,
+  filterDefExceptionTypes,
   getComponentMount,
   getComponentPropAssignment,
-  filterDefExceptionTypes,
-  getTypeTest,
+  getFunctionCallTest,
   getTestValue,
-  getFunctionCallTest
+  getTypeTest,
+  kebabCase,
+  testIndent
 } from '../specs.utils.js'
 
 const identifiers = {

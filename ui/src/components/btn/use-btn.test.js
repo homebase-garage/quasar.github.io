@@ -1,15 +1,15 @@
 import { mount } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { defineComponent } from 'vue'
 
 import useBtn, {
+  btnDesignOptions,
   btnPadding,
   defaultSizes,
-  btnDesignOptions,
-  useBtnProps,
-  nonRoundBtnProps,
   getBtnDesign,
-  getBtnDesignAttr
+  getBtnDesignAttr,
+  nonRoundBtnProps,
+  useBtnProps
 } from './use-btn.js'
 
 describe('[useBtn API]', () => {

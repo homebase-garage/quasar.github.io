@@ -1,4 +1,4 @@
-import { QUploader, LiteralUnion } from "quasar";
+import { LiteralUnion, QUploader } from "quasar";
 import {
   ComponentOptionsMixin,
   ComponentPropsOptions,

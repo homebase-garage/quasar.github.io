@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
+  Transition,
   computed,
-  watch,
-  onBeforeUnmount,
   getCurrentInstance,
-  Transition
+  h,
+  onBeforeUnmount,
+  ref,
+  watch
 } from 'vue'
 
 import usePageSticky, {

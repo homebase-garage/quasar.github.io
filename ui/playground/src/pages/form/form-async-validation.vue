@@ -58,7 +58,9 @@
 
 <script>
 const wait = (delay = 3000) =>
-  new Promise(resolve => setTimeout(resolve, delay))
+  new Promise(resolve => {
+    setTimeout(resolve, delay)
+  })
 const required = val =>
   (typeof val === 'string' && val.length !== 0) || 'Field is required'
 const asyncValidate = val => wait().then(() => required(val))

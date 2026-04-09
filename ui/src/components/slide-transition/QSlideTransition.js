@@ -1,4 +1,4 @@
-import { h, onBeforeUnmount, Transition } from 'vue'
+import { Transition, h, onBeforeUnmount } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 

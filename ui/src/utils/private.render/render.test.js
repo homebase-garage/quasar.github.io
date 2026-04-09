@@ -1,13 +1,13 @@
-import { describe, test, expect } from 'vitest'
-import { mount, flushPromises } from '@vue/test-utils'
+import { describe, expect, test } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
 import { ref } from 'vue'
 
 import {
-  hSlot,
-  hUniqueSlot,
+  hDir,
   hMergeSlot,
   hMergeSlotSafely,
-  hDir
+  hSlot,
+  hUniqueSlot
 } from './render.js'
 
 describe('[render API]', () => {

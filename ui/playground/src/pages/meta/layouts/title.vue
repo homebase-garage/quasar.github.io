@@ -6,7 +6,7 @@
 
 <script>
 import { useMeta } from 'quasar'
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 export default {
   setup() {

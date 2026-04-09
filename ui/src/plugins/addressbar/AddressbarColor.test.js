@@ -1,5 +1,5 @@
-import { describe, test, expect, vi } from 'vitest'
-import { mount, config } from '@vue/test-utils'
+import { describe, expect, test, vi } from 'vitest'
+import { config, mount } from '@vue/test-utils'
 
 import AddressbarColor from './AddressbarColor.js'
 

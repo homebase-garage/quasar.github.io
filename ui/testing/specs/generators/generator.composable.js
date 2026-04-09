@@ -1,7 +1,7 @@
-import { readAstJson, getImportStatement } from '../astParser.js'
+import { getImportStatement, readAstJson } from '../astParser.js'
 import { testIndent } from '../specs.utils.js'
 
-import { createVariableTest, createClassTest } from './generator.generic.js'
+import { createClassTest, createVariableTest } from './generator.generic.js'
 
 const identifiers = {
   variables: {

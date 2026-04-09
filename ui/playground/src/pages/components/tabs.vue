@@ -1008,12 +1008,12 @@
 <script>
 import {
   h,
-  ref,
-  onBeforeMount,
-  onMounted,
-  onBeforeUnmount,
   onActivated,
-  onDeactivated
+  onBeforeMount,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref
 } from 'vue'
 import { uid } from 'quasar'
 

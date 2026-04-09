@@ -1,4 +1,4 @@
-import { h, ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, nextTick, ref, watch } from 'vue'
 
 import TouchPan from '../../directives/touch-pan/TouchPan.js'
 
@@ -25,12 +25,12 @@ import throttle from '../../utils/throttle/throttle.js'
 import { stop } from '../../utils/event/event.js'
 import {
   hexToRgb,
-  rgbToHex,
-  rgbToString,
-  textToRgb,
-  rgbToHsv,
   hsvToRgb,
-  luminosity
+  luminosity,
+  rgbToHex,
+  rgbToHsv,
+  rgbToString,
+  textToRgb
 } from '../../utils/colors/colors.js'
 import { hDir } from '../../utils/private.render/render.js'
 

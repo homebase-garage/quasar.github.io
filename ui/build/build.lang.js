@@ -1,9 +1,9 @@
 import { globSync } from 'tinyglobby'
 
 import {
-  rootFolder,
-  resolveToRoot,
   logError,
+  resolveToRoot,
+  rootFolder,
   writeFileIfChanged
 } from './build.utils.js'
 

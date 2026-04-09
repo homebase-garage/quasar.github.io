@@ -1,10 +1,10 @@
-import { watch, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, watch } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import {
+  getHorizontalScrollPosition,
   getScrollTarget,
   getVerticalScrollPosition,
-  getHorizontalScrollPosition,
   scrollTargetProp
 } from '../../utils/scroll/scroll.js'
 import { listenOpts, noop } from '../../utils/event/event.js'

@@ -1,4 +1,4 @@
-import { watch, nextTick, onMounted, getCurrentInstance } from 'vue'
+import { getCurrentInstance, nextTick, onMounted, watch } from 'vue'
 
 import { vmHasRouter } from '../../utils/private.vm/vm.js'
 

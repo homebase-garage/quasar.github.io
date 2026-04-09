@@ -1,4 +1,4 @@
-import { h, computed, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 
 export default function useRefocusTarget(props, rootRef) {
   const refocusRef = ref(null)

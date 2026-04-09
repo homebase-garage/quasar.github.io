@@ -27,6 +27,8 @@
 </template>
 
 <script setup>
+// oxlint-disable import/no-namespace
+
 // When new icons show up, or icons are modified,
 // this is a good way to test the updates to make
 // sure our parsing works as expected.
@@ -49,7 +51,7 @@ import * as svgLineAwesomeIcons from '@quasar/extras/line-awesome'
 import * as svgMdiIcons from '@quasar/extras/mdi-v7'
 import * as svgThemifyIcons from '@quasar/extras/themify'
 
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const icons = ref([
   {

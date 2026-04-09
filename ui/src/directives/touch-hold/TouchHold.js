@@ -4,10 +4,10 @@ import { createDirective } from '../../utils/private.create/create.js'
 import {
   addEvt,
   cleanEvt,
-  position,
   leftClick,
-  stopAndPrevent,
-  noop
+  noop,
+  position,
+  stopAndPrevent
 } from '../../utils/event/event.js'
 import { clearSelection } from '../../utils/private.selection/selection.js'
 import getSSRProps from '../../utils/private.noop-ssr-directive-transform/noop-ssr-directive-transform.js'

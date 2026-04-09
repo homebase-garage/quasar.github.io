@@ -1,13 +1,13 @@
 import {
-  h,
-  shallowReactive,
-  ref,
   computed,
-  watch,
-  withDirectives,
   getCurrentInstance,
+  h,
+  onBeforeUnmount,
+  ref,
+  shallowReactive,
   vShow,
-  onBeforeUnmount
+  watch,
+  withDirectives
 } from 'vue'
 
 import QItem from '../item/QItem.js'
@@ -23,8 +23,8 @@ import useDark, {
 import useId from '../../composables/use-id/use-id.js'
 import { useRouterLinkProps } from '../../composables/private.use-router-link/use-router-link.js'
 import useModelToggle, {
-  useModelToggleProps,
-  useModelToggleEmits
+  useModelToggleEmits,
+  useModelToggleProps
 } from '../../composables/private.use-model-toggle/use-model-toggle.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

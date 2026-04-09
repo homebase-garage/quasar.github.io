@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import { getEmptyStorage, getStorage } from './web-storage.js'
 

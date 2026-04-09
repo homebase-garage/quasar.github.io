@@ -1,11 +1,11 @@
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { computed } from 'vue'
 
 import {
-  useFormProps,
   useFormAttrs,
   useFormInject,
-  useFormInputNameAttr
+  useFormInputNameAttr,
+  useFormProps
 } from './private.use-form.js'
 
 describe('[useForm API]', () => {

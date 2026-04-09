@@ -1,20 +1,20 @@
-import { h, ref, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref } from 'vue'
 
 import QChip from '../chip/QChip.js'
 
 import useField, {
-  useFieldState,
-  useNonInputFieldProps,
+  fieldValueIsFilled,
   useFieldEmits,
-  fieldValueIsFilled
+  useFieldState,
+  useNonInputFieldProps
 } from '../../composables/private.use-field/use-field.js'
 import {
-  useFormProps,
-  useFormInputNameAttr
+  useFormInputNameAttr,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 import useFile, {
-  useFileProps,
-  useFileEmits
+  useFileEmits,
+  useFileProps
 } from '../../composables/private.use-file/use-file.js'
 import useFileFormDomProps from '../../composables/private.use-file/use-file-dom-props.js'
 

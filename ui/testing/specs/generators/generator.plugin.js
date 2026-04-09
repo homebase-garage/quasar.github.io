@@ -1,5 +1,5 @@
 import readAssociatedJsonFile from '../readAssociatedJsonFile.js'
-import { testIndent, getTypeTest, getFunctionCallTest } from '../specs.utils.js'
+import { getFunctionCallTest, getTypeTest, testIndent } from '../specs.utils.js'
 
 const identifiers = {
   injection: {

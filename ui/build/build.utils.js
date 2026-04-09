@@ -1,8 +1,8 @@
-import { join, resolve, relative } from 'node:path'
+import { join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import fse from 'fs-extra'
 import zlib from 'zlib'
-import { red, green, blue, magenta, gray, underline } from 'kolorist'
+import { blue, gray, green, magenta, red, underline } from 'kolorist'
 import { table } from 'table'
 
 const jsRE = /\.c?js$/

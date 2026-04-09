@@ -1,4 +1,4 @@
-import { resolve, dirname, basename, relative } from 'node:path'
+import { basename, dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import fse from 'fs-extra'
 

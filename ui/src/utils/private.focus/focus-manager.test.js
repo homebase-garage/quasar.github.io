@@ -1,10 +1,10 @@
-import { describe, test, expect, vi, afterEach } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 
 import {
-  addFocusWaitFlag,
-  removeFocusWaitFlag,
   addFocusFn,
-  removeFocusFn
+  addFocusWaitFlag,
+  removeFocusFn,
+  removeFocusWaitFlag
 } from './focus-manager.js'
 
 let waitFlagList = []

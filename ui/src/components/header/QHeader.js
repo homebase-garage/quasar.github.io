@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
-  onBeforeUnmount,
+  getCurrentInstance,
+  h,
   inject,
-  getCurrentInstance
+  onBeforeUnmount,
+  ref,
+  watch
 } from 'vue'
 
 import QResizeObserver from '../resize-observer/QResizeObserver.js'
@@ -13,8 +13,8 @@ import QResizeObserver from '../resize-observer/QResizeObserver.js'
 import { createComponent } from '../../utils/private.create/create.js'
 import { hUniqueSlot } from '../../utils/private.render/render.js'
 import {
-  layoutKey,
-  emptyRenderFn
+  emptyRenderFn,
+  layoutKey
 } from '../../utils/private.symbols/symbols.js'
 
 function updateLocal(prop, val) {

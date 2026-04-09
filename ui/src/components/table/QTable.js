@@ -1,4 +1,4 @@
-import { h, ref, computed, watch, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, watch } from 'vue'
 
 import QTh from './QTh.js'
 
@@ -17,26 +17,26 @@ import useDark, {
 } from '../../composables/private.use-dark/use-dark.js'
 import { commonVirtScrollPropsList } from '../virtual-scroll/use-virtual-scroll.js'
 import useFullscreen, {
-  useFullscreenProps,
-  useFullscreenEmits
+  useFullscreenEmits,
+  useFullscreenProps
 } from '../../composables/private.use-fullscreen/use-fullscreen.js'
 
 import { useTableSort, useTableSortProps } from './table-sort.js'
 import { useTableFilter, useTableFilterProps } from './table-filter.js'
 import {
-  useTablePaginationState,
   useTablePagination,
-  useTablePaginationProps
+  useTablePaginationProps,
+  useTablePaginationState
 } from './table-pagination.js'
 import {
   useTableRowSelection,
-  useTableRowSelectionProps,
-  useTableRowSelectionEmits
+  useTableRowSelectionEmits,
+  useTableRowSelectionProps
 } from './table-row-selection.js'
 import {
   useTableRowExpand,
-  useTableRowExpandProps,
-  useTableRowExpandEmits
+  useTableRowExpandEmits,
+  useTableRowExpandProps
 } from './table-row-expand.js'
 import {
   useTableColumnSelection,
@@ -44,8 +44,8 @@ import {
 } from './table-column-selection.js'
 
 import {
-  injectProp,
-  injectMultipleProps
+  injectMultipleProps,
+  injectProp
 } from '../../utils/private.inject-obj-prop/inject-obj-prop.js'
 import { createComponent } from '../../utils/private.create/create.js'
 

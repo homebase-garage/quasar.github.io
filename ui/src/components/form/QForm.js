@@ -1,12 +1,12 @@
 import {
+  getCurrentInstance,
   h,
-  ref,
+  nextTick,
   onActivated,
   onDeactivated,
   onMounted,
-  getCurrentInstance,
-  nextTick,
-  provide
+  provide,
+  ref
 } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'

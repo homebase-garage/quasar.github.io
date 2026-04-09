@@ -8,11 +8,11 @@ import {
 import {
   addEvt,
   cleanEvt,
-  position,
   leftClick,
-  stopAndPrevent,
+  noop,
+  position,
   preventDraggable,
-  noop
+  stopAndPrevent
 } from '../../utils/event/event.js'
 import { clearSelection } from '../../utils/private.selection/selection.js'
 import getSSRProps from '../../utils/private.noop-ssr-directive-transform/noop-ssr-directive-transform.js'

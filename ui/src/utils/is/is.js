@@ -121,6 +121,7 @@ export function isDeepEqual(a, b) {
   }
 
   // true if both NaN, false otherwise
+  // oxlint-disable-next-line no-self-compare
   return a !== a && b !== b
 }
 

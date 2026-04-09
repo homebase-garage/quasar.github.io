@@ -1,9 +1,9 @@
-import { h, computed, inject, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, inject } from 'vue'
 
 import { hSlot } from '../../utils/private.render/render.js'
 import {
-  layoutKey,
-  emptyRenderFn
+  emptyRenderFn,
+  layoutKey
 } from '../../utils/private.symbols/symbols.js'
 
 export const usePageStickyProps = {

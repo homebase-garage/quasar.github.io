@@ -1,5 +1,5 @@
-import { readAstJson, getImportStatement } from '../astParser.js'
-import { testIndent, getTypeTest } from '../specs.utils.js'
+import { getImportStatement, readAstJson } from '../astParser.js'
+import { getTypeTest, testIndent } from '../specs.utils.js'
 
 const identifiers = {
   variables: {

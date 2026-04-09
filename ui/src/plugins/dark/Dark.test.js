@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 
 import Dark from './Dark.js'

@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
-  onMounted,
+  getCurrentInstance,
+  h,
   onBeforeUnmount,
-  getCurrentInstance
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
@@ -20,7 +20,7 @@ import {
 } from '../../utils/scroll/scroll.js'
 import { between } from '../../utils/format/format.js'
 import { prevent } from '../../utils/event/event.js'
-import { hSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hSlot } from '../../utils/private.render/render.js'
 
 const PULLER_HEIGHT = 40,
   OFFSET_TOP = 20

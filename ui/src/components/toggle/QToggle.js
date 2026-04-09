@@ -1,10 +1,10 @@
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
 import useCheckbox, {
-  useCheckboxProps,
-  useCheckboxEmits
+  useCheckboxEmits,
+  useCheckboxProps
 } from '../checkbox/use-checkbox.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

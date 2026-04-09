@@ -1,4 +1,4 @@
-import { h, ref, computed, getCurrentInstance, toRaw } from 'vue'
+import { computed, getCurrentInstance, h, ref, toRaw } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
@@ -10,14 +10,14 @@ import useSize, {
 } from '../../composables/private.use-size/use-size.js'
 import useRefocusTarget from '../../composables/private.use-refocus-target/use-refocus-target.js'
 import {
-  useFormProps,
-  useFormInject
+  useFormInject,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import optionSizes from '../../utils/private.option-sizes/option-sizes.js'
 import { stopAndPrevent } from '../../utils/event/event.js'
-import { hSlot, hMergeSlot } from '../../utils/private.render/render.js'
+import { hMergeSlot, hSlot } from '../../utils/private.render/render.js'
 
 const createSvg = () =>
   h(

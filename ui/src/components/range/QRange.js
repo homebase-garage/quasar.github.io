@@ -1,9 +1,9 @@
-import { h, ref, computed, watch, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, watch } from 'vue'
 
 import useSlider, {
-  useSliderProps,
+  keyCodes,
   useSliderEmits,
-  keyCodes
+  useSliderProps
 } from '../slider/use-slider.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
@@ -325,7 +325,7 @@ export default createComponent({
           }
           break
 
-        case dragType.RANGE:
+        case dragType.RANGE: {
           const ratioDelta = ratio - dragging.offsetRatio,
             minR = between(
               dragging.ratioMin + ratioDelta,
@@ -348,6 +348,7 @@ export default createComponent({
 
           state.focus.value = 'both'
           break
+        }
       }
 
       // If either of the values to be emitted are null, set them to the defaults the user has entered.

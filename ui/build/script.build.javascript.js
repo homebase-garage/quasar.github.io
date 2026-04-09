@@ -2,12 +2,12 @@ import fse from 'fs-extra'
 import { build as rolldownBuild } from 'rolldown'
 
 import {
-  version,
+  BUILD_TARGETS,
   banner,
-  resolveToRoot,
   logError,
-  writeFile,
-  BUILD_TARGETS
+  resolveToRoot,
+  version,
+  writeFile
 } from './build.utils.js'
 
 import prepareDiff from './prepare-diff.js'

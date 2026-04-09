@@ -1,9 +1,9 @@
 import {
-  version,
-  resolveToRoot,
+  kebabCase,
   logError,
-  writeFile,
-  kebabCase
+  resolveToRoot,
+  version,
+  writeFile
 } from './build.utils.js'
 
 const resolve = file => resolveToRoot('dist/web-types', file)

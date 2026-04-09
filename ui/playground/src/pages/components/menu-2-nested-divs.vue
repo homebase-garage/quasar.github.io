@@ -125,14 +125,14 @@
 
 <script>
 import {
-  h,
-  ref,
   computed,
-  watch,
+  getCurrentInstance,
+  h,
   nextTick,
   onBeforeUnmount,
   onMounted,
-  getCurrentInstance
+  ref,
+  watch
 } from 'vue'
 
 export default {

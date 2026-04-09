@@ -1,11 +1,11 @@
 import {
+  KeepAlive,
+  Transition,
+  computed,
+  getCurrentInstance,
   h,
   ref,
-  computed,
-  watch,
-  getCurrentInstance,
-  Transition,
-  KeepAlive
+  watch
 } from 'vue'
 
 import TouchSwipe from '../../directives/touch-swipe/TouchSwipe.js'
@@ -212,6 +212,8 @@ export default function usePanel() {
         updatePanelTransition(direction)
         forcedPanelTransition = true
         emit('update:modelValue', opt.props.name)
+
+        // oxlint-disable-next-line no-loop-func
         setTimeout(() => {
           forcedPanelTransition = false
         })

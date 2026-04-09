@@ -1,10 +1,10 @@
 import {
-  ref,
-  watch,
-  onMounted,
-  onBeforeUnmount,
+  getCurrentInstance,
   nextTick,
-  getCurrentInstance
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import { clearSelection } from '../../utils/private.selection/selection.js'

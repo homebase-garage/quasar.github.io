@@ -1,4 +1,4 @@
-import { h, ref, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref } from 'vue'
 
 import { client } from '../../plugins/platform/Platform.js'
 import { stop, stopAndPrevent } from '../../utils/event/event.js'

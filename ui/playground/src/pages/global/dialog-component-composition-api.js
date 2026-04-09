@@ -1,14 +1,14 @@
-import { h, ref, defineComponent } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import {
-  useQuasar,
-  useDialogPluginComponent,
-  QDialog,
-  QCard,
-  QCardSection,
-  QCardActions,
   QBtn,
-  QSelect
+  QCard,
+  QCardActions,
+  QCardSection,
+  QDialog,
+  QSelect,
+  useDialogPluginComponent,
+  useQuasar
 } from 'quasar'
 
 const options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']

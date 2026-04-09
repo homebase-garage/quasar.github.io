@@ -74,7 +74,7 @@ export default {
               this.imgLoaded.resolve = () => {}
               this.imgLoaded.reject = () => {}
 
-              reject()
+              reject(new Error('Error loading image'))
             }
           })
 

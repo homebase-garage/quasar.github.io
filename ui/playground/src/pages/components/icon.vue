@@ -150,7 +150,7 @@ import svgBootstrapiconsSet from 'quasar/icon-set/svg-bootstrap-icons'
 
 import { matAddBox } from '@quasar/extras/material-icons'
 import { mdiAirballoon } from '@quasar/extras/mdi-v7'
-import { ionMdAirplane, ionIosAirplane } from '@quasar/extras/ionicons-v4'
+import { ionIosAirplane, ionMdAirplane } from '@quasar/extras/ionicons-v4'
 import { ionCarOutline } from '@quasar/extras/ionicons-v8'
 import { fabGithub } from '@quasar/extras/fontawesome-v7'
 import { evaPaperPlaneOutline } from '@quasar/extras/eva-icons'

@@ -1,8 +1,8 @@
 import { createDirective } from '../../utils/private.create/create.js'
 import {
+  getHorizontalScrollPosition,
   getScrollTarget,
-  getVerticalScrollPosition,
-  getHorizontalScrollPosition
+  getVerticalScrollPosition
 } from '../../utils/scroll/scroll.js'
 import { listenOpts } from '../../utils/event/event.js'
 import getSSRProps from '../../utils/private.noop-ssr-directive-transform/noop-ssr-directive-transform.js'

@@ -1,5 +1,5 @@
-import { mount, flushPromises } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, test } from 'vitest'
 
 // import QBreadcrumbs from './QBreadcrumbs.js'
 

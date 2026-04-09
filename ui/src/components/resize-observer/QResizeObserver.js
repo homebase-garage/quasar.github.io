@@ -1,9 +1,9 @@
 import {
-  h,
-  onMounted,
-  onBeforeUnmount,
   getCurrentInstance,
-  nextTick
+  h,
+  nextTick,
+  onBeforeUnmount,
+  onMounted
 } from 'vue'
 
 import useHydration from '../../composables/use-hydration/use-hydration.js'
@@ -34,9 +34,7 @@ export default createComponent({
   emits: ['resize'],
 
   setup(props, { emit }) {
-    if (__QUASAR_SSR_SERVER__) {
-      return noop
-    }
+    if (__QUASAR_SSR_SERVER__) return noop
 
     let timer = null,
       targetEl,
@@ -111,62 +109,58 @@ export default createComponent({
       })
 
       return noop
-    } else {
-      // no observer, so fallback to old iframe method
-      const { isHydrated } = useHydration()
+    }
 
-      let curDocView
+    // no observer, so fallback to old iframe method
+    const { isHydrated } = useHydration()
 
-      function cleanup() {
-        if (timer !== null) {
-          clearTimeout(timer)
-          timer = null
-        }
+    let curDocView
 
-        if (curDocView !== void 0) {
-          // iOS is fuzzy, need to check it first
-          if (curDocView.removeEventListener !== void 0) {
-            curDocView.removeEventListener(
-              'resize',
-              trigger,
-              listenOpts.passive
-            )
-          }
-          curDocView = void 0
-        }
+    const cleanup = () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+        timer = null
       }
 
-      function onObjLoad() {
-        cleanup()
-
-        if (targetEl?.contentDocument) {
-          curDocView = targetEl.contentDocument.defaultView
-          curDocView.addEventListener('resize', trigger, listenOpts.passive)
-          emitEvent()
+      if (curDocView !== void 0) {
+        // iOS is fuzzy, need to check it first
+        if (curDocView.removeEventListener !== void 0) {
+          curDocView.removeEventListener('resize', trigger, listenOpts.passive)
         }
+        curDocView = void 0
       }
+    }
 
-      onMounted(() => {
-        nextTick(() => {
-          targetEl = proxy.$el
-          if (targetEl) onObjLoad()
-        })
+    const onObjLoad = () => {
+      cleanup()
+
+      if (targetEl?.contentDocument) {
+        curDocView = targetEl.contentDocument.defaultView
+        curDocView.addEventListener('resize', trigger, listenOpts.passive)
+        emitEvent()
+      }
+    }
+
+    onMounted(() => {
+      nextTick(() => {
+        targetEl = proxy.$el
+        if (targetEl) onObjLoad()
       })
+    })
 
-      onBeforeUnmount(cleanup)
+    onBeforeUnmount(cleanup)
 
-      return () => {
-        if (isHydrated.value === true) {
-          return h('object', {
-            class: 'q--avoid-card-border',
-            style: resizeProps.style,
-            tabindex: -1, // fix for Firefox
-            type: 'text/html',
-            data: resizeProps.url,
-            'aria-hidden': 'true',
-            onLoad: onObjLoad
-          })
-        }
+    return () => {
+      if (isHydrated.value === true) {
+        return h('object', {
+          class: 'q--avoid-card-border',
+          style: resizeProps.style,
+          tabindex: -1, // fix for Firefox
+          type: 'text/html',
+          data: resizeProps.url,
+          'aria-hidden': 'true',
+          onLoad: onObjLoad
+        })
       }
     }
   }

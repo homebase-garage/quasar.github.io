@@ -1,7 +1,7 @@
 import { config } from '@vue/test-utils'
 import { expect } from 'vitest'
 
-import { isRef, isReactive } from 'vue'
+import { isReactive, isRef } from 'vue'
 
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'

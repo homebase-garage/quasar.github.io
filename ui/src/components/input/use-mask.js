@@ -1,4 +1,4 @@
-import { ref, computed, watch, nextTick } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
 import { shouldIgnoreKey } from '../../utils/private.keyboard/key-composition.js'
 
@@ -59,6 +59,7 @@ function getTokenMap(tokens) {
 
 function getTokenRegexMask(keys) {
   return new RegExp(
+    // oxlint-disable-next-line no-template-curly-in-string
     '\\\\([^.*+?^${}()|([\\]])|([.*+?^${}()|[\\]])|([' +
       keys.join('') +
       '])|(.)',

@@ -1,4 +1,4 @@
-import { h, ref, computed, onBeforeUpdate, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, onBeforeUpdate, ref } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
@@ -6,9 +6,9 @@ import useSize, {
   useSizeProps
 } from '../../composables/private.use-size/use-size.js'
 import {
-  useFormProps,
   useFormAttrs,
-  useFormInject
+  useFormInject,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

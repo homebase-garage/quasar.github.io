@@ -1,13 +1,13 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
-  withDirectives,
-  vShow,
-  nextTick,
   getCurrentInstance,
-  onBeforeUpdate
+  h,
+  nextTick,
+  onBeforeUpdate,
+  ref,
+  vShow,
+  watch,
+  withDirectives
 } from 'vue'
 
 import QIcon from '../icon/QIcon.js'

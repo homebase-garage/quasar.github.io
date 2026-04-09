@@ -1,4 +1,4 @@
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 import QBtn from '../btn/QBtn.js'
 import QBtnGroup from '../btn-group/QBtnGroup.js'

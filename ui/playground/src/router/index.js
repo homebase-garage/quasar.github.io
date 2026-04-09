@@ -1,8 +1,8 @@
 import {
-  createRouter,
   createMemoryHistory,
-  createWebHistory,
-  createWebHashHistory
+  createRouter,
+  createWebHashHistory,
+  createWebHistory
 } from 'vue-router'
 
 import routes from './routes'

@@ -1,10 +1,10 @@
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 import {
-  QDialog,
-  QCard,
-  QCardSection,
-  QCardActions,
   QBtn,
+  QCard,
+  QCardActions,
+  QCardSection,
+  QDialog,
   QSelect
 } from 'quasar'
 

@@ -1,25 +1,25 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
-  onMounted,
-  onActivated,
-  onDeactivated,
-  onBeforeUnmount,
+  getCurrentInstance,
+  h,
   nextTick,
-  getCurrentInstance
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
 } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import debounce from '../../utils/debounce/debounce.js'
 import { height } from '../../utils/dom/dom.js'
 import {
-  getScrollTarget,
   getScrollHeight,
+  getScrollTarget,
   getVerticalScrollPosition,
-  setVerticalScrollPosition,
-  scrollTargetProp
+  scrollTargetProp,
+  setVerticalScrollPosition
 } from '../../utils/scroll/scroll.js'
 import { listenOpts } from '../../utils/event/event.js'
 import { hSlot, hUniqueSlot } from '../../utils/private.render/render.js'

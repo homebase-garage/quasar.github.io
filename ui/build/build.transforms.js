@@ -5,12 +5,12 @@ import path from 'node:path'
 import { globSync } from 'tinyglobby'
 
 import {
-  rootFolder,
-  resolveToRoot,
-  relativeToRoot,
-  writeFile,
+  filterOutPrivateFiles,
   kebabCase,
-  filterOutPrivateFiles
+  relativeToRoot,
+  resolveToRoot,
+  rootFolder,
+  writeFile
 } from './build.utils.js'
 
 function relative(name) {

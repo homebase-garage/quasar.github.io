@@ -1,11 +1,11 @@
-import { h, ref, computed, Transition } from 'vue'
+import { Transition, computed, h, ref } from 'vue'
 
 import { isRuntimeSsrPreHydration } from '../../plugins/platform/Platform.js'
 
 import Intersection from '../../directives/intersection/Intersection.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
-import { hSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hSlot } from '../../utils/private.render/render.js'
 
 export default createComponent({
   name: 'QIntersection',

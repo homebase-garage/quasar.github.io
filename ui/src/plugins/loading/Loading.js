@@ -1,4 +1,4 @@
-import { h, Transition, onMounted } from 'vue'
+import { Transition, h, onMounted } from 'vue'
 
 import QSpinner from '../../components/spinner/QSpinner.js'
 

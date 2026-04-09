@@ -3,8 +3,8 @@
  * [(modifier)center]
  */
 
-import { mount, flushPromises } from '@vue/test-utils'
-import { describe, test, expect } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { describe, expect, test } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
 import Ripple from './Ripple.js'

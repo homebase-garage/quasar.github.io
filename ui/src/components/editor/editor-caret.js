@@ -214,18 +214,20 @@ export default class Caret {
         return this.hasParent('A', true)
       case 'fontSize':
         return document.queryCommandValue(cmd) === param
-      case 'fontName':
+      case 'fontName': {
         const res = document.queryCommandValue(cmd)
         return res === `"${param}"` || res === param
+      }
       case 'fullscreen':
         return this.eVm.inFullscreen.value
       case 'viewsource':
         return this.eVm.isViewingSource.value
       case void 0:
         return false
-      default:
+      default: {
         const state = document.queryCommandState(cmd)
         return param !== void 0 ? state === param : state
+      }
     }
   }
 

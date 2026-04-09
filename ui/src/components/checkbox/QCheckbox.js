@@ -1,11 +1,11 @@
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import useCheckbox, {
-  useCheckboxProps,
-  useCheckboxEmits
+  useCheckboxEmits,
+  useCheckboxProps
 } from './use-checkbox.js'
 
 const createBgNode = () =>

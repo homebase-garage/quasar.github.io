@@ -1,12 +1,12 @@
 import {
-  h,
-  ref,
   computed,
-  watch,
+  getCurrentInstance,
+  h,
   onActivated,
-  onDeactivated,
   onBeforeUnmount,
-  getCurrentInstance
+  onDeactivated,
+  ref,
+  watch
 } from 'vue'
 
 import useDark, {
@@ -22,8 +22,8 @@ import TouchPan from '../../directives/touch-pan/TouchPan.js'
 import { createComponent } from '../../utils/private.create/create.js'
 import { between } from '../../utils/format/format.js'
 import {
-  setVerticalScrollPosition,
-  setHorizontalScrollPosition
+  setHorizontalScrollPosition,
+  setVerticalScrollPosition
 } from '../../utils/scroll/scroll.js'
 import { hMergeSlot } from '../../utils/private.render/render.js'
 import debounce from '../../utils/debounce/debounce.js'

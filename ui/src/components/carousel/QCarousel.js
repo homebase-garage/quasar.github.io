@@ -1,10 +1,10 @@
 import {
-  h,
   computed,
-  watch,
-  onMounted,
+  getCurrentInstance,
+  h,
   onBeforeUnmount,
-  getCurrentInstance
+  onMounted,
+  watch
 } from 'vue'
 
 import QBtn from '../btn/QBtn.js'
@@ -13,17 +13,17 @@ import useDark, {
   useDarkProps
 } from '../../composables/private.use-dark/use-dark.js'
 import usePanel, {
-  usePanelProps,
-  usePanelEmits
+  usePanelEmits,
+  usePanelProps
 } from '../../composables/private.use-panel/use-panel.js'
 import useFullscreen, {
-  useFullscreenProps,
-  useFullscreenEmits
+  useFullscreenEmits,
+  useFullscreenProps
 } from '../../composables/private.use-fullscreen/use-fullscreen.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { isNumber } from '../../utils/is/is.js'
-import { hMergeSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hMergeSlot } from '../../utils/private.render/render.js'
 
 const navigationPositionOptions = ['top', 'right', 'bottom', 'left']
 const controlTypeOptions = ['regular', 'flat', 'outline', 'push', 'unelevated']

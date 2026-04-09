@@ -1,12 +1,12 @@
-import { h, computed, inject } from 'vue'
+import { computed, h, inject } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { hSlot, hUniqueSlot } from '../../utils/private.render/render.js'
 import {
-  timelineKey,
-  emptyRenderFn
+  emptyRenderFn,
+  timelineKey
 } from '../../utils/private.symbols/symbols.js'
 
 export default createComponent({

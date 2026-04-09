@@ -1,4 +1,4 @@
-import { h, ref, computed, watch, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, watch } from 'vue'
 
 import QCircularProgress from '../circular-progress/QCircularProgress.js'
 import TouchPan from '../../directives/touch-pan/TouchPan.js'
@@ -9,8 +9,8 @@ import { between, normalizeToInterval } from '../../utils/format/format.js'
 import { hDir } from '../../utils/private.render/render.js'
 
 import {
-  useFormProps,
-  useFormAttrs
+  useFormAttrs,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 import { useCircularCommonProps } from '../circular-progress/circular-progress.js'
 

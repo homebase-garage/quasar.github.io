@@ -1,4 +1,4 @@
-import { h, getCurrentInstance } from 'vue'
+import { getCurrentInstance, h } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 

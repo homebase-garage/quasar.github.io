@@ -1,4 +1,4 @@
-import { h, ref, computed, getCurrentInstance, toRaw } from 'vue'
+import { computed, getCurrentInstance, h, ref, toRaw } from 'vue'
 
 import useDark, {
   useDarkProps
@@ -14,7 +14,7 @@ import {
 
 import optionSizes from '../../utils/private.option-sizes/option-sizes.js'
 import { stopAndPrevent } from '../../utils/event/event.js'
-import { hSlot, hMergeSlot } from '../../utils/private.render/render.js'
+import { hMergeSlot, hSlot } from '../../utils/private.render/render.js'
 
 export const useCheckboxProps = {
   ...useDarkProps,

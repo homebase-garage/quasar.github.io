@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { h, defineComponent } from 'vue'
+import { defineComponent, h } from 'vue'
 
 const TestComponent = defineComponent({
   inject: {

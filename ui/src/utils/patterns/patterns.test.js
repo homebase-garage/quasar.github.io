@@ -1,6 +1,6 @@
 // oxlint-disable import/no-named-as-default-member
 
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import patterns from './patterns.js'
 

@@ -1,4 +1,4 @@
-import { h, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import useDark, {

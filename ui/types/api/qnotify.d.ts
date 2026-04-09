@@ -1,4 +1,4 @@
-import { QNotifyCreateOptions, QBtnProps } from "quasar";
+import { QBtnProps, QNotifyCreateOptions } from "quasar";
 import { ButtonHTMLAttributes } from "vue";
 
 export type QNotifyUpdateOptions = Omit<

@@ -1,4 +1,4 @@
-import { h, ref, computed, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, onBeforeUnmount, ref } from 'vue'
 
 import TouchPan from '../../directives/touch-pan/TouchPan.js'
 
@@ -6,8 +6,8 @@ import useDark, {
   useDarkProps
 } from '../../composables/private.use-dark/use-dark.js'
 import {
-  useFormProps,
-  useFormInject
+  useFormInject,
+  useFormProps
 } from '../../composables/use-form/private.use-form.js'
 
 import { between } from '../../utils/format/format.js'

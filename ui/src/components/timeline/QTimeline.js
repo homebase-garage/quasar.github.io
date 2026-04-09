@@ -1,4 +1,4 @@
-import { h, computed, provide, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, provide } from 'vue'
 
 import useDark, {
   useDarkProps

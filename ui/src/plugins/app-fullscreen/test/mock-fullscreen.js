@@ -1,4 +1,4 @@
-import { vi, onTestFinished } from 'vitest'
+import { onTestFinished, vi } from 'vitest'
 
 /**
  * jsdom does not support Fullscreen API,

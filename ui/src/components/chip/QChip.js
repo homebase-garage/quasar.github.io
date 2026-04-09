@@ -1,4 +1,4 @@
-import { h, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 
@@ -13,7 +13,7 @@ import useSize, {
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { stopAndPrevent } from '../../utils/event/event.js'
-import { hMergeSlotSafely, hDir } from '../../utils/private.render/render.js'
+import { hDir, hMergeSlotSafely } from '../../utils/private.render/render.js'
 
 export const defaultSizes = {
   xs: 8,

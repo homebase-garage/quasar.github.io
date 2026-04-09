@@ -12,9 +12,9 @@ import IconSet from './plugins/icon-set/IconSet.js'
 
 import { quasarKey } from './utils/private.symbols/symbols.js'
 import {
+  freezeGlobalConfig,
   globalConfig,
-  globalConfigIsFrozen,
-  freezeGlobalConfig
+  globalConfigIsFrozen
 } from './utils/private.config/instance-config.js'
 import { isObject } from './utils/is/is.js'
 

@@ -4,8 +4,8 @@ import useDark, {
   useDarkProps
 } from '../../composables/private.use-dark/use-dark.js'
 import usePanel, {
-  usePanelProps,
-  usePanelEmits
+  usePanelEmits,
+  usePanelProps
 } from '../../composables/private.use-panel/use-panel.js'
 
 import { createComponent } from '../../utils/private.create/create.js'

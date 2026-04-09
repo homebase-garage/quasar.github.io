@@ -1,5 +1,5 @@
 import { green } from 'kolorist'
-import { version, createFolder } from './build.utils.js'
+import { createFolder, version } from './build.utils.js'
 
 const type = process.argv[2]
 const subtype = process.argv[3]

@@ -1,4 +1,4 @@
-import { h, ref, computed, watch, nextTick, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, nextTick, ref, watch } from 'vue'
 
 import TouchPan from '../../directives/touch-pan/TouchPan.js'
 
@@ -7,7 +7,7 @@ import useDark, {
 } from '../../composables/private.use-dark/use-dark.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
-import { hSlot, hMergeSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hMergeSlot, hSlot } from '../../utils/private.render/render.js'
 
 export default createComponent({
   name: 'QSplitter',

@@ -86,7 +86,7 @@
 <script>
 import { Loading, QSpinnerFacebook, QSpinnerGears, useQuasar } from 'quasar'
 
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 function show(options, timeout = 3000) {
   Loading.show(options)
@@ -216,7 +216,9 @@ export default {
         for (let i = 0; i < showCount.value; i++) {
           Loading.show()
 
-          await new Promise(resolve => setTimeout(resolve, 2000))
+          await new Promise(resolve => {
+            setTimeout(resolve, 2000)
+          })
 
           Loading.hide()
         }

@@ -1049,7 +1049,9 @@ export default function morph(_options) {
     ) {
       const delayPromise =
         options.waitFor > 0
-          ? new Promise(resolve => setTimeout(resolve, options.waitFor))
+          ? new Promise(resolve => {
+              setTimeout(resolve, options.waitFor)
+            })
           : options.waitFor === 'transitionend'
             ? new Promise(resolve => {
                 const endFn = () => {

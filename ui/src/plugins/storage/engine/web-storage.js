@@ -40,9 +40,10 @@ function decode(value) {
   const source = value.slice(9)
 
   switch (type) {
-    case '__q_date':
+    case '__q_date': {
       const number = Number(source)
       return new Date(Number.isNaN(number) === true ? source : number)
+    }
 
     case '__q_expr':
       return new RegExp(source)

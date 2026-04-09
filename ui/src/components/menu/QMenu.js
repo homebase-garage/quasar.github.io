@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
-  computed,
-  watch,
   Transition,
+  computed,
+  getCurrentInstance,
+  h,
   onBeforeUnmount,
-  getCurrentInstance
+  ref,
+  watch
 } from 'vue'
 
 import useAnchor, {
@@ -13,8 +13,8 @@ import useAnchor, {
 } from '../../composables/private.use-anchor/use-anchor.js'
 import useScrollTarget from '../../composables/private.use-scroll-target/use-scroll-target.js'
 import useModelToggle, {
-  useModelToggleProps,
-  useModelToggleEmits
+  useModelToggleEmits,
+  useModelToggleProps
 } from '../../composables/private.use-model-toggle/use-model-toggle.js'
 import useDark, {
   useDarkProps
@@ -47,10 +47,10 @@ import {
 import { addFocusFn } from '../../utils/private.focus/focus-manager.js'
 
 import {
-  validatePosition,
-  validateOffset,
+  parsePosition,
   setPosition,
-  parsePosition
+  validateOffset,
+  validatePosition
 } from '../../utils/private.position-engine/position-engine.js'
 
 export default createComponent({

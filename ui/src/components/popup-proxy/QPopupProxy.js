@@ -1,4 +1,4 @@
-import { h, ref, computed, watch, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, watch } from 'vue'
 
 import QDialog from '../dialog/QDialog.js'
 import QMenu from '../menu/QMenu.js'

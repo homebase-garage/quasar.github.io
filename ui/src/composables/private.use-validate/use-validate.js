@@ -1,4 +1,4 @@
-import { ref, computed, watch, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, onBeforeUnmount, ref, watch } from 'vue'
 
 import useFormChild from '../use-form/use-form-child.js'
 import { testPattern } from '../../utils/patterns/patterns.js'

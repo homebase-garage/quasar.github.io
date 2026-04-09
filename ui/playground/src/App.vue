@@ -88,8 +88,8 @@
 </template>
 
 <script setup>
-import { Quasar, Dark, useQuasar, useMeta } from 'quasar'
-import { ref, watch, onMounted } from 'vue'
+import { Dark, Quasar, useMeta, useQuasar } from 'quasar'
+import { onMounted, ref, watch } from 'vue'
 import languages from 'quasar/lang/index.json'
 
 const langList = import.meta.glob('../../lang/*.js')

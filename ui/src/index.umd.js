@@ -1,3 +1,5 @@
+// oxlint-disable import/no-namespace
+
 /**
  * UMD entry-point
  */

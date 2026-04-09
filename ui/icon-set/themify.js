@@ -2,26 +2,26 @@
    so we import them from MDI as svg */
 
 import {
+  mdiCodeTags,
   mdiFormatBold,
-  mdiFormatStrikethroughVariant,
-  mdiFormatSubscript,
-  mdiFormatSuperscript,
   mdiFormatClear,
+  mdiFormatFont,
   mdiFormatHeader1,
   mdiFormatHeader2,
   mdiFormatHeader3,
   mdiFormatHeader4,
   mdiFormatHeader5,
   mdiFormatHeader6,
-  mdiCodeTags,
+  mdiFormatStrikethroughVariant,
+  mdiFormatSubscript,
+  mdiFormatSuperscript,
   mdiNumeric1Box,
   mdiNumeric2Box,
   mdiNumeric3Box,
   mdiNumeric4Box,
   mdiNumeric5Box,
   mdiNumeric6Box,
-  mdiNumeric7Box,
-  mdiFormatFont
+  mdiNumeric7Box
 } from '@quasar/extras/mdi-v6'
 
 export default {

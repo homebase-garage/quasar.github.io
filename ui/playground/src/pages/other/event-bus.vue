@@ -17,14 +17,14 @@
 
 <script setup>
 import {
-  h,
-  ref,
   computed,
-  watch,
+  getCurrentInstance,
+  h,
   nextTick,
   onBeforeUnmount,
   onMounted,
-  getCurrentInstance
+  ref,
+  watch
 } from 'vue'
 import { EventBus } from 'quasar'
 

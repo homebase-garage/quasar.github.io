@@ -1,4 +1,4 @@
-import { onDeactivated, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onDeactivated } from 'vue'
 
 import { vmIsDestroyed } from '../../utils/private.vm/vm.js'
 

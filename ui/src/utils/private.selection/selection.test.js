@@ -1,4 +1,4 @@
-import { describe, test, expect, onTestFinished } from 'vitest'
+import { describe, expect, onTestFinished, test } from 'vitest'
 
 import { clearSelection } from './selection.js'
 

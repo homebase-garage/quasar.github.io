@@ -88,7 +88,7 @@
 
 <script>
 import { h } from 'vue'
-import { QInput, QForm } from 'quasar'
+import { QForm, QInput } from 'quasar'
 
 export default {
   components: {

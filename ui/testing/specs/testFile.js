@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import { Parser } from 'acorn'
 
 import { camelCase } from './specs.utils.js'
-import { getGenerator, generic as genericGenerator } from './generators/map.js'
+import { generic as genericGenerator, getGenerator } from './generators/map.js'
 
 const ignoreCommentLineMaxLen = 100
 const ignoreCommentRE =

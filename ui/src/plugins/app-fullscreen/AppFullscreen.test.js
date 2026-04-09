@@ -1,5 +1,5 @@
-import { describe, test, expect, afterEach } from 'vitest'
-import { mount, config } from '@vue/test-utils'
+import { afterEach, describe, expect, test } from 'vitest'
+import { config, mount } from '@vue/test-utils'
 
 // jsdom hack
 // this import should always sit before the AppFullscreen one

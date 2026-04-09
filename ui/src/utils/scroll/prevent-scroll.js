@@ -1,7 +1,7 @@
 import {
-  hasScrollbar,
+  getHorizontalScrollPosition,
   getVerticalScrollPosition,
-  getHorizontalScrollPosition
+  hasScrollbar
 } from './scroll.js'
 import { getEventPath, listenOpts, stopAndPrevent } from '../event/event.js'
 import { client } from '../../plugins/platform/Platform.js'

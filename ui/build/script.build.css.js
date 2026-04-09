@@ -4,11 +4,11 @@ import postcss from 'postcss'
 import { transform } from 'lightningcss'
 
 import {
+  BUILD_TARGETS,
   banner,
-  resolveToRoot,
   readFile,
-  writeFile,
-  BUILD_TARGETS
+  resolveToRoot,
+  writeFile
 } from './build.utils.js'
 import prepareDiff from './prepare-diff.js'
 

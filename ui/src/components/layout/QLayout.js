@@ -1,12 +1,12 @@
 import {
-  h,
-  ref,
-  reactive,
   computed,
-  watch,
-  provide,
+  getCurrentInstance,
+  h,
   onUnmounted,
-  getCurrentInstance
+  provide,
+  reactive,
+  ref,
+  watch
 } from 'vue'
 
 import { isRuntimeSsrPreHydration } from '../../plugins/platform/Platform.js'
@@ -193,12 +193,12 @@ export default createComponent({
       let timer = null
       const el = document.body
 
-      function restoreScrollbar() {
+      const restoreScrollbar = () => {
         timer = null
         el.classList.remove('hide-scrollbar')
       }
 
-      function hideScrollbar() {
+      const hideScrollbar = () => {
         if (timer === null) {
           // if it has no scrollbar then there's nothing to do
           if (el.scrollHeight > $q.screen.height) return
@@ -211,7 +211,7 @@ export default createComponent({
         timer = setTimeout(restoreScrollbar, 300)
       }
 
-      function updateScrollEvent(action) {
+      const updateScrollEvent = action => {
         if (timer !== null && action === 'remove') {
           clearTimeout(timer)
           restoreScrollbar()

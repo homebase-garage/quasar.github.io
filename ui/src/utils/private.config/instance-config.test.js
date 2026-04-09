@@ -1,10 +1,10 @@
-import { describe, test, expect } from 'vitest'
-import { mount, config } from '@vue/test-utils'
+import { describe, expect, test } from 'vitest'
+import { config, mount } from '@vue/test-utils'
 
 import {
+  freezeGlobalConfig,
   globalConfig,
-  globalConfigIsFrozen,
-  freezeGlobalConfig
+  globalConfigIsFrozen
 } from './instance-config.js'
 
 // We override Quasar install so we have a custom $q.config

@@ -1,4 +1,4 @@
-import { h, computed, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h } from 'vue'
 
 import QRadio from '../radio/QRadio.js'
 import QCheckbox from '../checkbox/QCheckbox.js'

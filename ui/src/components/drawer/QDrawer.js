@@ -1,20 +1,20 @@
 import {
-  h,
-  withDirectives,
-  ref,
   computed,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  nextTick,
+  getCurrentInstance,
+  h,
   inject,
-  getCurrentInstance
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  withDirectives
 } from 'vue'
 
 import useHistory from '../../composables/private.use-history/use-history.js'
 import useModelToggle, {
-  useModelToggleProps,
-  useModelToggleEmits
+  useModelToggleEmits,
+  useModelToggleProps
 } from '../../composables/private.use-model-toggle/use-model-toggle.js'
 import usePreventScroll from '../../composables/private.use-prevent-scroll/use-prevent-scroll.js'
 import useTimeout from '../../composables/use-timeout/use-timeout.js'
@@ -26,10 +26,10 @@ import TouchPan from '../../directives/touch-pan/TouchPan.js'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { between } from '../../utils/format/format.js'
-import { hSlot, hDir } from '../../utils/private.render/render.js'
+import { hDir, hSlot } from '../../utils/private.render/render.js'
 import {
-  layoutKey,
-  emptyRenderFn
+  emptyRenderFn,
+  layoutKey
 } from '../../utils/private.symbols/symbols.js'
 
 const duration = 150

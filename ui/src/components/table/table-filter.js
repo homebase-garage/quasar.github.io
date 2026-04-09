@@ -1,4 +1,4 @@
-import { computed, watch, nextTick } from 'vue'
+import { computed, nextTick, watch } from 'vue'
 
 export const useTableFilterProps = {
   filter: [String, Object],

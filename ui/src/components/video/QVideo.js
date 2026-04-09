@@ -1,4 +1,4 @@
-import { h, computed } from 'vue'
+import { computed, h } from 'vue'
 
 import useRatio, {
   useRatioProps

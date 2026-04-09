@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import useSpinner, { useSpinnerProps } from './use-spinner.js'
 import { useSizeDefaults } from 'quasar/src/composables/private.use-size/use-size.js'

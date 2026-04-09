@@ -1,4 +1,4 @@
-import { h, ref, computed, withDirectives, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, ref, withDirectives } from 'vue'
 
 import QIcon from '../icon/QIcon.js'
 import Ripple from '../../directives/ripple/Ripple.js'

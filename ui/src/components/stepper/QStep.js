@@ -1,4 +1,4 @@
-import { h, ref, computed, inject, getCurrentInstance, KeepAlive } from 'vue'
+import { KeepAlive, computed, getCurrentInstance, h, inject, ref } from 'vue'
 
 import QSlideTransition from '../slide-transition/QSlideTransition.js'
 import StepHeader from './StepHeader.js'
@@ -8,8 +8,8 @@ import useRenderCache from '../../composables/use-render-cache/use-render-cache.
 
 import { createComponent } from '../../utils/private.create/create.js'
 import {
-  stepperKey,
-  emptyRenderFn
+  emptyRenderFn,
+  stepperKey
 } from '../../utils/private.symbols/symbols.js'
 import { hSlot } from '../../utils/private.render/render.js'
 

@@ -1,11 +1,11 @@
-import { h, computed, provide, inject, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, inject, provide } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { hSlot } from '../../utils/private.render/render.js'
 import {
-  pageContainerKey,
+  emptyRenderFn,
   layoutKey,
-  emptyRenderFn
+  pageContainerKey
 } from '../../utils/private.symbols/symbols.js'
 
 export default createComponent({

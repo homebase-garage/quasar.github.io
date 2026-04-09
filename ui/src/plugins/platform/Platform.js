@@ -1,6 +1,6 @@
 // oxlint-disable no-useless-escape
 
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { injectProp } from '../../utils/private.inject-obj-prop/inject-obj-prop.js'
 
 /**

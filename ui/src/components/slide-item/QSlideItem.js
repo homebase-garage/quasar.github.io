@@ -1,11 +1,11 @@
 import {
-  h,
-  ref,
   computed,
-  withDirectives,
+  getCurrentInstance,
+  h,
   onBeforeUnmount,
   onBeforeUpdate,
-  getCurrentInstance
+  ref,
+  withDirectives
 } from 'vue'
 
 import TouchPan from '../../directives/touch-pan/TouchPan.js'

@@ -1,5 +1,5 @@
 import readAssociatedJsonFile from '../readAssociatedJsonFile.js'
-import { testIndent, kebabCase, getTestValue } from '../specs.utils.js'
+import { getTestValue, kebabCase, testIndent } from '../specs.utils.js'
 
 const identifiers = {
   value: {

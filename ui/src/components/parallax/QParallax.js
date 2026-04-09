@@ -1,4 +1,4 @@
-import { h, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { h, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { height, offset } from '../../utils/dom/dom.js'

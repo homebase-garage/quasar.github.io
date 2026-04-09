@@ -1,4 +1,4 @@
-import { ref, getCurrentInstance } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 
 import getEmitsObject from '../../utils/private.get-emits-object/get-emits-object.js'
 

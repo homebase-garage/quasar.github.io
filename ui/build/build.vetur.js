@@ -1,4 +1,4 @@
-import { resolveToRoot, logError, writeFile, kebabCase } from './build.utils.js'
+import { kebabCase, logError, resolveToRoot, writeFile } from './build.utils.js'
 
 const resolve = file => resolveToRoot('dist/vetur', file)
 

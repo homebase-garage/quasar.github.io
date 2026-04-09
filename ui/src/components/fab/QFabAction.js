@@ -1,4 +1,4 @@
-import { h, computed, inject, getCurrentInstance } from 'vue'
+import { computed, getCurrentInstance, h, inject } from 'vue'
 
 import QBtn from '../btn/QBtn.js'
 import QIcon from '../icon/QIcon.js'
