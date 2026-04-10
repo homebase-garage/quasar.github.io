@@ -182,11 +182,10 @@ export default function useBtn(props) {
     let colors
 
     if (props.color !== void 0) {
-      if (props.flat === true || props.outline === true) {
-        colors = `text-${props.textColor || props.color}`
-      } else {
-        colors = `bg-${props.color} text-${props.textColor || 'white'}`
-      }
+      colors =
+        props.flat === true || props.outline === true
+          ? `text-${props.textColor || props.color}`
+          : `bg-${props.color} text-${props.textColor || 'white'}`
     } else if (props.textColor) {
       colors = `text-${props.textColor}`
     }

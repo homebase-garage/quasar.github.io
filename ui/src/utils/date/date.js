@@ -31,126 +31,166 @@ function getRegexData(mask, dateLocale) {
   const regexText = mask.replace(reverseToken, match => {
     index++
     switch (match) {
-      case 'YY':
+      case 'YY': {
         map.YY = index
         return String.raw`(-?\d{1,2})`
-      case 'YYYY':
+      }
+      case 'YYYY': {
         map.YYYY = index
         return String.raw`(-?\d{1,4})`
-      case 'M':
+      }
+      case 'M': {
         map.M = index
         return String.raw`(\d{1,2})`
-      case 'Mo':
+      }
+      case 'Mo': {
         map.M = index++ // bumping to M
         return String.raw`(\d{1,2}(st|nd|rd|th))`
-      case 'MM':
+      }
+      case 'MM': {
         map.M = index // bumping to M
         return String.raw`(\d{2})`
-      case 'MMM':
+      }
+      case 'MMM': {
         map.MMM = index
         return monthsShort
-      case 'MMMM':
+      }
+      case 'MMMM': {
         map.MMMM = index
         return months
-      case 'D':
+      }
+      case 'D': {
         map.D = index
         return String.raw`(\d{1,2})`
-      case 'Do':
+      }
+      case 'Do': {
         map.D = index++ // bumping to D
         return String.raw`(\d{1,2}(st|nd|rd|th))`
-      case 'DD':
+      }
+      case 'DD': {
         map.D = index // bumping to D
         return String.raw`(\d{2})`
-      case 'H':
+      }
+      case 'H': {
         map.H = index
         return String.raw`(\d{1,2})`
-      case 'HH':
+      }
+      case 'HH': {
         map.H = index // bumping to H
         return String.raw`(\d{2})`
-      case 'h':
+      }
+      case 'h': {
         map.h = index
         return String.raw`(\d{1,2})`
-      case 'hh':
+      }
+      case 'hh': {
         map.h = index // bumping to h
         return String.raw`(\d{2})`
-      case 'm':
+      }
+      case 'm': {
         map.m = index
         return String.raw`(\d{1,2})`
-      case 'mm':
+      }
+      case 'mm': {
         map.m = index // bumping to m
         return String.raw`(\d{2})`
-      case 's':
+      }
+      case 's': {
         map.s = index
         return String.raw`(\d{1,2})`
-      case 'ss':
+      }
+      case 'ss': {
         map.s = index // bumping to s
         return String.raw`(\d{2})`
-      case 'S':
+      }
+      case 'S': {
         map.S = index
         return String.raw`(\d{1})`
-      case 'SS':
+      }
+      case 'SS': {
         map.S = index // bump to S
         return String.raw`(\d{2})`
-      case 'SSS':
+      }
+      case 'SSS': {
         map.S = index // bump to S
         return String.raw`(\d{3})`
-      case 'A':
+      }
+      case 'A': {
         map.A = index
         return '(AM|PM)'
-      case 'a':
+      }
+      case 'a': {
         map.a = index
         return '(am|pm)'
-      case 'aa':
+      }
+      case 'aa': {
         map.aa = index
         return String.raw`(a\.m\.|p\.m\.)`
+      }
 
-      case 'ddd':
+      case 'ddd': {
         return daysShort
-      case 'dddd':
+      }
+      case 'dddd': {
         return days
+      }
       case 'Q':
       case 'd':
-      case 'E':
+      case 'E': {
         return String.raw`(\d{1})`
-      case 'do':
+      }
+      case 'do': {
         index++
         return String.raw`(\d{1}(st|nd|rd|th))`
-      case 'Qo':
+      }
+      case 'Qo': {
         return '(1st|2nd|3rd|4th)'
+      }
       case 'DDD':
-      case 'DDDD':
+      case 'DDDD': {
         return String.raw`(\d{1,3})`
-      case 'DDDo':
+      }
+      case 'DDDo': {
         index++
         return String.raw`(\d{1,3}(st|nd|rd|th))`
-      case 'w':
+      }
+      case 'w': {
         return String.raw`(\d{1,2})`
-      case 'wo':
+      }
+      case 'wo': {
         index++
         return String.raw`(\d{1,2}(st|nd|rd|th))`
-      case 'ww':
+      }
+      case 'ww': {
         return String.raw`(\d{2})`
+      }
 
-      case 'Z': // to split: (?:(Z)()()|([+-])?(\\d{2}):?(\\d{2}))
+      case 'Z': {
+        // to split: (?:(Z)()()|([+-])?(\\d{2}):?(\\d{2}))
         map.Z = index
         return String.raw`(Z|[+-]\d{2}:\d{2})`
-      case 'ZZ':
+      }
+      case 'ZZ': {
         map.ZZ = index
         return String.raw`(Z|[+-]\d{2}\d{2})`
+      }
 
-      case 'X':
+      case 'X': {
         map.X = index
         return String.raw`(-?\d+)`
-      case 'x':
+      }
+      case 'x': {
         map.x = index
         return String.raw`(-?\d{4,})`
+      }
 
-      default:
+      default: {
         index--
         if (match[0] === '[') {
           match = match.slice(1, -1)
         }
-        return match.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
+        return match.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
+      }
     }
   })
 
@@ -368,9 +408,9 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
   let tzString = ''
 
   if (map.X !== void 0 || map.x !== void 0) {
-    const stamp = parseInt(match[map.X !== void 0 ? map.X : map.x], 10)
+    const stamp = Number.parseInt(match[map.X !== void 0 ? map.X : map.x], 10)
 
-    if (isNaN(stamp) === true || stamp < 0) {
+    if (Number.isNaN(stamp) === true || stamp < 0) {
       return date
     }
 
@@ -385,14 +425,14 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
     date.millisecond = d.getMilliseconds()
   } else {
     if (map.YYYY !== void 0) {
-      date.year = parseInt(match[map.YYYY], 10)
+      date.year = Number.parseInt(match[map.YYYY], 10)
     } else if (map.YY !== void 0) {
-      const y = parseInt(match[map.YY], 10)
+      const y = Number.parseInt(match[map.YY], 10)
       date.year = y < 0 ? y : 2000 + y
     }
 
     if (map.M !== void 0) {
-      date.month = parseInt(match[map.M], 10)
+      date.month = Number.parseInt(match[map.M], 10)
       if (date.month < 1 || date.month > 12) {
         return date
       }
@@ -403,7 +443,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
     }
 
     if (map.D !== void 0) {
-      date.day = parseInt(match[map.D], 10)
+      date.day = Number.parseInt(match[map.D], 10)
 
       if (date.year === null || date.month === null || date.day < 1) {
         return date
@@ -420,9 +460,9 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
     }
 
     if (map.H !== void 0) {
-      date.hour = parseInt(match[map.H], 10) % 24
+      date.hour = Number.parseInt(match[map.H], 10) % 24
     } else if (map.h !== void 0) {
-      date.hour = parseInt(match[map.h], 10) % 12
+      date.hour = Number.parseInt(match[map.h], 10) % 12
       if (
         (map.A && match[map.A] === 'PM') ||
         (map.a && match[map.a] === 'pm') ||
@@ -434,16 +474,16 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
     }
 
     if (map.m !== void 0) {
-      date.minute = parseInt(match[map.m], 10) % 60
+      date.minute = Number.parseInt(match[map.m], 10) % 60
     }
 
     if (map.s !== void 0) {
-      date.second = parseInt(match[map.s], 10) % 60
+      date.second = Number.parseInt(match[map.s], 10) % 60
     }
 
     if (map.S !== void 0) {
       date.millisecond =
-        parseInt(match[map.S], 10) * 10 ** (3 - match[map.S].length)
+        Number.parseInt(match[map.S], 10) * 10 ** (3 - match[map.S].length)
     }
 
     if (map.Z !== void 0 || map.ZZ !== void 0) {
@@ -464,7 +504,9 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
 }
 
 export function isValid(date) {
-  return typeof date === 'number' ? true : isNaN(Date.parse(date)) === false
+  return typeof date === 'number'
+    ? true
+    : Number.isNaN(Date.parse(date)) === false
 }
 
 export function buildDate(mod, utc) {
@@ -533,24 +575,30 @@ export function startOfDate(date, unit, utc) {
 
   switch (unit) {
     case 'year':
-    case 'years':
+    case 'years': {
       t[`${prefix}Month`](0)
+    }
     case 'month': // oxlint-disable-line no-fallthrough
-    case 'months':
+    case 'months': {
       t[`${prefix}Date`](1)
+    }
     case 'day': // oxlint-disable-line no-fallthrough
     case 'days':
-    case 'date':
+    case 'date': {
       t[`${prefix}Hours`](0)
+    }
     case 'hour': // oxlint-disable-line no-fallthrough
-    case 'hours':
+    case 'hours': {
       t[`${prefix}Minutes`](0)
+    }
     case 'minute': // oxlint-disable-line no-fallthrough
-    case 'minutes':
+    case 'minutes': {
       t[`${prefix}Seconds`](0)
+    }
     case 'second': // oxlint-disable-line no-fallthrough
-    case 'seconds':
+    case 'seconds': {
       t[`${prefix}Milliseconds`](0)
+    }
   }
   return t
 }
@@ -561,24 +609,30 @@ export function endOfDate(date, unit, utc) {
 
   switch (unit) {
     case 'year':
-    case 'years':
+    case 'years': {
       t[`${prefix}Month`](11)
+    }
     case 'month': // oxlint-disable-line no-fallthrough
-    case 'months':
+    case 'months': {
       t[`${prefix}Date`](daysInMonth(t))
+    }
     case 'day': // oxlint-disable-line no-fallthrough
     case 'days':
-    case 'date':
+    case 'date': {
       t[`${prefix}Hours`](23)
+    }
     case 'hour': // oxlint-disable-line no-fallthrough
-    case 'hours':
+    case 'hours': {
       t[`${prefix}Minutes`](59)
+    }
     case 'minute': // oxlint-disable-line no-fallthrough
-    case 'minutes':
+    case 'minutes': {
       t[`${prefix}Seconds`](59)
+    }
     case 'second': // oxlint-disable-line no-fallthrough
-    case 'seconds':
+    case 'seconds': {
       t[`${prefix}Milliseconds`](999)
+    }
   }
   return t
 }
@@ -616,45 +670,51 @@ export function getDateDiff(date, subtract, unit = 'days') {
 
   switch (unit) {
     case 'years':
-    case 'year':
+    case 'year': {
       return t.getFullYear() - sub.getFullYear()
+    }
 
     case 'months':
-    case 'month':
+    case 'month': {
       return (
         (t.getFullYear() - sub.getFullYear()) * 12 +
         t.getMonth() -
         sub.getMonth()
       )
+    }
 
     case 'days':
     case 'day':
-    case 'date':
+    case 'date': {
       return getDiff(
         startOfDate(t, 'day'),
         startOfDate(sub, 'day'),
         MILLISECONDS_IN_DAY
       )
+    }
 
     case 'hours':
-    case 'hour':
+    case 'hour': {
       return getDiff(
         startOfDate(t, 'hour'),
         startOfDate(sub, 'hour'),
         MILLISECONDS_IN_HOUR
       )
+    }
 
     case 'minutes':
-    case 'minute':
+    case 'minute': {
       return getDiff(
         startOfDate(t, 'minute'),
         startOfDate(sub, 'minute'),
         MILLISECONDS_IN_MINUTE
       )
+    }
 
     case 'seconds':
-    case 'second':
+    case 'second': {
       return getDiff(startOfDate(t, 'second'), startOfDate(sub, 'second'), 1000)
+    }
   }
 }
 
@@ -700,39 +760,46 @@ export function isSameDate(date, date2, unit) {
 
   switch (unit) {
     case 'second':
-    case 'seconds':
+    case 'seconds': {
       if (t.getSeconds() !== d.getSeconds()) {
         return false
       }
+    }
     case 'minute': // oxlint-disable-line no-fallthrough
-    case 'minutes':
+    case 'minutes': {
       if (t.getMinutes() !== d.getMinutes()) {
         return false
       }
+    }
     case 'hour': // oxlint-disable-line no-fallthrough
-    case 'hours':
+    case 'hours': {
       if (t.getHours() !== d.getHours()) {
         return false
       }
+    }
     case 'day': // oxlint-disable-line no-fallthrough
     case 'days':
-    case 'date':
+    case 'date': {
       if (t.getDate() !== d.getDate()) {
         return false
       }
+    }
     case 'month': // oxlint-disable-line no-fallthrough
-    case 'months':
+    case 'months': {
       if (t.getMonth() !== d.getMonth()) {
         return false
       }
+    }
     case 'year': // oxlint-disable-line no-fallthrough
-    case 'years':
+    case 'years': {
       if (t.getFullYear() !== d.getFullYear()) {
         return false
       }
       break
-    default:
+    }
+    default: {
       throw new Error(`date isSameDate unknown unit ${unit}`)
+    }
   }
 
   return true
@@ -747,12 +814,15 @@ function getOrdinal(n) {
     return `${n}th`
   }
   switch (n % 10) {
-    case 1:
+    case 1: {
       return `${n}st`
-    case 2:
+    }
+    case 2: {
       return `${n}nd`
-    case 3:
+    }
+    case 3: {
       return `${n}rd`
+    }
   }
   return `${n}th`
 }
@@ -996,7 +1066,7 @@ export function formatDate(
 
   const date = new Date(val)
 
-  if (isNaN(date)) return
+  if (Number.isNaN(date)) return
 
   if (mask === void 0) {
     mask = defaultMask
@@ -1014,7 +1084,7 @@ export function formatDate(
 }
 
 export function clone(date) {
-  return isDate(date) === true ? new Date(date.getTime()) : date
+  return isDate(date) ? new Date(date) : date
 }
 
 export default {

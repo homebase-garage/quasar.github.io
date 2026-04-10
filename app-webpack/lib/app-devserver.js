@@ -146,7 +146,7 @@ module.exports.AppDevserver = class AppDevserver extends AppTool {
   }
 
   async clearWatcherList(watcherList, clearFn) {
-    const list = watcherList.slice()
+    const list = [...watcherList]
     clearFn()
 
     for (const watcher of list) {

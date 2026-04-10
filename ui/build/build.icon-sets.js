@@ -10,12 +10,12 @@ const svgIconSetBanner = setName => `
  */`
 
 // generic conversion
-const convert = str => str.replace(/(-\w)/g, m => m[1].toUpperCase())
+const convert = str => str.replaceAll(/(-\w)/g, m => m[1].toUpperCase())
 const materialConvert = (str, old, prefix) => {
   if (old !== '') {
     str = str.slice(old.length)
   }
-  return (prefix + str).replace(/(_\w)/g, m => m[1].toUpperCase())
+  return (prefix + str).replaceAll(/(_\w)/g, m => m[1].toUpperCase())
 }
 
 const iconTypes = [
@@ -156,7 +156,7 @@ function generateSvgFile(type) {
 
   const contentString = insideOfExport
     .replace(/name: '(.+)'/, 'name: ""')
-    .replace(/'(.+)'/g, (_match, name) => {
+    .replaceAll(/'(.+)'/g, (_match, name) => {
       const { importName, variableName } = convertWebfont(name, type)
       if (!importList[importName].includes(variableName)) {
         importList[importName].push(variableName)
@@ -181,7 +181,7 @@ function generateSvgFile(type) {
     outsideOfExport,
     contentString
   ]
-    .filter(str => str)
+    .filter(Boolean)
     .join('\n\n')
 
   const iconFile = resolveToRoot(`icon-set/svg-${type.name}.js`)

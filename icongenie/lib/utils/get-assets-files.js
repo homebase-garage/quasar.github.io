@@ -18,7 +18,7 @@ export function getAssetsFiles(assets) {
 
         list.push({
           ...props,
-          name: props.name.replace(/{size}/g, replacer),
+          name: props.name.replaceAll('{size}', replacer),
           width,
           height
         })

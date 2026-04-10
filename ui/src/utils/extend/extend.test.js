@@ -56,7 +56,7 @@ describe('[extend API]', () => {
         ['number', 5, 6],
         ['string', 'a', 'b'],
         ['undefined', void 0, null],
-        ['NaN', NaN, Infinity],
+        ['NaN', Number.NaN, Infinity],
         ['Infinity', Infinity, 5],
         ['Date', new Date(150), new Date(200)],
         ['RegExp', /./, /.aaa/],

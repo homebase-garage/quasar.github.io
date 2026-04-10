@@ -35,6 +35,7 @@ function copy() {
   // before we copy the content.
   // The doc-code--copying class will do that for us
   target.classList.add('doc-code--copying')
+  // oxlint-disable-next-line unicorn/prefer-dom-node-text-content
   let text = target.innerText
   target.classList.remove('doc-code--copying')
 

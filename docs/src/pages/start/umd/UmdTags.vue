@@ -127,7 +127,7 @@ const googleSymbolsMap = {
   'material-symbols-sharp': 'Material+Symbols+Sharp'
 }
 
-const camelize = str => str.replace(/(-\w)/g, m => m[1].toUpperCase())
+const camelize = str => str.replaceAll(/(-\w)/g, m => m[1].toUpperCase())
 
 const { version } = useQuasar()
 const langOptions = languages.map(lang => ({
@@ -252,7 +252,7 @@ const head = computed(() => {
   cssAcc.push(`cdn.jsdelivr.net/npm/quasar@${version}/dist/quasar.rtl.prod.css`)
 
   return cssAcc
-    .filter(url => url)
+    .filter(Boolean)
     .map(url => getCssTag(url))
     .join('\n    ')
 })
@@ -281,7 +281,7 @@ const postCreateApp = computed(() => {
   let str = ''
 
   if (lang.value !== 'en-US') {
-    str += `Quasar.Lang.set(Quasar.Lang.${lang.value.replace(/-/g, '')})\n      `
+    str += `Quasar.Lang.set(Quasar.Lang.${lang.value.replaceAll('-', '')})\n      `
   }
 
   if (iconSet.value !== 'material-icons') {

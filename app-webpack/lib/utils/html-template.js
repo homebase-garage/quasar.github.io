@@ -21,7 +21,7 @@ module.exports.entryPointMarkup = entryPointMarkup
 module.exports.attachMarkup = attachMarkup
 
 function injectPublicPath(html, publicPath) {
-  return html.replace(
+  return html.replaceAll(
     /(href|src)\s*=\s*(['"])(.+)(['"])/gi,
     (_, att, pre, val, post) =>
       absoluteUrlRE.test(val.trim()) === true
@@ -61,7 +61,7 @@ function injectSsrRuntimeInterpolation(html) {
       const matches = found.match(/\sclass\s*=\s*['"]([^'"]*)['"]/i)
 
       if (matches) {
-        if (matches[1].length > 0) {
+        if (matches[1].length !== 0) {
           classes += ` ${matches[1]}`
         }
         start = start.replace(matches[0], '')

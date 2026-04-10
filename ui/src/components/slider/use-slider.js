@@ -134,12 +134,12 @@ export default function useSlider({
   )
 
   const innerMin = computed(() =>
-    isNaN(props.innerMin) === true || props.innerMin < props.min
+    Number.isNaN(props.innerMin) === true || props.innerMin < props.min
       ? props.min
       : props.innerMin
   )
   const innerMax = computed(() =>
-    isNaN(props.innerMax) === true || props.innerMax > props.max
+    Number.isNaN(props.innerMax) === true || props.innerMax > props.max
       ? props.max
       : props.innerMax
   )
@@ -157,7 +157,7 @@ export default function useSlider({
     }
 
     const decimals = (String(props.step).trim().split('.')[1] || '').length
-    return v => parseFloat(v.toFixed(decimals))
+    return v => Number.parseFloat(v.toFixed(decimals))
   })
 
   const keyStep = computed(() => (props.step === 0 ? 1 : props.step))

@@ -23,7 +23,7 @@ if (argv.help) {
   process.exit(0)
 }
 
-import os from 'os'
+import os from 'node:os'
 import { sync as spawn } from 'cross-spawn'
 
 import { getExternalNetworkInterface as getExternalIPs } from '../net.js'
@@ -56,13 +56,11 @@ const output = [
   { key: '  bun', value: getSpawnOutput('bun') },
   { key: '  @quasar/cli', value: green(cliPkg.version) },
   { key: '  @quasar/icongenie', value: getSpawnOutput('icongenie') },
-  { key: '  cordova', value: getSpawnOutput('cordova') }
-]
-
-output.push(
+  { key: '  cordova', value: getSpawnOutput('cordova') },
   { key: 'Networking', section: true },
   { key: '  Host', value: green(os.hostname()) }
-)
+]
+
 getExternalIPs().forEach(intf => {
   output.push({
     key: `  ${intf.deviceName}`,

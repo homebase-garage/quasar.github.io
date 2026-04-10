@@ -6,6 +6,7 @@ export default function frameDebounce(fn) {
   function debounced(...args) {
     // Always capture the latest arguments and context
     callArgs = args
+    // oxlint-disable-next-line unicorn/no-this-assignment
     context = this
 
     // If a frame is already requested, just update the args/context and wait

@@ -60,7 +60,7 @@ export default createComponent({
 
     const virtualScrollLength = computed(() =>
       props.itemsSize >= 0 && props.itemsFn !== void 0
-        ? parseInt(props.itemsSize, 10)
+        ? Number.parseInt(props.itemsSize, 10)
         : Array.isArray(props.items)
           ? props.items.length
           : 0
@@ -166,6 +166,7 @@ export default createComponent({
       )
 
       if (slots.before !== void 0) {
+        // oxlint-disable-next-line unicorn/prefer-spread
         child = slots.before().concat(child)
       }
 

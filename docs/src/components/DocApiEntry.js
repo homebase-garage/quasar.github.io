@@ -143,7 +143,7 @@ function getExpandable(openState, desc, isExpandable, key, getDetails) {
       ])
     ]
 
-    return expanded === true ? child.concat(getDetails()) : child
+    return expanded === true ? [...child, ...getDetails()] : child
   }
 
   return [getDiv(12, 'Description', desc)]
@@ -389,12 +389,14 @@ describe.events = (openState, events) => {
               )
             }
 
-            return getDiv(
-              12,
-              'Parameters',
-              void 0,
-              h('div', { class: 'doc-api-entry__subitem' }, params)
-            )
+            return [
+              getDiv(
+                12,
+                'Parameters',
+                void 0,
+                h('div', { class: 'doc-api-entry__subitem' }, params)
+              )
+            ]
           }
         )
       ])
@@ -481,6 +483,7 @@ describe.value = (openState, value) => [
   h(
     'div',
     { class: 'doc-api-entry row' },
+    // oxlint-disable-next-line unicorn/prefer-spread
     [getDiv(12, 'Type', getStringType(value.type))].concat(
       getProp(openState, 'value', value, void 0, -1, true)
     )
@@ -491,6 +494,7 @@ describe.arg = (openState, arg) => [
   h(
     'div',
     { class: 'doc-api-entry row' },
+    // oxlint-disable-next-line unicorn/prefer-spread
     [getDiv(12, 'Type', getStringType(arg.type))].concat(
       getProp(openState, 'arg', arg, void 0, -1, true)
     )

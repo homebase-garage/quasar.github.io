@@ -1,7 +1,7 @@
 const { removeFileLoaders } = require('../utils.js')
 
 const stackStart =
-  '  \u001b[0m\u001b[90m-\u001b[0m \u001b[0m\u001b[93mindex.js\u001b[0m\u001b[90m:'
+  '  \u001B[0m\u001B[90m-\u001B[0m \u001B[0m\u001B[93mindex.js\u001B[0m\u001B[90m:'
 
 function cleanMessage(message) {
   const acc = message
@@ -20,7 +20,7 @@ function cleanMessage(message) {
     .replace(/^Syntax Error: {3}/, '')
 
   const stackIndex = acc.indexOf(stackStart)
-  return stackIndex > -1 ? acc.substring(0, stackIndex) : acc
+  return stackIndex !== -1 ? acc.slice(0, stackIndex) : acc
 }
 
 module.exports = function format(error, printLog, titleFn) {

@@ -6,7 +6,7 @@ function plurals(n, opts) {
         ? 1
         : 2
 
-  return opts[index].replace(/{}/g, n)
+  return opts[index].replaceAll('{}', n)
 }
 
 export default {

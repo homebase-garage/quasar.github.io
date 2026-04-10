@@ -83,7 +83,7 @@ export default {
 
     const backHandler = () => {
       if (this.__history.length !== 0) {
-        const entry = this.__history[this.__history.length - 1]
+        const entry = this.__history.at(-1)
 
         if (entry.condition() === true) {
           this.__history.pop()

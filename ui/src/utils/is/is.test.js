@@ -11,7 +11,7 @@ describe('[is API]', () => {
         ['Boolean', true, true],
         ['Null', null, null],
         ['Undefined', void 0, void 0],
-        ['NaN', NaN, NaN],
+        ['NaN', Number.NaN, Number.NaN],
         ['Infinity', Infinity, Infinity],
         ['Date', new Date(150), new Date(150)],
         ['RegExp', /./, /./],
@@ -60,7 +60,7 @@ describe('[is API]', () => {
         ['5, str(5)', 5, '5'],
         ['5, null', 5, null],
         ['5, undefined', 5, void 0],
-        ['5, NaN', 5, NaN],
+        ['5, NaN', 5, Number.NaN],
         ['5, Infinity', 5, Infinity],
         ['5, {}', 5, {}],
         ['5, []', 5, []],
@@ -82,7 +82,7 @@ describe('[is API]', () => {
         ['5', 5, false],
         ['null', null, false],
         ['undefined', void 0, false],
-        ['NaN', NaN, false],
+        ['NaN', Number.NaN, false],
         ['Infinity', Infinity, false],
         ['Symbol()', Symbol('q'), false]
       ])('has correct return value for %s', (_, value, expected) => {
@@ -98,7 +98,7 @@ describe('[is API]', () => {
         ['{}', {}, false],
         ['null', null, false],
         ['undefined', void 0, false],
-        ['NaN', NaN, false],
+        ['NaN', Number.NaN, false],
         ['Infinity', Infinity, false],
         ['Symbol()', Symbol('q'), false]
       ])('has correct return value for %s', (_, value, expected) => {
@@ -110,12 +110,13 @@ describe('[is API]', () => {
       test.each([
         ['/./', /./, true],
         ['new RegExp()', new RegExp(), true],
+        // oxlint-disable-next-line unicorn/new-for-builtins
         ['RegExp()', RegExp(), true],
         ['5', 5, false],
         ['{}', {}, false],
         ['null', null, false],
         ['undefined', void 0, false],
-        ['NaN', NaN, false],
+        ['NaN', Number.NaN, false],
         ['Infinity', Infinity, false],
         ['Symbol()', Symbol('q'), false]
       ])('has correct return value for %s', (_, value, expected) => {
@@ -127,7 +128,7 @@ describe('[is API]', () => {
       test.each([
         ['5', 5, true],
         ['5.5', 5.5, true],
-        ['NaN', NaN, false],
+        ['NaN', Number.NaN, false],
         ['Infinity', Infinity, false],
         ['Symbol()', Symbol('q'), false],
         ['{}', {}, false],

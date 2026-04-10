@@ -758,7 +758,7 @@ export default {
   data() {
     const list = []
     for (let i = 0; i < 26 * 30; i += 1) {
-      const c = String.fromCharCode(97 + (i % 26))
+      const c = String.fromCodePoint(97 + (i % 26))
       const v = `${c}${c}${c}${c}${c}#${i}`
       list.push({ label: v, value: v })
     }

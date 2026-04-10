@@ -153,9 +153,9 @@ export function getScrollbarWidth() {
     overflow: 'hidden'
   })
 
-  outer.appendChild(inner)
+  outer.append(inner)
 
-  document.body.appendChild(outer)
+  document.body.append(outer)
 
   const w1 = inner.offsetWidth
   outer.style.overflow = 'scroll'

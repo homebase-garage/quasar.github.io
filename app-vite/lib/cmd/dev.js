@@ -178,16 +178,16 @@ const onQuasarConfChange = qConf => {
   devServer.run(qConf)
 }
 
-devServer.run(quasarConf).then(async () => {
-  if (typeof quasarConf.build.afterDev === 'function') {
-    await quasarConf.build.afterDev({ quasarConf })
-  }
+await devServer.run(quasarConf)
 
-  // run possible afterDev hooks
-  await ctx.appExt.runAppExtensionHook('afterDev', async hook => {
-    log(`Extension(${hook.api.extId}): Running afterDev hook...`)
-    await hook.fn(hook.api, { quasarConf })
-  })
+if (typeof quasarConf.build.afterDev === 'function') {
+  await quasarConf.build.afterDev({ quasarConf })
+}
 
-  quasarConfFile.watch(onQuasarConfChange)
+// run possible afterDev hooks
+await ctx.appExt.runAppExtensionHook('afterDev', async hook => {
+  log(`Extension(${hook.api.extId}): Running afterDev hook...`)
+  await hook.fn(hook.api, { quasarConf })
 })
+
+quasarConfFile.watch(onQuasarConfChange)

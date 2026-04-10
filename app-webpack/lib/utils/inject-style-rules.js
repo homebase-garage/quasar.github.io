@@ -120,7 +120,7 @@ async function createRule({ rule, isModules, pref, loader, loaderOptions }) {
       postCssOpts = ctx => {
         const plugins = [...originalPlugins]
         const isClientCSS = quasarCssPaths.every(
-          item => ctx.resourcePath.indexOf(item) === -1
+          item => ctx.resourcePath.includes(item) === false
         )
 
         plugins.push(

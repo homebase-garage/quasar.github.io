@@ -23,7 +23,7 @@ function getWithoutExtension(filename) {
 }
 
 function lowerCamelCase(name) {
-  return name.replace(/-([a-z])/g, g => g[1].toUpperCase())
+  return name.replaceAll(/-([a-z])/g, g => g[1].toUpperCase())
 }
 
 function addComponents(map, autoImport) {
@@ -91,9 +91,10 @@ function addUtils(map) {
 function getAutoImportFile(autoImport, encodeFn) {
   autoImport.kebabComponents.sort((a, b) => (a.length > b.length ? -1 : 1))
   autoImport.pascalComponents.sort((a, b) => (a.length > b.length ? -1 : 1))
-  autoImport.components = autoImport.kebabComponents.concat(
-    autoImport.pascalComponents
-  )
+  autoImport.components = [
+    ...autoImport.kebabComponents,
+    ...autoImport.pascalComponents
+  ]
   autoImport.directives.sort((a, b) => (a.length > b.length ? -1 : 1))
 
   return encodeFn({

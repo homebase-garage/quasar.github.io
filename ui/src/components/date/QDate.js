@@ -305,7 +305,7 @@ export default createComponent({
       const model = daysModel.value[0]
       const date = getNativeDateFn.value(model)
 
-      if (isNaN(date.valueOf()) === true) {
+      if (Number.isNaN(date.valueOf()) === true) {
         return lineStr
       }
 
@@ -323,17 +323,19 @@ export default createComponent({
     })
 
     const minSelectedModel = computed(() => {
-      const model = daysModel.value
-        .concat(rangeModel.value.map(range => range.from))
-        .sort((a, b) => a.year - b.year || a.month - b.month)
+      const model = [
+        ...daysModel.value,
+        ...rangeModel.value.map(range => range.from)
+      ].sort((a, b) => a.year - b.year || a.month - b.month)
 
       return model[0]
     })
 
     const maxSelectedModel = computed(() => {
-      const model = daysModel.value
-        .concat(rangeModel.value.map(range => range.to))
-        .sort((a, b) => b.year - a.year || b.month - a.month)
+      const model = [
+        ...daysModel.value,
+        ...rangeModel.value.map(range => range.to)
+      ].sort((a, b) => b.year - a.year || b.month - a.month)
 
       return model[0]
     })
@@ -390,7 +392,7 @@ export default createComponent({
         first = computedFirstDayOfWeek.value
 
       return first > 0
-        ? days.slice(first, 7).concat(days.slice(0, first))
+        ? [...days.slice(first, 7), ...days.slice(0, first)]
         : days
     })
 
@@ -413,7 +415,10 @@ export default createComponent({
       }
 
       const data = props.navigationMinYearMonth.split('/')
-      return { year: parseInt(data[0], 10), month: parseInt(data[1], 10) }
+      return {
+        year: Number.parseInt(data[0], 10),
+        month: Number.parseInt(data[1], 10)
+      }
     })
 
     const maxNav = computed(() => {
@@ -422,7 +427,10 @@ export default createComponent({
       }
 
       const data = props.navigationMaxYearMonth.split('/')
-      return { year: parseInt(data[0], 10), month: parseInt(data[1], 10) }
+      return {
+        year: Number.parseInt(data[0], 10),
+        month: Number.parseInt(data[1], 10)
+      }
     })
 
     const navBoundaries = computed(() => {
@@ -912,7 +920,7 @@ export default createComponent({
         return getDefaultViewModel()
       }
 
-      const target = model[model.length - 1]
+      const target = model.at(-1)
       const decoded = decodeString(
         target.from !== void 0 ? target.from : target,
         dateMask,
@@ -927,8 +935,8 @@ export default createComponent({
 
       if (props.defaultYearMonth !== void 0) {
         const d = props.defaultYearMonth.split('/')
-        year = parseInt(d[0], 10)
-        month = parseInt(d[1], 10)
+        year = Number.parseInt(d[0], 10)
+        month = Number.parseInt(d[1], 10)
       } else {
         // may come from data() where computed
         // props are not yet available
@@ -1125,14 +1133,11 @@ export default createComponent({
             ({ from, to }) => to.dateHash < fromHash || from.dateHash > toHash
           )
 
-          value = localDays
-            .concat(ranges)
-            .concat(date)
-            .map(entry => encodeEntry(entry))
+          value = [...localDays, ...ranges, date].map(entry =>
+            encodeEntry(entry)
+          )
         } else {
-          const model = normalizedModel.value.slice()
-          model.push(encodeEntry(date))
-          value = model
+          value = [...normalizedModel.value, encodeEntry(date)]
         }
       } else {
         value = encodeEntry(date)
@@ -1149,15 +1154,14 @@ export default createComponent({
       if (props.multiple === true && Array.isArray(props.modelValue) === true) {
         const val = encodeEntry(date)
 
-        if (date.from !== void 0) {
-          model = props.modelValue.filter(item =>
-            item.from !== void 0
-              ? item.from !== val.from && item.to !== val.to
-              : true
-          )
-        } else {
-          model = props.modelValue.filter(item => item !== val)
-        }
+        model =
+          date.from !== void 0
+            ? props.modelValue.filter(item =>
+                item.from !== void 0
+                  ? item.from !== val.from && item.to !== val.to
+                  : true
+              )
+            : props.modelValue.filter(item => item !== val)
 
         if (model.length === 0) {
           model = null
@@ -1168,8 +1172,7 @@ export default createComponent({
     }
 
     function updateValue(dateMask, dateLocale, reason) {
-      const model = daysModel.value
-        .concat(rangeModel.value)
+      const model = [...daysModel.value, ...rangeModel.value]
         .map(entry => encodeEntry(entry, dateMask, dateLocale))
         .filter(entry =>
           entry.from !== void 0
@@ -1396,16 +1399,17 @@ export default createComponent({
               {
                 class: 'q-date__navigation row items-center no-wrap'
               },
-              getNavigation({
-                label: innerLocale.value.months[viewModel.value.month - 1],
-                type: 'Months',
-                key: viewModel.value.month,
-                dir: monthDirection.value,
-                goTo: goToMonth,
-                boundaries: navBoundaries.value.month,
-                cls: ' col'
-              }).concat(
-                getNavigation({
+              [
+                ...getNavigation({
+                  label: innerLocale.value.months[viewModel.value.month - 1],
+                  type: 'Months',
+                  key: viewModel.value.month,
+                  dir: monthDirection.value,
+                  goTo: goToMonth,
+                  boundaries: navBoundaries.value.month,
+                  cls: ' col'
+                }),
+                ...getNavigation({
                   label: viewModel.value.year,
                   type: 'Years',
                   key: viewModel.value.year,
@@ -1414,7 +1418,7 @@ export default createComponent({
                   boundaries: navBoundaries.value.year,
                   cls: ''
                 })
-              )
+              ]
             ),
 
             h(

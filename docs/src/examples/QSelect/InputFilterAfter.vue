@@ -80,15 +80,15 @@ export default {
                 options.value = stringOptions
               } else {
                 const needle = val.toLowerCase()
-                options.value = stringOptions.filter(
-                  v => v.toLowerCase().indexOf(needle) > -1
+                options.value = stringOptions.filter(v =>
+                  v.toLowerCase().includes(needle)
                 )
               }
             },
 
             // "compRef" is the Vue reference to the QSelect
             compRef => {
-              if (val !== '' && compRef.options.length > 0) {
+              if (val !== '' && compRef.options.length !== 0) {
                 compRef.setOptionIndex(-1) // reset optionIndex in case there is something selected
                 compRef.moveOptionSelection(1, true) // focus the first selectable option and do not update the input-value
               }
@@ -107,8 +107,8 @@ export default {
                 options.value = stringOptions
               } else {
                 const needle = val.toLowerCase()
-                options.value = stringOptions.filter(
-                  v => v.toLowerCase().indexOf(needle) > -1
+                options.value = stringOptions.filter(v =>
+                  v.toLowerCase().includes(needle)
                 )
               }
             },
@@ -117,7 +117,7 @@ export default {
             compRef => {
               if (
                 val !== '' &&
-                compRef.options.length > 0 &&
+                compRef.options.length !== 0 &&
                 compRef.getOptionIndex() === -1
               ) {
                 compRef.moveOptionSelection(1, true) // focus the first selectable option and do not update the input-value

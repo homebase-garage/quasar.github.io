@@ -137,7 +137,7 @@ export function preventDraggable(el, status) {
 export function addEvt(ctx, targetName, events) {
   const name = `__q_${targetName}_evt`
 
-  ctx[name] = ctx[name] !== void 0 ? ctx[name].concat(events) : events
+  ctx[name] = [...(ctx[name] ?? []), ...events]
 
   events.forEach(evt => {
     evt[0].addEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]])

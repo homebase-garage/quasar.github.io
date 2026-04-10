@@ -119,23 +119,18 @@ export default function useAnchor({
     ) {
       if (props.noParentEvent === true || anchorEl.value === null) return
 
-      let evts
-
-      if (context === true) {
-        if (proxy.$q.platform.is.mobile === true) {
-          evts = [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
-        } else {
-          evts = [
-            [anchorEl.value, 'mousedown', 'hide', 'passive'],
-            [anchorEl.value, 'contextmenu', 'contextClick', 'notPassive']
-          ]
-        }
-      } else {
-        evts = [
-          [anchorEl.value, 'click', 'toggle', 'passive'],
-          [anchorEl.value, 'keyup', 'toggleKey', 'passive']
-        ]
-      }
+      const evts =
+        context === true
+          ? proxy.$q.platform.is.mobile === true
+            ? [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
+            : [
+                [anchorEl.value, 'mousedown', 'hide', 'passive'],
+                [anchorEl.value, 'contextmenu', 'contextClick', 'notPassive']
+              ]
+          : [
+              [anchorEl.value, 'click', 'toggle', 'passive'],
+              [anchorEl.value, 'keyup', 'toggleKey', 'passive']
+            ]
 
       addEvt(anchorEvents, 'anchor', evts)
     }

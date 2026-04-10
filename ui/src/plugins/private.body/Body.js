@@ -47,7 +47,7 @@ function applyClientSsrCorrections() {
   const { is } = client
   const classes = document.body.className
 
-  const classList = new Set(classes.replace(/ {2}/g, ' ').split(' '))
+  const classList = new Set(classes.replaceAll(/ {2}/g, ' ').split(' '))
 
   if (is.nativeMobile !== true && is.electron !== true && is.bex !== true) {
     if (is.desktop === true) {
@@ -78,7 +78,7 @@ function applyClientSsrCorrections() {
     classList.add('within-iframe')
   }
 
-  const newCls = Array.from(classList).join(' ')
+  const newCls = [...classList].join(' ')
 
   if (classes !== newCls) {
     document.body.className = newCls

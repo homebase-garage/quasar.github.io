@@ -52,15 +52,11 @@ const quasarConfigBanner = `/* eslint-disable */
  **/
 `
 
-function clone(obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
-
 function escapeHTMLTagContent(str) {
-  return str ? str.replace(/[<>]/g, '') : ''
+  return str ? str.replaceAll(/[<>]/g, '') : ''
 }
 function escapeHTMLAttribute(str) {
-  return str ? str.replace(/"/g, '') : ''
+  return str ? str.replaceAll('"', '') : ''
 }
 
 function formatPublicPath(publicPath) {
@@ -98,7 +94,7 @@ function parseAssetProperty(prefix) {
   return asset => {
     if (typeof asset === 'string') {
       return {
-        path: asset[0] === '~' ? asset.substring(1) : prefix + `/${asset}`
+        path: asset[0] === '~' ? asset.slice(1) : prefix + `/${asset}`
       }
     }
 
@@ -107,7 +103,7 @@ function parseAssetProperty(prefix) {
       path:
         typeof asset.path === 'string'
           ? asset.path[0] === '~'
-            ? asset.path.substring(1)
+            ? asset.path.slice(1)
             : prefix + `/${asset.path}`
           : asset.path
     }
@@ -115,7 +111,7 @@ function parseAssetProperty(prefix) {
 }
 
 function getUniqueArray(original) {
-  return Array.from(new Set(original))
+  return [...new Set(original)]
 }
 
 function uniquePathFilter(value, index, self) {
@@ -128,7 +124,7 @@ function uniqueRegexFilter(value, index, self) {
 
 const extRE = /\.[m|c]?[j|t]s$/
 function formatQuasarAssetPath(asset, type) {
-  return asset.indexOf('/') !== -1
+  return asset.includes('/')
     ? extRE.test(asset) === true
       ? asset
       : `${asset}.js`
@@ -161,20 +157,20 @@ async function onAddress({ host, port }, mode) {
 
       port = openPort
     }
-  } catch (e) {
+  } catch (err) {
     warn()
 
-    if (e.message === 'ERROR_NETWORK_PORT_NOT_AVAIL') {
+    if (err.message === 'ERROR_NETWORK_PORT_NOT_AVAIL') {
       warn(
         'Could not find an open port. Please configure a lower one to start searching with.'
       )
-    } else if (e.message === 'ERROR_NETWORK_ADDRESS_NOT_AVAIL') {
+    } else if (err.message === 'ERROR_NETWORK_ADDRESS_NOT_AVAIL') {
       warn(
         'Invalid host specified. No network address matches. Please specify another one.'
       )
     } else {
       warn('Unknown network error occurred')
-      console.error(e)
+      console.error(err)
     }
 
     warn()
@@ -321,10 +317,10 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
   async #build(esbuildConfig) {
     try {
       await esBuild(esbuildConfig)
-    } catch (e) {
+    } catch (err) {
       fse.removeSync(this.#tempFile)
       console.log()
-      console.error(e)
+      console.error(err)
       fatal(
         'Could not compile the quasar.config file because it has errors.',
         'FAIL'
@@ -336,9 +332,9 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
       const fnResult = await import(pathToFileURL(this.#tempFile))
 
       quasarConfigFn = fnResult.default || fnResult
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
       fatal(
         'The quasar.config file has runtime errors. Please check the Node.js stack above against the' +
           ` temporarily created ${basename(this.#tempFile)} file, fix the original file` +
@@ -407,14 +403,14 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
                 : require(tempFile)
 
             quasarConfigFn = res.default || res
-          } catch (e) {
+          } catch (err) {
             // free up memory immediately
             if (appPaths.quasarConfigOutputFormat === 'cjs') {
               delete require.cache[tempFile]
             }
 
             console.log()
-            console.error(e)
+            console.error(err)
 
             const msg =
               'Importing quasar.config file results in error. Please check the' +
@@ -479,9 +475,9 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
 
     try {
       userCfg = await quasarConfigFn(this.#ctx)
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
 
       const msg =
         'The quasar.config file has runtime errors.' +
@@ -613,9 +609,9 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
           await hook.fn(rawQuasarConf, hook.api)
         }
       )
-    } catch (e) {
+    } catch (err) {
       console.log()
-      console.error(e)
+      console.error(err)
 
       if (failOnError === true) {
         fatal('One of your installed App Extensions failed to run', 'FAIL')
@@ -709,27 +705,27 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
       }
     }
 
-    if (cfg.css.length > 0) {
+    if (cfg.css.length !== 0) {
       cfg.css = cfg.css
-        .filter(_ => _)
+        .filter(Boolean)
         .map(parseAssetProperty('src/css'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
     }
 
-    if (cfg.boot.length > 0) {
+    if (cfg.boot.length !== 0) {
       cfg.boot = cfg.boot
-        .filter(_ => _)
+        .filter(Boolean)
         .map(parseAssetProperty('boot'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
     }
 
-    if (cfg.extras.length > 0) {
+    if (cfg.extras.length !== 0) {
       cfg.extras = getUniqueArray(cfg.extras)
     }
 
-    if (cfg.animations.length > 0) {
+    if (cfg.animations.length !== 0) {
       cfg.animations = getUniqueArray(cfg.animations)
     }
 
@@ -795,7 +791,7 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
     cfg.build = merge(
       {
         vueLoaderOptions: {
-          transformAssetUrls: clone(this.#transformAssetUrls)
+          transformAssetUrls: structuredClone(this.#transformAssetUrls)
         },
         vueOptionsAPI: true,
         vueRouterMode: 'hash',
@@ -905,13 +901,13 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
 
     if (cfg.vendor.disable !== true) {
       cfg.vendor.add =
-        cfg.vendor.add.length > 0
-          ? new RegExp(cfg.vendor.add.filter(v => v).join('|'))
+        cfg.vendor.add.length !== 0
+          ? new RegExp(cfg.vendor.add.filter(Boolean).join('|'))
           : void 0
 
       cfg.vendor.remove =
-        cfg.vendor.remove.length > 0
-          ? new RegExp(cfg.vendor.remove.filter(v => v).join('|'))
+        cfg.vendor.remove.length !== 0
+          ? new RegExp(cfg.vendor.remove.filter(Boolean).join('|'))
           : void 0
     }
 
@@ -1040,9 +1036,9 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
         cfg.metaConf.needsAppMountHook = true
       }
 
-      if (cfg.ssr.middlewares.length > 0) {
+      if (cfg.ssr.middlewares.length !== 0) {
         cfg.ssr.middlewares = cfg.ssr.middlewares
-          .filter(_ => _)
+          .filter(Boolean)
           .map(parseAssetProperty('app/src-ssr/middlewares'))
           .filter(asset => asset.path)
           .filter(uniquePathFilter)
@@ -1170,7 +1166,7 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
 
           this.#vueDevtools = {
             host,
-            port: await findClosestOpenPort(11111, '0.0.0.0')
+            port: await findClosestOpenPort(11_111, '0.0.0.0')
           }
         }
 
@@ -1214,8 +1210,8 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
             if (typeof options[prop] === 'string') {
               try {
                 options[prop] = readFileSync(options[prop])
-              } catch (e) {
-                console.error(e)
+              } catch (err) {
+                console.error(err)
                 console.log()
                 delete options[prop]
                 warn(
@@ -1240,8 +1236,8 @@ module.exports.QuasarConfigFile = class QuasarConfigFile {
       cfg.build.gzip = merge(
         {
           algorithm: 'gzip',
-          test: new RegExp('\\.(' + ext.join('|') + ')$'),
-          threshold: 10240,
+          test: new RegExp(String.raw`\.(` + ext.join('|') + ')$'),
+          threshold: 10_240,
           minRatio: 0.8
         },
         gzip

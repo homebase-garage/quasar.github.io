@@ -20,7 +20,7 @@ const { QuasarSSRServerPlugin } = require('./plugin.webpack.server-side.js')
 function getModuleDirs(dir) {
   const folders = []
 
-  while (dir.length && dir[dir.length - 1] !== sep) {
+  while (dir.length !== 0 && dir.at(-1) !== sep) {
     const newFolder = join(dir, 'node_modules')
     if (existsSync(newFolder)) {
       folders.push(newFolder)
@@ -52,7 +52,7 @@ const quasarSsrConfig = {
     }
 
     if (ctx.mode.pwa) {
-      const templateParam = JSON.parse(JSON.stringify(quasarConf.htmlVariables))
+      const templateParam = structuredClone(quasarConf.htmlVariables)
 
       templateParam.ctx.mode = { pwa: true }
       templateParam.ctx.modeName = 'pwa'

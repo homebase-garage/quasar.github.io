@@ -1,6 +1,6 @@
-const { cpus } = require('os')
-const { fork } = require('child_process')
-const { join } = require('path')
+const { cpus } = require('node:os')
+const { fork } = require('node:child_process')
+const { join } = require('node:path')
 const { Queue, sleep, retry } = require('./utils')
 const { generateReadme } = require('./readme')
 

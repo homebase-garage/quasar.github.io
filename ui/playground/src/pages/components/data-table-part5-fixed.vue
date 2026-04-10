@@ -251,10 +251,10 @@ const seed = [
 ]
 
 // we generate lots of rows here
-let data = []
+const data = []
 const listSize = 1000
 for (let i = 0; i < listSize; i++) {
-  data = data.concat(seed.slice(0).map(r => ({ ...r })))
+  data.push(...seed.map(r => ({ ...r })))
 }
 data.forEach((row, index) => {
   row.index = index
@@ -317,14 +317,14 @@ export default {
           label: 'Calcium (%)',
           field: 'calcium',
           sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
+          sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
         },
         {
           name: 'iron',
           label: 'Iron (%)',
           field: 'iron',
           sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
+          sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
         }
       ]
     }

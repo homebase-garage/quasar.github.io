@@ -50,15 +50,15 @@ const rows = [
   {
     id: 1,
     calories: 159,
-    fat: 6.0,
+    fat: 6,
     carbs: 24,
-    protein: 4.0,
+    protein: 4,
     sodium: 87
   },
   {
     id: 2,
     calories: 237,
-    fat: 9.0,
+    fat: 9,
     carbs: 37,
     protein: 4.3,
     sodium: 129
@@ -66,9 +66,9 @@ const rows = [
   {
     id: 3,
     calories: 262,
-    fat: 16.0,
+    fat: 16,
     carbs: 23,
-    protein: 6.0,
+    protein: 6,
     sodium: 337
   },
   {

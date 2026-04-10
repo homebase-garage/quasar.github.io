@@ -74,7 +74,7 @@ if (isModeInstalled(ctx.appPaths, argv.mode) !== true) {
   fatal('Requested mode for inspection is NOT installed.')
 }
 
-const depth = parseInt(argv.depth, 10) || Infinity
+const depth = Number.parseInt(argv.depth, 10) || Infinity
 
 import { QuasarConfigFile } from '../quasar-config-file.js'
 const quasarConfFile = new QuasarConfigFile({

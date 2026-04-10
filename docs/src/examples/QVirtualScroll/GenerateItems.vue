@@ -91,7 +91,8 @@ const AsyncComponent = defineComponent({
   }
 })
 
-const size = ref(100000)
+const size = ref(100_000)
+// oxlint-disable-next-line unicorn/new-for-builtins
 const allItems = Array(size.value)
   .fill(null)
   .map((_, index) => ({

@@ -196,7 +196,7 @@ export default function useRouterLink({
         // child of the same parent
         getOriginalPath(routeMatched) === parentRecordPath &&
         // avoid comparing the child with its parent
-        currentMatched[currentMatched.length - 1].path !== parentRecordPath
+        currentMatched.at(-1).path !== parentRecordPath
         ? currentMatched.findIndex(
             isSameRouteRecord.bind(null, matched[length - 2])
           )

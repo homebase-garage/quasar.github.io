@@ -206,7 +206,7 @@ export default {
   },
   computed: {
     startOfDate() {
-      if (isNaN(new Date(this.date).valueOf()) === true) {
+      if (Number.isNaN(new Date(this.date).valueOf()) === true) {
         return {}
       }
       return {
@@ -220,7 +220,7 @@ export default {
     },
 
     startOfDateUTC() {
-      if (isNaN(new Date(this.date).valueOf()) === true) {
+      if (Number.isNaN(new Date(this.date).valueOf()) === true) {
         return {}
       }
       return {
@@ -234,7 +234,7 @@ export default {
     },
 
     endOfDate() {
-      if (isNaN(new Date(this.date).valueOf()) === true) {
+      if (Number.isNaN(new Date(this.date).valueOf()) === true) {
         return {}
       }
       return {
@@ -248,7 +248,7 @@ export default {
     },
 
     endOfDateUTC() {
-      if (isNaN(new Date(this.date).valueOf()) === true) {
+      if (Number.isNaN(new Date(this.date).valueOf()) === true) {
         return {}
       }
       return {

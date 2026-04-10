@@ -1,6 +1,6 @@
 import { readFileSync, statSync } from 'node:fs'
 import { basename, dirname, join } from 'node:path'
-import { gzipSync } from 'zlib'
+import { gzipSync } from 'node:zlib'
 import { blue, cyan, gray, green, magenta, underline } from 'kolorist'
 import { globSync } from 'tinyglobby'
 

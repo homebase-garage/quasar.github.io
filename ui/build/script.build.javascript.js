@@ -188,7 +188,7 @@ async function convertExternalImports(content) {
     )
   )
 
-  return tokenContent.replace(/____token_\d+____/g, token => {
+  return tokenContent.replaceAll(/____token_\d+____/g, token => {
     const { packageMatch, importIdMatch } = tokenMap[token]
     return importIdMatch
       .match(/[^\s,]+/g)
@@ -205,7 +205,7 @@ async function addUmdAssets(buildList, type, injectName, convertImports) {
   for (const file of fileList) {
     const name = file
       .slice(0, -3)
-      .replace(/-([a-zA-Z])/g, g => g[1].toUpperCase())
+      .replaceAll(/-([a-zA-Z])/g, g => g[1].toUpperCase())
 
     const inputCode = fse.readFileSync(resolveToRoot(`${type}/${file}`), 'utf8')
     const tempFile = resolveToRoot(`dist/${type}/temp.${file}`)

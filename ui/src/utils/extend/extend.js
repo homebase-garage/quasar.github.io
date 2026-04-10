@@ -50,6 +50,7 @@ export default function extend(...args) {
   }
 
   if (length === i) {
+    // oxlint-disable-next-line unicorn/no-this-assignment
     target = this
     i--
   }

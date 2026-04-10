@@ -62,7 +62,7 @@ const hasEnded = ref(false)
 let interval
 
 function calcTimeRemaining() {
-  const now = new Date().getTime()
+  const now = Date.now()
   const remaining = confDate - now
   hasEnded.value = remaining <= 0
 

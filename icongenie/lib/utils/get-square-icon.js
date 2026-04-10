@@ -24,7 +24,7 @@ export function getSquareIcon({
     corrections.push('height')
   }
 
-  if (corrections.length > 0) {
+  if (corrections.length !== 0) {
     warn(
       `Correction on padding for ${file.relativeName} due to padding exceeding file's dimension of ${size}x${size}px`
     )

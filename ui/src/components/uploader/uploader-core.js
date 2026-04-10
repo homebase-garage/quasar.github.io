@@ -325,8 +325,8 @@ export function getRenderer(getPlugin, expose) {
       }
     })
 
-    state.files.value = state.files.value.concat(localFiles)
-    state.queuedFiles.value = state.queuedFiles.value.concat(localFiles)
+    state.files.value.push(...localFiles)
+    state.queuedFiles.value.push(...localFiles)
     emit('added', localFiles)
     if (props.autoUpload === true) state.upload()
   }

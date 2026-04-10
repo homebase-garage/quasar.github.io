@@ -130,9 +130,9 @@ function inferPackageName(projectFolder) {
   return projectFolder
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, '-')
+    .replaceAll(/\s+/g, '-')
     .replace(/^[._]/, '')
-    .replace(/[^a-z0-9-~]+/g, '-')
+    .replaceAll(/[^a-z0-9-~]+/g, '-')
 }
 
 function escapeString(val) {
@@ -307,7 +307,7 @@ const quasarConfigFilenameList = [
 function ensureOutsideProject() {
   let dir = process.cwd()
 
-  while (dir.length !== 0 && dir[dir.length - 1] !== sep) {
+  while (dir.length !== 0 && dir.at(-1) !== sep) {
     for (const name of quasarConfigFilenameList) {
       const filename = join(dir, name)
       if (existsSync(filename)) {

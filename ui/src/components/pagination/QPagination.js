@@ -37,7 +37,7 @@ export default createComponent({
     maxPages: {
       type: [Number, String],
       default: 0,
-      validator: v => (typeof v === 'string' ? parseInt(v, 10) : v) >= 0
+      validator: v => (typeof v === 'string' ? Number.parseInt(v, 10) : v) >= 0
     },
 
     inputStyle: [Array, String, Object],
@@ -116,9 +116,9 @@ export default createComponent({
 
     const isDark = useDark(props, $q)
 
-    const minProp = computed(() => parseInt(props.min, 10))
-    const maxProp = computed(() => parseInt(props.max, 10))
-    const maxPagesProp = computed(() => parseInt(props.maxPages, 10))
+    const minProp = computed(() => Number.parseInt(props.min, 10))
+    const maxProp = computed(() => Number.parseInt(props.max, 10))
+    const maxPagesProp = computed(() => Number.parseInt(props.maxPages, 10))
 
     const inputPlaceholder = computed(() => model.value + ' / ' + maxProp.value)
     const boundaryLinksProp = computed(() =>
@@ -136,8 +136,8 @@ export default createComponent({
     const model = computed({
       get: () => props.modelValue,
       set: val => {
-        val = parseInt(val, 10)
-        if (props.disable || isNaN(val)) return
+        val = Number.parseInt(val, 10)
+        if (props.disable || Number.isNaN(val)) return
 
         const value = between(val, minProp.value, maxProp.value)
         if (props.modelValue !== value) {

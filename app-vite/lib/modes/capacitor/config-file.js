@@ -113,12 +113,13 @@ export class CapacitorConfigFile {
   }
 
   #updateCapJson(quasarConf, originalCapCfg, capVersion, target) {
-    const capJson = { ...originalCapCfg }
-
-    capJson.appName =
-      quasarConf.capacitor.appName ||
-      this.#ctx.pkg.appPkg.productName ||
-      'Quasar App'
+    const capJson = {
+      ...originalCapCfg,
+      appName:
+        quasarConf.capacitor.appName ||
+        this.#ctx.pkg.appPkg.productName ||
+        'Quasar App'
+    }
 
     if (capVersion < 5) {
       capJson.bundledWebRuntime = false

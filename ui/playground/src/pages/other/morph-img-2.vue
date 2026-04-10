@@ -28,9 +28,10 @@ export default {
   data() {
     return {
       indexZoomed: void 0,
-      images: Array(24)
-        .fill(null)
-        .map((_, i) => 'https://picsum.photos/id/' + i + '/500/300')
+      images: Array.from(
+        { length: 24 },
+        (_, i) => 'https://picsum.photos/id/' + i + '/500/300'
+      )
     }
   },
 

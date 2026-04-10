@@ -48,14 +48,12 @@
 
 <script>
 const optionNames = ['Google', 'Twitter', 'Facebook', 'Apple', 'Oracle']
-const options = Array(100_000)
-  .fill(null)
-  .reduce((acc, _, i) => {
-    optionNames.forEach(n => {
-      acc.push(`${n} - ${i}`)
-    })
-    return acc
-  }, [])
+const options = Array.from({ length: 100_000 }).reduce((acc, _, i) => {
+  optionNames.forEach(n => {
+    acc.push(`${n} - ${i}`)
+  })
+  return acc
+}, [])
 const pageSize = 50
 const lastPage = Math.ceil(options.length / pageSize)
 

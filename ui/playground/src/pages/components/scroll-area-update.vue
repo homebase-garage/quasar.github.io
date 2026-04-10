@@ -19,9 +19,10 @@
 export default {
   data() {
     return {
-      messages: Array(20)
-        .fill(null)
-        .map((_, id) => ({ id, text: 'message ' + id }))
+      messages: Array.from({ length: 20 }, (_, id) => ({
+        id,
+        text: 'message ' + id
+      }))
     }
   },
 

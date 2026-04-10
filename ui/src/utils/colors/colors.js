@@ -37,7 +37,7 @@ export function hexToRgb(hex) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3]
   }
 
-  const num = parseInt(hex, 16)
+  const num = Number.parseInt(hex, 16)
 
   return hex.length > 6
     ? {
@@ -62,36 +62,42 @@ export function hsvToRgb({ h, s, v, a }) {
     t = v * (1 - (1 - f) * s)
 
   switch (i % 6) {
-    case 0:
+    case 0: {
       r = v
       g = t
       b = p
       break
-    case 1:
+    }
+    case 1: {
       r = q
       g = v
       b = p
       break
-    case 2:
+    }
+    case 2: {
       r = p
       g = v
       b = t
       break
-    case 3:
+    }
+    case 3: {
       r = p
       g = q
       b = v
       break
-    case 4:
+    }
+    case 4: {
       r = t
       g = p
       b = v
       break
-    case 5:
+    }
+    case 5: {
       r = v
       g = p
       b = q
       break
+    }
   }
 
   return {
@@ -111,21 +117,25 @@ export function rgbToHsv({ r, g, b, a }) {
   let h
 
   switch (max) {
-    case min:
+    case min: {
       h = 0
       break
-    case r:
+    }
+    case r: {
       h = g - b + d * (g < b ? 6 : 0)
       h /= 6 * d
       break
-    case g:
+    }
+    case g: {
       h = b - r + d * 2
       h /= 6 * d
       break
-    case b:
+    }
+    case b: {
       h = r - g + d * 4
       h /= 6 * d
       break
+    }
   }
 
   return {
@@ -141,7 +151,7 @@ export function textToRgb(str) {
     throw new TypeError('Expected a string')
   }
 
-  const color = str.replace(/ /g, '')
+  const color = str.replaceAll(' ', '')
 
   const m = reRGBA.exec(color)
 
@@ -150,14 +160,14 @@ export function textToRgb(str) {
   }
 
   const rgb = {
-    r: Math.min(255, parseInt(m[2], 10)),
-    g: Math.min(255, parseInt(m[3], 10)),
-    b: Math.min(255, parseInt(m[4], 10))
+    r: Math.min(255, Number.parseInt(m[2], 10)),
+    g: Math.min(255, Number.parseInt(m[3], 10)),
+    b: Math.min(255, Number.parseInt(m[4], 10))
   }
 
   if (m[1]) {
-    const alpha = parseFloat(m[5])
-    rgb.a = Math.min(1, isNaN(alpha) === true ? 1 : alpha) * 100
+    const alpha = Number.parseFloat(m[5])
+    rgb.a = Math.min(1, Number.isNaN(alpha) === true ? 1 : alpha) * 100
   }
 
   return rgb
@@ -277,7 +287,7 @@ export function getPaletteColor(colorName) {
   const el = document.createElement('div')
 
   el.className = `text-${colorName} invisible fixed no-pointer-events`
-  document.body.appendChild(el)
+  document.body.append(el)
 
   const result = getComputedStyle(el).getPropertyValue('color')
 

@@ -1528,7 +1528,7 @@ export default {
     },
     stopProgress() {
       Object.values(this.loading)
-        .filter(t => t)
+        .filter(Boolean)
         .map(t => clearTimeout(t))
       this.loading = {}
     },

@@ -1,6 +1,6 @@
 // Inspired by @vue/babel-preset-app
 
-const path = require('path')
+const path = require('node:path')
 
 const {
   default: getTargets,
@@ -9,7 +9,11 @@ const {
 
 function getPolyfills(targets, userPolyfills = []) {
   // if no targets specified, include all default polyfills
-  if (!userPolyfills.length || !targets || !Object.keys(targets).length) {
+  if (
+    userPolyfills.length === 0 ||
+    !targets ||
+    Object.keys(targets).length === 0
+  ) {
     return userPolyfills
   }
 
@@ -17,7 +21,7 @@ function getPolyfills(targets, userPolyfills = []) {
   return userPolyfills.filter(item => isRequired(item, targets, { compatData }))
 }
 
-module.exports = (_, opts = {}) => {
+module.exports = function quasarBabelPreset(_, opts = {}) {
   const presets = []
   const plugins = []
 
@@ -63,7 +67,7 @@ module.exports = (_, opts = {}) => {
   if (useBuiltIns === 'usage') {
     polyfills = getPolyfills(targets, userPolyfills)
 
-    if (polyfills.length > 0) {
+    if (polyfills.length !== 0) {
       plugins.push([
         require('./polyfills'),
         { polyfills, useAbsolutePath: Boolean(absoluteRuntime) }
@@ -81,6 +85,7 @@ module.exports = (_, opts = {}) => {
     targets,
     useBuiltIns,
     include,
+    // oxlint-disable-next-line unicorn/prefer-spread
     exclude: polyfills.concat(exclude || []),
     shippedProposals,
     forceAllTransforms

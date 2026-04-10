@@ -32,8 +32,8 @@ function createRenderContext(clientManifest) {
       }
 
       return {
-        head: Array.from(head).map(addPublicPath),
-        body: Array.from(body).map(addPublicPath)
+        head: [...head].map(addPublicPath),
+        body: [...body].map(addPublicPath)
       }
     }
   }
@@ -98,9 +98,7 @@ function createRenderToStringFn(data) {
 
       const renderTagOptions = {
         renderContext: data.renderContext,
-        asyncFiles: data.renderContext.getAsyncFiles(
-          Array.from(ssrContext._modules)
-        ),
+        asyncFiles: data.renderContext.getAsyncFiles([...ssrContext._modules]),
         renderPreloadTagMap: file => data.renderPreloadTag(file, ssrContext),
         ssrContext
       }

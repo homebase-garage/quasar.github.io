@@ -69,7 +69,7 @@ function getValidValues(start, count, testFn) {
 
   return {
     min: values[0],
-    max: values[values.length - 1],
+    max: values.at(-1),
     values,
     threshold: count + 1
   }
@@ -245,7 +245,7 @@ export default createComponent({
 
       const am = getValidValues(0, 11, hourInSelection.value)
       const pm = getValidValues(12, 11, hourInSelection.value)
-      return { am, pm, values: am.values.concat(pm.values) }
+      return { am, pm, values: [...am.values, ...pm.values] }
     })
 
     const validMinutes = computed(() =>
@@ -262,12 +262,15 @@ export default createComponent({
 
     const viewValidOptions = computed(() => {
       switch (view.value) {
-        case 'hour':
+        case 'hour': {
           return validHours.value
-        case 'minute':
+        }
+        case 'minute': {
           return validMinutes.value
-        case 'second':
+        }
+        case 'second': {
           return validSeconds.value
+        }
       }
     })
 
@@ -462,9 +465,9 @@ export default createComponent({
     function updateClock(evt, clockRect, cacheVal) {
       const pos = position(evt),
         height = Math.abs(pos.top - clockRect.top),
-        distance = Math.sqrt(
-          Math.abs(pos.top - clockRect.top) ** 2 +
-            Math.abs(pos.left - clockRect.left) ** 2
+        distance = Math.hypot(
+          pos.top - clockRect.top,
+          pos.left - clockRect.left
         )
 
       let val,

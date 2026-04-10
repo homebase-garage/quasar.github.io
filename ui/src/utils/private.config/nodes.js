@@ -19,7 +19,7 @@ export function createGlobalNode(id, portalType) {
     }
   }
 
-  target.appendChild(el)
+  target.append(el)
   nodesList.push(el)
   portalTypeList.push(portalType)
 
@@ -50,7 +50,7 @@ export function changeGlobalNodesTarget(newTarget) {
   ) {
     nodesList.forEach(node => {
       if (node.contains(target) === false) {
-        target.appendChild(node)
+        target.append(node)
       }
     })
 
@@ -66,7 +66,7 @@ export function changeGlobalNodesTarget(newTarget) {
       (i === lastDialogIndex || portalTypeList[i] !== 'dialog') &&
       el.contains(target) === false
     ) {
-      target.appendChild(el)
+      target.append(el)
     }
   }
 }

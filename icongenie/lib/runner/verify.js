@@ -57,7 +57,7 @@ function printBanner(assetsOf, params) {
 
 function parseAssets(assets, include) {
   const filesMap = []
-  let assetsOf = []
+  const assetsOf = []
 
   if (include) {
     const embeddedModes = include.filter(mode =>
@@ -71,10 +71,10 @@ function parseAssets(assets, include) {
       })
     })
 
-    assetsOf = assetsOf.concat(embeddedModes)
+    assetsOf.push(...embeddedModes)
   }
 
-  if (assets && assets.length > 0) {
+  if (assets && assets.length !== 0) {
     filesMap.push({
       name: 'profile assets',
       files: getAssetsFiles(assets)
@@ -107,7 +107,7 @@ function verifyProfile(profile) {
       ? entry.files.filter(file => file.generator === params.filter)
       : entry.files
 
-    if (files.length > 0) {
+    if (files.length !== 0) {
       printMode(entry.name, files)
     }
   })

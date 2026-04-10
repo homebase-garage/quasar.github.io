@@ -19,10 +19,8 @@ const qAppPaths = (() => {
       if (value.types) {
         localMap[localMapKey] = resolveToCliDir(value.types)
       }
-    } else if (typeof value === 'string') {
-      if (dTsRE.test(value)) {
-        localMap[localMapKey] = resolveToCliDir(value)
-      }
+    } else if (typeof value === 'string' && dTsRE.test(value)) {
+      localMap[localMapKey] = resolveToCliDir(value)
     }
   }
 
@@ -215,7 +213,7 @@ function writeFeatureFlags(quasarConf, fsUtils) {
     }
   }
 
-  const flagDefinitions = Array.from(featureFlags)
+  const flagDefinitions = [...featureFlags]
     .map(flag => `${flag}: true;`)
     .join('\n    ')
   const contents = featureFlagsTemplate.replace(

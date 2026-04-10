@@ -140,6 +140,7 @@ function displayModes() {
 }
 
 if (argv._.length === 2) {
+  // oxlint-disable-next-line unicorn/prefer-top-level-await
   run()
 } else {
   displayModes()

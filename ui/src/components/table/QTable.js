@@ -251,7 +251,7 @@ export default createComponent({
 
       if (columnToSort.value !== null) {
         rows = computedSortMethod.value(
-          props.rows === rows ? rows.slice() : rows,
+          props.rows === rows ? [...rows] : rows,
           sortBy,
           descending
         )
@@ -369,11 +369,8 @@ export default createComponent({
 
         if (topRow !== void 0) {
           const topContent = h('tbody', topRow({ cols: computedCols.value }))
-
           virtSlots.before =
-            header === null
-              ? () => topContent
-              : () => [header()].concat(topContent)
+            header === null ? () => topContent : () => [header(), topContent]
         } else if (header !== null) {
           virtSlots.before = header
         }
@@ -421,7 +418,7 @@ export default createComponent({
         return
       }
 
-      toIndex = parseInt(toIndex, 10)
+      toIndex = Number.parseInt(toIndex, 10)
       const rowEl = rootRef.value.querySelector(
         `tbody tr:nth-of-type(${toIndex + 1})`
       )
@@ -566,18 +563,18 @@ export default createComponent({
         topRow = slots['top-row'],
         bottomRow = slots['bottom-row']
 
-      let child = computedRows.value.map((row, pageIndex) =>
+      const child = computedRows.value.map((row, pageIndex) =>
         getTBodyTR(row, body, pageIndex)
       )
 
-      if (topRow !== void 0) {
-        child = topRow({ cols: computedCols.value }).concat(child)
-      }
-      if (bottomRow !== void 0) {
-        child = child.concat(bottomRow({ cols: computedCols.value }))
-      }
-
-      return h('tbody', child)
+      return h(
+        'tbody',
+        [
+          topRow?.({ cols: computedCols.value }),
+          ...child,
+          bottomRow?.({ cols: computedCols.value })
+        ].flat()
+      )
     }
 
     function getBodyScope(data) {
@@ -665,7 +662,7 @@ export default createComponent({
       let child
 
       if (hasSelection === true) {
-        child = topSelection(marginalsScope.value).slice()
+        child = [topSelection(marginalsScope.value)].flat()
       } else {
         child = []
 
@@ -733,7 +730,7 @@ export default createComponent({
         headerCell = slots['header-cell']
 
       if (header !== void 0) {
-        return header(getHeaderScope({ header: true })).slice()
+        return [header(getHeaderScope({ header: true }))].flat()
       }
 
       const child = computedCols.value.map(col => {

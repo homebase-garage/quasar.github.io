@@ -249,7 +249,7 @@ const cssImport = computed(() => {
   }
 
   const libs =
-    acc.length > 0 ? `// Import icon libraries\n${acc.join('\n')}\n\n` : ''
+    acc.length !== 0 ? `// Import icon libraries\n${acc.join('\n')}\n\n` : ''
 
   const animExample =
     css.animate === true
@@ -276,7 +276,7 @@ const jsImport = computed(() => {
     acc.push(`import quasarIconSet from 'quasar/icon-set/${iconSet.value}'`)
   }
 
-  return `${acc.length > 0 ? '\n' : ''}${acc.join('\n')}`
+  return `${acc.length !== 0 ? '\n' : ''}${acc.join('\n')}`
 })
 
 const configInstantiation = computed(() => {

@@ -163,7 +163,7 @@ export function useTablePagination(
       innerPagination.value.rowsPerPage
     )
       ? props.rowsPerPageOptions
-      : [innerPagination.value.rowsPerPage].concat(props.rowsPerPageOptions)
+      : [innerPagination.value.rowsPerPage, ...props.rowsPerPageOptions]
 
     return opts.map(count => ({
       label: count === 0 ? $q.lang.table.allRows : String(count),

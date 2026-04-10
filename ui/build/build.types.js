@@ -8,7 +8,7 @@ import { clone, logError, resolveToRoot, writeFile } from './build.utils.js'
 const typeRoot = resolveToRoot('types')
 const distRoot = resolveToRoot('dist/types')
 const resolvePath = file => path.resolve(distRoot, file)
-const toCamelCase = str => str.replace(/(-\w)/g, m => m[1].toUpperCase())
+const toCamelCase = str => str.replaceAll(/(-\w)/g, m => m[1].toUpperCase())
 
 const extraInterfaces = {}
 
@@ -877,7 +877,7 @@ function ensureTypeScriptValidity() {
 }
 
 export async function generate({ api, quasarLangIndex }) {
-  const apiList = api.plugins.concat(api.directives).concat(api.components)
+  const apiList = [...api.plugins, ...api.directives, ...api.components]
 
   try {
     await Promise.all(copyPredefinedTypes(typeRoot))

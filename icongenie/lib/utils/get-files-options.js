@@ -9,7 +9,7 @@ function getRgbColor(color) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2]
   }
 
-  const num = parseInt(hex, 16)
+  const num = Number.parseInt(hex, 16)
 
   return {
     r: num >> 16,
@@ -31,7 +31,7 @@ export async function getFilesOptions({
 
   ...opts
 }) {
-  const qualityLevel = parseInt(quality, 10)
+  const qualityLevel = Number.parseInt(quality, 10)
   const sharpIcon = sharp(icon).withMetadata()
   const sharpBackground = background
     ? sharp(background).withMetadata()

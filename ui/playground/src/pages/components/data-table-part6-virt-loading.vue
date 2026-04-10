@@ -104,11 +104,9 @@ const seed = [
 
 const seedSize = seed.length
 
-let data = []
+const data = []
 for (let i = 0; i < 1000; i++) {
-  data = data.concat(
-    seed.map((r, j) => ({ ...r, index: i * seedSize + j + 1 }))
-  )
+  data.push(...seed.map((r, j) => ({ ...r, index: i * seedSize + j + 1 })))
 }
 Object.freeze(data)
 

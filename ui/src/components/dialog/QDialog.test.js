@@ -50,7 +50,7 @@ async function triggerEscKey(localWrapper) {
 function createFocusEl() {
   const el = document.createElement('div')
   el.setAttribute('tabindex', '0')
-  document.body.appendChild(el)
+  document.body.append(el)
 
   onTestFinished(() => {
     el.remove()

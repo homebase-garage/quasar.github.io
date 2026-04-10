@@ -119,7 +119,7 @@ function addNotification(config, $q, originalApi) {
     notif.timeout = 5000
   } else {
     const t = Number(notif.timeout) // we catch exponential notation too with Number() casting
-    if (isNaN(t) || t < 0) {
+    if (Number.isNaN(t) || t < 0) {
       return logError('wrong timeout', config)
     }
     notif.timeout = Number.isFinite(t) ? t : 0
@@ -137,17 +137,16 @@ function addNotification(config, $q, originalApi) {
     }
   }
 
-  const actions = (Array.isArray(config.actions) === true ? config.actions : [])
-    .concat(
-      config.ignoreDefaults !== true && Array.isArray(defaults.actions) === true
-        ? defaults.actions
-        : []
-    )
-    .concat(
-      Array.isArray(notifTypes[config.type]?.actions) === true
-        ? notifTypes[config.type].actions
-        : []
-    )
+  const actions = [
+    ...(Array.isArray(config.actions) === true ? config.actions : []),
+    ...(config.ignoreDefaults !== true &&
+    Array.isArray(defaults.actions) === true
+      ? defaults.actions
+      : []),
+    ...(Array.isArray(notifTypes[config.type]?.actions) === true
+      ? notifTypes[config.type].actions
+      : [])
+  ]
 
   const { closeBtn } = notif
   if (closeBtn) {
@@ -206,9 +205,12 @@ function addNotification(config, $q, originalApi) {
   } else {
     if (notif.group === void 0 || notif.group === true) {
       // do not replace notifications with different buttons
-      notif.group = [notif.message, notif.caption, notif.multiline]
-        .concat(notif.actions.map(props => `${props.label}*${props.icon}`))
-        .join('|')
+      notif.group = [
+        notif.message,
+        notif.caption,
+        notif.multiline,
+        ...notif.actions.map(props => `${props.label}*${props.icon}`)
+      ].join('|')
     }
 
     notif.meta.group = notif.group + '|' + notif.position
@@ -544,8 +546,8 @@ function getComponent() {
 
 export default {
   setDefaults(opts) {
-    if (__QUASAR_SSR_SERVER__ !== true) {
-      if (isObject(opts) === true) Object.assign(defaults, opts)
+    if (__QUASAR_SSR_SERVER__ !== true && isObject(opts) === true) {
+      Object.assign(defaults, opts)
     }
   },
 

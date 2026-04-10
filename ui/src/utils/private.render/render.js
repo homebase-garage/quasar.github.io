@@ -8,7 +8,7 @@ export function hUniqueSlot(slot, otherwise) {
   if (slot !== void 0) {
     const vnode = slot()
     if (vnode !== void 0 && vnode !== null) {
-      return vnode.slice()
+      return [...vnode]
     }
   }
 
@@ -20,6 +20,7 @@ export function hUniqueSlot(slot, otherwise) {
  * so it's merged with the possible slot
  */
 export function hMergeSlot(slot, source) {
+  // oxlint-disable-next-line unicorn/prefer-spread
   return slot !== void 0 ? source.concat(slot()) : source
 }
 
@@ -28,10 +29,9 @@ export function hMergeSlot(slot, source) {
  * even if source might not exist
  */
 export function hMergeSlotSafely(slot, source) {
-  if (slot === void 0) {
-    return source
-  }
+  if (slot === void 0) return source
 
+  // oxlint-disable-next-line unicorn/prefer-spread
   return source !== void 0 ? source.concat(slot()) : slot()
 }
 
@@ -41,8 +41,6 @@ export function hMergeSlotSafely(slot, source) {
  */
 export function hDir(tag, data, children, key, condition, getDirsFn) {
   data.key = key + condition
-
   const vnode = h(tag, data, children)
-
   return condition === true ? withDirectives(vnode, getDirsFn()) : vnode
 }

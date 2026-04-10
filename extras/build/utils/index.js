@@ -1,8 +1,8 @@
 const xmldom = require('@xmldom/xmldom')
 const Parser = new xmldom.DOMParser()
 
-const { resolve, basename } = require('path')
-const { readFileSync, writeFileSync, existsSync } = require('fs')
+const { resolve, basename } = require('node:path')
+const { readFileSync, writeFileSync, existsSync } = require('node:fs')
 
 const cjsReplaceRE = /export const /g
 const typeExceptions = ['g', 'svg', 'defs', 'style', 'title']
@@ -17,11 +17,11 @@ const chunkArray = (arr, size = 2) =>
   )
 
 const calcValue = (val, base) =>
-  val.endsWith('%') ? (parseFloat(val) * base) / 100 : Number(val)
+  val.endsWith('%') ? (Number.parseFloat(val) * base) / 100 : Number(val)
 
 const getAttributes = (el, list) =>
   list.reduce((attrs, name) => {
-    attrs[name] = parseFloat(el.getAttribute(name) || 0)
+    attrs[name] = Number.parseFloat(el.getAttribute(name) || 0)
     return attrs
   }, {})
 
@@ -76,7 +76,7 @@ const getAttributesAsStyle = el => {
     'y2'
   ])
 
-  return Array.from(el.attributes)
+  return [...el.attributes]
     .filter(({ namespaceURI }) => namespaceURI === null)
     .filter(({ nodeName }) => !exceptions.has(nodeName))
     .map(({ nodeName, nodeValue }) => `${nodeName}:${nodeValue};`)
@@ -185,7 +185,10 @@ function parseDom(name, el, pathsDefinitions) {
     }
 
     const style = el.getAttribute('style') || ''
-    let strAttributes = (style + getRecursiveAttributes(el)).replace(/;;/g, ';')
+    let strAttributes = (style + getRecursiveAttributes(el)).replaceAll(
+      ';;',
+      ';'
+    )
 
     // don't allow fill to be both 'none' and 'currentColor'
     // this is common because of the inheritance of 'fill:none' from an 'svg' tag
@@ -203,7 +206,7 @@ function parseDom(name, el, pathsDefinitions) {
 
     const paths = {
       path: decoders[type](el),
-      style: Array.from(combinedStyles).join(';'),
+      style: [...combinedStyles].join(';'),
       transform
     }
 
@@ -212,15 +215,15 @@ function parseDom(name, el, pathsDefinitions) {
     }
   }
 
-  Array.from(el.childNodes).forEach(child => {
+  ;[...el.childNodes].forEach(child => {
     parseDom(name, child, pathsDefinitions)
   })
 }
 
 function getWidthHeightAsViewbox(element) {
   // Retrieve width and height attributes
-  const width = parseFloat(element.getAttribute('width') || '0')
-  const height = parseFloat(element.getAttribute('height') || '0')
+  const width = Number.parseFloat(element.getAttribute('width') || '0')
+  const height = Number.parseFloat(element.getAttribute('height') || '0')
 
   // Ensure both width and height are valid numbers
   if (width > 0 && height > 0) {
@@ -257,30 +260,25 @@ function parseSvgContent(name, content) {
 
   const tmpView = `|${viewBox}`
 
-  const result = {
-    viewBox: viewBox !== '0 0 24 24' && tmpView !== '|' ? tmpView : ''
+  return {
+    viewBox: viewBox !== '0 0 24 24' && tmpView !== '|' ? tmpView : '',
+    paths: pathsDefinitions.every(def => !def.style && !def.transform)
+      ? pathsDefinitions.map(def => def.path).join('')
+      : pathsDefinitions
+          .map(def => {
+            let stylePart = def.style ? `@@${def.style}` : '' // Include style only if it is non-empty
+            const transformPart = def.transform ? `@@${def.transform}` : '' // Include transform only if it is non-empty
+
+            // If style is empty but transform is not, we need a special case
+            if (!def.style && def.transform) {
+              stylePart = '@@' // Empty style needs to output "@@" when transform exists
+            }
+
+            // Combine path with stylePart and transformPart
+            return `${def.path}${stylePart}${transformPart}`
+          })
+          .join('&&')
   }
-
-  if (pathsDefinitions.every(def => !def.style && !def.transform)) {
-    result.paths = pathsDefinitions.map(def => def.path).join('')
-  } else {
-    result.paths = pathsDefinitions
-      .map(def => {
-        let stylePart = def.style ? `@@${def.style}` : '' // Include style only if it is non-empty
-        const transformPart = def.transform ? `@@${def.transform}` : '' // Include transform only if it is non-empty
-
-        // If style is empty but transform is not, we need a special case
-        if (!def.style && def.transform) {
-          stylePart = '@@' // Empty style needs to output "@@" when transform exists
-        }
-
-        // Combine path with stylePart and transformPart
-        return `${def.path}${stylePart}${transformPart}`
-      })
-      .join('&&')
-  }
-
-  return result
 }
 function getPackageJson(packageName) {
   let file = resolve(
@@ -311,14 +309,14 @@ function getBanner(iconSetName, versionOrPackageName) {
 module.exports.getBanner = getBanner
 
 module.exports.defaultNameMapper = (filePath, prefix) =>
-  (prefix + '-' + basename(filePath, '.svg')).replace(/(-\w)/g, m =>
+  (prefix + '-' + basename(filePath, '.svg')).replaceAll(/(-\w)/g, m =>
     m[1].toUpperCase()
   )
 
 function extractSvg(content, name) {
   const { paths, viewBox } = parseSvgContent(name, content)
 
-  const path = paths.replace(/[\r\n\t]+/gi, ',').replace(/,,/gi, ',')
+  const path = paths.replaceAll(/[\r\n\t]+/gi, ',').replaceAll(',,', ',')
 
   return {
     svgDef: `export const ${name} = '${path}${viewBox}'`,
@@ -439,7 +437,7 @@ class Queue {
   }
 
   push = entries => {
-    this.pendingEntries = this.pendingEntries.concat(entries)
+    this.pendingEntries.push(...entries)
     this.process()
   }
 

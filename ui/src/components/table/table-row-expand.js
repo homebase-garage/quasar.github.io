@@ -1,7 +1,7 @@
 import { ref, watch } from 'vue'
 
 function getVal(val) {
-  return Array.isArray(val) ? val.slice() : []
+  return Array.isArray(val) ? [...val] : []
 }
 
 export const useTableRowExpandProps = {
@@ -33,7 +33,7 @@ export function useTableRowExpand(props, emit) {
   }
 
   function updateExpanded(key, add) {
-    const target = innerExpanded.value.slice()
+    const target = [...innerExpanded.value]
     const index = target.indexOf(key)
 
     if (add === true) {

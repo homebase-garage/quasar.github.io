@@ -6,6 +6,7 @@ function parsePromises(sequentialPromises) {
     return {
       isList,
       totalJobs,
+      // oxlint-disable-next-line unicorn/new-for-builtins
       resultAggregator: Array(totalJobs).fill(null)
     }
   }
@@ -115,9 +116,10 @@ export default function runSequentialPromises(
       runNextPromise()
     })
 
-  const threads = Array(Math.min(totalJobs, threadsNumber))
-    .fill(null)
-    .map(getPromiseThread)
+  const threads = Array.from(
+    { length: Math.min(totalJobs, threadsNumber) },
+    getPromiseThread
+  )
 
   return Promise.all(threads).then(() => resultAggregator)
 }

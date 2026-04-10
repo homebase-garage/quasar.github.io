@@ -37,8 +37,8 @@ function printBanner(assetsOf, params) {
 }
 
 function parseAssets(assets, include) {
-  let files = []
-  let assetsOf = []
+  const files = []
+  const assetsOf = []
 
   if (include) {
     const embeddedModes = include.filter(mode =>
@@ -46,14 +46,14 @@ function parseAssets(assets, include) {
     )
 
     embeddedModes.forEach(mode => {
-      files = files.concat(getAssetsFiles(modes[mode].assets))
+      files.push(...getAssetsFiles(modes[mode].assets))
     })
 
-    assetsOf = assetsOf.concat(embeddedModes)
+    assetsOf.push(...embeddedModes)
   }
 
-  if (assets && assets.length > 0) {
-    files = files.concat(getAssetsFiles(assets))
+  if (assets && assets.length !== 0) {
+    files.push(...getAssetsFiles(assets))
     assetsOf.push('profile')
   }
 
@@ -108,7 +108,7 @@ async function generateFromProfile(profile) {
     warn(
       `No assets to generate! No mode/include specified, filter too specific or the respective Quasar mode(s) are not installed`
     )
-    return Promise.resolve(0)
+    return 0
   }
 
   printBanner(assetsOf, params)

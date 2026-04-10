@@ -15,7 +15,7 @@ export function removeFocusWaitFlag(flag) {
 
   if (waitFlags.length === 0 && queue.length !== 0) {
     // only call last focus handler (can't focus multiple things at once)
-    queue[queue.length - 1]()
+    queue.at(-1)()
     queue = []
   }
 }

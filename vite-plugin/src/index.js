@@ -7,7 +7,7 @@ import quasar from './plugin.js'
 const transformAssetUrls = JSON.parse(
   readFileSync(
     join(quasarPath, 'dist/transforms/loader-asset-urls.json'),
-    'utf-8'
+    'utf8'
   )
 )
 

@@ -33,6 +33,10 @@
 <script>
 import { ref } from 'vue'
 
+function sortAtoi(a, b) {
+  return Number(a) - Number(b)
+}
+
 export default {
   setup() {
     const inView = ref([])
@@ -57,10 +61,6 @@ export default {
         inView.value.splice(index, 1)
         inView.value.sort(sortAtoi)
       }
-    }
-
-    function sortAtoi(a, b) {
-      return Number(a) - Number(b)
     }
 
     return {

@@ -19,7 +19,7 @@ module.exports.AppBuilder = class AppBuilder extends AppTool {
         ? filename
         : join(this.quasarConf.build.distDir, filename)
 
-    return fse.readFileSync(target, 'utf-8')
+    return fse.readFileSync(target, 'utf8')
   }
 
   writeFile(filename, content) {
@@ -29,7 +29,7 @@ module.exports.AppBuilder = class AppBuilder extends AppTool {
         : join(this.quasarConf.build.distDir, filename)
 
     fse.ensureDirSync(dirname(target))
-    fse.writeFileSync(target, content, 'utf-8')
+    fse.writeFileSync(target, content, 'utf8')
   }
 
   copyFiles(patterns, targetFolder = this.quasarConf.build.distDir) {

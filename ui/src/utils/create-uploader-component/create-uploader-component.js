@@ -10,8 +10,13 @@ import { isObject } from '../is/is.js'
 
 const coreEmitsObject = getEmitsObject(coreEmits)
 
-export default ({ name, props, emits, injectPlugin }) =>
-  createComponent({
+export default function createUploaderComponent({
+  name,
+  props,
+  emits,
+  injectPlugin
+}) {
+  return createComponent({
     name,
 
     props: {
@@ -28,3 +33,4 @@ export default ({ name, props, emits, injectPlugin }) =>
       return getRenderer(injectPlugin, expose)
     }
   })
+}

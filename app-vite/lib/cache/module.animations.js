@@ -6,5 +6,5 @@ export async function createInstance({ appPaths }) {
     appPaths.appDir
   )
 
-  return generalAnimations.concat(inAnimations).concat(outAnimations)
+  return [...generalAnimations, ...inAnimations, ...outAnimations]
 }

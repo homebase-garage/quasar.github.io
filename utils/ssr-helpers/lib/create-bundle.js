@@ -2,9 +2,9 @@
  * Forked from bundle-runner v0.0.1 NPM package
  */
 
-const path = require('path')
-const vm = require('vm')
-const NativeModule = require('module')
+const path = require('node:path')
+const vm = require('node:vm')
+const NativeModule = require('node:module')
 const { SourceMapConsumer } = require('source-map')
 
 const filenameRE = /\(([^)]+\.js):(\d+):(\d+)\)$/

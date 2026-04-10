@@ -154,9 +154,9 @@ export default createComponent({
       rows: computed(() => {
         const rows = props.view.toLowerCase().split(' ')
         return {
-          top: rows[0].split(''),
-          middle: rows[1].split(''),
-          bottom: rows[2].split('')
+          top: [...rows[0]],
+          middle: [...rows[1]],
+          bottom: [...rows[2]]
         }
       }),
 

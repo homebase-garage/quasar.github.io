@@ -17,8 +17,8 @@ if (!__QUASAR_SSR__) {
     height: '1px'
   })
 
-  document.body.appendChild(scroller)
-  scroller.appendChild(spacer)
+  document.body.append(scroller)
+  scroller.append(spacer)
   scroller.scrollLeft = -1000
 
   rtlHasScrollBug = scroller.scrollLeft >= 0

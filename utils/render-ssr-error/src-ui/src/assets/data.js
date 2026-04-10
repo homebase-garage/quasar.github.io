@@ -254,7 +254,7 @@ export default import.meta.env.DEV
           'Node.js': 'Node.js 16.15.1 Darwin',
           'Server protocol': 'HTTP/1.1',
           'Remote address': '::1',
-          'Remote port': 64902,
+          'Remote port': 64_902,
           'Request URI': '/',
           'Request method': 'GET',
           'Request pathname': '/',
@@ -311,7 +311,7 @@ export default import.meta.env.DEV
           HOMEBREW_REPOSITORY: '/opt/homebrew',
           MANPATH: '/opt/homebrew/share/man::',
           INFOPATH: '/opt/homebrew/share/info:',
-          LC_CTYPE: 'UTF-8',
+          LC_CTYPE: 'utf8',
           __CF_USER_TEXT_ENCODING: '0x1F5:0x0:0x0',
           QUASAR_CLI_VERSION: '2.0.1',
           NODE_ENV: 'development'

@@ -6,7 +6,7 @@ const gitFetch = new Octokit({ auth: process.env.TOKEN })
 const versionMatchRE = /([\w/\-@]+)[- ]v([\d.\-\w]+)/
 const ghLinkRE = /#([\d]+)/g
 
-export default async (packages, versionRE) => {
+export default async function releaseNotesRequest(packages, versionRE) {
   const packageNameList = Object.keys(packages)
 
   async function query(page) {

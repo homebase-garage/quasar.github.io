@@ -108,7 +108,7 @@ function getFileEnvResult({
       }
 
       usedEnvFiles.push(file)
-      return Object.entries(dotEnvParse(readFileSync(filePath, 'utf-8')))
+      return Object.entries(dotEnvParse(readFileSync(filePath, 'utf8')))
     })
   )
 

@@ -274,9 +274,9 @@ function d2g(jdn) {
 */
 
 function div(a, b) {
-  return ~~(a / b)
+  return Math.trunc(a / b)
 }
 
 function mod(a, b) {
-  return a - ~~(a / b) * b
+  return a - Math.trunc(a / b) * b
 }

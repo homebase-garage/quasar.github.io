@@ -1,10 +1,9 @@
 import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 
 import { mergeConfig } from 'vite'
 import { defineConfig } from '#q-app/wrappers'
 
-const rootFolder = fileURLToPath(new URL('.', import.meta.url))
+const rootFolder = import.meta.dirname
 const resolve = _path => join(rootFolder, _path)
 
 export default defineConfig(ctx => ({
@@ -32,6 +31,7 @@ export default defineConfig(ctx => ({
 
   build: {
     vueRouterMode: 'history',
+    vueOptionsAPI: true,
 
     alias: {
       'quasar/dist/quasar.sass': resolve('../src/css/index.sass'),

@@ -48,7 +48,7 @@ function openWindow(url, reject, windowFeatures) {
   }
 }
 
-export default (url, reject, windowFeatures) => {
+export default function openUrl(url, reject, windowFeatures) {
   if (Platform.is.ios === true && window.SafariViewController !== void 0) {
     window.SafariViewController.isAvailable(available => {
       if (available) {

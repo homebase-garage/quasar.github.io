@@ -64,7 +64,7 @@ export function useTableRowSelection(props, emit, computedRows, getRowKey) {
           ? rows
           : []
         : added === true
-          ? props.selected.concat(rows)
+          ? [...props.selected, ...rows]
           : props.selected.filter(
               row => keys.includes(getRowKey.value(row)) === false
             )

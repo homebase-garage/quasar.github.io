@@ -3,7 +3,7 @@ import { client } from '../../plugins/platform/Platform.js'
 const handlers = []
 
 function trigger(e) {
-  handlers[handlers.length - 1](e)
+  handlers.at(-1)(e)
 }
 
 export function addFocusout(fn) {

@@ -15,7 +15,7 @@ function useTransformState() {
   }
 
   const autoImportData = JSON.parse(
-    readFileSync(join(quasarPath, 'dist/transforms/auto-import.json'), 'utf-8')
+    readFileSync(join(quasarPath, 'dist/transforms/auto-import.json'), 'utf8')
   )
 
   const compRegex = {
@@ -34,7 +34,7 @@ function useTransformState() {
   }
 
   const dirRegex = new RegExp(
-    `_resolveDirective\\("${autoImportData.regex.directives.replace(/v-/g, '')}"\\)`,
+    `_resolveDirective\\("${autoImportData.regex.directives.replaceAll('v-', '')}"\\)`,
     'g'
   )
 
@@ -66,7 +66,7 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
   let code = jsImportTransformed
     .replace(compRegex[autoImportComponentCase], (_, match) => {
       const name = autoImportData.importName[match]
-      const reverseName = match.replace(/-/g, '_')
+      const reverseName = match.replaceAll('-', '_')
 
       if (importMap[name] === void 0) {
         importSet.add(name)
@@ -80,7 +80,7 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
     })
     .replace(dirRegex, (_, match) => {
       const name = autoImportData.importName['v-' + match]
-      const reverseName = match.replace(/-/g, '_')
+      const reverseName = match.replaceAll('-', '_')
 
       if (importMap[name] === void 0) {
         importSet.add(name)
@@ -96,8 +96,8 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
   if (compList.length !== 0) {
     const list = compList.sort(lengthSortFn).join('|')
     code = code
-      .replace(new RegExp(`const _component_(${list}) = `, 'g'), '')
-      .replace(
+      .replaceAll(new RegExp(`const _component_(${list}) = `, 'g'), '')
+      .replaceAll(
         new RegExp(`_component_(${list})`, 'g'),
         (_, match) => reverseMap[match]
       )
@@ -106,8 +106,8 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
   if (dirList.length !== 0) {
     const list = dirList.sort(lengthSortFn).join('|')
     code = code
-      .replace(new RegExp(`const _directive_(${list}) = `, 'g'), '')
-      .replace(
+      .replaceAll(new RegExp(`const _directive_(${list}) = `, 'g'), '')
+      .replaceAll(
         new RegExp(`_directive_(${list})`, 'g'),
         (_, match) => reverseMap[match]
       )

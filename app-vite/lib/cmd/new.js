@@ -218,23 +218,19 @@ async function getAsset(assetType) {
   }
 }
 
-async function generate() {
-  const { relativePath, ext, reference } = await getAsset(type)
-  const fullExt = `.${ext}`
+const { relativePath, ext, reference } = await getAsset(type)
+const fullExt = `.${ext}`
 
-  names.forEach(name => {
-    const file = join(
-      relativePath,
-      name + (name.endsWith(fullExt) ? '' : fullExt)
-    )
-    const targetFile = appPaths.resolve.app(file)
+names.forEach(name => {
+  const file = join(
+    relativePath,
+    name + (name.endsWith(fullExt) ? '' : fullExt)
+  )
+  const targetFile = appPaths.resolve.app(file)
 
-    createFile({
-      targetFile,
-      ext,
-      reference
-    })
+  createFile({
+    targetFile,
+    ext,
+    reference
   })
-}
-
-generate()
+})

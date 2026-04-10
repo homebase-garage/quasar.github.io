@@ -25,22 +25,18 @@ const api = {
   }
 }
 
-async function runRequests() {
-  for (const quasarVersion in api) {
-    const { versionRE, packages } = api[quasarVersion]
+for (const quasarVersion in api) {
+  const { versionRE, packages } = api[quasarVersion]
 
-    console.log(`Requesting release notes for Quasar v${quasarVersion}...`)
+  console.log(`Requesting release notes for Quasar v${quasarVersion}...`)
 
-    await request(packages, versionRE).then(content => {
-      const dir = join(rootFolder, 'dist/release-notes')
-      const file = join(dir, `${quasarVersion}.json`)
+  await request(packages, versionRE).then(content => {
+    const dir = join(rootFolder, 'dist/release-notes')
+    const file = join(dir, `${quasarVersion}.json`)
 
-      fse.ensureDir(dir)
-      fse.writeJsonSync(file, content)
+    fse.ensureDir(dir)
+    fse.writeJsonSync(file, content)
 
-      console.log(' Created:', file)
-    })
-  }
+    console.log(' Created:', file)
+  })
 }
-
-runRequests()

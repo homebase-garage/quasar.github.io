@@ -311,14 +311,12 @@ export default createComponent({
     )
 
     function getNodeByKey(key) {
-      const reduce = [].reduce
-
       const find = (result, node) => {
         if (result || !node) {
           return result
         }
-        if (Array.isArray(node) === true) {
-          return reduce.call(Object(node), find, result)
+        if (Array.isArray(node)) {
+          return node.reduce(find, result)
         }
         if (node[props.nodeKey] === key) {
           return node
@@ -354,11 +352,14 @@ export default createComponent({
     function expandAll() {
       const expanded = []
       const travel = node => {
-        if (node[props.childrenKey] && node[props.childrenKey].length !== 0) {
-          if (node.expandable !== false && node.disabled !== true) {
-            expanded.push(node[props.nodeKey])
-            node[props.childrenKey].forEach(travel)
-          }
+        if (
+          node[props.childrenKey] &&
+          node[props.childrenKey].length !== 0 &&
+          node.expandable !== false &&
+          node.disabled !== true
+        ) {
+          expanded.push(node[props.nodeKey])
+          node[props.childrenKey].forEach(travel)
         }
       }
 
@@ -415,36 +416,35 @@ export default createComponent({
       const shouldEmit = props.expanded !== void 0
 
       if (shouldEmit === true) {
-        target = target.slice()
+        target = [...target]
       }
 
       if (state) {
-        if (props.accordion) {
-          if (meta.value[key]) {
-            const collapse = []
-            if (meta.value[key].parent) {
-              meta.value[key].parent.children.forEach(m => {
-                if (m.key !== key && m.expandable === true) {
-                  collapse.push(m.key)
-                }
-              })
-            } else {
-              props.nodes.forEach(node => {
-                const k = node[props.nodeKey]
-                if (k !== key) {
-                  collapse.push(k)
-                }
-              })
-            }
-            if (collapse.length !== 0) {
-              target = target.filter(k => collapse.includes(k) === false)
-            }
+        if (props.accordion && meta.value[key]) {
+          const collapse = []
+          if (meta.value[key].parent) {
+            meta.value[key].parent.children.forEach(m => {
+              if (m.key !== key && m.expandable === true) {
+                collapse.push(m.key)
+              }
+            })
+          } else {
+            props.nodes.forEach(node => {
+              const k = node[props.nodeKey]
+              if (k !== key) {
+                collapse.push(k)
+              }
+            })
+          }
+
+          if (collapse.length !== 0) {
+            target = target.filter(k => collapse.includes(k) === false)
           }
         }
 
-        target = target
-          .concat([key])
-          .filter((entryKey, index, self) => self.indexOf(entryKey) === index)
+        target = [...target, key].filter(
+          (entryKey, index, self) => self.indexOf(entryKey) === index
+        )
       } else {
         target = target.filter(k => k !== key)
       }
@@ -465,16 +465,14 @@ export default createComponent({
       const shouldEmit = props.ticked !== void 0
 
       if (shouldEmit === true) {
-        target = target.slice()
+        target = [...target]
       }
 
-      if (state) {
-        target = target
-          .concat(keys)
-          .filter((key, index, self) => self.indexOf(key) === index)
-      } else {
-        target = target.filter(k => keys.includes(k) === false)
-      }
+      target = state
+        ? [...target, ...keys].filter(
+            (key, index, self) => self.indexOf(key) === index
+          )
+        : target.filter(k => keys.includes(k) === false)
 
       if (shouldEmit === true) {
         emit('update:ticked', target)

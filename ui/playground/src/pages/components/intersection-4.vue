@@ -63,12 +63,10 @@ const randomDate = () => {
   return new Date(start + Math.random() * (end - start))
 }
 
-const items = Array(50)
-  .fill()
-  .map((_, id) => ({
-    id,
-    date: randomDate()
-  }))
+const items = Array.from({ length: 50 }, (_, id) => ({
+  id,
+  date: randomDate()
+}))
 
 export default {
   data() {

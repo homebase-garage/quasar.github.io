@@ -91,7 +91,7 @@ describe('[nodes API]', () => {
 
         const newTargetEl = document.createElement('div')
         newTargetEl.setAttribute('id', 'new-target')
-        document.body.appendChild(newTargetEl)
+        document.body.append(newTargetEl)
 
         expect(changeGlobalNodesTarget(newTargetEl)).toBeUndefined()
 

@@ -43,6 +43,7 @@ async function getPackageVersionList(packageName, npmRegistryUrl) {
 
         resolve(versionList.length !== 0 ? versionList : null)
       } catch {
+        // oxlint-disable-next-line promise/no-multiple-resolved
         resolve(null)
       }
     })
@@ -63,7 +64,7 @@ function getMajorVersion(name) {
     const child = crossSpawnSync(name, ['--version'])
     if (child.status === 0) {
       const version = String(child.output[1]).trim()
-      return parseInt(version.split('.')[0], 10)
+      return Number.parseInt(version.split('.')[0], 10)
     }
   } catch {
     /* do nothing; we return null below */
@@ -180,7 +181,7 @@ class PackageManager {
     }
 
     if (currentVersion === null) {
-      return versionList[versionList.length - 1]
+      return versionList.at(-1)
     }
 
     const [, major, prerelease] = currentVersion.match(versionRegex)
@@ -192,7 +193,7 @@ class PackageManager {
     )
 
     const list = versionList.filter(version => regex.test(version))
-    return list[list.length - 1] || null
+    return list.at(-1) || null
   }
 }
 
@@ -284,7 +285,7 @@ const packageManagersList = [new Yarn(), new Pnpm(), new Npm(), new Bun()]
 function getProjectPackageManager(folder) {
   // Recursively checks for presence of the lock file by traversing
   // the folder tree up to the root
-  while (folder.length !== 0 && folder[folder.length - 1] !== sep) {
+  while (folder.length !== 0 && folder.at(-1) !== sep) {
     for (const pm of packageManagersList) {
       if (
         pm.lockFiles.some(lockFile => fs.existsSync(join(folder, lockFile)))

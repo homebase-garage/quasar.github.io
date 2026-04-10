@@ -99,7 +99,9 @@ function getWindowsPath(bin) {
     const buffer = execSync(
       String.raw`REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio" /v Path`
     )
-    const bufferString = buffer.toString('utf8').replace(/(\r\n|\n|\r)/gm, '')
+    const bufferString = buffer
+      .toString('utf8')
+      .replaceAll(/(\r\n|\n|\r)/gm, '')
     const index = bufferString.indexOf('REG_SZ')
 
     if (index > 0) {
@@ -184,13 +186,17 @@ export function openIDE({ mode, bin, target, dev, appPaths }) {
   console.log()
 
   switch (process.platform) {
-    case 'darwin':
+    case 'darwin': {
       return runMacOS(mode, target, appPaths)
-    case 'linux':
+    }
+    case 'linux': {
       return runLinux(mode, bin, target, appPaths)
-    case 'win32':
+    }
+    case 'win32': {
       return runWindows(mode, bin, target, appPaths)
-    default:
+    }
+    default: {
       fatal('Unsupported host OS for opening the IDE')
+    }
   }
 }

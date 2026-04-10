@@ -59,10 +59,10 @@ const quasarConfigBanner = `/* oxlint-disable */
 `
 
 function escapeHTMLTagContent(str) {
-  return str ? str.replace(/[<>]/g, '') : ''
+  return str ? str.replaceAll(/[<>]/g, '') : ''
 }
 function escapeHTMLAttribute(str) {
-  return str ? str.replace(/"/g, '') : ''
+  return str ? str.replaceAll('"', '') : ''
 }
 
 function formatPublicPath(publicPath) {
@@ -117,7 +117,7 @@ function parseAssetProperty(prefix) {
 }
 
 function getUniqueArray(original) {
-  return Array.from(new Set(original))
+  return [...new Set(original)]
 }
 
 function uniquePathFilter(value, index, self) {
@@ -450,16 +450,12 @@ export class QuasarConfigFile {
           this.#appEnv.snapshot.watchEnvFiles
         ) {
           const watcher = this.#watch.appEnvWatcher
-          watcher.unwatch(
-            Array.from(
-              this.#appEnv.watchEnvFiles.difference(newAppEnv.watchEnvFiles)
-            )
-          )
-          watcher.add(
-            Array.from(
-              newAppEnv.watchEnvFiles.difference(this.#appEnv.watchEnvFiles)
-            )
-          )
+          watcher.unwatch([
+            ...this.#appEnv.watchEnvFiles.difference(newAppEnv.watchEnvFiles)
+          ])
+          watcher.add([
+            ...newAppEnv.watchEnvFiles.difference(this.#appEnv.watchEnvFiles)
+          ])
         }
       }
 
@@ -491,16 +487,12 @@ export class QuasarConfigFile {
         this.#confEnv.snapshot.watchEnvFiles
       ) {
         const watcher = this.#watch.confEnvWatcher
-        watcher.unwatch(
-          Array.from(
-            this.#confEnv.watchEnvFiles.difference(newConfEnv.watchEnvFiles)
-          )
-        )
-        watcher.add(
-          Array.from(
-            newConfEnv.watchEnvFiles.difference(this.#confEnv.watchEnvFiles)
-          )
-        )
+        watcher.unwatch([
+          ...this.#confEnv.watchEnvFiles.difference(newConfEnv.watchEnvFiles)
+        ])
+        watcher.add([
+          ...newConfEnv.watchEnvFiles.difference(this.#confEnv.watchEnvFiles)
+        ])
       }
 
       if (
@@ -864,7 +856,7 @@ export class QuasarConfigFile {
 
     if (cfg.css.length !== 0) {
       cfg.css = cfg.css
-        .filter(_ => _)
+        .filter(Boolean)
         .map(parseAssetProperty('src/css'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
@@ -872,7 +864,7 @@ export class QuasarConfigFile {
 
     if (cfg.boot.length !== 0) {
       cfg.boot = cfg.boot
-        .filter(_ => _)
+        .filter(Boolean)
         .map(parseAssetProperty('boot'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
@@ -1115,7 +1107,7 @@ export class QuasarConfigFile {
 
       if (cfg.ssr.middlewares.length !== 0) {
         cfg.ssr.middlewares = cfg.ssr.middlewares
-          .filter(_ => _)
+          .filter(Boolean)
           .map(parseAssetProperty('app/src-ssr/middlewares'))
           .filter(asset => asset.path)
           .filter(uniquePathFilter)

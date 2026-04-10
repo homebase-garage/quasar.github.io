@@ -221,7 +221,7 @@ function printProperties({ props }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete props[key]
       }
     })
@@ -249,7 +249,7 @@ function printSlots({ slots }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete slots[key]
       }
     })
@@ -277,7 +277,7 @@ function printEvents({ events }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete events[key]
       }
     })
@@ -315,7 +315,7 @@ function printMethods({ methods }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete methods[key]
       }
     })
@@ -360,7 +360,7 @@ function printComputedProps({ computedProps }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete computedProps[key]
       }
     })
@@ -410,7 +410,7 @@ function printModifiers({ modifiers }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete modifiers[key]
       }
     })
@@ -451,7 +451,7 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.indexOf(argv.filter) === -1) {
+      if (key.includes(argv.filter) === false) {
         delete conf[key]
       }
     })
@@ -471,7 +471,7 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 
 function describe(api) {
   switch (api.type) {
-    case 'component':
+    case 'component': {
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.props === true) printProperties(api)
       if (apiParts.slots === true) printSlots(api)
@@ -479,20 +479,23 @@ function describe(api) {
       if (apiParts.methods === true) printMethods(api)
       if (apiParts.computedProps === true) printComputedProps(api)
       break
+    }
 
-    case 'directive':
+    case 'directive': {
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.value === true) printValue(api)
       if (apiParts.arg === true) printArg(api)
       if (apiParts.modifiers === true) printModifiers(api)
       break
+    }
 
-    case 'plugin':
+    case 'plugin': {
       if (apiParts.injection === true) printInjection(api)
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.props === true) printProperties(api)
       if (apiParts.methods === true) printMethods(api)
       break
+    }
   }
 
   if (api.meta && api.meta.docsUrl) {
@@ -534,8 +537,8 @@ async function run() {
       describe(api)
       console.log()
     }
-  } catch (e) {
-    fatal(e)
+  } catch (err) {
+    fatal(err)
   }
 }
 
@@ -556,7 +559,7 @@ function listElements() {
   if (filter) {
     const needle = filter.toLowerCase()
     const filterBanner = green(filter)
-    api = api.filter(entry => entry.toLowerCase().indexOf(needle) !== -1)
+    api = api.filter(entry => entry.toLowerCase().includes(needle))
 
     if (api.length === 0) {
       console.log(

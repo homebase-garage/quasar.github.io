@@ -45,26 +45,32 @@ function decode(value) {
       return new Date(Number.isNaN(number) === true ? source : number)
     }
 
-    case '__q_expr':
+    case '__q_expr': {
       return new RegExp(source)
+    }
 
-    case '__q_numb':
+    case '__q_numb': {
       return Number(source)
+    }
 
-    case '__q_bool':
+    case '__q_bool': {
       return Boolean(source === '1')
+    }
 
-    case '__q_strn':
+    case '__q_strn': {
       return String(source)
+    }
 
-    case '__q_objt':
+    case '__q_objt': {
       return JSON.parse(source)
+    }
 
-    default:
+    default: {
       // hmm, we reached here, we don't know the type,
       // then it means it wasn't encoded by us, so just
       // return whatever value it is
       return value
+    }
   }
 }
 

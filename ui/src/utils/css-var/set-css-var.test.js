@@ -15,7 +15,7 @@ describe('[setCssVar API]', () => {
 
       test('setCss(prop, el)', () => {
         const el = document.createElement('div')
-        document.body.appendChild(el)
+        document.body.append(el)
 
         expect.soft(setCssVar('my-prop', 'cool', el)).toBeUndefined()
 

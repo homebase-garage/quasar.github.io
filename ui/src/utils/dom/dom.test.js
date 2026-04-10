@@ -17,7 +17,7 @@ function createEl({ top, left } = {}) {
     el.style.left = left
   }
 
-  document.body.appendChild(el)
+  document.body.append(el)
   onTestFinished(() => {
     el.remove()
   })
@@ -171,7 +171,7 @@ describe('[dom API]', () => {
       test('childHasFocus(el, elChild)', () => {
         const el = createEl()
         const elChild = document.createElement('div')
-        el.appendChild(elChild)
+        el.append(elChild)
 
         expect(childHasFocus(el, elChild)).toBe(true)
       })

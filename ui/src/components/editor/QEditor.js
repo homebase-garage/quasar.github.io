@@ -324,6 +324,7 @@ export default createComponent({
         'size-1': {
           cmd: 'fontSize',
           param: '1',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size1 || i.size,
           tip: e.size1,
           htmlTip: `<font size="1">${e.size1}</font>`
@@ -331,6 +332,7 @@ export default createComponent({
         'size-2': {
           cmd: 'fontSize',
           param: '2',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size2 || i.size,
           tip: e.size2,
           htmlTip: `<font size="2">${e.size2}</font>`
@@ -338,6 +340,7 @@ export default createComponent({
         'size-3': {
           cmd: 'fontSize',
           param: '3',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size3 || i.size,
           tip: e.size3,
           htmlTip: `<font size="3">${e.size3}</font>`
@@ -345,6 +348,7 @@ export default createComponent({
         'size-4': {
           cmd: 'fontSize',
           param: '4',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size4 || i.size,
           tip: e.size4,
           htmlTip: `<font size="4">${e.size4}</font>`
@@ -352,6 +356,7 @@ export default createComponent({
         'size-5': {
           cmd: 'fontSize',
           param: '5',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size5 || i.size,
           tip: e.size5,
           htmlTip: `<font size="5">${e.size5}</font>`
@@ -359,6 +364,7 @@ export default createComponent({
         'size-6': {
           cmd: 'fontSize',
           param: '6',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size6 || i.size,
           tip: e.size6,
           htmlTip: `<font size="6">${e.size6}</font>`
@@ -366,6 +372,7 @@ export default createComponent({
         'size-7': {
           cmd: 'fontSize',
           param: '7',
+          // oxlint-disable-next-line unicorn/explicit-length-check
           icon: i.size7 || i.size,
           tip: e.size7,
           htmlTip: `<font size="7">${e.size7}</font>`

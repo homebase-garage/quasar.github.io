@@ -254,7 +254,7 @@ export default {
   watch: {
     $route: {
       handler({ query }) {
-        const page = parseInt(query.page, 10)
+        const page = Number.parseInt(query.page, 10)
 
         if (Number.isNaN(page) !== true) {
           this.page = Math.max(this.min, Math.min(this.max, page))

@@ -840,10 +840,10 @@ function parseObject({
     const regexList = Array.isArray(obj.type)
       ? obj.type.includes('Any')
         ? []
-        : obj.type.map(t => apiValueRegex[t]).filter(v => v)
+        : obj.type.map(t => apiValueRegex[t]).filter(Boolean)
       : obj.type === 'Any'
         ? []
-        : [apiValueRegex[obj.type]].filter(v => v)
+        : [apiValueRegex[obj.type]].filter(Boolean)
 
     for (const prop in obj) {
       // These props are always valid and doesn't need to be specified in 'props' of 'objectTypes' entries
@@ -1032,19 +1032,19 @@ function parseObject({
       )
     }
 
-    if (obj.default !== void 0 && obj.required === true) {
-      if (
-        Array.isArray(obj.type) === true
-          ? obj.type.includes('Any') !== true &&
-            obj.type.includes('undefined') !== true
-          : ['Any', 'undefined'].includes(obj.type) !== true
-      ) {
-        printErrorAndExit(
-          'cannot have "required" as true since it is optional because it has "default" ' +
-            '(if default is still required as it handles the "undefined" value, then ' +
-            'add "__requireWithDefault": true)'
-        )
-      }
+    if (
+      obj.default !== void 0 &&
+      obj.required === true &&
+      (Array.isArray(obj.type) === true
+        ? obj.type.includes('Any') !== true &&
+          obj.type.includes('undefined') !== true
+        : ['Any', 'undefined'].includes(obj.type) !== true)
+    ) {
+      printErrorAndExit(
+        'cannot have "required" as true since it is optional because it has "default" ' +
+          '(if default is still required as it handles the "undefined" value, then ' +
+          'add "__requireWithDefault": true)'
+      )
     }
 
     // If required is specified, use it, if not and it has a default value, then it's optional,
@@ -1275,7 +1275,10 @@ function fillAPI(apiType, list, encodeFn) {
       let match
 
       while ((match = slotRE.exec(componentContent)) !== null) {
-        const slotName = (match[1] || match[2]).replace(/(\${.+})/g, '[name]')
+        const slotName = (match[1] || match[2]).replaceAll(
+          /(\${.+})/g,
+          '[name]'
+        )
 
         if (apiSlots[slotName] === void 0) {
           logError(

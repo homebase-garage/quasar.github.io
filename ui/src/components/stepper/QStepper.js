@@ -110,6 +110,7 @@ export default createComponent({
           hSlot(slots.default)
         )
 
+        // oxlint-disable-next-line unicorn/prefer-spread
         return top === void 0 ? [content] : top.concat(content)
       }
 

@@ -11,7 +11,7 @@ describe('[clone API]', () => {
         ['Boolean', true],
         ['Null', null],
         ['Undefined', void 0],
-        ['NaN', NaN],
+        ['NaN', Number.NaN],
         ['Infinity', Infinity]
       ])('clone(%s)', (_, value) => {
         const result = clone(value)
@@ -61,9 +61,7 @@ describe('[clone API]', () => {
         const set = new Set([1, 2, 3])
         const result = clone(set)
 
-        expect(Array.from(result.values())).toStrictEqual(
-          Array.from(set.values())
-        )
+        expect([...result.values()]).toStrictEqual([...set.values()])
 
         expect(result).not.toBe(set)
       })
@@ -75,9 +73,7 @@ describe('[clone API]', () => {
         ])
         const result = clone(map)
 
-        expect(Array.from(result.entries())).toStrictEqual(
-          Array.from(map.entries())
-        )
+        expect([...result.entries()]).toStrictEqual([...map.entries()])
 
         expect(result).not.toBe(map)
       })

@@ -8,14 +8,15 @@ export const footerLinks = [
   },
   {
     name: socialLinks.name,
-    children: socialLinks.children.concat([
+    children: [
+      ...socialLinks.children,
       { name: 'Blog', path: 'https://blog.quasar.dev', external: true },
       {
         name: 'Announcements',
         path: 'https://github.com/quasarframework/quasar/discussions/categories/announcements',
         external: true
       }
-    ])
+    ]
   },
   {
     name: 'Options & Helpers',

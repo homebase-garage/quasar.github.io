@@ -101,7 +101,7 @@ export class QuasarModeBuilder extends AppBuilder {
             target
           ]
 
-    await this.#runCordovaCommand(args.concat(this.argv._), target)
+    await this.#runCordovaCommand([...args, ...this.argv._], target)
 
     if (this.argv['skip-pkg'] !== true) {
       if (this.argv.ide) {

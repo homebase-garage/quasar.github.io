@@ -304,7 +304,7 @@ const info = [
   argv.cors ? ['CORS', 'enabled'] : '',
   argv.proxy ? ['Proxy definitions', argv.proxy] : ''
 ]
-  .filter(msg => msg)
+  .filter(Boolean)
   .map(
     msg =>
       ' ' +
@@ -324,6 +324,8 @@ if (argv.open) {
 
     log('Opening default browser at ' + url + '\n')
     const { default: open } = await import('open')
+
+    // oxlint-disable-next-line unicorn/prefer-top-level-await
     open(url).catch(() => {
       warn('Failed to open default browser')
       warn()

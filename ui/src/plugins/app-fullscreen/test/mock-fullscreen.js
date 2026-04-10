@@ -22,7 +22,7 @@ export function mockedToggleFullscreen() {
 export function createMockedEl() {
   const el = document.createElement('div')
   el.setAttribute('tabindex', '0')
-  document.body.appendChild(el)
+  document.body.append(el)
 
   el.requestFullscreen = vi.fn(() => {
     document.fullscreenElement = el

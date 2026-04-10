@@ -27,7 +27,7 @@ import { computed, ref } from 'vue'
 
 const thresholds = []
 
-for (let i = 0; i <= 1.0; i += 0.01) {
+for (let i = 0; i <= 1; i += 0.01) {
   thresholds.push(i)
 }
 

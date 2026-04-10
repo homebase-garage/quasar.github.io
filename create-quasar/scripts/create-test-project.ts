@@ -54,6 +54,7 @@ export async function createProject({
 
 const args = process.argv.slice(2) as [ScriptType, AppEngine, PackageManager];
 
+// oxlint-disable-next-line unicorn/prefer-top-level-await
 void createProject({
   scriptType: args[0],
   appEngine: args[1],

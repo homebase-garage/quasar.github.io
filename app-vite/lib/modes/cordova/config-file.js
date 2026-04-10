@@ -64,6 +64,7 @@ export class CordovaConfigFile {
 
     if (
       this.#appURL !== 'index.html' &&
+      // oxlint-disable-next-line unicorn/prefer-array-some
       !root.find(`allow-navigation[@href='${this.#appURL}']`)
     ) {
       et.SubElement(root, 'allow-navigation', { href: this.#appURL })
@@ -78,6 +79,7 @@ export class CordovaConfigFile {
     }
 
     // needed for QResizeObserver until ResizeObserver Web API is supported by all platforms
+    // oxlint-disable-next-line unicorn/prefer-array-some
     if (!root.find("allow-navigation[@href='about:*']")) {
       et.SubElement(root, 'allow-navigation', { href: 'about:*' })
     }
@@ -144,10 +146,9 @@ export class CordovaConfigFile {
     } else {
       const tamperedFile = {
         name: 'AppDelegate.m',
-        path: appDelegatePath
+        path: appDelegatePath,
+        originalContent: fs.readFileSync(appDelegatePath, 'utf8')
       }
-
-      tamperedFile.originalContent = fs.readFileSync(appDelegatePath, 'utf8')
 
       // required for allowing devserver's SSL certificate on iOS
       if (
@@ -183,13 +184,9 @@ return YES;
       if (fs.existsSync(wkWebViewEnginePath)) {
         const tamperedFile = {
           name: `${plugin} > CDVWKWebViewEngine.m`,
-          path: wkWebViewEnginePath
+          path: wkWebViewEnginePath,
+          originalContent: fs.readFileSync(wkWebViewEnginePath, 'utf8')
         }
-
-        tamperedFile.originalContent = fs.readFileSync(
-          wkWebViewEnginePath,
-          'utf8'
-        )
 
         // Credit: https://gist.github.com/PeterStegnar/63cb8c9a39a13265c3a855e24a33ca37#file-cdvwkwebviewengine-m-L68-L74
         // Enables untrusted SSL connection

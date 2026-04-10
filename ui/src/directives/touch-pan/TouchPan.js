@@ -211,7 +211,8 @@ export default createDirective(
                     qClonedBy:
                       evt.qClonedBy === void 0
                         ? [ctx.uid]
-                        : evt.qClonedBy.concat(ctx.uid)
+                        : // oxlint-disable-next-line unicorn/prefer-spread
+                          evt.qClonedBy.concat(ctx.uid)
                   })
 
                   ctx.initialEvent = {

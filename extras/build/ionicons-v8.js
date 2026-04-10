@@ -7,8 +7,8 @@ const prefix = 'ion'
 
 const { globSync } = require('tinyglobby')
 const { copySync } = require('fs-extra')
-const { writeFileSync } = require('fs')
-const { resolve, join } = require('path')
+const { writeFileSync } = require('node:fs')
+const { resolve, join } = require('node:path')
 
 const skipped = []
 const distFolder = resolve(__dirname, `../${distName}`)

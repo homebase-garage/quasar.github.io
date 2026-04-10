@@ -16,5 +16,5 @@ export function shouldIgnoreKey(evt) {
 export function isKeyCode(evt, keyCodes) {
   return shouldIgnoreKey(evt) === true
     ? false
-    : [].concat(keyCodes).includes(evt.keyCode)
+    : [keyCodes].flat().includes(evt.keyCode)
 }

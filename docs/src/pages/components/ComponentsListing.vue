@@ -132,7 +132,7 @@ watch([searchTerms, filterTag], () => {
 
     // allow to search for direct components name (example: qbtn)
     const needle =
-      terms.length !== 1 && terms.startsWith('q') ? terms.substring(1) : terms
+      terms.length !== 1 && terms.startsWith('q') ? terms.slice(1) : terms
 
     const results = quasarElements.filter(
       entry =>

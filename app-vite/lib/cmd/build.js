@@ -162,6 +162,8 @@ await ctx.appExt.runAppExtensionHook('beforeBuild', async hook => {
 })
 
 log()
+
+// oxlint-disable-next-line unicorn/prefer-top-level-await
 appBuilder
   .build()
   .catch(err => {

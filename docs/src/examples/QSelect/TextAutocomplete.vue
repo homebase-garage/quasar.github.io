@@ -52,8 +52,8 @@ export default {
       filterFn(val, update, abort) {
         update(() => {
           const needle = val.toLocaleLowerCase()
-          options.value = stringOptions.filter(
-            v => v.toLocaleLowerCase().indexOf(needle) > -1
+          options.value = stringOptions.filter(v =>
+            v.toLocaleLowerCase().includes(needle)
           )
         })
       },

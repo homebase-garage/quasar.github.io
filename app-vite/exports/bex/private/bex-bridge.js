@@ -350,7 +350,7 @@ export class BexBridge {
   log(...args) {
     if (this.#debug !== true || args.length === 0) return
 
-    const lastArg = args[args.length - 1]
+    const lastArg = args.at(-1)
 
     if (lastArg !== void 0 && Object(lastArg) === lastArg) {
       const log = `${this.#banner} ${args.slice(0, -1).join(' ')} (click to expand)`
@@ -365,7 +365,7 @@ export class BexBridge {
   warn(...args) {
     if (args.length === 0) return
 
-    const lastArg = args[args.length - 1]
+    const lastArg = args.at(-1)
 
     if (lastArg !== void 0 && Object(lastArg) === lastArg) {
       console.warn(this.#banner, ...args.slice(0, -1))
@@ -418,7 +418,8 @@ export class BexBridge {
     )
 
     let responsePayload
-    for (const { type, callback } of list.slice(0)) {
+    // oxlint-disable-next-line unicorn/no-useless-spread
+    for (const { type, callback } of [...list]) {
       if (type === 'once') {
         this.off(message.event, callback)
       }
@@ -669,6 +670,7 @@ export class BexBridge {
     }
 
     return promise.catch(err => {
+      // oxlint-disable-next-line promise/no-nesting
       this.#sendPacket({
         id,
         from: this.portName,

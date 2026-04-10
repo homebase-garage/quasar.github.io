@@ -9,5 +9,5 @@ module.exports.resolveToCliDir = function resolveToCliDir(dir) {
 }
 
 module.exports.cliPkg = JSON.parse(
-  readFileSync(join(__dirname, '../../package.json'), 'utf-8')
+  readFileSync(join(__dirname, '../../package.json'), 'utf8')
 )

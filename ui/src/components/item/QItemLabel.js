@@ -14,7 +14,7 @@ export default createComponent({
   },
 
   setup(props, { slots }) {
-    const parsedLines = computed(() => parseInt(props.lines, 10))
+    const parsedLines = computed(() => Number.parseInt(props.lines, 10))
 
     const classes = computed(
       () =>

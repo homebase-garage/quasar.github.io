@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { quasarPath } from './quasar-path.js'
 
 const { version } = JSON.parse(
-  readFileSync(join(quasarPath, 'package.json'), 'utf-8')
+  readFileSync(join(quasarPath, 'package.json'), 'utf8')
 )
 
 export function getViteConfig(runMode, viteMode, externalViteCfg) {

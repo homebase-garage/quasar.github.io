@@ -15,7 +15,7 @@
 import { computed, nextTick, ref } from 'vue'
 
 const allOptions = []
-for (let i = 0; i <= 100000; i++) {
+for (let i = 0; i <= 100_000; i++) {
   allOptions.push('Opt ' + i)
 }
 

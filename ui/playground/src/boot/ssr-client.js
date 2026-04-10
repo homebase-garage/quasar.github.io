@@ -1,4 +1,4 @@
-export default ({ router }) => {
+export default function bootSsrClient({ router }) {
   console.log(
     '[Quasar] On route change we deliberately load page from server -- in order to test hydration errors'
   )

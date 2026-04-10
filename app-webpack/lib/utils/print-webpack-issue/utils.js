@@ -27,6 +27,6 @@ module.exports.removeFileLoaders = function removeFileLoaders(file) {
   }
 
   const split = file.split('!')
-  const filePath = split[split.length - 1]
+  const filePath = split.at(-1)
   return `in ${filePath}`
 }

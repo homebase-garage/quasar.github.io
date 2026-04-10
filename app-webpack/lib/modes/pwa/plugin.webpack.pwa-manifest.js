@@ -22,7 +22,7 @@ module.exports.PwaManifestPlugin = class PwaManifestPlugin {
     let json
     try {
       json = JSON.parse(
-        readFileSync(this.#quasarConf.metaConf.pwaManifestFile, 'utf-8')
+        readFileSync(this.#quasarConf.metaConf.pwaManifestFile, 'utf8')
       )
     } catch {
       warn('Could not compile PWA manifest.json. Please check its syntax.')

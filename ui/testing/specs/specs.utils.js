@@ -458,23 +458,21 @@ function getExpectMatcher({ jsonEntry, indent }) {
           indent
         })
       }
-    } else if (jsonEntry.type === 'Array') {
-      if (jsonEntry.definition !== void 0) {
-        const { definition } = jsonEntry
-        const keyList = Object.keys(definition)
+    } else if (jsonEntry.type === 'Array' && jsonEntry.definition !== void 0) {
+      const { definition } = jsonEntry
+      const keyList = Object.keys(definition)
 
-        const list = joinObject({
-          keyList,
-          getValue: (key, innerIndent) =>
-            getExpectMatcher({
-              jsonEntry: definition[key],
-              indent: innerIndent
-            }),
-          indent
-        })
+      const list = joinObject({
+        keyList,
+        getValue: (key, innerIndent) =>
+          getExpectMatcher({
+            jsonEntry: definition[key],
+            indent: innerIndent
+          }),
+        indent
+      })
 
-        return `expect.$arrayValues(${list})`
-      }
+      return `expect.$arrayValues(${list})`
     }
 
     if (['Any', 'FileList'].includes(jsonEntry.type) === true) {

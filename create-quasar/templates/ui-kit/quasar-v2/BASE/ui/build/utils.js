@@ -16,11 +16,11 @@ module.exports.createFolder = function (folder) {
 }
 
 module.exports.writeFile = function (dest, code, zip) {
-  const banner = dest.indexOf('.json') > -1
+  const banner = dest.includes('.json')
     ? red('[json]')
-    : dest.indexOf('.js') > -1
+    : dest.includes('.js')
       ? green('[js]  ')
-      : dest.indexOf('.ts') > -1
+      : dest.includes('.ts')
         ? cyan('[ts]  ')
         : blue('[css] ')
 

@@ -203,7 +203,7 @@ function parseResults(hits) {
       page: hit.menu.join(' » '),
       section:
         [hit.l1, hit.l2, hit.l3, hit.l4, hit.l5, hit.l6]
-          .filter(e => e)
+          .filter(Boolean)
           .join(' » ') || null,
       content: parseContent(hit._formatted.content),
 
@@ -233,7 +233,8 @@ function parseResults(hits) {
 
 function onKeydown(evt) {
   switch (evt.keyCode) {
-    case 27: // escape
+    case 27: {
+      // escape
       evt.preventDefault()
       if (hasFocus.value === true) {
         closePopup()
@@ -241,8 +242,10 @@ function onKeydown(evt) {
         resetSearch()
       }
       break
+    }
     case 38: // up
-    case 40: // down
+    case 40: {
+      // down
       evt.preventDefault()
       if (results.value !== null && results.value.ids !== void 0) {
         if (activeId.value === null) {
@@ -264,7 +267,9 @@ function onKeydown(evt) {
         }
       }
       break
-    case 13: // enter
+    }
+    case 13: {
+      // enter
       evt.preventDefault()
       evt.stopPropagation()
       if (results.value !== null) {
@@ -278,6 +283,7 @@ function onKeydown(evt) {
         }
       }
       break
+    }
   }
 }
 

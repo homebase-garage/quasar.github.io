@@ -13,7 +13,7 @@ export default function useFileDomProps(props, typeGuard) {
             : void 0
 
       if (Object(model) === model) {
-        ;('length' in model ? Array.from(model) : [model]).forEach(file => {
+        ;('length' in model ? [...model] : [model]).forEach(file => {
           dt.items.add(file)
         })
       }

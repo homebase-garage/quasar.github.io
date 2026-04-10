@@ -19,7 +19,7 @@ function getMajorVersion(name) {
     const child = crossSpawnSync(name, ['--version'])
     if (child.status === 0) {
       const version = String(child.output[1]).trim()
-      return parseInt(version.split('.')[0], 10)
+      return Number.parseInt(version.split('.')[0], 10)
     }
   } catch {
     /* do nothing; we return null below */
@@ -206,7 +206,7 @@ class Bun extends PackageManager {
 function getProjectPackageManager(packageManagersList, dir) {
   // Recursively checks for presence of the lock file by traversing
   // the dir tree up to the root
-  while (dir.length !== 0 && dir[dir.length - 1] !== sep) {
+  while (dir.length !== 0 && dir.at(-1) !== sep) {
     for (const pm of packageManagersList) {
       if (pm.lockFiles.some(lockFile => fs.existsSync(join(dir, lockFile)))) {
         return pm

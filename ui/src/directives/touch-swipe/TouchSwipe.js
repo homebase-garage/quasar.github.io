@@ -25,12 +25,16 @@ function parseArg(arg) {
 
   if (typeof arg === 'string' && arg.length !== 0) {
     arg.split(':').forEach((val, index) => {
-      const v = parseFloat(val)
+      const v = Number.parseFloat(val)
       if (v) data[index] = v
     })
   }
 
   return data
+}
+
+function removeBodyChildrenNoPointerEvents() {
+  document.body.classList.remove('no-pointer-events--children')
 }
 
 export default createDirective(
@@ -196,19 +200,12 @@ export default createDirective(
 
                   ctx.styleCleanup = withDelay => {
                     ctx.styleCleanup = void 0
-
                     document.body.classList.remove('non-selectable')
 
-                    const remove = () => {
-                      document.body.classList.remove(
-                        'no-pointer-events--children'
-                      )
-                    }
-
                     if (withDelay === true) {
-                      setTimeout(remove, 50)
+                      setTimeout(removeBodyChildrenNoPointerEvents, 50)
                     } else {
-                      remove()
+                      removeBodyChildrenNoPointerEvents()
                     }
                   }
                 }

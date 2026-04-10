@@ -39,18 +39,16 @@
 
 <script>
 const prefixes = ['Item', 'Option', 'Address', 'Selection']
-const options = Array(200)
-  .fill(0)
-  .map(
-    (item, i) => `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${i}`
-  )
-  .sort(() => Math.random() * 2 - 1)
+const options = Array.from(
+  { length: 200 },
+  (item, i) => `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${i}`
+).sort(() => Math.random() * 2 - 1)
 
 export default {
   data: function data() {
     return {
       model: '',
-      filteredOptions: options.slice(),
+      filteredOptions: [...options],
       behavior: void 0
     }
   },
@@ -59,7 +57,7 @@ export default {
     filterOptions(val, update) {
       update(() => {
         if (val === '') {
-          this.filteredOptions = options.slice()
+          this.filteredOptions = [...options]
         } else {
           const needle = val.toLocaleLowerCase()
           this.filteredOptions = options.filter(v =>

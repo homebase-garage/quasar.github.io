@@ -108,6 +108,7 @@ export default createComponent({
         h(
           'div',
           { class: 'q-timeline__content' },
+          // oxlint-disable-next-line unicorn/prefer-spread
           [
             h(
               'h6',

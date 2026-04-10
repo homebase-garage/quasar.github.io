@@ -173,12 +173,12 @@ export default function useCheckbox(type, getInner) {
   function getNextValue() {
     if (modelIsArray.value === true) {
       if (isTrue.value === true) {
-        const val = props.modelValue.slice()
+        const val = [...props.modelValue]
         val.splice(index.value, 1)
         return val
       }
 
-      return props.modelValue.concat([props.val])
+      return [...props.modelValue, props.val]
     }
 
     if (isTrue.value === true) {

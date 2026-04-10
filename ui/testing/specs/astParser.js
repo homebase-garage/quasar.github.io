@@ -228,7 +228,7 @@ export function getImportStatement({ ctx, json }) {
     list.push(ctx.camelCaseName)
   }
   if (json.namedExports.size !== 0) {
-    list.push(`{ ${Array.from(json.namedExports).join(', ')} }`)
+    list.push(`{ ${[...json.namedExports].join(', ')} }`)
   }
   return `import ${list.join(', ')} from './${ctx.localName}'`
 }

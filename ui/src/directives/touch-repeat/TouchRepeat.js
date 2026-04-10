@@ -32,6 +32,10 @@ function shouldEnd(evt, origin) {
   return Math.abs(left - origin.left) >= 7 || Math.abs(top - origin.top) >= 7
 }
 
+function removeBodyNonSelectable() {
+  document.body.classList.remove('non-selectable')
+}
+
 export default createDirective(
   __QUASAR_SSR_SERVER__
     ? { name: 'touch-repeat', getSSRProps }
@@ -41,9 +45,9 @@ export default createDirective(
         beforeMount(el, { modifiers, value, arg }) {
           const keyboard = Object.keys(modifiers).reduce((acc, key) => {
             if (keyRegex.test(key) === true) {
-              const keyCode = isNaN(parseInt(key, 10))
+              const keyCode = Number.isNaN(Number.parseInt(key, 10))
                 ? keyCodes[key.toLowerCase()]
-                : parseInt(key, 10)
+                : Number.parseInt(key, 10)
 
               if (keyCode >= 0) acc.push(keyCode)
             }
@@ -61,7 +65,7 @@ export default createDirective(
 
           const durations =
             typeof arg === 'string' && arg.length !== 0
-              ? arg.split(':').map(val => parseInt(val, 10))
+              ? arg.split(':').map(val => Number.parseInt(val, 10))
               : [0, 600, 300]
 
           const durationsLast = durations.length - 1
@@ -124,18 +128,13 @@ export default createDirective(
 
               function styleCleanup(withDelay) {
                 ctx.styleCleanup = void 0
-
                 document.documentElement.style.cursor = ''
-
-                const remove = () => {
-                  document.body.classList.remove('non-selectable')
-                }
 
                 if (withDelay === true) {
                   clearSelection()
-                  setTimeout(remove, 10)
+                  setTimeout(removeBodyNonSelectable, 10)
                 } else {
-                  remove()
+                  removeBodyNonSelectable()
                 }
               }
 

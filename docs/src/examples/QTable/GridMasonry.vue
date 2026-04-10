@@ -78,7 +78,7 @@ deserts.forEach(name => {
   }
 })
 
-rows.sort(() => -1 + Math.floor(3 * Math.random()))
+rows.sort(() => Math.floor(3 * Math.random()) - 1)
 
 export default {
   setup() {

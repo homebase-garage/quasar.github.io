@@ -225,10 +225,12 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
 
   if (typeof localEnv.filter === 'function') {
     result.clientEnvDefineList =
+      // oxlint-disable-next-line unicorn/no-array-method-this-argument
       localEnv.filter(result.clientEnvDefineList, 'client') || {}
 
     if (hasBackend === true) {
       result.backendEnvDefineList =
+        // oxlint-disable-next-line unicorn/no-array-method-this-argument
         localEnv.filter(result.backendEnvDefineList, 'backend') || {}
     }
   }

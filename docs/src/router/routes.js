@@ -70,7 +70,7 @@ const routes = [
         if (route !== void 0) Object.assign(acc, route)
 
         if (acc.path === void 0) {
-          const parts = key.substring(1, key.length - 3).split('/')
+          const parts = key.slice(1, -3).split('/')
           const len = parts.length
           const path =
             parts[len - 2] === parts[len - 1] ? parts.slice(0, len - 1) : parts

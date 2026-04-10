@@ -76,6 +76,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       // start building & launch server
       // deep clone to avoid webpack-dev-server mutating the original config which causes double compilation
       this.#server = new WebpackDevServer(
+        // oxlint-disable-next-line unicorn/prefer-structured-clone
         cloneDeep(quasarConf.devServer),
         compiler
       )
@@ -87,10 +88,11 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
     this.#stopCordova()
 
     if (this.argv.ide) {
-      await this.#runCordovaCommand(
-        quasarConf,
-        ['prepare', this.#target].concat(this.argv._)
-      )
+      await this.#runCordovaCommand(quasarConf, [
+        'prepare',
+        this.#target,
+        ...this.argv._
+      ])
 
       await openIDE({
         mode: 'cordova',
@@ -109,7 +111,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       args.push(`--target=${this.ctx.emulator}`)
     }
 
-    await this.#runCordovaCommand(quasarConf, args.concat(this.argv._))
+    await this.#runCordovaCommand(quasarConf, [...args, ...this.argv._])
   }
 
   #stopCordova() {

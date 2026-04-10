@@ -67,10 +67,12 @@ export function ensureArgv(argv, cmd) {
     }
   }
 
-  if (cmd === 'build' && argv.mode === 'electron') {
-    if (![void 0, 'packager', 'builder'].includes(argv.bundler)) {
-      fatal(`Unknown bundler "${argv.bundler}" for Electron`)
-    }
+  if (
+    cmd === 'build' &&
+    argv.mode === 'electron' &&
+    ![void 0, 'packager', 'builder'].includes(argv.bundler)
+  ) {
+    fatal(`Unknown bundler "${argv.bundler}" for Electron`)
   }
 }
 

@@ -45,6 +45,7 @@ function getClientManifest(compilation) {
   const initialFiles = uniq(
     Object.keys(stats.entrypoints)
       .map(name => stats.entrypoints[name].assets.map(entry => entry.name))
+      // oxlint-disable-next-line unicorn/prefer-spread
       .reduce((assets, all) => all.concat(assets), [])
       .filter(file => hotUpdateRE.test(file) === false)
   )
@@ -91,7 +92,7 @@ function getClientManifest(compilation) {
     if (h.length !== 0) acc.h = h
     if (b.length !== 0) acc.b = b
 
-    if (h.length || b.length) {
+    if (h.length !== 0 || b.length !== 0) {
       manifest.modules[moduleId] = acc
     } else {
       delete manifest.modules[moduleId]

@@ -33,7 +33,7 @@ import store from 'src/assets/store.js'
 
 // Protocols expect absolute paths, with forward slashes even on Windows
 const toAbsolutePath = path =>
-  `${data.project.rootFolder}/${path}`.replace(/\\/g, '/')
+  `${data.project.rootFolder}/${path}`.replaceAll('\\', '/')
 
 const editorList = [
   {

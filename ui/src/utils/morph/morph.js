@@ -11,15 +11,17 @@ function getAbsolutePosition(el, resize) {
   if (offsetBase === void 0) {
     offsetBase = document.createElement('div')
     offsetBase.style.cssText = 'position: absolute; left: 0; top: 0'
-    document.body.appendChild(offsetBase)
+    document.body.append(offsetBase)
   }
 
   const boundingRect = el.getBoundingClientRect()
   const baseRect = offsetBase.getBoundingClientRect()
   const { marginLeft, marginRight, marginTop, marginBottom } =
     window.getComputedStyle(el)
-  const marginH = parseInt(marginLeft, 10) + parseInt(marginRight, 10)
-  const marginV = parseInt(marginTop, 10) + parseInt(marginBottom, 10)
+  const marginH =
+    Number.parseInt(marginLeft, 10) + Number.parseInt(marginRight, 10)
+  const marginV =
+    Number.parseInt(marginTop, 10) + Number.parseInt(marginBottom, 10)
 
   return {
     left: boundingRect.left - baseRect.left,
@@ -151,12 +153,17 @@ function normalizeOptions(options) {
     waitFor: options.waitFor === void 0 ? 0 : options.waitFor,
 
     duration:
-      isNaN(options.duration) === true ? 300 : parseInt(options.duration, 10),
+      Number.isNaN(options.duration) === true
+        ? 300
+        : Number.parseInt(options.duration, 10),
     easing:
       typeof options.easing === 'string' && options.easing.length !== 0
         ? options.easing
         : 'ease-in-out',
-    delay: isNaN(options.delay) === true ? 0 : parseInt(options.delay, 10),
+    delay:
+      Number.isNaN(options.delay) === true
+        ? 0
+        : Number.parseInt(options.delay, 10),
     fill:
       typeof options.fill === 'string' && options.fill.length !== 0
         ? options.fill
@@ -174,13 +181,13 @@ function normalizeOptions(options) {
 
     tween: options.tween === true,
     tweenFromOpacity:
-      isNaN(options.tweenFromOpacity) === true
+      Number.isNaN(options.tweenFromOpacity) === true
         ? 0.6
-        : parseFloat(options.tweenFromOpacity),
+        : Number.parseFloat(options.tweenFromOpacity),
     tweenToOpacity:
-      isNaN(options.tweenToOpacity) === true
+      Number.isNaN(options.tweenToOpacity) === true
         ? 0.5
-        : parseFloat(options.tweenToOpacity)
+        : Number.parseFloat(options.tweenToOpacity)
   }
 }
 
@@ -543,7 +550,7 @@ export default function morph(_options) {
         elTo.style.overflowY = 'hidden'
       }
 
-      document.body.appendChild(elTo)
+      document.body.append(elTo)
 
       if (elFromTween !== void 0) {
         elFromTween.style.cssText = elFromCssText
@@ -568,7 +575,7 @@ export default function morph(_options) {
           elFromTween.style.overflowY = 'hidden'
         }
 
-        document.body.appendChild(elFromTween)
+        document.body.append(elFromTween)
       }
 
       const commonCleanup = aborted => {
@@ -977,7 +984,7 @@ export default function morph(_options) {
 
           ${keyframesTo}
         `
-        document.head.appendChild(style)
+        document.head.append(style)
 
         let animationDirection = 'normal'
 
@@ -1065,7 +1072,9 @@ export default function morph(_options) {
                     elTo.removeEventListener('transitioncancel', endFn)
                   }
 
-                  resolve()
+                  // oxlint-disable-next-line promise/no-multiple-resolved
+                  resolve?.()
+                  resolve = null
                 }
 
                 let timer = setTimeout(endFn, 400)

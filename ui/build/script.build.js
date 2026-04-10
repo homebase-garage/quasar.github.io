@@ -35,13 +35,11 @@ if (!type || type === 'js') {
   createFolder('dist/types')
   createFolder('dist/web-types')
 
-  import('./script.build.javascript.js').then(({ buildJavascript }) =>
-    buildJavascript(subtype || 'full')
-  )
+  const { buildJavascript } = await import('./script.build.javascript.js')
+  await buildJavascript(subtype || 'full')
 }
 
 if (!type || type === 'css') {
-  import('./script.build.css.js').then(({ buildCss }) =>
-    buildCss(/* with diff */ type === 'css')
-  )
+  const { buildCss } = await import('./script.build.css.js')
+  await buildCss(/* with diff */ type === 'css')
 }

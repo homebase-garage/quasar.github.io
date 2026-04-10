@@ -3,7 +3,7 @@ const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 export function humanStorageSize(bytes, decimals = 1) {
   let u = 0
 
-  while (parseInt(bytes, 10) >= 1024 && u < units.length - 1) {
+  while (Number.parseInt(bytes, 10) >= 1024 && u < units.length - 1) {
     bytes /= 1024
     ++u
   }

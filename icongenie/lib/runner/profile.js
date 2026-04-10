@@ -16,13 +16,10 @@ function getParams({ include, ...props }) {
 }
 
 function getAssets(assets) {
-  let list = []
-
-  assets.forEach(name => {
-    list = list.concat(modes[name].assets)
-  })
-
-  return list
+  return assets.reduce((acc, name) => {
+    acc.push(...modes[name].assets)
+    return acc
+  }, [])
 }
 
 function getTargetFilepath(output) {
@@ -58,7 +55,7 @@ export function profile({ output, assets, ...params }) {
     ensureDir(folderName)
   }
 
-  writeFileSync(targetFile, JSON.stringify(acc, null, 2), 'utf-8')
+  writeFileSync(targetFile, JSON.stringify(acc, null, 2), 'utf8')
 
   console.log(` Generated Icon Genie profile file:`)
   log(`${targetFile}\n`)

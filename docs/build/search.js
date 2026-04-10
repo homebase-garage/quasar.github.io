@@ -1,6 +1,5 @@
 import fs from 'node:fs'
 import { join, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { globSync } from 'tinyglobby'
 import md from 'markdown-ast'
 
@@ -10,8 +9,7 @@ import { capitalize, slugify } from './utils.js'
 const apiRE = /<DocApi .*file="([^"]+)".*\n/
 const installationRE = /<DocInstallation /
 const hiddenPageRE = /__[a-zA-Z0-9_-]+\.md$/
-
-const thisFolder = fileURLToPath(new URL('.', import.meta.url))
+const thisFolder = import.meta.dirname
 
 const mdPagesDir = join(thisFolder, '../src/pages')
 const mdPagesList = globSync('**/*.md', { cwd: mdPagesDir })
@@ -20,7 +18,7 @@ const mdPagesList = globSync('**/*.md', { cwd: mdPagesDir })
     if (key.includes('elements')) {
       console.error('Not element:', key)
     }
-    const parts = key.substring(0, key.length - 3).split('/')
+    const parts = key.slice(0, -3).split('/')
     const len = parts.length
     const urlParts =
       parts[len - 2] === parts[len - 1] ? parts.slice(0, len - 1) : parts
@@ -145,7 +143,7 @@ const processNode = (node, prefix = '') => {
     console.error('Unprocessed:', node)
   }
 
-  return { text: text.join(' ').replace(/\n/g, ''), type }
+  return { text: text.join(' ').replaceAll('\n', ''), type }
 }
 
 const processMarkdown = (syntaxTree, entries, entry) => {
@@ -155,19 +153,19 @@ const processMarkdown = (syntaxTree, entries, entry) => {
 
   const handleAnchor = () => {
     const joiner = type === 'page-list' ? '' : ' '
-    if (contents.length > 0) {
+    if (contents.length !== 0) {
       const text = contents
         .join(joiner)
         // .replace(/\n/g, ' ')
-        .replace(/<[^>]*\/>/g, '') // remove self-closing tags
-        .replace(/<br>/g, '\n')
-        .replace(/\|/g, '')
-        .replace(/---/g, '')
-        .replace(/::: tip/g, '')
-        .replace(/::: warning/g, '')
-        .replace(/::: danger/g, '')
-        .replace(/:::/g, '')
-        .replace(/\s\s+/g, ' ') // change multi-space to 1 space
+        .replaceAll(/<[^>]*\/>/g, '') // remove self-closing tags
+        .replaceAll('<br>', '\n')
+        .replaceAll('|', '')
+        .replaceAll('---', '')
+        .replaceAll('::: tip', '')
+        .replaceAll('::: warning', '')
+        .replaceAll('::: danger', '')
+        .replaceAll(':::', '')
+        .replaceAll(/\s\s+/g, ' ') // change multi-space to 1 space
         .trim()
 
       if (text === '') {
@@ -188,7 +186,7 @@ const processMarkdown = (syntaxTree, entries, entry) => {
       parent = { ...parent, content: '' }
 
       // clean up contents array
-      contents.splice(0, contents.length)
+      contents.splice(0)
     }
   }
 
@@ -217,12 +215,12 @@ const processMarkdown = (syntaxTree, entries, entry) => {
 function processPage(page, entries) {
   const { file, menu, url } = page
 
-  const contents = fs.readFileSync(file, 'utf-8')
+  const contents = fs.readFileSync(file, 'utf8')
   const frontMatter = parseFrontMatter(contents)
   let keys = null
 
   if (frontMatter.data.keys) {
-    keys = frontMatter.data.keys.replace(/,/g, ' ')
+    keys = frontMatter.data.keys.replaceAll(',', ' ')
   }
 
   const entryItem = createIndex({
@@ -268,7 +266,7 @@ function processPage(page, entries) {
 // -- Begin processing
 
 const run = () => {
-  const start = new Date().getTime()
+  const start = Date.now()
 
   createFolder('dist')
 
@@ -288,7 +286,7 @@ const run = () => {
 
   fs.writeFileSync(fileName, content, () => {})
 
-  const end = new Date().getTime()
+  const end = Date.now()
   const time = end - start
 
   console.log('Headings found:', rankList)

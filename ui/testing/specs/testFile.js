@@ -15,7 +15,7 @@ function getIgnoreCommentIds(ignoreComment) {
   if (ignoreComment === void 0) return []
 
   const matches = ignoreComment.match(ignoreCommentEntryRE)
-  return matches === null ? [] : Array.from(new Set(matches))
+  return matches === null ? [] : [...new Set(matches)]
 }
 
 function createIgnoreComment(ignoreCommentIds) {
@@ -167,9 +167,10 @@ function getTestFileMisconfiguration({ ctx, generator, json, testFile, opts }) {
   const { identifiers } = generator
   const identifiersKeys = Object.keys(identifiers)
 
-  const categoryList = identifiersKeys
-    .map(key => identifiers[key].categoryId)
-    .concat('[Generic]')
+  const categoryList = [
+    ...identifiersKeys.map(key => identifiers[key].categoryId),
+    '[Generic]'
+  ]
 
   const categoryTestIdMap = identifiersKeys.reduce((acc, key) => {
     const entry = identifiers[key]
@@ -493,17 +494,16 @@ export function getTestFile(ctx) {
 
     addIgnoreComments(ignoreCommentIds) {
       const hasIgnoreComment = this.ignoreCommentIds.length !== 0
-      const newIds = Array.from(
-        new Set([...this.ignoreCommentIds, ...ignoreCommentIds])
-      ).sort()
+      const newIds = [
+        ...new Set([...this.ignoreCommentIds, ...ignoreCommentIds])
+      ].sort()
 
       const ignoreComment = createIgnoreComment(newIds)
 
-      if (hasIgnoreComment === false) {
-        this.content = ignoreComment + this.content
-      } else {
-        this.content = this.content.replace(ignoreCommentRE, ignoreComment)
-      }
+      this.content =
+        hasIgnoreComment === false
+          ? ignoreComment + this.content
+          : this.content.replace(ignoreCommentRE, ignoreComment)
 
       this.ignoreCommentIds = newIds
       save(this.content)

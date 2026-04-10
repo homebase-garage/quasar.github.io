@@ -20,19 +20,19 @@ const Plugin = createReactivePlugin(
 if (__QUASAR_SSR_SERVER__ !== true) {
   let prop, evt
 
-  if (typeof document.hidden !== 'undefined') {
+  if (document.hidden !== void 0) {
     // Opera 12.10 and Firefox 18 and later support
     prop = 'hidden'
     evt = 'visibilitychange'
-  } else if (typeof document.msHidden !== 'undefined') {
+  } else if (document.msHidden !== void 0) {
     prop = 'msHidden'
     evt = 'msvisibilitychange'
-  } else if (typeof document.webkitHidden !== 'undefined') {
+  } else if (document.webkitHidden !== void 0) {
     prop = 'webkitHidden'
     evt = 'webkitvisibilitychange'
   }
 
-  if (evt && typeof document[prop] !== 'undefined') {
+  if (evt && document[prop] !== void 0) {
     const update = () => {
       Plugin.appVisible = !document[prop]
     }

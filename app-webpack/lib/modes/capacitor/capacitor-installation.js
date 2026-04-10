@@ -86,7 +86,7 @@ module.exports.addMode = async function addMode({
       appPaths.resolve.cli('templates/capacitor/' + filePath)
     )
     fse.ensureFileSync(dest)
-    fs.writeFileSync(dest, compileTemplate(content)(scope), 'utf-8')
+    fs.writeFileSync(dest, compileTemplate(content)(scope), 'utf8')
   })
 
   ensureDeps({ appPaths, cacheProxy })

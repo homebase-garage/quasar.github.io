@@ -43,16 +43,21 @@ export default {
     loading: 'Načítá se...',
     selectedRecords: rows => {
       switch (rows) {
-        case 0:
+        case 0: {
           return 'Nejsou vybrány žádné řádky.'
-        case 1:
+        }
+        case 1: {
           return 'Vybrán 1 řádek.'
-        case 2:
+        }
+        case 2: {
           return 'Vybrány 2 řádky.'
-        case 3:
+        }
+        case 3: {
           return 'Vybrány 3 řádky.'
-        case 4:
+        }
+        case 4: {
           return 'Vybrány 4 řádky.'
+        }
       }
       return 'Vybráno ' + rows + ' řádků.'
     },

@@ -350,7 +350,7 @@ export function useVirtualScroll({
       scrollDetails,
       Math.min(
         virtualScrollLength.value - 1,
-        Math.max(0, parseInt(toIndex, 10) || 0)
+        Math.max(0, Number.parseInt(toIndex, 10) || 0)
       ),
       0,
       scrollToEdges.includes(edge)
@@ -737,9 +737,9 @@ export function useVirtualScroll({
     localScrollViewSize = scrollViewSize
 
     const virtualScrollSliceRatioBefore =
-      parseFloat(props.virtualScrollSliceRatioBefore) || 0
+      Number.parseFloat(props.virtualScrollSliceRatioBefore) || 0
     const virtualScrollSliceRatioAfter =
-      parseFloat(props.virtualScrollSliceRatioAfter) || 0
+      Number.parseFloat(props.virtualScrollSliceRatioAfter) || 0
     const multiplier =
       1 + virtualScrollSliceRatioBefore + virtualScrollSliceRatioAfter
     const view =

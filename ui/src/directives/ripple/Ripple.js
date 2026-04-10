@@ -16,7 +16,7 @@ function showRipple(evt, el, ctx, forceCenter) {
     innerNode = document.createElement('span'),
     pos = position(evt),
     { left, top, width, height } = el.getBoundingClientRect(),
-    diameter = Math.sqrt(width * width + height * height),
+    diameter = Math.hypot(width, height),
     radius = diameter / 2,
     centerX = `${(width - diameter) / 2}px`,
     x = center ? centerX : `${pos.left - left - radius}px`,
@@ -33,8 +33,8 @@ function showRipple(evt, el, ctx, forceCenter) {
 
   node.className = `q-ripple${color ? ' text-' + color : ''}`
   node.setAttribute('dir', 'ltr')
-  node.appendChild(innerNode)
-  el.appendChild(node)
+  node.append(innerNode)
+  el.append(node)
 
   const abort = () => {
     node.remove()
@@ -67,7 +67,7 @@ function updateModifiers(ctx, { modifiers, value, arg }) {
     stop: cfg.stop === true,
     center: cfg.center === true,
     color: cfg.color || arg,
-    keyCodes: [].concat(cfg.keyCodes || 13)
+    keyCodes: [cfg.keyCodes || 13].flat()
   }
 }
 

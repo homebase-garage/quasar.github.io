@@ -1,9 +1,9 @@
 // version-check
 
 const version = process.version.split('.')
-const major = parseInt(version[0].replace(/\D/g, ''), 10)
-const minor = parseInt(version[1].replace(/\D/g, ''), 10)
-const patch = parseInt(version[2].replace(/\D/g, ''), 10)
+const major = Number.parseInt(version[0].replaceAll(/\D/g, ''), 10)
+const minor = Number.parseInt(version[1].replaceAll(/\D/g, ''), 10)
+const patch = Number.parseInt(version[2].replaceAll(/\D/g, ''), 10)
 
 const min = {
   major: 20,

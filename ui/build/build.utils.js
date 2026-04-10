@@ -1,7 +1,7 @@
 import { join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import fse from 'fs-extra'
-import zlib from 'zlib'
+import zlib from 'node:zlib'
 import { blue, gray, green, magenta, red, underline } from 'kolorist'
 import { table } from 'table'
 

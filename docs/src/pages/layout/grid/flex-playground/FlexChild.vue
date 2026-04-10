@@ -336,8 +336,8 @@ const classes = computed(() =>
     ' ' +
     (props.child.colGutterGroup === null ? '' : props.child.colGutterGroup)
   )
-    .replace(/,/g, ' ')
-    .replace(/  +/g, ' ')
+    .replaceAll(',', ' ')
+    .replaceAll(/  +/g, ' ')
     .trim()
 )
 

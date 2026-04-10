@@ -71,7 +71,7 @@ displayBanner({ argv, ctx, cmd: argv.cmd }).then(async () => {
     fatal('Requested mode for inspection is NOT installed.')
   }
 
-  const depth = parseInt(argv.depth, 10) || Infinity
+  const depth = Number.parseInt(argv.depth, 10) || Infinity
 
   const { QuasarConfigFile } = require('../quasar-config-file.js')
   const quasarConfFile = new QuasarConfigFile({

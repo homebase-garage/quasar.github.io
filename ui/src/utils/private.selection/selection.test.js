@@ -15,7 +15,7 @@ describe('[selection API]', () => {
         const el = document.createElement('div')
         el.innerHTML = '<address>quasar@email.com</address>'
 
-        document.body.appendChild(el)
+        document.body.append(el)
 
         onTestFinished(() => {
           el.remove()

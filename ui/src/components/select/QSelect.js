@@ -522,7 +522,7 @@ export default createComponent({
     function removeAtIndex(index) {
       if (index !== -1 && index < innerValue.value.length) {
         if (props.multiple === true) {
-          const model = props.modelValue.slice()
+          const model = [...props.modelValue]
           emit('remove', { index, value: model.splice(index, 1)[0] })
           emit('update:modelValue', model)
         } else {
@@ -563,7 +563,7 @@ export default createComponent({
         return
       }
 
-      const model = props.modelValue.slice()
+      const model = [...props.modelValue]
 
       emit('add', { index: model.length, value: val })
       model.push(val)
@@ -618,7 +618,7 @@ export default createComponent({
         return
       }
 
-      const model = props.modelValue.slice(),
+      const model = [...props.modelValue],
         index = innerOptionsValue.value.findIndex(v => isDeepEqual(v, optValue))
 
       if (index !== -1) {
@@ -907,8 +907,7 @@ export default createComponent({
 
         const searchRe = new RegExp(
           '^' +
-            searchBuffer
-              .split('')
+            [...searchBuffer]
               .map(l => (reEscapeList.includes(l) ? '\\' + l : l))
               .join('.*'),
           'i'
@@ -1016,18 +1015,14 @@ export default createComponent({
     }
 
     function getSelection() {
-      if (props.hideSelected === true) {
-        return []
-      }
+      if (props.hideSelected === true) return []
 
       if (slots['selected-item'] !== void 0) {
-        return selectedScope.value
-          .map(scope => slots['selected-item'](scope))
-          .slice()
+        return selectedScope.value.map(scope => slots['selected-item'](scope))
       }
 
       if (slots.selected !== void 0) {
-        return [].concat(slots.selected())
+        return [slots.selected()].flat()
       }
 
       if (props.useChips === true) {
@@ -1096,7 +1091,7 @@ export default createComponent({
       let options = padVirtualScroll('div', optionScope.value.map(fn))
 
       if (slots['before-options'] !== void 0) {
-        options = slots['before-options']().concat(options)
+        options = [slots['before-options'](), ...options].flat()
       }
 
       return hMergeSlot(slots['after-options'], options)

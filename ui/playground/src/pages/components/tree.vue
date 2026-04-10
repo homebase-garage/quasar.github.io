@@ -142,9 +142,13 @@ export default {
       this.selected = v ? this.selected || null : void 0
     },
     async isBigTree(v) {
-      this.nodes = v
-        ? (await import('src/mock-data/tree/bigTree.json')).default
-        : smallTree
+      if (v) {
+        console.log('Loading big tree...')
+        const json = await import('src/mock-data/tree/bigTree.json')
+        this.nodes = json.default
+        console.log('Big tree loaded')
+      }
+      this.nodes = smallTree
     }
   },
   data() {

@@ -73,9 +73,9 @@ function quality(value, argv) {
     return
   }
 
-  const numeric = parseInt(value, 10)
+  const numeric = Number.parseInt(value, 10)
 
-  if (isNaN(numeric)) {
+  if (Number.isNaN(numeric)) {
     die(`Invalid quality level number specified`)
   }
   if (numeric < 1 || numeric > 12) {
@@ -98,7 +98,7 @@ function padding(value, argv) {
   }
 
   const sizes = (Array.isArray(value) ? value : value.split(',')).map(val =>
-    parseInt(val, 10)
+    Number.parseInt(val, 10)
   )
 
   if (sizes.length > 2) {
@@ -106,7 +106,7 @@ function padding(value, argv) {
   }
 
   sizes.forEach(size => {
-    if (isNaN(size)) {
+    if (Number.isNaN(size)) {
       die(`Invalid padding specified (not numbers)`)
     }
     if (size < 0) {
@@ -207,9 +207,9 @@ function splashscreenIconRatio(value, argv) {
     return
   }
 
-  const numeric = parseFloat(value)
+  const numeric = Number.parseFloat(value)
 
-  if (isNaN(numeric)) {
+  if (Number.isNaN(numeric)) {
     die(`Invalid splashscreen icon ratio number specified`)
   }
   if (numeric < 0 || numeric > 100) {

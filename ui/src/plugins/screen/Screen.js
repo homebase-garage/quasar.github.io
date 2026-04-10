@@ -146,7 +146,7 @@ export default createReactivePlugin(
         // if css props available
         if (style.getPropertyValue('--q-size-sm')) {
           SIZE_LIST.forEach(name => {
-            this.sizes[name] = parseInt(
+            this.sizes[name] = Number.parseInt(
               style.getPropertyValue(`--q-size-${name}`),
               10
             )

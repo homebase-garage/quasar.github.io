@@ -140,7 +140,7 @@ export function isRegexp(v) {
 }
 
 export function isNumber(v) {
-  return typeof v === 'number' && isFinite(v)
+  return typeof v === 'number' && Number.isFinite(v)
 }
 
 export default {

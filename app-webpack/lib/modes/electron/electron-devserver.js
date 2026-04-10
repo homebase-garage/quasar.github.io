@@ -32,7 +32,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       'electron/package.json',
       this.ctx.appPaths.appDir
     )
-    const electronPkg = JSON.parse(readFileSync(electronPkgPath, 'utf-8'))
+    const electronPkg = JSON.parse(readFileSync(electronPkgPath, 'utf8'))
 
     this.#electronExecutable = join(
       dirname(electronPkgPath),
@@ -90,6 +90,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       // start building & launch server
       // deep clone to avoid webpack-dev-server mutating the original config which causes double compilation
       this.#server = new WebpackDevServer(
+        // oxlint-disable-next-line unicorn/prefer-structured-clone
         cloneDeep(quasarConf.devServer),
         compiler
       )
@@ -147,8 +148,9 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
       this.#electronExecutable,
       [
         '--inspect=' + quasarConf.electron.inspectPort,
-        this.ctx.appPaths.resolve.entry('electron-main.js')
-      ].concat(this.argv._),
+        this.ctx.appPaths.resolve.entry('electron-main.js'),
+        ...this.argv._
+      ],
       { cwd: this.ctx.appPaths.appDir },
       code => {
         if (this.#killedPid === true) {

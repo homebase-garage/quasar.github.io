@@ -95,7 +95,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
     // will complain about it not being found
     const indexHtmlDir = join(quasarConf.build.distDir, 'www')
     fse.ensureDirSync(indexHtmlDir)
-    fse.writeFileSync(join(indexHtmlDir, 'index.html'), '', 'utf-8')
+    fse.writeFileSync(join(indexHtmlDir, 'index.html'), '', 'utf8')
   }
 
   #compileBexManifest(quasarConf, queue) {
@@ -199,6 +199,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
         // start building & launch server
         // deep clone to avoid webpack-dev-server mutating the original config which causes double compilation
         this.#webpackServer = new WebpackDevServer(
+          // oxlint-disable-next-line unicorn/prefer-structured-clone
           cloneDeep(quasarConf.devServer),
           compiler
         )

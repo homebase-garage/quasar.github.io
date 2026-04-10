@@ -346,7 +346,7 @@ export default createComponent({
       if (
         typeof v !== 'string' ||
         v.length === 0 ||
-        testPattern.anyColor(v.replace(/ /g, '')) !== true
+        testPattern.anyColor(v.replaceAll(' ', '')) !== true
       ) {
         return {
           h: 0,
@@ -485,9 +485,9 @@ export default createComponent({
           return true
         } else if (hasAlpha.value !== true && inp.startsWith('rgb(')) {
           localModel = inp
-            .substring(4, inp.length - 1)
+            .slice(4, -1)
             .split(',')
-            .map(n => parseInt(n, 10))
+            .map(n => Number.parseInt(n, 10))
 
           if (
             localModel.length !== 3 ||
@@ -496,7 +496,7 @@ export default createComponent({
             return true
           }
         } else if (hasAlpha.value === true && inp.startsWith('rgba(')) {
-          localModel = inp.substring(5, inp.length - 1).split(',')
+          localModel = inp.slice(5, -1).split(',')
 
           if (
             localModel.length !== 4 ||
@@ -508,14 +508,14 @@ export default createComponent({
           }
 
           for (let i = 0; i < 3; i++) {
-            const v = parseInt(localModel[i], 10)
+            const v = Number.parseInt(localModel[i], 10)
             if (v < 0 || v > 255) {
               return true
             }
             localModel[i] = v
           }
 
-          const v = parseFloat(localModel[3])
+          const v = Number.parseFloat(localModel[3])
           if (v < 0 || v > 1) {
             return true
           }

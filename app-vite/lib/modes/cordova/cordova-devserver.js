@@ -63,10 +63,11 @@ export class QuasarModeDevserver extends AppDevserver {
     this.#stopCordova()
 
     if (this.argv.ide) {
-      await this.#runCordovaCommand(
-        quasarConf,
-        ['prepare', this.#target].concat(this.argv._)
-      )
+      await this.#runCordovaCommand(quasarConf, [
+        'prepare',
+        this.#target,
+        ...this.argv._
+      ])
 
       await openIDE({
         mode: 'cordova',
@@ -85,7 +86,7 @@ export class QuasarModeDevserver extends AppDevserver {
       args.push(`--target=${this.ctx.emulator}`)
     }
 
-    await this.#runCordovaCommand(quasarConf, args.concat(this.argv._))
+    await this.#runCordovaCommand(quasarConf, [...args, ...this.argv._])
   }
 
   #stopCordova() {

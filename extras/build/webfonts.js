@@ -1,5 +1,5 @@
 const spawn = require('cross-spawn')
-const { join } = require('path')
+const { join } = require('node:path')
 
 function run(cwd) {
   const runner = spawn.sync('bash', ['./update.sh'], {

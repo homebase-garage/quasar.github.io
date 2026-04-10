@@ -43,11 +43,12 @@ function getCordovaFiles(files) {
 }
 
 function updateConfigXml(cordovaFiles, hasSplashscreen) {
-  const doc = elementTree.parse(readFileSync(cordovaConfigXml, 'utf-8'))
+  const doc = elementTree.parse(readFileSync(cordovaConfigXml, 'utf8'))
   const rootNode = doc.getroot()
 
   if (
     hasSplashscreen &&
+    // oxlint-disable-next-line unicorn/prefer-array-some
     !rootNode.find('preference[@name="SplashMaintainAspectRatio"]')
   ) {
     const prefNode = elementTree.SubElement(rootNode, 'preference')
@@ -68,7 +69,7 @@ function updateConfigXml(cordovaFiles, hasSplashscreen) {
   cordovaFiles.forEach(file => {
     const isAndroid = file.platform === 'cordova-android'
     const node = isAndroid ? androidNode : iosNode
-    const src = relative(srcCordovaDir, file.absoluteName).replace(/\\/g, '/') // Windows support
+    const src = relative(srcCordovaDir, file.absoluteName).replaceAll('\\', '/') // Windows support
 
     if (file.generator === 'splashscreen') {
       // <splash src="res/screen/android/splash-land-hdpi.png" density="land-hdpi"/>
@@ -108,7 +109,7 @@ function updateConfigXml(cordovaFiles, hasSplashscreen) {
     }
   })
 
-  writeFileSync(cordovaConfigXml, doc.write({ indent: 4 }), 'utf-8')
+  writeFileSync(cordovaConfigXml, doc.write({ indent: 4 }), 'utf8')
   log(`Updated src-cordova/config.xml`)
 }
 
@@ -169,7 +170,7 @@ export function mountCordova(files) {
   if (existsSync(cordovaConfigXml)) {
     const cordovaFiles = getCordovaFiles(files)
 
-    if (cordovaFiles.length > 0) {
+    if (cordovaFiles.length !== 0) {
       const hasSplashscreen = cordovaFiles.some(
         file => file.generator === 'splashscreen'
       )
@@ -185,7 +186,7 @@ export function mountCordova(files) {
 
 export function verifyCordova(file) {
   if (isCordovaFile(file) && existsSync(cordovaConfigXml)) {
-    const doc = elementTree.parse(readFileSync(cordovaConfigXml, 'utf-8'))
+    const doc = elementTree.parse(readFileSync(cordovaConfigXml, 'utf8'))
     const isAndroid = file.platform === 'cordova-android'
 
     const node = doc

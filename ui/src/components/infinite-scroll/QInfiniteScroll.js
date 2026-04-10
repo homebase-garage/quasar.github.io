@@ -124,8 +124,8 @@ export default createComponent({
 
             if (isDone === true) {
               stop()
-            } else if (rootRef.value) {
-              if (rootRef.value.closest('body')) poll()
+            } else if (rootRef.value?.closest('body')) {
+              poll()
             }
           })
         }
@@ -183,14 +183,14 @@ export default createComponent({
     }
 
     function setDebounce(val) {
-      val = parseInt(val, 10)
+      val = Number.parseInt(val, 10)
 
       const oldPoll = poll
 
       poll =
         val <= 0
           ? immediatePoll
-          : debounce(immediatePoll, isNaN(val) === true ? 100 : val)
+          : debounce(immediatePoll, Number.isNaN(val) === true ? 100 : val)
 
       if (localScrollTarget && isWorking.value === true) {
         if (oldPoll !== void 0) {
@@ -215,7 +215,7 @@ export default createComponent({
         // we need to pause svg animations (if any) when hiding
         // otherwise the browser will keep on recalculating the style
         const action = `${isFetching.value === true ? 'un' : ''}pauseAnimations`
-        Array.from(loadingRef.value.getElementsByTagName('svg')).forEach(el => {
+        ;[...loadingRef.value.getElementsByTagName('svg')].forEach(el => {
           el[action]()
         })
       }

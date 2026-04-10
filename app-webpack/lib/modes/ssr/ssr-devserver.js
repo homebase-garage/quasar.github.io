@@ -156,11 +156,12 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
-    if (quasarConf.ssr.pwa === true) {
+    if (
+      quasarConf.ssr.pwa === true &&
       // also update pwa-devserver.js when changing here
-      if (diff('customServiceWorker', quasarConf) === true) {
-        return queue(() => this.#compileCustomServiceWorker(quasarConf, queue))
-      }
+      diff('customServiceWorker', quasarConf) === true
+    ) {
+      return queue(() => this.#compileCustomServiceWorker(quasarConf, queue))
     }
 
     // also update pwa-devserver.js when changing here
@@ -304,7 +305,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
     async function updateTemplate() {
       renderer.updateRenderTemplate(
         await getSsrHtmlTemplateFn(
-          readFileSync(templatePath, 'utf-8'),
+          readFileSync(templatePath, 'utf8'),
           quasarConf
         )
       )
@@ -479,7 +480,7 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
             redirectPaths.push(publicPath + splitted.slice(1).join('/'))
           }
 
-          if (redirectPaths[redirectPaths.length - 1] !== publicPath) {
+          if (redirectPaths.at(-1) !== publicPath) {
             redirectPaths.push(publicPath)
           }
 
@@ -525,15 +526,15 @@ module.exports.QuasarModeDevserver = class QuasarModeDevserver extends (
     const createInstance = () => {
       try {
         return createServer(httpsOptions, app)
-      } catch (error) {
-        if (error.code === 'ERR_INVALID_ARG_TYPE') {
+      } catch (err) {
+        if (err.code === 'ERR_INVALID_ARG_TYPE') {
           warn(
             'The SSR app instance is not compatible with automatic HTTPS support. ' +
               'Please use `devHttpsOptions` property from callback scope in `create` or `listen` to set up HTTPS manually.'
           )
         } else {
           warn(
-            `An error occurred while setting up HTTPS for the SSR app instance, devHttpsApp won't be available. Error: ${error.message}`
+            `An error occurred while setting up HTTPS for the SSR app instance, devHttpsApp won't be available. Error: ${err.message}`
           )
         }
       }

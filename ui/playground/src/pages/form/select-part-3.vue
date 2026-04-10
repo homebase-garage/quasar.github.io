@@ -309,12 +309,10 @@ const stringOptions = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
     }
   ],
   lotsOptions = () =>
-    Array(5000)
-      .fill(0)
-      .map((item, i) => ({
-        value: i,
-        label: `Item ${i}`
-      }))
+    Array.from({ length: 5000 }, (item, i) => ({
+      value: i,
+      label: `Item ${i}`
+    }))
 
 export default {
   data() {

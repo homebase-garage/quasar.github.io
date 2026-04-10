@@ -233,6 +233,7 @@ export default createComponent({
             onClick
           },
           {
+            // oxlint-disable-next-line unicorn/prefer-spread
             default: () => hSlot(slots.label, []).concat(Arrow),
             loading: slots.loading
           }

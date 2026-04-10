@@ -31,14 +31,14 @@ const replace = name => (_, p1) => {
   const parts = p1
     .split(',')
     .map(p => p.trim())
-    .filter(p => p.length > 0)
+    .filter(p => p.length !== 0)
     .reduce((acc, p) => {
       acc.push(p)
       return acc
     }, [])
 
   const text = []
-  if (parts.length > 0) {
+  if (parts.length !== 0) {
     text.push('const { ' + parts.join(', ') + ' } = ' + name)
   }
   return text.join('\n')
@@ -51,7 +51,7 @@ const formRef = ref(null)
 const def = reactive({ parts: {} })
 
 const css = computed(() =>
-  (def.parts.Style || '').replace(/(<style.*?>|<\/style>)/g, '').trim()
+  (def.parts.Style || '').replaceAll(/(<style.*?>|<\/style>)/g, '').trim()
 )
 
 const cssPreprocessor = computed(() => {
@@ -67,7 +67,7 @@ const js = computed(() => {
   let component = /export default {([\s\S]*)}/g.exec(def.parts.Script || '')
 
   component = ((component && component[1]) || '').trim()
-  if (component.length > 0) {
+  if (component.length !== 0) {
     component = '\n  ' + component + '\n'
   }
 
@@ -91,19 +91,22 @@ app.mount('#q-app')
 
 const html = computed(() =>
   (def.parts.Template || '')
-    .replace(/(<template>|<\/template>$)/g, '')
-    .replace(/\n/g, '\n  ')
-    .replace(
+    .replaceAll(/(<template>|<\/template>$)/g, '')
+    .replaceAll('\n', '\n  ')
+    .replaceAll(
       /([\w]+=")([^"]*?)(")/g,
       (match, p1, p2, p3) =>
-        p1 + p2.replace(/>/g, '___TEMP_REPLACEMENT___') + p3
+        p1 + p2.replaceAll('>', '___TEMP_REPLACEMENT___') + p3
     )
-    .replace(/<(q-[\w-]+|div)([^>]*?)\s*?([\n\r][\t ]+)?\/>/gs, '<$1$2$3></$1>')
-    .replace(
+    .replaceAll(
+      /<(q-[\w-]+|div)([^>]*?)\s*?([\n\r][\t ]+)?\/>/gs,
+      '<$1$2$3></$1>'
+    )
+    .replaceAll(
       /(<template[^>]*>)(\s*?(?:[\n\r][\t ]+)?)<(thead|tbody|tfoot)/gs,
       '$1$2<___PREVENT_TEMPLATE___$3'
     )
-    .replace(
+    .replaceAll(
       /<(thead|tbody|tfoot)(.*?)[\n\r]?(\s*)<\/\1>/gs,
       (match, p1, p2, p3) =>
         '<template>\n' +
@@ -119,9 +122,9 @@ const html = computed(() =>
         p3 +
         '</template>'
     )
-    .replace(/___PREVENT_TEMPLATE___/g, '')
-    .replace(/___TEMP_REPLACEMENT___/g, '>')
-    .replace(/^\s{2}/gm, '')
+    .replaceAll('___PREVENT_TEMPLATE___', '')
+    .replaceAll('___TEMP_REPLACEMENT___', '>')
+    .replaceAll(/^\s{2}/gm, '')
     .trim()
 )
 

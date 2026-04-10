@@ -563,6 +563,7 @@ export default function useField(state) {
       )
     }
 
+    // oxlint-disable-next-line unicorn/prefer-spread
     return node.concat(hSlot(slots.default))
   }
 

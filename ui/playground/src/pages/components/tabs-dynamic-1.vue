@@ -174,11 +174,7 @@ export default {
     },
 
     toggleAll() {
-      if (this.tabs.length !== 0) {
-        this.tabs = []
-      } else {
-        this.tabs = this.allTabs.map(t => t.tab)
-      }
+      this.tabs = this.tabs.length !== 0 ? [] : this.allTabs.map(t => t.tab)
     }
   }
 }

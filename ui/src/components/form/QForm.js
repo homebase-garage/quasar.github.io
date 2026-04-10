@@ -68,13 +68,13 @@ export default createComponent({
           : registeredComponents
               .reduce(
                 (acc, comp) =>
-                  acc.then(() =>
-                    validateComponent(comp).then(r => {
+                  acc
+                    .then(() => validateComponent(comp))
+                    .then(r => {
                       if (r.valid === false) {
                         throw r
                       }
-                    })
-                  ),
+                    }),
                 Promise.resolve()
               )
               .catch(err => [err])

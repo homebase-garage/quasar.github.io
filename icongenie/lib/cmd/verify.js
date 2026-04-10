@@ -94,6 +94,7 @@ const params = filterArgvParams(argv)
 
 if (params.profile) {
   parseArgv(params, ['profile'])
+  // oxlint-disable-next-line unicorn/prefer-top-level-await
   runProfiles(params, getProfileFiles(params.profile))
 } else {
   verify(params)

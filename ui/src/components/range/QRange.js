@@ -285,7 +285,7 @@ export default createComponent({
       const localModel = methods.convertRatioToModel(ratio)
 
       switch (dragging.type) {
-        case dragType.MIN:
+        case dragType.MIN: {
           if (ratio <= dragging.ratioMax) {
             pos = {
               minR: ratio,
@@ -304,8 +304,9 @@ export default createComponent({
             state.focus.value = 'max'
           }
           break
+        }
 
-        case dragType.MAX:
+        case dragType.MAX: {
           if (ratio >= dragging.ratioMin) {
             pos = {
               minR: dragging.ratioMin,
@@ -324,6 +325,7 @@ export default createComponent({
             state.focus.value = 'min'
           }
           break
+        }
 
         case dragType.RANGE: {
           const ratioDelta = ratio - dragging.offsetRatio,

@@ -137,6 +137,7 @@ const filter = computed({
   },
 
   set(val) {
+    // oxlint-disable-next-line unicorn/prefer-default-parameters
     const newFilter = val || ''
     store.value.filter = newFilter
     $q.localStorage.set(STORAGE_KEY, newFilter)
@@ -165,7 +166,7 @@ function moveSelection(evt, op) {
     } else {
       const nodes = document.querySelectorAll('.q-item')
       if (nodes.length !== 0) {
-        nextEl = nodes[nodes.length - 1]
+        nextEl = nodes.at(-1)
       }
     }
 

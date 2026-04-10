@@ -6,10 +6,11 @@ function fallback(text) {
   area.contentEditable = 'true'
   area.style.position = 'fixed' // avoid scrolling to bottom
 
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const fn = () => {}
   addFocusout(fn)
 
-  document.body.appendChild(area)
+  document.body.append(area)
   area.focus()
   area.select()
 

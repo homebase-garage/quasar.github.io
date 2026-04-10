@@ -58,12 +58,12 @@ export default createComponent({
     const dragging = ref(false)
 
     const innerMin = computed(() =>
-      isNaN(props.innerMin) === true || props.innerMin < props.min
+      Number.isNaN(props.innerMin) === true || props.innerMin < props.min
         ? props.min
         : props.innerMin
     )
     const innerMax = computed(() =>
-      isNaN(props.innerMax) === true || props.innerMax > props.max
+      Number.isNaN(props.innerMax) === true || props.innerMax > props.max
         ? props.max
         : props.innerMax
     )
@@ -184,7 +184,7 @@ export default createComponent({
         offset = [34, 37, 40].includes(evt.keyCode) ? -stepVal : stepVal
 
       model.value = between(
-        parseFloat((model.value + offset).toFixed(decimals.value)),
+        Number.parseFloat((model.value + offset).toFixed(decimals.value)),
         innerMin.value,
         innerMax.value
       )
@@ -195,9 +195,7 @@ export default createComponent({
     function updatePosition(evt, change) {
       const pos = position(evt),
         height = Math.abs(pos.top - centerPosition.top),
-        distance = Math.sqrt(
-          height ** 2 + Math.abs(pos.left - centerPosition.left) ** 2
-        )
+        distance = Math.hypot(height, pos.left - centerPosition.left)
 
       let angle = Math.asin(height / distance) * (180 / Math.PI)
 
@@ -229,7 +227,7 @@ export default createComponent({
             ? (modulo < 0 ? -1 : 1) * step.value
             : 0)
 
-        newModel = parseFloat(newModel.toFixed(decimals.value))
+        newModel = Number.parseFloat(newModel.toFixed(decimals.value))
       }
 
       newModel = between(newModel, innerMin.value, innerMax.value)

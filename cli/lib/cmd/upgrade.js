@@ -169,8 +169,8 @@ function getQuasarVersionPrefix(version) {
   const matches = version.match(/^(\d)/)
   if (!matches || !matches[1]) return ''
 
-  const major = parseInt(matches[1], 10)
-  return isNaN(major) ? '' : `v${major}.`
+  const major = Number.parseInt(matches[1], 10)
+  return Number.isNaN(major) ? '' : `v${major}.`
 }
 
 console.log()

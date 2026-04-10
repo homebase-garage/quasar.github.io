@@ -52,7 +52,7 @@ export default function renderSSRError({
 
     html:
       before +
-      JSON.stringify(data).replace(/<\/script>/g, '<\\/script>') +
+      JSON.stringify(data).replaceAll('</script>', String.raw`<\/script>`) +
       after
   }
 }

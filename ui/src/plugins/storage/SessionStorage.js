@@ -9,9 +9,8 @@ const storage =
 const Plugin = {
   install({ $q }) {
     $q.sessionStorage = storage
-  }
+  },
+  ...storage
 }
-
-Object.assign(Plugin, storage)
 
 export default Plugin

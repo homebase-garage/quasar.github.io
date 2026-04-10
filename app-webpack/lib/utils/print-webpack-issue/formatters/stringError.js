@@ -9,7 +9,7 @@ function extract(message) {
 
   return {
     title: parts[1],
-    message: message.substring(`Error: ${parts[1]}: `.length + 1)
+    message: message.slice(`Error: ${parts[1]}: `.length + 1)
   }
 }
 

@@ -45,13 +45,13 @@ export default function exportFile(fileName, rawData, opts = {}) {
 
   // Check for "download" attribute support;
   // If not supported, open this in new window
-  if (typeof link.download === 'undefined') {
+  if (link.download === void 0) {
     link.setAttribute('target', '_blank')
   }
 
   link.classList.add('hidden')
   link.style.position = 'fixed' // avoid scrolling to bottom
-  document.body.appendChild(link)
+  document.body.append(link)
 
   try {
     link.click()

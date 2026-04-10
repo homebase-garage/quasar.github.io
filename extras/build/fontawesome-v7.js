@@ -7,8 +7,8 @@ const prefix = 'fa'
 
 const { globSync } = require('tinyglobby')
 const { copySync, removeSync } = require('fs-extra')
-const { existsSync, writeFileSync } = require('fs')
-const { resolve, join } = require('path')
+const { existsSync, writeFileSync } = require('node:fs')
+const { resolve, join } = require('node:path')
 
 const skipped = []
 const distFolder = resolve(__dirname, `../${distName}`)
@@ -96,7 +96,7 @@ webfont.forEach(file => {
 copyCssFile({
   from: resolve(__dirname, `../node_modules/${packageName}/css/all.css`),
   to: resolve(__dirname, `../${distName}/${distName}.css`),
-  replaceFn: content => content.replace(/\.\.\/webfonts/g, '.')
+  replaceFn: content => content.replaceAll('../webfonts', '.')
 })
 
 copySync(

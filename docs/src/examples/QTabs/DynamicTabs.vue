@@ -69,7 +69,7 @@ export default {
       allTabs: computed(() =>
         tabsDefinition.map(tab => ({
           tab,
-          selected: tabs.value.indexOf(tab) > -1
+          selected: tabs.value.includes(tab)
         }))
       ),
 
@@ -79,7 +79,7 @@ export default {
         } else {
           const index = tabs.value.indexOf(tab)
 
-          if (index > -1) {
+          if (index !== -1) {
             tabs.value.splice(index, 1)
           }
         }

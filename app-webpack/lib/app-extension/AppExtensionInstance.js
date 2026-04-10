@@ -54,11 +54,11 @@ async function renderFile(
   if (rawCopy || isBinary(sourcePath)) {
     fse.copyFileSync(sourcePath, targetPath)
   } else {
-    const rawContent = fse.readFileSync(sourcePath, 'utf-8')
+    const rawContent = fse.readFileSync(sourcePath, 'utf8')
     const template = compileTemplate(rawContent, {
       interpolate: /<%=([\s\S]+?)%>/g
     })
-    fse.writeFileSync(targetPath, template(scope), 'utf-8')
+    fse.writeFileSync(targetPath, template(scope), 'utf8')
   }
 }
 
@@ -128,13 +128,12 @@ module.exports.AppExtensionInstance = class AppExtensionInstance {
       }
 
       this.packageFullName =
-        extName.substring(0, slashIndex + 1) +
+        extName.slice(0, slashIndex + 1) +
         'quasar-app-extension-' +
-        extName.substring(slashIndex + 1)
+        extName.slice(slashIndex + 1)
 
-      this.packageName =
-        '@' + this.#stripVersion(this.packageFullName.substring(1))
-      this.extId = '@' + this.#stripVersion(extName.substring(1))
+      this.packageName = '@' + this.#stripVersion(this.packageFullName.slice(1))
+      this.extId = '@' + this.#stripVersion(extName.slice(1))
     } else {
       this.packageFullName = `quasar-app-extension-${extName}`
       this.packageName = this.#stripVersion(this.packageFullName)
@@ -222,7 +221,7 @@ module.exports.AppExtensionInstance = class AppExtensionInstance {
     log(`Quasar App Extension "${this.extId}" successfully installed.`)
     log()
 
-    if (hooks && hooks.exitLog.length > 0) {
+    if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
         console.log(msg)
       })
@@ -260,7 +259,7 @@ module.exports.AppExtensionInstance = class AppExtensionInstance {
     log(`Quasar App Extension "${this.extId}" successfully removed.`)
     log()
 
-    if (hooks && hooks.exitLog.length > 0) {
+    if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
         console.log(msg)
       })
@@ -294,7 +293,7 @@ module.exports.AppExtensionInstance = class AppExtensionInstance {
   #stripVersion(packageFullName) {
     const index = packageFullName.indexOf('@')
 
-    return index > -1 ? packageFullName.substring(0, index) : packageFullName
+    return index !== -1 ? packageFullName.slice(0, index) : packageFullName
   }
 
   getPrompts() {
@@ -423,13 +422,13 @@ module.exports.AppExtensionInstance = class AppExtensionInstance {
 
     const hooks = api.__getHooks(this.#appExtJson)
 
-    if (hooks.renderFolders.length > 0) {
+    if (hooks.renderFolders.length !== 0) {
       for (const entry of hooks.renderFolders) {
         await renderFolders(entry, this.#ctx)
       }
     }
 
-    if (hooks.renderFiles.length > 0) {
+    if (hooks.renderFiles.length !== 0) {
       for (const entry of hooks.renderFiles) {
         await renderFile(entry, this.#ctx)
       }

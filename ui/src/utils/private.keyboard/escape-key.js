@@ -19,7 +19,7 @@ function onKeyup(evt) {
     escDown = false
 
     if (isKeyCode(evt, 27) === true) {
-      handlers[handlers.length - 1](evt)
+      handlers.at(-1)(evt)
     }
   }
 }

@@ -75,8 +75,8 @@ export default {
         const filt = filterStr.toLowerCase()
         return (
           node.label &&
-          node.label.toLowerCase().indexOf(filt) > -1 &&
-          node.label.toLowerCase().indexOf('(*)') > -1
+          node.label.toLowerCase().includes(filt) &&
+          node.label.toLowerCase().includes('(*)')
         )
       },
 

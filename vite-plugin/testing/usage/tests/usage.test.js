@@ -17,7 +17,7 @@ describe('quasar plugin', () => {
 
       const configResolved = viteConfPlugin.configResolved
       if (typeof configResolved !== 'function') {
-        throw new Error(
+        throw new TypeError(
           'configResolved hook is not a function. Adjust the test code accordingly'
         )
       }
@@ -42,7 +42,7 @@ describe('quasar plugin', () => {
 
       const configResolved = viteConfPlugin.configResolved
       if (typeof configResolved !== 'function') {
-        throw new Error(
+        throw new TypeError(
           'configResolved hook is not a function. Adjust the test code accordingly'
         )
       }

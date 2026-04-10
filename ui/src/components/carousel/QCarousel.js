@@ -344,8 +344,9 @@ export default createComponent({
             'sl-cont',
             props.swipeable,
             () => panelDirectives.value
-          )
-        ].concat(getContent())
+          ),
+          ...getContent()
+        ]
       )
     }
   }

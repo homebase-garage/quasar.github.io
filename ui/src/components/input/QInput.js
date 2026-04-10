@@ -72,7 +72,7 @@ export default createComponent({
     const { $q } = proxy
 
     const temp = {}
-    let emitCachedValue = NaN,
+    let emitCachedValue = Number.NaN,
       typedNumber,
       stopValueWatcher,
       emitTimer = null,
@@ -314,7 +314,7 @@ export default createComponent({
           emit('update:modelValue', val)
 
           nextTick(() => {
-            if (emitCachedValue === val) emitCachedValue = NaN
+            if (emitCachedValue === val) emitCachedValue = Number.NaN
           })
         }
 
@@ -362,7 +362,9 @@ export default createComponent({
           // if there is maxHeight and content is taller than maxHeight
           if (changeOverflow === true) {
             inp.style.overflowY =
-              parseInt(maxHeight, 10) < inp.scrollHeight ? 'auto' : 'hidden'
+              Number.parseInt(maxHeight, 10) < inp.scrollHeight
+                ? 'auto'
+                : 'hidden'
           }
           parentStyle.marginBottom = ''
           inp.scrollTop = scrollTop
@@ -451,7 +453,8 @@ export default createComponent({
       floatingLabel: computed(
         () =>
           (hasValue.value === true &&
-            (props.type !== 'number' || isNaN(innerValue.value) === false)) ||
+            (props.type !== 'number' ||
+              Number.isNaN(innerValue.value) === false)) ||
           fieldValueIsFilled(props.displayValue)
       ),
 

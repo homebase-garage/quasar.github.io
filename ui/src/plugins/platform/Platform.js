@@ -15,9 +15,7 @@ export const isRuntimeSsrPreHydration = __QUASAR_SSR_SERVER__
   ? { value: true }
   : ref(
       __QUASAR_SSR_CLIENT__ &&
-        (__QUASAR_SSR_PWA__
-          ? document.body.getAttribute('data-server-rendered') !== null
-          : true)
+        (__QUASAR_SSR_PWA__ ? 'serverRendered' in document.body.dataset : true)
     )
 
 let preHydrationBrowser
@@ -117,7 +115,7 @@ function getPlatform(UA) {
   if (matched.browser) {
     browser[matched.browser] = true
     browser.version = matched.version
-    browser.versionNumber = parseInt(matched.version, 10)
+    browser.versionNumber = Number.parseInt(matched.version, 10)
   }
 
   if (matched.platform) {

@@ -201,7 +201,7 @@ const Plugin = createReactivePlugin(
           // show last registered one since that one is still active
           if (keys.length !== 0) {
             // get last registered group
-            const lastGroup = keys[keys.length - 1]
+            const lastGroup = keys.at(-1)
             Plugin.show({ group: lastGroup })
             return
           }
@@ -217,8 +217,8 @@ const Plugin = createReactivePlugin(
     },
 
     setDefaults(opts) {
-      if (__QUASAR_SSR_SERVER__ !== true) {
-        if (isObject(opts) === true) Object.assign(defaults, opts)
+      if (__QUASAR_SSR_SERVER__ !== true && isObject(opts) === true) {
+        Object.assign(defaults, opts)
       }
     },
 

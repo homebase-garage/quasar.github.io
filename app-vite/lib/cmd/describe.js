@@ -468,7 +468,7 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 
 function describe(api) {
   switch (api.type) {
-    case 'component':
+    case 'component': {
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.props === true) printProperties(api)
       if (apiParts.slots === true) printSlots(api)
@@ -476,20 +476,23 @@ function describe(api) {
       if (apiParts.methods === true) printMethods(api)
       if (apiParts.computedProps === true) printComputedProps(api)
       break
+    }
 
-    case 'directive':
+    case 'directive': {
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.value === true) printValue(api)
       if (apiParts.arg === true) printArg(api)
       if (apiParts.modifiers === true) printModifiers(api)
       break
+    }
 
-    case 'plugin':
+    case 'plugin': {
       if (apiParts.injection === true) printInjection(api)
       if (apiParts.quasar === true) printQuasarConfOptions(api)
       if (apiParts.props === true) printProperties(api)
       if (apiParts.methods === true) printMethods(api)
       break
+    }
   }
 
   if (api.meta && api.meta.docsUrl) {
@@ -576,7 +579,9 @@ async function listElements() {
 }
 
 if (item === 'list') {
+  // oxlint-disable-next-line unicorn/prefer-top-level-await
   listElements()
 } else {
+  // oxlint-disable-next-line unicorn/prefer-top-level-await
   run()
 }

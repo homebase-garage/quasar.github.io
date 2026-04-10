@@ -15,18 +15,17 @@ function getModulePath(mod, useAbsolutePath) {
 
 // add polyfill imports to the first file encountered.
 // oxlint-disable-next-line no-empty-pattern
-module.exports = ({}, { polyfills, useAbsolutePath }) => ({
-  name: 'quasar-cli-inject-polyfills',
-  visitor: {
-    Program(path) {
-      // imports are injected in reverse order
-      polyfills
-        .slice()
-        .reverse()
-        .forEach(mod => {
+module.exports = function babelPolyfills({}, { polyfills, useAbsolutePath }) {
+  return {
+    name: 'quasar-cli-inject-polyfills',
+    visitor: {
+      Program(path) {
+        // imports are injected in reverse order
+        ;[...polyfills].reverse().forEach(mod => {
           // create import
           addSideEffect(path, getModulePath(mod, useAbsolutePath))
         })
+      }
     }
   }
-})
+}

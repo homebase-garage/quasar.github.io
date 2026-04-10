@@ -200,9 +200,10 @@ export default function useTab(props, slots, emit, routeData) {
       e.keyCode >= 35 &&
       e.keyCode <= 40 &&
       e.altKey !== true &&
-      e.metaKey !== true
+      e.metaKey !== true &&
+      $tabs.onKbdNavigate(e.keyCode, proxy.$el) === true
     ) {
-      if ($tabs.onKbdNavigate(e.keyCode, proxy.$el) === true) stopAndPrevent(e)
+      stopAndPrevent(e)
     }
 
     emit('keydown', e)

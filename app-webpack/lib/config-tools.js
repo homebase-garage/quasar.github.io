@@ -21,14 +21,17 @@ function getDependenciesRegex(list) {
   const deps = list
     .map(dep => {
       if (typeof dep === 'string') {
-        return join('node_modules', dep, '/').replace(/\\/g, '[\\\\/]') // windows support
+        return join('node_modules', dep, '/').replaceAll(
+          '\\',
+          String.raw`[\\/]`
+        ) // windows support
       }
       // oxlint-disable-next-line array-callback-return
       if (dep instanceof RegExp) {
         return dep.source
       }
     })
-    .filter(e => e)
+    .filter(Boolean)
 
   return new RegExp(deps.join('|'))
 }
@@ -156,13 +159,12 @@ module.exports.createWebpackChain = async function createWebpackChain(
   }
 
   if (quasarConf.build.webpackTranspile === true) {
-    const exceptionsRegex = getDependenciesRegex(
-      [
-        /\.vue\.js$/,
-        isSsrServer ? 'quasar/src' : 'quasar',
-        '@babel/runtime'
-      ].concat(quasarConf.build.webpackTranspileDependencies)
-    )
+    const exceptionsRegex = getDependenciesRegex([
+      /\.vue\.js$/,
+      isSsrServer ? 'quasar/src' : 'quasar',
+      '@babel/runtime',
+      ...quasarConf.build.webpackTranspileDependencies
+    ])
 
     chain.module
       .rule('babel')
@@ -205,7 +207,7 @@ module.exports.createWebpackChain = async function createWebpackChain(
     .loader('url-loader')
     .options({
       esModule: false,
-      limit: 10000,
+      limit: 10_000,
       name: `img/[name]${assetHash}.[ext]`
     })
 
@@ -217,7 +219,7 @@ module.exports.createWebpackChain = async function createWebpackChain(
     .loader('url-loader')
     .options({
       esModule: false,
-      limit: 10000,
+      limit: 10_000,
       name: `fonts/[name]${assetHash}.[ext]`
     })
 
@@ -229,7 +231,7 @@ module.exports.createWebpackChain = async function createWebpackChain(
     .loader('url-loader')
     .options({
       esModule: false,
-      limit: 10000,
+      limit: 10_000,
       name: `media/[name]${assetHash}.[ext]`
     })
 
@@ -281,7 +283,7 @@ module.exports.createWebpackChain = async function createWebpackChain(
 
   chain.plugin('boot-default-export').use(BootDefaultExportPlugin)
 
-  chain.performance.hints(false).maxAssetSize(500000)
+  chain.performance.hints(false).maxAssetSize(500_000)
 
   if (isSsrServer === false && quasarConf.vendor.disable !== true) {
     const { add, remove } = quasarConf.vendor

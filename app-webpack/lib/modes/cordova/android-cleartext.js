@@ -11,8 +11,9 @@ module.exports.fixAndroidCleartext = function fixAndroidCleartext(
   if (fs.existsSync(androidManifestPath) === false) return
 
   let androidManifest = fs.readFileSync(androidManifestPath, 'utf8')
-  const hasCleartext =
-    androidManifest.indexOf('android:usesCleartextTraffic="true"') !== -1
+  const hasCleartext = androidManifest.includes(
+    'android:usesCleartextTraffic="true"'
+  )
 
   if (action === 'add') {
     if (hasCleartext === false) {
@@ -21,7 +22,7 @@ module.exports.fixAndroidCleartext = function fixAndroidCleartext(
         '<application\n        android:usesCleartextTraffic="true"'
       )
 
-      fs.writeFileSync(androidManifestPath, androidManifest, 'utf-8')
+      fs.writeFileSync(androidManifestPath, androidManifest, 'utf8')
     }
 
     return
@@ -34,6 +35,6 @@ module.exports.fixAndroidCleartext = function fixAndroidCleartext(
       ''
     )
 
-    fs.writeFileSync(androidManifestPath, androidManifest, 'utf-8')
+    fs.writeFileSync(androidManifestPath, androidManifest, 'utf8')
   }
 }

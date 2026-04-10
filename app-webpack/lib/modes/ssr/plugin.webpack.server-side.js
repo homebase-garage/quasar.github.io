@@ -59,7 +59,7 @@ module.exports.getServerDevManifest = function getServerDevManifest(
       serverManifest.files[asset.name] = compilation
         .getAsset(asset.name)
         .source.source()
-    } else if (asset.name.match(jsMapRE)) {
+    } else if (jsMapRE.test(asset.name)) {
       serverManifest.maps[asset.name.replace(mapRE, '')] = JSON.parse(
         compilation.getAsset(asset.name).source.source()
       )

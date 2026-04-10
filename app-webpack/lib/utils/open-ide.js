@@ -91,22 +91,23 @@ function getWindowsPath(bin) {
     return bin.windowsAndroidStudio
   }
 
-  const studioPath =
-    'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe'
+  const studioPath = String.raw`C:\Program Files\Android\Android Studio\bin\studio64.exe`
   if (fs.existsSync(studioPath)) {
     return studioPath
   }
 
   try {
     const buffer = execSync(
-      'REG QUERY "HKEY_LOCAL_MACHINE\\SOFTWARE\\Android Studio" /v Path'
+      String.raw`REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\Android Studio" /v Path`
     )
-    const bufferString = buffer.toString('utf-8').replace(/(\r\n|\n|\r)/gm, '')
+    const bufferString = buffer
+      .toString('utf8')
+      .replaceAll(/(\r\n|\n|\r)/gm, '')
     const index = bufferString.indexOf('REG_SZ')
 
     if (index > 0) {
       const asPath =
-        bufferString.substring(index + 6).trim() + '\\bin\\studio64.exe'
+        bufferString.slice(index + 6).trim() + String.raw`\bin\studio64.exe`
       if (fs.existsSync(asPath)) {
         return asPath
       }
@@ -147,7 +148,7 @@ function runWindows({ mode, bin, target, appPaths, open }) {
     ' Please set quasar.config file > bin > windowsAndroidStudio with the escaped path to your studio64.exe'
   )
   console.log(
-    " Example: 'C:\\\\Program Files\\\\Android\\\\Android Studio\\\\bin\\\\studio64.exe'"
+    String.raw` Example: 'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe'`
   )
   process.exit(1)
 }
@@ -191,13 +192,17 @@ module.exports.openIDE = async function openIDE({
   const { default: open } = await import('open')
 
   switch (process.platform) {
-    case 'darwin':
+    case 'darwin': {
       return runMacOS({ mode, target, appPaths, open })
-    case 'linux':
+    }
+    case 'linux': {
       return runLinux({ mode, bin, target, appPaths, open })
-    case 'win32':
+    }
+    case 'win32': {
       return runWindows({ mode, bin, target, appPaths, open })
-    default:
+    }
+    default: {
       fatal('Unsupported host OS for opening the IDE')
+    }
   }
 }

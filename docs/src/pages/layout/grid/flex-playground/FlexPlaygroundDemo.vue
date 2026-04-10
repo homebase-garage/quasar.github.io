@@ -311,11 +311,13 @@ function checkQueryParams() {
     if (param in query) {
       const paramType = queryParams[param]
       switch (paramType) {
-        case 'object':
+        case 'object': {
           group[param] = JSON.parse(query[param])
           break
-        default:
+        }
+        default: {
           group[param] = query[param]
+        }
       }
     }
   }
@@ -353,7 +355,7 @@ function onChange(index) {
 function share() {
   let playgroudUrl = window.location.href
   if (playgroudUrl.includes('?')) {
-    playgroudUrl = playgroudUrl.substring(0, playgroudUrl.indexOf('?'))
+    playgroudUrl = playgroudUrl.slice(0, playgroudUrl.indexOf('?'))
   }
   let queryString = '',
     index = 0
@@ -362,11 +364,13 @@ function share() {
     const paramType = queryParams[param]
     let value
     switch (paramType) {
-      case 'object':
+      case 'object': {
         value = JSON.stringify(group[param])
         break
-      default:
+      }
+      default: {
         value = group[param]
+      }
     }
     queryString += `${param}=${encodeURIComponent(value)}`
     index++
@@ -427,8 +431,8 @@ const classes = computed(() =>
     ' ' +
     group.contentGroup
   )
-    .replace(/,/g, ' ')
-    .replace(/'  +'/g, ' ')
+    .replaceAll(',', ' ')
+    .replaceAll(/'  +'/g, ' ')
     .trim()
 )
 

@@ -234,7 +234,11 @@ export default createComponent({
 
     function set(value) {
       if (editable.value === true) {
-        const model = between(parseInt(value, 10), 1, parseInt(props.max, 10)),
+        const model = between(
+            Number.parseInt(value, 10),
+            1,
+            Number.parseInt(props.max, 10)
+          ),
           newVal =
             props.noReset !== true && props.modelValue === model ? 0 : model
 
@@ -252,21 +256,26 @@ export default createComponent({
     function onKeyup(e, i) {
       switch (e.keyCode) {
         case 13:
-        case 32:
+        case 32: {
           set(i)
           return stopAndPrevent(e)
+        }
         case 37: // LEFT ARROW
-        case 40: // DOWN ARROW
+        case 40: {
+          // DOWN ARROW
           if (iconRefs[`rt${i - 1}`]) {
             iconRefs[`rt${i - 1}`].focus()
           }
           return stopAndPrevent(e)
+        }
         case 39: // RIGHT ARROW
-        case 38: // UP ARROW
+        case 38: {
+          // UP ARROW
           if (iconRefs[`rt${i + 1}`]) {
             iconRefs[`rt${i + 1}`].focus()
           }
           return stopAndPrevent(e)
+        }
       }
     }
 

@@ -1,6 +1,6 @@
 import { clientList, planClientUpdate } from '../../plugins/meta/Meta.js'
 
-export default metaOptions => {
+export default function createMetaMixin(metaOptions) {
   if (__QUASAR_SSR_SERVER__) {
     return {
       created:

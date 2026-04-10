@@ -101,7 +101,7 @@ export async function cmdValidateTestFile({ ctx, testFile, argv }) {
         value: 'add-ignore-comments'
       },
       { title: 'Abort & exit', value: 'exit' }
-    ].filter(v => v)
+    ].filter(Boolean)
   })
 
   // allow user to exit

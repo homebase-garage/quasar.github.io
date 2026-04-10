@@ -111,7 +111,7 @@ export default {
         } else if (e.keyCode === 9) {
           if (
             inputFillCancelled.value !== true &&
-            inputShadowText.value.length > 0
+            inputShadowText.value.length !== 0
           ) {
             stopAndPrevent(e)
             inputModel.value =
@@ -137,7 +137,7 @@ export default {
         } else if (e.keyCode === 9) {
           if (
             textareaFillCancelled.value !== true &&
-            textareaShadowText.value.length > 0
+            textareaShadowText.value.length !== 0
           ) {
             stopAndPrevent(e)
             textareaModel.value =

@@ -31,7 +31,7 @@ function extract(
 
   if (comp !== null) {
     // avoid duplicates
-    comp = Array.from(new Set(comp))
+    comp = [...new Set(comp)]
 
     // map comp names only if not pascal-case already
     if (autoImportComponentCase !== 'pascal') {
@@ -41,7 +41,7 @@ function extract(
     if (autoImportComponentCase === 'combined') {
       // could have been transformed QIcon and q-icon too,
       // so avoid duplicates
-      comp = Array.from(new Set(comp))
+      comp = [...new Set(comp)]
     }
 
     importStatements += transform(comp, importTransformation)
@@ -49,7 +49,7 @@ function extract(
   }
 
   if (dir !== null) {
-    dir = Array.from(new Set(dir)).map(name => autoImportData.importName[name])
+    dir = [...new Set(dir)].map(name => autoImportData.importName[name])
 
     importStatements += transform(dir, importTransformation)
     installStatements += `qInstall(script, 'directives', {${dir.join(',')}});`
@@ -89,7 +89,7 @@ module.exports = function exports(content, map) {
     if (opts.isServerBuild === true) {
       newContent = content + getModuleIdentifierCode(this)
     } else {
-      const file = this.fs.readFileSync(this.resource, 'utf-8').toString()
+      const file = this.fs.readFileSync(this.resource, 'utf8').toString()
       const code = extract(file, this, opts)
 
       if (code !== void 0) {

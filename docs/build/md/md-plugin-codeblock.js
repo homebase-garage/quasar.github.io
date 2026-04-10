@@ -39,8 +39,8 @@ const langMatch = langList.map(l => l.aliases || l.name).join('|')
 const definitionLineRE = new RegExp(
   '^' +
     `(?<lang>(tabs|${langMatch}))` + // then a language name
-    '(\\s+\\[(?<attrs>.*)\\])?' + // then optional attributes
-    '(\\s+(?<title>.+))?' + // then optional title
+    String.raw`(\s+\[(?<attrs>.*)\])?` + // then optional attributes
+    String.raw`(\s+(?<title>.+))?` + // then optional title
     '$'
 )
 
@@ -49,11 +49,11 @@ const definitionLineRE = new RegExp(
  * ...content...
  */
 const tabsLineRE = new RegExp(
-  '^<<\\|\\s+' + // starts with "<<|" + at least one space char
+  String.raw`^<<\|\s+` + // starts with "<<|" + at least one space char
     `(?<lang>${langMatch})` + // then a language name
-    '(\\s+\\[(?<attrs>.*)\\])?' + // then optional attributes
-    '(\\s+(?<title>.+))?' + // then optional title
-    '\\s*\\|>>$' // then any number of space chars + the ending "|>>"
+    String.raw`(\s+\[(?<attrs>.*)\])?` + // then optional attributes
+    String.raw`(\s+(?<title>.+))?` + // then optional title
+    String.raw`\s*\|>>$` // then any number of space chars + the ending "|>>"
 )
 
 function extractTabs(content) {
@@ -146,7 +146,7 @@ function parseCodeLine(content, attrs) {
 
     for (const value of target) {
       // oxlint-disable-next-line prefer-const
-      let [from, to] = value.split('-').map(i => parseInt(i, 10))
+      let [from, to] = value.split('-').map(i => Number.parseInt(i, 10))
       if (to === void 0) to = from
 
       for (let i = from; i <= to; i++) {

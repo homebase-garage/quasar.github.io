@@ -289,7 +289,7 @@ export default createComponent({
       let child
 
       if (slots.header !== void 0) {
-        child = [].concat(slots.header(headerSlotScope.value))
+        child = [slots.header(headerSlotScope.value)].flat()
       } else {
         child = [
           h(QItemSection, () => [

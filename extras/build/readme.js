@@ -1,5 +1,5 @@
-const { readFileSync, writeFileSync } = require('fs')
-const { resolve } = require('path')
+const { readFileSync, writeFileSync } = require('node:fs')
+const { resolve } = require('node:path')
 const { webfontRows, svgRows } = require('./readme-data')
 
 const extrasRoot = resolve(__dirname, '..')
@@ -43,14 +43,17 @@ function resolveVersion(versionSource, googleVersions) {
       return `CDN ${version}`
     }
 
-    case 'file':
+    case 'file': {
       return resolveFileVersion(versionSource.path, versionSource.pattern)
+    }
 
-    case 'packageSpec':
+    case 'packageSpec': {
       return resolvePackageSpecVersion(versionSource.name)
+    }
 
-    default:
+    default: {
       throw new Error(`Unknown version source type: ${versionSource.type}`)
+    }
   }
 }
 

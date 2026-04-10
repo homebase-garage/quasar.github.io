@@ -34,7 +34,7 @@ function setColor(hexColor) {
   metaTag.setAttribute('content', hexColor)
 
   if (newTag) {
-    document.head.appendChild(metaTag)
+    document.head.append(metaTag)
   }
 }
 

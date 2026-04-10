@@ -65,7 +65,7 @@ export function addPreFetchHooks ({ router<%= quasarConf.ctx.mode.ssr && quasarC
         return diffed || (diffed = (
           !prevMatched[i] ||
           prevMatched[i].c !== m.c ||
-          m.path.indexOf('/:') > -1 // does it has params?
+          m.path.includes('/:') // does it has params?
         ))
       })
       .filter(m => m.c !== void 0 && (

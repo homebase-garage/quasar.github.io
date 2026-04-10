@@ -46,8 +46,8 @@ function getIosIcon(name) {
     folder: 'src-cordova/res/ios',
     sizes: [
       multiplier
-        ? parseFloat(size) * parseInt(multiplier, 10)
-        : parseFloat(size)
+        ? Number.parseFloat(size) * Number.parseInt(multiplier, 10)
+        : Number.parseFloat(size)
     ],
     platform: 'cordova-ios',
     background: true

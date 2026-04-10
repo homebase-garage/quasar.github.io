@@ -76,7 +76,7 @@ export default {
     },
 
     setNum1(val) {
-      const v = parseFloat(val)
+      const v = Number.parseFloat(val)
       if (v < 4) {
         this.num1 = v
       }

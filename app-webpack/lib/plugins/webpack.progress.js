@@ -87,11 +87,11 @@ function printBars() {
             state.progressMessage,
             state.progressDetails
               ? [state.progressDetails[0], state.progressDetails[1]]
-                  .filter(s => s)
+                  .filter(Boolean)
                   .join(' ')
               : ''
           ]
-            .filter(m => m)
+            .filter(Boolean)
             .join(' ')
         : 'idle'
 
@@ -113,7 +113,7 @@ function printStatus() {
   if (isDev === true && isCompilationIdle() === false) return
 
   const entriesWithErrors = compilations.filter(entry => entry.errors !== null)
-  if (entriesWithErrors.length > 0) {
+  if (entriesWithErrors.length !== 0) {
     if (isDev === true) clearConsole()
 
     entriesWithErrors.forEach(entry => {
@@ -134,7 +134,7 @@ function printStatus() {
   const entriesWithWarnings = compilations.filter(
     entry => entry.warnings !== null
   )
-  if (entriesWithWarnings.length > 0) {
+  if (entriesWithWarnings.length !== 0) {
     entriesWithWarnings.forEach(entry => {
       printWebpackWarnings(entry.name, entry.warnings)
     })
@@ -223,7 +223,7 @@ module.exports.WebpackProgressPlugin = class WebpackProgressPlugin extends (
         progressLog.start()
       }
 
-      this.state.startTime = Number(new Date())
+      this.state.startTime = Date.now()
     })
 
     compiler.hooks.done.tap('QuasarStatusPlugin', stats => {
@@ -243,7 +243,7 @@ module.exports.WebpackProgressPlugin = class WebpackProgressPlugin extends (
         progressLog.stop()
       }
 
-      const diffTime = Number(new Date()) - this.state.startTime
+      const diffTime = Date.now() - this.state.startTime
 
       if (this.state.errors !== null) {
         error(

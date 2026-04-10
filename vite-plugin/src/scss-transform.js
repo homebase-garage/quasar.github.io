@@ -24,7 +24,7 @@ export function createScssTransform(fileExtension, sassVariables) {
 
     if (newLineIndex !== -1) {
       const index = newLineIndex + 1
-      return content.substring(0, index) + prefix + content.substring(index)
+      return content.slice(0, index) + prefix + content.slice(index)
     }
 
     return content + '\n' + prefix

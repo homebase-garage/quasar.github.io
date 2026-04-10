@@ -75,7 +75,7 @@ export default createComponent({
     const innerValue = computed(() =>
       Object(props.modelValue) === props.modelValue
         ? 'length' in props.modelValue
-          ? Array.from(props.modelValue)
+          ? [...props.modelValue]
           : [props.modelValue]
         : []
     )
@@ -121,7 +121,7 @@ export default createComponent({
     )
 
     function removeAtIndex(index) {
-      const files = innerValue.value.slice()
+      const files = [...innerValue.value]
       files.splice(index, 1)
       emitValue(files)
     }
@@ -180,7 +180,7 @@ export default createComponent({
       }
 
       emitValue(
-        isAppending.value === true ? innerValue.value.concat(files) : files
+        isAppending.value === true ? [...innerValue.value, ...files] : files
       )
     }
 
@@ -297,6 +297,7 @@ export default createComponent({
           Object.assign(data, { onDragover, onDragleave, onKeydown, onKeyup })
         }
 
+        // oxlint-disable-next-line unicorn/prefer-spread
         return h('div', data, [getInput()].concat(getSelection()))
       }
     })

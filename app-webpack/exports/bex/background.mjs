@@ -64,7 +64,7 @@ function connectToDevServer(devServerPort) {
   socket.addEventListener('open', () => {
     console.log('[QBex|HMR] Connected')
     // send a ping every 30s to keep the connection alive
-    const interval = setInterval(() => socket.send('ping'), 30000)
+    const interval = setInterval(() => socket.send('ping'), 30_000)
     socket.addEventListener('close', () => clearInterval(interval))
   })
 

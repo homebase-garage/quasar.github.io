@@ -57,11 +57,7 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
         return SIGNALS.BUILD_EXTERNAL_TOOL_SPAWNED
       }
 
-      if (target === 'ios') {
-        await this.#buildIos()
-      } else {
-        await this.#buildAndroid()
-      }
+      await (target === 'ios' ? this.#buildIos() : this.#buildAndroid())
     }
   }
 
@@ -91,7 +87,7 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
 
     await spawnSync(
       'xcrun',
-      args.split(' ').concat([this.#packagedDir]).concat(this.argv._),
+      [...args.split(' '), this.#packagedDir, ...this.argv._],
       { cwd: this.ctx.appPaths.resolve.capacitor('ios/App') },
       () => {
         console.log()
@@ -120,8 +116,9 @@ module.exports.QuasarModeBuilder = class QuasarModeBuilder extends AppBuilder {
     await spawnSync(
       `./gradlew${process.platform === 'win32' ? '.bat' : ''}`,
       [
-        `assemble${this.quasarConf.metaConf.debugging ? 'Debug' : 'Release'}`
-      ].concat(this.argv._),
+        `assemble${this.quasarConf.metaConf.debugging ? 'Debug' : 'Release'}`,
+        ...this.argv._
+      ],
       { cwd: this.ctx.appPaths.resolve.capacitor('android') },
       () => {
         warn()

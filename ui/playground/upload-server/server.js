@@ -6,7 +6,7 @@ import throttle from 'express-throttle-bandwidth'
 
 const app = express()
 const port = process.env.PORT || 4444,
-  folder = path.join(__dirname, 'files')
+  folder = path.join(import.meta.dirname, 'files')
 
 fse.removeSync(folder)
 fse.ensureDirSync(folder)

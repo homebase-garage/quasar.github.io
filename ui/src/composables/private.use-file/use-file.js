@@ -63,8 +63,10 @@ export default function useFile({
       : null
   )
 
-  const maxFilesNumber = computed(() => parseInt(props.maxFiles, 10))
-  const maxTotalSizeNumber = computed(() => parseInt(props.maxTotalSize, 10))
+  const maxFilesNumber = computed(() => Number.parseInt(props.maxFiles, 10))
+  const maxTotalSizeNumber = computed(() =>
+    Number.parseInt(props.maxTotalSize, 10)
+  )
 
   function pickFiles(e) {
     if (editable.value) {
@@ -89,7 +91,7 @@ export default function useFile({
   }
 
   function processFiles(e, filesToProcess, currentFileList, append) {
-    let files = Array.from(filesToProcess || e.target.files)
+    let files = [...(filesToProcess || e.target.files)]
     const rejectedFiles = []
 
     const done = () => {
@@ -115,7 +117,7 @@ export default function useFile({
 
     // filter max file size
     if (props.maxFileSize !== void 0) {
-      const maxFileSize = parseInt(props.maxFileSize, 10)
+      const maxFileSize = Number.parseInt(props.maxFileSize, 10)
       files = filterFiles(
         files,
         rejectedFiles,

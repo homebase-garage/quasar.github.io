@@ -26,7 +26,7 @@ export const entryPointMarkup = '<!-- quasar:entry-point -->'
 export const attachMarkup = '<div id="q-app"></div>'
 
 function injectPublicPath(html, publicPath) {
-  return html.replace(
+  return html.replaceAll(
     /(href|src)\s*=\s*(['"])(.+)(['"])/gi,
     (_, att, pre, val, post) =>
       absoluteUrlRE.test(val.trim()) === true

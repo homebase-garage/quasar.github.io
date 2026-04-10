@@ -189,9 +189,7 @@ export default {
       showFirstNoKeepOpt: true,
       showFirstNoKeepComp: true,
 
-      logs: Array(4)
-        .fill(null)
-        .map(_ => []),
+      logs: Array.from({ length: 4 }, () => []),
       logNames: [
         'KeepAlive - Options API',
         'KeepAlive - Composition API',

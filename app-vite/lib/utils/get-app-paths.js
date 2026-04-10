@@ -10,7 +10,7 @@ const quasarConfigList = [
 ]
 
 function getAppInfo(appDir) {
-  while (appDir.length !== 0 && appDir[appDir.length - 1] !== sep) {
+  while (appDir.length !== 0 && appDir.at(-1) !== sep) {
     for (const { name, inputFormat } of quasarConfigList) {
       const quasarConfigFilename = join(appDir, name)
       if (existsSync(quasarConfigFilename)) {

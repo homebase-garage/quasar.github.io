@@ -125,11 +125,11 @@ function apply({ add, remove }) {
           tag.setAttribute(att, metaType[name][att])
         }
       }
-      tag.setAttribute('data-qmeta', name)
+      tag.dataset.qmeta = name
       if (type === 'script') {
         tag.innerHTML = metaType[name].innerHTML || ''
       }
-      document.head.appendChild(tag)
+      document.head.append(tag)
     }
   })
   Object.keys(add.htmlAttr)

@@ -146,7 +146,7 @@ export default createComponent({
 
     function getContent() {
       const child =
-        slots.default !== void 0 ? [].concat(slots.default(scope.value)) : []
+        slots.default !== void 0 ? [slots.default(scope.value)].flat() : []
 
       if (props.title) {
         child.unshift(

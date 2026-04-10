@@ -4,8 +4,8 @@ const packageName = 'animate.css'
 
 const { globSync } = require('tinyglobby')
 const { copySync } = require('fs-extra')
-const { writeFileSync } = require('fs')
-const { join, resolve, basename } = require('path')
+const { writeFileSync } = require('node:fs')
+const { join, resolve, basename } = require('node:path')
 
 const dist = resolve(__dirname, '../animate')
 
@@ -41,7 +41,7 @@ ${prefix}generalAnimations = ${JSON.stringify(generalAnimations, null, 2)}
 ${prefix}inAnimations = ${JSON.stringify(inAnimations, null, 2)}
 
 ${prefix}outAnimations = ${JSON.stringify(outAnimations, null, 2)}
-`.replace(/"/g, "'")
+`.replaceAll('"', "'")
 }
 
 if (cssFiles.length === 0) {
@@ -70,19 +70,19 @@ if (cssFiles.length === 0) {
   writeFileSync(
     join(dist, 'animate-list.d.ts'),
     getList('export type ')
-      .replace(/\[/g, '')
-      .replace(/\]/g, ';')
-      .replace(/ {2}'/g, "  | '")
-      .replace(/,/g, ''),
+      .replaceAll('[', '')
+      .replaceAll(']', ';')
+      .replaceAll(/ {2}'/g, "  | '")
+      .replaceAll(',', ''),
     'utf8'
   )
   writeFileSync(
     join(dist, 'animate-list.common.d.ts'),
     getList('export type ')
-      .replace(/\[/g, '')
-      .replace(/\]/g, ';')
-      .replace(/ {2}'/g, "  | '")
-      .replace(/,/g, ''),
+      .replaceAll('[', '')
+      .replaceAll(']', ';')
+      .replaceAll(/ {2}'/g, "  | '")
+      .replaceAll(',', ''),
     'utf8'
   )
 }

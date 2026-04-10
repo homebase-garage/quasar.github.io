@@ -171,7 +171,7 @@ function getPropsCategories(props) {
     }
   }
 
-  return acc.size === 1 ? [defaultInnerTabName] : Array.from(acc).sort()
+  return acc.size === 1 ? [defaultInnerTabName] : [...acc].sort()
 }
 
 function getInnerTabs(api, tabs, apiType) {
@@ -222,8 +222,8 @@ function parseApi(api, tabs, innerTabs) {
 
 function passesFilter(filter, name, desc) {
   return (
-    name.toLowerCase().indexOf(filter) > -1 ||
-    (desc !== void 0 && desc.toLowerCase().indexOf(filter) > -1)
+    name.toLowerCase().includes(filter) ||
+    (desc !== void 0 && desc.toLowerCase().includes(filter))
   )
 }
 

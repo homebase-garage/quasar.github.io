@@ -35,7 +35,7 @@ const options = ref(apiList)
 function filterFn(val, update) {
   update(() => {
     const needle = val.toLowerCase()
-    options.value = apiList.filter(v => v.toLowerCase().indexOf(needle) > -1)
+    options.value = apiList.filter(v => v.toLowerCase().includes(needle))
   })
 }
 </script>

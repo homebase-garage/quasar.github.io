@@ -35,7 +35,7 @@ export function getNormalizedVNodes(vnodes) {
     fillNormalizedVNodes(children, vnode)
   })
 
-  return Array.from(children)
+  return [...children]
 }
 
 export function vmHasRouter(vm) {

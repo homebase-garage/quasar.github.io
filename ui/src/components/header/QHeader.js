@@ -58,7 +58,7 @@ export default createComponent({
       return emptyRenderFn
     }
 
-    const size = ref(parseInt(props.heightHint, 10))
+    const size = ref(Number.parseInt(props.heightHint, 10))
     const revealed = ref(true)
 
     const fixed = computed(

@@ -1,6 +1,6 @@
 const { readFileSync, statSync } = require('node:fs')
 const { join, dirname, basename } = require('node:path')
-const { gzipSync } = require('zlib')
+const { gzipSync } = require('node:zlib')
 const { underline, green, blue, magenta, cyan, gray } = require('kolorist')
 const { globSync } = require('tinyglobby')
 

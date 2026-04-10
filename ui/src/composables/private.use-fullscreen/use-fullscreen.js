@@ -23,7 +23,7 @@ export default function useFullscreen() {
   const vm = getCurrentInstance()
   const { props, emit, proxy } = vm
 
-  let historyEntry, fullscreenFillerNode, container
+  let historyEntry, fullscreenFillerNode
   const inFullscreen = ref(false)
 
   if (vmHasRouter(vm) === true) {
@@ -63,9 +63,8 @@ export default function useFullscreen() {
     if (inFullscreen.value === true) return
 
     inFullscreen.value = true
-    container = proxy.$el.parentNode
-    container.replaceChild(fullscreenFillerNode, proxy.$el)
-    document.body.appendChild(proxy.$el)
+    proxy.$el.replaceWith(fullscreenFillerNode)
+    document.body.append(proxy.$el)
 
     counter++
     if (counter === 1) {
@@ -86,7 +85,7 @@ export default function useFullscreen() {
       historyEntry = void 0
     }
 
-    container.replaceChild(proxy.$el, fullscreenFillerNode)
+    fullscreenFillerNode.replaceWith(proxy.$el)
     inFullscreen.value = false
 
     counter = Math.max(0, counter - 1)

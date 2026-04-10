@@ -1,5 +1,5 @@
 module.exports = function exports(content) {
-  if (content.indexOf('$') !== -1) {
+  if (content.includes('$')) {
     const { prefix } = this.getOptions()
 
     const useIndex = Math.max(
@@ -12,11 +12,7 @@ module.exports = function exports(content) {
     }
 
     const newLineIndex = content.indexOf('\n', useIndex) + 1
-    return (
-      content.substring(0, newLineIndex) +
-      prefix +
-      content.substring(newLineIndex)
-    )
+    return content.slice(0, newLineIndex) + prefix + content.slice(newLineIndex)
   }
 
   return content

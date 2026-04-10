@@ -4,7 +4,7 @@ const { fileURLToPath } = require('node:url')
 module.exports.getCallerPath = function getCallerPath() {
   const _prepareStackTrace = Error.prepareStackTrace
   Error.prepareStackTrace = (_, stack) => stack
-  const stack = new Error().stack.slice(1)
+  const stack = new Error('Err').stack.slice(1)
   Error.prepareStackTrace = _prepareStackTrace
   const filename = stack[1].getFileName()
   return dirname(

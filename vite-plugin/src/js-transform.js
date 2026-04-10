@@ -9,10 +9,10 @@ export function loadQuasarImportMap() {
 
   try {
     quasarImportMap = JSON.parse(
-      readFileSync(join(quasarPath, 'dist/transforms/import-map.json'), 'utf-8')
+      readFileSync(join(quasarPath, 'dist/transforms/import-map.json'), 'utf8')
     )
-  } catch (error) {
-    throw new Error('Failed to load Quasar import map', { cause: error })
+  } catch (err) {
+    throw new Error('Failed to load Quasar import map', { cause: err })
   }
 }
 
@@ -80,7 +80,7 @@ export function removeQuasarImports(code, importMap, importSet, reverseMap) {
           importName + (importAs !== importName ? ` as ${importAs}` : '')
         )
         importMap[importName] = importAs
-        reverseMap[importName.replace(/-/g, '_')] = importAs
+        reverseMap[importName.replaceAll('-', '_')] = importAs
       }
     })
 

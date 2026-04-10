@@ -46,9 +46,9 @@ module.exports.appFilesValidations = function appFilesValidations(
   }
 
   let valid = true
-  const content = readFileSync(file, 'utf-8')
+  const content = readFileSync(file, 'utf8')
 
-  if (content.indexOf(attachMarkup) !== -1) {
+  if (content.includes(attachMarkup)) {
     if (relativePath === void 0) {
       relativePath = getRelativePath(appPaths, file)
     }
@@ -58,7 +58,7 @@ module.exports.appFilesValidations = function appFilesValidations(
     valid = false
   }
 
-  if (content.indexOf(entryPointMarkup) === -1) {
+  if (content.includes(entryPointMarkup) === false) {
     if (relativePath === void 0) {
       relativePath = getRelativePath(appPaths, file)
     }

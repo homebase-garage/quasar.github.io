@@ -39,9 +39,9 @@ if (process.env.DEV === true && process.env.TARGET === 'chrome') {
       port.onMessage.removeListener(onMessage)
 
       console.log(
-        chrome.runtime.lastError?.message?.indexOf(
+        chrome.runtime.lastError?.message?.includes(
           'Could not establish connection'
-        ) !== -1
+        )
           ? `${banner} Could not connect to background`
           : `${banner} Lost connection to background`
       )

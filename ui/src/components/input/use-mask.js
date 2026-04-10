@@ -69,7 +69,7 @@ function getTokenRegexMask(keys) {
 
 const escRegex = /[.*+?^${}()|[\]\\]/g
 const DEFAULT_TOKEN_REGEX_MASK = getTokenRegexMask(DEFAULT_TOKEN_MAP_KEYS)
-const MARKER = String.fromCharCode(1)
+const MARKER = String.fromCodePoint(1)
 
 export const useMaskProps = {
   mask: String,

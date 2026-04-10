@@ -78,7 +78,7 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
 
     // TODO: support other formats: .js and .ts
     const capJsonPath = appPaths.resolve.capacitor('capacitor.config.json')
-    const capJson = parseJSON(fs.readFileSync(capJsonPath, 'utf-8'))
+    const capJson = parseJSON(fs.readFileSync(capJsonPath, 'utf8'))
 
     const { capVersion } = cacheProxy.getModule('capCli')
 
@@ -112,12 +112,13 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
   }
 
   #updateCapJson(quasarConf, originalCapCfg, capVersion, target) {
-    const capJson = { ...originalCapCfg }
-
-    capJson.appName =
-      quasarConf.capacitor.appName ||
-      this.#ctx.pkg.appPkg.productName ||
-      'Quasar App'
+    const capJson = {
+      ...originalCapCfg,
+      appName:
+        quasarConf.capacitor.appName ||
+        this.#ctx.pkg.appPkg.productName ||
+        'Quasar App'
+    }
 
     if (capVersion < 5) {
       capJson.bundledWebRuntime = false
@@ -149,7 +150,7 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
     } = this.#ctx
 
     const capPkgPath = appPaths.resolve.capacitor('package.json')
-    const capPkg = parseJSON(fs.readFileSync(capPkgPath, 'utf-8'))
+    const capPkg = parseJSON(fs.readFileSync(capPkgPath, 'utf8'))
 
     Object.assign(capPkg, {
       name: quasarConf.capacitor.appName || appPkg.name,
@@ -158,7 +159,7 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
       author: appPkg.author
     })
 
-    fs.writeFileSync(capPkgPath, stringifyJSON(capPkg), 'utf-8')
+    fs.writeFileSync(capPkgPath, stringifyJSON(capPkg), 'utf8')
   }
 
   #updateSSL(quasarConf, target, capVersion) {
@@ -264,10 +265,10 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
       return
     }
 
-    const originalContent = fs.readFileSync(file, 'utf-8')
+    const originalContent = fs.readFileSync(file, 'utf8')
 
     // it's already there
-    if (originalContent.indexOf(content) > -1) return
+    if (originalContent.includes(content)) return
 
     const index = originalContent.indexOf(needle)
 
@@ -277,23 +278,21 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
     }
 
     const newContent =
-      originalContent.substring(0, index) +
-      content +
-      originalContent.substring(index)
+      originalContent.slice(0, index) + content + originalContent.slice(index)
 
-    fs.writeFileSync(file, newContent, 'utf-8')
+    fs.writeFileSync(file, newContent, 'utf8')
   }
 
   // for Capacitor 1-3
   #removeFromFile(file, content) {
     if (!file) return
 
-    const originalContent = fs.readFileSync(file, 'utf-8')
+    const originalContent = fs.readFileSync(file, 'utf8')
     const index = originalContent.indexOf(content)
 
-    if (index > -1) {
+    if (index !== -1) {
       const newContent = originalContent.replace(content, '')
-      fs.writeFileSync(file, newContent, 'utf-8')
+      fs.writeFileSync(file, newContent, 'utf8')
     }
   }
 
@@ -309,7 +308,7 @@ module.exports.CapacitorConfigFile = class CapacitorConfigFile {
       absolute: true
     })
 
-    if (mainActivityPath.length > 0) {
+    if (mainActivityPath.length !== 0) {
       if (mainActivityPath.length > 1) {
         warn(
           `Found multiple matches for MainActivity.java file, https might not work. Using file ${mainActivityPath[0]}.`
@@ -369,7 +368,7 @@ ${sslString}
         }
       }
 
-      fs.writeFileSync(mainActivityPath, mainActivity, 'utf-8')
+      fs.writeFileSync(mainActivityPath, mainActivity, 'utf8')
     }
   }
 }

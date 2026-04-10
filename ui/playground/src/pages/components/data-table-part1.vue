@@ -868,7 +868,7 @@ export default {
           label: 'Calories',
           field: 'calories',
           sortable: true,
-          sort: (a, b) => parseFloat(a) - parseFloat(b)
+          sort: (a, b) => Number.parseFloat(a) - Number.parseFloat(b)
         },
         {
           name: 'fat',
@@ -887,14 +887,14 @@ export default {
           label: 'Calcium (%)',
           field: 'calcium',
           sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
+          sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
         },
         {
           name: 'iron',
           label: 'Iron (%)',
           field: 'iron',
           sortable: true,
-          sort: (a, b) => parseInt(a, 10) - parseInt(b, 10)
+          sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
         }
       ],
       data: [
@@ -1041,7 +1041,7 @@ export default {
 
         const table = this.$refs.server,
           { page, rowsPerPage, sortBy, descending } = props.pagination
-        let rows = this.data.slice()
+        let rows = [...this.data]
 
         if (props.filter) {
           rows = table.computedFilterMethod(rows, props.filter)

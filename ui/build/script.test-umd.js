@@ -13,8 +13,7 @@ if (!fse.existsSync(src)) {
 fse.removeSync(dest)
 fse.symlinkSync(src, dest, 'dir')
 
-import('open').then(({ default: open }) => {
-  open(resolveToRoot('playground-umd/index.umd.html'), {
-    app: { name: 'google chrome' }
-  })
+const { default: open } = await import('open')
+open(resolveToRoot('playground-umd/index.umd.html'), {
+  app: { name: 'google chrome' }
 })

@@ -12,6 +12,10 @@ import {
 import { clearSelection } from '../../utils/private.selection/selection.js'
 import getSSRProps from '../../utils/private.noop-ssr-directive-transform/noop-ssr-directive-transform.js'
 
+function removeBodyNonSelectable() {
+  document.body.classList.remove('non-selectable')
+}
+
 export default createDirective(
   __QUASAR_SSR_SERVER__
     ? { name: 'touch-hold', getSSRProps }
@@ -65,15 +69,11 @@ export default createDirective(
                 ctx.styleCleanup = withDelay => {
                   ctx.styleCleanup = void 0
 
-                  const remove = () => {
-                    document.body.classList.remove('non-selectable')
-                  }
-
                   if (withDelay === true) {
                     clearSelection()
-                    setTimeout(remove, 10)
+                    setTimeout(removeBodyNonSelectable, 10)
                   } else {
-                    remove()
+                    removeBodyNonSelectable()
                   }
                 }
               }
@@ -131,7 +131,7 @@ export default createDirective(
 
           if (typeof binding.arg === 'string' && binding.arg.length !== 0) {
             binding.arg.split(':').forEach((val, index) => {
-              const v = parseInt(val, 10)
+              const v = Number.parseInt(val, 10)
               if (v) data[index] = v
             })
           }

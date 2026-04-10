@@ -91,10 +91,7 @@ export default function mdParse(code, id) {
   const mdRenderedContent = md.render(content)
 
   if (frontMatter.editLink !== false) {
-    frontMatter.editLink = id.substring(
-      id.indexOf('src/pages/') + 10,
-      id.length - 3
-    )
+    frontMatter.editLink = id.slice(id.indexOf('src/pages/') + 10, -3)
   }
 
   md.$frontMatter = null // free up memory
@@ -104,9 +101,6 @@ export default function mdParse(code, id) {
   return getVueComponent({
     frontMatter,
     mdContent,
-    pageScripts: [
-      ...Array.from(frontMatter.pageScripts),
-      ...Array.from(userScripts)
-    ].join('\n')
+    pageScripts: [...frontMatter.pageScripts, ...userScripts].join('\n')
   })
 }

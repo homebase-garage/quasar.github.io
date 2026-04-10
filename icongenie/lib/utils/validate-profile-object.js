@@ -1,3 +1,5 @@
+// oxlint-disable unicorn/no-thenable
+
 import Joi from 'joi'
 import { red } from 'kolorist'
 
@@ -5,7 +7,7 @@ import { generators } from '../generators/index.js'
 import { modes } from '../modes/index.js'
 
 const generatorsList = Object.keys(generators)
-const modesList = ['all'].concat(Object.keys(modes))
+const modesList = ['all', ...Object.keys(modes)]
 const platformsList = ['cordova-ios', 'cordova-android']
 
 const baseParamsSchema = {

@@ -20,7 +20,7 @@ function moveUseStatementsToTop(code) {
 
   return useStatements === null
     ? code
-    : Array.from(new Set(useStatements)).join('\n') +
+    : [...new Set(useStatements)].join('\n') +
         '\n' +
         code.replace(sassUseRE, '')
 }
@@ -42,13 +42,13 @@ function getConcatenatedContent(src, noBanner) {
 
     code = code
       // remove imports
-      .replace(/@import\s+'[^']+'[\s\r\n]+/g, '')
+      .replaceAll(/@import\s+'[^']+'[\s\r\n]+/g, '')
       // remove comments
-      .replace(/(\/\*[\w'-.,`\s\r\n*@]*\*\/)|(\/\/[^\r\n]*)/g, '')
+      .replaceAll(/(\/\*[\w'-.,`\s\r\n*@]*\*\/)|(\/\/[^\r\n]*)/g, '')
 
     code = moveUseStatementsToTop(code)
       // remove unnecessary newlines
-      .replace(/[\r\n]+/g, '\r\n')
+      .replaceAll(/[\r\n]+/g, '\r\n')
 
     resolve(localBanner + code)
   })

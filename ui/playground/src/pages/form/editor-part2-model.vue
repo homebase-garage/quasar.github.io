@@ -64,16 +64,16 @@ export default {
     removeTags(text) {
       return text.length > 25
         ? text
-            .replace(new RegExp('<b>', 'g'), '')
-            .replace(new RegExp('</b>', 'g'), '')
+            .replaceAll(new RegExp('<b>', 'g'), '')
+            .replaceAll(new RegExp('</b>', 'g'), '')
         : text
     },
 
     addTags(text) {
       return text
-        .replace(new RegExp('<b>', 'g'), '')
-        .replace(new RegExp('</b>', 'g'), '')
-        .replace(new RegExp('bacon', 'g'), '<i>bacon</i>')
+        .replaceAll(new RegExp('<b>', 'g'), '')
+        .replaceAll(new RegExp('</b>', 'g'), '')
+        .replaceAll(new RegExp('bacon', 'g'), '<i>bacon</i>')
     },
 
     onBlur() {

@@ -1,4 +1,3 @@
-import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -7,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 // In production, it should be import { ... } from '@quasar/vite-plugin'
 import { quasar, transformAssetUrls } from '../src'
 
-const rootFolder = fileURLToPath(new URL('.', import.meta.url))
+const rootFolder = import.meta.dirname
 const resolve = _path => join(rootFolder, _path)
 
 export default defineConfig(() => ({

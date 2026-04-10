@@ -15,7 +15,7 @@ function replaceScript(html, scriptFilename, scriptCode) {
       (_, beforeSrc, afterSrc) =>
         `<script${beforeSrc}${afterSrc}>\n${newCode}\n</script>`
     )
-    .replace(/<script type="module" crossorigin>/g, '<script type="module">')
+    .replaceAll('<script type="module" crossorigin>', '<script type="module">')
 }
 
 function replaceCss(html, scriptFilename, scriptCode) {

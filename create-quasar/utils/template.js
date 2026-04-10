@@ -36,8 +36,7 @@ function throwParseError(message, str, index) {
     '  ' +
     str.split(newlineRE)[lineNo - 1] +
     '\n' +
-    '  ' +
-    Array(colNo).join(' ') +
+    ' '.repeat(colNo + 1) +
     '^'
 
   throw new Error(message)
@@ -104,8 +103,8 @@ function getAST(str, opts) {
         // we're going to convert all CRLF to LF so it doesn't take more than one replace
 
         strng = strng
-          .replace(/\\|'/g, String.raw`\$&`)
-          .replace(/\r\n|\n|\r/g, String.raw`\n`)
+          .replaceAll(/\\|'/g, String.raw`\$&`)
+          .replaceAll(/\r\n|\n|\r/g, String.raw`\n`)
 
         ast.push(strng)
       }

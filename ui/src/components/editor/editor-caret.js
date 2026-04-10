@@ -205,25 +205,31 @@ export default class Caret {
     }
 
     switch (cmd) {
-      case 'formatBlock':
+      case 'formatBlock': {
         return (
           (param === 'DIV' && this.parent === this.el) ||
           this.hasParent(param, param === 'PRE')
         )
-      case 'link':
+      }
+      case 'link': {
         return this.hasParent('A', true)
-      case 'fontSize':
+      }
+      case 'fontSize': {
         return document.queryCommandValue(cmd) === param
+      }
       case 'fontName': {
         const res = document.queryCommandValue(cmd)
         return res === `"${param}"` || res === param
       }
-      case 'fullscreen':
+      case 'fullscreen': {
         return this.eVm.inFullscreen.value
-      case 'viewsource':
+      }
+      case 'viewsource': {
         return this.eVm.isViewingSource.value
-      case void 0:
+      }
+      case void 0: {
         return false
+      }
       default: {
         const state = document.queryCommandState(cmd)
         return param !== void 0 ? state === param : state

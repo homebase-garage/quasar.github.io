@@ -13,7 +13,7 @@ describe('[getCssVar API]', () => {
 
       test('getCssVar(prop, el)', () => {
         const el = document.createElement('div')
-        document.body.appendChild(el)
+        document.body.append(el)
         el.style.setProperty('--q-my-prop', 'some-value')
 
         expect.soft(getCssVar('my-prop', el)).toBe('some-value')

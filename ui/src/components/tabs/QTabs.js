@@ -247,7 +247,7 @@ export default createComponent({
       // Arrows need to be updated even if the scroll status was already true
       if (scroll === true) registerUpdateArrowsTick(updateArrows)
 
-      justify.value = size < parseInt(props.breakpoint, 10)
+      justify.value = size < Number.parseInt(props.breakpoint, 10)
     }
 
     function animate(oldName, newName) {

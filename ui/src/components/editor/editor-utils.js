@@ -35,7 +35,7 @@ function getBtn(eVm, btn, clickHandler, active = false) {
 
   if (eVm.$q.platform.is.desktop && (btn.tip || btn.htmlTip)) {
     const Key = btn.key
-      ? h('div', [h('small', `(CTRL + ${String.fromCharCode(btn.key)})`)])
+      ? h('div', [h('small', `(CTRL + ${String.fromCodePoint(btn.key)})`)])
       : null
 
     child.push(
@@ -294,10 +294,13 @@ export function getLinkEditor(eVm) {
           if (shouldIgnoreKey(evt) === true) return
 
           switch (evt.keyCode) {
-            case 13: // ENTER key
+            case 13: {
+              // ENTER key
               prevent(evt)
               return updateLink()
-            case 27: // ESCAPE key
+            }
+            case 27: {
+              // ESCAPE key
               prevent(evt)
               eVm.caret.restore()
               if (
@@ -308,6 +311,7 @@ export function getLinkEditor(eVm) {
               }
               eVm.editLinkUrl.value = null
               break
+            }
           }
         }
       }),

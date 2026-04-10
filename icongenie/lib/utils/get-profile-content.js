@@ -8,7 +8,7 @@ export function getProfileContent(profileFile) {
   const file = resolve(appDir, profileFile)
 
   try {
-    return JSON.parse(readFileSync(file, 'utf-8'))
+    return JSON.parse(readFileSync(file, 'utf8'))
   } catch (err) {
     warn(`Specified profile file has a syntax error`)
     console.error(err)

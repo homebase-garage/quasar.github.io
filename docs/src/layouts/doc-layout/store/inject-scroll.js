@@ -64,8 +64,7 @@ export default function injectScroll(store) {
 
   function scrollToCurrentAnchor(immediate) {
     const hash = window.location.hash
-    const el =
-      hash.length > 1 ? document.getElementById(hash.substring(1)) : null
+    const el = hash.length > 1 ? document.getElementById(hash.slice(1)) : null
 
     if (el !== null) {
       if (immediate === true) {

@@ -125,9 +125,10 @@ export default {
         }
       ],
 
-      rows: Array(256)
-        .fill(null)
-        .map((_, i) => ({ id: '#' + i, ip: '10.0.0.' + i }))
+      rows: Array.from({ length: 256 }, (_, i) => ({
+        id: '#' + i,
+        ip: '10.0.0.' + i
+      }))
     }
   }
 }

@@ -8,8 +8,8 @@ const version = '1.0.1'
 
 const tinyglobby = require('tinyglobby')
 const { copySync } = require('fs-extra')
-const { writeFileSync } = require('fs')
-const { resolve, join } = require('path')
+const { writeFileSync } = require('node:fs')
+const { resolve, join } = require('node:path')
 
 const skipped = []
 const distFolder = resolve(__dirname, '../themify')
@@ -35,7 +35,7 @@ svgFiles.forEach(file => {
 
   try {
     const { svgDef, typeDef } = extract(file, name)
-    const svgDef2 = svgDef.replace(/fill:#000000;/g, 'fill:currentColor;')
+    const svgDef2 = svgDef.replaceAll('fill:#000000;', 'fill:currentColor;')
     svgExports.push(svgDef2)
     typeExports.push(typeDef)
 

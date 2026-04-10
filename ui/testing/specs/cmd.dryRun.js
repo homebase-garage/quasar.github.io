@@ -4,7 +4,7 @@ import fse from 'fs-extra'
 
 import { getTestFile } from './testFile.js'
 
-const testFilePath = fileURLToPath(new URL('./__temp.js', import.meta.url))
+const testFilePath = fileURLToPath(new URL('__temp.js', import.meta.url))
 const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
 
 const ctxOverride = {

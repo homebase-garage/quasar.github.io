@@ -4,11 +4,11 @@ const prefix = 'sym_'
 
 // ------------
 
-const { resolve } = require('path')
+const { resolve } = require('node:path')
 const fetch = require('cross-fetch')
-const { writeFileSync } = require('fs')
+const { writeFileSync } = require('node:fs')
 
-const cpus = require('os').cpus().length
+const cpus = require('node:os').cpus().length
 const maxJobCount = cpus * 2 - 1 || 1
 
 const skipped = {}
@@ -33,7 +33,7 @@ function downloadIcon(icon) {
     Object.keys(themeMap).map(async theme => {
       // get future icon name
       const themeName = theme
-      const name = (prefix + theme + '_' + icon.name).replace(/(_\w)/g, m =>
+      const name = (prefix + theme + '_' + icon.name).replaceAll(/(_\w)/g, m =>
         m[1].toUpperCase()
       )
 

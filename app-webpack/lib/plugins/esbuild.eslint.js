@@ -1,6 +1,6 @@
 const fse = require('fs-extra')
-const os = require('os')
-const { posix } = require('path')
+const os = require('node:os')
+const { posix } = require('node:path')
 const { createFilter } = require('@rollup/pluginutils')
 
 const { dim, underline, bold } = require('kolorist')

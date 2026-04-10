@@ -30,7 +30,7 @@ export default createComponent({
 
     const showing = ref(false)
     const popupRef = ref(null)
-    const breakpoint = computed(() => parseInt(props.breakpoint, 10))
+    const breakpoint = computed(() => Number.parseInt(props.breakpoint, 10))
 
     const { canShow } = useAnchor({ showing })
 

@@ -59,7 +59,7 @@ function injectPlugin({ props, emit, helpers }) {
   }
 
   function upload() {
-    const queue = helpers.queuedFiles.value.slice(0)
+    const queue = [...helpers.queuedFiles.value]
     helpers.queuedFiles.value = []
 
     if (xhrProps.value.batch(queue)) {
@@ -102,7 +102,7 @@ function injectPlugin({ props, emit, helpers }) {
             abortPromises = false
           }
 
-          helpers.queuedFiles.value = helpers.queuedFiles.value.concat(files)
+          helpers.queuedFiles.value.push(...files)
           files.forEach(f => {
             helpers.updateFileStatus(f, 'failed')
           })
@@ -186,11 +186,11 @@ function injectPlugin({ props, emit, helpers }) {
       false
     )
 
-    xhr.onreadystatechange = () => {
+    xhr.addEventListener('readystatechange', () => {
       if (xhr.readyState < 4) return
 
       if (xhr.status && xhr.status < 400) {
-        helpers.uploadedFiles.value = helpers.uploadedFiles.value.concat(files)
+        helpers.uploadedFiles.value.push(...files)
         files.forEach(f => {
           helpers.updateFileStatus(f, 'uploaded')
         })
@@ -198,7 +198,7 @@ function injectPlugin({ props, emit, helpers }) {
       } else {
         aborted = true
         helpers.uploadedSize.value -= localUploadedSize
-        helpers.queuedFiles.value = helpers.queuedFiles.value.concat(files)
+        helpers.queuedFiles.value.push(...files)
         files.forEach(f => {
           helpers.updateFileStatus(f, 'failed')
         })
@@ -207,7 +207,7 @@ function injectPlugin({ props, emit, helpers }) {
 
       workingThreads.value--
       xhrs.value = xhrs.value.filter(x => x !== xhr)
-    }
+    })
 
     xhr.open(getProp('method', files), url)
 

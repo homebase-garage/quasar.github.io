@@ -44,7 +44,7 @@ module.exports.CordovaConfigFile = class CordovaConfigFile {
     this.#ctx = ctx
     this.#filePath = appPaths.resolve.cordova('config.xml')
 
-    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf-8'))
+    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf8'))
     this.#appURL = quasarConf.metaConf.APP_URL
     this.#tamperedFiles = []
 
@@ -64,6 +64,7 @@ module.exports.CordovaConfigFile = class CordovaConfigFile {
 
     if (
       this.#appURL !== 'index.html' &&
+      // oxlint-disable-next-line unicorn/prefer-array-some
       !root.find(`allow-navigation[@href='${this.#appURL}']`)
     ) {
       et.SubElement(root, 'allow-navigation', { href: this.#appURL })
@@ -81,6 +82,7 @@ module.exports.CordovaConfigFile = class CordovaConfigFile {
     }
 
     // needed for QResizeObserver until ResizeObserver Web API is supported by all platforms
+    // oxlint-disable-next-line unicorn/prefer-array-some
     if (!root.find("allow-navigation[@href='about:*']")) {
       et.SubElement(root, 'allow-navigation', { href: 'about:*' })
     }
@@ -91,7 +93,7 @@ module.exports.CordovaConfigFile = class CordovaConfigFile {
   reset() {
     if (!this.#appURL || this.#appURL === 'index.html') return
 
-    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf-8'))
+    const doc = et.parse(fs.readFileSync(this.#filePath, 'utf8'))
     const root = doc.getroot()
 
     root.find('content').set('src', 'index.html')
@@ -147,16 +149,15 @@ module.exports.CordovaConfigFile = class CordovaConfigFile {
     } else {
       const tamperedFile = {
         name: 'AppDelegate.m',
-        path: appDelegatePath
+        path: appDelegatePath,
+        originalContent: fs.readFileSync(appDelegatePath, 'utf8')
       }
-
-      tamperedFile.originalContent = fs.readFileSync(appDelegatePath, 'utf-8')
 
       // required for allowing devserver's SSL certificate on iOS
       if (
-        tamperedFile.originalContent.indexOf(
+        tamperedFile.originalContent.includes(
           'allowsAnyHTTPSCertificateForHost'
-        ) === -1
+        ) === false
       ) {
         tamperedFile.content =
           tamperedFile.originalContent +
@@ -186,20 +187,16 @@ return YES;
       if (fs.existsSync(wkWebViewEnginePath)) {
         const tamperedFile = {
           name: `${plugin} > CDVWKWebViewEngine.m`,
-          path: wkWebViewEnginePath
+          path: wkWebViewEnginePath,
+          originalContent: fs.readFileSync(wkWebViewEnginePath, 'utf8')
         }
-
-        tamperedFile.originalContent = fs.readFileSync(
-          wkWebViewEnginePath,
-          'utf-8'
-        )
 
         // Credit: https://gist.github.com/PeterStegnar/63cb8c9a39a13265c3a855e24a33ca37#file-cdvwkwebviewengine-m-L68-L74
         // Enables untrusted SSL connection
         if (
-          tamperedFile.originalContent.indexOf(
+          tamperedFile.originalContent.includes(
             'SecTrustRef serverTrust = challenge.protectionSpace.serverTrust'
-          ) === -1
+          ) === false
         ) {
           const lookupString = '@implementation CDVWKWebViewEngine'
           const insertIndex =
@@ -207,7 +204,7 @@ return YES;
             lookupString.length
 
           tamperedFile.content =
-            tamperedFile.originalContent.substring(0, insertIndex) +
+            tamperedFile.originalContent.slice(0, insertIndex) +
             `
 
   - (void)webView:(WKWebView *)webView
@@ -217,7 +214,7 @@ return YES;
   completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:serverTrust]);
   }
   ` +
-            tamperedFile.originalContent.substring(insertIndex)
+            tamperedFile.originalContent.slice(insertIndex)
 
           this.#tamperedFiles.push(tamperedFile)
         }

@@ -17,13 +17,16 @@ function read(string) {
 
   if (string.indexOf('"') === 0) {
     // This is a quoted cookie as according to RFC2068, unescape...
-    string = string.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+    string = string
+      .slice(1, -1)
+      .replaceAll(String.raw`\"`, '"')
+      .replaceAll(String.raw`\\`, '\\')
   }
 
   // Replace server-side written pluses with spaces.
   // If we can't decode the cookie, ignore it, it's unusable.
   // If we can't parse the cookie, ignore it, it's unusable.
-  string = decode(string.replace(/\+/g, ' '))
+  string = decode(string.replaceAll('+', ' '))
 
   try {
     const parsed = JSON.parse(string)
@@ -82,9 +85,9 @@ function set(key, val, opts = {}, ssr) {
     }
     // otherwise it must be a Number (defined in days)
     else {
-      expireValue = parseFloat(opts.expires)
+      expireValue = Number.parseFloat(opts.expires)
       expire =
-        isNaN(expireValue) === false
+        Number.isNaN(expireValue) === false
           ? getString(expireValue * 864e5)
           : opts.expires
     }
@@ -131,6 +134,7 @@ function set(key, val, opts = {}, ssr) {
 
     ssr.req.headers.cookie = all
   } else {
+    // oxlint-disable-next-line unicorn/no-document-cookie
     document.cookie = cookie
   }
 }
