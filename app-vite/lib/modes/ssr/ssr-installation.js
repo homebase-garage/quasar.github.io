@@ -31,7 +31,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
  * }} options
  */
 export function removeMode({ ctx: { appPaths } }) {
-  if (isModeInstalled(appPaths, 'ssr') === false) {
+  if (!isModeInstalled(appPaths, 'ssr')) {
     warn('No SSR support detected. Aborting.')
     return
   }

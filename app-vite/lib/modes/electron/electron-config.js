@@ -32,15 +32,15 @@ async function preloadScript(quasarConf, name) {
   const { appPaths } = quasarConf.ctx
 
   cfg.input = appPaths.resolve.electron(name)
-  cfg.output.file =
-    quasarConf.ctx.dev === true
-      ? appPaths.resolve.entry(`preload/${scriptName}.cjs`)
-      : join(quasarConf.build.distDir, `UnPackaged/preload/${scriptName}.cjs`)
+  cfg.output.file = quasarConf.ctx.dev
+    ? appPaths.resolve.entry(`preload/${scriptName}.cjs`)
+    : join(quasarConf.build.distDir, `UnPackaged/preload/${scriptName}.cjs`)
 
   cfg.transform.define = {
     ...cfg.transform.define,
-    'import.meta.env.QUASAR_PUBLIC_FOLDER':
-      quasarConf.ctx.dev === true ? JSON.stringify(appPaths.publicDir) : '"."'
+    'import.meta.env.QUASAR_PUBLIC_FOLDER': quasarConf.ctx.dev
+      ? JSON.stringify(appPaths.publicDir)
+      : '"."'
   }
 
   return {
@@ -67,7 +67,7 @@ export const quasarElectronConfig = {
       shippedToClient: true
     })
 
-    if (quasarConf.ctx.prod === true) {
+    if (quasarConf.ctx.prod) {
       cfg.build.outDir = join(quasarConf.build.distDir, 'UnPackaged')
     }
 
@@ -84,14 +84,13 @@ export const quasarElectronConfig = {
     const { appPaths } = quasarConf.ctx
 
     cfg.input = quasarConf.sourceFiles.electronMain
-    cfg.output.file =
-      quasarConf.ctx.dev === true
-        ? appPaths.resolve.entry('electron-main.js')
-        : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
+    cfg.output.file = quasarConf.ctx.dev
+      ? appPaths.resolve.entry('electron-main.js')
+      : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
 
     cfg.transform.define = {
       ...cfg.transform.define,
-      ...(quasarConf.ctx.dev === true
+      ...(quasarConf.ctx.dev
         ? {
             'import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER': JSON.stringify(
               appPaths.resolve.entry('preload')

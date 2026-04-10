@@ -50,7 +50,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
  * }} options
  */
 export async function removeMode({ ctx: { appPaths, cacheProxy } }) {
-  if (isModeInstalled(appPaths, 'electron') === false) {
+  if (!isModeInstalled(appPaths, 'electron')) {
     warn('No Electron support detected. Aborting.')
     return
   }

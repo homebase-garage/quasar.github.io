@@ -17,8 +17,8 @@ function defineHiddenProp(target, propName, value) {
  */
 export function getCtx(opts = {}) {
   const ctx = {
-    dev: opts.dev || false,
-    prod: opts.prod || false,
+    dev: Boolean(opts.dev),
+    prod: Boolean(opts.prod),
     mode: {},
     modeName: opts.mode,
     target: {},
@@ -28,9 +28,14 @@ export function getCtx(opts = {}) {
     archName: opts.arch,
     bundler: {},
     bundlerName: opts.bundler,
-    debug: opts.debug || false,
+    debug: Boolean(opts.debug),
     publish: opts.publish,
-    vueDevtools: opts.vueDevtools || false
+    vueDevtools: Boolean(opts.vueDevtools)
+  }
+
+  if (ctx.dev === ctx.prod) {
+    ctx.dev = false
+    ctx.prod = true
   }
 
   ctx.mode[opts.mode] = true

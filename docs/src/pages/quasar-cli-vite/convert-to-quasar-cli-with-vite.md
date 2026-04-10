@@ -138,7 +138,7 @@ sourceFiles: {
 
 ```diff /src-ssr/server.js
 export const renderPreloadTag = defineSsrRenderPreloadTag((file/* , { ssrContext } */) => {
-  if (jsRE.test(file) === true) {
+  if (jsRE.test(file)) {
 -   return `<script src="${file}" defer crossorigin></script>`;
 +   return `<link rel="modulepreload" href="${file}" crossorigin>`;
   }

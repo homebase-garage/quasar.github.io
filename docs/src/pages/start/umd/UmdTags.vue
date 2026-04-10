@@ -203,9 +203,8 @@ const lang = ref('en-US')
 const iconSet = ref('material-icons')
 
 function parseUrl(url) {
-  const min = minified.value === false ? url.replace('.prod', '') : url
-
-  return rtl.value === false ? min.replace('.rtl', '') : min
+  const min = minified.value ? url : url.replace('.prod', '')
+  return rtl.value ? min : min.replace('.rtl', '')
 }
 
 function getCssTag(url) {
@@ -224,7 +223,7 @@ function getJsTag(url) {
 
 const googleFonts = computed(() => {
   const cssAcc = Object.keys(googleMap)
-    .filter(key => css[key] === true)
+    .filter(key => css[key])
     .map(key => googleMap[key])
 
   return cssAcc.length === 0
@@ -234,7 +233,7 @@ const googleFonts = computed(() => {
 
 const googleSymbolsFonts = computed(() => {
   const cssAcc = Object.keys(googleSymbolsMap)
-    .filter(key => css[key] === true)
+    .filter(key => css[key])
     .map(key => googleSymbolsMap[key])
 
   return cssAcc.length === 0
@@ -244,7 +243,7 @@ const googleSymbolsFonts = computed(() => {
 
 const head = computed(() => {
   const cssAcc = Object.keys(cssMap)
-    .filter(key => css[key] === true)
+    .filter(key => css[key])
     .map(key => cssMap[key])
 
   cssAcc.unshift(googleSymbolsFonts.value)
@@ -258,10 +257,7 @@ const head = computed(() => {
 })
 
 const configInstantiation = computed(() => {
-  if (cfgObject.value === false) {
-    return ''
-  }
-
+  if (!cfgObject.value) return ''
   return `, {
         config: {
           /*

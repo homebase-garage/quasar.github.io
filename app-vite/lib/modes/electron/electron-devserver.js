@@ -93,7 +93,7 @@ export class QuasarModeDevserver extends AppDevserver {
       }))
     ].map(({ banner, cfg }) =>
       this.watchWithRolldown(banner, cfg, () => {
-        if (isReady === true) {
+        if (isReady) {
           this.#runElectron(quasarConf)
         }
       }).then(watcher => {
@@ -129,7 +129,7 @@ export class QuasarModeDevserver extends AppDevserver {
       ],
       { cwd: this.ctx.appPaths.appDir },
       code => {
-        if (this.#killedPid === true) {
+        if (this.#killedPid) {
           this.#killedPid = false
           return
         }

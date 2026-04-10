@@ -34,7 +34,7 @@ function getMethodParams(method, noRequired) {
     return ' ()'
   }
 
-  if (noRequired === true) {
+  if (noRequired) {
     return ` (${Object.keys(method.params).join(', ')})`
   }
 
@@ -122,7 +122,7 @@ function getNameDiv(prop, label, level, suffix, prefix) {
 }
 
 function getExpandable(openState, desc, isExpandable, key, getDetails) {
-  if (isExpandable === true) {
+  if (isExpandable) {
     const expanded = openState.value[key] === true
     const child = [
       h('div', { class: 'doc-api-entry__item col-xs-12 col-sm-12' }, [
@@ -133,9 +133,9 @@ function getExpandable(openState, desc, isExpandable, key, getDetails) {
             flat: true,
             size: '11px',
             padding: '1px',
-            icon: expanded === true ? mdiMinusBox : mdiPlusBox,
+            icon: expanded ? mdiMinusBox : mdiPlusBox,
             onClick: () => {
-              openState.value[key] = expanded === false
+              openState.value[key] = !expanded
             }
           })
         ]),
@@ -143,7 +143,7 @@ function getExpandable(openState, desc, isExpandable, key, getDetails) {
       ])
     ]
 
-    return expanded === true ? [...child, ...getDetails()] : child
+    return expanded ? [...child, ...getDetails()] : child
   }
 
   return [getDiv(12, 'Description', desc)]
@@ -152,7 +152,7 @@ function getExpandable(openState, desc, isExpandable, key, getDetails) {
 function getPropDetails(openState, masterKey, prop, level) {
   const details = []
 
-  if (prop.sync === true) {
+  if (prop.sync) {
     details.push(getDiv(3, 'Note', 'Required to be used with v-model!'))
   }
 
@@ -171,7 +171,7 @@ function getPropDetails(openState, masterKey, prop, level) {
     )
   }
 
-  if (prop.link === true) {
+  if (prop.link) {
     details.push(getDiv(6, 'External link', prop.link))
   }
 
@@ -310,7 +310,7 @@ function getProp(openState, masterKey, prop, propName, level, onlyChildren) {
 
     child.push(getNameDiv(prop, propName, level, suffix))
 
-    if (prop.reactive === true) {
+    if (prop.reactive) {
       child.push(getDiv(3, 'Reactive', 'yes'))
     }
   }
@@ -537,7 +537,7 @@ function useConfigToggle(openState) {
 describe.quasarConfOptions = (openState, conf) => {
   const configToggle = useConfigToggle(openState)
 
-  if (configToggle.enabled === false) {
+  if (!configToggle.enabled) {
     const needsConfigToggle =
       conf.definition &&
       Object.values(conf.definition).some(

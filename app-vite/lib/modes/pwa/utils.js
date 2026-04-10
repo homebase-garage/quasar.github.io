@@ -13,9 +13,9 @@ export function createHeadTags(quasarConf) {
   const { useCredentialsForManifestTag, injectPwaMetaTags, manifestFilename } =
     quasarConf.pwa
 
-  let headTags = `<link rel="manifest" href="${publicPath}${manifestFilename}"${useCredentialsForManifestTag === true ? ' crossorigin="use-credentials"' : ''}>`
+  let headTags = `<link rel="manifest" href="${publicPath}${manifestFilename}"${useCredentialsForManifestTag ? ' crossorigin="use-credentials"' : ''}>`
 
-  if (injectPwaMetaTags === true) {
+  if (injectPwaMetaTags) {
     headTags +=
       (pwaManifest.theme_color !== void 0
         ? `<meta name="theme-color" content="${pwaManifest.theme_color}">` +
@@ -41,7 +41,7 @@ export function createHeadTags(quasarConf) {
 
 export function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
   if (
-    ifNotAlreadyGenerated === true &&
+    ifNotAlreadyGenerated &&
     quasarConf.htmlVariables.pwaManifest !== void 0
   ) {
     return

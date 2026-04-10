@@ -29,7 +29,7 @@ function injectPublicPath(html, publicPath) {
   return html.replaceAll(
     /(href|src)\s*=\s*(['"])(.+)(['"])/gi,
     (_, att, pre, val, post) =>
-      absoluteUrlRE.test(val.trim()) === true
+      absoluteUrlRE.test(val.trim())
         ? `${att}=${pre}${val}${post}`
         : `${att}=${pre}${publicPath + val}${post}`
   )
@@ -92,13 +92,13 @@ export async function transformHtml(template, quasarConf) {
   )
 
   // should be dev only
-  if (quasarConf.metaConf.vueDevtools !== false) {
+  if (quasarConf.metaConf.vueDevtools) {
     html = injectVueDevtools(html, quasarConf.metaConf.vueDevtools)
   }
 
   html = html.replace(
     entryPointMarkup,
-    (quasarConf.ctx.mode.ssr === true ? entryPointMarkup : attachMarkup) +
+    (quasarConf.ctx.mode.ssr ? entryPointMarkup : attachMarkup) +
       quasarConf.metaConf.entryScript.tag
   )
 
@@ -108,7 +108,7 @@ export async function transformHtml(template, quasarConf) {
     html = injectPublicPath(html, '/')
   }
 
-  if (quasarConf.ctx.mode.ssr !== true && quasarConf.build.minify !== false) {
+  if (!quasarConf.ctx.mode.ssr && quasarConf.build.minify) {
     html = await minify(html, quasarConf.build.htmlMinifyOptions)
   }
 
@@ -151,7 +151,7 @@ export function getDevSsrTemplateFn(template, quasarConf) {
   html = injectPublicPath(html, '/')
   html = injectSsrRuntimeInterpolation(html)
 
-  if (quasarConf.metaConf.vueDevtools !== false) {
+  if (quasarConf.metaConf.vueDevtools) {
     html = injectVueDevtools(
       html,
       quasarConf.metaConf.vueDevtools,

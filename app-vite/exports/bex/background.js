@@ -112,7 +112,7 @@ function connectToDevServer(devServerPort, wsToken) {
   chrome.runtime.onConnect.addListener(port => {
     const { name } = port
 
-    if (contentScriptPortNameRE.test(name) === true) {
+    if (contentScriptPortNameRE.test(name)) {
       contentScriptPortList.add(port)
 
       port.onDisconnect.addListener(() => {
@@ -128,10 +128,7 @@ function connectToDevServer(devServerPort, wsToken) {
  * Only run these in development mode and in a background service worker.
  * Currently only Chrome supports this.
  */
-if (
-  import.meta.env.QUASAR_DEV === true &&
-  import.meta.env.QUASAR_TARGET === 'chrome'
-) {
+if (import.meta.env.QUASAR_DEV && import.meta.env.QUASAR_TARGET === 'chrome') {
   const devServerPort = import.meta.env.QUASAR_BEX_SERVER_PORT
   const wsToken = import.meta.env.QUASAR_BEX_WS_TOKEN
 
@@ -142,7 +139,7 @@ if (
 let scriptHasBridge = false
 
 export function createBridge({ debug } = {}) {
-  if (scriptHasBridge === true) {
+  if (scriptHasBridge) {
     console.error('Background Quasar Bridge has already been created.')
     return
   }

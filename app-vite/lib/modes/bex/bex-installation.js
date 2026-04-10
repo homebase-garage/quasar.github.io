@@ -35,7 +35,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
  * }} options
  */
 export function removeMode({ ctx: { appPaths } }) {
-  if (isModeInstalled(appPaths, 'bex') === false) {
+  if (!isModeInstalled(appPaths, 'bex')) {
     warn('No Browser Extension support detected. Aborting.')
     return
   }

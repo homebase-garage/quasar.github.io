@@ -49,7 +49,7 @@ export class QuasarModeBuilder extends AppBuilder {
      * Vite's warning would be:
      * <script src="cordova.js"> in "/index.html" can't be bundled without type="module" attribute
      */
-    if (this.quasarConf.ctx.prod === true) {
+    if (this.quasarConf.ctx.prod) {
       const indexHtmlFile = join(viteConfig.build.outDir, 'index.html')
       let html = this.readFile(indexHtmlFile)
       html = html.replace(
@@ -71,7 +71,7 @@ export class QuasarModeBuilder extends AppBuilder {
     }
 
     const cordovaContext = {
-      debug: this.quasarConf.metaConf.debugging === true,
+      debug: this.quasarConf.metaConf.debugging,
       target
     }
 

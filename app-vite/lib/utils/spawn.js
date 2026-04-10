@@ -31,10 +31,7 @@ export function spawn(cmd, params, opts, onClose) {
     onClose?.(code)
   })
 
-  if (opts.detach === true) {
-    runner.unref()
-  }
-
+  if (opts.detach) runner.unref()
   return runner.pid
 }
 

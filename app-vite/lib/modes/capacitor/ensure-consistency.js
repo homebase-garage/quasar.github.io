@@ -4,7 +4,7 @@ import fse from 'fs-extra'
 export function ensureWWW({ appPaths, forced }) {
   const www = appPaths.resolve.capacitor('www')
 
-  if (forced === true) fse.removeSync(www)
+  if (forced) fse.removeSync(www)
 
   if (!existsSync(www)) {
     fse.copySync(appPaths.resolve.cli('templates/capacitor/www'), www)

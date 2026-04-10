@@ -42,7 +42,7 @@ export default {
     const inView = ref([])
 
     function onIntersection(entry) {
-      if (entry.isIntersecting === true) {
+      if (entry.isIntersecting) {
         add(entry.target.dataset.id)
       } else {
         remove(entry.target.dataset.id)

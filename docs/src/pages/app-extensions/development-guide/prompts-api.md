@@ -210,7 +210,7 @@ api.compatibleWith(packageName, '1.x')
 ```
 
 ```js A more complex example:
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.compatibleWith('@quasar/app-vite', '^2.0.0')
 } else {
   api.compatbileWith('@quasar/app-webpack', '^4.0.0')

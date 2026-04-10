@@ -56,7 +56,7 @@ export default {
       secondMorphRef,
 
       props1: computed(() =>
-        toggle1.value === true
+        toggle1.value
           ? {
               class: 'q-ml-sm q-pa-md bg-orange text-white rounded-borders',
               style: 'font-size: 24px'
@@ -68,7 +68,7 @@ export default {
       ),
 
       props2: computed(() =>
-        toggle2.value === true
+        toggle2.value
           ? {
               fontSize: '52px',
               color: 'positive',
@@ -84,7 +84,7 @@ export default {
 
       morphContent1() {
         const onToggle = () => {
-          toggle1.value = toggle1.value !== true
+          toggle1.value = !toggle1.value
         }
 
         if (cancel1 === void 0 || cancel1() === false) {
@@ -102,7 +102,7 @@ export default {
 
       morphContent2() {
         const onToggle = () => {
-          toggle2.value = toggle2.value !== true
+          toggle2.value = !toggle2.value
         }
 
         if (cancel2 === void 0 || cancel2() === false) {

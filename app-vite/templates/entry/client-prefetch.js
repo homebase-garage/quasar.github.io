@@ -76,7 +76,7 @@ export function addPreFetchHooks ({ router<%= quasarConf.ctx.mode.ssr && quasarC
       .map(m => m.c.__c !== void 0 ? m.c.__c.preFetch : m.c.preFetch)
 
     <% if (!quasarConf.ctx.mode.ssr || quasarConf.ctx.mode.pwa) { %>
-    if (<%= quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa ? 'ssrIsRunningOnClientPWA === true && ' : '' %>appPrefetch !== false) {
+    if (<%= quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa ? 'ssrIsRunningOnClientPWA && ' : '' %>appPrefetch !== false) {
       preFetchList.unshift(appPrefetch)
       appPrefetch = false
     }

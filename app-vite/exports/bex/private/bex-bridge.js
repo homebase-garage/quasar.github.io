@@ -84,7 +84,7 @@ export class BexBridge {
     runtime.onConnect.addListener(port => {
       // if it's not a bridge port on the other end,
       // then ignore it
-      if (portNameRE.test(port.name) === false) return
+      if (!portNameRE.test(port.name)) return
 
       if (this.portMap[port.name] !== void 0) {
         this.warn(
@@ -120,7 +120,7 @@ export class BexBridge {
       )
     }
 
-    if (this.isConnected === true) {
+    if (this.isConnected) {
       return Promise.reject('The bridge is already connected')
     }
 
@@ -128,7 +128,7 @@ export class BexBridge {
 
     return new Promise((resolve, reject) => {
       const onPacket = packet => {
-        if (this.isConnected === false) {
+        if (!this.isConnected) {
           /**
            * We rely on the fact that upon connection is established
            * the background script will send a @quasar:ports event
@@ -181,7 +181,7 @@ export class BexBridge {
       return Promise.reject('Background script does not need to disconnect')
     }
 
-    if (this.isConnected === false) {
+    if (!this.isConnected) {
       return Promise.reject(
         'Tried to disconnect from the background script but the port was not connected'
       )
@@ -287,7 +287,7 @@ export class BexBridge {
    * @returns {Promise<any>} response payload
    */
   async send({ event, to, payload } = {}) {
-    if (this.isConnected === false) {
+    if (!this.isConnected) {
       throw new Error(
         'Tried to send message but the bridge is not connected. Please connect it first.'
       )
@@ -301,7 +301,7 @@ export class BexBridge {
       throw new Error('Tried to send message with no "to" prop specified')
     }
 
-    if (this.portList.includes(to) === false) {
+    if (!this.portList.includes(to)) {
       throw new Error(
         this.#type === 'background'
           ? `Tried to send message to "${to}" but there is no such port registered`
@@ -319,7 +319,7 @@ export class BexBridge {
       messageProps: { event }
     })
 
-    if (this.portList.includes(to) === false) {
+    if (!this.portList.includes(to)) {
       throw new Error(
         `Connection to "${to}" was closed while waiting for a response`
       )
@@ -600,7 +600,7 @@ export class BexBridge {
         ? this.portMap[packet.to]
         : this.portMap.background
 
-    if (this.portList.includes(packet.to) === false) {
+    if (!this.portList.includes(packet.to)) {
       return Promise.reject(
         `Tried to send message of type "${packet.type}" to "${packet.to}" but there is no such port registered`
       )
@@ -634,7 +634,7 @@ export class BexBridge {
     messageType,
     messageProps
   }) {
-    if (Array.isArray(payload) === false) {
+    if (!Array.isArray(payload)) {
       return this.#sendPacket({
         id,
         from: this.portName,

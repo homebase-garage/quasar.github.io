@@ -53,10 +53,10 @@ export default {
             .map(v => v.trim())
             .filter(v => v.length !== 0)
             .forEach(v => {
-              if (stringOptions.includes(v) === false) {
+              if (!stringOptions.includes(v)) {
                 stringOptions.push(v)
               }
-              if (modelValue.includes(v) === false) {
+              if (!modelValue.includes(v)) {
                 modelValue.push(v)
               }
             })

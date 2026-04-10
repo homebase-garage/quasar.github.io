@@ -19,7 +19,7 @@ export function quasarRolldownInjectReplacementsPlugin() {
     name: 'quasar:inject-replacements',
 
     transform(code, id) {
-      if (fileRE.test(id) === false) return null
+      if (!fileRE.test(id)) return null
 
       const prefix =
         `const ${dirnameReplacement} = ${JSON.stringify(path.dirname(id))};\n` +

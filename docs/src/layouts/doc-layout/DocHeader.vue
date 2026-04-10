@@ -130,7 +130,7 @@ import { useDocStore } from './store/index.js'
 const docStore = useDocStore()
 
 const logo = computed(() => {
-  const opt = docStore.$q.dark.isActive === true ? '-dark' : ''
+  const opt = docStore.$q.dark.isActive ? '-dark' : ''
   return {
     img: `https://cdn.quasar.dev/logo-v2/svg/logo${opt}.svg`,
     text: `https://cdn.quasar.dev/logo-v2/svg/logotype${opt}.svg`

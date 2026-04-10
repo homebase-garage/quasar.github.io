@@ -83,17 +83,16 @@ function getAssetLines(assetList, showGzipped) {
       sizeLen: size.length
     }
 
-    if (showGzipped === true) {
-      const val =
-        shouldHighlight === true
-          ? getHumanSize(getGzippedSize(asset.file))
-          : '-'
+    if (showGzipped) {
+      const val = shouldHighlight
+        ? getHumanSize(getGzippedSize(asset.file))
+        : '-'
 
       acc.gzipped = gray(val)
       acc.gzippedLen = val.length
     }
 
-    if (shouldHighlight === true) {
+    if (shouldHighlight) {
       const target = total[asset.type]
       target.size += asset.size
       target.number++
@@ -236,7 +235,7 @@ export function printBuildSummary(distDir, showGzipped) {
     size: 14
   }
 
-  if (showGzipped === true) {
+  if (showGzipped) {
     widthMap.gzipped = widthMap.size
   }
 

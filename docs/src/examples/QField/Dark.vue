@@ -100,9 +100,7 @@ export default {
       readonly,
       disable,
 
-      tabindex: computed(() =>
-        disable.value === true || readonly.value === true ? -1 : 0
-      )
+      tabindex: computed(() => (disable.value || readonly.value ? -1 : 0))
     }
   }
 }

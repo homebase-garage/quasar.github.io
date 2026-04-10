@@ -130,7 +130,7 @@ export default {
 
       columns,
 
-      records: computed(() => (hasData.value === true ? rows : []))
+      records: computed(() => (hasData.value ? rows : []))
     }
   }
 }

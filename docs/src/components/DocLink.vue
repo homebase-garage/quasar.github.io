@@ -1,10 +1,5 @@
 <template>
-  <router-link
-    v-if="internal === true"
-    v-bind="$attrs"
-    class="doc-link"
-    :to="to"
-  >
+  <router-link v-if="internal" v-bind="$attrs" class="doc-link" :to="to">
     <slot />
   </router-link>
   <a

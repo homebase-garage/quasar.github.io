@@ -5,14 +5,14 @@ export function debounce(fn, wait = 250, immediate) {
   function debounced(...args) {
     const later = () => {
       timer = null
-      if (immediate !== true) {
+      if (!immediate) {
         fn.apply(this, args)
       }
     }
 
     if (timer !== null) {
       clearTimeout(timer)
-    } else if (immediate === true) {
+    } else if (immediate) {
       fn.apply(this, args)
     }
 
@@ -31,7 +31,7 @@ export default function throttle(fn, limit = 250) {
     result
 
   return function runThrottle(...args) {
-    if (wait === false) {
+    if (!wait) {
       wait = true
       setTimeout(() => {
         wait = false

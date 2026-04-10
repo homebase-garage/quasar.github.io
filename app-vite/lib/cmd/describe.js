@@ -109,7 +109,7 @@ function getMethodParams(method, noRequired) {
     return ' ()'
   }
 
-  if (noRequired === true) {
+  if (noRequired) {
     return ` (${Object.keys(method.params).join(', ')})`
   }
 
@@ -218,7 +218,7 @@ function printProperties({ props }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete props[key]
       }
     })
@@ -246,7 +246,7 @@ function printSlots({ slots }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete slots[key]
       }
     })
@@ -274,7 +274,7 @@ function printEvents({ events }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete events[key]
       }
     })
@@ -312,7 +312,7 @@ function printMethods({ methods }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete methods[key]
       }
     })
@@ -357,7 +357,7 @@ function printComputedProps({ computedProps }) {
 
   if (argv.filter) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete computedProps[key]
       }
     })
@@ -407,7 +407,7 @@ function printModifiers({ modifiers }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete modifiers[key]
       }
     })
@@ -448,7 +448,7 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 
   if (argv.filter !== void 0) {
     keys.forEach(key => {
-      if (key.includes(argv.filter) === false) {
+      if (!key.includes(argv.filter)) {
         delete conf[key]
       }
     })
@@ -469,28 +469,28 @@ function printQuasarConfOptions({ quasarConfOptions }) {
 function describe(api) {
   switch (api.type) {
     case 'component': {
-      if (apiParts.quasar === true) printQuasarConfOptions(api)
-      if (apiParts.props === true) printProperties(api)
-      if (apiParts.slots === true) printSlots(api)
-      if (apiParts.events === true) printEvents(api)
-      if (apiParts.methods === true) printMethods(api)
-      if (apiParts.computedProps === true) printComputedProps(api)
+      if (apiParts.quasar) printQuasarConfOptions(api)
+      if (apiParts.props) printProperties(api)
+      if (apiParts.slots) printSlots(api)
+      if (apiParts.events) printEvents(api)
+      if (apiParts.methods) printMethods(api)
+      if (apiParts.computedProps) printComputedProps(api)
       break
     }
 
     case 'directive': {
-      if (apiParts.quasar === true) printQuasarConfOptions(api)
-      if (apiParts.value === true) printValue(api)
-      if (apiParts.arg === true) printArg(api)
-      if (apiParts.modifiers === true) printModifiers(api)
+      if (apiParts.quasar) printQuasarConfOptions(api)
+      if (apiParts.value) printValue(api)
+      if (apiParts.arg) printArg(api)
+      if (apiParts.modifiers) printModifiers(api)
       break
     }
 
     case 'plugin': {
-      if (apiParts.injection === true) printInjection(api)
-      if (apiParts.quasar === true) printQuasarConfOptions(api)
-      if (apiParts.props === true) printProperties(api)
-      if (apiParts.methods === true) printMethods(api)
+      if (apiParts.injection) printInjection(api)
+      if (apiParts.quasar) printQuasarConfOptions(api)
+      if (apiParts.props) printProperties(api)
+      if (apiParts.methods) printMethods(api)
       break
     }
   }

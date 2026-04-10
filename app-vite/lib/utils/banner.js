@@ -17,7 +17,7 @@ function getPackager(argv, cmd) {
 }
 
 function getCompilationTarget(target) {
-  return green(Array.isArray(target) === true ? target.join('|') : target)
+  return green(Array.isArray(target) ? target.join('|') : target)
 }
 
 export async function displayBanner({ argv, ctx, cmd, details }) {
@@ -160,13 +160,13 @@ export function printDevRunningBanner(quasarConf) {
     ` ${greenBanner} Browser target......... ${getCompilationTarget(quasarConf.build.target.browser)}`
   )
 
-  if (['electron', 'ssr'].includes(ctx.modeName) === true) {
+  if (['electron', 'ssr'].includes(ctx.modeName)) {
     banner.push(
       ` ${greenBanner} Node target............ ${getCompilationTarget(quasarConf.build.target.node)}`
     )
   }
 
-  if (ctx.mode.bex === true) {
+  if (ctx.mode.bex) {
     const folder =
       ctx.targetName === 'chrome'
         ? quasarConf.build.distDir

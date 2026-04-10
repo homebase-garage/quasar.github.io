@@ -53,15 +53,13 @@ export default {
     const inputModel = ref('')
     const inputFillCancelled = ref(false)
     const inputShadowText = computed(() => {
-      if (inputFillCancelled.value === true) {
-        return ''
-      }
+      if (inputFillCancelled.value) return ''
 
       const t = 'Text filled when you press TAB'
       const empty =
         typeof inputModel.value !== 'string' || inputModel.value.length === 0
 
-      if (empty === true) {
+      if (empty) {
         return t
       } else if (t.indexOf(inputModel.value) !== 0) {
         return ''
@@ -73,7 +71,7 @@ export default {
     const textareaModel = ref('')
     const textareaFillCancelled = ref(false)
     const textareaShadowText = computed(() => {
-      if (textareaFillCancelled.value === true) {
+      if (textareaFillCancelled.value) {
         return ''
       }
 
@@ -83,7 +81,7 @@ export default {
           typeof textareaModel.value !== 'string' ||
           textareaModel.value.length === 0
 
-      if (empty === true) {
+      if (empty) {
         return t.split('\n')[0]
       } else if (t.indexOf(textareaModel.value) !== 0) {
         return ''
@@ -118,7 +116,7 @@ export default {
               (typeof inputModel.value === 'string' ? inputModel.value : '') +
               inputShadowText.value
           }
-        } else if (inputFillCancelled.value === true) {
+        } else if (inputFillCancelled.value) {
           inputFillCancelled.value = false
         }
       },
@@ -131,12 +129,12 @@ export default {
         if (e === void 0) return
 
         if (e.keyCode === 27) {
-          if (textareaFillCancelled.value !== true) {
+          if (!textareaFillCancelled.value) {
             textareaFillCancelled.value = true
           }
         } else if (e.keyCode === 9) {
           if (
-            textareaFillCancelled.value !== true &&
+            !textareaFillCancelled.value &&
             textareaShadowText.value.length !== 0
           ) {
             stopAndPrevent(e)
@@ -145,7 +143,7 @@ export default {
                 ? textareaModel.value
                 : '') + textareaShadowText.value
           }
-        } else if (textareaFillCancelled.value === true) {
+        } else if (textareaFillCancelled.value) {
           textareaFillCancelled.value = false
         }
       }

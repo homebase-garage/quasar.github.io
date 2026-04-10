@@ -31,7 +31,7 @@
         </q-btn>
         <q-btn
           class="header-btn q-ml-xs"
-          v-if="props.noEdit === false"
+          v-if="!props.noEdit"
           dense
           flat
           round
@@ -148,9 +148,9 @@ const currentTab = ref('Template')
 const expanded = ref(false)
 
 const componentClass = computed(() =>
-  props.scrollable === true
+  props.scrollable
     ? 'doc-example__content--scrollable scroll-y'
-    : props.overflow === true
+    : props.overflow
       ? 'overflow-auto'
       : ''
 )

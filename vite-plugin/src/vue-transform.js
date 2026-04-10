@@ -58,10 +58,9 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
   const dirList = []
 
   const reverseMap = {}
-  const jsImportTransformed =
-    useTreeshaking === true
-      ? mapQuasarImports(content, importMap)
-      : removeQuasarImports(content, importMap, importSet, reverseMap)
+  const jsImportTransformed = useTreeshaking
+    ? mapQuasarImports(content, importMap)
+    : removeQuasarImports(content, importMap, importSet, reverseMap)
 
   let code = jsImportTransformed
     .replace(compRegex[autoImportComponentCase], (_, match) => {
@@ -118,12 +117,11 @@ export function vueTransform(content, autoImportComponentCase, useTreeshaking) {
   }
 
   const importList = [...importSet]
-  const codePrefix =
-    useTreeshaking === true
-      ? importList
-          .map(name => `import ${name} from '${importTransformation(name)}'`)
-          .join(';')
-      : `import {${importList.join(',')}} from 'quasar'`
+  const codePrefix = useTreeshaking
+    ? importList
+        .map(name => `import ${name} from '${importTransformation(name)}'`)
+        .join(';')
+    : `import {${importList.join(',')}} from 'quasar'`
 
   return codePrefix + ';' + code
 }

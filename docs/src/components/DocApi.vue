@@ -238,8 +238,7 @@ function getFilteredApi(parsedApi, filter, tabs, innerTabs) {
     if (tab === 'injection') {
       const name = parsedApi[tab][defaultInnerTabName]
       acc[tab] = {}
-      acc[tab][defaultInnerTabName] =
-        passesFilter(filter, name, '') === true ? name : {}
+      acc[tab][defaultInnerTabName] = passesFilter(filter, name, '') ? name : {}
 
       return
     }
@@ -255,14 +254,14 @@ function getFilteredApi(parsedApi, filter, tabs, innerTabs) {
 
       for (const name in api.definition || {}) {
         const entry = api.definition[name]
-        if (passesFilter(filter, name, entry.desc) === true) {
+        if (passesFilter(filter, name, entry.desc)) {
           result.definition[name] = entry
         }
       }
 
       if (
         Object.keys(result.definition).length === 0 &&
-        passesFilter(filter, api.propName, '') === false
+        !passesFilter(filter, api.propName, '')
       ) {
         acc[tab][defaultInnerTabName] = {}
       }
@@ -280,7 +279,7 @@ function getFilteredApi(parsedApi, filter, tabs, innerTabs) {
 
       for (const name in categoryEntries) {
         const entry = categoryEntries[name]
-        if (passesFilter(filter, name, entry.desc) === true) {
+        if (passesFilter(filter, name, entry.desc)) {
           subTabs[name] = entry
         }
       }
@@ -345,10 +344,9 @@ function getApiCount(parsedApi, tabs, innerTabs) {
   return acc
 }
 
-const getJsonUrl =
-  process.env.DEV === true
-    ? file => `/@fs/${process.env.FS_QUASAR_FOLDER}/dist/api/${file}.json`
-    : file => `/quasar-api/${file}.json`
+const getJsonUrl = process.env.DEV
+  ? file => `/@fs/${process.env.FS_QUASAR_FOLDER}/dist/api/${file}.json`
+  : file => `/quasar-api/${file}.json`
 
 const props = defineProps({
   file: {

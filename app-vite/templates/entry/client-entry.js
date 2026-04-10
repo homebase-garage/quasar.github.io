@@ -117,14 +117,14 @@ async function start ({
     }
   }
 
-  if (hasRedirected === true) return
+  if (hasRedirected) return
   <% } %>
 
   app.use(router)
 
   <% if (quasarConf.ctx.mode.ssr) { %>
     <% if (quasarConf.ctx.mode.pwa) { %>
-      if (ssrIsRunningOnClientPWA === true) {
+      if (ssrIsRunningOnClientPWA) {
         <% if (quasarConf.preFetch) { %>
         addPreFetchHooks({ router, ssrIsRunningOnClientPWA<%= quasarConf.metaConf.hasStore ? ', store' : '' %> })
         <% } %>

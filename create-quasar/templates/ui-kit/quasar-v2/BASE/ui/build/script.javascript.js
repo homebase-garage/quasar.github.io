@@ -180,7 +180,7 @@ function buildEntry (config) {
       }
 
       return buildUtils.writeFile(
-        config.build.minExt === true
+        config.build.minExt
           ? addExtension(config.rollup.output.file)
           : config.rollup.output.file,
         buildConf.banner + minified.code,

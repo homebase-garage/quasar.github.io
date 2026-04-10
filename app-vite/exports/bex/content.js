@@ -5,10 +5,7 @@ import { BexBridge } from './private/bex-bridge.js'
  * Only Chrome allows the background counterpart initialization
  * to take place in a service worker.
  */
-if (
-  import.meta.env.QUASAR_DEV === true &&
-  import.meta.env.QUASAR_TARGET === 'chrome'
-) {
+if (import.meta.env.QUASAR_DEV && import.meta.env.QUASAR_TARGET === 'chrome') {
   let scriptIsReloading = false
 
   const scriptName = import.meta.env.QUASAR_BEX_SCRIPT_NAME
@@ -38,7 +35,7 @@ if (
 
     port.onMessage.addListener(onMessage)
     port.onDisconnect.addListener(() => {
-      if (scriptIsReloading === true) return
+      if (scriptIsReloading) return
       port.onMessage.removeListener(onMessage)
 
       console.log(
@@ -59,7 +56,7 @@ if (
 let scriptHasBridge = false
 
 export function createBridge({ debug } = {}) {
-  if (scriptHasBridge === true) {
+  if (scriptHasBridge) {
     console.error('Content script Quasar Bridge has already been created.')
     return
   }

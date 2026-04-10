@@ -6,7 +6,7 @@
           v-for="color in list"
           :key="`picker-${color}`"
           :color="color"
-          :text-color="dark[color] === true ? 'white' : 'black'"
+          :text-color="dark[color] ? 'white' : 'black'"
           no-caps
           glossy
           unelevated
@@ -27,7 +27,7 @@
           :class="pageClass"
         >
           <div
-            :class="`bg-primary text-${dark.primary === true ? 'white shadow-2' : 'black'}`"
+            :class="`bg-primary text-${dark.primary ? 'white shadow-2' : 'black'}`"
           >
             <q-bar dense :dark="dark.primary">
               <q-space />
@@ -78,7 +78,7 @@
               >
                 <q-card
                   flat
-                  :class="`bg-${color} text-${dark[color] === true ? 'white' : 'black'}`"
+                  :class="`bg-${color} text-${dark[color] ? 'white' : 'black'}`"
                 >
                   <q-card-section>
                     <div class="text-h6 row no-wrap items-center">
@@ -103,7 +103,7 @@
               fab
               :icon="mdiMapMarkerRadius"
               color="accent"
-              :text-color="dark.accent === true ? 'white' : 'black'"
+              :text-color="dark.accent ? 'white' : 'black'"
               style="bottom: 16px; right: 16px"
             />
           </div>
@@ -245,9 +245,7 @@ list.forEach(entry => {
 })
 
 const pageClass = computed(() =>
-  darkMode.value === true
-    ? 'theme-picker__bg-dark text-white'
-    : 'bg-white text-black'
+  darkMode.value ? 'theme-picker__bg-dark text-white' : 'bg-white text-black'
 )
 
 const sassExport = computed(

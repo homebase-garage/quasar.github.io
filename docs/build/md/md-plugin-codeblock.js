@@ -163,14 +163,14 @@ function parseCodeLine(content, attrs) {
     })
   }
 
-  if (hasRemOrAdd === true) {
+  if (hasRemOrAdd) {
     lines.forEach((_, lineIndex) => {
       const target = acc[lineIndex]
 
       target.prefix.push(
-        target.classList.includes('c-add') === true
+        target.classList.includes('c-add')
           ? '+'
-          : target.classList.includes('c-rem') === true
+          : target.classList.includes('c-rem')
             ? '-'
             : ' '
       )
@@ -216,8 +216,7 @@ function getHighlightedContent(rawContent, attrs) {
   const preAttrs =
     maxheight !== void 0 ? ` style="max-height:${maxheight}"` : ''
 
-  const langProp =
-    customCopyLangList.includes(lang) === true ? ` lang="${lang}"` : ''
+  const langProp = customCopyLangList.includes(lang) ? ` lang="${lang}"` : ''
 
   return `<pre v-pre class="doc-code${codeClass}"${preAttrs}><code>${html}</code></pre><copy-button${langProp} />`
 }

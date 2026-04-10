@@ -142,7 +142,7 @@ export default {
         e.preventDefault()
 
         // don't drop on other draggables
-        if (e.target.draggable === true) return
+        if (e.target.draggable) return
 
         const draggedId = e.dataTransfer.getData('text')
         const draggedEl = document.getElementById(draggedId)

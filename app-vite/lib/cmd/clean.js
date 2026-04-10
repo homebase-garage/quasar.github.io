@@ -53,24 +53,24 @@ const cleanAll =
   argv.dist !== true &&
   argv.qconf !== true
 
-if (cleanAll === true || argv.entry === true) {
+if (cleanAll || argv.entry) {
   fse.removeSync(appPaths.resolve.app('.quasar'))
   log('Cleaned generated entry points')
 }
 
-if (cleanAll === true || argv.cache === true) {
+if (cleanAll || argv.cache) {
   fse.removeSync(appPaths.cacheDir)
   log('Cleaned dev/build cache')
 }
 
-if (cleanAll === true || argv.dist === true) {
+if (cleanAll || argv.dist) {
   // we empty the dist folder
   // (will not work if build > distDir was changed outside of it)
   fse.emptyDirSync(appPaths.resolve.app('dist'))
   log('Cleaned /dist folder')
 }
 
-if (cleanAll === true || argv.qconf === true) {
+if (cleanAll || argv.qconf) {
   const { globSync } = await import('tinyglobby')
   const fileList = globSync(['quasar.config.*.temporary.compiled.*'], {
     cwd: appPaths.appDir

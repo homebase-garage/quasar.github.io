@@ -211,7 +211,7 @@ const css = reactive({
 watch(
   () => css['roboto-font'],
   val => {
-    if (val === true) {
+    if (val) {
       css['roboto-font-latin-ext'] = false
     }
   }
@@ -220,7 +220,7 @@ watch(
 watch(
   () => css['roboto-font-latin-ext'],
   val => {
-    if (val === true) {
+    if (val) {
       css['roboto-font'] = false
     }
   }
@@ -234,16 +234,13 @@ const iconSet = ref('material-icons')
 
 const cssImport = computed(() => {
   const acc = extrasOptions
-    .filter(key => css[key] === true)
+    .filter(key => css[key])
     .map(key => `import '@quasar/extras/${key}/${key}.css'`)
 
-  if (
-    iconSet.value !== 'material-icons' &&
-    iconSet.value.startsWith('svg-') === false
-  ) {
+  if (iconSet.value !== 'material-icons' && !iconSet.value.startsWith('svg-')) {
     const key = iconSet.value
     const importValue = `import '@quasar/extras/${key}/${key}.css'`
-    if (acc.includes(importValue) === false) {
+    if (!acc.includes(importValue)) {
       acc.push(`// ..required because of selected iconSet:\n${importValue}`)
     }
   }
@@ -251,15 +248,15 @@ const cssImport = computed(() => {
   const libs =
     acc.length !== 0 ? `// Import icon libraries\n${acc.join('\n')}\n\n` : ''
 
-  const animExample =
-    css.animate === true
-      ? `// A few examples for animations from Animate.css:
+  const animExample = css.animate
+    ? `// A few examples for animations from Animate.css:
 // import @quasar/extras/animate/fadeIn.css
 // import @quasar/extras/animate/fadeOut.css\n\n`
-      : ''
+    : ''
 
-  const quasarCssPath =
-    useSassVariables.value === true ? 'src/css/index.sass' : 'dist/quasar.css'
+  const quasarCssPath = useSassVariables.value
+    ? 'src/css/index.sass'
+    : 'dist/quasar.css'
 
   return `${libs}${animExample}// Import Quasar css
 import 'quasar/${quasarCssPath}'`
@@ -290,7 +287,7 @@ const configInstantiation = computed(() => {
     str += '\n  iconSet: quasarIconSet,'
   }
 
-  if (cfgObject.value === true) {
+  if (cfgObject.value) {
     str += `\n  /*
   config: {
     brand: {
@@ -332,9 +329,7 @@ myApp.mount('#app')
 )
 
 const extraImports = computed(() =>
-  useSassVariables.value === true
-    ? "import { fileURLToPath } from 'node:url'\n"
-    : ''
+  useSassVariables.value ? "import { fileURLToPath } from 'node:url'\n" : ''
 )
 
 const vitePluginOptions = computed(() => {
@@ -344,7 +339,7 @@ const vitePluginOptions = computed(() => {
     acc.push(`      autoImportComponentCase: '${autoImportCase.value}'`)
   }
 
-  if (useSassVariables.value === true) {
+  if (useSassVariables.value) {
     acc.push(
       '      sassVariables: fileURLToPath(\n' +
         "        new URL('./src/quasar-variables.sass', import.meta.url)\n" +

@@ -67,10 +67,10 @@ if (argv._.length === 0) {
       const hasPrompts = Object.keys(prompts).length !== 0
 
       console.log(
-        `App Extension [ ${green(ext.extId)} ]${hasPrompts === true ? ' with prompts:' : ''}`
+        `App Extension [ ${green(ext.extId)} ]${hasPrompts ? ' with prompts:' : ''}`
       )
 
-      if (hasPrompts === true) {
+      if (hasPrompts) {
         console.log(JSON.stringify(prompts, null, 2))
         console.log()
       }

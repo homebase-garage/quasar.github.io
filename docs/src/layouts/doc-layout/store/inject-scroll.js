@@ -67,7 +67,7 @@ export default function injectScroll(store) {
     const el = hash.length > 1 ? document.getElementById(hash.slice(1)) : null
 
     if (el !== null) {
-      if (immediate === true) {
+      if (immediate) {
         let anchorEl = el
         while (
           anchorEl.parentElement !== null &&
@@ -85,7 +85,7 @@ export default function injectScroll(store) {
         }, 2000)
       }
 
-      scrollPage(el, immediate === true ? 0 : scrollDuration)
+      scrollPage(el, immediate ? 0 : scrollDuration)
     } else {
       preventTocUpdate = false
       store.setActiveToc()

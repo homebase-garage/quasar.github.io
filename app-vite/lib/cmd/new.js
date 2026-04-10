@@ -102,7 +102,7 @@ const validAssetTypes = [
   ...Object.entries(typeAliasMap).flat(),
   'ssrmiddleware'
 ]
-if (validAssetTypes.includes(rawType) === false) {
+if (!validAssetTypes.includes(rawType)) {
   showError(
     `Invalid asset type: ${rawType} (valid values: ${validAssetTypes.join('|')})`
   )
@@ -111,7 +111,7 @@ if (validAssetTypes.includes(rawType) === false) {
 /** @type {'page'|'layout'|'component'|'store'|'boot'|'ssrmiddleware'} */
 const type = typeAliasMap[rawType] || rawType
 
-if (['js', 'ts'].includes(format) === false) {
+if (!['js', 'ts'].includes(format)) {
   showError(`Invalid asset format: ${format} (valid values: js|ts)`)
 }
 
@@ -192,7 +192,7 @@ async function getAsset(assetType) {
       await storeProvider.install()
     }
 
-    if (fs.existsSync(targetFolder) === false) {
+    if (!fs.existsSync(targetFolder)) {
       fse.ensureDir(targetFolder)
 
       try {

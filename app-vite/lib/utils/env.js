@@ -25,8 +25,8 @@ function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
     return defaultPrefix
   }
 
-  if (Array.isArray(prefix) === false) {
-    if (validEnvKeyRE.test(prefix) === false) {
+  if (!Array.isArray(prefix)) {
+    if (!validEnvKeyRE.test(prefix)) {
       if (!defaultPrefix) {
         warn(
           `The "${prefix}" env prefix is invalid in JS. Allowing all env keys that are valid in JS (without any prefix).`,
@@ -49,7 +49,7 @@ function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
   for (const entry of prefix) {
     if (!entry) continue
 
-    if (validEnvKeyRE.test(entry) === false) {
+    if (!validEnvKeyRE.test(entry)) {
       warn(
         `Invalid env prefix "${entry}" specified in the array. Skipping it.`,
         banner
@@ -89,7 +89,7 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
     envCfg
   )
 
-  const fileList = isCI === true ? ['.env'] : ['.env', '.env.local']
+  const fileList = isCI ? ['.env'] : ['.env', '.env.local']
   const additionalFiles = Array.isArray(localEnv.file)
     ? localEnv.file
     : localEnv.file
@@ -126,13 +126,12 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
   return {
     envDefineList,
     watchEnvFiles: new Set(watchEnvFiles),
-    snapshot:
-      useSnapshot === true
-        ? {
-            envDefineList: encodeForDiff(envDefineList),
-            watchEnvFiles: encodeForDiff(watchEnvFiles)
-          }
-        : null,
+    snapshot: useSnapshot
+      ? {
+          envDefineList: encodeForDiff(envDefineList),
+          watchEnvFiles: encodeForDiff(watchEnvFiles)
+        }
+      : null,
     envBanner: `${prefix ? `prefix ${prefixLabel}` : 'no env prefix'}; ${
       usedEnvFiles.length !== 0
         ? `files: ${usedEnvFiles.join(' | ')}`
@@ -157,7 +156,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
     envCfg
   )
 
-  const fileList = isCI === true ? ['.env'] : ['.env', '.env.local']
+  const fileList = isCI ? ['.env'] : ['.env', '.env.local']
   const additionalFiles = Array.isArray(localEnv.file)
     ? localEnv.file
     : localEnv.file
@@ -195,7 +194,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
   }
 
   let backendBanner = ''
-  if (hasBackend === true) {
+  if (hasBackend) {
     const backendPrefix = getEnvFilesPrefix({
       prefix: localEnv.backendPrefix,
       defaultPrefix: defaultBackendAppEnvPrefix,
@@ -228,14 +227,14 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
       // oxlint-disable-next-line unicorn/no-array-method-this-argument
       localEnv.filter(result.clientEnvDefineList, 'client') || {}
 
-    if (hasBackend === true) {
+    if (hasBackend) {
       result.backendEnvDefineList =
         // oxlint-disable-next-line unicorn/no-array-method-this-argument
         localEnv.filter(result.backendEnvDefineList, 'backend') || {}
     }
   }
 
-  if (useSnapshot === true) {
+  if (useSnapshot) {
     result.snapshot = {
       envCfg: encodeForDiff(envCfg),
       watchEnvFiles: encodeForDiff(watchEnvFiles)
@@ -251,18 +250,18 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
   const usedEnvFiles = []
 
   const envFolderList = folderList.map(folder =>
-    isAbsolute(folder) === true ? folder : join(appDir, folder)
+    isAbsolute(folder) ? folder : join(appDir, folder)
   )
 
   const list = fileList.flatMap(file => {
-    if (isAbsolute(file) === true) return file
+    if (isAbsolute(file)) return file
     return envFolderList.map(folder => join(folder, file))
   })
 
   const env = Object.fromEntries(
     list.flatMap(filePath => {
       watchEnvFiles.push(filePath)
-      if (existsSync(filePath) === false) return []
+      if (!existsSync(filePath)) return []
 
       usedEnvFiles.push(relative(appDir, filePath))
       return Object.entries(dotEnvParse(readFileSync(filePath, 'utf8')))

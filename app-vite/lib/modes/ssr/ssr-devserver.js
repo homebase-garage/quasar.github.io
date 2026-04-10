@@ -79,7 +79,7 @@ export class QuasarModeDevserver extends AppDevserver {
       serverEntryFile: appPaths.resolve.entry('server-entry.js'),
       resolvePublicFolder(...args) {
         const dir = join(...args)
-        return isAbsolute(dir) === true ? dir : join(publicFolder, dir)
+        return isAbsolute(dir) ? dir : join(publicFolder, dir)
       }
     }
 
@@ -93,7 +93,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.registerDiff('viteSSR', (quasarConf, diffMap) => [
       quasarConf.ssr.pwa,
-      quasarConf.ssr.pwa === true ? quasarConf.pwa.swFilename : '',
+      quasarConf.ssr.pwa ? quasarConf.pwa.swFilename : '',
       quasarConf.metaConf.backendEnvDefineList,
 
       // extends 'vite' diff
@@ -128,25 +128,25 @@ export class QuasarModeDevserver extends AppDevserver {
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
-    if (quasarConf.ssr.pwa === true) {
+    if (quasarConf.ssr.pwa) {
       // also update pwa-devserver.js when changing here
-      if (diff('pwaManifest', quasarConf) === true) {
+      if (diff('pwaManifest', quasarConf)) {
         return queue(() => this.#compilePwaManifest(quasarConf))
       }
 
       // also update pwa-devserver.js when changing here
-      if (diff('pwaServiceWorker', quasarConf) === true) {
+      if (diff('pwaServiceWorker', quasarConf)) {
         return queue(() => this.#compilePwaServiceWorker(quasarConf, queue))
       }
     }
 
     // also update pwa-devserver.js when changing here
-    if (diff('webserver', quasarConf) === true) {
+    if (diff('webserver', quasarConf)) {
       return queue(() => this.#compileWebserver(quasarConf, queue))
     }
 
     // also update pwa-devserver.js when changing here
-    if (diff('viteSSR', quasarConf) === true) {
+    if (diff('viteSSR', quasarConf)) {
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
   }
@@ -210,7 +210,7 @@ export class QuasarModeDevserver extends AppDevserver {
     )
     this.#viteWatcherList.push(viteServer)
 
-    if (quasarConf.ssr.pwa === true) {
+    if (quasarConf.ssr.pwa) {
       injectPwaManifest(quasarConf, true)
     }
 
@@ -290,7 +290,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     await this.#bootWebserver(quasarConf)
 
-    if (urlDiffers === true && quasarConf.metaConf.openBrowser) {
+    if (urlDiffers && quasarConf.metaConf.openBrowser) {
       const { metaConf } = quasarConf
       openBrowser({
         url: metaConf.APP_URL,

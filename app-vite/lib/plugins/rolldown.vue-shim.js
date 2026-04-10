@@ -7,7 +7,7 @@ export function quasarRolldownVueShimPlugin() {
     name: 'quasar:vue-shim',
 
     load(id) {
-      if (id.endsWith('.vue') === false) return null
+      if (!id.endsWith('.vue')) return null
 
       return {
         code: '',

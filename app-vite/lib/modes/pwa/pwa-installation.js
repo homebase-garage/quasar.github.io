@@ -68,7 +68,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
  * }} options
  */
 export async function removeMode({ ctx: { appPaths, cacheProxy } }) {
-  if (isModeInstalled(appPaths, 'pwa') === false) {
+  if (!isModeInstalled(appPaths, 'pwa')) {
     warn('No PWA support detected. Aborting.')
     return
   }

@@ -56,7 +56,7 @@ const addPublicPath = url => (publicPath + url).replace(doubleSlashRE, '/')
 const httpRE = /^https?:\/\//
 
 function getRedirectUrl (url, router) {
-  if (typeof url === 'string' && httpRE.test(url) === true) {
+  if (typeof url === 'string' && httpRE.test(url)) {
     return url
   }
 
@@ -143,7 +143,7 @@ export default ssrContext => {
       }
     }
 
-    if (hasRedirected === true) return
+    if (hasRedirected) return
     <% } %>
 
     app.use(router)
@@ -207,7 +207,7 @@ export default ssrContext => {
         Promise.resolve()
       )
       .then(() => {
-        if (hasRedirected === true) return
+        if (hasRedirected) return
 
         <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
 

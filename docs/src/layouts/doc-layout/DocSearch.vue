@@ -73,11 +73,7 @@ const icon = computed(() =>
 )
 
 const keysLabel = computed(() =>
-  $q.platform.is.desktop === true
-    ? $q.platform.is.mac
-      ? '⌘K'
-      : 'Ctrl+K'
-    : null
+  $q.platform.is.desktop ? ($q.platform.is.mac ? '⌘K' : 'Ctrl+K') : null
 )
 
 let focusoutTimer
@@ -197,7 +193,7 @@ function parseResults(hits) {
 
   hits.forEach(hit => {
     // if we don't know how to display this API type then just abort
-    if (supportedHitTypes.includes(hit.type) === false) return
+    if (!supportedHitTypes.includes(hit.type)) return
 
     const entry = {
       page: hit.menu.join(' » '),
@@ -236,7 +232,7 @@ function onKeydown(evt) {
     case 27: {
       // escape
       evt.preventDefault()
-      if (hasFocus.value === true) {
+      if (hasFocus.value) {
         closePopup()
       } else {
         resetSearch()
@@ -273,7 +269,7 @@ function onKeydown(evt) {
       evt.preventDefault()
       evt.stopPropagation()
       if (results.value !== null) {
-        if (hasFocus.value === false) {
+        if (!hasFocus.value) {
           hasFocus.value = true
           return
         }

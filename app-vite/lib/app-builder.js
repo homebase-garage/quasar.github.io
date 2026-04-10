@@ -13,19 +13,17 @@ export class AppBuilder extends AppTool {
   }
 
   readFile(filename) {
-    const target =
-      isAbsolute(filename) === true
-        ? filename
-        : join(this.quasarConf.build.distDir, filename)
+    const target = isAbsolute(filename)
+      ? filename
+      : join(this.quasarConf.build.distDir, filename)
 
     return fse.readFileSync(target, 'utf8')
   }
 
   writeFile(filename, content) {
-    const target =
-      isAbsolute(filename) === true
-        ? filename
-        : join(this.quasarConf.build.distDir, filename)
+    const target = isAbsolute(filename)
+      ? filename
+      : join(this.quasarConf.build.distDir, filename)
 
     fse.ensureDirSync(dirname(target))
     fse.writeFileSync(target, content, 'utf8')
@@ -34,7 +32,7 @@ export class AppBuilder extends AppTool {
   copyFiles(patterns, targetFolder = this.quasarConf.build.distDir) {
     patterns.forEach(entry => {
       const from = this.ctx.appPaths.resolve.app(entry.from)
-      if (fse.existsSync(from) !== true) return
+      if (!fse.existsSync(from)) return
 
       const to = join(targetFolder, entry.to, basename(from))
       fse.copySync(from, to)
@@ -42,24 +40,21 @@ export class AppBuilder extends AppTool {
   }
 
   moveFile(source, destination) {
-    const input =
-      isAbsolute(source) === true
-        ? source
-        : join(this.quasarConf.build.distDir, source)
+    const input = isAbsolute(source)
+      ? source
+      : join(this.quasarConf.build.distDir, source)
 
-    const output =
-      isAbsolute(destination) === true
-        ? destination
-        : join(this.quasarConf.build.distDir, destination)
+    const output = isAbsolute(destination)
+      ? destination
+      : join(this.quasarConf.build.distDir, destination)
 
     fse.moveSync(input, output)
   }
 
   removeFile(filename) {
-    const target =
-      isAbsolute(filename) === true
-        ? filename
-        : join(this.quasarConf.build.distDir, filename)
+    const target = isAbsolute(filename)
+      ? filename
+      : join(this.quasarConf.build.distDir, filename)
 
     fse.removeSync(target)
   }

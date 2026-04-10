@@ -184,10 +184,9 @@ const anchor = computed(
 )
 const self = computed(() => `${selfOrigin.vertical} ${selfOrigin.horizontal}`)
 const menuExport = computed(() => {
-  const props =
-    cover.value === true
-      ? `cover anchor="${anchor.value}"`
-      : `${fit.value ? 'fit ' : ''}anchor="${anchor.value}" self="${self.value}"`
+  const props = cover.value
+    ? `cover anchor="${anchor.value}"`
+    : `${fit.value ? 'fit ' : ''}anchor="${anchor.value}" self="${self.value}"`
 
   return `<q-menu ${props}>
   <q-item clickable>

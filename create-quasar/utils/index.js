@@ -261,7 +261,7 @@ function initializeGit(projectFolder) {
     return
   }
 
-  if (folderHasGit(projectFolder) === true) {
+  if (folderHasGit(projectFolder)) {
     logger.log(
       'A parent of the project folder is already a Git repository, so skipping Git initialization.'
     )

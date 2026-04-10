@@ -48,7 +48,7 @@ export default function mdPluginHeading(md) {
   ) {
     const token = tokens[idx]
 
-    if (apiRE.test(token.content) === true) {
+    if (apiRE.test(token.content)) {
       const match = apiNameRE.exec(token.content)
       if (match !== null) {
         const title = `${match[1]} API`

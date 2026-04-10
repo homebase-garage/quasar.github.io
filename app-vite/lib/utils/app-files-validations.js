@@ -8,7 +8,7 @@ export function appFilesValidations(appPaths) {
 
   const file = appPaths.resolve.app('index.html')
 
-  if (fs.existsSync(file) === false) {
+  if (!fs.existsSync(file)) {
     warn('The file /index.html is missing. Please add it back.\n')
     return false
   }
@@ -21,7 +21,7 @@ export function appFilesValidations(appPaths) {
     valid = false
   }
 
-  if (content.includes(entryPointMarkup) === false) {
+  if (!content.includes(entryPointMarkup)) {
     warn(`Please add ${entryPointMarkup} to
     /index.html inside of <body>\n`)
     valid = false

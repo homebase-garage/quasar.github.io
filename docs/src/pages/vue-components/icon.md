@@ -609,7 +609,7 @@ $q.iconMapFn = iconName => {
   // iconName is the content of QIcon "name" prop (or related icon prop of other Quasar components)
 
   // can be any logic you want, but for this example:
-  if (iconName.startsWith('app:') === true) {
+  if (iconName.startsWith('app:')) {
     // we strip the "app:" part
     const name = iconName.substring(4)
 

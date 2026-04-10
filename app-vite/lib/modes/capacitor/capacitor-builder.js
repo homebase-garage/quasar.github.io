@@ -45,8 +45,8 @@ export class QuasarModeBuilder extends AppBuilder {
       capBin
     )
 
-    if (this.argv['skip-pkg'] !== true) {
-      if (this.argv.ide === true) {
+    if (!this.argv['skip-pkg']) {
+      if (this.argv.ide) {
         await openIDE({
           mode: 'capacitor',
           bin: this.quasarConf.bin,

@@ -66,8 +66,8 @@ function buttonProps({ href, route, isActive, isExactActive }) {
     to: href
   }
 
-  if (isActive === true) {
-    props.color = isExactActive === true ? 'primary' : 'amber-9'
+  if (isActive) {
+    props.color = isExactActive ? 'primary' : 'amber-9'
   } else {
     props.color = 'black'
   }

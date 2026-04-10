@@ -21,7 +21,7 @@ Same as the `ctx` from the `/quasar.config` file. Helps you make decisions based
 Example: You might want to use one of the api methods if running for electron mode only.
 
 ```js
-if (api.ctx.dev === true && api.ctx.mode.electron === true) {
+if (api.ctx.dev && api.ctx.mode.electron) {
   api.beforeDev(api => {
     // do something when running quasar dev and
     // with Electron mode
@@ -140,7 +140,7 @@ api.compatibleWith('@quasar/app', '1.x')
 ```
 
 ```js A more complex example
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.compatibleWith('@quasar/app-vite', '^2.0.0')
 } else {
   api.compatbileWith('@quasar/app-webpack', '^4.0.0')
@@ -215,11 +215,11 @@ api.extendQuasarConf((conf, api) => {
 
 ```js A more complex example:
 api.extendQuasarConf((conf, api) => {
-  if (api.hasVite === true) {
+  if (api.hasVite) {
     // do something with quasar.config file that is specific
     // to @quasar/app-vite
   } else {
-    // api.hasWebpack === true
+    // api.hasWebpack is true
     // do something with quasar.config file that is specific
     // to @quasar/app-webpack
   }
@@ -433,7 +433,7 @@ api.onPublish((api, opts) => {
  * @param {function} fn
  *   (viteConf: Object, invoke: Object {isClient, isServer}, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendViteConf((viteConf, { isClient, isServer }, api) => {
     // add/remove/change Quasar CLI generated Vite config object
   })
@@ -447,7 +447,7 @@ if (api.hasVite === true) {
  * @param {function} fn
  *   (esbuildConf: Object, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendSSRWebserverConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
@@ -462,7 +462,7 @@ if (api.hasVite === true) {
  * @param {function} fn
  *   (esbuildConf: Object, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendElectronMainConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
@@ -477,7 +477,7 @@ if (api.hasVite === true) {
  * @param {function} fn
  *   (esbuildConf: Object, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendElectronPreloadConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
@@ -492,7 +492,7 @@ if (api.hasVite === true) {
  * @param {function} fn
  *   (esbuildConf: Object, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendPWACustomSWConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
@@ -507,7 +507,7 @@ if (api.hasVite === true) {
  * @param {function} fn
  *   (esbuildConf: Object, api) => undefined
  */
-if (api.hasVite === true) {
+if (api.hasVite) {
   api.extendBexScriptsConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
@@ -526,7 +526,7 @@ Chain webpack config
  * @param {function} fn
  *   (chain: ChainObject, invoke: Object {isClient, isServer}, api) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.chainWebpack((chain, { isClient, isServer }, api) => {
     // add/remove/change chain (Webpack chain Object)
   })
@@ -544,7 +544,7 @@ Extend webpack config
  * @param {function} fn
  *   (cfg: Object, invoke: Object {isClient, isServer}, api) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.extendWebpack((cfg, { isClient, isServer }, api) => {
     // add/remove/change cfg (Webpack configuration Object)
   })
@@ -560,7 +560,7 @@ Chain webpack config of the main electron process
  * @param {function} fn
  *   (chain: ChainObject) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.chainWebpackMainElectronProcess((chain, { isClient, isServer }, api) => {
     // add/remove/change chain (Webpack chain Object)
   })
@@ -576,7 +576,7 @@ Extend webpack config Object of the main electron process
  * @param {function} fn
  *   (cfg: Object) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.extendWebpackMainElectronProcess((cfg, { isClient, isServer }, api) => {
     // add/remove/change cfg (Webpack configuration Object)
   })
@@ -592,7 +592,7 @@ Chain webpack config of the preload electron process
  * @param {function} fn
  *   (chain: ChainObject) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.chainWebpackPreloadElectronProcess(
     (chain, { isClient, isServer }, api) => {
       // add/remove/change chain (Webpack chain Object)
@@ -610,7 +610,7 @@ Extend webpack config Object of the preload electron process
  * @param {function} fn
  *   (cfg: Object) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.extendWebpackPreloadElectronProcess(
     (cfg, { isClient, isServer }, api) => {
       // add/remove/change cfg (Webpack configuration Object)
@@ -628,7 +628,7 @@ Chain webpack config of SSR webserver (includes the SSR middlewares from /src-ss
  * @param {function} fn
  *   (chain: ChainObject) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.chainWebpackWebserver((chain, { isClient, isServer }, api) => {
     // add/remove/change chain (Webpack chain Object)
     // isClient is always "false" and isServer is always "true"
@@ -645,7 +645,7 @@ Extend webpack config Object of SSR webserver (includes the SSR middlewares from
  * @param {function} fn
  *   (cfg: Object) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.extendWebpackWebserver((cfg, { isClient, isServer }, api) => {
     // add/remove/change cfg (Webpack configuration Object)
     // isClient is always "false" and isServer is always "true"
@@ -662,7 +662,7 @@ Chain webpack config for the custom service worker when using InjectManifest (co
  * @param {function} fn
  *   (cfg: ChainObject) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.chainWebpackCustomSW((cfg, { isClient, isServer }, api) => {
     // add/remove/change cfg (Webpack chain Object)
   })
@@ -678,7 +678,7 @@ Extend webpack config Object for the custom service worker when using InjectMani
  * @param {function} fn
  *   (chain: Object) => undefined
  */
-if (api.hasWebpack === true) {
+if (api.hasWebpack) {
   api.extendWebpackCustomSW((chain, { isClient, isServer }, api) => {
     // add/remove/change chain (Webpack configuration Object)
   })

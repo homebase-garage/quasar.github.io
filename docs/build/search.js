@@ -13,7 +13,7 @@ const thisFolder = import.meta.dirname
 
 const mdPagesDir = join(thisFolder, '../src/pages')
 const mdPagesList = globSync('**/*.md', { cwd: mdPagesDir })
-  .filter(file => hiddenPageRE.test(file) === false)
+  .filter(file => !hiddenPageRE.test(file))
   .map(key => {
     if (key.includes('elements')) {
       console.error('Not element:', key)
@@ -245,7 +245,7 @@ function processPage(page, entries) {
   }
 
   // handle Installation card (deep heading)
-  if (installationRE.test(contents) === true) {
+  if (installationRE.test(contents)) {
     addItem(entries, {
       ...entryItem,
       l1: 'Installation',

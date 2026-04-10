@@ -23,7 +23,7 @@ export class QuasarModeBuilder extends AppBuilder {
     await this.#copyWebserverFiles()
     await this.#writePackageJson()
 
-    if (this.quasarConf.ssr.pwa === true) {
+    if (this.quasarConf.ssr.pwa) {
       // also update pwa-builder.js when changing here
       injectPwaManifest(this.quasarConf)
     }
@@ -37,7 +37,7 @@ export class QuasarModeBuilder extends AppBuilder {
 
     await this.#writeRenderTemplate(viteClientConfig.build.outDir)
 
-    if (this.quasarConf.ssr.pwa === true) {
+    if (this.quasarConf.ssr.pwa) {
       // we need to detour the distDir temporarily
       const originalDistDir = this.quasarConf.build.distDir
       this.quasarConf.build.distDir = join(
@@ -141,7 +141,7 @@ export class QuasarModeBuilder extends AppBuilder {
       await getProdSsrRenderTemplateFileContent(html, this.quasarConf)
     )
 
-    if (this.quasarConf.ssr.pwa === true) {
+    if (this.quasarConf.ssr.pwa) {
       this.writeFile(
         `client/${this.quasarConf.ssr.pwaOfflineHtmlFilename}`,
         await transformProdSsrPwaOfflineHtml(html, this.quasarConf)
@@ -179,7 +179,7 @@ export class QuasarModeBuilder extends AppBuilder {
      */
     for (let key in viteManifest) {
       const value = viteManifest[key]
-      if (ssrManifestIdQueryRE.test(key) === true) {
+      if (ssrManifestIdQueryRE.test(key)) {
         key = key.replace(ssrManifestIdQueryReplaceRE, 'vue')
         if (ssrManifest[key] !== void 0) continue
       }

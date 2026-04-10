@@ -45,17 +45,17 @@ export default function mdParse(code, id) {
       "import DocExample from 'src/components/DocExample.vue'"
     )
   }
-  if (docApiRE.test(code) === true) {
+  if (docApiRE.test(code)) {
     frontMatter.pageScripts.add(
       "import DocApi from 'src/components/DocApi.vue'"
     )
   }
-  if (docInstallationRE.test(code) === true) {
+  if (docInstallationRE.test(code)) {
     frontMatter.pageScripts.add(
       "import DocInstallation from 'src/components/DocInstallation.vue'"
     )
   }
-  if (docTreeRE.test(code) === true) {
+  if (docTreeRE.test(code)) {
     frontMatter.pageScripts.add(
       "import DocTree from 'src/components/DocTree.vue'"
     )

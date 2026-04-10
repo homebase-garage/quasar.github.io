@@ -7,7 +7,7 @@ import { fatal, log } from '../../utils/logger.js'
 export function ensureWWW({ appPaths, forced }) {
   const www = appPaths.resolve.cordova('www')
 
-  if (forced === true) fse.removeSync(www)
+  if (forced) fse.removeSync(www)
 
   if (!existsSync(www)) {
     fse.copySync(appPaths.resolve.cli('templates/cordova/www'), www)

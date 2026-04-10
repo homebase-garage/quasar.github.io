@@ -93,7 +93,7 @@ const cfgEntries = []
 let threadList = Object.keys(modeConfig)
 
 if (argv.thread) {
-  if (threadList.includes(argv.thread) === false) {
+  if (!threadList.includes(argv.thread)) {
     fatal('Requested thread for inspection is NOT available for selected mode.')
   }
 

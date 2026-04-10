@@ -199,7 +199,7 @@ const {
   default: { removeSync }
 } = await import('fs-extra')
 
-if (removeDeprecatedAppPkg === true) {
+if (removeDeprecatedAppPkg) {
   console.log()
   nodePackager.uninstallPackage('@quasar/app', {
     displayName: 'deprecated @quasar/app'
@@ -210,7 +210,7 @@ if (removeDeprecatedAppPkg === true) {
   removeSync(appPaths.resolve.app('node_modules/@quasar/app'))
 
   const tsConfigFile = appPaths.resolve.app('tsconfig.json')
-  if (fs.existsSync(tsConfigFile) === true) {
+  if (fs.existsSync(tsConfigFile)) {
     const content = fs.readFileSync(tsConfigFile, 'utf8')
     fs.writeFileSync(
       tsConfigFile,
@@ -223,7 +223,7 @@ if (removeDeprecatedAppPkg === true) {
   }
 
   const quasarDTsFile = appPaths.resolve.app('src/quasar.d.ts')
-  if (fs.existsSync(quasarDTsFile) === true) {
+  if (fs.existsSync(quasarDTsFile)) {
     const content = fs.readFileSync(quasarDTsFile, 'utf8')
     fs.writeFileSync(
       quasarDTsFile,

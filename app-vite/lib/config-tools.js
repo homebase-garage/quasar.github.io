@@ -30,7 +30,7 @@ async function parseVitePlugins(entries, appDir, compileId) {
       continue
     }
 
-    if (Array.isArray(entry) === false) {
+    if (!Array.isArray(entry)) {
       if (typeof entry === 'function') {
         showTip = true
       }
@@ -97,7 +97,7 @@ async function parseVitePlugins(entries, appDir, compileId) {
     )
   }
 
-  if (showTip === true) {
+  if (showTip) {
     tip(
       'If you want changes to quasar.config file > build > vitePlugins to be picked up,' +
         ' specify them in this form:' +
@@ -147,16 +147,14 @@ export async function createViteConfig(
 
     root: appPaths.appDir,
     base: build.publicPath,
-    publicDir: build.ignorePublicFolder === true ? false : appPaths.publicDir,
+    publicDir: build.ignorePublicFolder ? false : appPaths.publicDir,
     clearScreen: false,
     logLevel: 'warn',
-    mode: ctx.dev === true ? 'development' : 'production',
+    mode: ctx.dev ? 'development' : 'production',
     cacheDir,
     define: {
       ...metaConf[
-        shippedToClient === true
-          ? 'clientEnvDefineList'
-          : 'backendEnvDefineList'
+        shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'
       ],
       ...build.define
     },
@@ -202,7 +200,7 @@ export async function createViteConfig(
         autoImportVueExtensions: quasarConf.framework.autoImportVueExtensions,
         autoImportScriptExtensions:
           quasarConf.framework.autoImportScriptExtensions,
-        devTreeshaking: quasarConf.framework.devTreeshaking === true,
+        devTreeshaking: Boolean(quasarConf.framework.devTreeshaking),
         sassVariables: quasarConf.metaConf.css.variablesFile
       }),
       ...(await parseVitePlugins(build.vitePlugins, appPaths.appDir, compileId))
@@ -210,11 +208,11 @@ export async function createViteConfig(
   }
 
   if (compileId !== 'vite-ssr-server') {
-    if (ctx.prod === true && quasarConf.build.useFilenameHashes !== true) {
+    if (ctx.prod && quasarConf.build.useFilenameHashes !== true) {
       viteConf.plugins.push(quasarViteStripFilenameHashesPlugin())
     }
 
-    if (compileId !== 'vite-ssr-client' || quasarConf.ctx.prod === true) {
+    if (compileId !== 'vite-ssr-client' || quasarConf.ctx.prod) {
       viteConf.plugins.unshift(quasarViteIndexHtmlTransformPlugin(quasarConf))
     }
   }
@@ -307,7 +305,7 @@ export function createNodeRolldownConfig(
     output: {
       format,
       codeSplitting: false,
-      sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false
+      sourcemap: quasarConf.metaConf.debugging ? 'inline' : false
     },
 
     resolve: {
@@ -325,9 +323,7 @@ export function createNodeRolldownConfig(
       minify: quasarConf.build.minify !== false,
       define: {
         ...quasarConf.metaConf[
-          shippedToClient === true
-            ? 'clientEnvDefineList'
-            : 'backendEnvDefineList'
+          shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'
         ],
         ...quasarConf.build.define
       }
@@ -360,7 +356,7 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
     output: {
       format: 'iife',
       codeSplitting: false,
-      sourcemap: quasarConf.metaConf.debugging === true ? 'inline' : false
+      sourcemap: quasarConf.metaConf.debugging ? 'inline' : false
     },
 
     resolve: {
@@ -374,9 +370,7 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
       minify: quasarConf.build.minify !== false,
       define: {
         ...quasarConf.metaConf[
-          shippedToClient === true
-            ? 'clientEnvDefineList'
-            : 'backendEnvDefineList'
+          shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'
         ],
         ...quasarConf.build.define
       }

@@ -66,12 +66,12 @@ function calcTimeRemaining() {
   const remaining = confDate - now
   hasEnded.value = remaining <= 0
 
-  if (hasEnded.value === false) {
+  if (hasEnded.value) {
+    clearInterval(interval)
+  } else {
     days.value = Math.floor(remaining / oneDay)
     hours.value = Math.floor((remaining % oneDay) / oneHour)
     minutes.value = Math.floor((remaining % oneHour) / oneMin)
-  } else {
-    clearInterval(interval)
   }
 }
 

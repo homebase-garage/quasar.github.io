@@ -8,7 +8,7 @@ function parseToc(toc) {
 
   const list = toc.map(entry => {
     if (entry.sub === true) {
-      if (wasHeader === true) {
+      if (wasHeader) {
         subheaderIndex = 1
       } else {
         subheaderIndex++

@@ -70,7 +70,7 @@ export function createManifest(quasarConf) {
   fse.ensureDirSync(quasarConf.build.distDir)
   fse.writeFileSync(
     join(quasarConf.build.distDir, 'manifest.json'),
-    JSON.stringify(json, null, quasarConf.build.minify === true ? void 0 : 2),
+    JSON.stringify(json, null, quasarConf.build.minify ? void 0 : 2),
     'utf8'
   )
 
@@ -98,7 +98,7 @@ function extractBexScripts(quasarConf, bexManifest) {
 
     bexManifest.background.service_worker = scriptName + '.js'
 
-    if (fse.existsSync(inputFile) === false) {
+    if (!fse.existsSync(inputFile)) {
       warn()
       warn(
         `The file defined in bex manifest > background > service_worker > "${rawName}" does NOT exists. Skipping.`
@@ -106,7 +106,7 @@ function extractBexScripts(quasarConf, bexManifest) {
       warn()
     } else {
       const entry = getCompilationEntry(quasarConf, inputFile, scriptName)
-      if (scriptNameSet.has(entry.name) === false) {
+      if (!scriptNameSet.has(entry.name)) {
         scriptNameSet.add(entry.name)
         scriptList.push(entry)
       }
@@ -119,7 +119,7 @@ function extractBexScripts(quasarConf, bexManifest) {
 
     bexManifest.background.scripts[index] = scriptName + '.js'
 
-    if (fse.existsSync(inputFile) === false) {
+    if (!fse.existsSync(inputFile)) {
       warn()
       warn(
         `The file defined in bex manifest > background > scripts > "${rawName}" does NOT exists. Skipping.`
@@ -129,7 +129,7 @@ function extractBexScripts(quasarConf, bexManifest) {
     }
 
     const entry = getCompilationEntry(quasarConf, inputFile, scriptName)
-    if (scriptNameSet.has(entry.name) === false) {
+    if (!scriptNameSet.has(entry.name)) {
       scriptNameSet.add(entry.name)
       scriptList.push(entry)
     }
@@ -142,7 +142,7 @@ function extractBexScripts(quasarConf, bexManifest) {
 
       contentScript.js[index] = scriptName + '.js'
 
-      if (fse.existsSync(inputFile) === false) {
+      if (!fse.existsSync(inputFile)) {
         warn()
         warn(
           `The file defined in bex manifest > content_scripts > js > "${rawName}" does NOT exists. Skipping.`
@@ -152,7 +152,7 @@ function extractBexScripts(quasarConf, bexManifest) {
       }
 
       const entry = getCompilationEntry(quasarConf, inputFile, scriptName)
-      if (scriptNameSet.has(entry.name) === false) {
+      if (!scriptNameSet.has(entry.name)) {
         scriptNameSet.add(entry.name)
         scriptList.push(entry)
       }
@@ -162,7 +162,7 @@ function extractBexScripts(quasarConf, bexManifest) {
   quasarConf.bex.extraScripts.forEach(rawName => {
     const inputFile = quasarConf.ctx.appPaths.resolve.bex(rawName)
 
-    if (fse.existsSync(inputFile) === false) {
+    if (!fse.existsSync(inputFile)) {
       warn()
       warn(
         `The file defined in quasar.config > bex > extraScripts > "${rawName}" does NOT exists. Skipping.`
@@ -173,7 +173,7 @@ function extractBexScripts(quasarConf, bexManifest) {
 
     const scriptName = rawName.replace(scriptExtRE, '')
     const entry = getCompilationEntry(quasarConf, inputFile, scriptName)
-    if (scriptNameSet.has(entry.name) === false) {
+    if (!scriptNameSet.has(entry.name)) {
       scriptNameSet.add(entry.name)
       scriptList.push(entry)
     }
@@ -199,7 +199,7 @@ export function copyBexAssets(quasarConf) {
   fse.copySync(assetsFolder, join(quasarConf.build.distDir, 'assets'))
   fse.copySync(iconsFolder, join(quasarConf.build.distDir, 'icons'))
 
-  if (fse.existsSync(localesFolder) === true) {
+  if (fse.existsSync(localesFolder)) {
     folders.push(localesFolder)
     fse.copySync(localesFolder, join(quasarConf.build.distDir, '_locales'))
   }

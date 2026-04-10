@@ -39,7 +39,7 @@ async function renderFile(
   { sourcePath, targetPath, rawCopy, scope, overwritePrompt },
   ctx
 ) {
-  if (overwritePrompt === true && fse.existsSync(targetPath)) {
+  if (overwritePrompt && fse.existsSync(targetPath)) {
     const answer = await promptOverwrite({
       targetPath,
       options: ['overwrite', 'skip'],
@@ -220,7 +220,7 @@ export class AppExtensionInstance {
     log()
 
     // verify if already installed
-    if (skipPkgUninstall === true) {
+    if (skipPkgUninstall) {
       if (!this.isInstalled) {
         fatal(
           `Tried to uninvoke App Extension "${this.extId}" but there's no npm package installed for it.`
@@ -328,7 +328,7 @@ export class AppExtensionInstance {
    * This allows to use preprocessors (e.g. TypeScript) for all AE files (including index, install, uninstall, etc. AE scripts)
    */
   #getScriptPath(scriptName) {
-    if (this.isInstalled === false) return
+    if (!this.isInstalled) return
 
     for (const ext of this.#scriptsExtensionList) {
       for (const folder of this.#scriptsTargetFolderList) {
@@ -415,7 +415,7 @@ export class AppExtensionInstance {
       }
     }
 
-    if (api.__getNodeModuleNeedsUpdate(this.#appExtJson) === true) {
+    if (api.__getNodeModuleNeedsUpdate(this.#appExtJson)) {
       const nodePackager = await this.#ctx.cacheProxy.getModule('nodePackager')
       nodePackager.install()
     }

@@ -154,7 +154,7 @@ const quasarConfFile = new QuasarConfigFile({
 
 const quasarConf = await quasarConfFile.read()
 
-if (quasarConf.metaConf.vueDevtools !== false) {
+if (quasarConf.metaConf.vueDevtools) {
   await startVueDevtools(ctx, quasarConf.metaConf.vueDevtools.port)
 }
 

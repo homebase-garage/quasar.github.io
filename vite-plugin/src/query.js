@@ -48,15 +48,11 @@ export function parseViteRequest(id) {
 
         script: matcher =>
           (query.type === void 0 || query.type === 'script') &&
-          matcher.extensionsList.some(
-            ext => query[`lang.${ext}`] !== void 0
-          ) === true,
+          matcher.extensionsList.some(ext => query[`lang.${ext}`] !== void 0),
 
         style: matcher =>
           query.type === 'style' &&
-          matcher.extensionsList.some(
-            ext => query[`lang.${ext}`] !== void 0
-          ) === true
+          matcher.extensionsList.some(ext => query[`lang.${ext}`] !== void 0)
       }
     : {
         template: matcher => matcher.filenameRegex.test(filename),

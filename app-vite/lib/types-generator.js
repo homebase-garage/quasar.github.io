@@ -43,10 +43,7 @@ export function generateTypes(quasarConf) {
 
       // Avoid unnecessary writes which will trigger rolldown
       // to recompile & apply quasar.config file changes
-      if (
-        fse.existsSync(file) === false ||
-        fse.readFileSync(file, 'utf8') !== content
-      ) {
+      if (!fse.existsSync(file) || fse.readFileSync(file, 'utf8') !== content) {
         fse.writeFileSync(file, content, 'utf8')
       }
     }
@@ -69,12 +66,11 @@ function generateTsConfig(quasarConf, fsUtils) {
   const toTsPath = pathToTransform => {
     // Folder aliases are defined as absolute paths.
     // So, the rest, e.g. `'some-pkg': 'another-pkg'`, is not absolute and must be resolved as a package.
-    const itemPath =
-      isAbsolute(pathToTransform) === false
-        ? // Try to resolve the package path first, it's crucial to some monorepo setups like npm/yarn/bun workspaces
-          getPackagePath(pathToTransform, appPaths.appDir) ||
-          join('node_modules', pathToTransform)
-        : pathToTransform
+    const itemPath = isAbsolute(pathToTransform)
+      ? pathToTransform
+      : // Try to resolve the package path first, it's crucial to some monorepo setups like npm/yarn/bun workspaces
+        getPackagePath(pathToTransform, appPaths.appDir) ||
+        join('node_modules', pathToTransform)
 
     const relativePath = relative(fsUtils.tsConfigDir, itemPath).replaceAll(
       '\\',
@@ -82,7 +78,7 @@ function generateTsConfig(quasarConf, fsUtils) {
     )
 
     if (relativePath.length === 0) return '.'
-    if (relativePath.startsWith('./') === false) return './' + relativePath
+    if (!relativePath.startsWith('./')) return './' + relativePath
     return relativePath
   }
 
@@ -116,7 +112,7 @@ function generateTsConfig(quasarConf, fsUtils) {
     // import ... from 'src' (resolves to 'src/index')
     paths[alias] = [tsPath]
 
-    if (stats === void 0 || stats.isFile() === true) return
+    if (stats === void 0 || stats.isFile()) return
 
     // import ... from 'src/something' (resolves to 'src/something.ts' or 'src/something/index.ts')
     paths[`${alias}/*`] = [`${tsPath}/*`]
@@ -201,7 +197,7 @@ function writeFeatureFlags(quasarConf, fsUtils) {
 
   const featureFlags = new Set()
 
-  if (quasarConf.metaConf.hasStore === true) {
+  if (quasarConf.metaConf.hasStore) {
     featureFlags.add('store')
   }
 

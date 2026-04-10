@@ -198,13 +198,13 @@ export default {
         const [newSelectedRow] = rowsList
         const { ctrlKey, shiftKey, metaKey } = evt
 
-        if (shiftKey !== true) {
+        if (!shiftKey) {
           storedSelectedRow = newSelectedRow
         }
 
         // wait for the default selection to be performed
         nextTick(() => {
-          if (shiftKey === true) {
+          if (shiftKey) {
             const tableRows = tableRef.value.filteredSortedRows
             let firstIndex = tableRows.indexOf(oldSelectedRow)
             let lastIndex = tableRows.indexOf(newSelectedRow)
@@ -221,16 +221,13 @@ export default {
             // we need the original row object so we can match them against the rows in range
             const selectedRows = selected.value.map(toRaw)
 
-            selected.value =
-              added === true
-                ? [
-                    ...selectedRows,
-                    ...rangeRows.filter(
-                      row => selectedRows.includes(row) === false
-                    )
-                  ]
-                : selectedRows.filter(row => rangeRows.includes(row) === false)
-          } else if ((ctrlKey || metaKey) !== true && added === true) {
+            selected.value = added
+              ? [
+                  ...selectedRows,
+                  ...rangeRows.filter(row => !selectedRows.includes(row))
+                ]
+              : selectedRows.filter(row => !rangeRows.includes(row))
+          } else if (!(ctrlKey || metaKey) && added) {
             selected.value = [newSelectedRow]
           }
         })

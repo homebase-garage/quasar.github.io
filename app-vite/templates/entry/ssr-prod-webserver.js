@@ -37,7 +37,7 @@ const clientManifest = JSON.parse(
 
 function resolvePublicFolder () {
   const dir = join(...arguments)
-  return isAbsolute(dir) === true
+  return isAbsolute(dir)
     ? dir
     : join(publicFolder, dir)
 }
@@ -51,14 +51,14 @@ function renderModulesPreload (modules, opts) {
     if (files === void 0) return
 
     files.forEach(file => {
-      if (seen.has(file) === true) return
+      if (seen.has(file)) return
 
       seen.add(file)
       const filename = basename(file)
 
       if (clientManifest[filename] !== void 0) {
         for (const depFile of clientManifest[filename]) {
-          if (seen.has(depFile) === false) {
+          if (!seen.has(depFile)) {
             links += renderPreloadTag(depFile, opts)
             seen.add(depFile)
           }

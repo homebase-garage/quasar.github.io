@@ -55,7 +55,7 @@ export default {
       desert,
       selection: computed(() =>
         Object.keys(desert)
-          .filter(type => desert[type] === true)
+          .filter(type => desert[type])
           .join(', ')
       )
     }

@@ -101,7 +101,7 @@ export async function addMode({
  * }} options
  */
 export function removeMode({ ctx: { appPaths } }) {
-  if (isModeInstalled(appPaths, 'cordova') === false) {
+  if (!isModeInstalled(appPaths, 'cordova')) {
     warn('No Cordova support detected. Aborting.')
     return
   }

@@ -195,33 +195,32 @@ export default {
         lastIndex.value = rowIndex
         document.getSelection().removeAllRanges()
 
-        if ($q.platform.is.mobile === true) {
+        if ($q.platform.is.mobile) {
           evt = { ctrlKey: true }
         } else if (
           evt !== Object(evt) ||
           (evt.shiftKey !== true && evt.ctrlKey !== true)
         ) {
-          selected.value = added === true ? rowsList : []
+          selected.value = added ? rowsList : []
           return
         }
 
-        const operateSelection =
-          added === true
-            ? selRow => {
-                const selectedIndex = selected.value.indexOf(selRow)
-                if (selectedIndex === -1) {
-                  selected.value.push(selRow)
-                }
+        const operateSelection = added
+          ? selRow => {
+              const selectedIndex = selected.value.indexOf(selRow)
+              if (selectedIndex === -1) {
+                selected.value.push(selRow)
               }
-            : selRow => {
-                const selectedIndex = selected.value.indexOf(selRow)
-                if (selectedIndex !== -1) {
-                  selected.value = [
-                    ...selected.value.slice(0, selectedIndex),
-                    ...selected.value.slice(selectedIndex + 1)
-                  ]
-                }
+            }
+          : selRow => {
+              const selectedIndex = selected.value.indexOf(selRow)
+              if (selectedIndex !== -1) {
+                selected.value = [
+                  ...selected.value.slice(0, selectedIndex),
+                  ...selected.value.slice(selectedIndex + 1)
+                ]
               }
+            }
 
         if (localLastIndex === null || evt.shiftKey !== true) {
           operateSelection(row)

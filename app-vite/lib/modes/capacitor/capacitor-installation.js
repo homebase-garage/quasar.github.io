@@ -109,7 +109,7 @@ export async function addMode({
  * }} options
  */
 export function removeMode({ ctx: { appPaths } }) {
-  if (isModeInstalled(appPaths, 'capacitor') === false) {
+  if (!isModeInstalled(appPaths, 'capacitor')) {
     warn('No Capacitor support detected. Aborting.')
     return
   }

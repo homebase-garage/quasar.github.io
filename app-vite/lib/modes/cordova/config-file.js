@@ -152,9 +152,9 @@ export class CordovaConfigFile {
 
       // required for allowing devserver's SSL certificate on iOS
       if (
-        tamperedFile.originalContent.includes(
+        !tamperedFile.originalContent.includes(
           'allowsAnyHTTPSCertificateForHost'
-        ) === false
+        )
       ) {
         tamperedFile.content =
           tamperedFile.originalContent +
@@ -191,9 +191,9 @@ return YES;
         // Credit: https://gist.github.com/PeterStegnar/63cb8c9a39a13265c3a855e24a33ca37#file-cdvwkwebviewengine-m-L68-L74
         // Enables untrusted SSL connection
         if (
-          tamperedFile.originalContent.includes(
+          !tamperedFile.originalContent.includes(
             'SecTrustRef serverTrust = challenge.protectionSpace.serverTrust'
-          ) === false
+          )
         ) {
           const lookupString = '@implementation CDVWKWebViewEngine'
           const insertIndex =

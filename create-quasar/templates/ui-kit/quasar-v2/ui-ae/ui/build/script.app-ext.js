@@ -31,7 +31,7 @@ module.exports.syncAppExt = function (both = true) {
     finished = false
 
   // sync version numbers
-  if (both === true) {
+  if (both) {
     appExtJson.version = version
   }
 
@@ -50,7 +50,7 @@ module.exports.syncAppExt = function (both = true) {
     }
   }
 
-  if (finished === true) {
+  if (finished) {
     writeJson(appExtFile, appExtJson)
     console.log(` ⭐️ App Extension version ${blue(appExtJson.name)} synced with UI version.\n`)
     return

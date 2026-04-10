@@ -26,7 +26,7 @@ export default function appRouter() {
   })
 
   Router.beforeEach(to => {
-    if (to.fullPath.startsWith('/quasar-cli/') === true) {
+    if (to.fullPath.startsWith('/quasar-cli/')) {
       return {
         path: to.fullPath.replace('/quasar-cli/', '/quasar-cli-webpack/'),
         query: to.query,
@@ -35,7 +35,7 @@ export default function appRouter() {
     }
   })
 
-  if (process.env.CLIENT === true) {
+  if (process.env.CLIENT) {
     Router.afterEach(to => {
       gtag('config', 'G-WRH1VBGG35', {
         page_path: to.path

@@ -57,8 +57,7 @@ const docStore = provideDocStore()
 
 const isFullscreen = computed(() => docStore.$route.meta.fullscreen === true)
 const pageClass = computed(
-  () =>
-    `doc-layout__page-el--${isFullscreen.value === true ? 'fullscreen' : 'standard'}`
+  () => `doc-layout__page-el--${isFullscreen.value ? 'fullscreen' : 'standard'}`
 )
 const pageContentClass = computed(
   () =>

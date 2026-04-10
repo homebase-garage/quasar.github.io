@@ -31,7 +31,7 @@ export const quasarSsrConfig = {
       define: {
         'import.meta.env.QUASAR_CLIENT': 'true',
         'import.meta.env.QUASAR_SERVER': 'false',
-        __QUASAR_SSR_PWA__: String(quasarConf.ssr.pwa === true)
+        __QUASAR_SSR_PWA__: String(Boolean(quasarConf.ssr.pwa))
       },
       appType: 'custom',
       server: {
@@ -44,7 +44,7 @@ export const quasarSsrConfig = {
     })
 
     // also update pwa-config.js when changing here
-    if (quasarConf.ssr.pwa === true) {
+    if (quasarConf.ssr.pwa) {
       cfg.plugins.push(quasarVitePluginPwaResources(quasarConf))
     }
 
@@ -72,7 +72,7 @@ export const quasarSsrConfig = {
       define: {
         'import.meta.env.QUASAR_CLIENT': 'false',
         'import.meta.env.QUASAR_SERVER': 'true',
-        __QUASAR_SSR_PWA__: String(quasarConf.ssr.pwa === true)
+        __QUASAR_SSR_PWA__: String(Boolean(quasarConf.ssr.pwa))
       },
       appType: 'custom',
       server: {
@@ -143,14 +143,14 @@ export const quasarSsrConfig = {
   workbox: quasarConf => {
     // returning null for the "inspect" cmd
     // otherwise this fn won't be called if not needed anyway
-    if (quasarConf.ssr.pwa !== true) return null
+    if (!quasarConf.ssr.pwa) return null
 
     return quasarPwaConfig.workbox(quasarConf)
   },
 
   customSw: quasarConf => {
     if (
-      quasarConf.ssr.pwa !== true ||
+      !quasarConf.ssr.pwa ||
       quasarConf.pwa.workboxMode !== 'InjectManifest'
     ) {
       // returning null for the "inspect" cmd

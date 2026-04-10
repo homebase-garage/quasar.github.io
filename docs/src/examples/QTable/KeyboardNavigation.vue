@@ -538,7 +538,7 @@ export default {
       rows,
 
       tableClass: computed(() =>
-        navigationActive.value === true ? 'shadow-8 no-outline' : null
+        navigationActive.value ? 'shadow-8 no-outline' : null
       ),
 
       activateNavigation() {
@@ -551,8 +551,8 @@ export default {
 
       onKey(evt) {
         if (
-          navigationActive.value !== true ||
-          [33, 34, 35, 36, 38, 40].includes(evt.keyCode) === false ||
+          !navigationActive.value ||
+          ![33, 34, 35, 36, 38, 40].includes(evt.keyCode) ||
           tableRef.value === null
         ) {
           return

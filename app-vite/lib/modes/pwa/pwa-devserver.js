@@ -57,17 +57,17 @@ export class QuasarModeDevserver extends AppDevserver {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
     // also update ssr-devserver.js when changing here
-    if (diff('pwaManifest', quasarConf) === true) {
+    if (diff('pwaManifest', quasarConf)) {
       return queue(() => this.#compilePwaManifest(quasarConf))
     }
 
     // also update ssr-devserver.js when changing here
-    if (diff('pwaServiceWorker', quasarConf) === true) {
+    if (diff('pwaServiceWorker', quasarConf)) {
       return queue(() => this.#compilePwaServiceWorker(quasarConf, queue))
     }
 
     // also update ssr-devserver.js when changing here
-    if (diff('vitePWA', quasarConf) === true) {
+    if (diff('vitePWA', quasarConf)) {
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
   }
@@ -86,7 +86,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.printBanner(quasarConf)
 
-    if (urlDiffers === true && quasarConf.metaConf.openBrowser) {
+    if (urlDiffers && quasarConf.metaConf.openBrowser) {
       const { metaConf } = quasarConf
       openBrowser({
         url: metaConf.APP_URL,

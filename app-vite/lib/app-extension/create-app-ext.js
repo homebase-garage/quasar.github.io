@@ -6,9 +6,7 @@ import { fatal, log } from '../utils/logger.js'
 import { AppExtensionInstance } from './AppExtensionInstance.js'
 
 function readJson(file) {
-  if (existsSync(file) === false) {
-    return {}
-  }
+  if (!existsSync(file)) return {}
 
   try {
     return parseJSON(readFileSync(file, 'utf8'))
@@ -40,7 +38,7 @@ function getAppExtJson({ file, json, onListUpdate }) {
       const hasAppExt = json[extId] !== void 0
       json[extId] = opts
       save()
-      if (hasAppExt === false) onListUpdate(json)
+      if (!hasAppExt) onListUpdate(json)
     },
 
     setInternal(extId, opts) {
@@ -50,7 +48,7 @@ function getAppExtJson({ file, json, onListUpdate }) {
     },
 
     remove(extId) {
-      if (acc.has(extId) === true) {
+      if (acc.has(extId)) {
         log(`Removing "${extId}" extension from /quasar.extensions.json ...`)
         delete json[extId]
         save()

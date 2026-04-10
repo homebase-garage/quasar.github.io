@@ -10,7 +10,7 @@ export class QuasarModeDevserver extends AppDevserver {
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
-    if (diff('vite', quasarConf) === true) {
+    if (diff('vite', quasarConf)) {
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
   }
@@ -29,7 +29,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     this.printBanner(quasarConf)
 
-    if (urlDiffers === true && quasarConf.metaConf.openBrowser) {
+    if (urlDiffers && quasarConf.metaConf.openBrowser) {
       const { metaConf } = quasarConf
       openBrowser({
         url: metaConf.APP_URL,

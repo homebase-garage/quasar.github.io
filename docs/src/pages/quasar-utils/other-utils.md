@@ -109,7 +109,7 @@ import { exportFile } from 'quasar'
 
 const status = exportFile('important.txt', 'some content')
 
-if (status === true) {
+if (status) {
   // browser allowed it
 } else {
   // browser denied it
@@ -125,7 +125,7 @@ const status = exportFile('file.csv', 'éà; ça; 12\nà@€; çï; 13', {
   mimeType: 'text/csv;charset=windows-1252;'
 })
 
-if (status === true) {
+if (status) {
   // browser allowed it
 } else {
   // browser denied it

@@ -9,7 +9,7 @@ export function fixAndroidCleartext(appPaths, action) {
     'platforms/android/app/src/main/AndroidManifest.xml'
   )
 
-  if (fs.existsSync(androidManifestPath) === false) return
+  if (!fs.existsSync(androidManifestPath)) return
 
   let androidManifest = fs.readFileSync(androidManifestPath, 'utf8')
   const hasCleartext = androidManifest.includes(
@@ -17,7 +17,7 @@ export function fixAndroidCleartext(appPaths, action) {
   )
 
   if (action === 'add') {
-    if (hasCleartext === false) {
+    if (!hasCleartext) {
       androidManifest = androidManifest.replace(
         '<application',
         '<application\n        android:usesCleartextTraffic="true"'
@@ -30,7 +30,7 @@ export function fixAndroidCleartext(appPaths, action) {
   }
 
   // else remove it
-  if (hasCleartext === true) {
+  if (hasCleartext) {
     androidManifest = androidManifest.replace(
       '        android:usesCleartextTraffic="true"\n',
       ''

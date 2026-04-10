@@ -96,7 +96,7 @@ export default {
             clearStack(redoStack.value)
           } else if (record.type === 'childList') {
             record.removedNodes.forEach(node => {
-              if (undoBlocked.value === false) {
+              if (!undoBlocked.value) {
                 // comes from redo
                 undoStack.value.unshift(node.textContent)
               } else {

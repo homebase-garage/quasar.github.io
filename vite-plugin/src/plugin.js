@@ -69,14 +69,14 @@ function getScssTransformsPlugin(opts) {
     transform(src, id) {
       const is = parseViteRequest(id)
 
-      if (is.style(scssMatcher) === true) {
+      if (is.style(scssMatcher)) {
         return {
           code: scssTransform(src),
           map: null
         }
       }
 
-      if (is.style(sassMatcher) === true) {
+      if (is.style(sassMatcher)) {
         return {
           code: sassTransform(src),
           map: null
@@ -98,10 +98,7 @@ function getScriptTransformsPlugin(opts) {
     name: 'vite:quasar:script',
 
     configResolved(resolvedConfig) {
-      if (
-        opts.devTreeshaking === false &&
-        resolvedConfig.mode !== 'production'
-      ) {
+      if (!opts.devTreeshaking && resolvedConfig.mode !== 'production') {
         useTreeshaking = false
       } else {
         loadQuasarImportMap()
@@ -111,14 +108,14 @@ function getScriptTransformsPlugin(opts) {
     transform(src, id) {
       const is = parseViteRequest(id)
 
-      if (is.template(vueMatcher) === true) {
+      if (is.template(vueMatcher)) {
         return {
           code: vueTransform(src, opts.autoImportComponentCase, useTreeshaking),
           map: null // provide source map if available
         }
       }
 
-      if (useTreeshaking === true && is.script(scriptMatcher) === true) {
+      if (useTreeshaking && is.script(scriptMatcher)) {
         return {
           code: mapQuasarImports(src),
           map: null // provide source map if available

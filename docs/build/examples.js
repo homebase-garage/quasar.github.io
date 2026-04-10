@@ -8,7 +8,7 @@ const resolvedIdPrefix = '\0examples:'
 const targetFolder = fileURLToPath(new URL('../src/examples', import.meta.url))
 
 function devLoad(id) {
-  if (id.startsWith(resolvedIdPrefix) === true) {
+  if (id.startsWith(resolvedIdPrefix)) {
     const query = `'/src/examples/${id.slice(id.indexOf(':') + 1)}/*.vue'`
     return (
       `export const code = import.meta.glob(${query}, { eager: true })` +
@@ -18,7 +18,7 @@ function devLoad(id) {
 }
 
 function prodLoad(id) {
-  if (id.startsWith(resolvedIdPrefix) === true) {
+  if (id.startsWith(resolvedIdPrefix)) {
     const exampleId = id.slice(id.indexOf(':') + 1)
     const files = globSync('*.vue', { cwd: join(targetFolder, exampleId) })
 
@@ -44,11 +44,11 @@ export default function examplesPlugin(isProd) {
     name: 'docs-examples',
 
     resolveId(id) {
-      if (moduleIdRE.test(id) === true) {
+      if (moduleIdRE.test(id)) {
         return '\0' + id
       }
     },
 
-    load: isProd === true ? prodLoad : devLoad
+    load: isProd ? prodLoad : devLoad
   }
 }

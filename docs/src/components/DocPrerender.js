@@ -54,7 +54,7 @@ export default {
         )
       }
 
-      if (hasHeader.value === true) acc.push(h(QSeparator))
+      if (hasHeader.value) acc.push(h(QSeparator))
 
       acc.push(
         props.tabs !== void 0

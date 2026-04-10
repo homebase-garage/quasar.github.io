@@ -53,11 +53,10 @@ export class AppTool {
         event.result.close()
         done('___ compiled with success by Rolldown')
 
-        if (isFirstBuild === false) onRebuildSuccess()
-        else {
+        if (isFirstBuild) {
           isFirstBuild = false
           resolve(watcher)
-        }
+        } else onRebuildSuccess()
       } else if (event.code === 'ERROR') {
         console.error(event.error)
         event.result.close()

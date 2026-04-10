@@ -7,7 +7,7 @@ export default {
   enforce: 'pre',
 
   transform(code, id) {
-    if (mdRE.test(id) === false) return
+    if (!mdRE.test(id)) return
 
     try {
       return mdParse(code, id)

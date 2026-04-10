@@ -74,7 +74,7 @@ export default {
       ),
 
       setTabSelected(tab, status) {
-        if (status === true) {
+        if (status) {
           tabs.value.push(tab)
         } else {
           const index = tabs.value.indexOf(tab)

@@ -90,7 +90,7 @@ export async function generateCertificate({ log, fatal }) {
 export async function getCertificate({ log, fatal }) {
   let certExists = existsSync(certPath)
 
-  if (certExists === true) {
+  if (certExists) {
     const certStat = statSync(certPath)
     const certTtl = 1000 * 60 * 60 * 24
     const now = new Date()
@@ -103,7 +103,7 @@ export async function getCertificate({ log, fatal }) {
     }
   }
 
-  return certExists === true
+  return certExists
     ? readFileSync(certPath, 'utf8')
     : await generateCertificate({ log, fatal })
 }
