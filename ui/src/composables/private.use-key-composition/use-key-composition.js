@@ -20,12 +20,12 @@ export default function useKeyComposition(onInput) {
     ) {
       const isComposing =
         client.is.firefox === true
-          ? isPlainText.test(e.data) === false
-          : isJapanese.test(e.data) === true ||
-            isChinese.test(e.data) === true ||
-            isKorean.test(e.data) === true
+          ? !isPlainText.test(e.data)
+          : isJapanese.test(e.data) ||
+            isChinese.test(e.data) ||
+            isKorean.test(e.data)
 
-      if (isComposing === true) {
+      if (isComposing) {
         e.target.qComposing = true
       }
     }

@@ -34,7 +34,7 @@ export default function useTick() {
         if (tickFn === fn) {
           // we also check if VM is destroyed, since if it
           // got to trigger one nextTick() we cannot stop it
-          if (vmIsDestroyed(vm) === false) tickFn()
+          if (!vmIsDestroyed(vm)) tickFn()
           tickFn = void 0
         }
       })

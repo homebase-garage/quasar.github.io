@@ -79,27 +79,25 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        `q-stepper q-stepper--${props.vertical === true ? 'vertical' : 'horizontal'}` +
-        (props.flat === true ? ' q-stepper--flat' : '') +
-        (props.bordered === true ? ' q-stepper--bordered' : '') +
-        (isDark.value === true ? ' q-stepper--dark q-dark' : '')
+        `q-stepper q-stepper--${props.vertical ? 'vertical' : 'horizontal'}` +
+        (props.flat ? ' q-stepper--flat' : '') +
+        (props.bordered ? ' q-stepper--bordered' : '') +
+        (isDark.value ? ' q-stepper--dark q-dark' : '')
     )
 
     const headerClasses = computed(
       () =>
         'q-stepper__header row items-stretch justify-between' +
-        ` q-stepper__header--${props.alternativeLabels === true ? 'alternative' : 'standard'}-labels` +
-        (props.flat === false || props.bordered === true
-          ? ' q-stepper__header--border'
-          : '') +
-        (props.contracted === true ? ' q-stepper__header--contracted' : '') +
+        ` q-stepper__header--${props.alternativeLabels ? 'alternative' : 'standard'}-labels` +
+        (props.bordered || !props.flat ? ' q-stepper__header--border' : '') +
+        (props.contracted ? ' q-stepper__header--contracted' : '') +
         (props.headerClass !== void 0 ? ` ${props.headerClass}` : '')
     )
 
     function getContent() {
       const top = hSlot(slots.message, [])
 
-      if (props.vertical === true) {
+      if (props.vertical) {
         if (isValidPanelName(props.modelValue)) updatePanelIndex()
 
         const content = h(

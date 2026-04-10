@@ -28,7 +28,7 @@ export default function useInterval() {
     registerInterval(fn, delay) {
       removeInterval()
 
-      if (vmIsDestroyed(vm) === false) {
+      if (!vmIsDestroyed(vm)) {
         timer = setInterval(fn, delay)
       }
     }

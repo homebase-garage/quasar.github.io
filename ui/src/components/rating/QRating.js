@@ -75,27 +75,24 @@ export default createComponent({
         ` q-rating--${editable.value === true ? '' : 'non-'}editable` +
         (props.noDimming === true ? ' q-rating--no-dimming' : '') +
         (props.disable === true ? ' disabled' : '') +
-        (props.color !== void 0 && Array.isArray(props.color) === false
+        (props.color !== void 0 && !Array.isArray(props.color)
           ? ` text-${props.color}`
           : '')
     )
 
     const iconData = computed(() => {
-      const iconLen =
-          Array.isArray(props.icon) === true ? props.icon.length : 0,
-        selIconLen =
-          Array.isArray(props.iconSelected) === true
-            ? props.iconSelected.length
-            : 0,
-        halfIconLen =
-          Array.isArray(props.iconHalf) === true ? props.iconHalf.length : 0,
-        colorLen = Array.isArray(props.color) === true ? props.color.length : 0,
-        selColorLen =
-          Array.isArray(props.colorSelected) === true
-            ? props.colorSelected.length
-            : 0,
-        halfColorLen =
-          Array.isArray(props.colorHalf) === true ? props.colorHalf.length : 0
+      const iconLen = Array.isArray(props.icon) ? props.icon.length : 0,
+        selIconLen = Array.isArray(props.iconSelected)
+          ? props.iconSelected.length
+          : 0,
+        halfIconLen = Array.isArray(props.iconHalf) ? props.iconHalf.length : 0,
+        colorLen = Array.isArray(props.color) ? props.color.length : 0,
+        selColorLen = Array.isArray(props.colorSelected)
+          ? props.colorSelected.length
+          : 0,
+        halfColorLen = Array.isArray(props.colorHalf)
+          ? props.colorHalf.length
+          : 0
 
       return {
         iconLen,

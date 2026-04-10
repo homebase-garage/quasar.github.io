@@ -6,15 +6,13 @@ export function onKeyDownComposition(evt) {
 
 export function shouldIgnoreKey(evt) {
   return (
-    lastKeyCompositionStatus === true ||
+    lastKeyCompositionStatus ||
     evt !== Object(evt) ||
-    evt.isComposing === true ||
-    evt.qKeyEvent === true
+    evt.isComposing ||
+    evt.qKeyEvent
   )
 }
 
 export function isKeyCode(evt, keyCodes) {
-  return shouldIgnoreKey(evt) === true
-    ? false
-    : [keyCodes].flat().includes(evt.keyCode)
+  return !shouldIgnoreKey(evt) && [keyCodes].flat().includes(evt.keyCode)
 }

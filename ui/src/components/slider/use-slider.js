@@ -122,15 +122,13 @@ export default function useSlider({
   const focus = ref(false)
   const dragging = ref(false)
 
-  const axis = computed(() => (props.vertical === true ? '--v' : '--h'))
+  const axis = computed(() => (props.vertical ? '--v' : '--h'))
   const labelSide = computed(
     () => '-' + (props.switchLabelSide === true ? 'switched' : 'standard')
   )
 
   const isReversed = computed(() =>
-    props.vertical === true
-      ? props.reverse === true
-      : props.reverse !== ($q.lang.rtl === true)
+    props.vertical ? props.reverse : props.reverse !== ($q.lang.rtl === true)
   )
 
   const innerMin = computed(() =>
@@ -145,10 +143,7 @@ export default function useSlider({
   )
 
   const editable = computed(
-    () =>
-      props.disable !== true &&
-      props.readonly !== true &&
-      innerMin.value < innerMax.value
+    () => !props.disable && !props.readonly && innerMin.value < innerMax.value
   )
 
   const roundValueFn = computed(() => {
@@ -172,7 +167,7 @@ export default function useSlider({
   const innerMaxRatio = computed(() => convertModelToRatio(innerMax.value))
 
   const positionProp = computed(() =>
-    props.vertical === true
+    props.vertical
       ? isReversed.value === true
         ? 'bottom'
         : 'top'
@@ -181,14 +176,10 @@ export default function useSlider({
         : 'left'
   )
 
-  const sizeProp = computed(() =>
-    props.vertical === true ? 'height' : 'width'
-  )
-  const thicknessProp = computed(() =>
-    props.vertical === true ? 'width' : 'height'
-  )
+  const sizeProp = computed(() => (props.vertical ? 'height' : 'width'))
+  const thicknessProp = computed(() => (props.vertical ? 'width' : 'height'))
   const orientation = computed(() =>
-    props.vertical === true ? 'vertical' : 'horizontal'
+    props.vertical ? 'vertical' : 'horizontal'
   )
 
   const attributes = computed(() => {
@@ -200,9 +191,9 @@ export default function useSlider({
       'data-step': props.step
     }
 
-    if (props.disable === true) {
+    if (props.disable) {
       acc['aria-disabled'] = 'true'
-    } else if (props.readonly === true) {
+    } else if (props.readonly) {
       acc['aria-readonly'] = 'true'
     }
 
@@ -212,8 +203,8 @@ export default function useSlider({
   const classes = computed(
     () =>
       `q-slider q-slider${axis.value} q-slider--${active.value === true ? '' : 'in'}active inline no-wrap ` +
-      (props.vertical === true ? 'row' : 'column') +
-      (props.disable === true
+      (props.vertical ? 'row' : 'column') +
+      (props.disable
         ? ' disabled'
         : ' q-slider--enabled' +
           (editable.value === true ? ' q-slider--editable' : '')) +
@@ -307,10 +298,9 @@ export default function useSlider({
 
   function getDraggingRatio(evt, draggingInfo) {
     const pos = position(evt),
-      val =
-        props.vertical === true
-          ? between((pos.top - draggingInfo.top) / draggingInfo.height, 0, 1)
-          : between((pos.left - draggingInfo.left) / draggingInfo.width, 0, 1)
+      val = props.vertical
+        ? between((pos.top - draggingInfo.top) / draggingInfo.height, 0, 1)
+        : between((pos.left - draggingInfo.left) / draggingInfo.width, 0, 1)
 
     return between(
       isReversed.value === true ? 1 - val : val,
@@ -381,14 +371,12 @@ export default function useSlider({
 
     return {
       ...innerBarStyle.value,
-      backgroundSize: props.vertical === true ? `2px ${size}%` : `${size}% 2px`
+      backgroundSize: props.vertical ? `2px ${size}%` : `${size}% 2px`
     }
   })
 
   function getMarkerList(def) {
-    if (def === false) {
-      return null
-    }
+    if (def === false) return null
 
     if (def === true) {
       return markerTicks.value.map(defaultMarkerConvertFn)
@@ -429,9 +417,7 @@ export default function useSlider({
   }
 
   const markerLabelsMap = computed(() => {
-    if (props.markerLabels === false) {
-      return null
-    }
+    if (props.markerLabels === false) return null
 
     const acc = {}
     markerLabelsList.value.forEach(entry => {
@@ -528,9 +514,7 @@ export default function useSlider({
   }
 
   function getTextContainerStyle(ratio) {
-    if (props.vertical === true) {
-      return null
-    }
+    if (props.vertical) return null
 
     const p = $q.lang.rtl !== props.reverse ? 1 - ratio : ratio
     return {
@@ -540,7 +524,7 @@ export default function useSlider({
 
   function getThumbRenderFn(thumb) {
     const focusClass = computed(() =>
-      preventFocus.value === false &&
+      !preventFocus.value &&
       (focus.value === thumb.focusValue || focus.value === 'both')
         ? ' q-slider--focus'
         : ''
@@ -625,7 +609,7 @@ export default function useSlider({
           )
         )
 
-        if (props.name !== void 0 && props.disable !== true) {
+        if (props.name !== void 0 && !props.disable) {
           injectFormInput(thumbContent, 'push')
         }
       }

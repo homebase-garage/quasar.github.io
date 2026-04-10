@@ -408,7 +408,7 @@ function createTestFileContent({ ctx, json, generator }) {
     }
   })
 
-  if (hasContent === false) {
+  if (!hasContent) {
     acc +=
       generator.getGenericTest?.({ ctx }) ||
       `\n  describe('[Generic]', () => {
@@ -500,10 +500,9 @@ export function getTestFile(ctx) {
 
       const ignoreComment = createIgnoreComment(newIds)
 
-      this.content =
-        hasIgnoreComment === false
-          ? ignoreComment + this.content
-          : this.content.replace(ignoreCommentRE, ignoreComment)
+      this.content = hasIgnoreComment
+        ? this.content.replace(ignoreCommentRE, ignoreComment)
+        : ignoreComment + this.content
 
       this.ignoreCommentIds = newIds
       save(this.content)

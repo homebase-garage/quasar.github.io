@@ -101,7 +101,7 @@ export default function useFile({
     }
 
     // filter file types
-    if (props.accept !== void 0 && extensions.value.includes('*/') === false) {
+    if (props.accept !== void 0 && !extensions.value.includes('*/')) {
       files = filterFiles(files, rejectedFiles, 'accept', file =>
         extensions.value.some(
           ext =>
@@ -150,7 +150,7 @@ export default function useFile({
         files,
         rejectedFiles,
         'duplicate',
-        file => filenameMap.includes(file.__key) === false
+        file => !filenameMap.includes(file.__key)
       )
     }
 
@@ -215,9 +215,9 @@ export default function useFile({
     const gone =
       e.relatedTarget !== null || client.is.safari !== true
         ? e.relatedTarget !== dndRef.value
-        : document
+        : !document
             .elementsFromPoint(e.clientX, e.clientY)
-            .includes(dndRef.value) === false
+            .includes(dndRef.value)
 
     if (gone === true) dnd.value = false
   }

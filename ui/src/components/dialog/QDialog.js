@@ -198,7 +198,7 @@ export default createComponent({
       addToHistory()
 
       refocusTarget =
-        props.noRefocus === false && document.activeElement !== null
+        !props.noRefocus && document.activeElement !== null
           ? document.activeElement
           : null
 
@@ -206,11 +206,10 @@ export default createComponent({
       showPortal()
       animating.value = true
 
-      if (props.noFocus !== true) {
+      if (props.noFocus) removeTick()
+      else {
         document.activeElement?.blur()
         registerTick(focus)
-      } else {
-        removeTick()
       }
 
       // should removeTimeout() if this gets removed

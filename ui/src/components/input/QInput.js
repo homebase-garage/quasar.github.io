@@ -98,12 +98,12 @@ export default createComponent({
     const state = useFieldState({ changeEvent: true })
 
     const isTextarea = computed(
-      () => props.type === 'textarea' || props.autogrow === true
+      () => props.type === 'textarea' || props.autogrow
     )
 
     const isTypeText = computed(
       () =>
-        isTextarea.value === true ||
+        isTextarea.value ||
         ['text', 'search', 'url', 'tel', 'password'].includes(props.type)
     )
 
@@ -132,7 +132,7 @@ export default createComponent({
         evt.onClick = onMaskedClick
       }
 
-      if (props.autogrow === true) {
+      if (props.autogrow) {
         evt.onAnimationend = onAnimationend
       }
 
@@ -153,11 +153,11 @@ export default createComponent({
         readonly: props.readonly === true
       }
 
-      if (isTextarea.value === false) {
+      if (!isTextarea.value) {
         acc.type = props.type
       }
 
-      if (props.autogrow === true) {
+      if (props.autogrow) {
         acc.rows = 1
       }
 
@@ -202,7 +202,7 @@ export default createComponent({
         }
 
         // textarea only
-        if (props.autogrow === true) nextTick(adjustHeight)
+        if (props.autogrow) nextTick(adjustHeight)
       }
     )
 
@@ -210,7 +210,7 @@ export default createComponent({
       () => props.autogrow,
       val => {
         // textarea only
-        if (val === true) {
+        if (val) {
           nextTick(adjustHeight)
         }
         // if it has a number of rows set respect it
@@ -223,7 +223,7 @@ export default createComponent({
     watch(
       () => props.dense,
       () => {
-        if (props.autogrow === true) nextTick(adjustHeight)
+        if (props.autogrow) nextTick(adjustHeight)
       }
     )
 
@@ -291,7 +291,7 @@ export default createComponent({
 
       // we need to trigger it immediately too,
       // to avoid "flickering"
-      if (props.autogrow === true) adjustHeight()
+      if (props.autogrow) adjustHeight()
     }
 
     function onAnimationend(e) {
@@ -425,7 +425,7 @@ export default createComponent({
 
     onMounted(() => {
       // textarea only
-      if (props.autogrow === true) adjustHeight()
+      if (props.autogrow) adjustHeight()
     })
 
     Object.assign(state, {
@@ -433,8 +433,8 @@ export default createComponent({
 
       fieldClass: computed(
         () =>
-          `q-${isTextarea.value === true ? 'textarea' : 'input'}` +
-          (props.autogrow === true ? ' q-textarea--autogrow' : '')
+          `q-${isTextarea.value ? 'textarea' : 'input'}` +
+          (props.autogrow ? ' q-textarea--autogrow' : '')
       ),
 
       hasShadow: computed(
@@ -453,13 +453,12 @@ export default createComponent({
       floatingLabel: computed(
         () =>
           (hasValue.value === true &&
-            (props.type !== 'number' ||
-              Number.isNaN(innerValue.value) === false)) ||
+            (props.type !== 'number' || !Number.isNaN(innerValue.value))) ||
           fieldValueIsFilled(props.displayValue)
       ),
 
       getControl: () =>
-        h(isTextarea.value === true ? 'textarea' : 'input', {
+        h(isTextarea.value ? 'textarea' : 'input', {
           ref: inputRef,
           class: ['q-field__native q-placeholder', props.inputClass],
           style: props.inputStyle,
@@ -476,7 +475,7 @@ export default createComponent({
           {
             class:
               'q-field__native q-field__shadow absolute-bottom no-pointer-events' +
-              (isTextarea.value === true ? '' : ' text-no-wrap')
+              (isTextarea.value ? '' : ' text-no-wrap')
           },
           [
             h('span', { class: 'invisible' }, getCurValue()),

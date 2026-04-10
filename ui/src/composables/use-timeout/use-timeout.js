@@ -28,7 +28,7 @@ export default function useTimeout() {
     registerTimeout(fn, delay) {
       removeTimeout()
 
-      if (vmIsDestroyed(vm) === false) {
+      if (!vmIsDestroyed(vm)) {
         timer = setTimeout(() => {
           timer = null
           fn()

@@ -182,19 +182,19 @@ export default createComponent({
     const cardDefaultClass = computed(
       () =>
         ' q-table__card' +
-        (isDark.value === true ? ' q-table__card--dark q-dark' : '') +
-        (props.square === true ? ' q-table--square' : '') +
-        (props.flat === true ? ' q-table--flat' : '') +
-        (props.bordered === true ? ' q-table--bordered' : '')
+        (isDark.value ? ' q-table__card--dark q-dark' : '') +
+        (props.square ? ' q-table--square' : '') +
+        (props.flat ? ' q-table--flat' : '') +
+        (props.bordered ? ' q-table--bordered' : '')
     )
 
     const containerClass = computed(
       () =>
         `q-table__container q-table--${props.separator}-separator column no-wrap` +
         (props.grid === true ? ' q-table--grid' : cardDefaultClass.value) +
-        (isDark.value === true ? ' q-table--dark' : '') +
-        (props.dense === true ? ' q-table--dense' : '') +
-        (props.wrapCells === false ? ' q-table--no-wrap' : '') +
+        (isDark.value ? ' q-table--dark' : '') +
+        (props.dense ? ' q-table--dense' : '') +
+        (props.wrapCells ? '' : ' q-table--no-wrap') +
         (inFullscreen.value === true ? ' fullscreen scroll' : '')
     )
 
@@ -341,7 +341,7 @@ export default createComponent({
       })
 
       if (acc.virtualScrollItemSize === void 0) {
-        acc.virtualScrollItemSize = props.dense === true ? 28 : 48
+        acc.virtualScrollItemSize = props.dense ? 28 : 48
       }
 
       return acc
@@ -971,7 +971,7 @@ export default createComponent({
             flat: true
           }
 
-          if (props.dense === true) {
+          if (props.dense) {
             btnProps.size = 'sm'
           }
 

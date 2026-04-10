@@ -225,11 +225,10 @@ function getEventParamsTest(jsonEntry, varName) {
 }
 
 function createEventTest({ camelCaseName, testId, jsonEntry, json, ctx }) {
-  const emitAccessor =
-    camelCaseName.includes(':') === false
-      ? `.${camelCaseName}`
-      : // example: 'update:modelValue'
-        `[ '${camelCaseName}' ]`
+  const emitAccessor = camelCaseName.includes(':')
+    ? // example: 'update:modelValue'
+      `[ '${camelCaseName}' ]`
+    : `.${camelCaseName}`
 
   const varName = `eventList${emitAccessor}`
   const paramsTest =

@@ -100,7 +100,7 @@ export default createComponent({
         return {}
       }
 
-      return $q.platform.is.mobile === true
+      return $q.platform.is.mobile
         ? { onClick: methods.onMobileClick }
         : {
             onMousedown: methods.onActivate,
@@ -116,7 +116,7 @@ export default createComponent({
         emit('update:modelValue', model.value)
       }
 
-      if (change === true) emit('change', model.value)
+      if (change) emit('change', model.value)
     }
 
     function getDragging() {
@@ -129,7 +129,7 @@ export default createComponent({
       model.value = methods.convertRatioToModel(localRatio)
 
       curRatio.value =
-        props.snap !== true || props.step === 0
+        !props.snap || props.step === 0
           ? localRatio
           : methods.convertModelToRatio(model.value)
     }
@@ -139,7 +139,7 @@ export default createComponent({
     }
 
     function onKeydown(evt) {
-      if (keyCodes.includes(evt.keyCode) === false) return
+      if (!keyCodes.includes(evt.keyCode)) return
 
       stopAndPrevent(evt)
 
@@ -148,7 +148,7 @@ export default createComponent({
         offset =
           ([34, 37, 40].includes(evt.keyCode) ? -1 : 1) *
           (state.isReversed.value === true ? -1 : 1) *
-          (props.vertical === true ? -1 : 1) *
+          (props.vertical ? -1 : 1) *
           stepVal
 
       model.value = between(

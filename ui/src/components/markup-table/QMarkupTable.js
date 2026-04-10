@@ -36,14 +36,12 @@ export default createComponent({
       () =>
         'q-markup-table q-table__container q-table__card' +
         ` q-table--${props.separator}-separator` +
-        (isDark.value === true
-          ? ' q-table--dark q-table__card--dark q-dark'
-          : '') +
-        (props.dense === true ? ' q-table--dense' : '') +
-        (props.flat === true ? ' q-table--flat' : '') +
-        (props.bordered === true ? ' q-table--bordered' : '') +
-        (props.square === true ? ' q-table--square' : '') +
-        (props.wrapCells === false ? ' q-table--no-wrap' : '')
+        (isDark.value ? ' q-table--dark q-table__card--dark q-dark' : '') +
+        (props.dense ? ' q-table--dense' : '') +
+        (props.flat ? ' q-table--flat' : '') +
+        (props.bordered ? ' q-table--bordered' : '') +
+        (props.square ? ' q-table--square' : '') +
+        (props.wrapCells ? '' : ' q-table--no-wrap')
     )
 
     return () =>

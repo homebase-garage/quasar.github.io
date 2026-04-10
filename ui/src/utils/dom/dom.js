@@ -64,7 +64,7 @@ export function getElement(el) {
 
 // internal
 export function childHasFocus(el, focusedEl) {
-  if (el === void 0 || el === null || el.contains(focusedEl) === true) {
+  if (el === void 0 || el === null || el.contains(focusedEl)) {
     return true
   }
 
@@ -73,9 +73,7 @@ export function childHasFocus(el, focusedEl) {
     next !== null;
     next = next.nextElementSibling
   ) {
-    if (next.contains(focusedEl)) {
-      return true
-    }
+    if (next.contains(focusedEl)) return true
   }
 
   return false

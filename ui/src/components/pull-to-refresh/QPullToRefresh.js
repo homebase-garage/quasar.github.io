@@ -127,7 +127,7 @@ export default createComponent({
       // if props.disable === false
       const modifiers = { down: true }
 
-      if (props.noMouse !== true) {
+      if (!props.noMouse) {
         modifiers.mouse = true
       }
 
@@ -221,7 +221,7 @@ export default createComponent({
         { class: 'q-pull-to-refresh' },
         child,
         'main',
-        props.disable === false,
+        !props.disable,
         () => directives.value
       )
     }

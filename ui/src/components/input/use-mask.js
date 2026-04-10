@@ -185,7 +185,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
     hasMask.value =
       props.mask !== void 0 && props.mask.length !== 0 && getIsTypeText()
 
-    if (hasMask.value === false) {
+    if (!hasMask.value) {
       computedUnmask = void 0
       maskMarked = ''
       maskReplaced = ''
@@ -430,8 +430,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
 
   const moveCursor = {
     left(inp, cursor) {
-      const noMarkBefore =
-        maskMarked.slice(cursor - 1).includes(MARKER) === false
+      const noMarkBefore = !maskMarked.slice(cursor - 1).includes(MARKER)
       let i = Math.max(0, cursor - 1)
 
       for (; i >= 0; i--) {
@@ -507,14 +506,13 @@ export default function useMask(props, emit, emitValue, inputRef) {
     rightReverse(inp, cursor) {
       const limit = inp.value.length,
         localMaskMarked = getPaddedMaskMarked(limit),
-        noMarkBefore =
-          localMaskMarked.slice(0, cursor + 1).includes(MARKER) === false
+        noMarkBefore = !localMaskMarked.slice(0, cursor + 1).includes(MARKER)
       let i = Math.min(limit, cursor + 1)
 
       for (; i <= limit; i++) {
         if (localMaskMarked[i - 1] === MARKER) {
           cursor = i
-          if (cursor > 0 && noMarkBefore === true) cursor--
+          if (cursor > 0 && noMarkBefore) cursor--
           break
         }
       }
@@ -541,8 +539,8 @@ export default function useMask(props, emit, emitValue, inputRef) {
     emit('keydown', e)
 
     if (
-      shouldIgnoreKey(e) === true ||
-      e.altKey === true // let browser handle these
+      shouldIgnoreKey(e) ||
+      e.altKey // let browser handle these
     ) {
       return
     }

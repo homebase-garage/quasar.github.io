@@ -367,7 +367,9 @@ export function getComponentMount({
 
   if (slot !== null) {
     const { name, slotFn } = slot
-    const nameAsObjKey = name.includes('-') === false ? name : `'${name}'` // example: 'navigation-icon'
+    const nameAsObjKey = name.includes('-')
+      ? /* example: 'navigation-icon' */ `'${name}'`
+      : name
 
     target.slots = {
       [nameAsObjKey]: slotFn.replace(newlineRE, `\n${innerIndent}`)

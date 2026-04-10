@@ -65,9 +65,7 @@ export function useTableRowSelection(props, emit, computedRows, getRowKey) {
           : []
         : added === true
           ? [...props.selected, ...rows]
-          : props.selected.filter(
-              row => keys.includes(getRowKey.value(row)) === false
-            )
+          : props.selected.filter(row => !keys.includes(getRowKey.value(row)))
 
     emit('update:selected', payload)
   }

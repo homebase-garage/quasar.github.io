@@ -62,9 +62,7 @@ export default createComponent({
     const isDark = useDark(props, proxy.$q)
     const sizeStyle = useSize(props, defaultSizes)
 
-    const motion = computed(
-      () => props.indeterminate === true || props.query === true
-    )
+    const motion = computed(() => props.indeterminate || props.query)
     const widthReverse = computed(() => props.reverse !== props.query)
     const style = computed(() => ({
       ...(sizeStyle.value !== null ? sizeStyle.value : {}),
@@ -75,10 +73,8 @@ export default createComponent({
       () =>
         'q-linear-progress' +
         (props.color !== void 0 ? ` text-${props.color}` : '') +
-        (props.reverse === true || props.query === true
-          ? ' q-linear-progress--reverse'
-          : '') +
-        (props.rounded === true ? ' rounded-borders' : '')
+        (props.reverse || props.query ? ' q-linear-progress--reverse' : '') +
+        (props.rounded ? ' rounded-borders' : '')
     )
 
     const trackStyle = computed(() =>
@@ -89,35 +85,31 @@ export default createComponent({
       )
     )
     const transitionSuffix = computed(
-      () => `with${props.instantFeedback === true ? 'out' : ''}-transition`
+      () => `with${props.instantFeedback ? 'out' : ''}-transition`
     )
 
     const trackClass = computed(
       () =>
         'q-linear-progress__track absolute-full' +
         ` q-linear-progress__track--${transitionSuffix.value}` +
-        ` q-linear-progress__track--${isDark.value === true ? 'dark' : 'light'}` +
+        ` q-linear-progress__track--${isDark.value ? 'dark' : 'light'}` +
         (props.trackColor !== void 0 ? ` bg-${props.trackColor}` : '')
     )
 
     const modelStyle = computed(() =>
-      width(
-        motion.value === true ? 1 : props.value,
-        widthReverse.value,
-        proxy.$q
-      )
+      width(motion.value ? 1 : props.value, widthReverse.value, proxy.$q)
     )
     const modelClass = computed(
       () =>
         'q-linear-progress__model absolute-full' +
         ` q-linear-progress__model--${transitionSuffix.value}` +
-        ` q-linear-progress__model--${motion.value === true ? 'in' : ''}determinate`
+        ` q-linear-progress__model--${motion.value ? 'in' : ''}determinate`
     )
 
     const stripeStyle = computed(() => ({ width: `${props.value * 100}%` }))
     const stripeClass = computed(
       () =>
-        `q-linear-progress__stripe absolute-${props.reverse === true ? 'right' : 'left'}` +
+        `q-linear-progress__stripe absolute-${props.reverse ? 'right' : 'left'}` +
         ` q-linear-progress__stripe--${transitionSuffix.value}`
     )
 
@@ -134,7 +126,7 @@ export default createComponent({
         })
       ]
 
-      if (props.stripe === true && motion.value === false) {
+      if (props.stripe && !motion.value) {
         child.push(
           h('div', {
             class: stripeClass.value,
@@ -151,7 +143,7 @@ export default createComponent({
           role: 'progressbar',
           'aria-valuemin': 0,
           'aria-valuemax': 1,
-          'aria-valuenow': props.indeterminate === true ? void 0 : props.value
+          'aria-valuenow': props.indeterminate ? void 0 : props.value
         },
         hMergeSlot(slots.default, child)
       )

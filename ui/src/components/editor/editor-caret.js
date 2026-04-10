@@ -323,7 +323,7 @@ export default class Caret {
 
       return
     } else if (cmd === 'viewsource') {
-      this.eVm.isViewingSource.value = this.eVm.isViewingSource.value === false
+      this.eVm.isViewingSource.value = !this.eVm.isViewingSource.value
       this.eVm.setContent(this.eVm.props.modelValue)
       done()
 

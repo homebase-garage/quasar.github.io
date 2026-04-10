@@ -78,7 +78,7 @@ function addNotification(config, $q, originalApi) {
     Object.assign(notif, defaults)
   }
 
-  if (isObject(config) === false) {
+  if (!isObject(config)) {
     if (notif.type) {
       Object.assign(notif, notifTypes[notif.type])
     }
@@ -108,14 +108,14 @@ function addNotification(config, $q, originalApi) {
   }
 
   if (notif.position) {
-    if (positionList.includes(notif.position) === false) {
+    if (!positionList.includes(notif.position)) {
       return logError('wrong position', config)
     }
   } else {
     notif.position = 'bottom'
   }
 
-  if (invalidTimeoutValues.includes(notif.timeout) === true) {
+  if (invalidTimeoutValues.includes(notif.timeout)) {
     notif.timeout = 5000
   } else {
     const t = Number(notif.timeout) // we catch exponential notation too with Number() casting
@@ -138,12 +138,11 @@ function addNotification(config, $q, originalApi) {
   }
 
   const actions = [
-    ...(Array.isArray(config.actions) === true ? config.actions : []),
-    ...(config.ignoreDefaults !== true &&
-    Array.isArray(defaults.actions) === true
+    ...(Array.isArray(config.actions) ? config.actions : []),
+    ...(config.ignoreDefaults !== true && Array.isArray(defaults.actions)
       ? defaults.actions
       : []),
-    ...(Array.isArray(notifTypes[config.type]?.actions) === true
+    ...(Array.isArray(notifTypes[config.type]?.actions)
       ? notifTypes[config.type].actions
       : [])
   ]
@@ -274,7 +273,7 @@ function addNotification(config, $q, originalApi) {
       }
 
       if (notif.badgePosition !== void 0) {
-        if (badgePositions.includes(notif.badgePosition) === false) {
+        if (!badgePositions.includes(notif.badgePosition)) {
           return logError('wrong badgePosition', config)
         }
       } else {
@@ -546,13 +545,13 @@ function getComponent() {
 
 export default {
   setDefaults(opts) {
-    if (__QUASAR_SSR_SERVER__ !== true && isObject(opts) === true) {
+    if (__QUASAR_SSR_SERVER__ !== true && isObject(opts)) {
       Object.assign(defaults, opts)
     }
   },
 
   registerType(typeName, typeOpts) {
-    if (__QUASAR_SSR_SERVER__ !== true && isObject(typeOpts) === true) {
+    if (__QUASAR_SSR_SERVER__ !== true && isObject(typeOpts)) {
       notifTypes[typeName] = typeOpts
     }
   },

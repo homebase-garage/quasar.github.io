@@ -44,7 +44,7 @@ export default createComponent({
 
     // page related
     const height = ref($q.screen.height)
-    const width = ref(props.container === true ? 0 : $q.screen.width)
+    const width = ref(props.container ? 0 : $q.screen.width)
     const scroll = ref({ position: 0, direction: 'down', inflectionPoint: 0 })
 
     // container only prop
@@ -55,12 +55,11 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        'q-layout q-layout--' +
-        (props.container === true ? 'containerized' : 'standard')
+        'q-layout q-layout--' + (props.container ? 'containerized' : 'standard')
     )
 
     const style = computed(() =>
-      props.container === false ? { minHeight: $q.screen.height + 'px' } : null
+      props.container ? null : { minHeight: $q.screen.height + 'px' }
     )
 
     // used by container only
@@ -85,7 +84,7 @@ export default createComponent({
     )
 
     function onPageScroll(data) {
-      if (props.container === true || document.qScrollPrevented !== true) {
+      if (props.container || document.qScrollPrevented !== true) {
         const info = {
           position: data.position.top,
           direction: data.direction,
@@ -127,7 +126,7 @@ export default createComponent({
     }
 
     function updateScrollbarWidth() {
-      if (props.container === true) {
+      if (props.container) {
         const newWidth =
           height.value > containerHeight.value ? getScrollbarWidth() : 0
 
@@ -220,12 +219,9 @@ export default createComponent({
         window[`${action}EventListener`]('resize', hideScrollbar)
       }
 
-      watch(
-        () => (props.container !== true ? 'add' : 'remove'),
-        updateScrollEvent
-      )
+      watch(() => (props.container ? 'remove' : 'add'), updateScrollEvent)
 
-      if (props.container !== true) updateScrollEvent('add')
+      if (!props.container) updateScrollEvent('add')
 
       onUnmounted(() => {
         updateScrollEvent('remove')
@@ -243,13 +239,13 @@ export default createComponent({
         {
           class: classes.value,
           style: style.value,
-          ref: props.container === true ? void 0 : rootRef,
+          ref: props.container ? void 0 : rootRef,
           tabindex: -1
         },
         content
       )
 
-      if (props.container === true) {
+      if (props.container) {
         return h(
           'div',
           {

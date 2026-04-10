@@ -114,7 +114,7 @@ export function getRenderer(getPlugin, expose) {
     uploadedSize: ref(0),
 
     updateFileStatus,
-    isAlive: () => vmIsDestroyed(vm) === false
+    isAlive: () => !vmIsDestroyed(vm)
   }
 
   const {

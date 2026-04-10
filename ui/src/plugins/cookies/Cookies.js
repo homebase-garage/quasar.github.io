@@ -86,10 +86,9 @@ function set(key, val, opts = {}, ssr) {
     // otherwise it must be a Number (defined in days)
     else {
       expireValue = Number.parseFloat(opts.expires)
-      expire =
-        Number.isNaN(expireValue) === false
-          ? getString(expireValue * 864e5)
-          : opts.expires
+      expire = Number.isNaN(expireValue)
+        ? opts.expires
+        : getString(expireValue * 864e5)
     }
   }
 

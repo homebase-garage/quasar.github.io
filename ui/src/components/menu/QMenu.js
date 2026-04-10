@@ -120,7 +120,7 @@ export default createComponent({
     const showing = ref(false)
 
     const hideOnRouteChange = computed(
-      () => props.persistent !== true && props.noRouteDismiss !== true
+      () => !props.persistent && !props.noRouteDismiss
     )
 
     const isDark = useDark(props, $q)
@@ -152,7 +152,7 @@ export default createComponent({
       anchorEl,
       innerRef,
       onClickOutside(e) {
-        if (props.persistent !== true && showing.value === true) {
+        if (!props.persistent && showing.value) {
           hide(e)
 
           if (
@@ -171,34 +171,31 @@ export default createComponent({
 
     const anchorOrigin = computed(() =>
       parsePosition(
-        props.anchor ||
-          (props.cover === true ? 'center middle' : 'bottom start'),
+        props.anchor || (props.cover ? 'center middle' : 'bottom start'),
         $q.lang.rtl
       )
     )
 
     const selfOrigin = computed(() =>
-      props.cover === true
+      props.cover
         ? anchorOrigin.value
         : parsePosition(props.self || 'top start', $q.lang.rtl)
     )
 
     const menuClass = computed(
       () =>
-        (props.square === true ? ' q-menu--square' : '') +
-        (isDark.value === true ? ' q-menu--dark q-dark' : '')
+        (props.square ? ' q-menu--square' : '') +
+        (isDark.value ? ' q-menu--dark q-dark' : '')
     )
 
     const onEvents = computed(() =>
-      props.autoClose === true ? { onClick: onAutoClose } : {}
+      props.autoClose ? { onClick: onAutoClose } : {}
     )
 
-    const handlesFocus = computed(
-      () => showing.value === true && props.persistent !== true
-    )
+    const handlesFocus = computed(() => showing.value && !props.persistent)
 
     watch(handlesFocus, val => {
-      if (val === true) {
+      if (val) {
         addEscapeKey(onEscapeKey)
         addClickOutside(clickOutsideProps)
       } else {
@@ -227,7 +224,7 @@ export default createComponent({
     }
 
     function handleShow(evt) {
-      refocusTarget = props.noRefocus === false ? document.activeElement : null
+      refocusTarget = props.noRefocus ? null : document.activeElement
 
       addFocusout(onFocusout)
 
@@ -261,20 +258,20 @@ export default createComponent({
         )
       }
 
-      if (props.noFocus !== true) {
+      if (!props.noFocus) {
         document.activeElement.blur()
       }
 
       // should removeTick() if this gets removed
       registerTick(() => {
         updatePosition()
-        if (props.noFocus !== true) focus()
+        if (!props.noFocus) focus()
       })
 
       // should removeTimeout() if this gets removed
       registerTimeout(() => {
         // required in order to avoid the "double-tap needed" issue
-        if ($q.platform.is.ios === true) {
+        if ($q.platform.is.ios) {
           // if auto-close, then this click should
           // not close the menu
           avoidAutoClose = props.autoClose
@@ -324,7 +321,7 @@ export default createComponent({
         unwatchPosition = void 0
       }
 
-      if (hiding === true || showing.value === true) {
+      if (hiding === true || showing.value) {
         removeFocusout(onFocusout)
         unconfigureScrollTarget()
         removeClickOutside(clickOutsideProps)
@@ -360,16 +357,16 @@ export default createComponent({
     function onFocusout(evt) {
       // the focus is not in a vue child component
       if (
-        handlesFocus.value === true &&
-        props.noFocus !== true &&
-        childHasFocus(innerRef.value, evt.target) !== true
+        handlesFocus.value &&
+        !props.noFocus &&
+        !childHasFocus(innerRef.value, evt.target)
       ) {
         focus()
       }
     }
 
     function onEscapeKey(evt) {
-      if (props.noEscDismiss !== true) {
+      if (!props.noEscDismiss) {
         emit('escapeKey')
         hide(evt)
       }
@@ -392,7 +389,7 @@ export default createComponent({
 
     function renderPortalContent() {
       return h(Transition, transitionProps.value, () =>
-        showing.value === true
+        showing.value
           ? h(
               'div',
               {

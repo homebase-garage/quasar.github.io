@@ -64,16 +64,11 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        'q-infinite-scroll__loading' +
-        (isFetching.value === true ? '' : ' invisible')
+        'q-infinite-scroll__loading' + (isFetching.value ? '' : ' invisible')
     )
 
     function immediatePoll() {
-      if (
-        props.disable === true ||
-        isFetching.value === true ||
-        isWorking.value === false
-      ) {
+      if (props.disable || isFetching.value || !isWorking.value) {
         return
       }
 
@@ -81,7 +76,7 @@ export default createComponent({
         scrollPosition = getVerticalScrollPosition(localScrollTarget),
         containerHeight = height(localScrollTarget)
 
-      if (props.reverse === false) {
+      if (!props.reverse) {
         if (
           Math.round(scrollPosition + containerHeight + props.offset) >=
           Math.round(scrollHeight)
@@ -94,11 +89,7 @@ export default createComponent({
     }
 
     function trigger() {
-      if (
-        props.disable === true ||
-        isFetching.value === true ||
-        isWorking.value === false
-      ) {
+      if (props.disable || isFetching.value || !isWorking.value) {
         return
       }
 
@@ -108,10 +99,10 @@ export default createComponent({
       const heightBefore = getScrollHeight(localScrollTarget)
 
       emit('load', index, isDone => {
-        if (isWorking.value === true) {
+        if (isWorking.value) {
           isFetching.value = false
           nextTick(() => {
-            if (props.reverse === true) {
+            if (props.reverse) {
               const heightAfter = getScrollHeight(localScrollTarget),
                 scrollPosition = getVerticalScrollPosition(localScrollTarget),
                 heightDifference = heightAfter - heightBefore
@@ -137,7 +128,7 @@ export default createComponent({
     }
 
     function resume() {
-      if (isWorking.value === false) {
+      if (!isWorking.value) {
         isWorking.value = true
         localScrollTarget.addEventListener('scroll', poll, passive)
       }
@@ -146,7 +137,7 @@ export default createComponent({
     }
 
     function stop() {
-      if (isWorking.value === true) {
+      if (isWorking.value) {
         isWorking.value = false
         isFetching.value = false
         localScrollTarget.removeEventListener('scroll', poll, passive)
@@ -155,16 +146,16 @@ export default createComponent({
     }
 
     function updateScrollTarget() {
-      if (localScrollTarget && isWorking.value === true) {
+      if (localScrollTarget && isWorking.value) {
         localScrollTarget.removeEventListener('scroll', poll, passive)
       }
 
       localScrollTarget = getScrollTarget(rootRef.value, props.scrollTarget)
 
-      if (isWorking.value === true) {
+      if (isWorking.value) {
         localScrollTarget.addEventListener('scroll', poll, passive)
 
-        if (props.reverse === true) {
+        if (props.reverse) {
           const scrollHeight = getScrollHeight(localScrollTarget),
             containerHeight = height(localScrollTarget)
 
@@ -192,7 +183,7 @@ export default createComponent({
           ? immediatePoll
           : debounce(immediatePoll, Number.isNaN(val) === true ? 100 : val)
 
-      if (localScrollTarget && isWorking.value === true) {
+      if (localScrollTarget && isWorking.value) {
         if (oldPoll !== void 0) {
           localScrollTarget.removeEventListener('scroll', oldPoll, passive)
         }
@@ -214,16 +205,14 @@ export default createComponent({
 
         // we need to pause svg animations (if any) when hiding
         // otherwise the browser will keep on recalculating the style
-        const action = `${isFetching.value === true ? 'un' : ''}pauseAnimations`
+        const action = `${isFetching.value ? 'un' : ''}pauseAnimations`
         ;[...loadingRef.value.getElementsByTagName('svg')].forEach(el => {
           el[action]()
         })
       }
     }
 
-    const renderLoadingSlot = computed(
-      () => props.disable !== true && isWorking.value === true
-    )
+    const renderLoadingSlot = computed(() => !props.disable && isWorking.value)
 
     watch([isFetching, renderLoadingSlot], () => {
       updateSvgAnimations()
@@ -232,18 +221,15 @@ export default createComponent({
     watch(
       () => props.disable,
       val => {
-        if (val === true) {
-          stop()
-        } else {
-          resume()
-        }
+        if (val) stop()
+        else resume()
       }
     )
 
     watch(
       () => props.reverse,
       () => {
-        if (isFetching.value === false && isWorking.value === true) {
+        if (!isFetching.value && isWorking.value) {
           immediatePoll()
         }
       }
@@ -267,7 +253,7 @@ export default createComponent({
     })
 
     onBeforeUnmount(() => {
-      if (isWorking.value === true) {
+      if (isWorking.value) {
         localScrollTarget.removeEventListener('scroll', poll, passive)
       }
     })
@@ -276,7 +262,7 @@ export default createComponent({
       setDebounce(props.debounce)
       updateScrollTarget()
 
-      if (isFetching.value === false) updateSvgAnimations()
+      if (!isFetching.value) updateSvgAnimations()
     })
 
     // expose public methods
@@ -297,7 +283,7 @@ export default createComponent({
       const child = hUniqueSlot(slots.default, [])
 
       if (renderLoadingSlot.value === true) {
-        child[props.reverse === false ? 'push' : 'unshift'](
+        child[props.reverse ? 'unshift' : 'push'](
           h(
             'div',
             { ref: loadingRef, class: classes.value },

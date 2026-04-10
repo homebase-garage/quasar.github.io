@@ -15,17 +15,13 @@ export default function useSplitAttrs() {
     const listeners = {}
 
     for (const key in attrs) {
-      if (
-        key !== 'class' &&
-        key !== 'style' &&
-        listenerRE.test(key) === false
-      ) {
+      if (key !== 'class' && key !== 'style' && !listenerRE.test(key)) {
         attributes[key] = attrs[key]
       }
     }
 
     for (const key in vnode.props) {
-      if (listenerRE.test(key) === true) {
+      if (listenerRE.test(key)) {
         listeners[key] = vnode.props[key]
       }
     }

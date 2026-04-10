@@ -154,21 +154,21 @@ export default createComponent({
     }
 
     function onLoad({ target }) {
-      if (vmIsDestroyed(vm) === false) {
-        removeLoadTimeout()
+      if (vmIsDestroyed(vm)) return
 
-        naturalRatio.value =
-          target.naturalHeight === 0
-            ? 0.5
-            : target.naturalWidth / target.naturalHeight
+      removeLoadTimeout()
 
-        waitForCompleteness(target, 1)
-      }
+      naturalRatio.value =
+        target.naturalHeight === 0
+          ? 0.5
+          : target.naturalWidth / target.naturalHeight
+
+      waitForCompleteness(target, 1)
     }
 
     function waitForCompleteness(target, count) {
       // protect against running forever
-      if (count === 1000 || vmIsDestroyed(vm) === true) return
+      if (count === 1000 || vmIsDestroyed(vm)) return
 
       if (target.complete === true) {
         onReady(target)
@@ -180,7 +180,7 @@ export default createComponent({
     }
 
     function onReady(target) {
-      if (vmIsDestroyed(vm) === true) return
+      if (vmIsDestroyed(vm)) return
 
       position.value = position.value ^ 1
       images[position.value].value = null
@@ -243,7 +243,7 @@ export default createComponent({
     }
 
     function getContent() {
-      if (isLoading.value === false) {
+      if (!isLoading.value) {
         return h(
           'div',
           {

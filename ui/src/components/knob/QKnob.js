@@ -86,16 +86,14 @@ export default createComponent({
 
     normalizeModel()
 
-    const editable = computed(
-      () => props.disable === false && props.readonly === false
-    )
+    const editable = computed(() => !props.disable && !props.readonly)
 
     const classes = computed(
       () =>
         'q-knob non-selectable' +
-        (editable.value === true
+        (editable.value
           ? ' q-knob--editable'
-          : props.disable === true
+          : props.disable
             ? ' disabled'
             : '')
     )
@@ -108,25 +106,24 @@ export default createComponent({
       () => props.instantFeedback === true || dragging.value === true
     )
 
-    const onEvents =
-      $q.platform.is.mobile === true
-        ? computed(() => (editable.value === true ? { onClick } : {}))
-        : computed(() =>
-            editable.value === true
-              ? {
-                  onMousedown,
-                  onClick,
-                  onKeydown,
-                  onKeyup
-                }
-              : {}
-          )
+    const onEvents = $q.platform.is.mobile
+      ? computed(() => (editable.value ? { onClick } : {}))
+      : computed(() =>
+          editable.value
+            ? {
+                onMousedown,
+                onClick,
+                onKeydown,
+                onKeyup
+              }
+            : {}
+        )
 
     const attrs = computed(() =>
-      editable.value === true
+      editable.value
         ? { tabindex: props.tabindex }
         : {
-            [`aria-${props.disable === true ? 'disabled' : 'readonly'}`]: 'true'
+            [`aria-${props.disable ? 'disabled' : 'readonly'}`]: 'true'
           }
     )
 
@@ -176,7 +173,7 @@ export default createComponent({
     }
 
     function onKeydown(evt) {
-      if (keyCodes.includes(evt.keyCode) === false) return
+      if (!keyCodes.includes(evt.keyCode)) return
 
       stopAndPrevent(evt)
 

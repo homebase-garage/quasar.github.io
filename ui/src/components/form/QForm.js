@@ -63,7 +63,7 @@ export default createComponent({
       const errorsPromise =
         props.greedy === true
           ? Promise.all(registeredComponents.map(validateComponent)).then(res =>
-              res.filter(r => r.valid !== true)
+              res.filter(r => !r.valid)
             )
           : registeredComponents
               .reduce(
@@ -71,9 +71,7 @@ export default createComponent({
                   acc
                     .then(() => validateComponent(comp))
                     .then(r => {
-                      if (r.valid === false) {
-                        throw r
-                      }
+                      if (!r.valid) throw r
                     }),
                 Promise.resolve()
               )
@@ -96,8 +94,7 @@ export default createComponent({
             // Try to focus first mounted and active component
             const activeError = errors.find(
               ({ comp: compRef }) =>
-                typeof compRef.focus === 'function' &&
-                vmIsDestroyed(compRef.$) === false
+                typeof compRef.focus === 'function' && !vmIsDestroyed(compRef.$)
             )
 
             if (activeError !== void 0) {

@@ -185,11 +185,7 @@ export default function useValidate(focused, innerLoading) {
 
     return Promise.all(promises).then(
       res => {
-        if (
-          res === void 0 ||
-          Array.isArray(res) === false ||
-          res.length === 0
-        ) {
+        if (res === void 0 || !Array.isArray(res) || res.length === 0) {
           if (index === validateIndex) update(false)
           return true
         }

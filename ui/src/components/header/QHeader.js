@@ -150,7 +150,7 @@ export default createComponent({
     watch(
       () => props.reveal,
       val => {
-        if (val === false) updateLocal(revealed, props.modelValue)
+        if (!val) updateLocal(revealed, props.modelValue)
       }
     )
 

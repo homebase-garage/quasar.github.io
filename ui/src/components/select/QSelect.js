@@ -889,9 +889,9 @@ export default createComponent({
         props.useInput !== true &&
         e.key !== void 0 &&
         e.key.length === 1 && // printable char
-        e.altKey === false && // not kbd shortcut
-        e.ctrlKey === false && // not kbd shortcut
-        e.metaKey === false && // not kbd shortcut, especially on macOS with Command key
+        !e.altKey && // not kbd shortcut
+        !e.ctrlKey && // not kbd shortcut
+        !e.metaKey && // not kbd shortcut, especially on macOS with Command key
         (e.keyCode !== 32 || searchBuffer.length !== 0) // space in middle of search
       ) {
         if (menu.value !== true) showPopup(e)
@@ -918,15 +918,14 @@ export default createComponent({
         if (
           keyRepeat === true ||
           index < 0 ||
-          searchRe.test(getOptionLabel.value(props.options[index])) !== true
+          !searchRe.test(getOptionLabel.value(props.options[index]))
         ) {
           do {
             index = normalizeToInterval(index + 1, -1, optionsLength - 1)
           } while (
             index !== optionIndex.value &&
             (isOptionDisabled.value(props.options[index]) === true ||
-              searchRe.test(getOptionLabel.value(props.options[index])) !==
-                true)
+              !searchRe.test(getOptionLabel.value(props.options[index])))
           )
         }
 

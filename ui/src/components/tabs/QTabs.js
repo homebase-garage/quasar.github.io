@@ -515,7 +515,7 @@ export default createComponent({
 
           if (
             queryLen !== currentQueryLen ||
-            hasQueryIncluded(currentQuery, query) === false
+            !hasQueryIncluded(currentQuery, query)
           ) {
             // it's set to exact but it doesn't matches the query
             continue
@@ -531,7 +531,7 @@ export default createComponent({
           continue
         }
 
-        if (queryLen !== 0 && hasQueryIncluded(query, currentQuery) === false) {
+        if (queryLen !== 0 && !hasQueryIncluded(query, currentQuery)) {
           // it has query and it doesn't includes the current one
           continue
         }

@@ -87,9 +87,7 @@ export default function useCheckbox(type, getInner) {
       : toRaw(props.modelValue) === toRaw(props.falseValue)
   )
 
-  const isIndeterminate = computed(
-    () => isTrue.value === false && isFalse.value === false
-  )
+  const isIndeterminate = computed(() => !isTrue.value && !isFalse.value)
 
   const tabindex = computed(() =>
     props.disable === true ? -1 : props.tabindex || 0
@@ -182,11 +180,11 @@ export default function useCheckbox(type, getInner) {
     }
 
     if (isTrue.value === true) {
-      if (props.toggleOrder !== 'ft' || props.toggleIndeterminate === false) {
+      if (props.toggleOrder !== 'ft' || !props.toggleIndeterminate) {
         return props.falseValue
       }
     } else if (isFalse.value === true) {
-      if (props.toggleOrder === 'ft' || props.toggleIndeterminate === false) {
+      if (props.toggleOrder === 'ft' || !props.toggleIndeterminate) {
         return props.trueValue
       }
     } else {

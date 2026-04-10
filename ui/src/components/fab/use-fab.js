@@ -49,14 +49,13 @@ export default function useFab(props, showing) {
 
     stacked: computed(
       () =>
-        props.externalLabel === false &&
-        ['top', 'bottom'].includes(props.labelPosition)
+        !props.externalLabel && ['top', 'bottom'].includes(props.labelPosition)
     ),
 
     labelProps: computed(() => {
-      if (props.externalLabel === true) {
+      if (props.externalLabel) {
         const hideLabel =
-          props.hideLabel === null ? showing.value === false : props.hideLabel
+          props.hideLabel === null ? !showing.value : props.hideLabel
 
         return {
           action: 'push',
@@ -65,7 +64,7 @@ export default function useFab(props, showing) {
               props.labelClass,
               'q-fab__label q-tooltip--style q-fab__label--external' +
                 ` q-fab__label--external-${props.labelPosition}` +
-                (hideLabel === true ? ' q-fab__label--external-hidden' : '')
+                (hideLabel ? ' q-fab__label--external-hidden' : '')
             ],
             style: props.labelStyle
           }
@@ -80,7 +79,7 @@ export default function useFab(props, showing) {
           class: [
             props.labelClass,
             `q-fab__label q-fab__label--internal q-fab__label--internal-${props.labelPosition}` +
-              (props.hideLabel === true ? ' q-fab__label--internal-hidden' : '')
+              (props.hideLabel ? ' q-fab__label--internal-hidden' : '')
           ],
           style: props.labelStyle
         }

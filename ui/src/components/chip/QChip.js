@@ -91,9 +91,7 @@ export default createComponent({
     )
 
     const isClickable = computed(
-      () =>
-        props.disable === false &&
-        (props.clickable === true || props.selected !== null)
+      () => !props.disable && (props.clickable || props.selected !== null)
     )
 
     const classes = computed(() => {
@@ -104,27 +102,24 @@ export default createComponent({
 
       return (
         'q-chip row inline no-wrap items-center' +
-        (props.outline === false && props.color !== void 0
-          ? ` bg-${props.color}`
-          : '') +
+        (!props.outline && props.color !== void 0 ? ` bg-${props.color}` : '') +
         (text ? ` text-${text} q-chip--colored` : '') +
-        (props.disable === true ? ' disabled' : '') +
-        (props.dense === true ? ' q-chip--dense' : '') +
-        (props.outline === true ? ' q-chip--outline' : '') +
+        (props.disable ? ' disabled' : '') +
+        (props.dense ? ' q-chip--dense' : '') +
+        (props.outline ? ' q-chip--outline' : '') +
         (props.selected === true ? ' q-chip--selected' : '') +
         (isClickable.value === true
           ? ' q-chip--clickable cursor-pointer non-selectable q-hoverable'
           : '') +
-        (props.square === true ? ' q-chip--square' : '') +
-        (isDark.value === true ? ' q-chip--dark q-dark' : '')
+        (props.square ? ' q-chip--square' : '') +
+        (isDark.value ? ' q-chip--dark q-dark' : '')
       )
     })
 
     const attributes = computed(() => {
-      const chip =
-        props.disable === true
-          ? { tabindex: -1, 'aria-disabled': 'true' }
-          : { tabindex: props.tabindex || 0 }
+      const chip = props.disable
+        ? { tabindex: -1, 'aria-disabled': 'true' }
+        : { tabindex: props.tabindex || 0 }
 
       const remove = {
         ...chip,
@@ -150,7 +145,7 @@ export default createComponent({
     function onRemove(e) {
       if (e.keyCode === void 0 || e.keyCode === 13) {
         stopAndPrevent(e)
-        if (props.disable === false) {
+        if (!props.disable) {
           emit('update:modelValue', false)
           emit('remove')
         }
@@ -213,7 +208,7 @@ export default createComponent({
     }
 
     return () => {
-      if (props.modelValue === false) return
+      if (!props.modelValue) return
 
       const data = {
         class: classes.value,

@@ -25,11 +25,9 @@ function includesParams(outer, inner) {
       outerValue = outer[key]
 
     if (typeof innerValue === 'string') {
-      if (innerValue !== outerValue) {
-        return false
-      }
+      if (innerValue !== outerValue) return false
     } else if (
-      Array.isArray(outerValue) === false ||
+      !Array.isArray(outerValue) ||
       outerValue.length !== innerValue.length ||
       innerValue.some((value, i) => value !== outerValue[i])
     ) {
@@ -41,15 +39,15 @@ function includesParams(outer, inner) {
 }
 
 function isEquivalentArray(a, b) {
-  return Array.isArray(b) === true
+  return Array.isArray(b)
     ? a.length === b.length && a.every((value, i) => value === b[i])
     : a.length === 1 && a[0] === b
 }
 
 function isSameRouteLocationParamsValue(a, b) {
-  return Array.isArray(a) === true
+  return Array.isArray(a)
     ? isEquivalentArray(a, b)
-    : Array.isArray(b) === true
+    : Array.isArray(b)
       ? isEquivalentArray(b, a)
       : a === b
 }
@@ -60,7 +58,7 @@ function isSameRouteLocationParams(a, b) {
   }
 
   for (const key in a) {
-    if (isSameRouteLocationParamsValue(a[key], b[key]) === false) {
+    if (!isSameRouteLocationParamsValue(a[key], b[key])) {
       return false
     }
   }

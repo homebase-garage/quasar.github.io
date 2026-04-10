@@ -85,7 +85,7 @@ export default createComponent({
     const spinner = computed(() =>
       props.progress === false
         ? null
-        : isObject(props.progress) === true
+        : isObject(props.progress)
           ? {
               component: props.progress.spinner || QSpinner,
               props: { color: props.progress.color || vmColor.value }
