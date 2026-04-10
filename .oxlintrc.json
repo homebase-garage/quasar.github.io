@@ -92,6 +92,7 @@
     "unicorn/no-null": "off",
     "unicorn/filename-case": "off",
     "unicorn/prefer-global-this": "off",
+    "unicorn/number-literal-case": "off", // conflicts with oxfmt
 
     /** Performance rule overrides */
     "no-await-in-loop": "off",

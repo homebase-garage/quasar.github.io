@@ -53,8 +53,8 @@ export default function uid() {
   }
 
   const b = Array.prototype.slice.call(buf, bufIdx, (bufIdx += 16))
-  b[6] = (b[6] & 0x0F) | 0x40
-  b[8] = (b[8] & 0x3F) | 0x80
+  b[6] = (b[6] & 0x0f) | 0x40
+  b[8] = (b[8] & 0x3f) | 0x80
 
   return (
     hexBytes[b[0]] +
