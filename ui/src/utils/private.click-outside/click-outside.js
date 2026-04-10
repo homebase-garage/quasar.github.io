@@ -49,10 +49,10 @@ function globalHandler(evt) {
 
     if (
       (state.anchorEl.value === null ||
-        state.anchorEl.value.contains(target) === false) &&
+        !state.anchorEl.value.contains(target)) &&
       (target === document.body ||
         (state.innerRef.value !== null &&
-          state.innerRef.value.contains(target) === false))
+          !state.innerRef.value.contains(target)))
     ) {
       // mark the event as being processed by clickOutside
       // used to prevent refocus after menu close

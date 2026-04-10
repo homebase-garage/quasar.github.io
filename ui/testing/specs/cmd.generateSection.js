@@ -6,7 +6,7 @@ const jsonPathRE = /^[^.]+\.[^.]+$/
  * Generates a targeted section of a json path
  */
 export function cmdGenerateSection({ ctx, testFile, jsonPath }) {
-  if (jsonPathRE.test(jsonPath) === false) {
+  if (!jsonPathRE.test(jsonPath)) {
     console.log(`  ❌ Invalid json path: "${jsonPath}"`)
     return
   }

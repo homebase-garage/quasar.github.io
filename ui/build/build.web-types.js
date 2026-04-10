@@ -32,8 +32,9 @@ function getDescription(propApi) {
 }
 
 export function generate({ api, compact = false }) {
-  const encodeFn =
-    compact === true ? JSON.stringify : json => JSON.stringify(json, null, 2)
+  const encodeFn = compact
+    ? JSON.stringify
+    : json => JSON.stringify(json, null, 2)
 
   try {
     const webtypes = encodeFn({

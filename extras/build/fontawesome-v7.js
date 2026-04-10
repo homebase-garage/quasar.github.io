@@ -30,7 +30,7 @@ iconTypes.forEach(type => {
   const svgFiles = globSync(svgFolder + `/${type}/*.svg`)
 
   svgFiles.forEach(file => {
-    const name = defaultNameMapper(file, prefix + type.charAt(0))
+    const name = defaultNameMapper(file, prefix + type.at(0))
 
     if (iconNames.has(name)) return
 
@@ -80,10 +80,7 @@ const staleFiles = [
 
 staleFiles.forEach(file => {
   const target = resolve(__dirname, `../${distName}/${file}`)
-
-  if (existsSync(target) === true) {
-    removeSync(target)
-  }
+  if (existsSync(target)) removeSync(target)
 })
 
 webfont.forEach(file => {

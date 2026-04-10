@@ -42,7 +42,7 @@ export function profile({ output, assets, ...params }) {
 
   validateProfileObject(acc, true)
 
-  if (acc.params.icon && isAbsolute(acc.params.icon) === false) {
+  if (acc.params.icon && !isAbsolute(acc.params.icon)) {
     // generate icon path relative to app root
     // so it won't matter from where the profile file is run
     acc.params.icon = relative(appDir, acc.params.icon)

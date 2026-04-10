@@ -56,7 +56,7 @@ export function shouldStart(evt, ctx) {
     evt.target !== void 0 &&
     evt.target.draggable !== true &&
     typeof ctx.handler === 'function' &&
-    avoidNodeNamesList.includes(evt.target.nodeName.toUpperCase()) === false &&
-    (evt.qClonedBy === void 0 || evt.qClonedBy.includes(ctx.uid) === false)
+    !avoidNodeNamesList.includes(evt.target.nodeName.toUpperCase()) &&
+    (evt.qClonedBy === void 0 || !evt.qClonedBy.includes(ctx.uid))
   )
 }

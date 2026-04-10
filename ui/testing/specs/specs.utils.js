@@ -23,7 +23,7 @@ export function plural(num) {
 }
 
 export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  return str.at(0).toUpperCase() + str.slice(1)
 }
 
 const typeMap = {
@@ -407,7 +407,7 @@ function getExpectMatcher({ jsonEntry, indent }) {
     return `expect.$any(${list})`
   }
 
-  if (Array.isArray(jsonEntry.type) === false) {
+  if (!Array.isArray(jsonEntry.type)) {
     if (jsonEntry.type === 'Object') {
       if (jsonEntry.definition !== void 0) {
         const keyList = Object.keys(jsonEntry.definition)
@@ -516,7 +516,7 @@ export function getTypeTest({ jsonEntry, ref, indent }) {
     return `expect(${list}).toContain(${ref})`
   }
 
-  if (Array.isArray(jsonEntry.type) === false) {
+  if (!Array.isArray(jsonEntry.type)) {
     const target = typeMap[jsonEntry.type]
     if (target === void 0) {
       console.error('jsonEntry:', jsonEntry)
@@ -546,6 +546,7 @@ export function getTypeTest({ jsonEntry, ref, indent }) {
 const defTypeTestableValueKeyList = Object.keys(typeMap).filter(
   key => typeMap[key].valueRegex !== void 0
 )
+const exampleBannerRE = /^# $/
 
 export function getTestValue({ jsonEntry, indent }) {
   const { type, default: defaultVal, values, examples } = jsonEntry
@@ -555,9 +556,9 @@ export function getTestValue({ jsonEntry, indent }) {
     ...(values || []),
     ...(examples || [])
     // filter example: "# hard-coded palette", "# right/left"
-  ].filter(v => /^# $/.test(v) === false)
+  ].filter(v => !exampleBannerRE.test(v))
 
-  const typeList = Array.isArray(type) === false ? [type] : type
+  const typeList = Array.isArray(type) ? type : [type]
 
   for (const typeBeingTested of typeList) {
     if (typeBeingTested === 'Any') {

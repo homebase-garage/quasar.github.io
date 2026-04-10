@@ -73,7 +73,7 @@ pagesRoutes
       route: '/' + page,
       title: file
         .split(/-/)
-        .map(f => f.charAt(0).toUpperCase() + f.slice(1))
+        .map(f => f.at(0).toUpperCase() + f.slice(1))
         .join(' ')
     })
   })

@@ -503,11 +503,7 @@ export function readAstJson(ctx) {
   const hasClasses = Object.keys(json.classes).length !== 0
   const hasFunctions = Object.keys(json.functions).length !== 0
 
-  if (
-    hasVariables === false &&
-    hasClasses === false &&
-    hasFunctions === false
-  ) {
+  if (!hasVariables && !hasClasses && !hasFunctions) {
     console.error(
       'AST: no variables, classes or functions found for:',
       ctx.targetAbsolute
@@ -516,15 +512,15 @@ export function readAstJson(ctx) {
     throw new Error('readAstJson > no variables, classes or functions found')
   }
 
-  if (hasVariables === false) {
+  if (!hasVariables) {
     delete json.variables
   }
 
-  if (hasClasses === false) {
+  if (!hasClasses) {
     delete json.classes
   }
 
-  if (hasFunctions === false) {
+  if (!hasFunctions) {
     delete json.functions
   }
 

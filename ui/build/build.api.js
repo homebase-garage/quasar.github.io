@@ -120,15 +120,15 @@ function parseAddedIn(val) {
     return '"addedIn" is empty'
   }
 
-  if (val.charAt(0) !== 'v') {
+  if (val.at(0) !== 'v') {
     return `"addedIn" value (${val}) must start with "v"`
   }
 
-  if (semanticRE.test(val) !== true) {
+  if (!semanticRE.test(val)) {
     return `"addedIn" value (${val}) must follow semantic versioning`
   }
 
-  if (val.endsWith('.0') === true) {
+  if (val.endsWith('.0')) {
     return `"addedIn" value (${val}) must not end with '.0' (remove it)`
   }
 
@@ -570,19 +570,13 @@ const typeList = [
 
 // assumes type does NOT have any duplicates
 function isClassStyleType(type) {
-  if (Array.isArray(type) === false) {
-    return false
-  }
-  if (type.length !== 3) {
-    return false
-  }
+  if (!Array.isArray(type)) return false
+  if (type.length !== 3) return false
 
   let hits = 0
 
   ;['String', 'Array', 'Object'].forEach(entry => {
-    if (type.includes(entry) === true) {
-      hits++
-    }
+    if (type.includes(entry)) hits++
   })
 
   return hits === 3
@@ -599,7 +593,6 @@ const serializableTypes = [
 ]
 function isSerializable(value) {
   const types = Array.isArray(value.type) ? value.type : [value.type]
-
   return types.every(type => serializableTypes.includes(type))
 }
 
@@ -630,7 +623,7 @@ function getApiWithMixins(api, mainFile) {
 }
 
 function deCapitalize(str) {
-  return str.charAt(0).toLowerCase() + str.slice(1)
+  return str.at(0).toLowerCase() + str.slice(1)
 }
 
 const arrayRE = /(\[.*\])/
@@ -668,15 +661,13 @@ function encodeDefaultValue(val, isFunction) {
 const runtimePropTypeToAny = ['File', 'FileList', 'Element']
 const runtimePropTypeExceptions = ['null', 'undefined']
 function extractRuntimeDefinablePropTypes(apiTypes) {
-  if (apiTypes.includes('Any') === true) {
+  if (apiTypes.includes('Any')) {
     return ['Any']
   }
 
-  return apiTypes.some(key => runtimePropTypeToAny.includes(key) === true)
+  return apiTypes.some(key => runtimePropTypeToAny.includes(key))
     ? ['Any']
-    : apiTypes
-        .filter(key => runtimePropTypeExceptions.includes(key) === false)
-        .sort()
+    : apiTypes.filter(key => !runtimePropTypeExceptions.includes(key)).sort()
 }
 
 function parseRuntimeType(runtimeConstructor) {
@@ -709,10 +700,10 @@ function extractRuntimePropAttrs(runtimeProp) {
 
   let runtimeTypes
 
-  if (Array.isArray(runtimeProp.type) === true) {
+  if (Array.isArray(runtimeProp.type)) {
     runtimeTypes = runtimeProp.type.map(parseRuntimeType)
 
-    if (runtimeTypes.includes('Any') === true) {
+    if (runtimeTypes.includes('Any')) {
       runtimeTypes = ['Any']
     } else {
       runtimeTypes.sort()
@@ -779,7 +770,7 @@ function parseObject({
     process.exit(1)
   }
 
-  if (Object.hasOwn(obj, 'addedIn') === true) {
+  if (Object.hasOwn(obj, 'addedIn')) {
     const result = parseAddedIn(obj.addedIn)
     if (result !== true) {
       printErrorAndExit(result)
@@ -800,7 +791,7 @@ function parseObject({
   // there are cases where you extend something but you
   // need to remove some props from the extended object
   if (obj.__delete !== void 0) {
-    if (Array.isArray(obj.__delete) === false) {
+    if (!Array.isArray(obj.__delete)) {
       printErrorAndExit('"__delete" prop must be an Array')
     }
 
@@ -847,7 +838,7 @@ function parseObject({
 
     for (const prop in obj) {
       // These props are always valid and doesn't need to be specified in 'props' of 'objectTypes' entries
-      if (['type', '__exemption'].includes(prop) === true) {
+      if (['type', '__exemption'].includes(prop)) {
         continue
       }
 
@@ -948,7 +939,7 @@ function parseObject({
     if (obj.type) {
       const list = Array.isArray(obj.type) ? obj.type : [obj.type]
       list.forEach(t => {
-        if (typeList.includes(t) === false) {
+        if (!typeList.includes(t)) {
           printErrorAndExit(
             `object has unrecognized type "${t}"; if this is a new type, then ` +
               'add it to the "typeList" array in build.api.js'
@@ -965,8 +956,8 @@ function parseObject({
       if (regexList.length !== 0) {
         obj.values.forEach(val => {
           if (
-            apiIgnoreValueRegex.test(val) === false &&
-            regexList.every(regex => regex.test(val) === false)
+            !apiIgnoreValueRegex.test(val) &&
+            regexList.every(regex => !regex.test(val))
           ) {
             printErrorAndExit(
               `object: "values" -> "${val}" value must satisfy regex: ` +
@@ -982,17 +973,17 @@ function parseObject({
         printErrorAndExit('object: stringify "default" value')
       }
 
-      if (apiIgnoreValueRegex.test(obj.default) === false) {
+      if (!apiIgnoreValueRegex.test(obj.default)) {
         if (
           regexList.length !== 0 &&
-          regexList.every(regex => regex.test(obj.default) === false)
+          regexList.every(regex => !regex.test(obj.default))
         ) {
           printErrorAndExit(
             `object: "default" value must satisfy regex: ${regexList.map(r => r.toString()).join(' or ')}`
           )
         }
 
-        if (obj.values && obj.values.includes(obj.default) === false) {
+        if (obj.values && !obj.values.includes(obj.default)) {
           printErrorAndExit(
             'object: "default" value must be one of the "values"'
           )
@@ -1008,8 +999,8 @@ function parseObject({
       if (regexList.length !== 0) {
         obj.examples.forEach(val => {
           if (
-            apiIgnoreValueRegex.test(val) === false &&
-            regexList.every(regex => regex.test(val) === false)
+            !apiIgnoreValueRegex.test(val) &&
+            regexList.every(regex => !regex.test(val))
           ) {
             printErrorAndExit(
               `object: "examples" -> "${val}" value must satisfy regex: ${regexList.map(r => r.toString()).join(' or ')}`
@@ -1024,8 +1015,8 @@ function parseObject({
     }
 
     if (
-      Object.hasOwn(obj, 'passthrough') === true &&
-      passthroughValues.includes(obj.passthrough) === false
+      Object.hasOwn(obj, 'passthrough') &&
+      !passthroughValues.includes(obj.passthrough)
     ) {
       printErrorAndExit(
         `"passthrough" should be one of: ${passthroughValues.join('|')}`
@@ -1035,10 +1026,9 @@ function parseObject({
     if (
       obj.default !== void 0 &&
       obj.required === true &&
-      (Array.isArray(obj.type) === true
-        ? obj.type.includes('Any') !== true &&
-          obj.type.includes('undefined') !== true
-        : ['Any', 'undefined'].includes(obj.type) !== true)
+      (Array.isArray(obj.type)
+        ? !obj.type.includes('Any') && !obj.type.includes('undefined')
+        : !['Any', 'undefined'].includes(obj.type))
     ) {
       printErrorAndExit(
         'cannot have "required" as true since it is optional because it has "default" ' +
@@ -1064,10 +1054,7 @@ function parseObject({
   }
 
   if (masterType === 'props') {
-    if (
-      Array.isArray(obj.type) === true &&
-      new Set(obj.type).size !== obj.type.length
-    ) {
+    if (Array.isArray(obj.type) && new Set(obj.type).size !== obj.type.length) {
       printErrorAndExit(
         'object has "type" defined as Array, but the Array contains duplicates'
       )
@@ -1079,10 +1066,7 @@ function parseObject({
           'object is class-type (Object form) but "tsType" prop is set to ' +
             `"${obj.tsType}" instead of "VueClassObjectProp":`
         )
-      } else if (
-        obj.tsType !== 'VueClassProp' &&
-        isClassStyleType(obj.type) === true
-      ) {
+      } else if (obj.tsType !== 'VueClassProp' && isClassStyleType(obj.type)) {
         printErrorAndExit(
           'object is class-type (String/Array/Object form) but "tsType" prop ' +
             `is set to "${obj.tsType}" instead of "VueClassProp":`
@@ -1094,10 +1078,7 @@ function parseObject({
           'object is style-type (Object form) but "tsType" prop is ' +
             `set to "${obj.tsType}" instead of "VueStyleObjectProp":`
         )
-      } else if (
-        obj.tsType !== 'VueStyleProp' &&
-        isClassStyleType(obj.type) === true
-      ) {
+      } else if (obj.tsType !== 'VueStyleProp' && isClassStyleType(obj.type)) {
         printErrorAndExit(
           'object is style-type (String/Array/Object form) but "tsType" prop ' +
             `is set to "${obj.tsType}" instead of "VueStyleProp":`
@@ -1108,7 +1089,7 @@ function parseObject({
     if (
       verifySerializable &&
       obj.configFileType === void 0 &&
-      isSerializable(obj) === false
+      !isSerializable(obj)
     ) {
       printErrorAndExit(
         'object\'s type is non-serializable but props in "quasarConfOptions" can only consist of ' +
@@ -1119,9 +1100,7 @@ function parseObject({
   }
 
   // If it must be synced, then it is syncable too (v-model:xyz)
-  if (obj.sync === true) {
-    obj.syncable = true
-  }
+  if (obj.sync === true) obj.syncable = true
 
   if (obj.returns) {
     parseObject({
@@ -1171,7 +1150,7 @@ function parseAPI(file, apiType) {
       printErrorAndExit(` "${type}" is not recognized for a ${apiType}`)
     }
 
-    if (Object.hasOwn(api, type) === true) {
+    if (Object.hasOwn(api, type)) {
       const result = topSections[apiType].rootValidations[type](api[type])
       if (result !== true) {
         printErrorAndExit(result)
@@ -1210,7 +1189,7 @@ function parseAPI(file, apiType) {
 
   for (const type in api) {
     const targetApi = api[type]
-    if (handledTypes.includes(type) === true) continue
+    if (handledTypes.includes(type)) continue
 
     for (const itemName in targetApi) {
       parseObject({
@@ -1294,7 +1273,7 @@ function fillAPI(apiType, list, encodeFn) {
         const propName = `on${capitalize(matchedEmit)}`
 
         if (
-          runtimeEmits.includes(matchedEmit) === false &&
+          !runtimeEmits.includes(matchedEmit) &&
           runtimeProps[propName] === void 0
         ) {
           logError(
@@ -1327,13 +1306,13 @@ function fillAPI(apiType, list, encodeFn) {
           hasError = true
         }
 
-        if (/^on[A-Z]/.test(runtimePropName) === true) {
+        if (/^on[A-Z]/.test(runtimePropName)) {
           const strippedPropName = runtimePropName.slice(2) // strip "on" prefix
           const runtimeEmitName = deCapitalize(strippedPropName)
           const apiEventName = kebabCase(strippedPropName)
 
           // should not duplicate as prop and emit
-          if (runtimeEmits.includes(runtimeEmitName) === true) {
+          if (runtimeEmits.includes(runtimeEmitName)) {
             logError(
               `${componentName}: Component has duplicated prop (${runtimePropName}) + ` +
                 `emit (${runtimeEmitName}); only one should be defined`
@@ -1423,14 +1402,14 @@ function fillAPI(apiType, list, encodeFn) {
 
           // API "default" value validation against runtime
           if (hasRuntimeDefault === true) {
-            if (Object.hasOwn(apiEntry, 'default') === false) {
+            if (!Object.hasOwn(apiEntry, 'default')) {
               logError(
                 `${name}: "props" -> "${apiPropName}" is missing "default" with ` +
                   `value: "${encodeDefaultValue(runtimeDefaultValue, isRuntimeFunction)}"`
               )
               console.log(apiEntry)
               hasError = true
-            } else if (apiIgnoreValueRegex.test(apiEntry.default) === false) {
+            } else if (!apiIgnoreValueRegex.test(apiEntry.default)) {
               const encodedValue = encodeDefaultValue(
                 runtimeDefaultValue,
                 isRuntimeFunction
@@ -1452,10 +1431,7 @@ function fillAPI(apiType, list, encodeFn) {
                     handledAlready = true
                   }
 
-                  if (
-                    handledAlready === false &&
-                    functionRE.test(fn) === false
-                  ) {
+                  if (!handledAlready && !functionRE.test(fn)) {
                     logError(
                       `${componentName}: prop "${runtimePropName}" -> "default" should ` +
                         'be an arrow function that begins with: "() => "'
@@ -1464,10 +1440,7 @@ function fillAPI(apiType, list, encodeFn) {
                     hasError = true
                   }
 
-                  if (
-                    handledAlready === false &&
-                    /^[a-zA-Z]/.test(encodedValue) === true
-                  ) {
+                  if (!handledAlready && /^[a-zA-Z]/.test(encodedValue)) {
                     logError(
                       `${componentName}: prop "${runtimePropName}" -> "default" should ` +
                         'be an arrow factory function that does not reference any external variables'
@@ -1477,10 +1450,7 @@ function fillAPI(apiType, list, encodeFn) {
                   }
                 }
 
-                if (
-                  handledAlready === false &&
-                  apiEntry.__runtimeDefault !== true
-                ) {
+                if (!handledAlready && apiEntry.__runtimeDefault !== true) {
                   logError(
                     `${name}: "props" -> "${apiPropName}" > "default" value should ` +
                       `be: "${encodedValue}" (instead of "${apiEntry.default}")`
@@ -1504,7 +1474,7 @@ function fillAPI(apiType, list, encodeFn) {
             }
           } else if (
             apiEntry.__runtimeDefault !== true &&
-            Object.hasOwn(apiEntry, 'default') === true
+            Object.hasOwn(apiEntry, 'default')
           ) {
             logError(
               `${name}: "props" -> "${apiPropName}" should NOT have a "default" value; Solutions:` +
@@ -1584,7 +1554,7 @@ function fillAPI(apiType, list, encodeFn) {
             hasError = true
           }
 
-          if (runtimeEmits.includes(runtimeEmitName) === true) {
+          if (runtimeEmits.includes(runtimeEmitName)) {
             logError(
               `${name}: "events" -> "${apiEventName}" should NOT be a "passthrough" ` +
                 `as it exists in the Component (as emits: ${runtimeEmitName})`
@@ -1598,7 +1568,7 @@ function fillAPI(apiType, list, encodeFn) {
 
         if (
           runtimeProps[runtimePropName] === void 0 &&
-          runtimeEmits.includes(runtimeEmitName) === false
+          !runtimeEmits.includes(runtimeEmitName)
         ) {
           logError(
             `${name}: "events" -> "${apiEventName}" is in JSON but ` +
@@ -1609,7 +1579,7 @@ function fillAPI(apiType, list, encodeFn) {
         }
       }
 
-      if (hasError === true) {
+      if (hasError) {
         logError('Errors were found... exiting with error')
         process.exit(1)
       }
@@ -1630,14 +1600,14 @@ function fillAPI(apiType, list, encodeFn) {
             }
 
             if (
-              Object.hasOwn(entry, 'passthrough') === true &&
+              Object.hasOwn(entry, 'passthrough') &&
               entry.passthrough !== true
             ) {
               // save bytes over the wire
               delete entry.passthrough
             }
 
-            if (Object.hasOwn(entry, '__runtimeDefault') === true) {
+            if (Object.hasOwn(entry, '__runtimeDefault')) {
               // API internal prop; not needed in the final API
               delete entry.__runtimeDefault
             }
@@ -1718,8 +1688,9 @@ function resetRuntimeImports() {
 }
 
 export async function generate({ compact = false } = {}) {
-  const encodeFn =
-    compact === true ? JSON.stringify : json => JSON.stringify(json, null, 2)
+  const encodeFn = compact
+    ? JSON.stringify
+    : json => JSON.stringify(json, null, 2)
 
   prepareRuntimeImports()
 

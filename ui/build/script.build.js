@@ -15,7 +15,7 @@ console.log()
 
 if (!type) {
   await import('./script.clean.js')
-} else if (['js', 'css'].includes(type) === false) {
+} else if (!['js', 'css'].includes(type)) {
   console.error(` Unrecognized build type specified: ${type}`)
   console.error(' Available: js | css')
   console.error()

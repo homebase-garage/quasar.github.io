@@ -16,10 +16,10 @@ function hasDifferentKeys(a, b) {
 
     if (
       /* valA is Object */ Object(valA) === valA &&
-      Array.isArray(valA) === false &&
+      !Array.isArray(valA) &&
       /* valB is Object */ Object(valB) === valB &&
-      Array.isArray(valB) === false &&
-      hasDifferentKeys(valA, valB) === true
+      !Array.isArray(valB) &&
+      hasDifferentKeys(valA, valB)
     ) {
       return true
     }

@@ -189,7 +189,7 @@ function createWsToken() {
     const listLen = list.length
     wsToken = ''
     for (let i = 0; i < 12; i++) {
-      wsToken += list.charAt(Math.floor(Math.random() * listLen))
+      wsToken += list.at(Math.floor(Math.random() * listLen))
     }
   }
 

@@ -851,7 +851,7 @@ export default createComponent({
 
       const monthMap = daysMap.value[getMonthHash(date)]
 
-      if (monthMap === void 0 || monthMap.includes(date.day) === false) {
+      if (monthMap === void 0 || !monthMap.includes(date.day)) {
         addToModel(date)
       }
 

@@ -35,8 +35,9 @@ function getAttributes(data) {
 }
 
 export function generate({ api, compact = false }) {
-  const encodeFn =
-    compact === true ? JSON.stringify : json => JSON.stringify(json, null, 2)
+  const encodeFn = compact
+    ? JSON.stringify
+    : json => JSON.stringify(json, null, 2)
 
   const data = api.components.map(c => ({
     name: kebabCase(c.name),

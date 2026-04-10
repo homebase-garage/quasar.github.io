@@ -74,10 +74,10 @@ async function renderFolders({ source, rawCopy, scope }, ctx) {
       .map(name => {
         // dotfiles are ignored when published to npm, therefore in templates
         // we need to use underscore instead (e.g. "_gitignore")
-        if (name.charAt(0) === '_' && name.charAt(1) !== '_') {
+        if (name.at(0) === '_' && name.at(1) !== '_') {
           return `.${name.slice(1)}`
         }
-        if (name.charAt(0) === '_' && name.charAt(1) === '_') {
+        if (name.at(0) === '_' && name.at(1) === '_') {
           return `${name.slice(1)}`
         }
         return name
@@ -122,7 +122,7 @@ export class AppExtensionInstance {
     this.#ctx = ctx
     this.#appExtJson = appExtJson
 
-    if (extName.charAt(0) === '@') {
+    if (extName.at(0) === '@') {
       const slashIndex = extName.indexOf('/')
       if (slashIndex === -1) {
         fatal(`Invalid Quasar App Extension name: "${extName}"`)

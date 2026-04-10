@@ -109,8 +109,9 @@ function getAutoImportFile(autoImport, encodeFn) {
 }
 
 export function generate({ compact = false } = {}) {
-  const encodeFn =
-    compact === true ? JSON.stringify : json => JSON.stringify(json, null, 2)
+  const encodeFn = compact
+    ? JSON.stringify
+    : json => JSON.stringify(json, null, 2)
 
   const map = {
     Quasar: relative('src/vue-plugin.js')

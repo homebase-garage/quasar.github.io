@@ -64,7 +64,7 @@ describe('[QBreadcrumbs API]', () => {
         await flushPromises()
 
         expect(wrapper.get('.q-breadcrumbs > div').classes()).toSatisfy(list =>
-          list.every(cls => cls.startsWith('q-gutter') === false)
+          list.every(cls => !cls.startsWith('q-gutter'))
         )
       })
 

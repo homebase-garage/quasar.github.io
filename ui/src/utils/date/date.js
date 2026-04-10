@@ -342,7 +342,7 @@ export function adjustDate(date, rawMod, utc) {
         : d
 
   for (const key in mod) {
-    const op = key.charAt(0).toUpperCase() + key.slice(1)
+    const op = key.at(0).toUpperCase() + key.slice(1)
     t[`set${middle}${op}`](mod[key])
   }
 
@@ -504,9 +504,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
 }
 
 export function isValid(date) {
-  return typeof date === 'number'
-    ? true
-    : Number.isNaN(Date.parse(date)) === false
+  return typeof date === 'number' ? true : !Number.isNaN(Date.parse(date))
 }
 
 export function buildDate(mod, utc) {

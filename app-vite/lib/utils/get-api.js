@@ -39,7 +39,7 @@ export async function getApi(item, ctx) {
     let file
     const { callerPath, relativePath } = hooks.describeApi[item]
 
-    if (relativePath.charAt(0) === '~') {
+    if (relativePath.at(0) === '~') {
       try {
         file = relativePath.slice(1)
         file = require.resolve(file, {

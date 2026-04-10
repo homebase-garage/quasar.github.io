@@ -47,11 +47,11 @@ function changed(old, def) {
 }
 
 function bodyFilter(name) {
-  return ['class', 'style'].includes(name) === false
+  return !['class', 'style'].includes(name)
 }
 
 function htmlFilter(name) {
-  return ['lang', 'dir'].includes(name) === false
+  return !['lang', 'dir'].includes(name)
 }
 
 function diff(meta, other) {
@@ -79,12 +79,12 @@ function diff(meta, other) {
     add[type] = {}
 
     for (const key in old) {
-      if (Object.hasOwn(cur, key) === false) {
+      if (!Object.hasOwn(cur, key)) {
         remove[type].push(key)
       }
     }
     for (const key in cur) {
-      if (Object.hasOwn(old, key) === false) {
+      if (!Object.hasOwn(old, key)) {
         add[type][key] = cur[key]
       } else if (changed(old[key], cur[key]) === true) {
         remove[type].push(key)

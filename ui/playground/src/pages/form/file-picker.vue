@@ -124,7 +124,7 @@ export default {
 
   methods: {
     testMove() {
-      if (Array.isArray(this.fileM) === false || this.fileM.length === 0) {
+      if (!Array.isArray(this.fileM) || this.fileM.length === 0) {
         return
       }
 

@@ -110,9 +110,7 @@ async function generateAddon(source) {
 }
 
 export function buildCss(withDiff) {
-  if (withDiff === true) {
-    prepareDiff('dist/quasar.sass')
-  }
+  if (withDiff) prepareDiff('dist/quasar.sass')
 
   Promise.all([
     generateBase('src/css/index.sass'),

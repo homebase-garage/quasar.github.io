@@ -287,7 +287,7 @@ function addToExtraInterfaces(def) {
         })
       }
     } else if (
-      Object.hasOwn(extraInterfaces, def.tsType) === false &&
+      !Object.hasOwn(extraInterfaces, def.tsType) &&
       !extraInterfaceExclusions.includes(def.tsType)
     ) {
       extraInterfaces[def.tsType] = void 0
@@ -668,7 +668,7 @@ function getIndexDts(apis, quasarLangIndex) {
       const [target, property] = content.injection.split('.')
 
       // should not be the following; they are declared separately in globals.d.ts
-      if (['iconSet', 'lang'].includes(property) === false) {
+      if (!['iconSet', 'lang'].includes(property)) {
         if (!injections[target]) {
           injections[target] = []
         }

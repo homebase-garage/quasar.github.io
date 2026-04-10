@@ -49,7 +49,7 @@ export function changeGlobalNodesTarget(newTarget) {
     ) < 2
   ) {
     nodesList.forEach(node => {
-      if (node.contains(target) === false) {
+      if (!node.contains(target)) {
         target.append(node)
       }
     })
@@ -64,7 +64,7 @@ export function changeGlobalNodesTarget(newTarget) {
 
     if (
       (i === lastDialogIndex || portalTypeList[i] !== 'dialog') &&
-      el.contains(target) === false
+      !el.contains(target)
     ) {
       target.append(el)
     }

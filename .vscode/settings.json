@@ -24,6 +24,7 @@
   "search.exclude": {
     "**/dist": true,
     "**/.quasar": true,
-    "**/quasar.config.js.temporary.*": true
+    "**/quasar.config.js.temporary.*": true,
+    "utils/render-ssr-error/compiled-assets": true
   }
 }

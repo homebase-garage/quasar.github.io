@@ -77,7 +77,7 @@ const getColorParamsSchema = requireHash => {
 
 const getParamsSchema = isGeneratingProfileFile => ({
   ...baseParamsSchema,
-  ...getColorParamsSchema(isGeneratingProfileFile === false)
+  ...getColorParamsSchema(!isGeneratingProfileFile)
 })
 
 export function validateProfileObject(

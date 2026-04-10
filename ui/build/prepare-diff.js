@@ -51,7 +51,7 @@ export default function prepareDiff(locationPath) {
       const relativePath = relativeToRoot(filePath)
       currentMap.set(filePath, true)
 
-      if (originalsMap.has(filePath) === false) {
+      if (!originalsMap.has(filePath)) {
         console.log(`\n 📜 New file: ${relativePath}`)
         somethingChanged = true
         return
@@ -70,13 +70,13 @@ export default function prepareDiff(locationPath) {
     })
 
     originalsMap.forEach((_, filePath) => {
-      if (currentMap.has(filePath) === false) {
+      if (!currentMap.has(filePath)) {
         console.log(`\n 📜 Removed file: ${relativeToRoot(filePath)}\n`)
         somethingChanged = true
       }
     })
 
-    if (somethingChanged === false) {
+    if (!somethingChanged) {
       console.log('\n 📜 No changes detected.\n')
     }
   })

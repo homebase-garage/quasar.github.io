@@ -268,7 +268,7 @@ export default function morph(_options) {
     elFromTween.className = elFromTween.classList
       .toString()
       .split(' ')
-      .filter(c => c.startsWith('bg-') === false)
+      .filter(c => !c.startsWith('bg-'))
       .join(' ')
   }
 
@@ -435,7 +435,7 @@ export default function morph(_options) {
       // we strip the background classes (background color can no longer be animated if !important is used)
       elTo.className = elToClassSaved
         .split(' ')
-        .filter(c => c.startsWith('bg-') === false)
+        .filter(c => !c.startsWith('bg-'))
         .join(' ')
 
       const elToPosition = getAbsolutePosition(elTo, options.resize)
@@ -473,8 +473,8 @@ export default function morph(_options) {
 
       const elSharedSize =
         elFrom === elTo &&
-        ['absolute', 'fixed'].includes(elToPositioningType) === false &&
-        ['absolute', 'fixed'].includes(elFromPositioningType) === false
+        !['absolute', 'fixed'].includes(elToPositioningType) &&
+        !['absolute', 'fixed'].includes(elFromPositioningType)
 
       // if the final element has fixed position or if a parent
       // has fixed position we need to animate it as fixed

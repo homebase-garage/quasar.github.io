@@ -145,9 +145,9 @@ export default createComponent({
         if (
           props.type === 'submit' &&
           el !== document.body &&
-          rootRef.value.contains(el) === false &&
+          !rootRef.value.contains(el) &&
           // required for iOS and desktop Safari
-          el.contains(rootRef.value) === false
+          !el.contains(rootRef.value)
         ) {
           if (e.qAvoidFocus !== true) rootRef.value.focus()
 

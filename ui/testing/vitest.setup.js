@@ -31,7 +31,7 @@ window.scrollTo = () => {}
  *   expect.$any([ expect.any(String), expect.any(Number), 'xyz' ])
  */
 function $any(received, expectedList) {
-  if (Array.isArray(expectedList) === false) {
+  if (!Array.isArray(expectedList)) {
     throw new TypeError('The second argument must be an array of matchers!')
   }
 

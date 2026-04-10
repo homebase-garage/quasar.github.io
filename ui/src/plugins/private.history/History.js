@@ -10,9 +10,9 @@ function filterInvalidPath(path) {
 }
 
 function normalizeExitPath(path) {
-  if (path.startsWith('#') === true) path = path.slice(1)
-  if (path.startsWith('/') === false) path = '/' + path
-  if (path.endsWith('/') === true) path = path.slice(0, -1)
+  if (path.startsWith('#')) path = path.slice(1)
+  if (!path.startsWith('/')) path = '/' + path
+  if (path.endsWith('/')) path = path.slice(0, -1)
   return '#' + path
 }
 

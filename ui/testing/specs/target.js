@@ -14,6 +14,6 @@ export function getTargetList(argv) {
     : ['src/**/*.js']
 
   return globSync(targetList, { cwd: rootFolder }).filter(
-    file => exceptionFileRE.test(file) === false
+    file => !exceptionFileRE.test(file)
   )
 }

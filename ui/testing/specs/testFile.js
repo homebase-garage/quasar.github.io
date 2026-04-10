@@ -44,7 +44,7 @@ function extractTree(astNode, tree, indent) {
   if (
     astNode.type !== 'ExpressionStatement' ||
     astNode.expression.type !== 'CallExpression' ||
-    treeNodeCalleeTypes.includes(astNode.expression.callee.type) === false
+    !treeNodeCalleeTypes.includes(astNode.expression.callee.type)
   ) {
     return true
   }
@@ -58,7 +58,7 @@ function extractTree(astNode, tree, indent) {
     callee.object?.name || // MemberExpression
     callee.name // Identifier
 
-  if (treeNodeTypes.includes(type) === false) return
+  if (!treeNodeTypes.includes(type)) return
 
   const entry = {
     insertIndex: fn.body.end - indent,
@@ -153,7 +153,7 @@ function getTestFileMisconfiguration({ ctx, generator, json, testFile, opts }) {
   }
 
   const targetImport = `from './${ctx.localName}'`
-  if (content.includes(targetImport) === false) {
+  if (!content.includes(targetImport)) {
     errors.push(`Should contain: import ${ctx.camelCaseName} ${targetImport}`)
   }
 
@@ -186,7 +186,7 @@ function getTestFileMisconfiguration({ ctx, generator, json, testFile, opts }) {
   Object.keys(tree.children).forEach(categoryId => {
     const { type } = tree.children[categoryId]
 
-    if (categoryId[0] === '[' && categoryList.includes(categoryId) === false) {
+    if (categoryId[0] === '[' && !categoryList.includes(categoryId)) {
       errors.push(
         `Invalid category "${categoryId}" found at ${type}('${categoryId}').`
       )
@@ -219,7 +219,7 @@ function getTestFileMisconfiguration({ ctx, generator, json, testFile, opts }) {
         return
       }
 
-      if (ignoreCommentIds.includes(testId) === true) {
+      if (ignoreCommentIds.includes(testId)) {
         errors.push(
           `Found describe('${testId}') but it's marked as ignored. Delete the ignore comment.`
         )
@@ -423,7 +423,7 @@ function createTestFileContent({ ctx, json, generator }) {
 }
 
 function getInitialState(file) {
-  if (fse.existsSync(file) === false) {
+  if (!fse.existsSync(file)) {
     return {
       content: null,
       ignoreCommentIds: [],

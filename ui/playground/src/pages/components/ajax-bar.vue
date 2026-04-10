@@ -114,8 +114,7 @@ export default {
   created() {
     LoadingBar.setDefaults({
       hijackFilter(url) {
-        const res =
-          /\/server/.test(url) === true && /\/other-server/.test(url) === false
+        const res = /\/server/.test(url) && !/\/other-server/.test(url)
 
         console.log(url, res)
         return res

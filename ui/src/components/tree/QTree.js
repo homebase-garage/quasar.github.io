@@ -438,7 +438,7 @@ export default createComponent({
           }
 
           if (collapse.length !== 0) {
-            target = target.filter(k => collapse.includes(k) === false)
+            target = target.filter(k => !collapse.includes(k))
           }
         }
 
@@ -472,7 +472,7 @@ export default createComponent({
         ? [...target, ...keys].filter(
             (key, index, self) => self.indexOf(key) === index
           )
-        : target.filter(k => keys.includes(k) === false)
+        : target.filter(k => !keys.includes(k))
 
       if (shouldEmit === true) {
         emit('update:ticked', target)

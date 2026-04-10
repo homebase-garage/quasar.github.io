@@ -121,7 +121,7 @@ function parseIconPath(value) {
   const __path = untildify(value)
 
   if (isAbsolute(__path)) {
-    return existsSync(__path) === true ? __path : null
+    return existsSync(__path) ? __path : null
   }
 
   let localIcon = resolve(process.cwd(), __path)

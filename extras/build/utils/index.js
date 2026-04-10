@@ -179,7 +179,7 @@ function parseDom(name, el, pathsDefinitions) {
 
   if (el.getAttribute === void 0 || el.getAttribute('opacity') === '0') return
 
-  if (typeExceptions.includes(type) === false) {
+  if (!typeExceptions.includes(type)) {
     if (decoders[type] === void 0) {
       throw new Error(`Unsupported tag: "${type}" in ${name}`)
     }
@@ -485,7 +485,7 @@ class Queue {
 module.exports.Queue = Queue
 
 module.exports.copyCssFile = function copyCssFile({ from, to, replaceFn }) {
-  if (existsSync(from) === false) {
+  if (!existsSync(from)) {
     console.error(`[Error] ${from} does not exist`)
     process.exit(1)
   }

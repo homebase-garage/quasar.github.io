@@ -78,8 +78,7 @@ function prepareApp(app, uiOpts, pluginOpts) {
       pluginOpts,
       Object.values(uiOpts.plugins).filter(
         p =>
-          typeof p.install === 'function' &&
-          autoInstalledPlugins.includes(p) === false
+          typeof p.install === 'function' && !autoInstalledPlugins.includes(p)
       )
     )
   }

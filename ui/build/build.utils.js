@@ -59,7 +59,7 @@ export function kebabCase(str) {
 }
 
 export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  return str.at(0).toUpperCase() + str.slice(1)
 }
 
 export const rootFolder = fileURLToPath(new URL('..', import.meta.url))
@@ -233,5 +233,5 @@ export function clone(data) {
 const privateFileRE = /test|private/
 
 export function filterOutPrivateFiles(file) {
-  return privateFileRE.test(file) === false
+  return !privateFileRE.test(file)
 }

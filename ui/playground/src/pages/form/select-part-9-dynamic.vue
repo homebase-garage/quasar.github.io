@@ -71,9 +71,9 @@ export default {
       if (this.multiple1.some(x => x.includes('Google'))) {
         return options.filter(
           x =>
-            x.includes('Twitter') === false &&
-            x.includes('Apple') === false &&
-            x.includes('Oracle') === false
+            !x.includes('Twitter') &&
+            !x.includes('Apple') &&
+            !x.includes('Oracle')
         )
       }
       return options

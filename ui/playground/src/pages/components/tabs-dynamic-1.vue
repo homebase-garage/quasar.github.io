@@ -24,7 +24,7 @@
         dense
         v-ripple
         clickable
-        @click="outsideArrows = outsideArrows === false"
+        @click="outsideArrows = !outsideArrows"
       >
         <q-item-section>
           <q-item-label>{{
@@ -41,7 +41,7 @@
         dense
         v-ripple
         clickable
-        @click="mobileArrows = mobileArrows === false"
+        @click="mobileArrows = !mobileArrows"
       >
         <q-item-section>
           <q-item-label>{{

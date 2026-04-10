@@ -31,7 +31,7 @@ const argv = parseArgs(processArgv, {
 
 // if user hasn't explicitly specified this, then
 // we shouldn't take it into account
-if (processArgv.includes('--skip-trim') === false) {
+if (!processArgv.includes('--skip-trim')) {
   delete argv['skip-trim']
 }
 

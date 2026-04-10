@@ -123,8 +123,9 @@ export default {
   identifiers,
   getJson: readAssociatedJsonFile,
   getFileHeader: ({ ctx, json }) => {
-    const hasQuasarInstallOverride =
-      autoInstalledPlugins.includes(ctx.camelCaseName) === false
+    const hasQuasarInstallOverride = !autoInstalledPlugins.includes(
+      ctx.camelCaseName
+    )
 
     const acc = [
       "import { describe, test, expect } from 'vitest'",

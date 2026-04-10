@@ -113,12 +113,12 @@
 
           <q-btn
             label="Toggle seamless dialog (in fullscreen el)"
-            @click="dialog2 = dialog2 === false"
+            @click="dialog2 = !dialog2"
           />
 
           <q-btn
             label="Toggle seamless dialog (outside fullscreen el)"
-            @click="dialog3 = dialog3 === false"
+            @click="dialog3 = !dialog3"
           />
         </div>
 
@@ -201,7 +201,7 @@
 
               <q-btn
                 label="Toggle seamless dialog inside local fullscreen"
-                @click="dialog4 = dialog4 === false"
+                @click="dialog4 = !dialog4"
               />
 
               <q-dialog v-model="dialog4" seamless position="left">
