@@ -119,7 +119,6 @@ export default createComponent({
     const hasSelection = computed(() => props.selected !== void 0)
 
     const computedIcon = computed(() => props.icon || $q.iconSet.tree.icon)
-
     const computedControlColor = computed(
       () => props.controlColor || props.color
     )
@@ -159,7 +158,7 @@ export default createComponent({
             node[props.childrenKey].length !== 0,
           selectable =
             node.disabled !== true &&
-            hasSelection.value === true &&
+            hasSelection.value &&
             node.selectable !== false,
           expandable = node.disabled !== true && node.expandable !== false,
           hasTicking = tickStrategy !== 'none',

@@ -74,8 +74,8 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-icon' +
-        (props.left === true ? ' on-left' : '') + // TODO Qv3: drop this
-        (props.right === true ? ' on-right' : '') +
+        (props.left ? ' on-left' : '') + // TODO Qv3: drop this
+        (props.right ? ' on-right' : '') +
         (props.color !== void 0 ? ` text-${props.color}` : '')
     )
 
@@ -188,11 +188,11 @@ export default createComponent({
         'aria-hidden': 'true'
       }
 
-      if (type.value.none === true) {
+      if (type.value.none) {
         return h(props.tag, data, hSlot(slots.default))
       }
 
-      if (type.value.img === true) {
+      if (type.value.img) {
         return h(
           props.tag,
           data,
@@ -200,7 +200,7 @@ export default createComponent({
         )
       }
 
-      if (type.value.svg === true) {
+      if (type.value.svg) {
         return h(
           props.tag,
           data,
@@ -216,7 +216,7 @@ export default createComponent({
         )
       }
 
-      if (type.value.svguse === true) {
+      if (type.value.svguse) {
         return h(
           props.tag,
           data,

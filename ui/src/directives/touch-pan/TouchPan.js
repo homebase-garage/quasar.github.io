@@ -133,7 +133,7 @@ export default createDirective(
 
         beforeMount(el, { value, modifiers }) {
           // early return, we don't need to do anything
-          if (modifiers.mouse !== true && client.has.touch !== true) return
+          if (modifiers.mouse !== true && !client.has.touch) return
 
           function handleEvent(evt, mouseEvent) {
             if (modifiers.mouse === true && mouseEvent === true) {
@@ -201,8 +201,8 @@ export default createDirective(
                     ? new MouseEvent(evt.type, evt)
                     : new TouchEvent(evt.type, evt)
 
-                  if (evt.defaultPrevented === true) prevent(clone)
-                  if (evt.cancelBubble === true) stop(clone)
+                  if (evt.defaultPrevented) prevent(clone)
+                  if (evt.cancelBubble) stop(clone)
 
                   Object.assign(clone, {
                     qKeyEvent: evt.qKeyEvent,
@@ -415,7 +415,7 @@ export default createDirective(
             ])
           }
 
-          if (client.has.touch === true) {
+          if (client.has.touch) {
             addEvt(ctx, 'main', [
               [
                 el,

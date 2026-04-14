@@ -109,8 +109,7 @@ export default function useBtn(props) {
     })
 
   const style = computed(() => {
-    const obj =
-      props.fab === false && props.fabMini === false ? sizeStyle.value : {}
+    const obj = props.fab || props.fabMini ? {} : sizeStyle.value
 
     return props.padding !== void 0
       ? {
@@ -125,9 +124,7 @@ export default function useBtn(props) {
       : obj
   })
 
-  const isRounded = computed(
-    () => props.rounded || props.fab === true || props.fabMini === true
-  )
+  const isRounded = computed(() => props.rounded || props.fab || props.fabMini)
 
   const isActionable = computed(() => !props.disable && !props.loading)
 
@@ -178,7 +175,7 @@ export default function useBtn(props) {
 
     if (props.color !== void 0) {
       colors =
-        props.flat === true || props.outline === true
+        props.flat || props.outline
           ? `text-${props.textColor || props.color}`
           : `bg-${props.color} text-${props.textColor || 'white'}`
     } else if (props.textColor) {
@@ -197,11 +194,7 @@ export default function useBtn(props) {
         : props.disable
           ? ' disabled'
           : '') +
-      (props.fab === true
-        ? ' q-btn--fab'
-        : props.fabMini === true
-          ? ' q-btn--fab-mini'
-          : '') +
+      (props.fab ? ' q-btn--fab' : props.fabMini ? ' q-btn--fab-mini' : '') +
       (props.noCaps ? ' q-btn--no-uppercase' : '') +
       (props.dense ? ' q-btn--dense' : '') +
       (props.stretch ? ' no-border-radius self-stretch' : '') +

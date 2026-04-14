@@ -66,15 +66,15 @@ export default function usePageSticky() {
     const side = attach.value
     const dir = $q.lang.rtl === true ? -1 : 1
 
-    if (side.top === true && top.value !== 0) {
+    if (side.top && top.value !== 0) {
       posY = `${top.value}px`
-    } else if (side.bottom === true && bottom.value !== 0) {
+    } else if (side.bottom && bottom.value !== 0) {
       posY = `${-bottom.value}px`
     }
 
-    if (side.left === true && left.value !== 0) {
+    if (side.left && left.value !== 0) {
       posX = `${dir * left.value}px`
-    } else if (side.right === true && right.value !== 0) {
+    } else if (side.right && right.value !== 0) {
       posX = `${-dir * right.value}px`
     }
 
@@ -84,14 +84,14 @@ export default function usePageSticky() {
       css.margin = `${props.offset[1]}px ${props.offset[0]}px`
     }
 
-    if (side.vertical === true) {
+    if (side.vertical) {
       if (left.value !== 0) {
         css[$q.lang.rtl === true ? 'right' : 'left'] = `${left.value}px`
       }
       if (right.value !== 0) {
         css[$q.lang.rtl === true ? 'left' : 'right'] = `${right.value}px`
       }
-    } else if (side.horizontal === true) {
+    } else if (side.horizontal) {
       if (top.value !== 0) {
         css.top = `${top.value}px`
       }
@@ -106,7 +106,7 @@ export default function usePageSticky() {
   const classes = computed(
     () =>
       `q-page-sticky row flex-center fixed-${props.position}` +
-      ` q-page-sticky--${props.expand === true ? 'expand' : 'shrink'}`
+      ` q-page-sticky--${props.expand ? 'expand' : 'shrink'}`
   )
 
   function getStickyContent(slots) {
@@ -118,7 +118,7 @@ export default function usePageSticky() {
         class: classes.value,
         style: style.value
       },
-      props.expand === true ? content : [h('div', content)]
+      props.expand ? content : [h('div', content)]
     )
   }
 

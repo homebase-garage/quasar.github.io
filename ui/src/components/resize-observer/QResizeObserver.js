@@ -12,14 +12,13 @@ import { createComponent } from '../../utils/private.create/create.js'
 import { listenOpts, noop } from '../../utils/event/event.js'
 
 const hasObserver = typeof ResizeObserver !== 'undefined'
-const resizeProps =
-  hasObserver === true
-    ? {}
-    : {
-        style:
-          'display:block;position:absolute;top:0;left:0;right:0;bottom:0;height:100%;width:100%;overflow:hidden;pointer-events:none;z-index:-1;',
-        url: 'about:blank'
-      }
+const resizeProps = hasObserver
+  ? {}
+  : {
+      style:
+        'display:block;position:absolute;top:0;left:0;right:0;bottom:0;height:100%;width:100%;overflow:hidden;pointer-events:none;z-index:-1;',
+      url: 'about:blank'
+    }
 
 export default createComponent({
   name: 'QResizeObserver',
@@ -73,7 +72,7 @@ export default createComponent({
     // expose public method
     proxy.trigger = trigger
 
-    if (hasObserver === true) {
+    if (hasObserver) {
       let observer
 
       // initialize as soon as possible
@@ -151,7 +150,7 @@ export default createComponent({
     onBeforeUnmount(cleanup)
 
     return () => {
-      if (isHydrated.value === true) {
+      if (isHydrated.value) {
         return h('object', {
           class: 'q--avoid-card-border',
           style: resizeProps.style,

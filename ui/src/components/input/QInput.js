@@ -126,7 +126,7 @@ export default createComponent({
         evt.onCompositionend =
           onComposition
 
-      if (hasMask.value === true) {
+      if (hasMask.value) {
         evt.onKeydown = onMaskedKeydown
         // reset selection anchor on pointer selection
         evt.onClick = onMaskedClick
@@ -142,7 +142,7 @@ export default createComponent({
     const inputAttrs = computed(() => {
       const acc = {
         tabindex: 0,
-        'data-autofocus': props.autofocus === true || void 0,
+        'data-autofocus': props.autofocus || void 0,
         rows: props.type === 'textarea' ? 6 : void 0,
         'aria-label': props.label,
         name: nameProp.value,
@@ -179,7 +179,7 @@ export default createComponent({
     watch(
       () => props.modelValue,
       v => {
-        if (hasMask.value === true) {
+        if (hasMask.value) {
           if (stopValueWatcher === true) {
             stopValueWatcher = false
             if (String(v) === emitCachedValue) return
@@ -189,10 +189,7 @@ export default createComponent({
         } else if (innerValue.value !== v) {
           innerValue.value = v
 
-          if (
-            props.type === 'number' &&
-            Object.hasOwn(temp, 'value') === true
-          ) {
+          if (props.type === 'number' && Object.hasOwn(temp, 'value')) {
             if (typedNumber === true) {
               typedNumber = false
             } else {
@@ -245,7 +242,7 @@ export default createComponent({
     }
 
     function onPaste(e) {
-      if (hasMask.value === true && props.reverseFillMask !== true) {
+      if (hasMask.value && props.reverseFillMask !== true) {
         const inp = e.target
         moveCursorForPaste(inp, inp.selectionStart, inp.selectionEnd)
       }
@@ -268,12 +265,12 @@ export default createComponent({
         return
       }
 
-      if (hasMask.value === true) {
+      if (hasMask.value) {
         updateMaskValue(val, false, e.inputType)
       } else {
         emitValue(val)
 
-        if (isTypeText.value === true && e.target === document.activeElement) {
+        if (isTypeText.value && e.target === document.activeElement) {
           const { selectionStart, selectionEnd } = e.target
 
           if (selectionStart !== void 0 && selectionEnd !== void 0) {
@@ -303,7 +300,7 @@ export default createComponent({
       emitValueFn = () => {
         emitTimer = null
 
-        if (props.type !== 'number' && Object.hasOwn(temp, 'value') === true) {
+        if (props.type !== 'number' && Object.hasOwn(temp, 'value')) {
           delete temp.value
         }
 
@@ -413,7 +410,7 @@ export default createComponent({
     }
 
     function getCurValue() {
-      return Object.hasOwn(temp, 'value') === true
+      return Object.hasOwn(temp, 'value')
         ? temp.value
         : innerValue.value !== void 0
           ? innerValue.value

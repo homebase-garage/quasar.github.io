@@ -219,9 +219,7 @@ export default createComponent({
     const view = ref(props.defaultView)
     const model = ref(parseModel(props.modelValue || props.defaultValue))
 
-    const editable = computed(
-      () => props.disable !== true && props.readonly !== true
-    )
+    const editable = computed(() => !props.disable && !props.readonly)
 
     const isHex = computed(
       () =>
@@ -238,7 +236,7 @@ export default createComponent({
     const formAttrs = computed(() => ({
       type: 'hidden',
       name: props.name,
-      value: model.value[isOutputHex.value === true ? 'hex' : 'rgb']
+      value: model.value[isOutputHex.value ? 'hex' : 'rgb']
     }))
 
     const injectFormInput = useFormInject(formAttrs)
@@ -281,10 +279,8 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-color-picker' +
-        (props.bordered === true ? ' q-color-picker--bordered' : '') +
-        (props.square === true
-          ? ' q-color-picker--square no-border-radius'
-          : '') +
+        (props.bordered ? ' q-color-picker--bordered' : '') +
+        (props.square ? ' q-color-picker--square no-border-radius' : '') +
         (props.flat ? ' q-color-picker--flat no-shadow' : '') +
         (props.disable ? ' disabled' : '') +
         (isDark.value ? ' q-color-picker--dark q-dark' : '')
@@ -334,11 +330,11 @@ export default createComponent({
       model.value.b = rgb.b
       model.value.a = rgb.a
 
-      const value = model.value[isOutputHex.value === true ? 'hex' : 'rgb']
+      const value = model.value[isOutputHex.value ? 'hex' : 'rgb']
 
       // emit new value
       emit('update:modelValue', value)
-      if (change === true) emit('change', value)
+      if (change) emit('change', value)
     }
 
     function parseModel(v) {
@@ -352,7 +348,7 @@ export default createComponent({
       if (
         typeof v !== 'string' ||
         v.length === 0 ||
-        testPattern.anyColor(v.replaceAll(' ', '')) !== true
+        !testPattern.anyColor(v.replaceAll(' ', ''))
       ) {
         return {
           h: 0,
@@ -361,7 +357,7 @@ export default createComponent({
           r: 0,
           g: 0,
           b: 0,
-          a: alpha === true ? 100 : void 0,
+          a: alpha ? 100 : void 0,
           hex: void 0,
           rgb: void 0
         }
@@ -369,7 +365,7 @@ export default createComponent({
 
       const localModel = textToRgb(v)
 
-      if (alpha === true && localModel.a === void 0) {
+      if (alpha && localModel.a === void 0) {
         localModel.a = 100
       }
 
@@ -388,10 +384,7 @@ export default createComponent({
         rect = panel.getBoundingClientRect()
 
       let x = Math.min(width, Math.max(0, left - rect.left))
-
-      if ($q.lang.rtl === true) {
-        x = width - x
-      }
+      if ($q.lang.rtl === true) x = width - x
 
       const y = Math.min(height, Math.max(0, top - rect.top)),
         s = Math.round((100 * x) / width),
@@ -400,7 +393,7 @@ export default createComponent({
           h: model.value.h,
           s,
           v,
-          a: hasAlpha.value === true ? model.value.a : void 0
+          a: hasAlpha.value ? model.value.a : void 0
         })
 
       model.value.s = s
@@ -414,7 +407,7 @@ export default createComponent({
         h: hue,
         s: model.value.s,
         v: model.value.v,
-        a: hasAlpha.value === true ? model.value.a : void 0
+        a: hasAlpha.value ? model.value.a : void 0
       })
 
       model.value.h = hue
@@ -429,14 +422,14 @@ export default createComponent({
       if (evt !== void 0) stop(evt)
 
       if (!numericRE.test(value)) {
-        if (change === true) proxy.$forceUpdate()
+        if (change) proxy.$forceUpdate()
         return
       }
 
       const val = Math.floor(Number(value))
 
       if (val < 0 || val > max) {
-        if (change === true) proxy.$forceUpdate()
+        if (change) proxy.$forceUpdate()
         return
       }
 
@@ -444,12 +437,7 @@ export default createComponent({
         r: formatModel === 'r' ? val : model.value.r,
         g: formatModel === 'g' ? val : model.value.g,
         b: formatModel === 'b' ? val : model.value.b,
-        a:
-          hasAlpha.value === true
-            ? formatModel === 'a'
-              ? val
-              : model.value.a
-            : void 0
+        a: hasAlpha.value ? (formatModel === 'a' ? val : model.value.a) : void 0
       }
 
       if (formatModel !== 'a') {
@@ -476,10 +464,7 @@ export default createComponent({
       stop(evt)
 
       if (topView.value === 'hex') {
-        if (
-          inp.length !== (hasAlpha.value === true ? 9 : 7) ||
-          !hexRE.test(inp)
-        ) {
+        if (inp.length !== (hasAlpha.value ? 9 : 7) || !hexRE.test(inp)) {
           return true
         }
 
@@ -489,7 +474,7 @@ export default createComponent({
 
         if (!inp.endsWith(')')) {
           return true
-        } else if (hasAlpha.value !== true && inp.startsWith('rgb(')) {
+        } else if (!hasAlpha.value && inp.startsWith('rgb(')) {
           localModel = inp
             .slice(4, -1)
             .split(',')
@@ -498,7 +483,7 @@ export default createComponent({
           if (localModel.length !== 3 || !rgbRE.test(inp)) {
             return true
           }
-        } else if (hasAlpha.value === true && inp.startsWith('rgba(')) {
+        } else if (hasAlpha.value && inp.startsWith('rgba(')) {
           localModel = inp.slice(5, -1).split(',')
 
           if (localModel.length !== 4 || !rgbaRE.test(inp)) {
@@ -529,7 +514,7 @@ export default createComponent({
           localModel[1] > 255 ||
           localModel[2] < 0 ||
           localModel[2] > 255 ||
-          (hasAlpha.value === true && (localModel[3] < 0 || localModel[3] > 1))
+          (hasAlpha.value && (localModel[3] < 0 || localModel[3] > 1))
         ) {
           return true
         }
@@ -538,7 +523,7 @@ export default createComponent({
           r: localModel[0],
           g: localModel[1],
           b: localModel[2],
-          a: hasAlpha.value === true ? localModel[3] * 100 : void 0
+          a: hasAlpha.value ? localModel[3] * 100 : void 0
         }
       }
 
@@ -614,7 +599,7 @@ export default createComponent({
     function getHeader() {
       const child = []
 
-      if (props.noHeaderTabs !== true) {
+      if (!props.noHeaderTabs) {
         child.push(
           h(
             QTabs,
@@ -627,13 +612,13 @@ export default createComponent({
             },
             () => [
               h(QTab, {
-                label: 'HEX' + (hasAlpha.value === true ? 'A' : ''),
+                label: 'HEX' + (hasAlpha.value ? 'A' : ''),
                 name: 'hex',
                 ripple: false
               }),
 
               h(QTab, {
-                label: 'RGB' + (hasAlpha.value === true ? 'A' : ''),
+                label: 'RGB' + (hasAlpha.value ? 'A' : ''),
                 name: 'rgb',
                 ripple: false
               })
@@ -655,11 +640,11 @@ export default createComponent({
               ...(editable.value ? {} : { readonly: true }),
               ...getCache('topIn', {
                 onInput: evt => {
-                  updateErrorIcon(onEditorChange(evt) === true)
+                  updateErrorIcon(onEditorChange(evt))
                 },
                 onChange: stop,
                 onBlur: evt => {
-                  if (onEditorChange(evt, true) === true) proxy.$forceUpdate()
+                  if (onEditorChange(evt, true)) proxy.$forceUpdate()
                   updateErrorIcon(false)
                 }
               })
@@ -825,7 +810,7 @@ export default createComponent({
         })
       ]
 
-      if (hasAlpha.value === true) {
+      if (hasAlpha.value) {
         sliders.push(
           h(QSlider, {
             class: 'q-color-picker__alpha non-selectable',
@@ -944,7 +929,7 @@ export default createComponent({
           })
         ]),
 
-        hasAlpha.value === true
+        hasAlpha.value
           ? h('div', { class: 'row items-center no-wrap' }, [
               h('div', 'A'),
               h(QSlider, {
@@ -1006,12 +991,12 @@ export default createComponent({
     return () => {
       const child = [getContent()]
 
-      if (props.name !== void 0 && props.disable !== true) {
+      if (props.name !== void 0 && !props.disable) {
         injectFormInput(child, 'push')
       }
 
-      if (props.noHeader !== true) child.unshift(getHeader())
-      if (props.noFooter !== true) child.push(getFooter())
+      if (!props.noHeader) child.unshift(getHeader())
+      if (!props.noFooter) child.push(getFooter())
 
       return h(
         'div',

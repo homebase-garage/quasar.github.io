@@ -211,7 +211,7 @@ export default createComponent({
 
     const minLink = computed(() => innerModel.value.hour !== null)
     const secLink = computed(
-      () => minLink.value === true && innerModel.value.minute !== null
+      () => minLink.value && innerModel.value.minute !== null
     )
 
     const hourInSelection = computed(() =>
@@ -240,9 +240,7 @@ export default createComponent({
     )
 
     const validHours = computed(() => {
-      if (hourInSelection.value === null) {
-        return null
-      }
+      if (hourInSelection.value === null) return null
 
       const am = getValidValues(0, 11, hourInSelection.value)
       const pm = getValidValues(12, 11, hourInSelection.value)
@@ -491,8 +489,8 @@ export default createComponent({
               : validHours.value.am.values.length !== 0
 
           val = getNormalizedClockValue(
-            val + (am === true ? 0 : 12),
-            validHours.value[am === true ? 'am' : 'pm']
+            val + (am ? 0 : 12),
+            validHours.value[am ? 'am' : 'pm']
           )
         } else {
           val = Math.round(val)
@@ -825,7 +823,7 @@ export default createComponent({
 
         h(
           'div',
-          minLink.value === true
+          minLink.value
             ? {
                 class:
                   'q-time__link ' +
@@ -847,7 +845,7 @@ export default createComponent({
 
           h(
             'div',
-            secLink.value === true
+            secLink.value
               ? {
                   class:
                     'q-time__link ' +

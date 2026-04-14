@@ -30,9 +30,7 @@ export default function useFullscreen() {
     watch(
       () => proxy.$route.fullPath,
       () => {
-        if (props.noRouteFullscreenExit !== true) {
-          exitFullscreen()
-        }
+        if (!props.noRouteFullscreenExit) exitFullscreen()
       }
     )
   }
@@ -104,7 +102,7 @@ export default function useFullscreen() {
   })
 
   onMounted(() => {
-    if (props.fullscreen === true) setFullscreen()
+    if (props.fullscreen) setFullscreen()
   })
 
   onBeforeUnmount(exitFullscreen)

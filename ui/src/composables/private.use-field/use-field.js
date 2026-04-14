@@ -496,7 +496,7 @@ export default function useField(state) {
       )
     }
 
-    if (state.getShadowControl !== void 0 && state.hasShadow.value === true) {
+    if (state.getShadowControl !== void 0 && state.hasShadow.value) {
       node.push(state.getShadowControl())
     }
 
@@ -635,12 +635,12 @@ export default function useField(state) {
   })
 
   onActivated(() => {
-    if (shouldActivate === true && props.autofocus === true) {
+    if (shouldActivate && props.autofocus) {
       proxy.focus()
     }
   })
 
-  if (props.autofocus === true) {
+  if (props.autofocus) {
     onMounted(() => {
       proxy.focus()
     })

@@ -39,6 +39,7 @@ function changed(old, def) {
   if (Object.keys(old).length !== Object.keys(def).length) {
     return true
   }
+
   for (const key in old) {
     if (old[key] !== def[key]) {
       return true
@@ -86,7 +87,7 @@ function diff(meta, other) {
     for (const key in cur) {
       if (!Object.hasOwn(old, key)) {
         add[type][key] = cur[key]
-      } else if (changed(old[key], cur[key]) === true) {
+      } else if (changed(old[key], cur[key])) {
         remove[type].push(key)
         add[type][key] = cur[key]
       }

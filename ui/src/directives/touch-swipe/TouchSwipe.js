@@ -45,7 +45,7 @@ export default createDirective(
 
         beforeMount(el, { value, arg, modifiers }) {
           // early return, we don't need to do anything
-          if (modifiers.mouse !== true && client.has.touch !== true) return
+          if (modifiers.mouse !== true && !client.has.touch) return
 
           const mouseCapture = modifiers.mouseCapture === true ? 'Capture' : ''
 
@@ -252,7 +252,7 @@ export default createDirective(
             ])
           }
 
-          if (client.has.touch === true) {
+          if (client.has.touch) {
             addEvt(ctx, 'main', [
               [
                 el,

@@ -175,7 +175,7 @@ export default createComponent({
       )
 
       watch(hasClickOutside, val => {
-        const fn = val === true ? addClickOutside : removeClickOutside
+        const fn = val ? addClickOutside : removeClickOutside
         fn(clickOutsideProps)
       })
 
@@ -298,7 +298,7 @@ export default createComponent({
     }
 
     function configureAnchorEl() {
-      if (props.noParentEvent === true || anchorEl.value === null) return
+      if (props.noParentEvent || anchorEl.value === null) return
 
       const evts = $q.platform.is.mobile
         ? [[anchorEl.value, 'touchstart', 'delayShow', 'passive']]
@@ -316,7 +316,7 @@ export default createComponent({
           anchorEl.value,
           props.scrollTarget
         )
-        const fn = props.noParentEvent === true ? updatePosition : hide
+        const fn = props.noParentEvent ? updatePosition : hide
 
         changeScrollEvent(localScrollTarget.value, fn)
       }

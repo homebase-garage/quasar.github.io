@@ -21,7 +21,7 @@ export default createComponent({
     const { isHydrated } = useHydration()
 
     return () => {
-      if (isHydrated.value === true) {
+      if (isHydrated.value) {
         const node = hSlot(slots.default)
         return node === void 0
           ? node

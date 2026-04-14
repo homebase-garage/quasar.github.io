@@ -64,7 +64,7 @@ export default createComponent({
         child.unshift(props.body)
       }
 
-      if (props.heading === true) {
+      if (props.heading) {
         const content = [
           h('div'),
           h('div'),
@@ -76,7 +76,7 @@ export default createComponent({
           {
             class: 'q-timeline__heading'
           },
-          reverse.value === true ? content.reverse() : content
+          reverse.value ? content.reverse() : content
         )
       }
 
@@ -124,7 +124,7 @@ export default createComponent({
         {
           class: classes.value
         },
-        reverse.value === true ? content.reverse() : content
+        reverse.value ? content.reverse() : content
       )
     }
   }

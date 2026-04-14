@@ -26,7 +26,7 @@ function getBlockElement(el, parent) {
 function isChildOf(el, parent, orSame) {
   return !el || el === document.body
     ? false
-    : (orSame === true && el === parent) ||
+    : (orSame && el === parent) ||
         (parent === document ? document.body : parent).contains(el.parentNode)
 }
 

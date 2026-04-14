@@ -133,7 +133,7 @@ export default function useFile({
     // Cordova/iOS allows selecting multiple files even when the
     // multiple attribute is not specified. We also normalize drag'n'dropped
     // files here:
-    if (props.multiple !== true && files.length !== 0) {
+    if (!props.multiple && files.length !== 0) {
       files = [files[0]]
     }
 
@@ -204,7 +204,7 @@ export default function useFile({
 
   function onDragover(e) {
     stopAndPreventDrag(e)
-    if (dnd.value !== true) dnd.value = true
+    if (!dnd.value) dnd.value = true
   }
 
   function onDragleave(e) {
@@ -234,7 +234,7 @@ export default function useFile({
   }
 
   function getDndNode(type) {
-    if (dnd.value === true) {
+    if (dnd.value) {
       return h('div', {
         ref: dndRef,
         class: `q-${type}__dnd absolute-full`,

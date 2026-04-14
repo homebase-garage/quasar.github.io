@@ -347,12 +347,10 @@ const bottomOffset = ref(100)
 
 const scrollRef = ref(null)
 
-const axis = computed(() =>
-  horizontal.value === true ? 'horizontal' : 'vertical'
-)
+const axis = computed(() => (horizontal.value ? 'horizontal' : 'vertical'))
 
 const customBarStyle = computed(() =>
-  customStyle.value === true
+  customStyle.value
     ? {
         backgroundColor: '#666',
         borderStyle: 'solid',

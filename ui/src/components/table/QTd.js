@@ -17,8 +17,8 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-td' +
-        (props.autoWidth === true ? ' q-table--col-auto-width' : '') +
-        (props.noHover === true ? ' q-td--no-hover' : '') +
+        (props.autoWidth ? ' q-table--col-auto-width' : '') +
+        (props.noHover ? ' q-td--no-hover' : '') +
         ' '
     )
 

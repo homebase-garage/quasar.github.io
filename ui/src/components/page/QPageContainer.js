@@ -27,17 +27,17 @@ export default createComponent({
     const style = computed(() => {
       const css = {}
 
-      if ($layout.header.space === true) {
+      if ($layout.header.space) {
         css.paddingTop = `${$layout.header.size}px`
       }
-      if ($layout.right.space === true) {
+      if ($layout.right.space) {
         css[`padding${$q.lang.rtl === true ? 'Left' : 'Right'}`] =
           `${$layout.right.size}px`
       }
-      if ($layout.footer.space === true) {
+      if ($layout.footer.space) {
         css.paddingBottom = `${$layout.footer.size}px`
       }
-      if ($layout.left.space === true) {
+      if ($layout.left.space) {
         css[`padding${$q.lang.rtl === true ? 'Right' : 'Left'}`] =
           `${$layout.left.size}px`
       }

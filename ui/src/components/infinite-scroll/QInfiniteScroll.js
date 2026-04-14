@@ -181,7 +181,7 @@ export default createComponent({
       poll =
         val <= 0
           ? immediatePoll
-          : debounce(immediatePoll, Number.isNaN(val) === true ? 100 : val)
+          : debounce(immediatePoll, Number.isNaN(val) ? 100 : val)
 
       if (localScrollTarget && isWorking.value) {
         if (oldPoll !== void 0) {
@@ -193,7 +193,7 @@ export default createComponent({
     }
 
     function updateSvgAnimations(isRetry) {
-      if (renderLoadingSlot.value === true) {
+      if (renderLoadingSlot.value) {
         if (loadingRef.value === null) {
           if (isRetry !== true) {
             nextTick(() => {
@@ -282,7 +282,7 @@ export default createComponent({
     return () => {
       const child = hUniqueSlot(slots.default, [])
 
-      if (renderLoadingSlot.value === true) {
+      if (renderLoadingSlot.value) {
         child[props.reverse ? 'unshift' : 'push'](
           h(
             'div',

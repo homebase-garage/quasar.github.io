@@ -138,8 +138,7 @@ export default function usePanel() {
   watch(
     () => props.modelValue,
     (newVal, oldVal) => {
-      const index =
-        isValidPanelName(newVal) === true ? getPanelIndex(newVal) : -1
+      const index = isValidPanelName(newVal) ? getPanelIndex(newVal) : -1
 
       if (forcedPanelTransition !== true) {
         updatePanelTransition(
@@ -243,7 +242,7 @@ export default function usePanel() {
 
   function getPanelContentChild() {
     const panel =
-      isValidPanelName(props.modelValue) === true &&
+      isValidPanelName(props.modelValue) &&
       updatePanelIndex() &&
       panels[panelIndex.value]
 
@@ -251,7 +250,7 @@ export default function usePanel() {
       ? [
           h(KeepAlive, keepAliveProps.value, [
             h(
-              needsUniqueKeepAliveWrapper.value === true
+              needsUniqueKeepAliveWrapper.value
                 ? getCache(contentKey.value, () => ({
                     ...PanelWrapper,
                     name: contentKey.value
@@ -289,7 +288,7 @@ export default function usePanel() {
       panel =>
         panel.props !== null &&
         panel.props.slot === void 0 &&
-        isValidPanelName(panel.props.name) === true
+        isValidPanelName(panel.props.name)
     )
 
     return panels.length

@@ -152,18 +152,14 @@ function normalizeOptions(options) {
 
     waitFor: options.waitFor === void 0 ? 0 : options.waitFor,
 
-    duration:
-      Number.isNaN(options.duration) === true
-        ? 300
-        : Number.parseInt(options.duration, 10),
+    duration: Number.isNaN(options.duration)
+      ? 300
+      : Number.parseInt(options.duration, 10),
     easing:
       typeof options.easing === 'string' && options.easing.length !== 0
         ? options.easing
         : 'ease-in-out',
-    delay:
-      Number.isNaN(options.delay) === true
-        ? 0
-        : Number.parseInt(options.delay, 10),
+    delay: Number.isNaN(options.delay) ? 0 : Number.parseInt(options.delay, 10),
     fill:
       typeof options.fill === 'string' && options.fill.length !== 0
         ? options.fill
@@ -180,14 +176,12 @@ function normalizeOptions(options) {
     keepToClone: options.keepToClone === true || options.keeptoclone === true,
 
     tween: options.tween === true,
-    tweenFromOpacity:
-      Number.isNaN(options.tweenFromOpacity) === true
-        ? 0.6
-        : Number.parseFloat(options.tweenFromOpacity),
-    tweenToOpacity:
-      Number.isNaN(options.tweenToOpacity) === true
-        ? 0.5
-        : Number.parseFloat(options.tweenToOpacity)
+    tweenFromOpacity: Number.isNaN(options.tweenFromOpacity)
+      ? 0.6
+      : Number.parseFloat(options.tweenFromOpacity),
+    tweenToOpacity: Number.isNaN(options.tweenToOpacity)
+      ? 0.5
+      : Number.parseFloat(options.tweenToOpacity)
   }
 }
 

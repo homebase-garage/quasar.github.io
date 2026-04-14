@@ -197,9 +197,7 @@ export default createComponent({
     )
 
     const rootContainerClass = computed(
-      () =>
-        containerClass.value +
-        (props.loading === true ? ' q-table--loading' : '')
+      () => containerClass.value + (props.loading ? ' q-table--loading' : '')
     )
 
     watch(
@@ -210,7 +208,7 @@ export default createComponent({
         props.tableHeaderClass +
         containerClass.value,
       () => {
-        if (hasVirtScroll.value === true) virtScrollRef.value?.reset()
+        if (hasVirtScroll.value) virtScrollRef.value?.reset()
       }
     )
 
@@ -232,7 +230,7 @@ export default createComponent({
     const filteredSortedRows = computed(() => {
       let rows = props.rows
 
-      if (isServerSide.value === true || rows.length === 0) {
+      if (isServerSide.value || rows.length === 0) {
         return rows
       }
 
@@ -265,9 +263,7 @@ export default createComponent({
     const computedRows = computed(() => {
       let rows = filteredSortedRows.value
 
-      if (isServerSide.value === true) {
-        return rows
-      }
+      if (isServerSide.value) return rows
 
       const { rowsPerPage } = computedPagination.value
 
@@ -346,15 +342,15 @@ export default createComponent({
     })
 
     function resetVirtualScroll() {
-      if (hasVirtScroll.value === true) virtScrollRef.value.reset()
+      if (hasVirtScroll.value) virtScrollRef.value.reset()
     }
 
     function getBody() {
       if (props.grid) return getGridBody()
 
-      const header = props.hideHeader !== true ? getTHead : null
+      const header = props.hideHeader ? null : getTHead
 
-      if (hasVirtScroll.value === true) {
+      if (hasVirtScroll.value) {
         const topRow = slots['top-row']
         const bottomRow = slots['bottom-row']
 
@@ -497,7 +493,7 @@ export default createComponent({
               )
         })
 
-      if (hasSelectionMode.value === true) {
+      if (hasSelectionMode.value) {
         const slot = slots['body-selection']
         const content =
           slot !== void 0
@@ -605,7 +601,7 @@ export default createComponent({
         dense: props.dense
       })
 
-      if (hasSelectionMode.value === true) {
+      if (hasSelectionMode.value) {
         injectProp(
           data,
           'selected',
@@ -646,7 +642,7 @@ export default createComponent({
         topRight = slots['top-right'],
         topSelection = slots['top-selection'],
         hasSelection =
-          hasSelectionMode.value === true &&
+          hasSelectionMode.value &&
           topSelection !== void 0 &&
           rowsSelectedNumber.value > 0,
         topClass = 'q-table__top relative-position row items-center'
@@ -657,7 +653,7 @@ export default createComponent({
 
       let child
 
-      if (hasSelection === true) {
+      if (hasSelection) {
         child = [topSelection(marginalsScope.value)].flat()
       } else {
         child = []
@@ -697,13 +693,13 @@ export default createComponent({
     }
 
     const headerSelectedValue = computed(() =>
-      someRowsSelected.value === true ? null : allRowsSelected.value
+      someRowsSelected.value ? null : allRowsSelected.value
     )
 
     function getTHead() {
       const child = getTHeadTR()
 
-      if (props.loading === true && slots.loading === void 0) {
+      if (props.loading && slots.loading === void 0) {
         child.push(
           h('tr', { class: 'q-table__progress' }, [
             h(
@@ -746,9 +742,9 @@ export default createComponent({
             )
       })
 
-      if (singleSelection.value === true && !props.grid) {
+      if (singleSelection.value && !props.grid) {
         child.unshift(h('th', { class: 'q-table--col-auto-width' }, ' '))
-      } else if (multipleSelection.value === true) {
+      } else if (multipleSelection.value) {
         const slot = slots['header-selection']
         const content =
           slot !== void 0
@@ -788,7 +784,7 @@ export default createComponent({
         dense: props.dense
       })
 
-      if (multipleSelection.value === true) {
+      if (multipleSelection.value) {
         injectProp(
           data,
           'selected',
@@ -801,9 +797,7 @@ export default createComponent({
     }
 
     function onMultipleSelectionSet(val) {
-      if (someRowsSelected.value === true) {
-        val = false
-      }
+      if (someRowsSelected.value) val = false
 
       updateSelection(
         computedRows.value.map(getRowKey.value),
@@ -825,15 +819,14 @@ export default createComponent({
     function getBottomDiv() {
       if (props.hideBottom) return
 
-      if (nothingToDisplay.value === true) {
+      if (nothingToDisplay.value) {
         if (props.hideNoData) return
 
-        const message =
-          props.loading === true
-            ? props.loadingLabel || $q.lang.table.loading
-            : props.filter
-              ? props.noResultsLabel || $q.lang.table.noResults
-              : props.noDataLabel || $q.lang.table.noData
+        const message = props.loading
+          ? props.loadingLabel || $q.lang.table.loading
+          : props.filter
+            ? props.noResultsLabel || $q.lang.table.noResults
+            : props.noDataLabel || $q.lang.table.noData
 
         const noData = slots['no-data']
         const children =
@@ -868,7 +861,7 @@ export default createComponent({
 
       const child =
         !props.hideSelectedBanner &&
-        hasSelectionMode.value === true &&
+        hasSelectionMode.value &&
         rowsSelectedNumber.value > 0
           ? [
               h('div', { class: 'q-table__control' }, [
@@ -912,7 +905,7 @@ export default createComponent({
 
       child.push(h('div', { class: 'q-table__separator col' }))
 
-      if (hasOpts === true) {
+      if (hasOpts) {
         child.push(
           h('div', { class: 'q-table__control' }, [
             h('span', { class: 'q-table__bottom-item' }, [
@@ -1027,7 +1020,7 @@ export default createComponent({
     function getGridHeader() {
       const child = props.gridHeader
         ? [h('table', { class: 'q-table' }, [getTHead(h)])]
-        : props.loading === true && slots.loading === void 0
+        : props.loading && slots.loading === void 0
           ? getProgress(h)
           : void 0
 
@@ -1046,7 +1039,7 @@ export default createComponent({
                 ])
               )
 
-              if (hasSelectionMode.value === true) {
+              if (hasSelectionMode.value) {
                 const slot = slots['body-selection']
                 const content =
                   slot !== void 0
@@ -1189,7 +1182,7 @@ export default createComponent({
 
       child.push(getBody(), getBottomDiv())
 
-      if (props.loading === true && slots.loading !== void 0) {
+      if (props.loading && slots.loading !== void 0) {
         child.push(slots.loading())
       }
 

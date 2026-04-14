@@ -70,7 +70,7 @@ export default createComponent({
     // expose public methods
     Object.assign(proxy, {
       show(evt) {
-        if (canShow(evt) === true) popupRef.value.show(evt)
+        if (canShow(evt)) popupRef.value.show(evt)
       },
       hide(evt) {
         popupRef.value.hide(evt)

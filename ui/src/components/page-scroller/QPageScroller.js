@@ -112,7 +112,7 @@ export default createComponent({
     }
 
     function getContent() {
-      return showing.value === true
+      return showing.value
         ? h(
             'div',
             {

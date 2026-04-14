@@ -50,9 +50,7 @@ export default createComponent({
 
     function validate(shouldFocus) {
       const localFocus =
-        typeof shouldFocus === 'boolean'
-          ? shouldFocus
-          : props.noErrorFocus !== true
+        typeof shouldFocus === 'boolean' ? shouldFocus : !props.noErrorFocus
 
       const index = ++validateIndex
 
@@ -60,22 +58,21 @@ export default createComponent({
         emit(`validation${res === true ? 'Success' : 'Error'}`, compRef)
       }
 
-      const errorsPromise =
-        props.greedy === true
-          ? Promise.all(registeredComponents.map(validateComponent)).then(res =>
-              res.filter(r => !r.valid)
+      const errorsPromise = props.greedy
+        ? Promise.all(registeredComponents.map(validateComponent)).then(res =>
+            res.filter(r => !r.valid)
+          )
+        : registeredComponents
+            .reduce(
+              (acc, comp) =>
+                acc
+                  .then(() => validateComponent(comp))
+                  .then(r => {
+                    if (!r.valid) throw r
+                  }),
+              Promise.resolve()
             )
-          : registeredComponents
-              .reduce(
-                (acc, comp) =>
-                  acc
-                    .then(() => validateComponent(comp))
-                    .then(r => {
-                      if (!r.valid) throw r
-                    }),
-                Promise.resolve()
-              )
-              .catch(err => [err])
+            .catch(err => [err])
 
       return errorsPromise.then(errors => {
         if (errors === void 0 || errors.length === 0) {
@@ -145,7 +142,7 @@ export default createComponent({
       nextTick(() => {
         // allow userland to reset values before
         resetValidation()
-        if (props.autofocus === true && props.noResetFocus !== true) {
+        if (props.autofocus && !props.noResetFocus) {
           focus()
         }
       })
@@ -192,13 +189,13 @@ export default createComponent({
     })
 
     onActivated(() => {
-      if (shouldActivate === true && props.autofocus === true) {
+      if (shouldActivate && props.autofocus) {
         focus()
       }
     })
 
     onMounted(() => {
-      if (props.autofocus === true) focus()
+      if (props.autofocus) focus()
     })
 
     // expose public methods

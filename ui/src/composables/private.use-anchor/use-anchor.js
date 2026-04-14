@@ -80,7 +80,7 @@ export default function useAnchor({
       mobileTouch(evt) {
         anchorEvents.mobileCleanup(evt)
 
-        if (canShow(evt) !== true) return
+        if (!canShow(evt)) return
 
         proxy.hide(evt)
         anchorEl.value.classList.add('non-selectable')
@@ -108,7 +108,7 @@ export default function useAnchor({
           touchTimer = null
         }
 
-        if (showing.value === true && evt !== void 0) {
+        if (showing.value && evt !== void 0) {
           clearSelection()
         }
       }
@@ -117,20 +117,19 @@ export default function useAnchor({
     configureAnchorEl = function configureAnchorElFn(
       context = props.contextMenu
     ) {
-      if (props.noParentEvent === true || anchorEl.value === null) return
+      if (props.noParentEvent || anchorEl.value === null) return
 
-      const evts =
-        context === true
-          ? proxy.$q.platform.is.mobile
-            ? [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
-            : [
-                [anchorEl.value, 'mousedown', 'hide', 'passive'],
-                [anchorEl.value, 'contextmenu', 'contextClick', 'notPassive']
-              ]
+      const evts = context
+        ? proxy.$q.platform.is.mobile
+          ? [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
           : [
-              [anchorEl.value, 'click', 'toggle', 'passive'],
-              [anchorEl.value, 'keyup', 'toggleKey', 'passive']
+              [anchorEl.value, 'mousedown', 'hide', 'passive'],
+              [anchorEl.value, 'contextmenu', 'contextClick', 'notPassive']
             ]
+        : [
+            [anchorEl.value, 'click', 'toggle', 'passive'],
+            [anchorEl.value, 'keyup', 'toggleKey', 'passive']
+          ]
 
       addEvt(anchorEvents, 'anchor', evts)
     }
@@ -203,7 +202,7 @@ export default function useAnchor({
     () => props.noParentEvent,
     val => {
       if (anchorEl.value !== null) {
-        if (val === true) {
+        if (val) {
           unconfigureAnchorEl()
         } else {
           configureAnchorEl()

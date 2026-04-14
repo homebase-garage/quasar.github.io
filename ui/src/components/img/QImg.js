@@ -114,7 +114,7 @@ export default createComponent({
     const hasError = ref(false)
 
     const classes = computed(
-      () => `q-img q-img--${props.noNativeMenu === true ? 'no-' : ''}menu`
+      () => `q-img q-img--${props.noNativeMenu ? 'no-' : ''}menu`
     )
 
     const style = computed(() => ({
@@ -125,7 +125,7 @@ export default createComponent({
     const imgClass = computed(
       () =>
         `q-img__image ${props.imgClass !== void 0 ? props.imgClass + ' ' : ''}` +
-        `q-img__image--with${props.noTransition === true ? 'out' : ''}-transition` +
+        `q-img__image--with${props.noTransition ? 'out' : ''}-transition` +
         ' q-img__image--'
     )
 
@@ -262,7 +262,7 @@ export default createComponent({
         },
         slots.loading !== void 0
           ? slots.loading()
-          : props.noSpinner === true
+          : props.noSpinner
             ? void 0
             : [
                 h(QSpinner, {

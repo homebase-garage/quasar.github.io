@@ -410,7 +410,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
   if (map.X !== void 0 || map.x !== void 0) {
     const stamp = Number.parseInt(match[map.X !== void 0 ? map.X : map.x], 10)
 
-    if (Number.isNaN(stamp) === true || stamp < 0) {
+    if (Number.isNaN(stamp) || stamp < 0) {
       return date
     }
 

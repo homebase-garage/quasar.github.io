@@ -511,7 +511,7 @@ export function getRenderer(getPlugin, expose) {
   const publicApi = {}
 
   for (const key in state) {
-    if (isRef(state[key]) === true) {
+    if (isRef(state[key])) {
       injectProp(publicApi, key, () => state[key].value)
     } else {
       // method or non-computed prop

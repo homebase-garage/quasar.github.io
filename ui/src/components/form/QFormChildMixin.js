@@ -12,7 +12,7 @@ export default {
     disable(val) {
       const $form = this.$.provides[formKey]
       if ($form !== void 0) {
-        if (val === true) {
+        if (val) {
           this.resetValidation()
           $form.unbindComponent(this)
         } else {

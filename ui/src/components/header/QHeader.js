@@ -85,7 +85,7 @@ export default createComponent({
     )
 
     const revealOnFocus = computed(
-      () => props.modelValue === true && hidden.value === true && props.reveal
+      () => props.modelValue === true && hidden.value && props.reveal
     )
 
     const classes = computed(
@@ -94,7 +94,7 @@ export default createComponent({
         (fixed.value ? 'fixed' : 'absolute') +
         '-top' +
         (props.bordered ? ' q-header--bordered' : '') +
-        (hidden.value === true ? ' q-header--hidden' : '') +
+        (hidden.value ? ' q-header--hidden' : '') +
         (props.modelValue !== true ? ' q-layout--prevent-focus' : '')
     )
 
@@ -102,10 +102,10 @@ export default createComponent({
       const view = $layout.rows.value.top,
         css = {}
 
-      if (view[0] === 'l' && $layout.left.space === true) {
+      if (view[0] === 'l' && $layout.left.space) {
         css[$q.lang.rtl === true ? 'right' : 'left'] = `${$layout.left.size}px`
       }
-      if (view[2] === 'r' && $layout.right.space === true) {
+      if (view[2] === 'r' && $layout.right.space) {
         css[$q.lang.rtl === true ? 'left' : 'right'] = `${$layout.right.size}px`
       }
 
@@ -122,10 +122,7 @@ export default createComponent({
     }
 
     function onFocusin(evt) {
-      if (revealOnFocus.value === true) {
-        updateLocal(revealed, true)
-      }
-
+      if (revealOnFocus.value) updateLocal(revealed, true)
       emit('focusin', evt)
     }
 
@@ -155,7 +152,7 @@ export default createComponent({
     })
 
     watch($layout.scroll, scroll => {
-      if (props.reveal === true) {
+      if (props.reveal) {
         updateLocal(
           revealed,
           scroll.direction === 'up' ||
@@ -184,7 +181,7 @@ export default createComponent({
     return () => {
       const child = hUniqueSlot(slots.default, [])
 
-      if (props.elevated === true) {
+      if (props.elevated) {
         child.push(
           h('div', {
             class:

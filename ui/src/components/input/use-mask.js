@@ -112,7 +112,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
 
   function getIsTypeText() {
     return (
-      props.autogrow === true ||
+      props.autogrow ||
       ['textarea', 'text', 'search', 'url', 'tel', 'password'].includes(
         props.type
       )
@@ -137,21 +137,21 @@ export default function useMask(props, emit, emitValue, inputRef) {
   watch(
     () => props.fillMask + props.reverseFillMask,
     () => {
-      if (hasMask.value === true) updateMaskValue(innerValue.value, true)
+      if (hasMask.value) updateMaskValue(innerValue.value, true)
     }
   )
 
   watch(
     () => props.unmaskedValue,
     () => {
-      if (hasMask.value === true) updateMaskValue(innerValue.value)
+      if (hasMask.value) updateMaskValue(innerValue.value)
     }
   )
 
   function getInitialMaskedValue() {
     updateMaskInternals()
 
-    if (hasMask.value === true) {
+    if (hasMask.value) {
       const masked = maskValue(unmaskValue(props.modelValue))
 
       return props.fillMask !== false ? fillWithMask(masked) : masked
@@ -205,7 +205,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       extract = [],
       mask = []
 
-    let firstMatch = props.reverseFillMask === true,
+    let firstMatch = props.reverseFillMask,
       unmaskChar = '',
       negateChar = ''
 
@@ -261,7 +261,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       ),
       extractLast = extract.length - 1,
       extractMatcher = extract.map((re, index) => {
-        if (index === 0 && props.reverseFillMask === true) {
+        if (index === 0 && props.reverseFillMask) {
           return new RegExp('^' + fillCharEscaped + '*' + re)
         } else if (index === extractLast) {
           return new RegExp(
@@ -270,7 +270,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
               '(' +
               (negateChar === '' ? '.' : negateChar) +
               '+)?' +
-              (props.reverseFillMask === true ? '$' : fillCharEscaped + '*')
+              (props.reverseFillMask ? '$' : fillCharEscaped + '*')
           )
         }
 
@@ -280,7 +280,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
     computedMask = mask
     computedUnmask = val => {
       const unmaskMatch = unmaskMatcher.exec(
-        props.reverseFillMask === true ? val : val.slice(0, mask.length + 1)
+        props.reverseFillMask ? val : val.slice(0, mask.length + 1)
       )
       if (unmaskMatch !== null) {
         val = unmaskMatch.slice(1).join('')
@@ -330,13 +330,12 @@ export default function useMask(props, emit, emitValue, inputRef) {
     if (document.activeElement === inp) {
       nextTick(() => {
         if (masked === maskReplaced) {
-          const cursor =
-            props.reverseFillMask === true ? maskReplaced.length : 0
+          const cursor = props.reverseFillMask ? maskReplaced.length : 0
           inp.setSelectionRange(cursor, cursor, 'forward')
           return
         }
 
-        if (inputType === 'insertFromPaste' && props.reverseFillMask !== true) {
+        if (inputType === 'insertFromPaste' && !props.reverseFillMask) {
           const maxEnd = inp.selectionEnd
           let cursor = end - 1
           // each non-marker char means we move once to right
@@ -353,26 +352,25 @@ export default function useMask(props, emit, emitValue, inputRef) {
         if (
           ['deleteContentBackward', 'deleteContentForward'].includes(inputType)
         ) {
-          const cursor =
-            props.reverseFillMask === true
-              ? end === 0
-                ? masked.length > preMasked.length
-                  ? 1
-                  : 0
-                : Math.max(
-                    0,
-                    masked.length -
-                      (masked === maskReplaced
-                        ? 0
-                        : Math.min(preMasked.length, endReverse) + 1)
-                  ) + 1
-              : end
+          const cursor = props.reverseFillMask
+            ? end === 0
+              ? masked.length > preMasked.length
+                ? 1
+                : 0
+              : Math.max(
+                  0,
+                  masked.length -
+                    (masked === maskReplaced
+                      ? 0
+                      : Math.min(preMasked.length, endReverse) + 1)
+                ) + 1
+            : end
 
           inp.setSelectionRange(cursor, cursor, 'forward')
           return
         }
 
-        if (props.reverseFillMask === true) {
+        if (props.reverseFillMask) {
           if (changed === true) {
             const cursor = Math.max(
               0,
@@ -405,7 +403,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       })
     }
 
-    const val = props.unmaskedValue === true ? unmaskValue(masked) : masked
+    const val = props.unmaskedValue ? unmaskValue(masked) : masked
 
     if (
       String(props.modelValue) !== val &&
@@ -562,7 +560,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       const fn =
         moveCursor[
           (e.keyCode === 39 ? 'right' : 'left') +
-            (props.reverseFillMask === true ? 'Reverse' : '')
+            (props.reverseFillMask ? 'Reverse' : '')
         ]
 
       e.preventDefault()
@@ -578,14 +576,14 @@ export default function useMask(props, emit, emitValue, inputRef) {
       }
     } else if (
       e.keyCode === 8 && // Backspace
-      props.reverseFillMask !== true &&
+      !props.reverseFillMask &&
       start === end
     ) {
       moveCursor.left(inp, start)
       inp.setSelectionRange(inp.selectionStart, end, 'backward')
     } else if (
       e.keyCode === 46 && // Delete
-      props.reverseFillMask === true &&
+      props.reverseFillMask &&
       start === end
     ) {
       moveCursor.rightReverse(inp, end)
@@ -598,7 +596,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       return ''
     }
 
-    if (props.reverseFillMask === true) {
+    if (props.reverseFillMask) {
       return maskValueReverse(val, updateMaskInternalsFlag)
     }
 
@@ -686,7 +684,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       return val
     }
 
-    return props.reverseFillMask === true && val.length !== 0
+    return props.reverseFillMask && val.length !== 0
       ? maskReplaced.slice(0, -val.length) + val
       : val + maskReplaced.slice(val.length)
   }

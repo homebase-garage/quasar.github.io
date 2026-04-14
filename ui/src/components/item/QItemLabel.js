@@ -19,11 +19,9 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-item__label' +
-        (props.overline === true
-          ? ' q-item__label--overline text-overline'
-          : '') +
-        (props.caption === true ? ' q-item__label--caption text-caption' : '') +
-        (props.header === true ? ' q-item__label--header' : '') +
+        (props.overline ? ' q-item__label--overline text-overline' : '') +
+        (props.caption ? ' q-item__label--caption text-caption' : '') +
+        (props.header ? ' q-item__label--header' : '') +
         (parsedLines.value === 1 ? ' ellipsis' : '')
     )
 

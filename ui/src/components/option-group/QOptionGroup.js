@@ -114,7 +114,7 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-option-group q-gutter-x-sm' +
-        (props.inline === true ? ' q-option-group--inline' : '')
+        (props.inline ? ' q-option-group--inline' : '')
     )
 
     const attrs = computed(() => {

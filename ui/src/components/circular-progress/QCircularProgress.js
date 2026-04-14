@@ -49,7 +49,7 @@ export default createComponent({
     })
 
     const circleStyle = computed(() =>
-      props.instantFeedback !== true && props.indeterminate !== true
+      !props.instantFeedback && !props.indeterminate
         ? {
             transition: `stroke-dashoffset ${props.animationSpeed}ms ease 0s, stroke ${props.animationSpeed}ms ease`
           }
@@ -72,9 +72,7 @@ export default createComponent({
     const strokeDashOffset = computed(() => {
       const dashRatio = (props.max - normalized.value) / range.value
       const dashGap =
-        props.rounded === true &&
-        normalized.value < props.max &&
-        dashRatio < 0.25
+        props.rounded && normalized.value < props.max && dashRatio < 0.25
           ? (strokeWidth.value / 2) * (1 - dashRatio / 0.25)
           : 0
 
@@ -132,7 +130,7 @@ export default createComponent({
           thickness: strokeWidth.value,
           offset: strokeDashOffset.value,
           color: props.color,
-          rounded: props.rounded === true ? 'round' : void 0
+          rounded: props.rounded ? 'round' : void 0
         })
       )
 
@@ -149,7 +147,7 @@ export default createComponent({
         )
       ]
 
-      if (props.showValue === true) {
+      if (props.showValue) {
         child.push(
           h(
             'div',
@@ -168,13 +166,12 @@ export default createComponent({
       return h(
         'div',
         {
-          class: `q-circular-progress q-circular-progress--${props.indeterminate === true ? 'in' : ''}determinate`,
+          class: `q-circular-progress q-circular-progress--${props.indeterminate ? 'in' : ''}determinate`,
           style: sizeStyle.value,
           role: 'progressbar',
           'aria-valuemin': props.min,
           'aria-valuemax': props.max,
-          'aria-valuenow':
-            props.indeterminate === true ? void 0 : normalized.value
+          'aria-valuenow': props.indeterminate ? void 0 : normalized.value
         },
         hMergeSlotSafely(slots.internal, child)
       ) // "internal" is used by QKnob

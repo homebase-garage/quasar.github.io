@@ -214,7 +214,7 @@ export default createComponent({
 
     const virtualScrollItemSizeComputed = computed(() =>
       props.virtualScrollItemSize === void 0
-        ? props.optionsDense === true
+        ? props.optionsDense
           ? 24
           : 48
         : props.virtualScrollItemSize
@@ -386,10 +386,10 @@ export default createComponent({
           }
         }
 
-        if (disable !== true) {
+        if (!disable) {
           if (optionIndex.value === index) itemProps.focused = true
 
-          if ($q.platform.is.desktop === true) {
+          if ($q.platform.is.desktop) {
             itemProps.onMousemove = () => {
               if (menu.value) setOptionIndex(index)
             }
@@ -1210,7 +1210,7 @@ export default createComponent({
         val,
         (fn, afterFn) => {
           if (
-            (keepClosed === true || state.focused.value === true) &&
+            (keepClosed === true || state.focused.value) &&
             filterId === localFilterId
           ) {
             clearTimeout(filterId)
@@ -1383,9 +1383,7 @@ export default createComponent({
             {
               class:
                 'q-select__dialog' +
-                (isOptionsDark.value === true
-                  ? ' q-select__dialog--dark q-dark'
-                  : '') +
+                (isOptionsDark.value ? ' q-select__dialog--dark q-dark' : '') +
                 (dialogFieldFocused.value ? ' q-select__dialog--focused' : '')
             },
             content

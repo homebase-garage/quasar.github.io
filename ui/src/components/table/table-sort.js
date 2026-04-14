@@ -60,10 +60,10 @@ export function useTableSort(
               // due to the above two statements
               return col.sort(A, B, a, b) * dir
             }
-            if (isNumber(A) === true && isNumber(B) === true) {
+            if (isNumber(A) && isNumber(B)) {
               return (A - B) * dir
             }
-            if (isDate(A) === true && isDate(B) === true) {
+            if (isDate(A) && isDate(B)) {
               return sortDate(A, B) * dir
             }
             if (typeof A === 'boolean' && typeof B === 'boolean') {

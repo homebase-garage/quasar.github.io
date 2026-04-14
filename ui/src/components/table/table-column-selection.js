@@ -85,7 +85,7 @@ export function useTableColumnSelection(
   const computedColspan = computed(() =>
     props.tableColspan !== void 0
       ? props.tableColspan
-      : computedCols.value.length + (hasSelectionMode.value === true ? 1 : 0)
+      : computedCols.value.length + (hasSelectionMode.value ? 1 : 0)
   )
 
   return {

@@ -67,7 +67,7 @@ export default createComponent({
       element = el
 
       // if animationg overflowY is already 'hidden'
-      if (animating === true) {
+      if (animating) {
         cleanup()
         pos = el.offsetHeight === el.scrollHeight ? 0 : void 0
       } else {
@@ -96,7 +96,7 @@ export default createComponent({
       let pos
       element = el
 
-      if (animating === true) {
+      if (animating) {
         cleanup()
       } else {
         lastEvent = 'show'
@@ -124,7 +124,7 @@ export default createComponent({
     }
 
     onBeforeUnmount(() => {
-      if (animating === true) cleanup()
+      if (animating) cleanup()
     })
 
     return () =>

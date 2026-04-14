@@ -53,9 +53,7 @@ export default function useValidate(focused, innerLoading) {
       !innerLoading.value
   )
 
-  const hasError = computed(
-    () => props.error === true || innerError.value === true
-  )
+  const hasError = computed(() => props.error === true || innerError.value)
 
   const errorMessage = computed(() =>
     typeof props.errorMessage === 'string' && props.errorMessage.length !== 0
@@ -69,7 +67,7 @@ export default function useValidate(focused, innerLoading) {
       isDirtyModel.value = true
 
       if (
-        canDebounceValidate.value === true &&
+        canDebounceValidate.value &&
         // trigger validation if not using any kind of lazy-rules
         props.lazyRules === false
       ) {
@@ -81,8 +79,8 @@ export default function useValidate(focused, innerLoading) {
   function onRulesChange() {
     if (
       props.lazyRules !== 'ondemand' &&
-      canDebounceValidate.value === true &&
-      isDirtyModel.value === true
+      canDebounceValidate.value &&
+      isDirtyModel.value
     ) {
       debouncedValidate()
     }
@@ -91,7 +89,7 @@ export default function useValidate(focused, innerLoading) {
   watch(
     () => props.reactiveRules,
     val => {
-      if (val === true) {
+      if (val) {
         if (unwatchRules === void 0) {
           unwatchRules = watch(() => props.rules, onRulesChange, {
             immediate: true,
@@ -111,10 +109,7 @@ export default function useValidate(focused, innerLoading) {
   watch(focused, val => {
     if (val === true) {
       isDirtyModel.value = true
-    } else if (
-      canDebounceValidate.value === true &&
-      props.lazyRules !== 'ondemand'
-    ) {
+    } else if (canDebounceValidate.value && props.lazyRules !== 'ondemand') {
       debouncedValidate()
     }
   })
@@ -144,10 +139,10 @@ export default function useValidate(focused, innerLoading) {
           isDirtyModel.value = true
         }
 
-    const update = (err, msg) => {
-      if (err === true) setDirty()
+    const update = (hasErr, msg) => {
+      if (hasErr) setDirty()
 
-      innerError.value = err
+      innerError.value = hasErr
       innerErrorMessage.value = msg || null
       innerLoading.value = false
     }

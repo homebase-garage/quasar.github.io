@@ -119,7 +119,7 @@ export default createComponent({
           isActive.value
             ? [
                 h(
-                  $stepper.value.needsUniqueKeepAliveWrapper.value === true
+                  $stepper.value.needsUniqueKeepAliveWrapper.value
                     ? getCache(contentKey.value, () => ({
                         ...PanelWrapper,
                         name: contentKey.value

@@ -126,10 +126,7 @@ export default createComponent({
 
     function onBeforeHide() {
       if (!validated && hasModelChanged()) {
-        if (
-          props.autoSave === true &&
-          props.validate(currentModel.value) === true
-        ) {
+        if (props.autoSave && props.validate(currentModel.value) === true) {
           emit('save', currentModel.value, initialValue.value)
           emit('update:modelValue', currentModel.value)
         } else {
@@ -154,7 +151,7 @@ export default createComponent({
         )
       }
 
-      if (props.buttons === true) {
+      if (props.buttons) {
         child.push(
           h(
             'div',

@@ -77,14 +77,14 @@ export function useTablePaginationState(vm, getCellValue) {
       ...val
     })
 
-    if (samePagination(computedPagination.value, newPagination) === true) {
-      if (isServerSide.value === true && forceServerRequest === true) {
+    if (samePagination(computedPagination.value, newPagination)) {
+      if (isServerSide.value && forceServerRequest === true) {
         sendServerRequest(newPagination)
       }
       return
     }
 
-    if (isServerSide.value === true) {
+    if (isServerSide.value) {
       sendServerRequest(newPagination)
       return
     }
@@ -124,7 +124,7 @@ export function useTablePagination(
   } = vm
 
   const computedRowsNumber = computed(() =>
-    isServerSide.value === true
+    isServerSide.value
       ? computedPagination.value.rowsNumber || 0
       : filteredSortedRowsNumber.value
   )

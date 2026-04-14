@@ -95,10 +95,9 @@ export default createComponent({
     )
 
     const classes = computed(() => {
-      const text =
-        props.outline === true
-          ? props.color || props.textColor
-          : props.textColor
+      const text = props.outline
+        ? props.color || props.textColor
+        : props.textColor
 
       return (
         'q-chip row inline no-wrap items-center' +
@@ -108,7 +107,7 @@ export default createComponent({
         (props.dense ? ' q-chip--dense' : '') +
         (props.outline ? ' q-chip--outline' : '') +
         (props.selected === true ? ' q-chip--selected' : '') +
-        (isClickable.value === true
+        (isClickable.value
           ? ' q-chip--clickable cursor-pointer non-selectable q-hoverable'
           : '') +
         (props.square ? ' q-chip--square' : '') +
@@ -155,11 +154,11 @@ export default createComponent({
     function getContent() {
       const child = []
 
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         child.push(h('div', { class: 'q-focus-helper' }))
       }
 
-      if (hasLeftIcon.value === true) {
+      if (hasLeftIcon.value) {
         child.push(
           h(QIcon, {
             class: 'q-chip__icon q-chip__icon--left',
@@ -192,7 +191,7 @@ export default createComponent({
         )
       }
 
-      if (props.removable === true) {
+      if (props.removable) {
         child.push(
           h(QIcon, {
             class: 'q-chip__icon q-chip__icon--remove cursor-pointer',
@@ -215,7 +214,7 @@ export default createComponent({
         style: sizeStyle.value
       }
 
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         Object.assign(data, attributes.value.chip, { onClick, onKeyup })
       }
 

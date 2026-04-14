@@ -33,10 +33,7 @@ export default createDirective(
             noop,
 
             mouseStart(evt) {
-              if (
-                typeof ctx.handler === 'function' &&
-                leftClick(evt) === true
-              ) {
+              if (typeof ctx.handler === 'function' && leftClick(evt)) {
                 addEvt(ctx, 'temp', [
                   [document, 'mousemove', 'move', 'passiveCapture'],
                   [document, 'click', 'end', 'notPassiveCapture']
@@ -152,7 +149,7 @@ export default createDirective(
             ])
           }
 
-          if (client.has.touch === true) {
+          if (client.has.touch) {
             addEvt(ctx, 'main', [
               [
                 el,

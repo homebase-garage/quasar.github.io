@@ -171,7 +171,7 @@ export default createComponent({
     )
 
     function onHeaderClick(e) {
-      if (hasLink.value !== true) toggle(e)
+      if (!hasLink.value) toggle(e)
       emit('click', e)
     }
 
@@ -206,7 +206,7 @@ export default createComponent({
       }
 
       const stopShowWatcher = watch(showing, val => {
-        if (val === true) {
+        if (val) {
           itemGroups[props.group] = uniqueId
         } else if (itemGroups[props.group] === uniqueId) {
           delete itemGroups[props.group]
@@ -256,7 +256,7 @@ export default createComponent({
         })
       ]
 
-      if (activeToggleIcon.value === true) {
+      if (activeToggleIcon.value) {
         Object.assign(data, {
           tabindex: 0,
           ...toggleAriaAttrs.value,
@@ -329,13 +329,13 @@ export default createComponent({
         insetLevel: props.headerInsetLevel
       }
 
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         data.clickable = true
         data.onClick = onHeaderClick
 
         Object.assign(
           data,
-          hasLink.value === true ? linkProps.value : toggleAriaAttrs.value
+          hasLink.value ? linkProps.value : toggleAriaAttrs.value
         )
       }
 

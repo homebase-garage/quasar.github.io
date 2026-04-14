@@ -30,7 +30,7 @@ export default createComponent({
         return h(
           'th',
           {
-            class: props.autoWidth === true ? 'q-table--col-auto-width' : '',
+            class: props.autoWidth ? 'q-table--col-auto-width' : '',
             onClick
           },
           hSlot(slots.default)
@@ -63,8 +63,7 @@ export default createComponent({
 
       const data = {
         class:
-          col.__thClass +
-          (props.autoWidth === true ? ' q-table--col-auto-width' : ''),
+          col.__thClass + (props.autoWidth ? ' q-table--col-auto-width' : ''),
         style: col.headerStyle,
         onClick: evt => {
           if (col.sortable === true) props.props.sort(col)

@@ -13,7 +13,7 @@ import { between } from '../../utils/format/format.js'
 import { isKeyCode } from '../../utils/private.keyboard/key-composition.js'
 
 function getBool(val, otherwise) {
-  return [true, false].includes(val) ? val : otherwise
+  return val === true || val === false ? val : otherwise
 }
 
 export default createComponent({
@@ -332,7 +332,7 @@ export default createComponent({
       const contentEnd = []
       let contentMiddle
 
-      if (boundaryLinksProp.value === true) {
+      if (boundaryLinksProp.value) {
         contentStart.push(
           getBtn(
             {
@@ -358,7 +358,7 @@ export default createComponent({
         )
       }
 
-      if (directionLinksProp.value === true) {
+      if (directionLinksProp.value) {
         contentStart.push(
           getBtn(
             {
@@ -384,12 +384,12 @@ export default createComponent({
         )
       }
 
-      if (props.input !== true) {
+      if (!props.input) {
         // has buttons instead of inputbox
         contentMiddle = []
         const { pgFrom, pgTo, marginalStyle: style } = btnConfig.value
 
-        if (btnConfig.value.boundaryStart === true) {
+        if (btnConfig.value.boundaryStart) {
           const active = minProp.value === props.modelValue
           contentStart.push(
             getBtn(
@@ -405,7 +405,7 @@ export default createComponent({
           )
         }
 
-        if (btnConfig.value.boundaryEnd === true) {
+        if (btnConfig.value.boundaryEnd) {
           const active = maxProp.value === props.modelValue
           contentEnd.unshift(
             getBtn(
@@ -421,7 +421,7 @@ export default createComponent({
           )
         }
 
-        if (btnConfig.value.ellipsesStart === true) {
+        if (btnConfig.value.ellipsesStart) {
           contentStart.push(
             getBtn(
               {
@@ -436,7 +436,7 @@ export default createComponent({
           )
         }
 
-        if (btnConfig.value.ellipsesEnd === true) {
+        if (btnConfig.value.ellipsesEnd) {
           contentEnd.unshift(
             getBtn(
               {
@@ -483,7 +483,7 @@ export default createComponent({
             [
               ...contentStart,
 
-              props.input === true
+              props.input
                 ? h(QInput, {
                     class: 'inline',
                     style: {

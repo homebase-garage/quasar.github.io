@@ -63,7 +63,7 @@ export default function useModelToggle({
   }
 
   function processShow(evt) {
-    if (showing.value === true) return
+    if (showing.value) return
 
     showing.value = true
 
@@ -97,7 +97,7 @@ export default function useModelToggle({
   }
 
   function processHide(evt) {
-    if (showing.value === false) return
+    if (!showing.value) return
 
     showing.value = false
 

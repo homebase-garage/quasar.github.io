@@ -509,7 +509,7 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        `q-editor q-editor--${isViewingSource.value === true ? 'source' : 'default'}` +
+        `q-editor q-editor--${isViewingSource.value ? 'source' : 'default'}` +
         (props.disable ? ' disabled' : '') +
         (inFullscreen.value ? ' fullscreen column' : '') +
         (props.square ? ' q-editor--square no-border-radius' : '') +
@@ -533,7 +533,7 @@ export default createComponent({
 
     function onInput() {
       if (contentRef.value !== null) {
-        const prop = `inner${isViewingSource.value === true ? 'Text' : 'HTML'}`
+        const prop = `inner${isViewingSource.value ? 'Text' : 'HTML'}`
         const val = contentRef.value[prop]
 
         if (val !== props.modelValue) {
@@ -546,7 +546,7 @@ export default createComponent({
     function onKeydown(e) {
       emit('keydown', e)
 
-      if (e.ctrlKey !== true || shouldIgnoreKey(e) === true) {
+      if (!e.ctrlKey || shouldIgnoreKey(e)) {
         refreshToolbar()
         return
       }
@@ -592,7 +592,7 @@ export default createComponent({
         root.contains(e.target) &&
         (e.relatedTarget === null || !root.contains(e.relatedTarget))
       ) {
-        const prop = `inner${isViewingSource.value === true ? 'Text' : 'HTML'}`
+        const prop = `inner${isViewingSource.value ? 'Text' : 'HTML'}`
         eVm.caret.restorePosition(contentRef.value[prop].length)
         refreshToolbar()
       }
@@ -621,14 +621,14 @@ export default createComponent({
 
     function setContent(v, restorePosition) {
       if (contentRef.value !== null) {
-        if (restorePosition === true) {
+        if (restorePosition) {
           eVm.caret.savePosition()
         }
 
-        const prop = `inner${isViewingSource.value === true ? 'Text' : 'HTML'}`
+        const prop = `inner${isViewingSource.value ? 'Text' : 'HTML'}`
         contentRef.value[prop] = v
 
-        if (restorePosition === true) {
+        if (restorePosition) {
           eVm.caret.restorePosition(contentRef.value[prop].length)
           refreshToolbar()
         }

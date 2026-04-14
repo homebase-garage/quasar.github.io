@@ -58,12 +58,12 @@ export default createComponent({
     const dragging = ref(false)
 
     const innerMin = computed(() =>
-      Number.isNaN(props.innerMin) === true || props.innerMin < props.min
+      Number.isNaN(props.innerMin) || props.innerMin < props.min
         ? props.min
         : props.innerMin
     )
     const innerMax = computed(() =>
-      Number.isNaN(props.innerMax) === true || props.innerMax > props.max
+      Number.isNaN(props.innerMax) || props.innerMax > props.max
         ? props.max
         : props.innerMax
     )
@@ -103,7 +103,7 @@ export default createComponent({
     )
     const step = computed(() => (props.step === 0 ? 1 : props.step))
     const instantFeedback = computed(
-      () => props.instantFeedback === true || dragging.value === true
+      () => props.instantFeedback || dragging.value
     )
 
     const onEvents = $q.platform.is.mobile
@@ -208,9 +208,7 @@ export default createComponent({
         angle = normalizeToInterval(angle - props.angle, 0, 360)
       }
 
-      if (props.reverse === true) {
-        angle = 360 - angle
-      }
+      if (props.reverse) angle = 360 - angle
 
       let newModel = props.min + (angle / 360) * (props.max - props.min)
 

@@ -103,8 +103,7 @@ export default function useCheckbox(type, getInner) {
 
     const color =
       props.color !== void 0 &&
-      (props.keepColor === true ||
-        (type === 'toggle' ? isTrue.value : !isFalse.value))
+      (props.keepColor || (type === 'toggle' ? isTrue.value : !isFalse.value))
         ? ` text-${props.color}`
         : ''
 
@@ -134,12 +133,11 @@ export default function useCheckbox(type, getInner) {
       tabindex: tabindex.value,
       role: type === 'toggle' ? 'switch' : 'checkbox',
       'aria-label': props.label,
-      'aria-checked':
-        isIndeterminate.value === true
-          ? 'mixed'
-          : isTrue.value
-            ? 'true'
-            : 'false'
+      'aria-checked': isIndeterminate.value
+        ? 'mixed'
+        : isTrue.value
+          ? 'true'
+          : 'false'
     }
 
     if (props.disable) {

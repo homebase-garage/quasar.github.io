@@ -66,7 +66,7 @@ export default createComponent({
 
     const fixed = computed(
       () =>
-        props.reveal === true ||
+        props.reveal ||
         $layout.view.value.includes('F') ||
         ($q.platform.is.ios && $layout.isContainer.value)
     )
@@ -81,8 +81,8 @@ export default createComponent({
       if (props.modelValue !== true) {
         return 0
       }
-      if (fixed.value === true) {
-        return revealed.value === true ? size.value : 0
+      if (fixed.value) {
+        return revealed.value ? size.value : 0
       }
 
       const localOffset =
@@ -95,27 +95,22 @@ export default createComponent({
     })
 
     const hidden = computed(
-      () =>
-        props.modelValue !== true ||
-        (fixed.value === true && revealed.value !== true)
+      () => props.modelValue !== true || (fixed.value && !revealed.value)
     )
 
     const revealOnFocus = computed(
-      () =>
-        props.modelValue === true &&
-        hidden.value === true &&
-        props.reveal === true
+      () => props.modelValue === true && hidden.value && props.reveal
     )
 
     const classes = computed(
       () =>
         'q-footer q-layout__section--marginal ' +
-        (fixed.value === true ? 'fixed' : 'absolute') +
+        (fixed.value ? 'fixed' : 'absolute') +
         '-bottom' +
-        (props.bordered === true ? ' q-footer--bordered' : '') +
-        (hidden.value === true ? ' q-footer--hidden' : '') +
+        (props.bordered ? ' q-footer--bordered' : '') +
+        (hidden.value ? ' q-footer--hidden' : '') +
         (props.modelValue !== true
-          ? ' q-layout--prevent-focus' + (fixed.value !== true ? ' hidden' : '')
+          ? ' q-layout--prevent-focus' + (fixed.value ? '' : ' hidden')
           : '')
     )
 
@@ -123,10 +118,10 @@ export default createComponent({
       const view = $layout.rows.value.bottom,
         css = {}
 
-      if (view[0] === 'l' && $layout.left.space === true) {
+      if (view[0] === 'l' && $layout.left.space) {
         css[$q.lang.rtl === true ? 'right' : 'left'] = `${$layout.left.size}px`
       }
-      if (view[2] === 'r' && $layout.right.space === true) {
+      if (view[2] === 'r' && $layout.right.space) {
         css[$q.lang.rtl === true ? 'left' : 'right'] = `${$layout.right.size}px`
       }
 
@@ -143,7 +138,7 @@ export default createComponent({
     }
 
     function updateRevealed() {
-      if (props.reveal !== true) return
+      if (!props.reveal) return
 
       const { direction, position, inflectionPoint } = $layout.scroll.value
 
@@ -157,10 +152,7 @@ export default createComponent({
     }
 
     function onFocusin(evt) {
-      if (revealOnFocus.value === true) {
-        updateLocal(revealed, true)
-      }
-
+      if (revealOnFocus.value) updateLocal(revealed, true)
       emit('focusin', evt)
     }
 
@@ -222,7 +214,7 @@ export default createComponent({
         })
       ])
 
-      if (props.elevated === true) {
+      if (props.elevated) {
         child.push(
           h('div', {
             class:

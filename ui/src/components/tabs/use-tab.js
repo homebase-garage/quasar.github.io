@@ -139,7 +139,7 @@ export default function useTab(props, slots, emit, routeData) {
       return
     }
 
-    if (routeData.hasRouterLink.value === true) {
+    if (routeData.hasRouterLink.value) {
       const go = (opts = {}) => {
         // if requiring to go to another route, then we
         // let the QTabs route watcher do its job,
@@ -182,7 +182,7 @@ export default function useTab(props, slots, emit, routeData) {
       }
 
       emit('click', e, go)
-      if (e.defaultPrevented !== true) go()
+      if (!e.defaultPrevented) go()
 
       return
     }

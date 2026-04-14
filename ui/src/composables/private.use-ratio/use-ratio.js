@@ -11,7 +11,7 @@ export default function useRatio(props, naturalRatio) {
       props.ratio || (naturalRatio !== void 0 ? naturalRatio.value : void 0)
     )
 
-    return Number.isNaN(ratio) !== true && ratio > 0
+    return !Number.isNaN(ratio) && ratio > 0
       ? { paddingBottom: `${100 / ratio}%` }
       : null
   })

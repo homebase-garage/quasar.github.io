@@ -23,7 +23,7 @@ export default createComponent({
   },
 
   setup(props, { slots }) {
-    const op = computed(() => (props.sent === true ? 'sent' : 'received'))
+    const op = computed(() => (props.sent ? 'sent' : 'received'))
 
     const textClass = computed(
       () =>
@@ -40,7 +40,7 @@ export default createComponent({
     const containerClass = computed(
       () =>
         'q-message-container row items-end no-wrap' +
-        (props.sent === true ? ' reverse' : '')
+        (props.sent ? ' reverse' : '')
     )
 
     const sizeClass = computed(() =>
@@ -48,10 +48,10 @@ export default createComponent({
     )
 
     const domProps = computed(() => ({
-      msg: props.textHtml === true ? 'innerHTML' : 'textContent',
-      stamp: props.stampHtml === true ? 'innerHTML' : 'textContent',
-      name: props.nameHtml === true ? 'innerHTML' : 'textContent',
-      label: props.labelHtml === true ? 'innerHTML' : 'textContent'
+      msg: props.textHtml ? 'innerHTML' : 'textContent',
+      stamp: props.stampHtml ? 'innerHTML' : 'textContent',
+      name: props.nameHtml ? 'innerHTML' : 'textContent',
+      label: props.labelHtml ? 'innerHTML' : 'textContent'
     }))
 
     function wrapStamp(node) {
@@ -73,12 +73,11 @@ export default createComponent({
     }
 
     function getText(contentList, withSlots) {
-      const content =
-        withSlots === true
-          ? contentList.length > 1
-            ? text => text
-            : text => h('div', [text])
-          : text => h('div', { [domProps.value.msg]: text })
+      const content = withSlots
+        ? contentList.length > 1
+          ? text => text
+          : text => h('div', [text])
+        : text => h('div', { [domProps.value.msg]: text })
 
       return contentList.map((msg, index) =>
         h(
@@ -129,7 +128,7 @@ export default createComponent({
       if (slots.default !== void 0) {
         msg.push(getText(getNormalizedVNodes(slots.default()), true))
       } else if (props.text !== void 0) {
-        msg.push(getText(props.text))
+        msg.push(getText(props.text, false))
       }
 
       container.push(h('div', { class: sizeClass.value }, msg))

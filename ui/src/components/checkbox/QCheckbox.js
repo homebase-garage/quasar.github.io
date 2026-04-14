@@ -50,9 +50,9 @@ export default createComponent({
     function getInner(isTrue, isIndeterminate) {
       const icon = computed(
         () =>
-          (isTrue.value === true
+          (isTrue.value
             ? props.checkedIcon
-            : isIndeterminate.value === true
+            : isIndeterminate.value
               ? props.indeterminateIcon
               : props.uncheckedIcon) || null
       )

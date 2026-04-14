@@ -36,7 +36,7 @@ export default createComponent({
     const mediaParentRef = ref(null)
     const mediaRef = ref(null)
 
-    let isWorking,
+    let isWorking = false,
       mediaEl,
       mediaHeight,
       resizeHandler,
@@ -46,14 +46,14 @@ export default createComponent({
     watch(
       () => props.height,
       () => {
-        if (isWorking === true) updatePos()
+        if (isWorking) updatePos()
       }
     )
 
     watch(
       () => props.scrollTarget,
       () => {
-        if (isWorking === true) {
+        if (isWorking) {
           stop()
           start()
         }
@@ -100,7 +100,7 @@ export default createComponent({
       mediaHeight =
         mediaEl.naturalHeight || mediaEl.videoHeight || height(mediaEl)
 
-      if (isWorking === true) updatePos()
+      if (isWorking) updatePos()
     }
 
     function start() {
@@ -112,7 +112,7 @@ export default createComponent({
     }
 
     function stop() {
-      if (isWorking === true) {
+      if (isWorking) {
         isWorking = false
         localScrollTarget.removeEventListener('scroll', updatePos, passive)
         window.removeEventListener('resize', resizeHandler, passive)
@@ -142,7 +142,7 @@ export default createComponent({
 
       if (window.IntersectionObserver !== void 0) {
         observer = new IntersectionObserver(entries => {
-          const fn = entries[0].isIntersecting === true ? start : stop
+          const fn = entries[0].isIntersecting ? start : stop
           fn()
         })
 

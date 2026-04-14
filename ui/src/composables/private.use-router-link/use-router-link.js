@@ -276,7 +276,7 @@ export default function useRouterLink({
       const go = opts => navigateToRouterLink(e, opts)
 
       emit('click', e, go)
-      if (e.defaultPrevented !== true) go()
+      if (!e.defaultPrevented) go()
     } else {
       emit('click', e)
     }

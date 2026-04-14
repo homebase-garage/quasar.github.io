@@ -18,7 +18,7 @@ export default createComponent({
         (props.props === void 0 || props.props.header === true
           ? ''
           : ' ' + props.props.__trClass) +
-        (props.noHover === true ? ' q-tr--no-hover' : '')
+        (props.noHover ? ' q-tr--no-hover' : '')
     )
 
     return () =>

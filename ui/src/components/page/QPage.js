@@ -35,8 +35,8 @@ export default createComponent({
 
     const style = computed(() => {
       const offset =
-        ($layout.header.space === true ? $layout.header.size : 0) +
-        ($layout.footer.space === true ? $layout.footer.size : 0)
+        ($layout.header.space ? $layout.header.size : 0) +
+        ($layout.footer.space ? $layout.footer.size : 0)
 
       if (typeof props.styleFn === 'function') {
         const height = $layout.isContainer.value
@@ -58,7 +58,7 @@ export default createComponent({
     })
 
     const classes = computed(
-      () => `q-page${props.padding === true ? ' q-layout-padding' : ''}`
+      () => `q-page${props.padding ? ' q-layout-padding' : ''}`
     )
 
     return () =>

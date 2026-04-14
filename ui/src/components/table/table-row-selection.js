@@ -24,11 +24,8 @@ export function useTableRowSelection(props, emit, computedRows, getRowKey) {
   })
 
   const hasSelectionMode = computed(() => props.selection !== 'none')
-
   const singleSelection = computed(() => props.selection === 'single')
-
   const multipleSelection = computed(() => props.selection === 'multiple')
-
   const allRowsSelected = computed(
     () =>
       computedRows.value.length !== 0 &&
@@ -39,7 +36,7 @@ export function useTableRowSelection(props, emit, computedRows, getRowKey) {
 
   const someRowsSelected = computed(
     () =>
-      allRowsSelected.value !== true &&
+      !allRowsSelected.value &&
       computedRows.value.some(
         row => selectedKeys.value[getRowKey.value(row)] === true
       )
@@ -58,14 +55,13 @@ export function useTableRowSelection(props, emit, computedRows, getRowKey) {
   function updateSelection(keys, rows, added, evt) {
     emit('selection', { rows, added, keys, evt })
 
-    const payload =
-      singleSelection.value === true
-        ? added === true
-          ? rows
-          : []
-        : added === true
-          ? [...props.selected, ...rows]
-          : props.selected.filter(row => !keys.includes(getRowKey.value(row)))
+    const payload = singleSelection.value
+      ? added === true
+        ? rows
+        : []
+      : added === true
+        ? [...props.selected, ...rows]
+        : props.selected.filter(row => !keys.includes(getRowKey.value(row)))
 
     emit('update:selected', payload)
   }

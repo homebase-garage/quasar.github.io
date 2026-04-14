@@ -44,7 +44,7 @@ export const useFabProps = {
 export default function useFab(props, showing) {
   return {
     formClass: computed(
-      () => `q-fab--form-${props.square === true ? 'square' : 'rounded'}`
+      () => `q-fab--form-${props.square ? 'square' : 'rounded'}`
     ),
 
     stacked: computed(

@@ -73,7 +73,7 @@ export default createComponent({
       () =>
         'q-rating row inline items-center' +
         ` q-rating--${editable.value ? '' : 'non-'}editable` +
-        (props.noDimming === true ? ' q-rating--no-dimming' : '') +
+        (props.noDimming ? ' q-rating--no-dimming' : '') +
         (props.disable ? ' disabled' : '') +
         (props.color !== void 0 && !Array.isArray(props.color)
           ? ` text-${props.color}`
@@ -236,8 +236,7 @@ export default createComponent({
             1,
             Number.parseInt(props.max, 10)
           ),
-          newVal =
-            props.noReset !== true && props.modelValue === model ? 0 : model
+          newVal = !props.noReset && props.modelValue === model ? 0 : model
 
         if (newVal !== props.modelValue) emit('update:modelValue', newVal)
         mouseModel.value = 0

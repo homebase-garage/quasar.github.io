@@ -298,9 +298,7 @@ export default createComponent({
       const model = daysModel.value[0]
       const date = getNativeDateFn.value(model)
 
-      if (Number.isNaN(date.valueOf()) === true) {
-        return lineStr
-      }
+      if (Number.isNaN(date.valueOf())) return lineStr
 
       if (innerLocale.value.headerTitle !== void 0) {
         return innerLocale.value.headerTitle(date, model)
@@ -593,7 +591,7 @@ export default createComponent({
 
         for (let i = 1; i <= daysInMonth.value; i++) {
           const dayHash = viewMonthHash.value + '/' + pad(i)
-          map[i] = fn(dayHash) === true && evtColor.value(dayHash)
+          map[i] = fn(dayHash) && evtColor.value(dayHash)
         }
       }
 
@@ -852,9 +850,7 @@ export default createComponent({
     }
 
     function setView(viewMode) {
-      if (viewIsValid(viewMode) === true) {
-        view.value = viewMode
-      }
+      if (viewIsValid(viewMode)) view.value = viewMode
     }
 
     function offsetCalendar(type, descending) {

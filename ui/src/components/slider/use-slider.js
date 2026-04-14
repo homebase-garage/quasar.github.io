@@ -132,12 +132,12 @@ export default function useSlider({
   )
 
   const innerMin = computed(() =>
-    Number.isNaN(props.innerMin) === true || props.innerMin < props.min
+    Number.isNaN(props.innerMin) || props.innerMin < props.min
       ? props.min
       : props.innerMin
   )
   const innerMax = computed(() =>
-    Number.isNaN(props.innerMax) === true || props.innerMax > props.max
+    Number.isNaN(props.innerMax) || props.innerMax > props.max
       ? props.max
       : props.innerMax
   )
@@ -567,7 +567,7 @@ export default function useSlider({
         h('div', { class: 'q-slider__focus-ring fit' })
       ]
 
-      if (props.label === true || props.labelAlways) {
+      if (props.label || props.labelAlways) {
         thumbContent.push(
           h(
             'div',

@@ -14,7 +14,7 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-toolbar row no-wrap items-center' +
-        (props.inset === true ? ' q-toolbar--inset' : '')
+        (props.inset ? ' q-toolbar--inset' : '')
     )
 
     return () =>

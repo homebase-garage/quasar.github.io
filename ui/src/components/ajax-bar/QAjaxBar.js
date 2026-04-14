@@ -75,7 +75,7 @@ function highjackAjax(stackEntry) {
       stack.forEach(entry => {
         if (
           entry.hijackFilter.value === null ||
-          entry.hijackFilter.value(url) === true
+          entry.hijackFilter.value(url)
         ) {
           entry.start()
           stopStack.push(entry.stop)
@@ -145,7 +145,7 @@ export default createComponent({
       () =>
         `q-loading-bar q-loading-bar--${props.position}` +
         (props.color !== void 0 ? ` bg-${props.color}` : '') +
-        (animate.value === true ? '' : ' no-transition')
+        (animate.value ? '' : ' no-transition')
     )
 
     const horizontal = computed(
@@ -282,7 +282,7 @@ export default createComponent({
       }
     }
 
-    let hijacked
+    let hijacked = false
 
     onMounted(() => {
       if (!props.skipHijack) {
@@ -297,7 +297,7 @@ export default createComponent({
 
     onBeforeUnmount(() => {
       if (timer !== null) clearTimeout(timer)
-      if (hijacked === true) restoreAjax(start)
+      if (hijacked) restoreAjax(start)
     })
 
     // expose public methods

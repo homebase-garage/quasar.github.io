@@ -106,9 +106,7 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-virtual-scroll q-virtual-scroll' +
-        (props.virtualScrollHorizontal === true
-          ? '--horizontal'
-          : '--vertical') +
+        (props.virtualScrollHorizontal ? '--horizontal' : '--vertical') +
         (props.scrollTarget !== void 0 ? '' : ' scroll')
     )
 

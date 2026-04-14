@@ -59,15 +59,13 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-pull-to-refresh__puller row flex-center' +
-        (animating.value === true
-          ? ' q-pull-to-refresh__puller--animating'
-          : '') +
+        (animating.value ? ' q-pull-to-refresh__puller--animating' : '') +
         (props.bgColor !== void 0 ? ` bg-${props.bgColor}` : '')
     )
 
     function pull(event) {
       if (event.isFinal) {
-        if (pulling.value === true) {
+        if (pulling.value) {
           pulling.value = false
 
           if (state.value === 'pulled') {
@@ -82,7 +80,7 @@ export default createComponent({
         return
       }
 
-      if (animating.value === true || state.value === 'refreshing') {
+      if (animating.value || state.value === 'refreshing') {
         return false
       }
 
@@ -91,7 +89,7 @@ export default createComponent({
           getVerticalScrollPosition(localScrollTarget) !== 0 ||
           event.direction !== 'down'
         ) {
-          if (pulling.value === true) {
+          if (pulling.value) {
             pulling.value = false
             state.value = 'pull'
             animateTo({ pos: -PULLER_HEIGHT, ratio: 0 })
@@ -136,7 +134,7 @@ export default createComponent({
 
     const contentClass = computed(
       () =>
-        `q-pull-to-refresh__content${pulling.value === true ? ' no-pointer-events' : ''}`
+        `q-pull-to-refresh__content${pulling.value ? ' no-pointer-events' : ''}`
     )
 
     function trigger() {

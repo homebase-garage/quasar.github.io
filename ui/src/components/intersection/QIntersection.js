@@ -80,7 +80,7 @@ export default createComponent({
     }
 
     function getContent() {
-      if (showing.value === true) {
+      if (showing.value) {
         return [
           h(
             'div',

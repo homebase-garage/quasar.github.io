@@ -344,15 +344,11 @@ export default createComponent({
     }
 
     function scrollToStart() {
-      animScrollTo(
-        rtlPosCorrection.value === true ? Number.MAX_SAFE_INTEGER : 0
-      )
+      animScrollTo(rtlPosCorrection.value ? Number.MAX_SAFE_INTEGER : 0)
     }
 
     function scrollToEnd() {
-      animScrollTo(
-        rtlPosCorrection.value === true ? 0 : Number.MAX_SAFE_INTEGER
-      )
+      animScrollTo(rtlPosCorrection.value ? 0 : Number.MAX_SAFE_INTEGER)
     }
 
     function stopAnimScroll() {
@@ -410,7 +406,7 @@ export default createComponent({
     // with a computed variable by directly applying the minimal
     // number of instructions on get/set functions
     const posFn = computed(() =>
-      rtlPosCorrection.value === true
+      rtlPosCorrection.value
         ? {
             get: content => Math.abs(content.scrollLeft),
             set: (content, pos) => {
@@ -635,7 +631,7 @@ export default createComponent({
         // start watching route
         watchRoute()
 
-        if (tabData.routeData.hasRouterLink.value === true) {
+        if (tabData.routeData.hasRouterLink.value) {
           verifyRouteModel()
         }
       }

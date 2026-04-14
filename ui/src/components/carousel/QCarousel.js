@@ -116,7 +116,7 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        `q-carousel q-panel-parent q-carousel--with${props.padding === true ? '' : 'out'}-padding` +
+        `q-carousel q-panel-parent q-carousel--with${props.padding ? '' : 'out'}-padding` +
         (inFullscreen.value ? ' fullscreen' : '') +
         (isDark.value ? ' q-carousel--dark q-dark' : '') +
         (props.arrows ? ` q-carousel--arrows-${direction.value}` : '') +
@@ -171,8 +171,9 @@ export default createComponent({
     )
 
     function startTimer() {
-      const duration =
-        isNumber(props.autoplay) === true ? Math.abs(props.autoplay) : 5000
+      const duration = isNumber(props.autoplay)
+        ? Math.abs(props.autoplay)
+        : 5000
 
       if (timer !== null) clearTimeout(timer)
       timer = setTimeout(() => {
@@ -242,7 +243,7 @@ export default createComponent({
               name,
               active,
               btnProps: {
-                icon: active === true ? navActiveIcon.value : navIcon.value,
+                icon: active ? navActiveIcon.value : navIcon.value,
                 size: 'sm',
                 ...controlProps.value
               },
@@ -275,7 +276,7 @@ export default createComponent({
       }
 
       if (props.arrows && panelIndex.value >= 0) {
-        if (props.infinite === true || panelIndex.value > 0) {
+        if (props.infinite || panelIndex.value > 0) {
           node.push(
             h(
               'div',
@@ -294,7 +295,7 @@ export default createComponent({
           )
         }
 
-        if (props.infinite === true || panelIndex.value < panelsLen - 1) {
+        if (props.infinite || panelIndex.value < panelsLen - 1) {
           node.push(
             h(
               'div',

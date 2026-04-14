@@ -143,7 +143,7 @@ function getDropdown(eVm, btn) {
           }
         },
         () => [
-          noIcons === true
+          noIcons
             ? null
             : h(
                 QItemSection,
@@ -291,7 +291,7 @@ export function getLinkEditor(eVm) {
           link = evt.target.value
         },
         onKeydown: evt => {
-          if (shouldIgnoreKey(evt) === true) return
+          if (shouldIgnoreKey(evt)) return
 
           switch (evt.keyCode) {
             case 13: {

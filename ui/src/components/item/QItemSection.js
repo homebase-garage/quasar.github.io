@@ -18,13 +18,13 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-item__section column' +
-        ` q-item__section--${props.avatar === true || props.side === true || props.thumbnail === true ? 'side' : 'main'}` +
-        (props.top === true
+        ` q-item__section--${props.avatar || props.side || props.thumbnail ? 'side' : 'main'}` +
+        (props.top
           ? ' q-item__section--top justify-start'
           : ' justify-center') +
-        (props.avatar === true ? ' q-item__section--avatar' : '') +
-        (props.thumbnail === true ? ' q-item__section--thumbnail' : '') +
-        (props.noWrap === true ? ' q-item__section--nowrap' : '')
+        (props.avatar ? ' q-item__section--avatar' : '') +
+        (props.thumbnail ? ' q-item__section--thumbnail' : '') +
+        (props.noWrap ? ' q-item__section--nowrap' : '')
     )
 
     return () => h('div', { class: classes.value }, hSlot(slots.default))

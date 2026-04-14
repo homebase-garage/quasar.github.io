@@ -198,8 +198,7 @@ export default createComponent({
     const rightSide = computed(() => props.side === 'right')
 
     const stateDirection = computed(
-      () =>
-        ($q.lang.rtl === true ? -1 : 1) * (rightSide.value === true ? 1 : -1)
+      () => ($q.lang.rtl === true ? -1 : 1) * (rightSide.value ? 1 : -1)
     )
 
     const flagBackdropBg = ref(0)
@@ -210,9 +209,7 @@ export default createComponent({
       size.value * stateDirection.value
     )
 
-    const otherSide = computed(() =>
-      rightSide.value === true ? 'left' : 'right'
-    )
+    const otherSide = computed(() => (rightSide.value ? 'left' : 'right'))
     const offset = computed(() =>
       showing.value && !belowBreakpoint.value && !props.overlay
         ? props.miniToOverlay
@@ -248,13 +245,13 @@ export default createComponent({
     }))
 
     const headerSlot = computed(() =>
-      rightSide.value === true
+      rightSide.value
         ? $layout.rows.value.top[2] === 'r'
         : $layout.rows.value.top[0] === 'l'
     )
 
     const footerSlot = computed(() =>
-      rightSide.value === true
+      rightSide.value
         ? $layout.rows.value.bottom[2] === 'r'
         : $layout.rows.value.bottom[0] === 'l'
     )
@@ -262,18 +259,18 @@ export default createComponent({
     const aboveStyle = computed(() => {
       const css = {}
 
-      if ($layout.header.space === true && !headerSlot.value) {
+      if ($layout.header.space && !headerSlot.value) {
         if (fixed.value) {
           css.top = `${$layout.header.offset}px`
-        } else if ($layout.header.space === true) {
+        } else if ($layout.header.space) {
           css.top = `${$layout.header.size}px`
         }
       }
 
-      if ($layout.footer.space === true && !footerSlot.value) {
+      if ($layout.footer.space && !footerSlot.value) {
         if (fixed.value) {
           css.bottom = `${$layout.footer.offset}px`
-        } else if ($layout.footer.space === true) {
+        } else if ($layout.footer.space) {
           css.bottom = `${$layout.footer.size}px`
         }
       }
@@ -486,7 +483,7 @@ export default createComponent({
       } else {
         if (
           $layout.isContainer.value &&
-          rightSide.value === true &&
+          rightSide.value &&
           (belowBreakpoint.value || Math.abs(position) === size.value)
         ) {
           position += stateDirection.value * $layout.scrollbarWidth.value
@@ -537,7 +534,7 @@ export default createComponent({
       if (evt.isFinal) {
         const opened = position >= Math.min(75, width)
 
-        if (opened === true) {
+        if (opened) {
           show()
         } else {
           $layout.animate()
@@ -550,15 +547,13 @@ export default createComponent({
       }
 
       applyPosition(
-        ($q.lang.rtl === true ? rightSide.value !== true : rightSide.value)
+        ($q.lang.rtl === true ? !rightSide.value : rightSide.value)
           ? Math.max(width - position, 0)
           : Math.min(0, position - width)
       )
       applyBackdrop(between(position / width, 0, 1))
 
-      if (evt.isFirst) {
-        flagPanning.value = true
-      }
+      if (evt.isFirst) flagPanning.value = true
     }
 
     function onClosePan(evt) {
@@ -575,7 +570,7 @@ export default createComponent({
       if (evt.isFinal) {
         const opened = Math.abs(position) < Math.min(75, width)
 
-        if (opened === true) {
+        if (opened) {
           $layout.animate()
           applyBackdrop(1)
           applyPosition(0)
@@ -590,9 +585,7 @@ export default createComponent({
       applyPosition(stateDirection.value * position)
       applyBackdrop(between(1 - position / width, 0, 1))
 
-      if (evt.isFirst) {
-        flagPanning.value = true
-      }
+      if (evt.isFirst) flagPanning.value = true
     }
 
     function cleanup() {

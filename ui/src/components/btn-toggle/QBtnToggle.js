@@ -137,9 +137,9 @@ export default createComponent({
     )
 
     function set(value, opt, e) {
-      if (props.readonly !== true) {
+      if (!props.readonly) {
         if (props.modelValue === value) {
-          if (props.clearable === true) {
+          if (props.clearable) {
             emit('update:modelValue', null, null)
             emit('clear')
           }
@@ -160,11 +160,7 @@ export default createComponent({
         h(QBtn, opt.props, opt.slot !== void 0 ? slots[opt.slot] : void 0)
       )
 
-      if (
-        props.name !== void 0 &&
-        props.disable !== true &&
-        hasActiveValue.value === true
-      ) {
+      if (props.name !== void 0 && !props.disable && hasActiveValue.value) {
         injectFormInput(child, 'push')
       }
 

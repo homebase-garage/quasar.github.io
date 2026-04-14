@@ -104,8 +104,8 @@ export default createComponent({
 
     let shakeTimeout = null,
       refocusTarget = null,
-      isMaximized,
-      avoidAutoClose
+      isMaximized = false,
+      avoidAutoClose = false
 
     const hideOnRouteChange = computed(
       () => !props.persistent && !props.noRouteDismiss && !props.seamless
@@ -180,7 +180,7 @@ export default createComponent({
     watch(useBackdrop, val => {
       preventBodyScroll(val)
 
-      if (val === true) {
+      if (val) {
         addFocusout(onFocusChange)
         addEscapeKey(onEscapeKey)
       } else {
@@ -361,7 +361,7 @@ export default createComponent({
 
     function updateMaximized(active) {
       if (active === true) {
-        if (isMaximized !== true) {
+        if (!isMaximized) {
           if (maximizedModals < 1) {
             document.body.classList.add('q-body--dialog')
           }
@@ -369,7 +369,7 @@ export default createComponent({
 
           isMaximized = true
         }
-      } else if (isMaximized === true) {
+      } else if (isMaximized) {
         if (maximizedModals < 2) {
           document.body.classList.remove('q-body--dialog')
         }
@@ -380,7 +380,7 @@ export default createComponent({
     }
 
     function onAutoClose(e) {
-      if (avoidAutoClose !== true) {
+      if (!avoidAutoClose) {
         hide(e)
         emit('click', e)
       }
@@ -398,8 +398,8 @@ export default createComponent({
       // the focus is not in a vue child component
       if (
         !props.allowFocusOutside &&
-        portalIsAccessible.value === true &&
-        childHasFocus(innerRef.value, evt.target) !== true
+        portalIsAccessible.value &&
+        !childHasFocus(innerRef.value, evt.target)
       ) {
         focus('[tabindex]:not([tabindex="-1"])')
       }
@@ -423,7 +423,7 @@ export default createComponent({
         'div',
         {
           role: 'dialog',
-          'aria-modal': useBackdrop.value === true ? 'true' : 'false',
+          'aria-modal': useBackdrop.value ? 'true' : 'false',
           ...attrs,
           class: rootClasses.value
         },
@@ -435,7 +435,7 @@ export default createComponent({
               appear: true
             },
             () =>
-              useBackdrop.value === true
+              useBackdrop.value
                 ? h('div', {
                     class: 'q-dialog__backdrop fixed-full',
                     style: backdropStyle.value,

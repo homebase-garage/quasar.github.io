@@ -28,7 +28,7 @@ export default function useFileDomProps(props, typeGuard) {
     }
   }
 
-  return typeGuard === true
+  return typeGuard
     ? computed(() => {
         if (props.type !== 'file') return
         return getFormDomProps()

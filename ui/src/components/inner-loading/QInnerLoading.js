@@ -73,7 +73,7 @@ export default createComponent({
     }
 
     function getContent() {
-      return props.showing === true
+      return props.showing
         ? h(
             'div',
             { class: classes.value, style: transitionStyle.value },

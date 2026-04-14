@@ -25,7 +25,7 @@ function update(el, ctx, value) {
     ctx.handler = handler
   }
 
-  if (changed === true) {
+  if (changed) {
     ctx.cfg = cfg
     ctx.observer?.unobserve(el)
 
@@ -41,10 +41,7 @@ function update(el, ctx, value) {
 
         const res = ctx.handler(entry, ctx.observer)
 
-        if (
-          res === false ||
-          (ctx.once === true && entry.isIntersecting === true)
-        ) {
+        if (res === false || (ctx.once && entry.isIntersecting)) {
           destroy(el)
         }
       }

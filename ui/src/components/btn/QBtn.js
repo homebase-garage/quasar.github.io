@@ -102,7 +102,7 @@ export default createComponent({
         }
       }
 
-      if (isActionable.value === true) {
+      if (isActionable.value) {
         const acc = {
           onClick,
           onKeydown,
@@ -183,7 +183,7 @@ export default createComponent({
       if (isKeyCode(e, [13, 32]) && keyboardTarget !== rootRef.value) {
         if (keyboardTarget !== null) cleanup()
 
-        if (e.defaultPrevented !== true) {
+        if (!e.defaultPrevented) {
           // focus external button if the focus helper was focused before
           if (e.qAvoidFocus !== true) rootRef.value.focus()
 
@@ -203,7 +203,7 @@ export default createComponent({
 
       emit('touchstart', e)
 
-      if (e.defaultPrevented === true) return
+      if (e.defaultPrevented) return
 
       if (touchTarget !== rootRef.value) {
         if (touchTarget !== null) cleanup()
@@ -239,7 +239,7 @@ export default createComponent({
       e.qSkipRipple = avoidMouseRipple === true
       emit('mousedown', e)
 
-      if (e.defaultPrevented !== true && mouseTarget !== rootRef.value) {
+      if (!e.defaultPrevented && mouseTarget !== rootRef.value) {
         if (mouseTarget !== null) cleanup()
         mouseTarget = rootRef.value
         rootRef.value.classList.add('q-btn--active')
@@ -330,9 +330,7 @@ export default createComponent({
     // expose public methods
     Object.assign(proxy, {
       click: e => {
-        if (isActionable.value === true) {
-          onClick(e)
-        }
+        if (isActionable.value) onClick(e)
       }
     })
 

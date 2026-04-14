@@ -150,7 +150,7 @@ export default createComponent({
       if (isClickable.value) {
         data.tabindex = props.tabindex || '0'
         Object.assign(data, linkAttrs.value)
-      } else if (isActionable.value === true) {
+      } else if (isActionable.value) {
         data['aria-disabled'] = 'true'
       }
 

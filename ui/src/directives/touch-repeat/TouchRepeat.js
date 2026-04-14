@@ -57,7 +57,7 @@ export default createDirective(
           // early return, we don't need to do anything
           if (
             modifiers.mouse !== true &&
-            client.has.touch !== true &&
+            !client.has.touch &&
             keyboard.length === 0
           ) {
             return
@@ -238,7 +238,7 @@ export default createDirective(
             ])
           }
 
-          if (client.has.touch === true) {
+          if (client.has.touch) {
             addEvt(ctx, 'main', [
               [
                 el,

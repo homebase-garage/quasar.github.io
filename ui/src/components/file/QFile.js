@@ -111,14 +111,10 @@ export default createComponent({
     }))
 
     const fieldClass = computed(
-      () =>
-        'q-file q-field--auto-height' +
-        (dnd.value === true ? ' q-file--dnd' : '')
+      () => 'q-file q-field--auto-height' + (dnd.value ? ' q-file--dnd' : '')
     )
 
-    const isAppending = computed(
-      () => props.multiple === true && props.append === true
-    )
+    const isAppending = computed(() => props.multiple && props.append)
 
     function removeAtIndex(index) {
       const files = [...innerValue.value]
@@ -134,7 +130,7 @@ export default createComponent({
     }
 
     function emitValue(files) {
-      emit('update:modelValue', props.multiple === true ? files : files[0])
+      emit('update:modelValue', props.multiple ? files : files[0])
     }
 
     function onKeydown(e) {
@@ -172,16 +168,14 @@ export default createComponent({
       // protect against input @change being called in a loop
       // like it happens on Safari, so don't emit same thing:
       if (
-        props.multiple === true
+        props.multiple
           ? props.modelValue && files.every(f => innerValue.value.includes(f))
           : props.modelValue === files[0]
       ) {
         return
       }
 
-      emitValue(
-        isAppending.value === true ? [...innerValue.value, ...files] : files
-      )
+      emitValue(isAppending.value ? [...innerValue.value, ...files] : files)
     }
 
     function getFiller() {
@@ -208,7 +202,7 @@ export default createComponent({
           : slots.selected({ files: innerValue.value, ref: this })
       }
 
-      if (props.useChips === true) {
+      if (props.useChips) {
         return innerValue.value.length === 0
           ? getFiller()
           : innerValue.value.map((file, i) =>
@@ -258,9 +252,7 @@ export default createComponent({
         onChange: addFilesToQueue
       }
 
-      if (props.multiple === true) {
-        data.multiple = true
-      }
+      if (props.multiple) data.multiple = true
 
       return h('input', data)
     }
@@ -273,7 +265,7 @@ export default createComponent({
       innerValue,
 
       floatingLabel: computed(
-        () => hasValue.value === true || fieldValueIsFilled(props.displayValue)
+        () => hasValue.value || fieldValueIsFilled(props.displayValue)
       ),
 
       computedCounter: computed(() => {
@@ -293,7 +285,7 @@ export default createComponent({
           tabindex: props.tabindex
         }
 
-        if (state.editable.value === true) {
+        if (state.editable.value) {
           Object.assign(data, { onDragover, onDragleave, onKeydown, onKeyup })
         }
 

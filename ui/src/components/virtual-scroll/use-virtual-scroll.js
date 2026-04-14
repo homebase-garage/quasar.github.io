@@ -99,9 +99,8 @@ function getScrollDetails(
 
     if (rtl === true) {
       details.scrollStart =
-        (rtlHasScrollBug === true
-          ? details.scrollMaxSize - details.scrollViewSize
-          : 0) - details.scrollStart
+        (rtlHasScrollBug ? details.scrollMaxSize - details.scrollViewSize : 0) -
+        details.scrollStart
     }
   } else {
     if (parent === window) {
@@ -171,7 +170,7 @@ function setScroll(parent, scroll, horizontal, rtl) {
     if (horizontal === true) {
       if (rtl === true) {
         scroll =
-          (rtlHasScrollBug === true
+          (rtlHasScrollBug
             ? document.body.scrollWidth - document.documentElement.clientWidth
             : 0) - scroll
       }
@@ -188,9 +187,7 @@ function setScroll(parent, scroll, horizontal, rtl) {
   } else if (horizontal === true) {
     if (rtl === true) {
       scroll =
-        (rtlHasScrollBug === true
-          ? parent.scrollWidth - parent.offsetWidth
-          : 0) - scroll
+        (rtlHasScrollBug ? parent.scrollWidth - parent.offsetWidth : 0) - scroll
     }
     parent.scrollLeft = scroll
   } else {
@@ -621,10 +618,9 @@ export function useVirtualScroll({
           el => el.classList && !el.classList.contains('q-virtual-scroll--skip')
         ),
         childrenLength = children.length,
-        sizeFn =
-          props.virtualScrollHorizontal === true
-            ? el => el.getBoundingClientRect().width
-            : el => el.offsetHeight
+        sizeFn = props.virtualScrollHorizontal
+          ? el => el.getBoundingClientRect().width
+          : el => el.offsetHeight
 
       let index = from,
         size,
@@ -764,8 +760,7 @@ export function useVirtualScroll({
   }
 
   function padVirtualScroll(tag, content) {
-    const paddingSize =
-      props.virtualScrollHorizontal === true ? 'width' : 'height'
+    const paddingSize = props.virtualScrollHorizontal ? 'width' : 'height'
     const style = {
       ['--q-virtual-scroll-item-' + paddingSize]:
         virtualScrollItemSizeComputed.value + 'px'

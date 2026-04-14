@@ -42,7 +42,7 @@ function decode(value) {
   switch (type) {
     case '__q_date': {
       const number = Number(source)
-      return new Date(Number.isNaN(number) === true ? source : number)
+      return new Date(Number.isNaN(number) ? source : number)
     }
 
     case '__q_expr': {

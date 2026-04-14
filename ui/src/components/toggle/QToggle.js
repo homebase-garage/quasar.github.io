@@ -25,16 +25,14 @@ export default createComponent({
     function getInner(isTrue, isIndeterminate) {
       const icon = computed(
         () =>
-          (isTrue.value === true
+          (isTrue.value
             ? props.checkedIcon
-            : isIndeterminate.value === true
+            : isIndeterminate.value
               ? props.indeterminateIcon
               : props.uncheckedIcon) || props.icon
       )
 
-      const color = computed(() =>
-        isTrue.value === true ? props.iconColor : null
-      )
+      const color = computed(() => (isTrue.value ? props.iconColor : null))
 
       return () => [
         h('div', { class: 'q-toggle__track' }),
