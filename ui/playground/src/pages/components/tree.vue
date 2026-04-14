@@ -147,6 +147,7 @@ export default {
         const json = await import('src/mock-data/tree/bigTree.json')
         this.nodes = json.default
         console.log('Big tree loaded')
+        return
       }
       this.nodes = smallTree
     }
