@@ -217,7 +217,7 @@ function getPlatform(UA) {
   browser.name = matched.browser
   browser.platform = matched.platform
 
-  if (__QUASAR_SSR_SERVER__ !== true) {
+  if (!__QUASAR_SSR_SERVER__) {
     if (userAgent.includes('electron')) {
       browser.electron = true
     } else if (document.location.href.includes('-extension://')) {
@@ -236,7 +236,7 @@ function getPlatform(UA) {
         browser.nativeMobileWrapper = 'cordova'
       }
 
-      if (isRuntimeSsrPreHydration.value === true) {
+      if (isRuntimeSsrPreHydration.value) {
         /*
          * We need to remember the current state as
          * everything that follows can only be corrected client-side,
@@ -342,7 +342,7 @@ const Platform = {
 
     if (__QUASAR_SSR_SERVER__) {
       $q.platform = this.parseSSR(opts.ssrContext)
-    } else if (isRuntimeSsrPreHydration.value === true) {
+    } else if (isRuntimeSsrPreHydration.value) {
       // takeover should increase accuracy for
       // the rest of the props; we also avoid
       // hydration errors
@@ -397,7 +397,7 @@ if (__QUASAR_SSR_SERVER__) {
 
   Object.assign(Platform, client)
 
-  if (isRuntimeSsrPreHydration.value === true) {
+  if (isRuntimeSsrPreHydration.value) {
     // must match with server-side before
     // client taking over in order to prevent
     // hydration errors

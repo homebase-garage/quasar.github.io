@@ -38,7 +38,8 @@ import { isObject } from '../../utils/is/is.js'
 const yearsInterval = 20
 const views = ['Calendar', 'Years', 'Months']
 const viewIsValid = v => views.includes(v)
-const yearMonthValidator = v => /^-?[\d]+\/[0-1]\d$/.test(v)
+const yearMonthRE = /^-?[\d]+\/[0-1]\d$/
+const yearMonthValidator = v => yearMonthRE.test(v)
 const lineStr = ' \u2014 '
 
 function getMonthHash(date) {
@@ -61,7 +62,7 @@ export default createComponent({
       required: true,
       validator: val =>
         typeof val === 'string' ||
-        Array.isArray(val) === true ||
+        Array.isArray(val) ||
         Object(val) === val ||
         val === null
     },
@@ -160,16 +161,16 @@ export default createComponent({
     const editRange = ref(null)
 
     const classes = computed(() => {
-      const type = props.landscape === true ? 'landscape' : 'portrait'
+      const type = props.landscape ? 'landscape' : 'portrait'
       return (
-        `q-date q-date--${type} q-date--${type}-${props.minimal === true ? 'minimal' : 'standard'}` +
-        (isDark.value === true ? ' q-date--dark q-dark' : '') +
-        (props.bordered === true ? ' q-date--bordered' : '') +
-        (props.square === true ? ' q-date--square no-border-radius' : '') +
-        (props.flat === true ? ' q-date--flat no-shadow' : '') +
-        (props.disable === true
+        `q-date q-date--${type} q-date--${type}-${props.minimal ? 'minimal' : 'standard'}` +
+        (isDark.value ? ' q-date--dark q-dark' : '') +
+        (props.bordered ? ' q-date--bordered' : '') +
+        (props.square ? ' q-date--square no-border-radius' : '') +
+        (props.flat ? ' q-date--flat no-shadow' : '') +
+        (props.disable
           ? ' disabled'
-          : props.readonly === true
+          : props.readonly
             ? ' q-date--readonly'
             : '')
       )
@@ -180,14 +181,11 @@ export default createComponent({
     const computedTextColor = computed(() => props.textColor || 'white')
 
     const isImmediate = computed(
-      () =>
-        props.emitImmediately === true &&
-        props.multiple !== true &&
-        props.range !== true
+      () => props.emitImmediately && !props.multiple && !props.range
     )
 
     const normalizedModel = computed(() =>
-      Array.isArray(props.modelValue) === true
+      Array.isArray(props.modelValue)
         ? props.modelValue
         : props.modelValue !== null && props.modelValue !== void 0
           ? [props.modelValue]
@@ -211,10 +209,7 @@ export default createComponent({
       const fn = date => decodeString(date, innerMask.value, innerLocale.value)
       return normalizedModel.value
         .filter(
-          date =>
-            isObject(date) === true &&
-            date.from !== void 0 &&
-            date.to !== void 0
+          date => isObject(date) && date.from !== void 0 && date.to !== void 0
         )
         .map(range => ({ from: fn(range.from), to: fn(range.to) }))
         .filter(
@@ -294,9 +289,7 @@ export default createComponent({
         )
       }
 
-      if (daysInModel.value === 0) {
-        return lineStr
-      }
+      if (daysInModel.value === 0) return lineStr
 
       if (daysInModel.value > 1) {
         return `${daysInModel.value} ${innerLocale.value.pluralDay}`
@@ -787,7 +780,7 @@ export default createComponent({
     })
 
     const attributes = computed(() =>
-      props.disable === true ? { 'aria-disabled': 'true' } : {}
+      props.disable ? { 'aria-disabled': 'true' } : {}
     )
 
     watch(
@@ -805,7 +798,7 @@ export default createComponent({
     watch(view, () => {
       if (
         blurTargetRef.value !== null &&
-        proxy.$el.contains(document.activeElement) === true
+        proxy.$el.contains(document.activeElement)
       ) {
         blurTargetRef.value.focus()
       }
@@ -877,7 +870,7 @@ export default createComponent({
     }
 
     function setEditingRange(from, to) {
-      if (props.range === false || !from) {
+      if (!props.range || !from) {
         editRange.value = null
         return
       }
@@ -909,12 +902,11 @@ export default createComponent({
     }
 
     function getViewModel(dateMask, dateLocale) {
-      const model =
-        Array.isArray(props.modelValue) === true
-          ? props.modelValue
-          : props.modelValue
-            ? [props.modelValue]
-            : []
+      const model = Array.isArray(props.modelValue)
+        ? props.modelValue
+        : props.modelValue
+          ? [props.modelValue]
+          : []
 
       if (model.length === 0) {
         return getDefaultViewModel()
@@ -971,25 +963,25 @@ export default createComponent({
       }
 
       updateViewModel(year, month)
-      if (isImmediate.value === true) emitImmediately('month')
+      if (isImmediate.value) emitImmediately('month')
     }
 
     function goToYear(offset) {
       const year = Number(viewModel.value.year) + offset
       updateViewModel(year, viewModel.value.month)
-      if (isImmediate.value === true) emitImmediately('year')
+      if (isImmediate.value) emitImmediately('year')
     }
 
     function setYear(year) {
       updateViewModel(year, viewModel.value.month)
       view.value = props.defaultView === 'Years' ? 'Months' : 'Calendar'
-      if (isImmediate.value === true) emitImmediately('year')
+      if (isImmediate.value) emitImmediately('year')
     }
 
     function setMonth(month) {
       updateViewModel(viewModel.value.year, month)
       view.value = 'Calendar'
-      if (isImmediate.value === true) emitImmediately('month')
+      if (isImmediate.value) emitImmediately('month')
     }
 
     function toggleDate(date, monthHash) {
@@ -1054,9 +1046,7 @@ export default createComponent({
 
     function emitValue(val, action, date) {
       const value =
-        val !== null && val.length === 1 && props.multiple === false
-          ? val[0]
-          : val
+        val !== null && val.length === 1 && !props.multiple ? val[0] : val
 
       const { reason, details } = getEmitParams(action, date)
 
@@ -1118,7 +1108,7 @@ export default createComponent({
     function addToModel(date) {
       let value
 
-      if (props.multiple === true) {
+      if (props.multiple) {
         if (date.from !== void 0) {
           // we also need to filter out intersections
 
@@ -1147,11 +1137,11 @@ export default createComponent({
     }
 
     function removeFromModel(date) {
-      if (props.noUnset === true) return
+      if (props.noUnset) return
 
       let model = null
 
-      if (props.multiple === true && Array.isArray(props.modelValue) === true) {
+      if (props.multiple && Array.isArray(props.modelValue)) {
         const val = encodeEntry(date)
 
         model =
@@ -1180,14 +1170,14 @@ export default createComponent({
             : entry.dateHash !== null
         )
 
-      const value = (props.multiple === true ? model : model[0]) || null
+      const value = (props.multiple ? model : model[0]) || null
 
       setLastValue(value)
       emit('update:modelValue', value, reason)
     }
 
     function getHeader() {
-      if (props.minimal === true) return
+      if (props.minimal) return
 
       return h(
         'div',
@@ -1279,7 +1269,7 @@ export default createComponent({
                 ]
               ),
 
-              props.todayBtn === true
+              props.todayBtn
                 ? h(QBtn, {
                     class: 'q-date__header-today self-start',
                     icon: $q.iconSet.datetime.today,
@@ -1533,7 +1523,7 @@ export default createComponent({
           )
         })
 
-        if (props.yearsInMonthView === true) {
+        if (props.yearsInMonthView) {
           content.unshift(
             h('div', { class: 'row no-wrap full-width' }, [
               getNavigation({
@@ -1667,7 +1657,7 @@ export default createComponent({
     function onDayClick(dayIndex) {
       const day = { ...viewModel.value, day: dayIndex }
 
-      if (props.range === false) {
+      if (!props.range) {
         toggleDate(day, viewMonthHash.value)
         return
       }
@@ -1677,7 +1667,7 @@ export default createComponent({
           item => item.fill !== true && item.i === dayIndex
         )
 
-        if (props.noUnset !== true && dayProps.range !== void 0) {
+        if (!props.noUnset && dayProps.range !== void 0) {
           removeFromModel({
             target: day,
             from: dayProps.range.from,
@@ -1763,7 +1753,7 @@ export default createComponent({
         content.push(h('div', { class: 'q-date__actions' }, def))
       }
 
-      if (props.name !== void 0 && props.disable !== true) {
+      if (props.name !== void 0 && !props.disable) {
         injectFormInput(content, 'push')
       }
 

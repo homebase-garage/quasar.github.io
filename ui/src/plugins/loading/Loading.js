@@ -41,7 +41,7 @@ function registerProps(opts) {
   }
 
   const newProps =
-    isObject(opts) === true && opts.ignoreDefaults === true
+    isObject(opts) && opts.ignoreDefaults === true
       ? { ...originalDefaults, ...opts }
       : { ...defaults, ...opts }
 
@@ -86,7 +86,7 @@ const Plugin = createReactivePlugin(
                 function onAfterLeave() {
                   // might be called to finalize
                   // previous leave, even if it was cancelled
-                  if (Plugin.isActive !== true && app !== void 0) {
+                  if (!Plugin.isActive && app !== void 0) {
                     preventScroll(false)
                     app.unmount(el)
                     removeGlobalNode(el)
@@ -96,9 +96,7 @@ const Plugin = createReactivePlugin(
                 }
 
                 function getContent() {
-                  if (Plugin.isActive !== true) {
-                    return null
-                  }
+                  if (!Plugin.isActive) return null
 
                   const content = [
                     h(props.spinner, {
@@ -184,7 +182,7 @@ const Plugin = createReactivePlugin(
     },
 
     hide(group) {
-      if (__QUASAR_SSR_SERVER__ !== true && Plugin.isActive === true) {
+      if (!__QUASAR_SSR_SERVER__ && Plugin.isActive) {
         if (group === void 0) {
           // clear out any active groups
           activeGroups = {}
@@ -217,7 +215,7 @@ const Plugin = createReactivePlugin(
     },
 
     setDefaults(opts) {
-      if (__QUASAR_SSR_SERVER__ !== true && isObject(opts) === true) {
+      if (!__QUASAR_SSR_SERVER__ && isObject(opts)) {
         Object.assign(defaults, opts)
       }
     },
@@ -225,7 +223,7 @@ const Plugin = createReactivePlugin(
     install({ $q, parentApp }) {
       $q.loading = this
 
-      if (__QUASAR_SSR_SERVER__ !== true) {
+      if (!__QUASAR_SSR_SERVER__) {
         Plugin.__parentApp = parentApp
 
         if ($q.config.loading !== void 0) {

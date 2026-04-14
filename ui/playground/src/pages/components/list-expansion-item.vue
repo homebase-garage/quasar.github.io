@@ -158,7 +158,7 @@
                 flat
                 dense
                 label="Toggle content"
-                :aria-expanded="expanded === true ? 'true' : 'false'"
+                :aria-expanded="expanded ? 'true' : 'false'"
                 :aria-controls="detailsId"
                 @click="toggle"
               />

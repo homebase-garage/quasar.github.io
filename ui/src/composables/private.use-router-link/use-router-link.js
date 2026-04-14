@@ -104,53 +104,48 @@ export default function useRouterLink({
   const { props, proxy, emit } = vm
 
   const hasRouter = vmHasRouter(vm)
-  const hasHrefLink = computed(
-    () => props.disable !== true && props.href !== void 0
-  )
+  const hasHrefLink = computed(() => !props.disable && props.href !== void 0)
 
   // for perf reasons, we use minimum amount of runtime work
-  const hasRouterLinkProps =
-    useDisableForRouterLinkProps === true
-      ? computed(
-          () =>
-            hasRouter === true &&
-            props.disable !== true &&
-            hasHrefLink.value !== true &&
-            props.to !== void 0 &&
-            props.to !== null &&
-            props.to !== ''
-        )
-      : computed(
-          () =>
-            hasRouter === true &&
-            hasHrefLink.value !== true &&
-            props.to !== void 0 &&
-            props.to !== null &&
-            props.to !== ''
-        )
+  const hasRouterLinkProps = useDisableForRouterLinkProps
+    ? computed(
+        () =>
+          hasRouter &&
+          !props.disable &&
+          !hasHrefLink.value &&
+          props.to !== void 0 &&
+          props.to !== null &&
+          props.to !== ''
+      )
+    : computed(
+        () =>
+          hasRouter &&
+          !hasHrefLink.value &&
+          props.to !== void 0 &&
+          props.to !== null &&
+          props.to !== ''
+      )
 
   const resolvedLink = computed(() =>
-    hasRouterLinkProps.value === true ? getLink(props.to) : null
+    hasRouterLinkProps.value ? getLink(props.to) : null
   )
 
   const hasRouterLink = computed(() => resolvedLink.value !== null)
-  const hasLink = computed(
-    () => hasHrefLink.value === true || hasRouterLink.value === true
-  )
+  const hasLink = computed(() => hasHrefLink.value || hasRouterLink.value)
 
   const linkTag = computed(() =>
-    props.type === 'a' || hasLink.value === true
+    props.type === 'a' || hasLink.value
       ? 'a'
       : props.tag || fallbackTag || 'div'
   )
 
   const linkAttrs = computed(() =>
-    hasHrefLink.value === true
+    hasHrefLink.value
       ? {
           href: props.href,
           target: props.target
         }
-      : hasRouterLink.value === true
+      : hasRouterLink.value
         ? {
             href: resolvedLink.value.href,
             target: props.target
@@ -159,9 +154,7 @@ export default function useRouterLink({
   )
 
   const linkActiveIndex = computed(() => {
-    if (hasRouterLink.value === false) {
-      return -1
-    }
+    if (!hasRouterLink.value) return -1
 
     const { matched } = resolvedLink.value,
       { length } = matched,
@@ -204,25 +197,25 @@ export default function useRouterLink({
 
   const linkIsActive = computed(
     () =>
-      hasRouterLink.value === true &&
+      hasRouterLink.value &&
       linkActiveIndex.value !== -1 &&
       includesParams(proxy.$route.params, resolvedLink.value.params)
   )
 
   const linkIsExactActive = computed(
     () =>
-      linkIsActive.value === true &&
+      linkIsActive.value &&
       linkActiveIndex.value === proxy.$route.matched.length - 1 &&
       isSameRouteLocationParams(proxy.$route.params, resolvedLink.value.params)
   )
 
   const linkClass = computed(() =>
-    hasRouterLink.value === true
-      ? linkIsExactActive.value === true
+    hasRouterLink.value
+      ? linkIsExactActive.value
         ? ` ${props.exactActiveClass} ${props.activeClass}`
-        : props.exact === true
+        : props.exact
           ? ''
-          : linkIsActive.value === true
+          : linkIsActive.value
             ? ` ${props.activeClass}`
             : ''
       : ''
@@ -279,7 +272,7 @@ export default function useRouterLink({
 
   // warning! ensure that the component using it has 'click' included in its 'emits' definition prop
   function navigateOnClick(e) {
-    if (hasRouterLink.value === true) {
+    if (hasRouterLink.value) {
       const go = opts => navigateToRouterLink(e, opts)
 
       emit('click', e, go)

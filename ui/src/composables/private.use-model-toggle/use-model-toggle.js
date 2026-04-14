@@ -29,7 +29,7 @@ export default function useModelToggle({
   let payload
 
   function toggle(evt) {
-    if (showing.value === true) {
+    if (showing.value) {
       hide(evt)
     } else {
       show(evt)
@@ -38,7 +38,7 @@ export default function useModelToggle({
 
   function show(evt) {
     if (
-      props.disable === true ||
+      props.disable ||
       evt?.qAnchorHandled === true ||
       (canShow !== void 0 && canShow(evt) !== true)
     ) {
@@ -47,7 +47,7 @@ export default function useModelToggle({
 
     const listener = props['onUpdate:modelValue'] !== void 0
 
-    if (listener === true && __QUASAR_SSR_SERVER__ !== true) {
+    if (listener && !__QUASAR_SSR_SERVER__) {
       emit('update:modelValue', true)
       payload = evt
       nextTick(() => {
@@ -57,11 +57,7 @@ export default function useModelToggle({
       })
     }
 
-    if (
-      props.modelValue === null ||
-      listener === false ||
-      __QUASAR_SSR_SERVER__
-    ) {
+    if (__QUASAR_SSR_SERVER__ || props.modelValue === null || !listener) {
       processShow(evt)
     }
   }
@@ -85,7 +81,7 @@ export default function useModelToggle({
 
     const listener = props['onUpdate:modelValue'] !== void 0
 
-    if (listener === true && __QUASAR_SSR_SERVER__ !== true) {
+    if (listener && !__QUASAR_SSR_SERVER__) {
       emit('update:modelValue', false)
       payload = evt
       nextTick(() => {
@@ -95,11 +91,7 @@ export default function useModelToggle({
       })
     }
 
-    if (
-      props.modelValue === null ||
-      listener === false ||
-      __QUASAR_SSR_SERVER__
-    ) {
+    if (__QUASAR_SSR_SERVER__ || props.modelValue === null || !listener) {
       processHide(evt)
     }
   }
@@ -131,11 +123,11 @@ export default function useModelToggle({
 
   watch(() => props.modelValue, processModelChange)
 
-  if (hideOnRouteChange !== void 0 && vmHasRouter(vm) === true) {
+  if (hideOnRouteChange !== void 0 && vmHasRouter(vm)) {
     watch(
       () => proxy.$route.fullPath,
       () => {
-        if (hideOnRouteChange.value === true && showing.value === true) {
+        if (hideOnRouteChange.value && showing.value) {
           hide()
         }
       }

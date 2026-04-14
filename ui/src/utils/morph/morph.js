@@ -67,7 +67,7 @@ function getComputedStyle(el, props) {
         let val = ''
 
         for (let styleIndex = 0; styleIndex < styleLen; styleIndex++) {
-          if (reStyleSkipKey.test(style[styleIndex]) !== true) {
+          if (!reStyleSkipKey.test(style[styleIndex])) {
             val += style[styleIndex] + ': ' + style[style[styleIndex]] + '; '
           }
         }
@@ -96,7 +96,7 @@ function getComputedStyle(el, props) {
     } else if (prop === 'cssText') {
       fixed[prop] = style[prop]
         .split(';')
-        .filter(val => reStyleSkipRule.test(val) !== true)
+        .filter(val => !reStyleSkipRule.test(val))
         .join(';')
     } else {
       fixed[prop] = style[prop]
@@ -518,7 +518,7 @@ export default function morph(_options) {
       // we apply styles specified by user
       if (typeof options.style === 'string') {
         elTo.style.cssText += ' ' + options.style
-      } else if (isObject(options.style) === true) {
+      } else if (isObject(options.style)) {
         for (const prop in options.style) {
           elTo.style[prop] = options.style[prop]
         }

@@ -82,7 +82,7 @@ export default createComponent({
     function set() {
       if (props.validate(currentModel.value) === false) return
 
-      if (hasModelChanged() === true) {
+      if (hasModelChanged()) {
         emit('save', currentModel.value, initialValue.value)
         emit('update:modelValue', currentModel.value)
       }
@@ -91,7 +91,7 @@ export default createComponent({
     }
 
     function cancel() {
-      if (hasModelChanged() === true) {
+      if (hasModelChanged()) {
         emit('cancel', currentModel.value, initialValue.value)
       }
 
@@ -105,7 +105,7 @@ export default createComponent({
     }
 
     function hasModelChanged() {
-      return isDeepEqual(currentModel.value, initialValue.value) === false
+      return !isDeepEqual(currentModel.value, initialValue.value)
     }
 
     function closeMenu() {
@@ -125,7 +125,7 @@ export default createComponent({
     }
 
     function onBeforeHide() {
-      if (validated === false && hasModelChanged() === true) {
+      if (!validated && hasModelChanged()) {
         if (
           props.autoSave === true &&
           props.validate(currentModel.value) === true

@@ -42,5 +42,5 @@ export function hMergeSlotSafely(slot, source) {
 export function hDir(tag, data, children, key, condition, getDirsFn) {
   data.key = key + condition
   const vnode = h(tag, data, children)
-  return condition === true ? withDirectives(vnode, getDirsFn()) : vnode
+  return condition ? withDirectives(vnode, getDirsFn()) : vnode
 }

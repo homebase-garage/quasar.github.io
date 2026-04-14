@@ -411,7 +411,7 @@ export default {
           () => {
             this.leftSlideRatio = ratio
           },
-          isReset === true ? 200 : void 0
+          isReset ? 200 : void 0
         )
       }
     },

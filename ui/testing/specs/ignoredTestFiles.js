@@ -25,7 +25,7 @@ class IgnoredFilesList {
   }
 
   #save() {
-    if (this.#shouldSave === true) {
+    if (this.#shouldSave) {
       const content = [...this.#list].sort().join('\n')
       fse.writeFileSync(this.#file, content + '\n', 'utf8')
     }

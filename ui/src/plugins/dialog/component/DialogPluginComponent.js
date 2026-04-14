@@ -111,7 +111,7 @@ export default createComponent({
     })
 
     const okLabel = computed(() =>
-      isObject(props.ok) === true
+      isObject(props.ok)
         ? $q.lang.label.ok
         : props.ok === true
           ? $q.lang.label.ok
@@ -119,7 +119,7 @@ export default createComponent({
     )
 
     const cancelLabel = computed(() =>
-      isObject(props.cancel) === true
+      isObject(props.cancel)
         ? $q.lang.label.cancel
         : props.cancel === true
           ? $q.lang.label.cancel
@@ -147,7 +147,7 @@ export default createComponent({
       label: okLabel.value,
       ripple: false,
       disable: okDisabled.value,
-      ...(isObject(props.ok) === true ? props.ok : { flat: true }),
+      ...(isObject(props.ok) ? props.ok : { flat: true }),
       'data-autofocus':
         (props.focus === 'ok' && hasForm.value !== true) || void 0,
       onClick: onOk
@@ -157,7 +157,7 @@ export default createComponent({
       color: vmColor.value,
       label: cancelLabel.value,
       ripple: false,
-      ...(isObject(props.cancel) === true ? props.cancel : { flat: true }),
+      ...(isObject(props.cancel) ? props.cancel : { flat: true }),
       'data-autofocus':
         (props.focus === 'cancel' && hasForm.value !== true) || void 0,
       onClick: onCancel
@@ -196,7 +196,7 @@ export default createComponent({
       if (
         okDisabled.value !== true &&
         props.prompt.type !== 'textarea' &&
-        isKeyCode(evt, 13) === true
+        isKeyCode(evt, 13)
       ) {
         onOk()
       }

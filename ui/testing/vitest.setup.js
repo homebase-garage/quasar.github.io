@@ -53,7 +53,7 @@ function $any(received, expectedList) {
  */
 export function $arrayValues(received, expected) {
   const pass =
-    Array.isArray(received) === true &&
+    Array.isArray(received) &&
     received.every(item => this.equals(item, expected))
 
   return {

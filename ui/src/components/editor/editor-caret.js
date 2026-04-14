@@ -1,5 +1,7 @@
 import { noop } from '../../utils/event/event.js'
 
+const tagList = ['div', 'li', 'ul', 'ol', 'blockquote']
+
 function getBlockElement(el, parent) {
   if (parent && el === parent) {
     return null
@@ -7,9 +9,7 @@ function getBlockElement(el, parent) {
 
   const nodeName = el.nodeName.toLowerCase()
 
-  if (['div', 'li', 'ul', 'ol', 'blockquote'].includes(nodeName) === true) {
-    return el
-  }
+  if (tagList.includes(nodeName)) return el
 
   const style = window.getComputedStyle
       ? window.getComputedStyle(el)
@@ -186,11 +186,9 @@ export default class Caret {
   }
 
   hasParents(list, recursive, el = this.parent) {
-    if (el === null) {
-      return false
-    }
+    if (el === null) return false
 
-    if (list.includes(el.nodeName.toLowerCase()) === true) {
+    if (list.includes(el.nodeName.toLowerCase())) {
       return true
     }
 
@@ -200,9 +198,7 @@ export default class Caret {
   }
 
   is(cmd, param) {
-    if (this.selection === null) {
-      return false
-    }
+    if (this.selection === null) return false
 
     switch (cmd) {
       case 'formatBlock': {

@@ -12,7 +12,7 @@
       >
         <template v-slot:error>
           <div class="absolute-bottom text-body1 text-center text-negative">
-            {{ image.bogus === true ? 'Bogus image' : 'Error on loading' }}
+            {{ image.bogus ? 'Bogus image' : 'Error on loading' }}
           </div>
         </template>
       </q-img>

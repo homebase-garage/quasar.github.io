@@ -56,13 +56,13 @@ export default createComponent({
     const scrollHeight = computed(
       () =>
         $layout.height.value -
-        ($layout.isContainer.value === true
+        ($layout.isContainer.value
           ? $layout.containerHeight.value
           : $q.screen.height)
     )
 
     function isVisible() {
-      return props.reverse === true
+      return props.reverse
         ? scrollHeight.value - $layout.scroll.value.position >
             props.scrollOffset
         : $layout.scroll.value.position > props.scrollOffset
@@ -78,7 +78,7 @@ export default createComponent({
     }
 
     function updateReverse() {
-      if (props.reverse === true) {
+      if (props.reverse) {
         if (heightWatcher === void 0) {
           heightWatcher = watch(scrollHeight, updateVisibility)
         }
@@ -99,14 +99,12 @@ export default createComponent({
 
     function onClick(e) {
       const target = getScrollTarget(
-        $layout.isContainer.value === true
-          ? rootRef.value
-          : $layout.rootRef.value
+        $layout.isContainer.value ? rootRef.value : $layout.rootRef.value
       )
 
       setVerticalScrollPosition(
         target,
-        props.reverse === true ? $layout.height.value : 0,
+        props.reverse ? $layout.height.value : 0,
         props.duration
       )
 

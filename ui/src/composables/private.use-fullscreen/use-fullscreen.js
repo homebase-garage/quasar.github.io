@@ -26,7 +26,7 @@ export default function useFullscreen() {
   let historyEntry, fullscreenFillerNode
   const inFullscreen = ref(false)
 
-  if (vmHasRouter(vm) === true) {
+  if (vmHasRouter(vm)) {
     watch(
       () => proxy.$route.fullPath,
       () => {
@@ -40,9 +40,7 @@ export default function useFullscreen() {
   watch(
     () => props.fullscreen,
     v => {
-      if (inFullscreen.value !== v) {
-        toggleFullscreen()
-      }
+      if (inFullscreen.value !== v) toggleFullscreen()
     }
   )
 
@@ -52,7 +50,7 @@ export default function useFullscreen() {
   })
 
   function toggleFullscreen() {
-    if (inFullscreen.value === true) {
+    if (inFullscreen.value) {
       exitFullscreen()
     } else {
       setFullscreen()
@@ -60,7 +58,7 @@ export default function useFullscreen() {
   }
 
   function setFullscreen() {
-    if (inFullscreen.value === true) return
+    if (inFullscreen.value) return
 
     inFullscreen.value = true
     proxy.$el.replaceWith(fullscreenFillerNode)
@@ -78,7 +76,7 @@ export default function useFullscreen() {
   }
 
   function exitFullscreen() {
-    if (inFullscreen.value !== true) return
+    if (!inFullscreen.value) return
 
     if (historyEntry !== void 0) {
       History.remove(historyEntry)

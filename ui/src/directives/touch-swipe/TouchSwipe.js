@@ -79,7 +79,7 @@ export default createDirective(
             },
 
             start(evt, mouseEvent) {
-              if (client.is.firefox === true) preventDraggable(el, true)
+              if (client.is.firefox) preventDraggable(el, true)
 
               const pos = position(evt)
 
@@ -230,7 +230,7 @@ export default createDirective(
               if (ctx.event === void 0) return
 
               cleanEvt(ctx, 'temp')
-              if (client.is.firefox === true) preventDraggable(el, false)
+              if (client.is.firefox) preventDraggable(el, false)
               ctx.styleCleanup?.(true)
               if (evt !== void 0 && ctx.event.dir !== false) stopAndPrevent(evt)
 
@@ -285,7 +285,7 @@ export default createDirective(
             cleanEvt(ctx, 'main')
             cleanEvt(ctx, 'temp')
 
-            if (client.is.firefox === true) preventDraggable(el, false)
+            if (client.is.firefox) preventDraggable(el, false)
             ctx.styleCleanup?.()
 
             delete el.__qtouchswipe

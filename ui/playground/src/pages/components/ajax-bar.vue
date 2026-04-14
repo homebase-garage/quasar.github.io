@@ -148,7 +148,7 @@ export default {
     },
 
     loadingState() {
-      return LoadingBar.isActive === true ? 'active' : 'idle'
+      return LoadingBar.isActive ? 'active' : 'idle'
     }
   },
   methods: {

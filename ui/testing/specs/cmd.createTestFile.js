@@ -43,7 +43,7 @@ export async function cmdCreateTestFile({ ctx, testFile, ignoredTestFiles }) {
   // allow user to exit
   if (confirm === void 0) process.exit(1)
 
-  if (confirm === true) {
+  if (confirm) {
     fse.writeFileSync(ctx.testFileAbsolute, testFileContent, 'utf8')
     console.log(`  🎉 Created "${ctx.testFileRelative}"`)
   }

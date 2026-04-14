@@ -204,7 +204,7 @@
                       icon="save"
                       @click.stop="scope.set"
                       :disable="
-                        scope.validate(scope.value) === false ||
+                        !scope.validate(scope.value) ||
                         scope.initialValue === scope.value
                       "
                     />

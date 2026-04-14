@@ -39,23 +39,21 @@ export default createComponent({
         ($layout.footer.space === true ? $layout.footer.size : 0)
 
       if (typeof props.styleFn === 'function') {
-        const height =
-          $layout.isContainer.value === true
-            ? $layout.containerHeight.value
-            : $q.screen.height
+        const height = $layout.isContainer.value
+          ? $layout.containerHeight.value
+          : $q.screen.height
 
         return props.styleFn(offset, height)
       }
 
       return {
-        minHeight:
-          $layout.isContainer.value === true
-            ? $layout.containerHeight.value - offset + 'px'
-            : $q.screen.height === 0
-              ? offset !== 0
-                ? `calc(100vh - ${offset}px)`
-                : '100vh'
-              : $q.screen.height - offset + 'px'
+        minHeight: $layout.isContainer.value
+          ? $layout.containerHeight.value - offset + 'px'
+          : $q.screen.height === 0
+            ? offset !== 0
+              ? `calc(100vh - ${offset}px)`
+              : '100vh'
+            : $q.screen.height - offset + 'px'
       }
     })
 

@@ -2,16 +2,18 @@ import { Teleport, h, onUnmounted, ref } from 'vue'
 
 import { createComponent } from '../../utils/private.create/create.js'
 import { noop } from '../../utils/event/event.js'
+import { portalProxyList } from '../../utils/private.portal/portal.js'
+import { injectProp } from '../../utils/private.inject-obj-prop/inject-obj-prop.js'
+
 import {
   addFocusWaitFlag,
   removeFocusWaitFlag
 } from '../../utils/private.focus/focus-manager.js'
+
 import {
   createGlobalNode,
   removeGlobalNode
 } from '../../utils/private.config/nodes.js'
-import { portalProxyList } from '../../utils/private.portal/portal.js'
-import { injectProp } from '../../utils/private.inject-obj-prop/inject-obj-prop.js'
 
 /**
  * Noop internal component to ease testing
@@ -78,8 +80,8 @@ export default function usePortal(vm, innerRef, renderPortalContent, type) {
 
     portalIsAccessible.value = false
 
-    if (portalIsActive.value === false) {
-      if (onGlobalDialog === false && portalEl === null) {
+    if (!portalIsActive.value) {
+      if (!onGlobalDialog && portalEl === null) {
         portalEl = createGlobalNode(false, type)
       }
 
@@ -130,9 +132,9 @@ export default function usePortal(vm, innerRef, renderPortalContent, type) {
     portalIsAccessible,
 
     renderPortal: () =>
-      onGlobalDialog === true
+      onGlobalDialog
         ? renderPortalContent()
-        : portalIsActive.value === true
+        : portalIsActive.value
           ? [h(Teleport, { to: portalEl }, h(QPortal, renderPortalContent))]
           : void 0
   }

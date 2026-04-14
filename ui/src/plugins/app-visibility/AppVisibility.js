@@ -17,7 +17,7 @@ const Plugin = createReactivePlugin(
   }
 )
 
-if (__QUASAR_SSR_SERVER__ !== true) {
+if (!__QUASAR_SSR_SERVER__) {
   let prop, evt
 
   if (document.hidden !== void 0) {

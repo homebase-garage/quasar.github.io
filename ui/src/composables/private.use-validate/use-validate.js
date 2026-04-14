@@ -45,12 +45,12 @@ export default function useValidate(focused, innerLoading) {
 
   const canDebounceValidate = computed(
     () =>
-      props.disable !== true &&
-      hasRules.value === true &&
+      !props.disable &&
+      hasRules.value &&
       // Should not have a validation in progress already;
       // It might mean that focus switched to submit btn and
       // QForm's submit() has been called already (ENTER key)
-      innerLoading.value === false
+      !innerLoading.value
   )
 
   const hasError = computed(
@@ -135,18 +135,14 @@ export default function useValidate(focused, innerLoading) {
    *   - Promise (pending async validation)
    */
   function validate(val = props.modelValue) {
-    if (props.disable === true || hasRules.value === false) {
-      return true
-    }
+    if (props.disable || !hasRules.value) return true
 
     const index = ++validateIndex
-
-    const setDirty =
-      innerLoading.value !== true
-        ? () => {
-            isDirtyModel.value = true
-          }
-        : () => {}
+    const setDirty = innerLoading.value
+      ? () => {}
+      : () => {
+          isDirtyModel.value = true
+        }
 
     const update = (err, msg) => {
       if (err === true) setDirty()

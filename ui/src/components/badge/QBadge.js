@@ -32,23 +32,22 @@ export default createComponent({
     )
 
     const classes = computed(() => {
-      const text =
-        props.outline === true
-          ? props.color || props.textColor
-          : props.textColor
+      const text = props.outline
+        ? props.color || props.textColor
+        : props.textColor
 
       return (
         'q-badge flex inline items-center no-wrap' +
-        ` q-badge--${props.multiLine === true ? 'multi' : 'single'}-line` +
-        (props.outline === true
+        ` q-badge--${props.multiLine ? 'multi' : 'single'}-line` +
+        (props.outline
           ? ' q-badge--outline'
           : props.color !== void 0
             ? ` bg-${props.color}`
             : '') +
         (text !== void 0 ? ` text-${text}` : '') +
-        (props.floating === true ? ' q-badge--floating' : '') +
-        (props.rounded === true ? ' q-badge--rounded' : '') +
-        (props.transparent === true ? ' q-badge--transparent' : '')
+        (props.floating ? ' q-badge--floating' : '') +
+        (props.rounded ? ' q-badge--rounded' : '') +
+        (props.transparent ? ' q-badge--transparent' : '')
       )
     })
 

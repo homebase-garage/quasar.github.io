@@ -80,7 +80,7 @@ export function useTableSort(
   function sort(col /* String(col name) or Object(col definition) */) {
     let sortOrder = props.columnSortOrder
 
-    if (isObject(col) === true) {
+    if (isObject(col)) {
       if (col.sortOrder) {
         sortOrder = col.sortOrder
       }

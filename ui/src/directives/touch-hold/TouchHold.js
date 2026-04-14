@@ -62,7 +62,7 @@ export default createDirective(
 
               const startTime = Date.now()
 
-              if (client.is.mobile === true) {
+              if (client.is.mobile) {
                 document.body.classList.add('non-selectable')
                 clearSelection()
 

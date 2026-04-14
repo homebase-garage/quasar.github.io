@@ -221,9 +221,7 @@ export default {
   },
   computed: {
     rowClass() {
-      if (this.center === true) {
-        return 'items-center'
-      }
+      return this.center ? 'items-center' : ''
     },
 
     props() {

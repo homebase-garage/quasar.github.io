@@ -66,9 +66,10 @@ export default createComponent({
           const middle = els < len
           const disabled =
             comp.props !== null && disabledValues.includes(comp.props.disable)
+
           const cls =
-            (middle === true ? '' : ' q-breadcrumbs--last') +
-            (disabled !== true && middle === true ? activeClass.value : '')
+            (middle ? '' : ' q-breadcrumbs--last') +
+            (!disabled && middle ? activeClass.value : '')
 
           els++
 
@@ -82,7 +83,7 @@ export default createComponent({
             )
           )
 
-          if (middle === true) {
+          if (middle) {
             child.push(
               h(
                 'div',

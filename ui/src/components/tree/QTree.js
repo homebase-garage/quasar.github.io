@@ -110,9 +110,9 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        `q-tree q-tree--${props.dense === true ? 'dense' : 'standard'}` +
-        (props.noConnectors === true ? ' q-tree--no-connectors' : '') +
-        (isDark.value === true ? ' q-tree--dark' : '') +
+        `q-tree q-tree--${props.dense ? 'dense' : 'standard'}` +
+        (props.noConnectors ? ' q-tree--no-connectors' : '') +
+        (isDark.value ? ' q-tree--dark' : '') +
         (props.color !== void 0 ? ` text-${props.color}` : '')
     )
 
@@ -182,7 +182,7 @@ export default createComponent({
         if (
           localLazy === true &&
           lazy.value[key] !== void 0 &&
-          Array.isArray(node[props.childrenKey]) === true
+          Array.isArray(node[props.childrenKey])
         ) {
           localLazy = lazy.value[key]
         }
@@ -243,7 +243,7 @@ export default createComponent({
                   n.matchesFilter !== true ||
                   n.noTick === true ||
                   n.tickable !== true
-              ) === true
+              )
             ) {
               m.tickable = false
             }
@@ -253,7 +253,7 @@ export default createComponent({
             if (
               m.noTick !== true &&
               strictTicking !== true &&
-              m.children.every(n => n.noTick) === true
+              m.children.every(n => n.noTick)
             ) {
               m.noTick = true
             }
@@ -382,7 +382,7 @@ export default createComponent({
         if (m.lazy === 'loading') return
 
         lazy.value[key] = 'loading'
-        if (Array.isArray(node[props.childrenKey]) !== true) {
+        if (!Array.isArray(node[props.childrenKey])) {
           node[props.childrenKey] = []
         }
         emit('lazyLoad', {
@@ -390,8 +390,7 @@ export default createComponent({
           key,
           done: children => {
             lazy.value[key] = 'loaded'
-            node[props.childrenKey] =
-              Array.isArray(children) === true ? children : []
+            node[props.childrenKey] = Array.isArray(children) ? children : []
             nextTick(() => {
               const localMeta = meta.value[key]
               if (localMeta?.isParent === true) {
@@ -667,7 +666,7 @@ export default createComponent({
           ),
 
           isParent === true
-            ? props.noTransition === true
+            ? props.noTransition
               ? m.expanded === true
                 ? h(
                     'div',
@@ -742,7 +741,7 @@ export default createComponent({
       }
 
       if (hasSelection.value && localMeta.selectable) {
-        if (props.noSelectionUnset === false) {
+        if (!props.noSelectionUnset) {
           emit(
             'update:selected',
             localMeta.key !== props.selected ? localMeta.key : null
@@ -806,9 +805,7 @@ export default createComponent({
       }
     }
 
-    if (props.defaultExpandAll === true) {
-      expandAll()
-    }
+    if (props.defaultExpandAll) expandAll()
 
     // expose public methods
     Object.assign(proxy, {

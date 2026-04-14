@@ -7,7 +7,7 @@ export function clearSelection() {
       selection.empty()
     } else if (selection.removeAllRanges !== void 0) {
       selection.removeAllRanges()
-      if (Platform.is.mobile !== true) {
+      if (!Platform.is.mobile) {
         selection.addRange(document.createRange())
       }
     }

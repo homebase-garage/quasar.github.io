@@ -21,8 +21,8 @@ function translate({ p, pos, active, horiz, reverse, dir }) {
   let x = 1,
     y = 1
 
-  if (horiz === true) {
-    if (reverse === true) {
+  if (horiz) {
+    if (reverse) {
       x = -1
     }
     if (pos === 'bottom') {
@@ -33,7 +33,7 @@ function translate({ p, pos, active, horiz, reverse, dir }) {
     }
   }
 
-  if (reverse === true) {
+  if (reverse) {
     y = -1
   }
   if (pos === 'right') {
@@ -151,9 +151,7 @@ export default createComponent({
     const horizontal = computed(
       () => props.position === 'top' || props.position === 'bottom'
     )
-    const sizeProp = computed(() =>
-      horizontal.value === true ? 'height' : 'width'
-    )
+    const sizeProp = computed(() => (horizontal.value ? 'height' : 'width'))
 
     const style = computed(() => {
       const active = onScreen.value
@@ -166,7 +164,7 @@ export default createComponent({
         reverse:
           proxy.$q.lang.rtl === true &&
           ['top', 'bottom'].includes(props.position)
-            ? props.reverse === false
+            ? !props.reverse
             : props.reverse,
         dir: proxy.$q.lang.rtl === true ? -1 : 1
       })
@@ -178,7 +176,7 @@ export default createComponent({
     })
 
     const attributes = computed(() =>
-      onScreen.value === true
+      onScreen.value
         ? {
             role: 'progressbar',
             'aria-valuemin': 0,
@@ -287,7 +285,7 @@ export default createComponent({
     let hijacked
 
     onMounted(() => {
-      if (props.skipHijack !== true) {
+      if (!props.skipHijack) {
         hijacked = true
         highjackAjax({
           start,

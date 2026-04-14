@@ -7,7 +7,7 @@ const toString = Object.prototype.toString,
   )
 
 function isPlainObject(obj) {
-  if (obj !== Object(obj) || notPlainObject.has(toString.call(obj)) === true) {
+  if (obj !== Object(obj) || notPlainObject.has(toString.call(obj))) {
     return false
   }
 
@@ -68,12 +68,12 @@ export default function extend(...args) {
         if (
           deep === true &&
           copy &&
-          ((copyIsArray = Array.isArray(copy)) || isPlainObject(copy) === true)
+          ((copyIsArray = Array.isArray(copy)) || isPlainObject(copy))
         ) {
-          if (copyIsArray === true) {
-            clone = Array.isArray(src) === true ? src : []
+          if (copyIsArray) {
+            clone = Array.isArray(src) ? src : []
           } else {
-            clone = isPlainObject(src) === true ? src : {}
+            clone = isPlainObject(src) ? src : {}
           }
 
           target[name] = extend(deep, clone, copy)

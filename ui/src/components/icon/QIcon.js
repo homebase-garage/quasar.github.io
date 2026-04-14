@@ -104,7 +104,7 @@ export default createComponent({
         }
       }
 
-      if (mRE.test(icon) === true) {
+      if (mRE.test(icon)) {
         const [def, viewBox = defaultViewBox] = icon.split('|')
 
         return {
@@ -117,14 +117,14 @@ export default createComponent({
         }
       }
 
-      if (imgRE.test(icon) === true) {
+      if (imgRE.test(icon)) {
         return {
           img: true,
           src: icon.slice(4)
         }
       }
 
-      if (svgUseRE.test(icon) === true) {
+      if (svgUseRE.test(icon)) {
         const [def, viewBox = defaultViewBox] = icon.split('|')
 
         return {
@@ -139,11 +139,11 @@ export default createComponent({
 
       if (matches !== null) {
         cls = libMap[matches[1]](icon)
-      } else if (faRE.test(icon) === true) {
+      } else if (faRE.test(icon)) {
         cls = icon
-      } else if (ionRE.test(icon) === true) {
-        cls = `ionicons ion-${$q.platform.is.ios === true ? 'ios' : 'md'}${icon.slice(3)}`
-      } else if (symRE.test(icon) === true) {
+      } else if (ionRE.test(icon)) {
+        cls = `ionicons ion-${$q.platform.is.ios ? 'ios' : 'md'}${icon.slice(3)}`
+      } else if (symRE.test(icon)) {
         // "notranslate" class is for Google Translate
         // to avoid tampering with Material Symbols ligature font
         //

@@ -5,40 +5,40 @@ import { onKeyDownComposition } from '../../utils/private.keyboard/key-compositi
 import { client, isRuntimeSsrPreHydration } from '../platform/Platform.js'
 
 function getMobilePlatform(is) {
-  if (is.ios === true) return 'ios'
-  if (is.android === true) return 'android'
+  if (is.ios) return 'ios'
+  if (is.android) return 'android'
 }
 
 function getBodyClasses({ is, has, within }, cfg) {
   const cls = [
-    is.desktop === true ? 'desktop' : 'mobile',
-    `${has.touch === false ? 'no-' : ''}touch`
+    is.desktop ? 'desktop' : 'mobile',
+    `${has.touch ? '' : 'no-'}touch`
   ]
 
-  if (is.mobile === true) {
+  if (is.mobile) {
     const mobile = getMobilePlatform(is)
     if (mobile !== void 0) cls.push('platform-' + mobile)
   }
 
-  if (is.nativeMobile === true) {
+  if (is.nativeMobile) {
     const type = is.nativeMobileWrapper
 
     cls.push(type)
     cls.push('native-mobile')
 
     if (
-      is.ios === true &&
+      is.ios &&
       (cfg[type] === void 0 || cfg[type].iosStatusBarPadding !== false)
     ) {
       cls.push('q-ios-padding')
     }
-  } else if (is.electron === true) {
+  } else if (is.electron) {
     cls.push('electron')
-  } else if (is.bex === true) {
+  } else if (is.bex) {
     cls.push('bex')
   }
 
-  if (within.iframe === true) cls.push('within-iframe')
+  if (within.iframe) cls.push('within-iframe')
 
   return cls
 }
@@ -49,13 +49,13 @@ function applyClientSsrCorrections() {
 
   const classList = new Set(classes.replaceAll(/ {2}/g, ' ').split(' '))
 
-  if (is.nativeMobile !== true && is.electron !== true && is.bex !== true) {
-    if (is.desktop === true) {
+  if (!is.nativeMobile && !is.electron && !is.bex) {
+    if (is.desktop) {
       classList.delete('mobile')
       classList.delete('platform-ios')
       classList.delete('platform-android')
       classList.add('desktop')
-    } else if (is.mobile === true) {
+    } else if (is.mobile) {
       classList.delete('desktop')
       classList.add('mobile')
 
@@ -69,20 +69,18 @@ function applyClientSsrCorrections() {
     }
   }
 
-  if (client.has.touch === true) {
+  if (client.has.touch) {
     classList.delete('no-touch')
     classList.add('touch')
   }
 
-  if (client.within.iframe === true) {
+  if (client.within.iframe) {
     classList.add('within-iframe')
   }
 
   const newCls = [...classList].join(' ')
 
-  if (classes !== newCls) {
-    document.body.className = newCls
-  }
+  if (classes !== newCls) document.body.className = newCls
 }
 
 function setColors(brand) {
@@ -117,7 +115,7 @@ export default {
 
     if (this.__installed === true) return
 
-    if (isRuntimeSsrPreHydration.value === true) {
+    if (isRuntimeSsrPreHydration.value) {
       applyClientSsrCorrections()
     } else {
       const { $q } = opts
@@ -127,7 +125,7 @@ export default {
       document.body.classList.add(...getBodyClasses(client, $q.config))
     }
 
-    if (client.is.ios === true) {
+    if (client.is.ios) {
       // needed for iOS button active state
       document.body.addEventListener('touchstart', noop)
     }

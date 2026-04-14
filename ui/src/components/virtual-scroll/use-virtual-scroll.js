@@ -121,7 +121,7 @@ function getScrollDetails(
       el !== null;
       el = el.previousElementSibling
     ) {
-      if (el.classList.contains('q-virtual-scroll--skip') === false) {
+      if (!el.classList.contains('q-virtual-scroll--skip')) {
         details.offsetStart += el[propElSize]
       }
     }
@@ -133,7 +133,7 @@ function getScrollDetails(
       el !== null;
       el = el.nextElementSibling
     ) {
-      if (el.classList.contains('q-virtual-scroll--skip') === false) {
+      if (!el.classList.contains('q-virtual-scroll--skip')) {
         details.offsetEnd += el[propElSize]
       }
     }
@@ -487,7 +487,7 @@ export function useVirtualScroll({
       from !== virtualScrollSliceRange.value.from ||
       to !== virtualScrollSliceRange.value.to
 
-    if (rangeChanged === false && alignEnd === void 0) {
+    if (!rangeChanged && alignEnd === void 0) {
       emitScroll(toIndex)
       return
     }
@@ -495,10 +495,10 @@ export function useVirtualScroll({
     const { activeElement } = document
     const contentEl = contentRef.value
     if (
-      rangeChanged === true &&
+      rangeChanged &&
       contentEl !== null &&
       contentEl !== activeElement &&
-      contentEl.contains(activeElement) === true
+      contentEl.contains(activeElement)
     ) {
       contentEl.addEventListener('focusout', onBlurRefocusFn)
 
@@ -514,7 +514,7 @@ export function useVirtualScroll({
         ? virtualScrollSizes.slice(from, toIndex).reduce(sumFn, 0)
         : 0
 
-    if (rangeChanged === true) {
+    if (rangeChanged) {
       // vue key matching algorithm works only if
       // the array of VNodes changes on only one of the ends
       // so we first change one end and then the other
@@ -563,7 +563,7 @@ export function useVirtualScroll({
       // (another call to setVirtualScrollSliceRange before animation frame)
       if (prevScrollStart !== scrollDetails.scrollStart) return
 
-      if (rangeChanged === true) {
+      if (rangeChanged) {
         updateVirtualScrollSizes(from)
       }
 
@@ -618,9 +618,7 @@ export function useVirtualScroll({
     if (contentEl) {
       const children = filterProto.call(
           contentEl.children,
-          el =>
-            el.classList &&
-            el.classList.contains('q-virtual-scroll--skip') === false
+          el => el.classList && !el.classList.contains('q-virtual-scroll--skip')
         ),
         childrenLength = children.length,
         sizeFn =
@@ -638,7 +636,7 @@ export function useVirtualScroll({
 
         while (
           i < childrenLength &&
-          children[i].classList.contains('q-virtual-scroll--with-prev') === true
+          children[i].classList.contains('q-virtual-scroll--with-prev')
         ) {
           size += sizeFn(children[i])
           i++
@@ -663,7 +661,7 @@ export function useVirtualScroll({
   function localResetVirtualScroll(toIndex, fullReset) {
     const defaultSize = Number(virtualScrollItemSizeComputed.value)
 
-    if (fullReset === true || Array.isArray(virtualScrollSizes) === false) {
+    if (fullReset === true || !Array.isArray(virtualScrollSizes)) {
       virtualScrollSizes = []
     }
 
@@ -866,7 +864,7 @@ export function useVirtualScroll({
   setVirtualScrollSize()
   const onVirtualScrollEvt = debounce(
     localOnVirtualScrollEvt,
-    $q.platform.is.ios === true ? 120 : 35
+    $q.platform.is.ios ? 120 : 35
   )
 
   onBeforeMount(() => {

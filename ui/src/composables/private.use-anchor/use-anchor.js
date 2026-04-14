@@ -63,7 +63,7 @@ export default function useAnchor({
       },
 
       toggleKey(evt) {
-        if (isKeyCode(evt, 13) === true) anchorEvents.toggle(evt)
+        if (isKeyCode(evt, 13)) anchorEvents.toggle(evt)
       },
 
       contextClick(evt) {
@@ -121,7 +121,7 @@ export default function useAnchor({
 
       const evts =
         context === true
-          ? proxy.$q.platform.is.mobile === true
+          ? proxy.$q.platform.is.mobile
             ? [[anchorEl.value, 'touchstart', 'mobileTouch', 'passive']]
             : [
                 [anchorEl.value, 'mousedown', 'hide', 'passive'],

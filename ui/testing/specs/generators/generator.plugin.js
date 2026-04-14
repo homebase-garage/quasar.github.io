@@ -147,7 +147,7 @@ export default {
       "const mountPlugin = () => mount({ template: '<div />' })"
     )
 
-    if (hasQuasarInstallOverride === true) {
+    if (hasQuasarInstallOverride) {
       acc.push(
         '',
         '// We override Quasar install so it installs this plugin',

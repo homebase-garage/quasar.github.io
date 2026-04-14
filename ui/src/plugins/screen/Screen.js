@@ -50,7 +50,7 @@ export default createReactivePlugin(
 
       if (this.__installed === true) {
         if ($q.config.screen !== void 0) {
-          if ($q.config.screen.bodyClasses === false) {
+          if (!$q.config.screen.bodyClasses) {
             document.body.classList.remove(`screen--${this.name}`)
           } else {
             this.__update(true)
@@ -64,7 +64,7 @@ export default createReactivePlugin(
       const scrollingElement =
         document.scrollingElement || document.documentElement
       const getSize =
-        visualViewport === void 0 || client.is.mobile === true
+        visualViewport === void 0 || client.is.mobile
           ? () => [
               Math.max(window.innerWidth, scrollingElement.clientWidth),
               Math.max(window.innerHeight, scrollingElement.clientHeight)
@@ -186,7 +186,7 @@ export default createReactivePlugin(
         }
       }
 
-      if (isRuntimeSsrPreHydration.value === true) {
+      if (isRuntimeSsrPreHydration.value) {
         onSSRHydrated.push(start)
       } else {
         start()

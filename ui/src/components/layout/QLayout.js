@@ -19,6 +19,8 @@ import { getScrollbarWidth } from '../../utils/scroll/scroll.js'
 import { hMergeSlot } from '../../utils/private.render/render.js'
 import { layoutKey } from '../../utils/private.symbols/symbols.js'
 
+const viewRE = /^(h|l)h(h|r) lpr (f|l)f(f|r)$/
+
 export default createComponent({
   name: 'QLayout',
 
@@ -27,7 +29,7 @@ export default createComponent({
     view: {
       type: String,
       default: 'hhh lpr fff',
-      validator: v => /^(h|l)h(h|r) lpr (f|l)f(f|r)$/.test(v.toLowerCase())
+      validator: v => viewRE.test(v.toLowerCase())
     },
 
     onScroll: Function,
@@ -50,7 +52,7 @@ export default createComponent({
     // container only prop
     const containerHeight = ref(0)
     const scrollbarWidth = ref(
-      isRuntimeSsrPreHydration.value === true ? 0 : getScrollbarWidth()
+      isRuntimeSsrPreHydration.value ? 0 : getScrollbarWidth()
     )
 
     const classes = computed(
@@ -84,7 +86,7 @@ export default createComponent({
     )
 
     function onPageScroll(data) {
-      if (props.container || document.qScrollPrevented !== true) {
+      if (props.container || !document.qScrollPrevented) {
         const info = {
           position: data.position.top,
           direction: data.direction,
@@ -188,7 +190,7 @@ export default createComponent({
 
     // prevent scrollbar flicker while resizing window height
     // if no page scrollbar is already present
-    if (__QUASAR_SSR_SERVER__ !== true && getScrollbarWidth() > 0) {
+    if (!__QUASAR_SSR_SERVER__ && getScrollbarWidth() > 0) {
       let timer = null
       const el = document.body
 

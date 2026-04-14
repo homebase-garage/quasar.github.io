@@ -156,9 +156,7 @@ export default function useSlider({
   })
 
   const keyStep = computed(() => (props.step === 0 ? 1 : props.step))
-  const tabindex = computed(() =>
-    editable.value === true ? props.tabindex || 0 : -1
-  )
+  const tabindex = computed(() => (editable.value ? props.tabindex || 0 : -1))
 
   const trackLen = computed(() => props.max - props.min)
   const innerBarLen = computed(() => innerMax.value - innerMin.value)
@@ -168,10 +166,10 @@ export default function useSlider({
 
   const positionProp = computed(() =>
     props.vertical
-      ? isReversed.value === true
+      ? isReversed.value
         ? 'bottom'
         : 'top'
-      : isReversed.value === true
+      : isReversed.value
         ? 'right'
         : 'left'
   )
@@ -207,7 +205,7 @@ export default function useSlider({
       (props.disable
         ? ' disabled'
         : ' q-slider--enabled' +
-          (editable.value === true ? ' q-slider--editable' : '')) +
+          (editable.value ? ' q-slider--editable' : '')) +
       (focus.value === 'both' ? ' q-slider--focus' : '') +
       (props.label || props.labelAlways === true ? ' q-slider--label' : '') +
       (props.labelAlways === true ? ' q-slider--label-always' : '') +
@@ -303,14 +301,14 @@ export default function useSlider({
         : between((pos.left - draggingInfo.left) / draggingInfo.width, 0, 1)
 
     return between(
-      isReversed.value === true ? 1 - val : val,
+      isReversed.value ? 1 - val : val,
       innerMinRatio.value,
       innerMaxRatio.value
     )
   }
 
   const markerStep = computed(() =>
-    isNumber(props.markers) === true ? props.markers : keyStep.value
+    isNumber(props.markers) ? props.markers : keyStep.value
   )
 
   const markerTicks = computed(() => {
@@ -333,14 +331,12 @@ export default function useSlider({
     return (
       markerPrefixClass +
       `${prefix}${props.switchMarkerLabelsSide === true ? 'switched' : 'standard'}` +
-      `${prefix}${isReversed.value === true ? 'rtl' : 'ltr'}`
+      `${prefix}${isReversed.value ? 'rtl' : 'ltr'}`
     )
   })
 
   const markerLabelsList = computed(() => {
-    if (props.markerLabels === false) {
-      return null
-    }
+    if (props.markerLabels === false) return null
 
     return getMarkerList(props.markerLabels).map((entry, index) => ({
       index,
@@ -385,17 +381,15 @@ export default function useSlider({
     if (typeof def === 'function') {
       return markerTicks.value.map(value => {
         const item = def(value)
-        return isObject(item) === true
-          ? { ...item, value }
-          : { value, label: item }
+        return isObject(item) ? { ...item, value } : { value, label: item }
       })
     }
 
     const filterFn = ({ value }) => value >= props.min && value <= props.max
 
-    if (Array.isArray(def) === true) {
+    if (Array.isArray(def)) {
       return def
-        .map(item => (isObject(item) === true ? item : { value: item }))
+        .map(item => (isObject(item) ? item : { value: item }))
         .filter(filterFn)
     }
 
@@ -403,9 +397,7 @@ export default function useSlider({
       .map(key => {
         const item = def[key]
         const value = Number(key)
-        return isObject(item) === true
-          ? { ...item, value }
-          : { value, label: item }
+        return isObject(item) ? { ...item, value } : { value, label: item }
       })
       .filter(filterFn)
   }
@@ -532,7 +524,7 @@ export default function useSlider({
 
     const thumbClasses = computed(
       () =>
-        `q-slider__thumb q-slider__thumb${axis.value} q-slider__thumb${axis.value}-${isReversed.value === true ? 'rtl' : 'ltr'} absolute non-selectable` +
+        `q-slider__thumb q-slider__thumb${axis.value} q-slider__thumb${axis.value}-${isReversed.value ? 'rtl' : 'ltr'} absolute non-selectable` +
         focusClass.value +
         (thumb.thumbColor.value !== void 0
           ? ` text-${thumb.thumbColor.value}`

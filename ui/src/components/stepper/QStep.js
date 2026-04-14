@@ -87,9 +87,9 @@ export default createComponent({
     const isActive = computed(() => $stepper.value.modelValue === props.name)
 
     const scrollEvent = computed(() =>
-      ($q.platform.is.ios !== true && $q.platform.is.chrome === true) ||
-      isActive.value !== true ||
-      $stepper.value.vertical !== true
+      (!$q.platform.is.ios && $q.platform.is.chrome) ||
+      !isActive.value ||
+      !$stepper.value.vertical
         ? {}
         : {
             onScroll(e) {
@@ -112,11 +112,11 @@ export default createComponent({
     function getStepContent() {
       const vertical = $stepper.value.vertical
 
-      if (vertical === true && $stepper.value.keepAlive === true) {
+      if (vertical && $stepper.value.keepAlive) {
         return h(
           KeepAlive,
           $stepper.value.keepAliveProps.value,
-          isActive.value === true
+          isActive.value
             ? [
                 h(
                   $stepper.value.needsUniqueKeepAliveWrapper.value === true
@@ -133,9 +133,7 @@ export default createComponent({
         )
       }
 
-      return vertical !== true || isActive.value === true
-        ? getStepWrapper(slots)
-        : void 0
+      return !vertical || isActive.value ? getStepWrapper(slots) : void 0
     }
 
     return () =>
@@ -147,7 +145,7 @@ export default createComponent({
           role: 'tabpanel',
           ...scrollEvent.value
         },
-        $stepper.value.vertical === true
+        $stepper.value.vertical
           ? [
               h(StepHeader, {
                 stepper: $stepper.value,
@@ -155,7 +153,7 @@ export default createComponent({
                 goToPanel: $stepper.value.goToPanel
               }),
 
-              $stepper.value.animated === true
+              $stepper.value.animated
                 ? h(QSlideTransition, getStepContent)
                 : getStepContent()
             ]

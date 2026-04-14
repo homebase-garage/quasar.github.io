@@ -160,13 +160,13 @@ export default {
     },
 
     div2Text() {
-      return this.toggle2 === false
+      return !this.toggle2
         ? 'A short text'
         : 'A much longer text to show how it works. It should grow / shrink. Is it working?'
     },
 
     div2Class() {
-      return this.toggle2 === false
+      return !this.toggle2
         ? 'absolute-top-left rounded-borders bg-red-2 q-pa-lg q-ma-sm'
         : 'absolute-bottom-right bg-red-6 q-pa-sm q-ma-md'
     }
@@ -175,7 +175,7 @@ export default {
   methods: {
     test1() {
       const onToggle = () => {
-        this.toggle1 = this.toggle1 !== true
+        this.toggle1 = !this.toggle1
       }
 
       if (this.cancel1 === void 0 || this.cancel1() === false) {

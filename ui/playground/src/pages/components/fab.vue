@@ -150,15 +150,10 @@
           />
         </template>
         <template #active-icon="{ opened }">
-          <q-icon
-            :class="{ 'test-fab-animate': opened === true }"
-            name="close"
-          />
+          <q-icon :class="{ 'test-fab-animate': opened }" name="close" />
         </template>
         <template #label="{ opened }">
-          <div :class="{ 'test-fab-animate--hover': opened === true }"
-            >Label</div
-          >
+          <div :class="{ 'test-fab-animate--hover': opened }">Label</div>
         </template>
 
         <q-fab-action color="blue" class="white" external-label>

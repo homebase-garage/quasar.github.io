@@ -6,8 +6,7 @@ function getLocale() {
   if (__QUASAR_SSR_SERVER__) return
 
   const val =
-    Array.isArray(navigator.languages) === true &&
-    navigator.languages.length !== 0
+    Array.isArray(navigator.languages) && navigator.languages.length !== 0
       ? navigator.languages[0]
       : navigator.language
 

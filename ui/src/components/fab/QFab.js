@@ -60,7 +60,7 @@ export default createComponent({
     } = getCurrentInstance()
     const { formClass, labelProps } = useFab(props, showing)
 
-    const hideOnRouteChange = computed(() => props.persistent !== true)
+    const hideOnRouteChange = computed(() => !props.persistent)
 
     const { hide, toggle } = useModelToggle({
       showing,
@@ -73,14 +73,14 @@ export default createComponent({
       () =>
         'q-fab z-fab row inline justify-center' +
         ` q-fab--align-${props.verticalActionsAlign} ${formClass.value}` +
-        (showing.value === true ? ' q-fab--opened' : ' q-fab--closed')
+        (showing.value ? ' q-fab--opened' : ' q-fab--closed')
     )
 
     const actionClass = computed(
       () =>
         'q-fab__actions flex no-wrap inline' +
         ` q-fab__actions--${props.direction}` +
-        ` q-fab__actions--${showing.value === true ? 'opened' : 'closed'}`
+        ` q-fab__actions--${showing.value ? 'opened' : 'closed'}`
     )
 
     const actionAttrs = computed(() => {
@@ -89,7 +89,7 @@ export default createComponent({
         role: 'menu'
       }
 
-      if (showing.value !== true) {
+      if (!showing.value) {
         attrs['aria-hidden'] = 'true'
       }
 
@@ -99,7 +99,7 @@ export default createComponent({
     const iconHolderClass = computed(
       () =>
         'q-fab__icon-holder ' +
-        ` q-fab__icon-holder--${showing.value === true ? 'opened' : 'closed'}`
+        ` q-fab__icon-holder--${showing.value ? 'opened' : 'closed'}`
     )
 
     function getIcon(kebab, camel) {
@@ -173,7 +173,7 @@ export default createComponent({
               label: void 0,
               noCaps: true,
               fab: true,
-              'aria-expanded': showing.value === true ? 'true' : 'false',
+              'aria-expanded': showing.value ? 'true' : 'false',
               'aria-haspopup': 'true',
               'aria-controls': targetUid.value,
               onClick: toggle

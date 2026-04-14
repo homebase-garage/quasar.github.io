@@ -212,7 +212,7 @@ export default {
 
   computed: {
     fillMaskComp() {
-      return this.fillMask === false ? false : this.fillMaskText
+      return this.fillMask ? this.fillMaskText : false
     },
 
     variableMask1() {

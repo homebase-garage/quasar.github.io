@@ -18,7 +18,7 @@ function update(el, ctx, value) {
   } else {
     handler = value.handler
     cfg = { ...defaultCfg, ...value.cfg }
-    changed = ctx.cfg === void 0 || isDeepEqual(ctx.cfg, cfg) === false
+    changed = ctx.cfg === void 0 || !isDeepEqual(ctx.cfg, cfg)
   }
 
   if (ctx.handler !== handler) {
@@ -33,7 +33,7 @@ function update(el, ctx, value) {
       if (typeof ctx.handler === 'function') {
         // if observed element is part of a vue transition
         // then we need to be careful...
-        if (entry.rootBounds === null && document.body.contains(el) === true) {
+        if (entry.rootBounds === null && document.body.contains(el)) {
           ctx.observer.unobserve(el)
           ctx.observer.observe(el)
           return

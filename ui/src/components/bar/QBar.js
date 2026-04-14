@@ -24,8 +24,8 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-bar row no-wrap items-center' +
-        ` q-bar--${props.dense === true ? 'dense' : 'standard'} ` +
-        ` q-bar--${isDark.value === true ? 'dark' : 'light'}`
+        ` q-bar--${props.dense ? 'dense' : 'standard'} ` +
+        ` q-bar--${isDark.value ? 'dark' : 'light'}`
     )
 
     return () =>

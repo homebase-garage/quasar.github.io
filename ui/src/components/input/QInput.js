@@ -344,8 +344,9 @@ export default createComponent({
           // chrome does not keep scroll #15498
           const { scrollTop } = inp
           // chrome calculates a smaller scrollHeight when in a .column container
-          const { overflowY, maxHeight } =
-            $q.platform.is.firefox === true ? {} : window.getComputedStyle(inp)
+          const { overflowY, maxHeight } = $q.platform.is.firefox
+            ? {}
+            : window.getComputedStyle(inp)
           // on firefox or if overflowY is specified as scroll #14263, #14344
           // we don't touch overflow
           // firefox is not so bad in the end

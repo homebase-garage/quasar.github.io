@@ -101,45 +101,37 @@ export default createComponent({
     const { inFullscreen } = useFullscreen()
 
     const style = computed(() =>
-      inFullscreen.value !== true && props.height !== void 0
+      !inFullscreen.value && props.height !== void 0
         ? { height: props.height }
         : {}
     )
 
     const direction = computed(() =>
-      props.vertical === true ? 'vertical' : 'horizontal'
+      props.vertical ? 'vertical' : 'horizontal'
     )
 
     const navigationPosition = computed(
-      () =>
-        props.navigationPosition ||
-        (props.vertical === true ? 'right' : 'bottom')
+      () => props.navigationPosition || (props.vertical ? 'right' : 'bottom')
     )
 
     const classes = computed(
       () =>
         `q-carousel q-panel-parent q-carousel--with${props.padding === true ? '' : 'out'}-padding` +
-        (inFullscreen.value === true ? ' fullscreen' : '') +
-        (isDark.value === true ? ' q-carousel--dark q-dark' : '') +
-        (props.arrows === true
-          ? ` q-carousel--arrows-${direction.value}`
-          : '') +
-        (props.navigation === true
+        (inFullscreen.value ? ' fullscreen' : '') +
+        (isDark.value ? ' q-carousel--dark q-dark' : '') +
+        (props.arrows ? ` q-carousel--arrows-${direction.value}` : '') +
+        (props.navigation
           ? ` q-carousel--navigation-${navigationPosition.value}`
           : '')
     )
 
     const arrowIcons = computed(() => {
       const ico = [
-        props.prevIcon ||
-          $q.iconSet.carousel[props.vertical === true ? 'up' : 'left'],
-        props.nextIcon ||
-          $q.iconSet.carousel[props.vertical === true ? 'down' : 'right']
+        props.prevIcon || $q.iconSet.carousel[props.vertical ? 'up' : 'left'],
+        props.nextIcon || $q.iconSet.carousel[props.vertical ? 'down' : 'right']
       ]
 
-      return props.vertical === false && $q.lang.rtl === true
-        ? ico.reverse()
-        : ico
+      return !props.vertical && $q.lang.rtl === true ? ico.reverse() : ico
     })
 
     const navIcon = computed(
@@ -226,7 +218,7 @@ export default createComponent({
     function getContent() {
       const node = []
 
-      if (props.navigation === true) {
+      if (props.navigation) {
         const fn =
           slots['navigation-icon'] !== void 0
             ? slots['navigation-icon']
@@ -260,7 +252,7 @@ export default createComponent({
             })
           })
         )
-      } else if (props.thumbnails === true) {
+      } else if (props.thumbnails) {
         const color =
           props.controlColor !== void 0 ? ` text-${props.controlColor}` : ''
 
@@ -282,7 +274,7 @@ export default createComponent({
         )
       }
 
-      if (props.arrows === true && panelIndex.value >= 0) {
+      if (props.arrows && panelIndex.value >= 0) {
         if (props.infinite === true || panelIndex.value > 0) {
           node.push(
             h(

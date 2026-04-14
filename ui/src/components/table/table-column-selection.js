@@ -37,8 +37,7 @@ export function useTableColumnSelection(
       props.visibleColumns !== void 0
         ? colList.value.filter(
             col =>
-              col.required === true ||
-              props.visibleColumns.includes(col.name) === true
+              col.required === true || props.visibleColumns.includes(col.name)
           )
         : colList.value
 

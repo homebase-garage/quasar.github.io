@@ -18,7 +18,7 @@ function onKeyup(evt) {
   if (escDown === true) {
     escDown = false
 
-    if (isKeyCode(evt, 27) === true) {
+    if (isKeyCode(evt, 27)) {
       handlers.at(-1)(evt)
     }
   }
@@ -32,7 +32,7 @@ function update(action) {
 }
 
 export function addEscapeKey(fn) {
-  if (client.is.desktop === true) {
+  if (client.is.desktop) {
     handlers.push(fn)
 
     if (handlers.length === 1) {

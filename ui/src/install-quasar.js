@@ -11,12 +11,12 @@ import Lang from './plugins/lang/Lang.js'
 import IconSet from './plugins/icon-set/IconSet.js'
 
 import { quasarKey } from './utils/private.symbols/symbols.js'
+import { isObject } from './utils/is/is.js'
 import {
   freezeGlobalConfig,
   globalConfig,
   globalConfigIsFrozen
 } from './utils/private.config/instance-config.js'
-import { isObject } from './utils/is/is.js'
 
 /**
  * If the list below changes, make sure
@@ -59,7 +59,7 @@ function prepareApp(app, uiOpts, pluginOpts) {
 
   if (uiOpts.components !== void 0) {
     Object.values(uiOpts.components).forEach(c => {
-      if (isObject(c) === true && c.name !== void 0) {
+      if (isObject(c) && c.name !== void 0) {
         app.component(c.name, c)
       }
     })
@@ -67,7 +67,7 @@ function prepareApp(app, uiOpts, pluginOpts) {
 
   if (uiOpts.directives !== void 0) {
     Object.values(uiOpts.directives).forEach(d => {
-      if (isObject(d) === true && d.name !== void 0) {
+      if (isObject(d) && d.name !== void 0) {
         app.directive(d.name, d)
       }
     })
@@ -83,7 +83,7 @@ function prepareApp(app, uiOpts, pluginOpts) {
     )
   }
 
-  if (isRuntimeSsrPreHydration.value === true) {
+  if (isRuntimeSsrPreHydration.value) {
     pluginOpts.$q.onSSRHydrated = () => {
       pluginOpts.onSSRHydrated.forEach(fn => {
         fn()
@@ -138,7 +138,7 @@ export default __QUASAR_SSR_SERVER__
   : function installQuasar(parentApp, opts = {}) {
       const $q = { version: __QUASAR_VERSION__ }
 
-      if (globalConfigIsFrozen === false) {
+      if (!globalConfigIsFrozen) {
         if (opts.config !== void 0) {
           Object.assign(globalConfig, opts.config)
         }

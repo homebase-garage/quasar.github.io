@@ -30,13 +30,13 @@ export default createComponent({
         'stretch',
         'glossy'
       ]
-        .filter(t => props[t] === true)
+        .filter(t => props[t])
         .map(t => `q-btn-group--${t}`)
         .join(' ')
 
       return (
         `q-btn-group row no-wrap${cls.length !== 0 ? ' ' + cls : ''}` +
-        (props.spread === true ? ' q-btn-group--spread' : ' inline')
+        (props.spread ? ' q-btn-group--spread' : ' inline')
       )
     })
 

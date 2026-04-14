@@ -125,7 +125,7 @@ export default createComponent({
         return i => `${label}${i}`
       }
 
-      if (Array.isArray(props.iconAriaLabel) === true) {
+      if (Array.isArray(props.iconAriaLabel)) {
         const iMax = props.iconAriaLabel.length
 
         if (iMax > 0) {

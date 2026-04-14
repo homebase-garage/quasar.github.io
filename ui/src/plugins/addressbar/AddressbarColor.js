@@ -40,17 +40,17 @@ function setColor(hexColor) {
 
 export default {
   set:
-    __QUASAR_SSR_SERVER__ !== true &&
-    client.is.mobile === true &&
-    (client.is.nativeMobile === true ||
-      client.is.winphone === true ||
-      client.is.safari === true ||
-      client.is.webkit === true ||
-      client.is.vivaldi === true)
+    !__QUASAR_SSR_SERVER__ &&
+    client.is.mobile &&
+    (client.is.nativeMobile ||
+      client.is.winphone ||
+      client.is.safari ||
+      client.is.webkit ||
+      client.is.vivaldi)
       ? hexColor => {
           const val = hexColor || getCssVar('primary')
 
-          if (client.is.nativeMobile === true && window.StatusBar) {
+          if (client.is.nativeMobile && window.StatusBar) {
             window.StatusBar.backgroundColorByHexString(val)
           } else {
             setColor(val)

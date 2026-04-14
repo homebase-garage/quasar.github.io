@@ -24,7 +24,7 @@ function getId(val, required) {
  * avoid hydration errors.
  */
 export default function useId({ getValue, required = true } = {}) {
-  if (isRuntimeSsrPreHydration.value === true) {
+  if (isRuntimeSsrPreHydration.value) {
     const id = getValue !== void 0 ? ref(parseValue(getValue())) : ref(null)
 
     if (required === true && id.value === null) {

@@ -22,15 +22,13 @@ function getRouteEntry(path, children = []) {
  * @returns RouteConfig[]
  */
 function getRoutes(entry) {
-  if (entry === true) {
-    return []
-  }
+  if (entry === true) return []
 
   if (typeof entry === 'string') {
     return [getRouteEntry(entry)]
   }
 
-  if (Array.isArray(entry) === true) {
+  if (Array.isArray(entry)) {
     return entry.reduce((acc, route) => {
       acc.push(...getRoutes(route))
       return acc

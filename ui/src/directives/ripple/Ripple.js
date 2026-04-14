@@ -105,7 +105,7 @@ export default createDirective(
               if (
                 ctx.enabled === true &&
                 evt.qSkipRipple !== true &&
-                isKeyCode(evt, ctx.modifiers.keyCodes) === true &&
+                isKeyCode(evt, ctx.modifiers.keyCodes) &&
                 evt.type ===
                   `key${ctx.modifiers.early === true ? 'down' : 'up'}`
               ) {

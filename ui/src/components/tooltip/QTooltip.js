@@ -115,7 +115,7 @@ export default createComponent({
       parsePosition(props.anchor, $q.lang.rtl)
     )
     const selfOrigin = computed(() => parsePosition(props.self, $q.lang.rtl))
-    const hideOnRouteChange = computed(() => props.persistent !== true)
+    const hideOnRouteChange = computed(() => !props.persistent)
 
     const { registerTick, removeTick } = useTick()
     const { registerTimeout } = useTimeout()
@@ -148,7 +148,7 @@ export default createComponent({
 
     // if we're on mobile, let's improve the experience
     // by closing it when user taps outside of it
-    if ($q.platform.is.mobile === true) {
+    if ($q.platform.is.mobile) {
       const clickOutsideProps = {
         anchorEl,
         innerRef,
@@ -170,8 +170,8 @@ export default createComponent({
           // (null is the default value)
           props.modelValue === null &&
           // and it's not persistent
-          props.persistent !== true &&
-          showing.value === true
+          !props.persistent &&
+          showing.value
       )
 
       watch(hasClickOutside, val => {
@@ -264,7 +264,7 @@ export default createComponent({
     }
 
     function delayShow(evt) {
-      if ($q.platform.is.mobile === true) {
+      if ($q.platform.is.mobile) {
         clearSelection()
         document.body.classList.add('non-selectable')
 
@@ -282,7 +282,7 @@ export default createComponent({
     }
 
     function delayHide(evt) {
-      if ($q.platform.is.mobile === true) {
+      if ($q.platform.is.mobile) {
         cleanEvt(anchorEvents, 'tooltipTemp')
         clearSelection()
         // delay needed otherwise selection still occurs
@@ -300,13 +300,12 @@ export default createComponent({
     function configureAnchorEl() {
       if (props.noParentEvent === true || anchorEl.value === null) return
 
-      const evts =
-        $q.platform.is.mobile === true
-          ? [[anchorEl.value, 'touchstart', 'delayShow', 'passive']]
-          : [
-              [anchorEl.value, 'mouseenter', 'delayShow', 'passive'],
-              [anchorEl.value, 'mouseleave', 'delayHide', 'passive']
-            ]
+      const evts = $q.platform.is.mobile
+        ? [[anchorEl.value, 'touchstart', 'delayShow', 'passive']]
+        : [
+            [anchorEl.value, 'mouseenter', 'delayShow', 'passive'],
+            [anchorEl.value, 'mouseleave', 'delayHide', 'passive']
+          ]
 
       addEvt(anchorEvents, 'anchor', evts)
     }
@@ -324,7 +323,7 @@ export default createComponent({
     }
 
     function getTooltipContent() {
-      return showing.value === true
+      return showing.value
         ? h(
             'div',
             {

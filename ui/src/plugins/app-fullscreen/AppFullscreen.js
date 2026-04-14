@@ -22,8 +22,9 @@ function getFullscreenElement() {
 }
 
 function updateEl() {
-  const newEl = (Plugin.activeEl =
-    Plugin.isActive === false ? null : getFullscreenElement())
+  const newEl = (Plugin.activeEl = Plugin.isActive
+    ? getFullscreenElement()
+    : null)
 
   changeGlobalNodesTarget(
     newEl === null || newEl === document.documentElement ? document.body : newEl
@@ -31,7 +32,7 @@ function updateEl() {
 }
 
 function togglePluginState() {
-  Plugin.isActive = Plugin.isActive === false
+  Plugin.isActive = !Plugin.isActive
   updateEl()
 }
 
@@ -59,7 +60,7 @@ const Plugin = createReactivePlugin(
   }
 )
 
-if (__QUASAR_SSR_SERVER__ === true) {
+if (__QUASAR_SSR_SERVER__) {
   assignFn(() => Promise.resolve())
 } else {
   prefixes.request = [
@@ -71,7 +72,7 @@ if (__QUASAR_SSR_SERVER__ === true) {
 
   Plugin.isCapable = prefixes.request !== void 0
 
-  if (Plugin.isCapable === false) {
+  if (!Plugin.isCapable) {
     // it means the browser does NOT support it
     assignFn(() => Promise.reject(new Error('Not capable')))
   } else {
@@ -85,7 +86,7 @@ if (__QUASAR_SSR_SERVER__ === true) {
         }
 
         const queue =
-          activeEl !== null && el.contains(activeEl) === true
+          activeEl !== null && el.contains(activeEl)
             ? Plugin.exit()
             : Promise.resolve()
 
@@ -93,13 +94,13 @@ if (__QUASAR_SSR_SERVER__ === true) {
       },
 
       exit() {
-        return Plugin.isActive === true
+        return Plugin.isActive
           ? promisify(document, prefixes.exit)
           : Promise.resolve()
       },
 
       toggle(target) {
-        return Plugin.isActive === true ? Plugin.exit() : Plugin.request(target)
+        return Plugin.isActive ? Plugin.exit() : Plugin.request(target)
       }
     })
 
@@ -111,7 +112,7 @@ if (__QUASAR_SSR_SERVER__ === true) {
     ].find(exit => document[exit])
 
     Plugin.isActive = Boolean(getFullscreenElement())
-    if (Plugin.isActive === true) updateEl()
+    if (Plugin.isActive) updateEl()
 
     ;[
       'onfullscreenchange',

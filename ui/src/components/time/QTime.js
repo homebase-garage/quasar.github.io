@@ -33,11 +33,13 @@ import { position } from '../../utils/event/event.js'
 import { pad } from '../../utils/format/format.js'
 import { vmIsDestroyed } from '../../utils/private.vm/vm.js'
 
+const defaultDateRE = /^-?[\d]+\/[0-1]\d\/[0-3]\d$/
+
 function getViewByModel(model, withSeconds) {
   if (model.hour !== null) {
     if (model.minute === null) {
       return 'minute'
-    } else if (withSeconds === true && model.second === null) {
+    } else if (withSeconds && model.second === null) {
       return 'second'
     }
   }
@@ -100,7 +102,7 @@ export default createComponent({
 
     defaultDate: {
       type: String,
-      validator: v => /^-?[\d]+\/[0-1]\d\/[0-3]\d$/.test(v)
+      validator: v => defaultDateRE.test(v)
     },
 
     options: Function,
@@ -147,19 +149,22 @@ export default createComponent({
     const view = ref(getViewByModel(model))
     const innerModel = ref(model)
     const isAM = ref(model.hour === null || model.hour < 12)
+    const computedFormat24h = computed(() =>
+      props.format24h !== null ? props.format24h : $q.lang.date.format24h
+    )
 
     const classes = computed(
       () =>
-        `q-time q-time--${props.landscape === true ? 'landscape' : 'portrait'}` +
-        (isDark.value === true ? ' q-time--dark q-dark' : '') +
-        (props.disable === true
+        `q-time q-time--${props.landscape ? 'landscape' : 'portrait'}` +
+        (isDark.value ? ' q-time--dark q-dark' : '') +
+        (props.disable
           ? ' disabled'
-          : props.readonly === true
+          : props.readonly
             ? ' q-time--readonly'
             : '') +
-        (props.bordered === true ? ' q-time--bordered' : '') +
-        (props.square === true ? ' q-time--square no-border-radius' : '') +
-        (props.flat === true ? ' q-time--flat no-shadow' : '')
+        (props.bordered ? ' q-time--bordered' : '') +
+        (props.square ? ' q-time--square no-border-radius' : '') +
+        (props.flat ? ' q-time--flat no-shadow' : '')
     )
 
     const stringModel = computed(() => {
@@ -169,10 +174,10 @@ export default createComponent({
         hour:
           time.hour === null
             ? '--'
-            : computedFormat24h.value === true
+            : computedFormat24h.value
               ? pad(time.hour)
               : String(
-                  isAM.value === true
+                  isAM.value
                     ? time.hour === 0
                       ? 12
                       : time.hour
@@ -185,10 +190,6 @@ export default createComponent({
       }
     })
 
-    const computedFormat24h = computed(() =>
-      props.format24h !== null ? props.format24h : $q.lang.date.format24h
-    )
-
     const pointerStyle = computed(() => {
       const forHour = view.value === 'hour',
         divider = forHour === true ? 12 : 60,
@@ -199,7 +200,7 @@ export default createComponent({
 
       if (
         forHour === true &&
-        computedFormat24h.value === true &&
+        computedFormat24h.value &&
         innerModel.value.hour >= 12
       ) {
         transform += ' scale(.7)'
@@ -282,12 +283,12 @@ export default createComponent({
         viewValidOptions.value !== null ? viewValidOptions.value.values : void 0
 
       if (view.value === 'hour') {
-        if (computedFormat24h.value === true) {
+        if (computedFormat24h.value) {
           end = 23
         } else {
           end = 11
 
-          if (isAM.value === false) {
+          if (!isAM.value) {
             offset = 12
           }
         }
@@ -303,7 +304,7 @@ export default createComponent({
           disable = values?.includes(actualVal) === false,
           label =
             view.value === 'hour' && val === 0
-              ? computedFormat24h.value === true
+              ? computedFormat24h.value
                 ? '00'
                 : '12'
               : val
@@ -393,7 +394,7 @@ export default createComponent({
     function getMask() {
       return props.calendar !== 'persian' && props.mask !== null
         ? props.mask
-        : `HH:mm${props.withSeconds === true ? ':ss' : ''}`
+        : `HH:mm${props.withSeconds ? ':ss' : ''}`
     }
 
     function getDefaultDateModel() {
@@ -418,9 +419,8 @@ export default createComponent({
         (viewValidOptions.value !== null &&
           (viewValidOptions.value.values.length === 0 ||
             (view.value === 'hour' &&
-              computedFormat24h.value !== true &&
-              validHours.value[isAM.value === true ? 'am' : 'pm'].values
-                .length === 0)))
+              !computedFormat24h.value &&
+              validHours.value[isAM.value ? 'am' : 'pm'].values.length === 0)))
       )
     }
 
@@ -483,13 +483,12 @@ export default createComponent({
         val = angle / 30
 
         if (validHours.value !== null) {
-          const am =
-            computedFormat24h.value !== true
-              ? isAM.value === true
-              : validHours.value.am.values.length !== 0 &&
-                  validHours.value.pm.values.length !== 0
-                ? distance >= clockRect.dist
-                : validHours.value.am.values.length !== 0
+          const am = !computedFormat24h.value
+            ? isAM.value
+            : validHours.value.am.values.length !== 0 &&
+                validHours.value.pm.values.length !== 0
+              ? distance >= clockRect.dist
+              : validHours.value.am.values.length !== 0
 
           val = getNormalizedClockValue(
             val + (am === true ? 0 : 12),
@@ -498,7 +497,7 @@ export default createComponent({
         } else {
           val = Math.round(val)
 
-          if (computedFormat24h.value === true) {
+          if (computedFormat24h.value) {
             if (distance < clockRect.dist) {
               if (val < 12) {
                 val += 12
@@ -506,14 +505,14 @@ export default createComponent({
             } else if (val === 12) {
               val = 0
             }
-          } else if (isAM.value === true && val === 12) {
+          } else if (isAM.value && val === 12) {
             val = 0
-          } else if (isAM.value === false && val !== 12) {
+          } else if (!isAM.value && val !== 12) {
             val += 12
           }
         }
 
-        if (computedFormat24h.value === true) {
+        if (computedFormat24h.value) {
           isAM.value = val < 12
         }
       } else {
@@ -557,7 +556,7 @@ export default createComponent({
       if (shouldAbortInteraction() !== true) {
         // onMousedown() has already updated the offset
         // (on desktop only, through mousedown event)
-        if ($q.platform.is.desktop !== true) {
+        if (!$q.platform.is.desktop) {
           updateClock(evt, getClockRect())
         }
 
@@ -579,10 +578,9 @@ export default createComponent({
         const payload = e.keyCode === 37 ? -1 : 1
 
         if (validHours.value !== null) {
-          const values =
-            computedFormat24h.value === true
-              ? validHours.value.values
-              : validHours.value[isAM.value === true ? 'am' : 'pm'].values
+          const values = computedFormat24h.value
+            ? validHours.value.values
+            : validHours.value[isAM.value ? 'am' : 'pm'].values
 
           if (values.length === 0) return
 
@@ -598,9 +596,8 @@ export default createComponent({
             setHour(values[index])
           }
         } else {
-          const wrap = computedFormat24h.value === true ? 24 : 12,
-            offset =
-              computedFormat24h.value !== true && isAM.value === false ? 12 : 0,
+          const wrap = computedFormat24h.value ? 24 : 12,
+            offset = !computedFormat24h.value && !isAM.value ? 12 : 0,
             val =
               innerModel.value.hour === null ? -payload : innerModel.value.hour
 
@@ -703,7 +700,7 @@ export default createComponent({
     }
 
     function setAm() {
-      if (isAM.value === false) {
+      if (!isAM.value) {
         isAM.value = true
 
         if (innerModel.value.hour !== null) {
@@ -714,7 +711,7 @@ export default createComponent({
     }
 
     function setPm() {
-      if (isAM.value === true) {
+      if (isAM.value) {
         isAM.value = false
 
         if (innerModel.value.hour !== null) {
@@ -758,7 +755,7 @@ export default createComponent({
       }
 
       if (
-        props.withSeconds === true &&
+        props.withSeconds &&
         secondInSelection.value !== null &&
         secondInSelection.value(innerModel.value.second) !== true
       ) {
@@ -770,7 +767,7 @@ export default createComponent({
       if (
         innerModel.value.hour === null ||
         innerModel.value.minute === null ||
-        (props.withSeconds === true && innerModel.value.second === null)
+        (props.withSeconds && innerModel.value.second === null)
       ) {
         return
       }
@@ -786,7 +783,7 @@ export default createComponent({
           ? pad(date.hour) +
             ':' +
             pad(date.minute) +
-            (props.withSeconds === true ? ':' + pad(date.second) : '')
+            (props.withSeconds ? ':' + pad(date.second) : '')
           : formatDate(
               new Date(
                 date.year,
@@ -844,7 +841,7 @@ export default createComponent({
         )
       ]
 
-      if (props.withSeconds === true) {
+      if (props.withSeconds) {
         label.push(
           h('div', ':'),
 
@@ -878,7 +875,7 @@ export default createComponent({
         )
       ]
 
-      if (computedFormat24h.value === false) {
+      if (!computedFormat24h.value) {
         child.push(
           h(
             'div',
@@ -891,9 +888,7 @@ export default createComponent({
                 {
                   class:
                     'q-time__link ' +
-                    (isAM.value === true
-                      ? 'q-time__link--active'
-                      : 'cursor-pointer'),
+                    (isAM.value ? 'q-time__link--active' : 'cursor-pointer'),
                   tabindex: tabindex.value,
                   onClick: setAm,
                   onKeyup: setAmOnKey
@@ -906,9 +901,7 @@ export default createComponent({
                 {
                   class:
                     'q-time__link ' +
-                    (isAM.value !== true
-                      ? 'q-time__link--active'
-                      : 'cursor-pointer'),
+                    (isAM.value ? 'cursor-pointer' : 'q-time__link--active'),
                   tabindex: tabindex.value,
                   onClick: setPm,
                   onKeyup: setPmOnKey
@@ -1007,7 +1000,7 @@ export default createComponent({
               )
           ),
 
-          props.nowBtn === true
+          props.nowBtn
             ? h(QBtn, {
                 class: 'q-time__now-button absolute',
                 icon: $q.iconSet.datetime.now,

@@ -118,24 +118,19 @@ export default createComponent({
           $layout.totalWidth.value <= props.breakpoint)
     )
 
-    const isMini = computed(
-      () => props.mini === true && belowBreakpoint.value !== true
-    )
+    const isMini = computed(() => props.mini && !belowBreakpoint.value)
 
-    const size = computed(() =>
-      isMini.value === true ? props.miniWidth : props.width
-    )
+    const size = computed(() => (isMini.value ? props.miniWidth : props.width))
 
     const showing = ref(
-      props.showIfAbove === true && belowBreakpoint.value === false
+      props.showIfAbove && !belowBreakpoint.value
         ? true
         : props.modelValue === true
     )
 
     const hideOnRouteChange = computed(
       () =>
-        props.persistent !== true &&
-        (belowBreakpoint.value === true || onScreenOverlay.value === true)
+        !props.persistent && (!belowBreakpoint.value || onScreenOverlay.value)
     )
 
     function handleShow(evt, noEvent) {
@@ -144,14 +139,14 @@ export default createComponent({
       if (evt !== false) $layout.animate()
       applyPosition(0)
 
-      if (belowBreakpoint.value === true) {
+      if (belowBreakpoint.value) {
         const otherInstance = $layout.instances[otherSide.value]
         if (otherInstance?.belowBreakpoint === true) {
           otherInstance.hide(false)
         }
 
         applyBackdrop(1)
-        if ($layout.isContainer.value !== true) preventBodyScroll(true)
+        if (!$layout.isContainer.value) preventBodyScroll(true)
       } else {
         applyBackdrop(0)
         if (evt !== false) setScrollable(false)
@@ -219,10 +214,8 @@ export default createComponent({
       rightSide.value === true ? 'left' : 'right'
     )
     const offset = computed(() =>
-      showing.value === true &&
-      belowBreakpoint.value === false &&
-      props.overlay === false
-        ? props.miniToOverlay === true
+      showing.value && !belowBreakpoint.value && !props.overlay
+        ? props.miniToOverlay
           ? props.miniWidth
           : size.value
         : 0
@@ -230,32 +223,24 @@ export default createComponent({
 
     const fixed = computed(
       () =>
-        props.overlay === true ||
-        props.miniToOverlay === true ||
+        props.overlay ||
+        props.miniToOverlay ||
         $layout.view.value.includes(rightSide.value ? 'R' : 'L') ||
-        ($q.platform.is.ios === true && $layout.isContainer.value === true)
+        ($q.platform.is.ios && $layout.isContainer.value)
     )
 
     const onLayout = computed(
-      () =>
-        props.overlay === false &&
-        showing.value === true &&
-        belowBreakpoint.value === false
+      () => !props.overlay && showing.value && !belowBreakpoint.value
     )
 
     const onScreenOverlay = computed(
-      () =>
-        props.overlay === true &&
-        showing.value === true &&
-        belowBreakpoint.value === false
+      () => props.overlay && showing.value && !belowBreakpoint.value
     )
 
     const backdropClass = computed(
       () =>
         'fullscreen q-drawer__backdrop' +
-        (showing.value === false && flagPanning.value === false
-          ? ' hidden'
-          : '')
+        (!showing.value && !flagPanning.value ? ' hidden' : '')
     )
 
     const backdropStyle = computed(() => ({
@@ -277,16 +262,16 @@ export default createComponent({
     const aboveStyle = computed(() => {
       const css = {}
 
-      if ($layout.header.space === true && headerSlot.value === false) {
-        if (fixed.value === true) {
+      if ($layout.header.space === true && !headerSlot.value) {
+        if (fixed.value) {
           css.top = `${$layout.header.offset}px`
         } else if ($layout.header.space === true) {
           css.top = `${$layout.header.size}px`
         }
       }
 
-      if ($layout.footer.space === true && footerSlot.value === false) {
-        if (fixed.value === true) {
+      if ($layout.footer.space === true && !footerSlot.value) {
+        if (fixed.value) {
           css.bottom = `${$layout.footer.offset}px`
         } else if ($layout.footer.space === true) {
           css.bottom = `${$layout.footer.size}px`
@@ -302,36 +287,32 @@ export default createComponent({
         transform: `translateX(${flagContentPosition.value}px)`
       }
 
-      return belowBreakpoint.value === true
-        ? acc
-        : Object.assign(acc, aboveStyle.value)
+      return belowBreakpoint.value ? acc : Object.assign(acc, aboveStyle.value)
     })
 
     const contentClass = computed(
       () =>
         'q-drawer__content fit ' +
-        ($layout.isContainer.value !== true ? 'scroll' : 'overflow-auto')
+        ($layout.isContainer.value ? 'overflow-auto' : 'scroll')
     )
 
     const classes = computed(
       () =>
         `q-drawer q-drawer--${props.side}` +
-        (flagMiniAnimate.value === true ? ' q-drawer--mini-animate' : '') +
-        (props.bordered === true ? ' q-drawer--bordered' : '') +
-        (isDark.value === true ? ' q-drawer--dark q-dark' : '') +
-        (flagPanning.value === true
+        (flagMiniAnimate.value ? ' q-drawer--mini-animate' : '') +
+        (props.bordered ? ' q-drawer--bordered' : '') +
+        (isDark.value ? ' q-drawer--dark q-dark' : '') +
+        (flagPanning.value
           ? ' no-transition'
-          : showing.value === true
+          : showing.value
             ? ''
             : ' q-layout--prevent-focus') +
-        (belowBreakpoint.value === true
+        (belowBreakpoint.value
           ? ' fixed q-drawer--on-top q-drawer--mobile q-drawer--top-padding'
-          : ` q-drawer--${isMini.value === true ? 'mini' : 'standard'}` +
-            (fixed.value === true || onLayout.value !== true ? ' fixed' : '') +
-            (props.overlay === true || props.miniToOverlay === true
-              ? ' q-drawer--on-top'
-              : '') +
-            (headerSlot.value === true ? ' q-drawer--top-padding' : ''))
+          : ` q-drawer--${isMini.value ? 'mini' : 'standard'}` +
+            (fixed.value || !onLayout.value ? ' fixed' : '') +
+            (props.overlay || props.miniToOverlay ? ' q-drawer--on-top' : '') +
+            (headerSlot.value ? ' q-drawer--top-padding' : ''))
     )
 
     const openDirective = computed(() => {
@@ -399,14 +380,14 @@ export default createComponent({
       if (val === true) {
         // from lg to xs
         lastDesktopState = showing.value
-        if (showing.value === true) hide(false)
+        if (showing.value) hide(false)
       } else if (
-        props.overlay === false &&
+        !props.overlay &&
         props.behavior !== 'mobile' &&
         lastDesktopState !== false
       ) {
         // from xs to lg
-        if (showing.value === true) {
+        if (showing.value) {
           applyPosition(0)
           applyBackdrop(0)
           cleanup()
@@ -433,10 +414,7 @@ export default createComponent({
     )
 
     watch($layout.totalWidth, () => {
-      if (
-        $layout.isContainer.value === true ||
-        document.qScrollPrevented !== true
-      ) {
+      if ($layout.isContainer.value || !document.qScrollPrevented) {
         updateBelowBreakpoint()
       }
     })
@@ -444,12 +422,12 @@ export default createComponent({
     watch(() => props.behavior + props.breakpoint, updateBelowBreakpoint)
 
     watch($layout.isContainer, val => {
-      if (showing.value === true) preventBodyScroll(val !== true)
-      if (val === true) updateBelowBreakpoint()
+      if (showing.value) preventBodyScroll(!val)
+      if (val) updateBelowBreakpoint()
     })
 
     watch($layout.scrollbarWidth, () => {
-      applyPosition(showing.value === true ? 0 : void 0)
+      applyPosition(showing.value ? 0 : void 0)
     })
 
     watch(offset, val => {
@@ -502,14 +480,14 @@ export default createComponent({
     function applyPosition(position) {
       if (position === void 0) {
         nextTick(() => {
-          position = showing.value === true ? 0 : size.value
+          position = showing.value ? 0 : size.value
           applyPosition(stateDirection.value * position)
         })
       } else {
         if (
-          $layout.isContainer.value === true &&
+          $layout.isContainer.value &&
           rightSide.value === true &&
-          (belowBreakpoint.value === true || Math.abs(position) === size.value)
+          (belowBreakpoint.value || Math.abs(position) === size.value)
         ) {
           position += stateDirection.value * $layout.scrollbarWidth.value
         }
@@ -524,7 +502,7 @@ export default createComponent({
 
     function setScrollable(v) {
       const action =
-        v === true ? 'remove' : $layout.isContainer.value !== true ? 'add' : ''
+        v === true ? 'remove' : $layout.isContainer.value ? '' : 'add'
 
       if (action !== '') {
         document.body.classList[action]('q-body--drawer-toggle')
@@ -549,11 +527,9 @@ export default createComponent({
     }
 
     function onOpenPan(evt) {
-      if (showing.value !== false) {
-        // some browsers might capture and trigger this
-        // even if Drawer has just been opened (but animation is still pending)
-        return
-      }
+      // some browsers might capture and trigger this
+      // even if Drawer has just been opened (but animation is still pending)
+      if (!showing.value) return
 
       const width = size.value,
         position = between(evt.distance.x, 0, width)
@@ -586,11 +562,9 @@ export default createComponent({
     }
 
     function onClosePan(evt) {
-      if (showing.value !== true) {
-        // some browsers might capture and trigger this
-        // even if Drawer has just been closed (but animation is still pending)
-        return
-      }
+      // some browsers might capture and trigger this
+      // even if Drawer has just been closed (but animation is still pending)
+      if (!showing.value) return
 
       const width = size.value,
         dir = evt.direction === props.side,
@@ -631,7 +605,7 @@ export default createComponent({
     }
 
     function updateSizeOnLayout(miniToOverlay, newSize) {
-      updateLayout('size', miniToOverlay === true ? props.miniWidth : newSize)
+      updateLayout('size', miniToOverlay ? props.miniWidth : newSize)
     }
 
     $layout.instances[props.side] = instance
@@ -640,9 +614,9 @@ export default createComponent({
     updateLayout('offset', offset.value)
 
     if (
-      props.showIfAbove === true &&
+      props.showIfAbove &&
       props.modelValue !== true &&
-      showing.value === true &&
+      showing.value &&
       props['onUpdate:modelValue'] !== void 0
     ) {
       emit('update:modelValue', true)
@@ -652,10 +626,10 @@ export default createComponent({
       emit('onLayout', onLayout.value)
       emit('miniState', isMini.value)
 
-      lastDesktopState = props.showIfAbove === true
+      lastDesktopState = props.showIfAbove
 
       const fn = () => {
-        const action = showing.value === true ? handleShow : handleHide
+        const action = showing.value ? handleShow : handleHide
         action(false, true)
       }
 
@@ -670,11 +644,7 @@ export default createComponent({
         layoutTotalWidthWatcher()
         layoutTotalWidthWatcher = void 0
 
-        if (
-          showing.value === false &&
-          props.showIfAbove === true &&
-          belowBreakpoint.value === false
-        ) {
+        if (!showing.value && props.showIfAbove && !belowBreakpoint.value) {
           show(false)
         } else {
           fn()
@@ -690,7 +660,7 @@ export default createComponent({
         timerMini = null
       }
 
-      if (showing.value === true) cleanup()
+      if (showing.value) cleanup()
 
       if ($layout.instances[props.side] === instance) {
         $layout.instances[props.side] = void 0
@@ -703,8 +673,8 @@ export default createComponent({
     return () => {
       const child = []
 
-      if (belowBreakpoint.value === true) {
-        if (props.noSwipeOpen === false) {
+      if (belowBreakpoint.value) {
+        if (!props.noSwipeOpen) {
           child.push(
             withDirectives(
               h('div', {
@@ -729,13 +699,13 @@ export default createComponent({
             },
             void 0,
             'backdrop',
-            props.noSwipeBackdrop !== true && showing.value === true,
+            !props.noSwipeBackdrop && showing.value,
             () => backdropCloseDirective.value
           )
         )
       }
 
-      const mini = isMini.value === true && slots.mini !== void 0
+      const mini = isMini.value && slots.mini !== void 0
       const content = [
         h(
           'div',
@@ -744,11 +714,11 @@ export default createComponent({
             key: String(mini), // required otherwise Vue will not diff correctly
             class: [contentClass.value, attrs.class]
           },
-          mini === true ? slots.mini() : hSlot(slots.default)
+          mini ? slots.mini() : hSlot(slots.default)
         )
       ]
 
-      if (props.elevated === true && showing.value === true) {
+      if (props.elevated && showing.value) {
         content.push(
           h('div', {
             class:
@@ -763,7 +733,7 @@ export default createComponent({
           { ref: 'content', class: classes.value, style: style.value },
           content,
           'contentclose',
-          props.noSwipeClose !== true && belowBreakpoint.value === true,
+          !props.noSwipeClose && belowBreakpoint.value,
           () => contentCloseDirective.value
         )
       )

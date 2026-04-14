@@ -199,9 +199,7 @@ export default {
 
   computed: {
     labelClass() {
-      if (this.withLabelClass === true) {
-        return 'bg-white text-grey-8'
-      }
+      return this.withLabelClass ? 'bg-white text-grey-8' : ''
     },
 
     stickyConfig() {

@@ -54,40 +54,33 @@ export default createComponent({
     const blurTargetRef = ref(null)
 
     const isActionable = computed(
-      () =>
-        props.clickable === true ||
-        hasLink.value === true ||
-        props.tag === 'label'
+      () => props.clickable || hasLink.value || props.tag === 'label'
     )
 
-    const isClickable = computed(
-      () => props.disable !== true && isActionable.value === true
-    )
+    const isClickable = computed(() => props.disable && isActionable.value)
 
     const classes = computed(
       () =>
         'q-item q-item-type row no-wrap' +
-        (props.dense === true ? ' q-item--dense' : '') +
-        (isDark.value === true ? ' q-item--dark' : '') +
-        (hasLink.value === true && props.active === null
+        (props.dense ? ' q-item--dense' : '') +
+        (isDark.value ? ' q-item--dark' : '') +
+        (hasLink.value && props.active === null
           ? linkClass.value
           : props.active === true
             ? ` q-item--active${props.activeClass !== void 0 ? ` ${props.activeClass}` : ''}`
             : '') +
-        (props.disable === true ? ' disabled' : '') +
-        (isClickable.value === true
+        (props.disable ? ' disabled' : '') +
+        (isClickable.value
           ? ' q-item--clickable q-link cursor-pointer ' +
-            (props.manualFocus === true
+            (props.manualFocus
               ? 'q-manual-focusable'
               : 'q-focusable q-hoverable') +
-            (props.focused === true ? ' q-manual-focusable--focused' : '')
+            (props.focused ? ' q-manual-focusable--focused' : '')
           : '')
     )
 
     const style = computed(() => {
-      if (props.insetLevel === void 0) {
-        return null
-      }
+      if (props.insetLevel === void 0) return null
 
       const dir = $q.lang.rtl === true ? 'Right' : 'Left'
       return {
@@ -96,7 +89,7 @@ export default createComponent({
     })
 
     function onClick(e) {
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         if (blurTargetRef.value !== null && e.qAvoidFocus !== true) {
           if (
             e.qKeyEvent !== true &&
@@ -113,7 +106,7 @@ export default createComponent({
     }
 
     function onKeyup(e) {
-      if (isClickable.value === true && isKeyCode(e, [13, 32]) === true) {
+      if (isClickable.value && isKeyCode(e, [13, 32])) {
         stopAndPrevent(e)
 
         // for ripple
@@ -131,7 +124,7 @@ export default createComponent({
     function getContent() {
       const child = hUniqueSlot(slots.default, [])
 
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         child.unshift(
           h('div', {
             class: 'q-focus-helper',
@@ -154,7 +147,7 @@ export default createComponent({
         onKeyup
       }
 
-      if (isClickable.value === true) {
+      if (isClickable.value) {
         data.tabindex = props.tabindex || '0'
         Object.assign(data, linkAttrs.value)
       } else if (isActionable.value === true) {

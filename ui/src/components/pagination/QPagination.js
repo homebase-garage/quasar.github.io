@@ -285,7 +285,7 @@ export default createComponent({
     function updateModel() {
       model.value = newPage.value
       newPage.value = null
-      if ($q.platform.is.mobile === true) document.activeElement.blur()
+      if ($q.platform.is.mobile) document.activeElement.blur()
     }
 
     function onInputValue(val) {
@@ -293,7 +293,7 @@ export default createComponent({
     }
 
     function onKeyup(e) {
-      if (isKeyCode(e, 13) === true) updateModel()
+      if (isKeyCode(e, 13)) updateModel()
     }
 
     function getBtn(cfg, page, active) {

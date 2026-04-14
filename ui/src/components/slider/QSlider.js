@@ -147,7 +147,7 @@ export default createComponent({
           ([34, 33].includes(evt.keyCode) ? 10 : 1) * state.keyStep.value,
         offset =
           ([34, 37, 40].includes(evt.keyCode) ? -1 : 1) *
-          (state.isReversed.value === true ? -1 : 1) *
+          (state.isReversed.value ? -1 : 1) *
           (props.vertical ? -1 : 1) *
           stepVal
 

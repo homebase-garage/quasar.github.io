@@ -20,7 +20,7 @@ function parseFeatures(winFeatures) {
 function openWindow(url, reject, windowFeatures) {
   let open = window.open
 
-  if (Platform.is.cordova === true) {
+  if (Platform.is.cordova) {
     if (cordova?.InAppBrowser?.open !== void 0) {
       open = cordova.InAppBrowser.open
     } else if (navigator?.app !== void 0) {
@@ -36,20 +36,20 @@ function openWindow(url, reject, windowFeatures) {
   // null return can be treated as a blocked popup.
   // Note: parseFeatures() normalizes values to booleans, so strict === true is safe.
   const cfg = { noopener: true, ...windowFeatures }
-  const hasNoopener = cfg.noopener === true || cfg.noreferrer === true
+  const hasNoopener = cfg.noopener || cfg.noreferrer
 
   const win = open(url, '_blank', parseFeatures(windowFeatures))
 
   if (win) {
     if (Platform.is.desktop) win.focus()
     return win
-  } else if (hasNoopener === false) {
+  } else if (!hasNoopener) {
     reject?.()
   }
 }
 
 export default function openUrl(url, reject, windowFeatures) {
-  if (Platform.is.ios === true && window.SafariViewController !== void 0) {
+  if (Platform.is.ios && window.SafariViewController !== void 0) {
     window.SafariViewController.isAvailable(available => {
       if (available) {
         window.SafariViewController.show({ url }, noop, reject)

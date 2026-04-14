@@ -100,7 +100,7 @@ onMounted(() => {
   }
 
   window.addEventListener('keydown', onKeyup, { passive: false, capture: true })
-  if ($q.platform.is.desktop === true) filterRef.value.focus()
+  if ($q.platform.is.desktop) filterRef.value.focus()
 })
 
 onBeforeUnmount(() => {

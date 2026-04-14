@@ -34,9 +34,7 @@ const Plugin = createReactivePlugin(
     },
 
     toggle() {
-      if (__QUASAR_SSR_SERVER__ !== true) {
-        Plugin.set(Plugin.isActive === false)
-      }
+      if (!__QUASAR_SSR_SERVER__) Plugin.set(!Plugin.isActive)
     },
 
     install({ $q, ssrContext }) {
@@ -61,7 +59,7 @@ const Plugin = createReactivePlugin(
             $q.dark.mode = val
           },
           toggle: () => {
-            $q.dark.set($q.dark.isActive === false)
+            $q.dark.set(!$q.dark.isActive)
           }
         }
 

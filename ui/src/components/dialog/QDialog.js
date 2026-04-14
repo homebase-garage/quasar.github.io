@@ -108,10 +108,7 @@ export default createComponent({
       avoidAutoClose
 
     const hideOnRouteChange = computed(
-      () =>
-        props.persistent !== true &&
-        props.noRouteDismiss !== true &&
-        props.seamless !== true
+      () => !props.persistent && !props.noRouteDismiss && !props.seamless
     )
 
     const { preventBodyScroll } = usePreventScroll()
@@ -153,32 +150,30 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-dialog__inner flex no-pointer-events' +
-        ` q-dialog__inner--${props.maximized === true ? 'maximized' : 'minimized'}` +
+        ` q-dialog__inner--${props.maximized ? 'maximized' : 'minimized'}` +
         ` q-dialog__inner--${props.position} ${positionClass[props.position]}` +
-        (animating.value === true ? ' q-dialog__inner--animating' : '') +
-        (props.fullWidth === true ? ' q-dialog__inner--fullwidth' : '') +
-        (props.fullHeight === true ? ' q-dialog__inner--fullheight' : '') +
-        (props.square === true ? ' q-dialog__inner--square' : '')
+        (animating.value ? ' q-dialog__inner--animating' : '') +
+        (props.fullWidth ? ' q-dialog__inner--fullwidth' : '') +
+        (props.fullHeight ? ' q-dialog__inner--fullheight' : '') +
+        (props.square ? ' q-dialog__inner--square' : '')
     )
 
-    const useBackdrop = computed(
-      () => showing.value === true && props.seamless !== true
-    )
+    const useBackdrop = computed(() => showing.value && !props.seamless)
 
     const onEvents = computed(() =>
-      props.autoClose === true ? { onClick: onAutoClose } : {}
+      props.autoClose ? { onClick: onAutoClose } : {}
     )
 
     const rootClasses = computed(() => [
       'q-dialog fullscreen no-pointer-events ' +
-        `q-dialog--${useBackdrop.value === true ? 'modal' : 'seamless'}`,
+        `q-dialog--${useBackdrop.value ? 'modal' : 'seamless'}`,
       attrs.class
     ])
 
     watch(
       () => props.maximized,
       state => {
-        if (showing.value === true) updateMaximized(state)
+        if (showing.value) updateMaximized(state)
       }
     )
 
@@ -214,8 +209,8 @@ export default createComponent({
 
       // should removeTimeout() if this gets removed
       registerTimeout(() => {
-        if (vm.proxy.$q.platform.is.ios === true) {
-          if (props.seamless !== true && document.activeElement) {
+        if (vm.proxy.$q.platform.is.ios) {
+          if (!props.seamless && document.activeElement) {
             const { top, bottom } =
                 document.activeElement.getBoundingClientRect(),
               { innerHeight } = window,
@@ -289,7 +284,7 @@ export default createComponent({
           }
         }
 
-        if (node.contains(document.activeElement) !== true) {
+        if (!node.contains(document.activeElement)) {
           node =
             node.querySelector(
               '[autofocus][tabindex], [data-autofocus][tabindex]'
@@ -333,9 +328,9 @@ export default createComponent({
     }
 
     function onEscapeKey() {
-      if (props.seamless !== true) {
-        if (props.persistent === true || props.noEscDismiss === true) {
-          if (props.maximized !== true && props.noShake !== true) shake()
+      if (!props.seamless) {
+        if (props.persistent || props.noEscDismiss) {
+          if (!props.maximized && !props.noShake) shake()
         } else {
           emit('escapeKey')
           hide()
@@ -349,10 +344,10 @@ export default createComponent({
         shakeTimeout = null
       }
 
-      if (hiding === true || showing.value === true) {
+      if (hiding === true || showing.value) {
         updateMaximized(false)
 
-        if (props.seamless !== true) {
+        if (!props.seamless) {
           preventBodyScroll(false)
           removeFocusout(onFocusChange)
           removeEscapeKey(onEscapeKey)
@@ -392,9 +387,9 @@ export default createComponent({
     }
 
     function onBackdropClick(e) {
-      if (props.persistent !== true && props.noBackdropDismiss !== true) {
+      if (!props.persistent && !props.noBackdropDismiss) {
         hide(e)
-      } else if (props.noShake !== true) {
+      } else if (!props.noShake) {
         shake()
       }
     }
@@ -402,7 +397,7 @@ export default createComponent({
     function onFocusChange(evt) {
       // the focus is not in a vue child component
       if (
-        props.allowFocusOutside !== true &&
+        !props.allowFocusOutside &&
         portalIsAccessible.value === true &&
         childHasFocus(innerRef.value, evt.target) !== true
       ) {
@@ -452,7 +447,7 @@ export default createComponent({
           ),
 
           h(Transition, transitionProps.value, () =>
-            showing.value === true
+            showing.value
               ? h(
                   'div',
                   {

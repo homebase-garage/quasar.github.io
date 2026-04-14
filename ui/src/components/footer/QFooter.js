@@ -59,8 +59,7 @@ export default createComponent({
     const size = ref(Number.parseInt(props.heightHint, 10))
     const revealed = ref(true)
     const windowHeight = ref(
-      isRuntimeSsrPreHydration.value === true ||
-        $layout.isContainer.value === true
+      isRuntimeSsrPreHydration.value || $layout.isContainer.value
         ? 0
         : window.innerHeight
     )
@@ -69,11 +68,11 @@ export default createComponent({
       () =>
         props.reveal === true ||
         $layout.view.value.includes('F') ||
-        ($q.platform.is.ios && $layout.isContainer.value === true)
+        ($q.platform.is.ios && $layout.isContainer.value)
     )
 
     const containerHeight = computed(() =>
-      $layout.isContainer.value === true
+      $layout.isContainer.value
         ? $layout.containerHeight.value
         : windowHeight.value
     )
@@ -195,7 +194,7 @@ export default createComponent({
     watch(
       () => $q.screen.height,
       val => {
-        if ($layout.isContainer.value !== true) updateLocal(windowHeight, val)
+        if (!$layout.isContainer.value) updateLocal(windowHeight, val)
       }
     )
 

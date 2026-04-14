@@ -61,7 +61,7 @@ function onAppleScroll(e) {
 }
 
 function onAppleResize(evt) {
-  if (vpPendingUpdate === true) return
+  if (vpPendingUpdate) return
 
   vpPendingUpdate = true
 
@@ -117,8 +117,8 @@ function apply(action) {
     body.classList.add('q-body--prevent-scroll')
     document.qScrollPrevented = true
 
-    if (client.is.ios === true) {
-      if (hasViewport === true) {
+    if (client.is.ios) {
+      if (hasViewport) {
         window.scrollTo(0, 0)
         window.visualViewport.addEventListener(
           'resize',
@@ -141,14 +141,14 @@ function apply(action) {
     }
   }
 
-  if (client.is.desktop === true && client.is.mac === true) {
+  if (client.is.desktop && client.is.mac) {
     // ref. https://developers.google.com/web/updates/2017/01/scrolling-intervention
     window[`${action}EventListener`]('wheel', onWheel, listenOpts.notPassive)
   }
 
   if (action === 'remove') {
-    if (client.is.ios === true) {
-      if (hasViewport === true) {
+    if (client.is.ios) {
+      if (hasViewport) {
         window.visualViewport.removeEventListener(
           'resize',
           onAppleResize,
@@ -208,7 +208,7 @@ export default function preventScroll(state) {
 
     action = 'remove'
 
-    if (client.is.ios === true && client.is.nativeMobile === true) {
+    if (client.is.ios && client.is.nativeMobile) {
       if (closeTimer !== null) clearTimeout(closeTimer)
       closeTimer = setTimeout(() => {
         apply(action)

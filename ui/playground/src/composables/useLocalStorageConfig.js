@@ -5,9 +5,7 @@ function hasDifferentKeys(a, b) {
   const keys = Object.keys(a)
   const length = keys.length
 
-  if (length !== Object.keys(b).length) {
-    return true
-  }
+  if (length !== Object.keys(b).length) return true
 
   for (let i = length; i-- !== 0; ) {
     const key = keys[i]
@@ -33,7 +31,7 @@ export function useLocalStorageConfig(localStorageKey, definition) {
 
   if (config) {
     // if something changed in the definition, reset it to the default definition
-    if (hasDifferentKeys(config, definition) === true) {
+    if (hasDifferentKeys(config, definition)) {
       config = definition
       LocalStorage.set(localStorageKey, config)
     }

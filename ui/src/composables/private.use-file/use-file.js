@@ -213,7 +213,7 @@ export default function useFile({
     // Safari bug: relatedTarget is null for over 10 years
     // https://bugs.webkit.org/show_bug.cgi?id=66547
     const gone =
-      e.relatedTarget !== null || client.is.safari !== true
+      e.relatedTarget !== null || !client.is.safari
         ? e.relatedTarget !== dndRef.value
         : !document
             .elementsFromPoint(e.clientX, e.clientY)

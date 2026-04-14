@@ -149,7 +149,7 @@ function getPropDefinition({
   let propType = getTypeVal(definition)
 
   if (
-    (isCompProps === true || isRestParam) &&
+    (isCompProps || isRestParam) &&
     name !== 'model-value' &&
     !definition.required &&
     !propType.includes(' undefined')

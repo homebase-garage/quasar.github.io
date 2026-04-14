@@ -83,20 +83,20 @@ export default createComponent({
 
     const ariaAttrs = computed(() => {
       const acc = {
-        'aria-expanded': showing.value === true ? 'true' : 'false',
+        'aria-expanded': showing.value ? 'true' : 'false',
         'aria-haspopup': 'true',
         'aria-controls': targetUid.value,
         'aria-label':
           props.toggleAriaLabel ||
-          proxy.$q.lang.label[showing.value === true ? 'collapse' : 'expand'](
+          proxy.$q.lang.label[showing.value ? 'collapse' : 'expand'](
             props.label
           )
       }
 
       if (
-        props.disable === true ||
-        (props.split === false && props.disableMainBtn === true) ||
-        props.disableDropdown === true
+        props.disable ||
+        (!props.split && props.disableMainBtn) ||
+        props.disableDropdown
       ) {
         acc['aria-disabled'] = 'true'
       }
@@ -107,10 +107,8 @@ export default createComponent({
     const iconClass = computed(
       () =>
         'q-btn-dropdown__arrow' +
-        (showing.value === true && props.noIconAnimation === false
-          ? ' rotate-180'
-          : '') +
-        (props.split === false ? ' q-btn-dropdown__arrow-container' : '')
+        (showing.value && !props.noIconAnimation ? ' rotate-180' : '') +
+        (props.split ? '' : ' q-btn-dropdown__arrow-container')
     )
 
     const btnDesignAttr = computed(() => getBtnDesignAttr(props))
@@ -175,7 +173,7 @@ export default createComponent({
     })
 
     onMounted(() => {
-      if (props.modelValue === true) show()
+      if (props.modelValue) show()
     })
 
     return () => {
@@ -186,7 +184,7 @@ export default createComponent({
         })
       ]
 
-      if (props.disableDropdown !== true) {
+      if (!props.disableDropdown) {
         Arrow.push(
           h(
             QMenu,
@@ -220,14 +218,14 @@ export default createComponent({
         )
       }
 
-      if (props.split === false) {
+      if (!props.split) {
         return h(
           QBtn,
           {
             class: 'q-btn-dropdown q-btn-dropdown--simple',
             ...btnProps.value,
             ...ariaAttrs.value,
-            disable: props.disable === true || props.disableMainBtn === true,
+            disable: props.disable || props.disableMainBtn,
             noWrap: true,
             round: false,
             onClick
@@ -256,7 +254,7 @@ export default createComponent({
             {
               class: 'q-btn-dropdown--current',
               ...btnProps.value,
-              disable: props.disable === true || props.disableMainBtn === true,
+              disable: props.disable || props.disableMainBtn,
               noWrap: true,
               round: false,
               onClick: onClickHide
@@ -273,7 +271,7 @@ export default createComponent({
               class: 'q-btn-dropdown__arrow-container q-anchor--skip',
               ...ariaAttrs.value,
               ...btnDesignAttr.value,
-              disable: props.disable === true || props.disableDropdown === true,
+              disable: props.disable || props.disableDropdown,
               rounded: props.rounded,
               color: props.color,
               textColor: props.textColor,

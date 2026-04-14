@@ -205,8 +205,7 @@ const testSvgReFill = (groups, texts) => {
 
   const [curGroup, ...restGroups] = groups
   const curTexts = []
-  const srcTexts =
-    Array.isArray(texts) !== true || texts.length === 0 ? [''] : texts
+  const srcTexts = !Array.isArray(texts) || texts.length === 0 ? [''] : texts
 
   srcTexts.forEach(text => {
     curGroup.forEach(char => {
@@ -231,7 +230,7 @@ const icon = ref(TOP_ICON)
 const $q = useQuasar()
 
 watch(useMapFn, val => {
-  if (val === true) {
+  if (val) {
     icon.value = TOP_ICON
     // IconSet.iconMapFn = customIconMapFn
     $q.iconMapFn = customIconMapFn

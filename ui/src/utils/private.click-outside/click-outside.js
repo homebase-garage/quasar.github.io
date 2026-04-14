@@ -17,7 +17,7 @@ function globalHandler(evt) {
   if (
     target === void 0 ||
     target.nodeType === 8 ||
-    target.classList.contains('no-pointer-events') === true
+    target.classList.contains('no-pointer-events')
   ) {
     return
   }
@@ -39,7 +39,7 @@ function globalHandler(evt) {
       break
     }
 
-    if (proxy.props.seamless !== true) return
+    if (!proxy.props.seamless) return
 
     portalIndex--
   }

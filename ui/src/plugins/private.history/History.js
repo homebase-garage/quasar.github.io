@@ -17,19 +17,14 @@ function normalizeExitPath(path) {
 }
 
 function getShouldExitFn(cfg) {
-  if (cfg.backButtonExit === false) {
-    return () => false
-  }
-
-  if (cfg.backButtonExit === '*') {
-    return getTrue
-  }
+  if (cfg.backButtonExit === false) return () => false
+  if (cfg.backButtonExit === '*') return getTrue
 
   // Add default root path
   const exitPaths = ['#/']
 
   // Add custom exit paths
-  if (Array.isArray(cfg.backButtonExit) === true) {
+  if (Array.isArray(cfg.backButtonExit)) {
     exitPaths.push(
       ...cfg.backButtonExit.filter(filterInvalidPath).map(normalizeExitPath)
     )

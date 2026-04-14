@@ -141,6 +141,12 @@ const thumbPath = 'M5 5 h10 v10 h-10 v-10 z'
 const alphaTrackImg =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGAwZkAFZ5G5jPRRgOYEVDeB3EBjBQBOZwTVugIGyAAAAABJRU5ErkJggg=='
 
+const numericRE = /^[0-9]+$/
+const hexRE = /^#[0-9A-Fa-f]+$/
+const rgbRE = /^rgb\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3}\)$/
+const rgbaRE =
+  /^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},(0|0\.[0-9]+[1-9]|0\.[1-9]+|1)\)$/
+
 export default createComponent({
   name: 'QColor',
 
@@ -422,7 +428,7 @@ export default createComponent({
     function onNumericChange(value, formatModel, max, evt, change) {
       if (evt !== void 0) stop(evt)
 
-      if (!/^[0-9]+$/.test(value)) {
+      if (!numericRE.test(value)) {
         if (change === true) proxy.$forceUpdate()
         return
       }
@@ -472,7 +478,7 @@ export default createComponent({
       if (topView.value === 'hex') {
         if (
           inp.length !== (hasAlpha.value === true ? 9 : 7) ||
-          !/^#[0-9A-Fa-f]+$/.test(inp)
+          !hexRE.test(inp)
         ) {
           return true
         }
@@ -489,21 +495,13 @@ export default createComponent({
             .split(',')
             .map(n => Number.parseInt(n, 10))
 
-          if (
-            localModel.length !== 3 ||
-            !/^rgb\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3}\)$/.test(inp)
-          ) {
+          if (localModel.length !== 3 || !rgbRE.test(inp)) {
             return true
           }
         } else if (hasAlpha.value === true && inp.startsWith('rgba(')) {
           localModel = inp.slice(5, -1).split(',')
 
-          if (
-            localModel.length !== 4 ||
-            !/^rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},(0|0\.[0-9]+[1-9]|0\.[1-9]+|1)\)$/.test(
-              inp
-            )
-          ) {
+          if (localModel.length !== 4 || !rgbaRE.test(inp)) {
             return true
           }
 

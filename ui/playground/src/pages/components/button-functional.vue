@@ -160,8 +160,8 @@
           v-slot="{ href, route, isActive, isExactActive }"
         >
           <q-btn
-            :flat="isActive !== true"
-            :outline="isActive === true && isExactActive !== true"
+            :flat="!isActive"
+            :outline="isActive && !isExactActive"
             color="primary"
             size="lg"
             no-caps
@@ -175,8 +175,8 @@
           v-slot="{ href, route, isActive, isExactActive }"
         >
           <q-btn
-            :flat="isActive !== true"
-            :outline="isActive === true && isExactActive !== true"
+            :flat="!isActive"
+            :outline="isActive && !isExactActive"
             color="primary"
             size="lg"
             no-caps
@@ -190,8 +190,8 @@
           v-slot="{ href, route, isActive, isExactActive }"
         >
           <q-btn
-            :flat="isActive !== true"
-            :outline="isActive === true && isExactActive !== true"
+            :flat="!isActive"
+            :outline="isActive && !isExactActive"
             color="primary"
             size="lg"
             no-caps
@@ -205,8 +205,8 @@
           v-slot="{ href, route, isActive, isExactActive }"
         >
           <q-btn
-            :flat="isActive !== true"
-            :outline="isActive === true && isExactActive !== true"
+            :flat="!isActive"
+            :outline="isActive && !isExactActive"
             color="primary"
             size="lg"
             no-caps
@@ -220,8 +220,8 @@
           v-slot="{ href, route, isActive, isExactActive }"
         >
           <q-btn
-            :flat="isActive !== true"
-            :outline="isActive === true && isExactActive !== true"
+            :flat="!isActive"
+            :outline="isActive && !isExactActive"
             color="primary"
             size="lg"
             no-caps

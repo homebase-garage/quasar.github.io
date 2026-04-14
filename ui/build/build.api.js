@@ -630,14 +630,12 @@ const arrayRE = /(\[.*\])/
 const objectRE = /(\{.*\})/
 const functionRE = /^(\s*\(\s*\)\s*=>\s*).+/
 function encodeDefaultValue(val, isFunction) {
-  if (typeof val === 'string') {
-    return `'${val}'`
-  }
+  if (typeof val === 'string') return `'${val}'`
 
   if (typeof val === 'function') {
     const fn = val.toString()
 
-    if (isFunction === true) return fn
+    if (isFunction) return fn
 
     const arrayMatch = fn.match(arrayRE)
     if (arrayMatch !== null) {
@@ -1373,14 +1371,14 @@ function fillAPI(apiType, list, encodeFn) {
 
           const isRuntimeFunction =
             runtimeTypes.length === 1 && runtimeTypes[0] === 'Function'
+
           const runtimeDefinableApiTypes =
             extractRuntimeDefinablePropTypes(apiTypes)
 
           // API "type" validation against runtime
           if (
             runtimeDefinableApiTypes.length !== runtimeTypes.length ||
-            runtimeDefinableApiTypes.every((t, i) => t === runtimeTypes[i]) ===
-              false
+            !runtimeDefinableApiTypes.every((t, i) => t === runtimeTypes[i])
           ) {
             logError(
               `${name}: wrong definition for prop "${apiPropName}" - ` +
@@ -1418,7 +1416,7 @@ function fillAPI(apiType, list, encodeFn) {
               if (apiEntry.default !== encodedValue) {
                 let handledAlready = false
 
-                if (isRuntimeFunction === true) {
+                if (isRuntimeFunction) {
                   const fn = runtimeDefaultValue.toString()
 
                   if (fn.includes('\n')) {

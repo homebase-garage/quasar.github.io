@@ -33,10 +33,10 @@ const mediaTypeRE = /[^\s]\/[^\s]/
 export const btnDesignOptions = ['flat', 'outline', 'push', 'unelevated']
 
 export function getBtnDesign(props, defaultValue) {
-  if (props.flat === true) return 'flat'
-  if (props.outline === true) return 'outline'
-  if (props.push === true) return 'push'
-  if (props.unelevated === true) return 'unelevated'
+  if (props.flat) return 'flat'
+  if (props.outline) return 'outline'
+  if (props.push) return 'push'
+  if (props.unelevated) return 'unelevated'
   return defaultValue
 }
 
@@ -126,15 +126,13 @@ export default function useBtn(props) {
   })
 
   const isRounded = computed(
-    () => props.rounded === true || props.fab === true || props.fabMini === true
+    () => props.rounded || props.fab === true || props.fabMini === true
   )
 
-  const isActionable = computed(
-    () => props.disable !== true && props.loading !== true
-  )
+  const isActionable = computed(() => !props.disable && !props.loading)
 
   const tabIndex = computed(() =>
-    isActionable.value === true ? props.tabindex || 0 : -1
+    isActionable.value ? props.tabindex || 0 : -1
   )
 
   const design = computed(() => getBtnDesign(props, 'standard'))
@@ -142,31 +140,28 @@ export default function useBtn(props) {
   const attributes = computed(() => {
     const acc = { tabindex: tabIndex.value }
 
-    if (hasLink.value === true) {
+    if (hasLink.value) {
       Object.assign(acc, linkAttrs.value)
-    } else if (formTypes.includes(props.type) === true) {
+    } else if (formTypes.includes(props.type)) {
       acc.type = props.type
     }
 
     if (linkTag.value === 'a') {
-      if (props.disable === true) {
+      if (props.disable) {
         acc['aria-disabled'] = 'true'
       } else if (acc.href === void 0) {
         acc.role = 'button'
       }
 
-      if (
-        hasRouterLink.value !== true &&
-        mediaTypeRE.test(props.type) === true
-      ) {
+      if (!hasRouterLink.value && mediaTypeRE.test(props.type)) {
         acc.type = props.type
       }
-    } else if (props.disable === true) {
+    } else if (props.disable) {
       acc.disabled = ''
       acc['aria-disabled'] = 'true'
     }
 
-    if (props.loading === true && props.percentage !== void 0) {
+    if (props.loading && props.percentage !== void 0) {
       Object.assign(acc, {
         role: 'progressbar',
         'aria-valuemin': 0,
@@ -190,17 +185,16 @@ export default function useBtn(props) {
       colors = `text-${props.textColor}`
     }
 
-    const shape =
-      props.round === true
-        ? 'round'
-        : `rectangle${isRounded.value === true ? ' q-btn--rounded' : props.square === true ? ' q-btn--square' : ''}`
+    const shape = props.round
+      ? 'round'
+      : `rectangle${isRounded.value ? ' q-btn--rounded' : props.square ? ' q-btn--square' : ''}`
 
     return (
       `q-btn--${design.value} q-btn--${shape}` +
       (colors !== void 0 ? ' ' + colors : '') +
-      (isActionable.value === true
+      (isActionable.value
         ? ' q-btn--actionable q-focusable q-hoverable'
-        : props.disable === true
+        : props.disable
           ? ' disabled'
           : '') +
       (props.fab === true
@@ -208,10 +202,10 @@ export default function useBtn(props) {
         : props.fabMini === true
           ? ' q-btn--fab-mini'
           : '') +
-      (props.noCaps === true ? ' q-btn--no-uppercase' : '') +
-      (props.dense === true ? ' q-btn--dense' : '') +
-      (props.stretch === true ? ' no-border-radius self-stretch' : '') +
-      (props.glossy === true ? ' glossy' : '') +
+      (props.noCaps ? ' q-btn--no-uppercase' : '') +
+      (props.dense ? ' q-btn--dense' : '') +
+      (props.stretch ? ' no-border-radius self-stretch' : '') +
+      (props.glossy ? ' glossy' : '') +
       (props.square ? ' q-btn--square' : '')
     )
   })
@@ -219,9 +213,9 @@ export default function useBtn(props) {
   const innerClasses = computed(
     () =>
       alignClass.value +
-      (props.stack === true ? ' column' : ' row') +
-      (props.noWrap === true ? ' no-wrap text-no-wrap' : '') +
-      (props.loading === true ? ' q-btn__content--hidden' : '')
+      (props.stack ? ' column' : ' row') +
+      (props.noWrap ? ' no-wrap text-no-wrap' : '') +
+      (props.loading ? ' q-btn__content--hidden' : '')
   )
 
   return {

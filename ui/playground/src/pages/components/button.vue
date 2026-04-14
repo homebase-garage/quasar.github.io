@@ -1556,7 +1556,7 @@ export default {
     },
     handle(type, e, abort) {
       console.log(type, e)
-      if (abort === true) e.preventDefault()
+      if (abort) e.preventDefault()
     }
   },
   beforeUnmount() {

@@ -24,10 +24,9 @@ export default function createUploaderComponent({
       ...props
     },
 
-    emits:
-      isObject(emits) === true
-        ? { ...coreEmitsObject, ...emits }
-        : [...coreEmits, ...emits],
+    emits: isObject(emits)
+      ? { ...coreEmitsObject, ...emits }
+      : [...coreEmits, ...emits],
 
     setup(_, { expose }) {
       return getRenderer(injectPlugin, expose)

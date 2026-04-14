@@ -63,10 +63,10 @@ if (targetList.length === 0) {
   process.exit(1)
 }
 
-const cmdDryRun = argv['dry-run'] === true ? getDryRunCmd() : null
+const cmdDryRun = argv['dry-run'] ? getDryRunCmd() : null
 
 for (const target of targetList) {
-  if (ignoredTestFiles.has(target) === true) {
+  if (ignoredTestFiles.has(target)) {
     if (argv.ci !== true) {
       console.log(`  📦 Ignoring "${target}"`)
     }

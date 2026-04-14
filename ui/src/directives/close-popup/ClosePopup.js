@@ -14,12 +14,8 @@ import getSSRProps from '../../utils/private.noop-ssr-directive-transform/noop-s
  */
 
 function getDepth(value) {
-  if (value === false) {
-    return 0
-  }
-  if (value === true || value === void 0) {
-    return 1
-  }
+  if (value === false) return 0
+  if (value === true || value === void 0) return 1
 
   const depth = Number.parseInt(value, 10)
   return Number.isNaN(depth) ? 0 : depth
@@ -48,7 +44,7 @@ export default createDirective(
             },
 
             handlerKey(evt) {
-              if (isKeyCode(evt, 13) === true) ctx.handler(evt)
+              if (isKeyCode(evt, 13)) ctx.handler(evt)
             }
           }
 

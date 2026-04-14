@@ -63,17 +63,17 @@ export default createComponent({
 
     const fixed = computed(
       () =>
-        props.reveal === true ||
+        props.reveal ||
         $layout.view.value.includes('H') ||
-        ($q.platform.is.ios && $layout.isContainer.value === true)
+        ($q.platform.is.ios && $layout.isContainer.value)
     )
 
     const offset = computed(() => {
       if (props.modelValue !== true) {
         return 0
       }
-      if (fixed.value === true) {
-        return revealed.value === true ? size.value : 0
+      if (fixed.value) {
+        return revealed.value ? size.value : 0
       }
 
       const localOffset = size.value - $layout.scroll.value.position
@@ -81,24 +81,19 @@ export default createComponent({
     })
 
     const hidden = computed(
-      () =>
-        props.modelValue !== true ||
-        (fixed.value === true && revealed.value !== true)
+      () => props.modelValue !== true || (fixed.value && !revealed.value)
     )
 
     const revealOnFocus = computed(
-      () =>
-        props.modelValue === true &&
-        hidden.value === true &&
-        props.reveal === true
+      () => props.modelValue === true && hidden.value === true && props.reveal
     )
 
     const classes = computed(
       () =>
         'q-header q-layout__section--marginal ' +
-        (fixed.value === true ? 'fixed' : 'absolute') +
+        (fixed.value ? 'fixed' : 'absolute') +
         '-top' +
-        (props.bordered === true ? ' q-header--bordered' : '') +
+        (props.bordered ? ' q-header--bordered' : '') +
         (hidden.value === true ? ' q-header--hidden' : '') +
         (props.modelValue !== true ? ' q-layout--prevent-focus' : '')
     )

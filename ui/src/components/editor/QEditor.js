@@ -116,7 +116,7 @@ export default createComponent({
     let defaultFont, offsetBottom
     let lastEmit = props.modelValue
 
-    if (__QUASAR_SSR_SERVER__ !== true) {
+    if (!__QUASAR_SSR_SERVER__) {
       document.execCommand(
         'defaultParagraphSeparator',
         false,
@@ -589,8 +589,8 @@ export default createComponent({
 
       if (
         root !== null &&
-        root.contains(e.target) === true &&
-        (e.relatedTarget === null || root.contains(e.relatedTarget) !== true)
+        root.contains(e.target) &&
+        (e.relatedTarget === null || !root.contains(e.relatedTarget))
       ) {
         const prop = `inner${isViewingSource.value === true ? 'Text' : 'HTML'}`
         eVm.caret.restorePosition(contentRef.value[prop].length)
@@ -603,8 +603,8 @@ export default createComponent({
 
       if (
         root !== null &&
-        root.contains(e.target) === true &&
-        (e.relatedTarget === null || root.contains(e.relatedTarget) !== true)
+        root.contains(e.target) &&
+        (e.relatedTarget === null || !root.contains(e.relatedTarget))
       ) {
         eVm.caret.savePosition()
         refreshToolbar()

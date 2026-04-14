@@ -7,7 +7,7 @@ function trigger(e) {
 }
 
 export function addFocusout(fn) {
-  if (client.is.desktop === true) {
+  if (client.is.desktop) {
     handlers.push(fn)
 
     if (handlers.length === 1) {

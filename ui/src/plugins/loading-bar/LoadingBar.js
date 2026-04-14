@@ -70,7 +70,7 @@ const Plugin = createReactivePlugin(
           barRef.value.increment(...args)
         },
         setDefaults(opts) {
-          if (isObject(opts) === true) {
+          if (isObject(opts)) {
             Object.assign(props.value, opts)
           }
         }

@@ -6,7 +6,7 @@ import { isRuntimeSsrPreHydration } from '../../plugins/platform/Platform.js'
 export default function useHydration() {
   const isHydrated = ref(!isRuntimeSsrPreHydration.value)
 
-  if (isHydrated.value === false) {
+  if (!isHydrated.value) {
     onMounted(() => {
       isHydrated.value = true
     })

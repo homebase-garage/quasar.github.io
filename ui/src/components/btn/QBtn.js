@@ -71,10 +71,10 @@ export default createComponent({
     )
 
     const ripple = computed(() =>
-      props.disable === true || props.ripple === false
+      props.disable || props.ripple === false
         ? false
         : {
-            keyCodes: hasLink.value === true ? [13, 32] : [13],
+            keyCodes: hasLink.value ? [13, 32] : [13],
             ...(props.ripple === true ? {} : props.ripple)
           }
     )
@@ -109,7 +109,7 @@ export default createComponent({
           onMousedown
         }
 
-        if (proxy.$q.platform.has.touch === true) {
+        if (proxy.$q.platform.has.touch) {
           const suffix = props.onTouchstart !== void 0 ? '' : 'Passive'
 
           acc[`onTouchstart${suffix}`] = onTouchstart
@@ -137,7 +137,7 @@ export default createComponent({
       if (rootRef.value === null) return
 
       if (e !== void 0) {
-        if (e.defaultPrevented === true) return
+        if (e.defaultPrevented) return
 
         const el = document.activeElement
         // focus button if it came from ENTER on form
@@ -180,7 +180,7 @@ export default createComponent({
 
       emit('keydown', e)
 
-      if (isKeyCode(e, [13, 32]) === true && keyboardTarget !== rootRef.value) {
+      if (isKeyCode(e, [13, 32]) && keyboardTarget !== rootRef.value) {
         if (keyboardTarget !== null) cleanup()
 
         if (e.defaultPrevented !== true) {
@@ -255,15 +255,12 @@ export default createComponent({
       if (e?.type === 'blur' && document.activeElement === rootRef.value) return
 
       if (e?.type === 'keyup') {
-        if (
-          keyboardTarget === rootRef.value &&
-          isKeyCode(e, [13, 32]) === true
-        ) {
+        if (keyboardTarget === rootRef.value && isKeyCode(e, [13, 32])) {
           // for click trigger
           const evt = new MouseEvent('click', e)
           evt.qKeyEvent = true
-          if (e.defaultPrevented === true) prevent(evt)
-          if (e.cancelBubble === true) stop(evt)
+          if (e.defaultPrevented) prevent(evt)
+          if (e.cancelBubble) stop(evt)
           rootRef.value.dispatchEvent(evt)
 
           stopAndPrevent(e)
@@ -346,23 +343,23 @@ export default createComponent({
         inner.push(
           h(QIcon, {
             name: props.icon,
-            left: props.stack !== true && hasLabel.value === true,
+            left: !props.stack && hasLabel.value,
             role: 'img'
           })
         )
       }
 
-      if (hasLabel.value === true) {
+      if (hasLabel.value) {
         inner.push(h('span', { class: 'block' }, [props.label]))
       }
 
       inner = hMergeSlot(slots.default, inner)
 
-      if (props.iconRight !== void 0 && props.round === false) {
+      if (props.iconRight !== void 0 && !props.round) {
         inner.push(
           h(QIcon, {
             name: props.iconRight,
-            right: props.stack !== true && hasLabel.value === true,
+            right: !props.stack && hasLabel.value,
             role: 'img'
           })
         )
@@ -382,7 +379,7 @@ export default createComponent({
             {
               class:
                 'q-btn__progress absolute-full overflow-hidden' +
-                (props.darkPercentage === true ? ' q-btn__progress--dark' : '')
+                (props.darkPercentage ? ' q-btn__progress--dark' : '')
             },
             [
               h('span', {
@@ -414,7 +411,7 @@ export default createComponent({
               name: 'q-transition--fade'
             },
             () =>
-              props.loading === true
+              props.loading
                 ? [
                     h(
                       'span',

@@ -154,8 +154,8 @@ export default createComponent({
     scroll.vertical.thumbHidden = computed(
       () =>
         ((props.visible === null ? hover.value : props.visible) !== true &&
-          tempShowing.value === false &&
-          panning.value === false) ||
+          !tempShowing.value &&
+          !panning.value) ||
         scroll.vertical.size.value <= container.vertical.value + 1
     )
     scroll.vertical.thumbStart = computed(
@@ -207,8 +207,8 @@ export default createComponent({
     scroll.horizontal.thumbHidden = computed(
       () =>
         ((props.visible === null ? hover.value : props.visible) !== true &&
-          tempShowing.value === false &&
-          panning.value === false) ||
+          !tempShowing.value &&
+          !panning.value) ||
         scroll.horizontal.size.value <= container.horizontal.value + 1
     )
     scroll.horizontal.thumbStart = computed(
@@ -284,7 +284,7 @@ export default createComponent({
     }, 0)
 
     function localSetScrollPosition(axis, offset, duration) {
-      if (axisList.includes(axis) === false) {
+      if (!axisList.includes(axis)) {
         console.error(
           '[QScrollArea]: wrong first param of setScrollPosition (vertical/horizontal)'
         )

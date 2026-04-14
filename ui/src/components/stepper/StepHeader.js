@@ -36,42 +36,42 @@ export default createComponent({
 
     const isDone = computed(() => {
       const opt = props.step.done
-      return isDisable.value === false && (opt === true || opt === '')
+      return !isDisable.value && (opt === true || opt === '')
     })
 
     const headerNav = computed(() => {
       const opt = props.step.headerNav,
         nav = opt === true || opt === '' || opt === void 0
 
-      return isDisable.value === false && props.stepper.headerNav && nav
+      return !isDisable.value && props.stepper.headerNav && nav
     })
 
     const hasPrefix = computed(
       () =>
         props.step.prefix &&
-        (isActive.value === false || props.stepper.activeIcon === 'none') &&
-        (isError.value === false || props.stepper.errorIcon === 'none') &&
-        (isDone.value === false || props.stepper.doneIcon === 'none')
+        (!isActive.value || props.stepper.activeIcon === 'none') &&
+        (!isError.value || props.stepper.errorIcon === 'none') &&
+        (!isDone.value || props.stepper.doneIcon === 'none')
     )
 
     const icon = computed(() => {
       const defaultIcon = props.step.icon || props.stepper.inactiveIcon
 
-      if (isActive.value === true) {
+      if (isActive.value) {
         const localIcon = props.step.activeIcon || props.stepper.activeIcon
         return localIcon === 'none'
           ? defaultIcon
           : localIcon || $q.iconSet.stepper.active
       }
 
-      if (isError.value === true) {
+      if (isError.value) {
         const localIcon = props.step.errorIcon || props.stepper.errorIcon
         return localIcon === 'none'
           ? defaultIcon
           : localIcon || $q.iconSet.stepper.error
       }
 
-      if (isDisable.value === false && isDone.value === true) {
+      if (!isDisable.value && isDone.value) {
         const localIcon = props.step.doneIcon || props.stepper.doneIcon
         return localIcon === 'none'
           ? defaultIcon
@@ -82,22 +82,21 @@ export default createComponent({
     })
 
     const color = computed(() => {
-      const errorColor =
-        isError.value === true
-          ? props.step.errorColor || props.stepper.errorColor
-          : void 0
+      const errorColor = isError.value
+        ? props.step.errorColor || props.stepper.errorColor
+        : void 0
 
-      if (isActive.value === true) {
+      if (isActive.value) {
         const localColor =
           props.step.activeColor ||
           props.stepper.activeColor ||
           props.step.color
         return localColor !== void 0 ? localColor : errorColor
       }
-      if (errorColor !== void 0) {
-        return errorColor
-      }
-      if (isDisable.value === false && isDone.value === true) {
+
+      if (errorColor !== void 0) return errorColor
+
+      if (!isDisable.value && isDone.value) {
         return (
           props.step.doneColor ||
           props.stepper.doneColor ||
@@ -113,16 +112,16 @@ export default createComponent({
       () =>
         'q-stepper__tab col-grow flex items-center no-wrap relative-position' +
         (color.value !== void 0 ? ` text-${color.value}` : '') +
-        (isError.value === true
+        (isError.value
           ? ' q-stepper__tab--error q-stepper__tab--error-with-' +
             (hasPrefix.value === true ? 'prefix' : 'icon')
           : '') +
-        (isActive.value === true ? ' q-stepper__tab--active' : '') +
-        (isDone.value === true ? ' q-stepper__tab--done' : '') +
+        (isActive.value ? ' q-stepper__tab--active' : '') +
+        (isDone.value ? ' q-stepper__tab--done' : '') +
         (headerNav.value === true
           ? ' q-stepper__tab--navigation q-focusable q-hoverable'
           : '') +
-        (isDisable.value === true ? ' q-stepper__tab--disabled' : '')
+        (isDisable.value ? ' q-stepper__tab--disabled' : '')
     )
 
     const ripple = computed(() =>
@@ -131,11 +130,11 @@ export default createComponent({
 
     function onActivate() {
       blurRef.value?.focus()
-      if (isActive.value === false) props.goToPanel(props.step.name)
+      if (!isActive.value) props.goToPanel(props.step.name)
     }
 
     function onKeyup(e) {
-      if (e.keyCode === 13 && isActive.value === false) {
+      if (e.keyCode === 13 && !isActive.value) {
         props.goToPanel(props.step.name)
       }
     }
@@ -149,7 +148,7 @@ export default createComponent({
 
         Object.assign(
           data,
-          isDisable.value === true
+          isDisable.value
             ? { tabindex: -1, 'aria-disabled': 'true' }
             : { tabindex: attrs.tabindex || 0 }
         )

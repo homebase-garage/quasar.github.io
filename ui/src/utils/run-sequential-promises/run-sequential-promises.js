@@ -1,7 +1,7 @@
 function parsePromises(sequentialPromises) {
   const isList = Array.isArray(sequentialPromises)
 
-  if (isList === true) {
+  if (isList) {
     const totalJobs = sequentialPromises.length
     return {
       isList,
@@ -73,17 +73,16 @@ export default function runSequentialPromises(
       function runNextPromise() {
         const currentJobIndex = ++jobIndex
 
-        if (hasAborted === true || currentJobIndex >= totalJobs) {
+        if (hasAborted || currentJobIndex >= totalJobs) {
           resolve()
           return
         }
 
-        const key =
-          isList === true ? currentJobIndex : resultKeys[currentJobIndex]
+        const key = isList ? currentJobIndex : resultKeys[currentJobIndex]
 
         sequentialPromises[key](resultAggregator)
           .then(value => {
-            if (hasAborted === true) {
+            if (hasAborted) {
               resolve()
               return // early exit
             }
@@ -94,7 +93,7 @@ export default function runSequentialPromises(
             setTimeout(runNextPromise)
           })
           .catch(err => {
-            if (hasAborted === true) {
+            if (hasAborted) {
               resolve()
               return // early exit
             }
@@ -102,7 +101,7 @@ export default function runSequentialPromises(
             const result = { key, status: 'rejected', reason: err }
             resultAggregator[key] = result
 
-            if (abortOnFail === true) {
+            if (abortOnFail) {
               hasAborted = true
               reject({ ...result, resultAggregator })
               return // early exit

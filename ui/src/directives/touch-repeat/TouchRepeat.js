@@ -44,7 +44,7 @@ export default createDirective(
 
         beforeMount(el, { modifiers, value, arg }) {
           const keyboard = Object.keys(modifiers).reduce((acc, key) => {
-            if (keyRegex.test(key) === true) {
+            if (keyRegex.test(key)) {
               const keyCode = Number.isNaN(Number.parseInt(key, 10))
                 ? keyCodes[key.toLowerCase()]
                 : Number.parseInt(key, 10)
@@ -93,7 +93,7 @@ export default createDirective(
             keyboardStart(evt) {
               if (
                 typeof ctx.handler === 'function' &&
-                isKeyCode(evt, keyboard) === true
+                isKeyCode(evt, keyboard)
               ) {
                 if (durations[0] === 0 || ctx.event !== void 0) {
                   stopAndPrevent(evt)
@@ -138,7 +138,7 @@ export default createDirective(
                 }
               }
 
-              if (client.is.mobile === true) {
+              if (client.is.mobile) {
                 document.body.classList.add('non-selectable')
                 clearSelection()
                 ctx.styleCleanup = styleCleanup
@@ -166,7 +166,7 @@ export default createDirective(
                     ctx.event.position = position(evt)
                   }
 
-                  if (client.is.mobile !== true) {
+                  if (!client.is.mobile) {
                     document.documentElement.style.cursor = 'pointer'
                     document.body.classList.add('non-selectable')
                     clearSelection()

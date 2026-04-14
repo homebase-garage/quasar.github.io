@@ -120,17 +120,15 @@ export default createComponent({
     })
 
     const trackContainerEvents = computed(() => {
-      if (state.editable.value !== true) {
-        return {}
-      }
+      if (!state.editable.value) return {}
 
-      if ($q.platform.is.mobile === true) {
+      if ($q.platform.is.mobile) {
         return { onClick: methods.onMobileClick }
       }
 
       const evt = { onMousedown: methods.onActivate }
 
-      if (props.dragRange === true || props.dragOnlyRange === true) {
+      if (props.dragRange || props.dragOnlyRange) {
         Object.assign(evt, {
           onFocus: () => {
             state.focus.value = 'both'
@@ -145,9 +143,9 @@ export default createComponent({
     })
 
     function getEvents(side) {
-      return $q.platform.is.mobile !== true &&
-        state.editable.value === true &&
-        props.dragOnlyRange !== true
+      return !$q.platform.is.mobile &&
+        state.editable.value &&
+        !props.dragOnlyRange
         ? {
             onFocus: () => {
               state.focus.value = side
@@ -160,11 +158,10 @@ export default createComponent({
     }
 
     const thumbTabindex = computed(() =>
-      props.dragOnlyRange !== true ? state.tabindex.value : null
+      props.dragOnlyRange ? null : state.tabindex.value
     )
     const trackContainerTabindex = computed(() =>
-      $q.platform.is.mobile !== true &&
-      (props.dragRange || props.dragOnlyRange === true)
+      !$q.platform.is.mobile && (props.dragRange || props.dragOnlyRange)
         ? state.tabindex.value
         : null
     )
@@ -229,12 +226,11 @@ export default createComponent({
     function getDragging(event) {
       const { left, top, width, height } =
           rootRef.value.getBoundingClientRect(),
-        sensitivity =
-          props.dragOnlyRange === true
-            ? 0
-            : props.vertical === true
-              ? minThumbRef.value.offsetHeight / (2 * height)
-              : minThumbRef.value.offsetWidth / (2 * width)
+        sensitivity = props.dragOnlyRange
+          ? 0
+          : props.vertical
+            ? minThumbRef.value.offsetHeight / (2 * height)
+            : minThumbRef.value.offsetWidth / (2 * width)
 
       const dragging = {
         left,
@@ -249,16 +245,13 @@ export default createComponent({
 
       const ratio = methods.getDraggingRatio(event, dragging)
 
-      if (
-        props.dragOnlyRange !== true &&
-        ratio < dragging.ratioMin + sensitivity
-      ) {
+      if (!props.dragOnlyRange && ratio < dragging.ratioMin + sensitivity) {
         dragging.type = dragType.MIN
       } else if (
-        props.dragOnlyRange === true ||
+        props.dragOnlyRange ||
         ratio < dragging.ratioMax - sensitivity
       ) {
-        if (props.dragRange === true || props.dragOnlyRange === true) {
+        if (props.dragRange || props.dragOnlyRange) {
           dragging.type = dragType.RANGE
           Object.assign(dragging, {
             offsetRatio: ratio,
@@ -377,8 +370,8 @@ export default createComponent({
           ([34, 33].includes(evt.keyCode) ? 10 : 1) * state.keyStep.value,
         offset =
           ([34, 37, 40].includes(evt.keyCode) ? -1 : 1) *
-          (state.isReversed.value === true ? -1 : 1) *
-          (props.vertical === true ? -1 : 1) *
+          (state.isReversed.value ? -1 : 1) *
+          (props.vertical ? -1 : 1) *
           stepVal
 
       if (state.focus.value === 'both') {
@@ -393,7 +386,7 @@ export default createComponent({
           min,
           max: state.roundValueFn.value(min + interval)
         }
-      } else if (state.focus.value === false) {
+      } else if (!state.focus.value) {
         return
       } else {
         const which = state.focus.value

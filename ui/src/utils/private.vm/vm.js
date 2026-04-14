@@ -17,7 +17,7 @@ export function getParentProxy(proxy) {
 
 function fillNormalizedVNodes(children, vnode) {
   if (typeof vnode.type === 'symbol') {
-    if (Array.isArray(vnode.children) === true) {
+    if (Array.isArray(vnode.children)) {
       vnode.children.forEach(child => {
         fillNormalizedVNodes(children, child)
       })

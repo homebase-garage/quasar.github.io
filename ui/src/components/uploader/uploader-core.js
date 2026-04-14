@@ -99,9 +99,7 @@ export function getRenderer(getPlugin, expose) {
     proxy.$forceUpdate()
   }
 
-  const editable = computed(
-    () => props.disable !== true && props.readonly !== true
-  )
+  const editable = computed(() => !props.disable && !props.readonly)
   const dnd = ref(false)
 
   const rootRef = ref(null)
@@ -156,10 +154,10 @@ export function getRenderer(getPlugin, expose) {
 
   const canAddFiles = computed(
     () =>
-      editable.value === true &&
-      state.isUploading.value !== true &&
+      editable.value &&
+      !state.isUploading.value &&
       // if single selection and no files are queued:
-      (props.multiple === true || state.queuedFiles.value.length === 0) &&
+      (props.multiple || state.queuedFiles.value.length === 0) &&
       // if max-files is set and current number of files does not exceeds it:
       (props.maxFiles === void 0 ||
         state.files.value.length < maxFilesNumber.value) &&
@@ -170,9 +168,9 @@ export function getRenderer(getPlugin, expose) {
 
   const canUpload = computed(
     () =>
-      editable.value === true &&
-      state.isBusy.value !== true &&
-      state.isUploading.value !== true &&
+      editable.value &&
+      !state.isBusy.value &&
+      !state.isUploading.value &&
       state.queuedFiles.value.length !== 0
   )
 
@@ -197,15 +195,15 @@ export function getRenderer(getPlugin, expose) {
   )
 
   watch(state.isUploading, (newVal, oldVal) => {
-    if (oldVal === false && newVal === true) {
+    if (!oldVal && newVal) {
       emit('start')
-    } else if (oldVal === true && newVal === false) {
+    } else if (oldVal && !newVal) {
       emit('finish')
     }
   })
 
   function reset() {
-    if (props.disable === false) {
+    if (!props.disable) {
       state.abort()
       state.uploadedSize.value = 0
       uploadSize.value = 0
@@ -217,7 +215,7 @@ export function getRenderer(getPlugin, expose) {
   }
 
   function removeUploadedFiles() {
-    if (props.disable === false) {
+    if (!props.disable) {
       batchRemoveFiles(['uploaded'], () => {
         state.uploadedFiles.value = []
       })
@@ -232,7 +230,7 @@ export function getRenderer(getPlugin, expose) {
   }
 
   function batchRemoveFiles(statusList, cb) {
-    if (props.disable === true) return
+    if (props.disable) return
 
     const removed = {
       files: [],
@@ -240,9 +238,7 @@ export function getRenderer(getPlugin, expose) {
     }
 
     const localFiles = state.files.value.filter(f => {
-      if (statusList.includes(f.__status) === false) {
-        return true
-      }
+      if (!statusList.includes(f.__status)) return true
 
       removed.size += f.size
       removed.files.push(f)
@@ -328,11 +324,11 @@ export function getRenderer(getPlugin, expose) {
     state.files.value.push(...localFiles)
     state.queuedFiles.value.push(...localFiles)
     emit('added', localFiles)
-    if (props.autoUpload === true) state.upload()
+    if (props.autoUpload) state.upload()
   }
 
   function upload() {
-    if (canUpload.value === true) state.upload()
+    if (canUpload.value) state.upload()
   }
 
   function getBtn(show, icon, fn) {
@@ -366,7 +362,7 @@ export function getRenderer(getPlugin, expose) {
       type: 'file',
       title: '', // try to remove default tooltip
       accept: props.accept,
-      multiple: props.multiple === true ? 'multiple' : void 0,
+      multiple: props.multiple ? 'multiple' : void 0,
       capture: props.capture,
       onMousedown: stop, // need to stop refocus from QBtn
       onClick: pickFiles,
@@ -403,7 +399,7 @@ export function getRenderer(getPlugin, expose) {
                 removeUploadedFiles
               ),
 
-              state.isUploading.value === true
+              state.isUploading.value
                 ? h(QSpinner, { class: 'q-uploader__spinner' })
                 : null,
 
@@ -419,7 +415,7 @@ export function getRenderer(getPlugin, expose) {
 
               getBtn(canAddFiles.value, 'add'),
               getBtn(
-                props.hideUploadBtn === false && canUpload.value === true,
+                !props.hideUploadBtn && canUpload.value,
                 'upload',
                 state.upload
               ),
@@ -511,7 +507,7 @@ export function getRenderer(getPlugin, expose) {
   }
 
   onBeforeUnmount(() => {
-    if (state.isUploading.value === true) state.abort()
+    if (state.isUploading.value) state.abort()
     if (state.files.value.length !== 0) revokeImgURLs()
   })
 
@@ -570,7 +566,7 @@ export function getRenderer(getPlugin, expose) {
       getDndNode('uploader')
     ]
 
-    if (state.isBusy.value === true) {
+    if (state.isBusy.value) {
       children.push(
         h(
           'div',
@@ -584,7 +580,7 @@ export function getRenderer(getPlugin, expose) {
 
     const data = { ref: rootRef, class: classes.value }
 
-    if (canAddFiles.value === true) {
+    if (canAddFiles.value) {
       Object.assign(data, { onDragover, onDragleave })
     }
 

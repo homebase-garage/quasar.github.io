@@ -31,7 +31,7 @@ function read(string) {
   try {
     const parsed = JSON.parse(string)
 
-    if (parsed === Object(parsed) || Array.isArray(parsed) === true) {
+    if (parsed === Object(parsed) || Array.isArray(parsed)) {
       string = parsed
     }
   } catch {}
@@ -196,7 +196,7 @@ if (__QUASAR_SSR__) {
   }
 }
 
-if (__QUASAR_SSR_SERVER__ !== true) {
+if (!__QUASAR_SSR_SERVER__) {
   Object.assign(Plugin, getObject())
 }
 

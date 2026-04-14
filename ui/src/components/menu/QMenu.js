@@ -208,7 +208,7 @@ export default createComponent({
       addFocusFn(() => {
         let node = innerRef.value
 
-        if (node && node.contains(document.activeElement) !== true) {
+        if (node && !node.contains(document.activeElement)) {
           node =
             node.querySelector(
               '[autofocus][tabindex], [data-autofocus][tabindex]'

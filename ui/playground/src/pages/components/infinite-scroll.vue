@@ -70,7 +70,7 @@
         <q-infinite-scroll
           @load="loadReverse"
           :disable="disable"
-          :reverse="reverse === false"
+          :reverse="!reverse"
           v-if="active"
           scroll-target="#reverse-target"
         >

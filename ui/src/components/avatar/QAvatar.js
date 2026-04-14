@@ -33,9 +33,9 @@ export default createComponent({
         'q-avatar' +
         (props.color ? ` bg-${props.color}` : '') +
         (props.textColor ? ` text-${props.textColor} q-chip--colored` : '') +
-        (props.square === true
+        (props.square
           ? ' q-avatar--square'
-          : props.rounded === true
+          : props.rounded
             ? ' rounded-borders'
             : '')
     )

@@ -75,10 +75,10 @@ export default createComponent({
     const arrayModel = Array.isArray(props.modelValue)
 
     if (props.type === 'radio') {
-      if (arrayModel === true) {
+      if (arrayModel) {
         console.error('q-option-group: model should not be array')
       }
-    } else if (arrayModel === false) {
+    } else if (!arrayModel) {
       console.error('q-option-group: model should be array in your case')
     }
 

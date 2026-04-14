@@ -27,15 +27,15 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-banner row items-center' +
-        (props.dense === true ? ' q-banner--dense' : '') +
-        (isDark.value === true ? ' q-banner--dark q-dark' : '') +
-        (props.rounded === true ? ' rounded-borders' : '')
+        (props.dense ? ' q-banner--dense' : '') +
+        (isDark.value ? ' q-banner--dark q-dark' : '') +
+        (props.rounded ? ' rounded-borders' : '')
     )
 
     const actionClass = computed(
       () =>
         'q-banner__actions row items-center justify-end' +
-        ` col-${props.inlineActions === true ? 'auto' : 'all'}`
+        ` col-${props.inlineActions ? 'auto' : 'all'}`
     )
 
     return () => {
@@ -67,7 +67,7 @@ export default createComponent({
         {
           class:
             classes.value +
-            (props.inlineActions === false && actions !== void 0
+            (!props.inlineActions && actions !== void 0
               ? ' q-banner--top-padding'
               : ''),
           role: 'alert'

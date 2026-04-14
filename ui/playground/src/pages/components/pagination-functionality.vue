@@ -266,7 +266,7 @@ export default {
 
   computed: {
     toFn() {
-      if (this.useToFn === true && this.inputType !== true) {
+      if (this.useToFn && !this.inputType) {
         return page => ({ query: { page } })
       }
     }

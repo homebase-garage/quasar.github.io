@@ -38,7 +38,7 @@ export default createComponent({
 
   setup(props, { slots, emit }) {
     const showing = ref(
-      isRuntimeSsrPreHydration.value === true ? props.ssrPrerender : false
+      isRuntimeSsrPreHydration.value ? props.ssrPrerender : false
     )
 
     const intersectionProps = computed(() =>
@@ -59,7 +59,7 @@ export default createComponent({
     const hasDirective = computed(
       () =>
         props.disable !== true &&
-        (isRuntimeSsrPreHydration.value !== true ||
+        (!isRuntimeSsrPreHydration.value ||
           props.once !== true ||
           props.ssrPrerender !== true)
     )

@@ -178,7 +178,7 @@ export default createDirective(
             },
 
             start(evt, mouseEvent) {
-              if (client.is.firefox === true) preventDraggable(el, true)
+              if (client.is.firefox) preventDraggable(el, true)
               ctx.lastEvt = evt
 
               /*
@@ -364,7 +364,7 @@ export default createDirective(
               if (ctx.event === void 0) return
 
               cleanEvt(ctx, 'temp')
-              if (client.is.firefox === true) preventDraggable(el, false)
+              if (client.is.firefox) preventDraggable(el, false)
 
               if (abort === true) {
                 ctx.styleCleanup?.()
@@ -456,7 +456,7 @@ export default createDirective(
             cleanEvt(ctx, 'main')
             cleanEvt(ctx, 'temp')
 
-            if (client.is.firefox === true) preventDraggable(el, false)
+            if (client.is.firefox) preventDraggable(el, false)
             ctx.styleCleanup?.()
 
             delete el.__qtouchpan

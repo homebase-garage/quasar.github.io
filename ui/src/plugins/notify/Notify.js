@@ -384,7 +384,7 @@ function removeNotification(notif) {
 }
 
 function hasContent(str) {
-  return str !== void 0 && str !== null && emptyRE.test(str) !== true
+  return str !== void 0 && str !== null && !emptyRE.test(str)
 }
 
 function logError(error, config) {
@@ -545,13 +545,13 @@ function getComponent() {
 
 export default {
   setDefaults(opts) {
-    if (__QUASAR_SSR_SERVER__ !== true && isObject(opts)) {
+    if (!__QUASAR_SSR_SERVER__ && isObject(opts)) {
       Object.assign(defaults, opts)
     }
   },
 
   registerType(typeName, typeOpts) {
-    if (__QUASAR_SSR_SERVER__ !== true && isObject(typeOpts)) {
+    if (!__QUASAR_SSR_SERVER__ && isObject(typeOpts)) {
       notifTypes[typeName] = typeOpts
     }
   },
@@ -568,12 +568,12 @@ export default {
       this.setDefaults($q.config.notify)
     }
 
-    if (__QUASAR_SSR_SERVER__ !== true && this.__installed !== true) {
+    if (!__QUASAR_SSR_SERVER__ && this.__installed !== true) {
       positionList.forEach(pos => {
         notificationsList[pos] = ref([])
 
         const vert =
-            ['left', 'center', 'right'].includes(pos) === true
+            pos === 'left' || pos === 'center' || pos === 'right'
               ? 'center'
               : pos.includes('top')
                 ? 'top'
@@ -583,11 +583,12 @@ export default {
             : pos.includes('right')
               ? 'end'
               : 'center',
-          classes = ['left', 'right'].includes(pos)
-            ? `items-${pos === 'left' ? 'start' : 'end'} justify-center`
-            : pos === 'center'
-              ? 'flex-center'
-              : `items-${align}`
+          classes =
+            pos === 'left' || pos === 'right'
+              ? `items-${pos === 'left' ? 'start' : 'end'} justify-center`
+              : pos === 'center'
+                ? 'flex-center'
+                : `items-${align}`
 
         positionClass[pos] =
           `q-notifications__list q-notifications__list--${vert} fixed column no-wrap ${classes}`

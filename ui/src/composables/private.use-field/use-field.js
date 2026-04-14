@@ -107,7 +107,7 @@ export function useFieldState({
 
     isDark,
 
-    editable: computed(() => props.disable !== true && props.readonly !== true),
+    editable: computed(() => !props.disable && !props.readonly),
 
     innerLoading: ref(false),
     focused: ref(false),
@@ -173,12 +173,12 @@ export default function useField(state) {
 
   if (state.computedCounter === void 0) {
     state.computedCounter = computed(() => {
-      if (props.counter !== false) {
+      if (props.counter) {
         const len =
           typeof props.modelValue === 'string' ||
           typeof props.modelValue === 'number'
             ? String(props.modelValue).length
-            : Array.isArray(props.modelValue) === true
+            : Array.isArray(props.modelValue)
               ? props.modelValue.length
               : 0
 
@@ -197,39 +197,26 @@ export default function useField(state) {
     state.floatingLabel !== void 0
       ? computed(
           () =>
-            props.stackLabel === true ||
-            state.focused.value === true ||
-            state.floatingLabel.value === true
+            props.stackLabel || state.focused.value || state.floatingLabel.value
         )
       : computed(
-          () =>
-            props.stackLabel === true ||
-            state.focused.value === true ||
-            state.hasValue.value === true
+          () => props.stackLabel || state.focused.value || state.hasValue.value
         )
 
   const shouldRenderBottom = computed(
     () =>
-      props.bottomSlots === true ||
+      props.bottomSlots ||
       props.hint !== void 0 ||
-      hasRules.value === true ||
-      props.counter === true ||
+      hasRules.value ||
+      props.counter ||
       props.error !== null
   )
 
   const styleType = computed(() => {
-    if (props.filled === true) {
-      return 'filled'
-    }
-    if (props.outlined === true) {
-      return 'outlined'
-    }
-    if (props.borderless === true) {
-      return 'borderless'
-    }
-    if (props.standout) {
-      return 'standout'
-    }
+    if (props.filled) return 'filled'
+    if (props.outlined) return 'outlined'
+    if (props.borderless) return 'borderless'
+    if (props.standout) return 'standout'
     return 'standard'
   })
 
@@ -237,25 +224,23 @@ export default function useField(state) {
     () =>
       `q-field row no-wrap items-start q-field--${styleType.value}` +
       (state.fieldClass !== void 0 ? ` ${state.fieldClass.value}` : '') +
-      (props.rounded === true ? ' q-field--rounded' : '') +
-      (props.square === true ? ' q-field--square' : '') +
-      (floatingLabel.value === true ? ' q-field--float' : '') +
-      (hasLabel.value === true ? ' q-field--labeled' : '') +
-      (props.dense === true ? ' q-field--dense' : '') +
-      (props.itemAligned === true ? ' q-field--item-aligned q-item-type' : '') +
-      (state.isDark.value === true ? ' q-field--dark' : '') +
+      (props.rounded ? ' q-field--rounded' : '') +
+      (props.square ? ' q-field--square' : '') +
+      (floatingLabel.value ? ' q-field--float' : '') +
+      (hasLabel.value ? ' q-field--labeled' : '') +
+      (props.dense ? ' q-field--dense' : '') +
+      (props.itemAligned ? ' q-field--item-aligned q-item-type' : '') +
+      (state.isDark.value ? ' q-field--dark' : '') +
       (state.getControl === void 0 ? ' q-field--auto-height' : '') +
-      (state.focused.value === true ? ' q-field--focused' : '') +
-      (hasError.value === true ? ' q-field--error' : '') +
-      (hasError.value === true || state.focused.value === true
-        ? ' q-field--highlighted'
-        : '') +
-      (props.hideBottomSpace !== true && shouldRenderBottom.value === true
+      (state.focused.value ? ' q-field--focused' : '') +
+      (hasError.value ? ' q-field--error' : '') +
+      (hasError.value || state.focused.value ? ' q-field--highlighted' : '') +
+      (!props.hideBottomSpace && shouldRenderBottom.value
         ? ' q-field--with-bottom'
         : '') +
-      (props.disable === true
+      (props.disable
         ? ' q-field--disabled'
-        : props.readonly === true
+        : props.readonly
           ? ' q-field--readonly'
           : '')
   )
@@ -264,25 +249,23 @@ export default function useField(state) {
     () =>
       'q-field__control relative-position row no-wrap' +
       (props.bgColor !== void 0 ? ` bg-${props.bgColor}` : '') +
-      (hasError.value === true
+      (hasError.value
         ? ' text-negative'
         : typeof props.standout === 'string' &&
             props.standout.length !== 0 &&
-            state.focused.value === true
+            state.focused.value
           ? ` ${props.standout}`
           : props.color !== void 0
             ? ` text-${props.color}`
             : '')
   )
 
-  const hasLabel = computed(
-    () => props.labelSlot === true || props.label !== void 0
-  )
+  const hasLabel = computed(() => props.labelSlot || props.label !== void 0)
 
   const labelClass = computed(
     () =>
       'q-field__label no-pointer-events absolute ellipsis' +
-      (props.labelColor !== void 0 && hasError.value !== true
+      (props.labelColor !== void 0 && !hasError.value
         ? ` text-${props.labelColor}`
         : '')
   )
@@ -303,7 +286,7 @@ export default function useField(state) {
       acc.for = state.targetUid.value
     }
 
-    if (props.disable === true) {
+    if (props.disable) {
       acc['aria-disabled'] = 'true'
     }
 
@@ -343,7 +326,7 @@ export default function useField(state) {
       focusoutTimer = null
     }
 
-    if (state.editable.value === true && state.focused.value === false) {
+    if (state.editable.value && !state.focused.value) {
       state.focused.value = true
       emit('focus', e)
     }
@@ -355,16 +338,16 @@ export default function useField(state) {
       focusoutTimer = null
 
       if (
-        document.hasFocus() === true &&
-        (state.hasPopupOpen === true ||
+        document.hasFocus() &&
+        (state.hasPopupOpen ||
           state.controlRef === void 0 ||
           state.controlRef.value === null ||
-          state.controlRef.value.contains(document.activeElement) !== false)
+          state.controlRef.value.contains(document.activeElement))
       ) {
         return
       }
 
-      if (state.focused.value === true) {
+      if (state.focused.value) {
         state.focused.value = false
         emit('blur', e)
       }
@@ -377,10 +360,10 @@ export default function useField(state) {
     // prevent activating the field but keep focus on desktop
     stopAndPrevent(e)
 
-    if ($q.platform.is.mobile !== true) {
+    if (!$q.platform.is.mobile) {
       const el = state.targetRef?.value || state.rootRef.value
       el.focus()
-    } else if (state.rootRef.value.contains(document.activeElement) === true) {
+    } else if (state.rootRef.value.contains(document.activeElement)) {
       document.activeElement.blur()
     }
 
@@ -435,7 +418,7 @@ export default function useField(state) {
       )
     )
 
-    if (hasError.value === true && props.noErrorIcon === false) {
+    if (hasError.value && !props.noErrorIcon) {
       node.push(
         getInnerAppendNode('error', [
           h(QIcon, { name: $q.iconSet.field.error, color: 'negative' })
@@ -443,7 +426,7 @@ export default function useField(state) {
       )
     }
 
-    if (props.loading === true || state.innerLoading.value === true) {
+    if (props.loading || state.innerLoading.value) {
       node.push(
         getInnerAppendNode(
           'inner-loading-append',
@@ -453,9 +436,9 @@ export default function useField(state) {
         )
       )
     } else if (
-      props.clearable === true &&
-      state.hasValue.value === true &&
-      state.editable.value === true
+      props.clearable &&
+      state.hasValue.value &&
+      state.editable.value
     ) {
       node.push(
         getInnerAppendNode('inner-clearable-append', [
@@ -517,7 +500,7 @@ export default function useField(state) {
       node.push(state.getShadowControl())
     }
 
-    if (hasLabel.value === true) {
+    if (hasLabel.value) {
       node.push(
         h(
           'div',
@@ -544,7 +527,7 @@ export default function useField(state) {
             class: 'q-field__native row',
             tabindex: -1,
             ...state.splitAttrs.attributes.value,
-            'data-autofocus': props.autofocus === true || void 0
+            'data-autofocus': props.autofocus || void 0
           },
           slots.control(controlSlotScope.value)
         )
@@ -570,7 +553,7 @@ export default function useField(state) {
   function getBottom() {
     let msg, key
 
-    if (hasError.value === true) {
+    if (hasError.value) {
       if (errorMessage.value !== null) {
         msg = [h('div', { role: 'alert' }, errorMessage.value)]
         key = `q--slot-error-${errorMessage.value}`
@@ -578,7 +561,7 @@ export default function useField(state) {
         msg = hSlot(slots.error)
         key = 'q--slot-error'
       }
-    } else if (props.hideHint !== true || state.focused.value === true) {
+    } else if (!props.hideHint || state.focused.value) {
       if (props.hint !== void 0) {
         msg = [h('div', props.hint)]
         key = `q--slot-hint-${props.hint}`
@@ -588,13 +571,9 @@ export default function useField(state) {
       }
     }
 
-    const hasCounter = props.counter === true || slots.counter !== void 0
+    const hasCounter = props.counter || slots.counter !== void 0
 
-    if (
-      props.hideBottomSpace === true &&
-      hasCounter === false &&
-      msg === void 0
-    ) {
+    if (props.hideBottomSpace && !hasCounter && msg === void 0) {
       return
     }
 
@@ -612,15 +591,15 @@ export default function useField(state) {
       {
         class:
           'q-field__bottom row items-start q-field__bottom--' +
-          (props.hideBottomSpace !== true ? 'animated' : 'stale'),
+          (props.hideBottomSpace ? 'stale' : 'animated'),
         onClick: prevent
       },
       [
-        props.hideBottomSpace === true
+        props.hideBottomSpace
           ? main
           : h(Transition, { name: 'q-transition--field-message' }, () => main),
 
-        hasCounter === true
+        hasCounter
           ? h(
               'div',
               {
@@ -679,7 +658,7 @@ export default function useField(state) {
       state.getControl === void 0 && slots.control === void 0
         ? {
             ...state.splitAttrs.attributes.value,
-            'data-autofocus': props.autofocus === true || void 0,
+            'data-autofocus': props.autofocus || void 0,
             ...attributes.value
           }
         : attributes.value
@@ -722,7 +701,7 @@ export default function useField(state) {
               getContent()
             ),
 
-            shouldRenderBottom.value === true ? getBottom() : null
+            shouldRenderBottom.value ? getBottom() : null
           ]
         ),
 

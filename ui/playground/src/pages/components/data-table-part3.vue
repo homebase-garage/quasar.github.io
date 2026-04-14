@@ -270,7 +270,7 @@ export default {
 
   computed: {
     selection() {
-      return this.hasSelection === true ? 'multiple' : void 0
+      return this.hasSelection ? 'multiple' : void 0
     }
   },
 

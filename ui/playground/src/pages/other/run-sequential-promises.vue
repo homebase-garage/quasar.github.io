@@ -140,7 +140,7 @@ function getPromiseList(fail) {
 
     resultAggregator =>
       new Promise((resolve, reject) => {
-        if (Array.isArray(resultAggregator) === false) {
+        if (!Array.isArray(resultAggregator)) {
           reject('resultAggregator is NOT an array')
         } else {
           setTimeout(() => {
@@ -374,7 +374,7 @@ function getPromiseMap(fail) {
     four: resultAggregator =>
       new Promise((resolve, reject) => {
         if (
-          Array.isArray(resultAggregator) === true ||
+          Array.isArray(resultAggregator) ||
           Object(resultAggregator) !== resultAggregator
         ) {
           reject('resultAggregator is NOT a mapped object')

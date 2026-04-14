@@ -66,7 +66,7 @@ export default function useTab(props, slots, emit, routeData) {
   const tabIndicatorRef = ref(null)
 
   const ripple = computed(() =>
-    props.disable === true || props.ripple === false
+    props.disable || props.ripple === false
       ? false
       : {
           keyCodes: [13, 32],
@@ -80,7 +80,7 @@ export default function useTab(props, slots, emit, routeData) {
   const classes = computed(
     () =>
       'q-tab relative-position self-stretch flex flex-center text-center' +
-      (isActive.value === true
+      (isActive.value
         ? ' q-tab--active' +
           ($tabs.tabProps.value.activeClass
             ? ' ' + $tabs.tabProps.value.activeClass
@@ -92,13 +92,11 @@ export default function useTab(props, slots, emit, routeData) {
             ? ` bg-${$tabs.tabProps.value.activeBgColor}`
             : '')
         : ' q-tab--inactive') +
-      (props.icon && props.label && $tabs.tabProps.value.inlineLabel === false
+      (props.icon && props.label && !$tabs.tabProps.value.inlineLabel
         ? ' q-tab--full'
         : '') +
-      (props.noCaps === true || $tabs.tabProps.value.noCaps === true
-        ? ' q-tab--no-caps'
-        : '') +
-      (props.disable === true
+      (props.noCaps || $tabs.tabProps.value.noCaps ? ' q-tab--no-caps' : '') +
+      (props.disable
         ? ' disabled'
         : ' q-focusable q-hoverable cursor-pointer') +
       (routeData !== void 0 ? routeData.linkClass.value : '')
@@ -107,16 +105,16 @@ export default function useTab(props, slots, emit, routeData) {
   const innerClass = computed(
     () =>
       'q-tab__content self-stretch flex-center relative-position q-anchor--skip non-selectable ' +
-      ($tabs.tabProps.value.inlineLabel === true
+      ($tabs.tabProps.value.inlineLabel
         ? 'row no-wrap q-tab__content--inline'
         : 'column') +
       (props.contentClass !== void 0 ? ` ${props.contentClass}` : '')
   )
 
   const tabIndex = computed(() =>
-    props.disable === true ||
+    props.disable ||
     $tabs.hasFocus.value === true ||
-    (isActive.value === false && $tabs.hasActiveTab.value === true)
+    (!isActive.value && $tabs.hasActiveTab.value === true)
       ? -1
       : props.tabindex || 0
   )
@@ -126,7 +124,7 @@ export default function useTab(props, slots, emit, routeData) {
       blurTargetRef.value?.focus()
     }
 
-    if (props.disable === true) {
+    if (props.disable) {
       // we should hinder native navigation though
       if (routeData?.hasRouterLink.value === true) {
         stopAndPrevent(e)
@@ -246,14 +244,14 @@ export default function useTab(props, slots, emit, routeData) {
       )
     }
 
-    if (narrow === true) content.push(indicator)
+    if (narrow) content.push(indicator)
 
     const node = [
       h('div', { class: 'q-focus-helper', tabindex: -1, ref: blurTargetRef }),
       h('div', { class: innerClass.value }, hMergeSlot(slots.default, content))
     ]
 
-    if (narrow === false) node.push(indicator)
+    if (!narrow) node.push(indicator)
 
     return node
   }
@@ -279,8 +277,8 @@ export default function useTab(props, slots, emit, routeData) {
       class: classes.value,
       tabindex: tabIndex.value,
       role: 'tab',
-      'aria-selected': isActive.value === true ? 'true' : 'false',
-      'aria-disabled': props.disable === true ? 'true' : void 0,
+      'aria-selected': isActive.value ? 'true' : 'false',
+      'aria-disabled': props.disable ? 'true' : void 0,
       onClick,
       onKeydown,
       ...customData

@@ -96,7 +96,7 @@ export default {
 
     const acc = ["import { describe, test, expect } from 'vitest'"]
 
-    if (needsMount === true) {
+    if (needsMount) {
       acc.push(
         "import { mount } from '@vue/test-utils'",
         "import { defineComponent } from 'vue'"

@@ -265,7 +265,7 @@ function joinObject({ keyList, getValue, indent }) {
   const innerIndent = indent + '  '
 
   keyList.forEach(key => {
-    if (ignoreKeyRE.test(key) === true) {
+    if (ignoreKeyRE.test(key)) {
       commentLines.push(`// ${key}`)
     } else {
       codeLines.push(`${key}: ${getValue(key, innerIndent)}`)
@@ -302,7 +302,7 @@ function joinList({ keyList, getValue, indent, prefix = '[', suffix = ']' }) {
 }
 
 export function filterDefExceptionTypes(type) {
-  const typeList = Array.isArray(type) === true ? type : [type]
+  const typeList = Array.isArray(type) ? type : [type]
   return typeList.filter(item => item !== 'FileList')
 }
 
@@ -477,7 +477,7 @@ function getExpectMatcher({ jsonEntry, indent }) {
       return `expect.$arrayValues(${list})`
     }
 
-    if (['Any', 'FileList'].includes(jsonEntry.type) === true) {
+    if (['Any', 'FileList'].includes(jsonEntry.type)) {
       return 'expect.anything()'
     }
 
@@ -567,9 +567,7 @@ export function getTestValue({ jsonEntry, indent }) {
       for (const typeWithRegex of defTypeTestableValueKeyList) {
         const { valueRegex } = typeMap[typeWithRegex]
         for (const val of valuesList) {
-          if (valueRegex.test(val) === true) {
-            return val
-          }
+          if (valueRegex.test(val)) return val
         }
       }
 
@@ -582,9 +580,7 @@ export function getTestValue({ jsonEntry, indent }) {
     const { valueRegex } = target
 
     for (const val of valuesList) {
-      if (valueRegex.test(val) === true) {
-        return val
-      }
+      if (valueRegex.test(val)) return val
     }
   }
 

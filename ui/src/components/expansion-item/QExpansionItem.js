@@ -97,8 +97,8 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-expansion-item q-item-type' +
-        ` q-expansion-item--${showing.value === true ? 'expanded' : 'collapsed'}` +
-        ` q-expansion-item--${props.popup === true ? 'popup' : 'standard'}`
+        ` q-expansion-item--${showing.value ? 'expanded' : 'collapsed'}` +
+        ` q-expansion-item--${props.popup ? 'popup' : 'standard'}`
     )
 
     const contentStyle = computed(() => {
@@ -127,27 +127,21 @@ export default createComponent({
       return acc
     })
 
-    const isClickable = computed(
-      () => hasLink.value === true || props.expandIconToggle !== true
-    )
+    const isClickable = computed(() => hasLink.value || !props.expandIconToggle)
 
     const expansionIcon = computed(() =>
-      props.expandedIcon !== void 0 && showing.value === true
+      props.expandedIcon !== void 0 && showing.value
         ? props.expandedIcon
         : props.expandIcon ||
-          $q.iconSet.expansionItem[
-            props.denseToggle === true ? 'denseIcon' : 'icon'
-          ]
+          $q.iconSet.expansionItem[props.denseToggle ? 'denseIcon' : 'icon']
     )
 
     const activeToggleIcon = computed(
-      () =>
-        props.disable !== true &&
-        (hasLink.value === true || props.expandIconToggle === true)
+      () => !props.disable && (hasLink.value || props.expandIconToggle)
     )
 
     const headerSlotScope = computed(() => ({
-      expanded: showing.value === true,
+      expanded: showing.value,
       detailsId: targetUid.value,
       toggle,
       show,
@@ -158,13 +152,11 @@ export default createComponent({
       const toggleAriaLabel =
         props.toggleAriaLabel !== void 0
           ? props.toggleAriaLabel
-          : $q.lang.label[showing.value === true ? 'collapse' : 'expand'](
-              props.label
-            )
+          : $q.lang.label[showing.value ? 'collapse' : 'expand'](props.label)
 
       return {
         role: 'button',
-        'aria-expanded': showing.value === true ? 'true' : 'false',
+        'aria-expanded': showing.value ? 'true' : 'false',
         'aria-controls': targetUid.value,
         'aria-label': toggleAriaLabel
       }
@@ -209,7 +201,7 @@ export default createComponent({
         uniqueId = uid()
       }
 
-      if (showing.value === true) {
+      if (showing.value) {
         itemGroups[props.group] = uniqueId
       }
 
@@ -246,10 +238,10 @@ export default createComponent({
       const data = {
         class: [
           'q-focusable relative-position cursor-pointer' +
-            `${props.denseToggle === true && props.switchToggleSide === true ? ' items-end' : ''}`,
+            `${props.denseToggle && props.switchToggleSide ? ' items-end' : ''}`,
           props.expandIconClass
         ],
-        side: props.switchToggleSide !== true,
+        side: !props.switchToggleSide,
         avatar: props.switchToggleSide
       }
 
@@ -257,7 +249,7 @@ export default createComponent({
         h(QIcon, {
           class:
             'q-expansion-item__toggle-icon' +
-            (props.expandedIcon === void 0 && showing.value === true
+            (props.expandedIcon === void 0 && showing.value
               ? ' q-expansion-item__toggle-icon--rotated'
               : ''),
           name: expansionIcon.value
@@ -306,12 +298,12 @@ export default createComponent({
         ]
 
         if (props.icon) {
-          child[props.switchToggleSide === true ? 'push' : 'unshift'](
+          child[props.switchToggleSide ? 'push' : 'unshift'](
             h(
               QItemSection,
               {
-                side: props.switchToggleSide === true,
-                avatar: props.switchToggleSide !== true
+                side: props.switchToggleSide,
+                avatar: !props.switchToggleSide
               },
               () => h(QIcon, { name: props.icon })
             )
@@ -319,10 +311,8 @@ export default createComponent({
         }
       }
 
-      if (props.disable !== true && props.hideExpandIcon !== true) {
-        child[props.switchToggleSide === true ? 'unshift' : 'push'](
-          getToggleIcon()
-        )
+      if (!props.disable && !props.hideExpandIcon) {
+        child[props.switchToggleSide ? 'unshift' : 'push'](getToggleIcon())
       }
 
       return child
@@ -383,7 +373,7 @@ export default createComponent({
         )
       ]
 
-      if (props.expandSeparator === true) {
+      if (props.expandSeparator) {
         node.push(
           h(QSeparator, {
             class:

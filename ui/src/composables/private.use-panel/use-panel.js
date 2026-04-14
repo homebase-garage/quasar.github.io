@@ -88,7 +88,7 @@ export default function usePanel() {
   const panelIndex = { value: null }
 
   function onSwipe(evt) {
-    const dir = props.vertical === true ? 'up' : 'left'
+    const dir = props.vertical ? 'up' : 'left'
     goToPanelByOffset(
       (proxy.$q.lang.rtl === true ? -1 : 1) * (evt.direction === dir ? 1 : -1)
     )
@@ -100,7 +100,7 @@ export default function usePanel() {
       onSwipe,
       void 0,
       {
-        horizontal: props.vertical !== true,
+        horizontal: !props.vertical,
         vertical: props.vertical,
         mouse: true
       }
@@ -108,14 +108,11 @@ export default function usePanel() {
   ])
 
   const transitionPrev = computed(
-    () =>
-      props.transitionPrev ||
-      `slide-${props.vertical === true ? 'down' : 'right'}`
+    () => props.transitionPrev || `slide-${props.vertical ? 'down' : 'right'}`
   )
 
   const transitionNext = computed(
-    () =>
-      props.transitionNext || `slide-${props.vertical === true ? 'up' : 'left'}`
+    () => props.transitionNext || `slide-${props.vertical ? 'up' : 'left'}`
   )
 
   const transitionStyle = computed(
@@ -188,7 +185,7 @@ export default function usePanel() {
 
   function updatePanelTransition(direction) {
     const val =
-      direction !== 0 && props.animated === true && panelIndex.value !== -1
+      direction !== 0 && props.animated && panelIndex.value !== -1
         ? 'q-transition--' +
           (direction === -1 ? transitionPrev.value : transitionNext.value)
         : null
@@ -225,7 +222,7 @@ export default function usePanel() {
     }
 
     if (
-      props.infinite === true &&
+      props.infinite &&
       panels.length !== 0 &&
       startIndex !== -1 &&
       startIndex !== panels.length
@@ -250,7 +247,7 @@ export default function usePanel() {
       updatePanelIndex() &&
       panels[panelIndex.value]
 
-    return props.keepAlive === true
+    return props.keepAlive
       ? [
           h(KeepAlive, keepAliveProps.value, [
             h(
@@ -282,7 +279,7 @@ export default function usePanel() {
   function getPanelContent() {
     if (panels.length === 0) return
 
-    return props.animated === true
+    return props.animated
       ? [h(Transition, { name: panelTransition.value }, getPanelContentChild)]
       : getPanelContentChild()
   }

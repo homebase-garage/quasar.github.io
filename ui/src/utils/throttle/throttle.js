@@ -3,7 +3,7 @@ export default function throttle(fn, limit = 250) {
     result
 
   return function runThrottle(...args) {
-    if (wait === false) {
+    if (!wait) {
       wait = true
       setTimeout(() => {
         wait = false

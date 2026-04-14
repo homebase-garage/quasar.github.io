@@ -273,7 +273,7 @@ export default createComponent({
       )
     }
 
-    if (__QUASAR_SSR_SERVER__ !== true) {
+    if (!__QUASAR_SSR_SERVER__) {
       const watchSrc = () => {
         watch(
           () =>
@@ -301,7 +301,7 @@ export default createComponent({
         )
       }
 
-      if (isRuntimeSsrPreHydration.value === true) {
+      if (isRuntimeSsrPreHydration.value) {
         onMounted(watchSrc)
       } else {
         watchSrc()
