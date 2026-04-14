@@ -20,10 +20,9 @@ const defaultSizes = {
 
 function width(val, reverse, $q) {
   return {
-    transform:
-      reverse === true
-        ? `translateX(${$q.lang.rtl === true ? '-' : ''}100%) scale3d(${-val},1,1)`
-        : `scale3d(${val},1,1)`
+    transform: reverse
+      ? `translateX(${$q.lang.rtl === true ? '-' : ''}100%) scale3d(${-val},1,1)`
+      : `scale3d(${val},1,1)`
   }
 }
 

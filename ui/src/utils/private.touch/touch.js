@@ -20,9 +20,7 @@ export function getModifierDirections(mod) {
     }
   }
 
-  if (Object.keys(dir).length === 0) {
-    return modifiersAll
-  }
+  if (Object.keys(dir).length === 0) return modifiersAll
 
   if (dir.horizontal === true) {
     dir.left = dir.right = true

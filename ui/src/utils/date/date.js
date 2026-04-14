@@ -721,11 +721,7 @@ export function getDayOfYear(date) {
 }
 
 export function inferDateFormat(date) {
-  return isDate(date) === true
-    ? 'date'
-    : typeof date === 'number'
-      ? 'number'
-      : 'string'
+  return isDate(date) ? 'date' : typeof date === 'number' ? 'number' : 'string'
 }
 
 export function getDateBetween(date, min, max) {

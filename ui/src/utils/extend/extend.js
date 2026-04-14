@@ -66,7 +66,7 @@ export default function extend(...args) {
         }
 
         if (
-          deep === true &&
+          deep &&
           copy &&
           ((copyIsArray = Array.isArray(copy)) || isPlainObject(copy))
         ) {

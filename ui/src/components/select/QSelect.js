@@ -291,9 +291,8 @@ export default createComponent({
 
     const menuContentClass = computed(
       () =>
-        (props.virtualScrollHorizontal === true
-          ? 'q-virtual-scroll--horizontal'
-          : '') + (props.popupContentClass ? ' ' + props.popupContentClass : '')
+        (props.virtualScrollHorizontal ? 'q-virtual-scroll--horizontal' : '') +
+        (props.popupContentClass ? ' ' + props.popupContentClass : '')
     )
 
     const noOptions = computed(() => virtualScrollLength.value === 0)
@@ -365,7 +364,7 @@ export default createComponent({
 
       return props.options.slice(from, to).map((opt, i) => {
         const disable = isOptionDisabled.value(opt) === true
-        const active = isOptionSelected(opt) === true
+        const active = isOptionSelected(opt)
         const index = from + i
 
         const itemProps = {
@@ -546,7 +545,7 @@ export default createComponent({
         return
       }
 
-      if (unique === true && isOptionSelected(opt) === true) return
+      if (unique === true && isOptionSelected(opt)) return
 
       if (
         props.maxValues !== void 0 &&
@@ -588,8 +587,7 @@ export default createComponent({
 
         if (
           innerValue.value.length === 0 ||
-          isDeepEqual(getOptionValue.value(innerValue.value[0]), optValue) !==
-            true
+          !isDeepEqual(getOptionValue.value(innerValue.value[0]), optValue)
         ) {
           emit('update:modelValue', props.emitValue ? optValue : opt)
         }
@@ -1028,7 +1026,7 @@ export default createComponent({
       return [
         h('span', {
           class: 'ellipsis',
-          [valueAsHtml.value === true ? 'innerHTML' : 'textContent']:
+          [valueAsHtml.value ? 'innerHTML' : 'textContent']:
             ariaCurrentValue.value
         })
       ]

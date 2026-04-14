@@ -183,14 +183,14 @@ export default createComponent({
     scroll.vertical.thumbClass = computed(
       () =>
         'q-scrollarea__thumb q-scrollarea__thumb--v absolute-right' +
-        (scroll.vertical.thumbHidden.value === true
+        (scroll.vertical.thumbHidden.value
           ? ' q-scrollarea__thumb--invisible'
           : '')
     )
     scroll.vertical.barClass = computed(
       () =>
         'q-scrollarea__bar q-scrollarea__bar--v absolute-right' +
-        (scroll.vertical.thumbHidden.value === true
+        (scroll.vertical.thumbHidden.value
           ? ' q-scrollarea__bar--invisible'
           : '')
     )
@@ -237,21 +237,20 @@ export default createComponent({
     scroll.horizontal.thumbClass = computed(
       () =>
         'q-scrollarea__thumb q-scrollarea__thumb--h absolute-bottom' +
-        (scroll.horizontal.thumbHidden.value === true
+        (scroll.horizontal.thumbHidden.value
           ? ' q-scrollarea__thumb--invisible'
           : '')
     )
     scroll.horizontal.barClass = computed(
       () =>
         'q-scrollarea__bar q-scrollarea__bar--h absolute-bottom' +
-        (scroll.horizontal.thumbHidden.value === true
+        (scroll.horizontal.thumbHidden.value
           ? ' q-scrollarea__bar--invisible'
           : '')
     )
 
     const mainStyle = computed(() =>
-      scroll.vertical.thumbHidden.value === true &&
-      scroll.horizontal.thumbHidden.value === true
+      scroll.vertical.thumbHidden.value && scroll.horizontal.thumbHidden.value
         ? props.contentStyle
         : props.contentActiveStyle
     )
@@ -346,7 +345,7 @@ export default createComponent({
       const data = scroll[axis]
 
       if (e.isFirst) {
-        if (data.thumbHidden.value === true) return
+        if (data.thumbHidden.value) return
 
         panRefPos = data.position.value
         panning.value = true
@@ -373,7 +372,7 @@ export default createComponent({
     function onMousedown(evt, axis) {
       const data = scroll[axis]
 
-      if (data.thumbHidden.value !== true) {
+      if (!data.thumbHidden.value) {
         const startOffset =
           axis === 'vertical'
             ? props.verticalOffset[0]

@@ -13,7 +13,7 @@ export default function useHistory(showing, hide, hideOnRouteChange) {
   }
 
   onBeforeUnmount(() => {
-    if (showing.value === true) removeFromHistory()
+    if (showing.value) removeFromHistory()
   })
 
   return {

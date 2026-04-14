@@ -2,10 +2,10 @@ import { noop } from '../../../utils/event/event.js'
 import { isDate, isRegexp } from '../../../utils/is/is.js'
 
 function encode(value) {
-  if (isDate(value) === true) {
+  if (isDate(value)) {
     return '__q_date|' + value.getTime()
   }
-  if (isRegexp(value) === true) {
+  if (isRegexp(value)) {
     return '__q_expr|' + value.source
   }
   if (typeof value === 'number') {

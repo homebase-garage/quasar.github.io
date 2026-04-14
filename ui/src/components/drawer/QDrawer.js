@@ -498,8 +498,7 @@ export default createComponent({
     }
 
     function setScrollable(v) {
-      const action =
-        v === true ? 'remove' : $layout.isContainer.value ? '' : 'add'
+      const action = v ? 'remove' : $layout.isContainer.value ? '' : 'add'
 
       if (action !== '') {
         document.body.classList[action]('q-body--drawer-toggle')

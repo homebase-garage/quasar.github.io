@@ -80,7 +80,7 @@ export default createDirective(
               if (
                 ctx.event === void 0 &&
                 typeof ctx.handler === 'function' &&
-                leftClick(evt) === true
+                leftClick(evt)
               ) {
                 addEvt(ctx, 'temp', [
                   [document, 'mousemove', 'move', 'passiveCapture'],

@@ -93,7 +93,7 @@ export default createComponent({
       scroll.directionChanged = scroll.direction !== curDir
       scroll.delta = delta
 
-      if (scroll.directionChanged === true) {
+      if (scroll.directionChanged) {
         scroll.direction = curDir
         scroll.inflectionPoint = scroll.position
       }

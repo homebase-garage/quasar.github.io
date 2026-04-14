@@ -250,7 +250,7 @@ export default createComponent({
             key: 'content',
             class: 'q-img__content absolute-full q-anchor--skip'
           },
-          hSlot(slots[hasError.value === true ? 'error' : 'default'])
+          hSlot(slots[hasError.value ? 'error' : 'default'])
         )
       }
 

@@ -253,7 +253,7 @@ export default createComponent({
             ? tabDataList.find(tab => tab.name.value === newName)
             : null
 
-      if (hadActivated === true) {
+      if (hadActivated) {
         // After the component has been re-activated
         // we should not animate the transition.
         // Consider it as if the component has just been mounted.
@@ -337,9 +337,7 @@ export default createComponent({
     function animScrollTo(value) {
       if (scrollTimer !== null) clearInterval(scrollTimer)
       scrollTimer = setInterval(() => {
-        if (scrollTowards(value) === true) {
-          stopAnimScroll()
-        }
+        if (scrollTowards(value)) stopAnimScroll()
       }, 5)
     }
 
@@ -475,8 +473,7 @@ export default createComponent({
         const exact = tab.routeData.exact.value === true
 
         if (
-          tab.routeData[exact === true ? 'linkIsExactActive' : 'linkIsActive']
-            .value !== true
+          !tab.routeData[exact ? 'linkIsExactActive' : 'linkIsActive'].value
         ) {
           // it cannot match anything as it's not active nor exact-active
           continue
@@ -485,7 +482,7 @@ export default createComponent({
         const { hash, query, matched, href } = tab.routeData.resolvedLink.value
         const queryLen = Object.keys(query).length
 
-        if (exact === true) {
+        if (exact) {
           if (hash !== currentHash) {
             // it's set to exact but it doesn't matches the hash
             continue
@@ -678,7 +675,8 @@ export default createComponent({
       unwatchRoute?.()
     }
 
-    let hadRouteWatcher, hadActivated
+    let hadRouteWatcher = false,
+      hadActivated = false
 
     onBeforeUnmount(cleanup)
 
@@ -688,7 +686,7 @@ export default createComponent({
     })
 
     onActivated(() => {
-      if (hadRouteWatcher === true) {
+      if (hadRouteWatcher) {
         watchRoute()
         hadActivated = true
         verifyRouteModel()

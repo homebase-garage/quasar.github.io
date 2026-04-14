@@ -216,7 +216,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
           const c = tokens.value.tokenMap[token]
           mask.push(c)
           negateChar = c.negate
-          if (firstMatch === true) {
+          if (firstMatch) {
             extract.push(
               '(?:' +
                 negateChar +
@@ -325,7 +325,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
     // We want to avoid "flickering" so we set value immediately
     if (inp.value !== masked) inp.value = masked
 
-    if (changed === true) innerValue.value = masked
+    if (changed) innerValue.value = masked
 
     if (document.activeElement === inp) {
       nextTick(() => {
@@ -371,7 +371,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
         }
 
         if (props.reverseFillMask) {
-          if (changed === true) {
+          if (changed) {
             const cursor = Math.max(
               0,
               masked.length -
@@ -389,7 +389,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
             const cursor = masked.length - endReverse
             inp.setSelectionRange(cursor, cursor, 'backward')
           }
-        } else if (changed === true) {
+        } else if (changed) {
           const cursor = Math.max(
             0,
             maskMarked.indexOf(MARKER),
@@ -434,7 +434,7 @@ export default function useMask(props, emit, emitValue, inputRef) {
       for (; i >= 0; i--) {
         if (maskMarked[i] === MARKER) {
           cursor = i
-          if (noMarkBefore === true) cursor++
+          if (noMarkBefore) cursor++
           break
         }
       }

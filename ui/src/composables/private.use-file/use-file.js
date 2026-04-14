@@ -7,7 +7,7 @@ function filterFiles(files, rejectedFiles, failedPropValidation, filterFn) {
   const acceptedFiles = []
 
   files.forEach(file => {
-    if (filterFn(file) === true) {
+    if (filterFn(file)) {
       acceptedFiles.push(file)
     } else {
       rejectedFiles.push({ failedPropValidation, file })
@@ -110,9 +110,7 @@ export default function useFile({
         )
       )
 
-      if (files.length === 0) {
-        return done()
-      }
+      if (files.length === 0) return done()
     }
 
     // filter max file size

@@ -113,8 +113,8 @@ export default function useTab(props, slots, emit, routeData) {
 
   const tabIndex = computed(() =>
     props.disable ||
-    $tabs.hasFocus.value === true ||
-    (!isActive.value && $tabs.hasActiveTab.value === true)
+    $tabs.hasFocus.value ||
+    (!isActive.value && $tabs.hasActiveTab.value)
       ? -1
       : props.tabindex || 0
   )
@@ -146,7 +146,7 @@ export default function useTab(props, slots, emit, routeData) {
         // otherwise directly select this
         let hardError
         const reqId =
-          opts.to === void 0 || isDeepEqual(opts.to, props.to) === true
+          opts.to === void 0 || isDeepEqual(opts.to, props.to)
             ? ($tabs.avoidRouteWatcher = uid())
             : null
 

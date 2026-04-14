@@ -73,8 +73,8 @@ export default createComponent({
 
     const temp = {}
     let emitCachedValue = Number.NaN,
-      typedNumber,
-      stopValueWatcher,
+      typedNumber = false,
+      stopValueWatcher = false,
       emitTimer = null,
       emitValueFn
 
@@ -180,7 +180,7 @@ export default createComponent({
       () => props.modelValue,
       v => {
         if (hasMask.value) {
-          if (stopValueWatcher === true) {
+          if (stopValueWatcher) {
             stopValueWatcher = false
             if (String(v) === emitCachedValue) return
           }
@@ -190,7 +190,7 @@ export default createComponent({
           innerValue.value = v
 
           if (props.type === 'number' && Object.hasOwn(temp, 'value')) {
-            if (typedNumber === true) {
+            if (typedNumber) {
               typedNumber = false
             } else {
               delete temp.value
@@ -351,14 +351,14 @@ export default createComponent({
 
           // reset height of textarea to a small size to detect the real height
           // but keep the total control size the same
-          if (changeOverflow === true) inp.style.overflowY = 'hidden'
+          if (changeOverflow) inp.style.overflowY = 'hidden'
           parentStyle.marginBottom = inp.scrollHeight - 1 + 'px'
           inp.style.height = '1px'
 
           inp.style.height = inp.scrollHeight + 'px'
           // we should allow scrollbars only
           // if there is maxHeight and content is taller than maxHeight
-          if (changeOverflow === true) {
+          if (changeOverflow) {
             inp.style.overflowY =
               Number.parseInt(maxHeight, 10) < inp.scrollHeight
                 ? 'auto'
@@ -450,7 +450,7 @@ export default createComponent({
 
       floatingLabel: computed(
         () =>
-          (hasValue.value === true &&
+          (hasValue.value &&
             (props.type !== 'number' || !Number.isNaN(innerValue.value))) ||
           fieldValueIsFilled(props.displayValue)
       ),

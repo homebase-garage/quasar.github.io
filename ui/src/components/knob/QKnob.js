@@ -147,7 +147,7 @@ export default createComponent({
         dragging.value = true
       }
 
-      updatePosition(event.evt)
+      updatePosition(event.evt, false)
     }
 
     const directives = computed(() => [
@@ -164,7 +164,7 @@ export default createComponent({
 
     function onMousedown(evt) {
       updateCenterPosition()
-      updatePosition(evt)
+      updatePosition(evt, false)
     }
 
     function onClick(evt) {
@@ -186,7 +186,7 @@ export default createComponent({
         innerMax.value
       )
 
-      updateValue()
+      updateValue(false)
     }
 
     function updatePosition(evt, change) {
@@ -247,7 +247,7 @@ export default createComponent({
         emit('update:modelValue', model.value)
       }
 
-      if (change === true) emit('change', model.value)
+      if (change) emit('change', model.value)
     }
 
     const formAttrs = useFormAttrs(props)

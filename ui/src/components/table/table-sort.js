@@ -98,7 +98,7 @@ export function useTableSort(
     if (sortBy !== col) {
       sortBy = col
       descending = sortOrder === 'da'
-    } else if (props.binaryStateSort === true) {
+    } else if (props.binaryStateSort) {
       descending = !descending
     } else if (descending === true) {
       if (sortOrder === 'ad') {
