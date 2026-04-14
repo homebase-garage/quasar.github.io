@@ -207,7 +207,7 @@
 
     <div class="row q-gutter-md">
       <q-scroll-area
-        ref="scroll2"
+        ref="scrollRef2"
         class="bg-yellow"
         style="width: 400px; height: 200px"
         :visible="alwaysVisible"

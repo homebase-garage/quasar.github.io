@@ -943,11 +943,11 @@ export class QuasarConfigFile {
 
         define: {
           // vue
-          __VUE_OPTIONS_API__: String(cfg.build.vueOptionsAPI !== false),
           __VUE_PROD_DEVTOOLS__: String(cfg.metaConf.debugging),
           __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: String(
             cfg.metaConf.debugging
           ), // Vue 3.4+
+          // __VUE_OPTIONS_API__ is set further down the line, based on cfg.build.vueOptionsAPI
 
           // vue-i18n
           __VUE_I18N_FULL_INSTALL__: 'true',
@@ -979,6 +979,10 @@ export class QuasarConfigFile {
         }
       },
       cfg.build
+    )
+
+    cfg.build.define.__VUE_OPTIONS_API__ = String(
+      Boolean(cfg.build.vueOptionsAPI)
     )
 
     if (!cfg.build.target.browser) {
