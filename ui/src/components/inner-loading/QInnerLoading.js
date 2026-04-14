@@ -39,7 +39,7 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-inner-loading q--avoid-card-border absolute-full column flex-center' +
-        (isDark.value === true ? ' q-inner-loading--dark' : '')
+        (isDark.value ? ' q-inner-loading--dark' : '')
     )
 
     const labelClass = computed(

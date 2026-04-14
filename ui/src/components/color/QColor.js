@@ -285,13 +285,13 @@ export default createComponent({
         (props.square === true
           ? ' q-color-picker--square no-border-radius'
           : '') +
-        (props.flat === true ? ' q-color-picker--flat no-shadow' : '') +
-        (props.disable === true ? ' disabled' : '') +
-        (isDark.value === true ? ' q-color-picker--dark q-dark' : '')
+        (props.flat ? ' q-color-picker--flat no-shadow' : '') +
+        (props.disable ? ' disabled' : '') +
+        (isDark.value ? ' q-color-picker--dark q-dark' : '')
     )
 
     const attributes = computed(() =>
-      props.disable === true ? { 'aria-disabled': 'true' } : {}
+      props.disable ? { 'aria-disabled': 'true' } : {}
     )
 
     const spectrumDirective = computed(() => [
@@ -652,7 +652,7 @@ export default createComponent({
             h('input', {
               class: 'fit',
               value: model.value[topView.value],
-              ...(editable.value !== true ? { readonly: true } : {}),
+              ...(editable.value ? {} : { readonly: true }),
               ...getCache('topIn', {
                 onInput: evt => {
                   updateErrorIcon(onEditorChange(evt) === true)
@@ -781,9 +781,9 @@ export default createComponent({
         ref: spectrumRef,
         class:
           'q-color-picker__spectrum non-selectable relative-position cursor-pointer' +
-          (editable.value !== true ? ' readonly' : ''),
+          (editable.value ? '' : ' readonly'),
         style: spectrumStyle.value,
-        ...(editable.value === true
+        ...(editable.value
           ? {
               onClick: onSpectrumClick,
               onMousedown: onActivate
@@ -818,7 +818,7 @@ export default createComponent({
           trackSize: '8px',
           innerTrackColor: 'transparent',
           selectionColor: 'transparent',
-          readonly: editable.value !== true,
+          readonly: !editable.value,
           thumbPath,
           'onUpdate:modelValue': onHue,
           onChange: onHueChange
@@ -837,7 +837,7 @@ export default createComponent({
             innerTrackColor: 'transparent',
             selectionColor: 'transparent',
             trackImg: alphaTrackImg,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             hideSelection: true,
             thumbPath,
             ...getCache('alphaSlide', {
@@ -871,7 +871,7 @@ export default createComponent({
             max: 255,
             color: 'red',
             dark: isDark.value,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             ...getCache('rSlide', {
               'onUpdate:modelValue': value => onNumericChange(value, 'r', 255),
               onChange: value => onNumericChange(value, 'r', 255, void 0, true)
@@ -880,7 +880,7 @@ export default createComponent({
           h('input', {
             value: model.value.r,
             maxlength: 3,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             onChange: stop,
             ...getCache('rIn', {
               onInput: evt => onNumericChange(evt.target.value, 'r', 255, evt),
@@ -898,7 +898,7 @@ export default createComponent({
             max: 255,
             color: 'green',
             dark: isDark.value,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             ...getCache('gSlide', {
               'onUpdate:modelValue': value => onNumericChange(value, 'g', 255),
               onChange: value => onNumericChange(value, 'g', 255, void 0, true)
@@ -907,7 +907,7 @@ export default createComponent({
           h('input', {
             value: model.value.g,
             maxlength: 3,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             onChange: stop,
             ...getCache('gIn', {
               onInput: evt => onNumericChange(evt.target.value, 'g', 255, evt),
@@ -924,7 +924,7 @@ export default createComponent({
             min: 0,
             max: 255,
             color: 'blue',
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             dark: isDark.value,
             ...getCache('bSlide', {
               'onUpdate:modelValue': value => onNumericChange(value, 'b', 255),
@@ -934,7 +934,7 @@ export default createComponent({
           h('input', {
             value: model.value.b,
             maxlength: 3,
-            readonly: editable.value !== true,
+            readonly: !editable.value,
             onChange: stop,
             ...getCache('bIn', {
               onInput: evt => onNumericChange(evt.target.value, 'b', 255, evt),
@@ -950,7 +950,7 @@ export default createComponent({
               h(QSlider, {
                 modelValue: model.value.a,
                 color: 'grey',
-                readonly: editable.value !== true,
+                readonly: !editable.value,
                 dark: isDark.value,
                 ...getCache('aSlide', {
                   'onUpdate:modelValue': value =>
@@ -962,7 +962,7 @@ export default createComponent({
               h('input', {
                 value: model.value.a,
                 maxlength: 3,
-                readonly: editable.value !== true,
+                readonly: !editable.value,
                 onChange: stop,
                 ...getCache('aIn', {
                   onInput: evt =>
@@ -981,7 +981,7 @@ export default createComponent({
         h('div', {
           class: 'q-color-picker__cube col-auto',
           style: { backgroundColor: color },
-          ...(editable.value === true
+          ...(editable.value
             ? getCache('palette#' + color, {
                 onClick: () => {
                   onPalettePick(color)
@@ -996,9 +996,7 @@ export default createComponent({
           {
             class:
               'row items-center q-color-picker__palette-rows' +
-              (editable.value === true
-                ? ' q-color-picker__palette-rows--editable'
-                : '')
+              (editable.value ? ' q-color-picker__palette-rows--editable' : '')
           },
           computedPalette.value.map(fn)
         )

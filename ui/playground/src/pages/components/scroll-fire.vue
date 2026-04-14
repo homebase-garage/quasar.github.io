@@ -36,7 +36,7 @@ export default {
 
   computed: {
     computedBounceImage() {
-      return this.disable === true ? void 0 : this.bounceImage
+      return this.disable ? void 0 : this.bounceImage
     }
   },
 

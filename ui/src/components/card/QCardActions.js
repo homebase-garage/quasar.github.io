@@ -21,7 +21,7 @@ export default createComponent({
     const classes = computed(
       () =>
         `q-card__actions ${alignClass.value}` +
-        ` q-card__actions--${props.vertical === true ? 'vert column' : 'horiz row'}`
+        ` q-card__actions--${props.vertical ? 'vert column' : 'horiz row'}`
     )
 
     return () => h('div', { class: classes.value }, hSlot(slots.default))

@@ -108,7 +108,7 @@ export default createComponent({
             ...opt,
             ...btnOptionDesign.value,
 
-            disable: props.disable === true || opt.disable === true,
+            disable: props.disable || opt.disable === true,
 
             // Options that come from the button specific options first, then from general props
             color:

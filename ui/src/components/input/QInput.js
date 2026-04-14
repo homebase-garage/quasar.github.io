@@ -149,8 +149,8 @@ export default createComponent({
         ...state.splitAttrs.attributes.value,
         id: state.targetUid.value,
         maxlength: props.maxlength,
-        disabled: props.disable === true,
-        readonly: props.readonly === true
+        disabled: props.disable,
+        readonly: props.readonly
       }
 
       if (!isTextarea.value) {

@@ -286,7 +286,7 @@ export default {
 
   computed: {
     computedHandlePan() {
-      return this.disable === true ? void 0 : this.handlePan
+      return this.disable ? void 0 : this.handlePan
     }
   },
 

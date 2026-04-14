@@ -179,12 +179,12 @@ export function getRenderer(getPlugin, expose) {
   const classes = computed(
     () =>
       'q-uploader column no-wrap' +
-      (isDark.value === true ? ' q-uploader--dark q-dark' : '') +
-      (props.bordered === true ? ' q-uploader--bordered' : '') +
-      (props.square === true ? ' q-uploader--square no-border-radius' : '') +
-      (props.flat === true ? ' q-uploader--flat no-shadow' : '') +
-      (props.disable === true ? ' disabled q-uploader--disable' : '') +
-      (dnd.value === true ? ' q-uploader--dnd' : '')
+      (isDark.value ? ' q-uploader--dark q-dark' : '') +
+      (props.bordered ? ' q-uploader--bordered' : '') +
+      (props.square ? ' q-uploader--square no-border-radius' : '') +
+      (props.flat ? ' q-uploader--flat no-shadow' : '') +
+      (props.disable ? ' disabled q-uploader--disable' : '') +
+      (dnd.value ? ' q-uploader--dnd' : '')
   )
 
   const colorClass = computed(
@@ -311,10 +311,7 @@ export function getRenderer(getPlugin, expose) {
       state.updateFileStatus(file, 'idle')
       uploadSize.value += file.size
 
-      if (
-        props.noThumbnails !== true &&
-        file.type.toUpperCase().startsWith('IMAGE')
-      ) {
+      if (!props.noThumbnails && file.type.toUpperCase().startsWith('IMAGE')) {
         const img = new Image()
         img.src = window.URL.createObjectURL(file)
         file.__img = img
@@ -439,7 +436,7 @@ export function getRenderer(getPlugin, expose) {
           key: file.__key,
           class:
             'q-uploader__file relative-position' +
-            (props.noThumbnails !== true && file.__img !== void 0
+            (!props.noThumbnails && file.__img !== void 0
               ? ' q-uploader__file--img'
               : '') +
             (file.__status === 'failed'
@@ -448,7 +445,7 @@ export function getRenderer(getPlugin, expose) {
                 ? ' q-uploader__file--uploaded'
                 : ''),
           style:
-            props.noThumbnails !== true && file.__img !== void 0
+            !props.noThumbnails && file.__img !== void 0
               ? {
                   backgroundImage: 'url("' + file.__img.src + '")',
                   backgroundSize: props.thumbnailFit

@@ -236,7 +236,7 @@ export default function useRouterLink({
     e,
     { returnRouterError, to = props.to, replace = props.replace } = {}
   ) {
-    if (props.disable === true) {
+    if (props.disable) {
       // ensure native navigation is prevented in all cases,
       // like when useDisableForRouterLinkProps === false (QRouteTab)
       e.preventDefault()

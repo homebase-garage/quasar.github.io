@@ -123,7 +123,7 @@ export default createComponent({
       if (props.type === 'radio') {
         acc.role = 'radiogroup'
 
-        if (props.disable === true) {
+        if (props.disable) {
           acc['aria-disabled'] = 'true'
         }
       }

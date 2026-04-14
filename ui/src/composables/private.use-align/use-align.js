@@ -24,11 +24,11 @@ export default function useAlign(props) {
   return computed(() => {
     const align =
       props.align === void 0
-        ? props.vertical === true
+        ? props.vertical
           ? 'stretch'
           : 'left'
         : props.align
 
-    return `${props.vertical === true ? 'items' : 'justify'}-${alignMap[align]}`
+    return `${props.vertical ? 'items' : 'justify'}-${alignMap[align]}`
   })
 }

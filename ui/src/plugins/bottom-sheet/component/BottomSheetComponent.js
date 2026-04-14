@@ -165,7 +165,7 @@ export default createComponent({
       }
 
       child.push(
-        props.grid === true
+        props.grid
           ? h(
               'div',
               {
@@ -192,8 +192,8 @@ export default createComponent({
           QCard,
           {
             class: [
-              `q-bottom-sheet q-bottom-sheet--${props.grid === true ? 'grid' : 'list'}` +
-                (isDark.value === true ? ' q-bottom-sheet--dark q-dark' : ''),
+              `q-bottom-sheet q-bottom-sheet--${props.grid ? 'grid' : 'list'}` +
+                (isDark.value ? ' q-bottom-sheet--dark q-dark' : ''),
               props.cardClass
             ],
             style: props.cardStyle

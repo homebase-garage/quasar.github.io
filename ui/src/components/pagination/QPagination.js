@@ -156,7 +156,7 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-pagination row no-wrap items-center' +
-        (props.disable === true ? ' disabled' : '')
+        (props.disable ? ' disabled' : '')
     )
 
     const gutterProp = computed(() =>
@@ -181,7 +181,7 @@ export default createComponent({
     })
 
     const attrs = computed(() => ({
-      'aria-disabled': props.disable === true ? 'true' : 'false',
+      'aria-disabled': props.disable ? 'true' : 'false',
       role: 'navigation'
     }))
 

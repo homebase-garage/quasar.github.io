@@ -123,8 +123,7 @@ export default createComponent({
     const targetRef = ref(null)
 
     const classes = computed(
-      () =>
-        'q-scrollarea' + (isDark.value === true ? ' q-scrollarea--dark' : '')
+      () => 'q-scrollarea' + (isDark.value ? ' q-scrollarea--dark' : '')
     )
 
     Object.assign(container, {
@@ -346,7 +345,7 @@ export default createComponent({
     function onPanThumb(e, axis) {
       const data = scroll[axis]
 
-      if (e.isFirst === true) {
+      if (e.isFirst) {
         if (data.thumbHidden.value === true) return
 
         panRefPos = data.position.value
@@ -355,7 +354,7 @@ export default createComponent({
         return
       }
 
-      if (e.isFinal === true) {
+      if (e.isFinal) {
         panning.value = false
       }
 

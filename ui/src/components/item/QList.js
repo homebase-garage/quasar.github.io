@@ -36,11 +36,11 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-list' +
-        (props.bordered === true ? ' q-list--bordered' : '') +
-        (props.dense === true ? ' q-list--dense' : '') +
-        (props.separator === true ? ' q-list--separator' : '') +
-        (isDark.value === true ? ' q-list--dark' : '') +
-        (props.padding === true ? ' q-list--padding' : '')
+        (props.bordered ? ' q-list--bordered' : '') +
+        (props.dense ? ' q-list--dense' : '') +
+        (props.separator ? ' q-list--separator' : '') +
+        (isDark.value ? ' q-list--dark' : '') +
+        (props.padding ? ' q-list--padding' : '')
     )
 
     return () =>

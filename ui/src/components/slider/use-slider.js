@@ -124,7 +124,7 @@ export default function useSlider({
 
   const axis = computed(() => (props.vertical ? '--v' : '--h'))
   const labelSide = computed(
-    () => '-' + (props.switchLabelSide === true ? 'switched' : 'standard')
+    () => '-' + (props.switchLabelSide ? 'switched' : 'standard')
   )
 
   const isReversed = computed(() =>
@@ -200,19 +200,17 @@ export default function useSlider({
 
   const classes = computed(
     () =>
-      `q-slider q-slider${axis.value} q-slider--${active.value === true ? '' : 'in'}active inline no-wrap ` +
+      `q-slider q-slider${axis.value} q-slider--${active.value ? '' : 'in'}active inline no-wrap ` +
       (props.vertical ? 'row' : 'column') +
       (props.disable
         ? ' disabled'
         : ' q-slider--enabled' +
           (editable.value ? ' q-slider--editable' : '')) +
       (focus.value === 'both' ? ' q-slider--focus' : '') +
-      (props.label || props.labelAlways === true ? ' q-slider--label' : '') +
-      (props.labelAlways === true ? ' q-slider--label-always' : '') +
-      (isDark.value === true ? ' q-slider--dark' : '') +
-      (props.dense === true
-        ? ' q-slider--dense q-slider--dense' + axis.value
-        : '')
+      (props.label || props.labelAlways ? ' q-slider--label' : '') +
+      (props.labelAlways ? ' q-slider--label-always' : '') +
+      (isDark.value ? ' q-slider--dark' : '') +
+      (props.dense ? ' q-slider--dense q-slider--dense' + axis.value : '')
   )
 
   function getPositionClass(name) {
@@ -330,7 +328,7 @@ export default function useSlider({
     const prefix = ` ${markerPrefixClass}${axis.value}-`
     return (
       markerPrefixClass +
-      `${prefix}${props.switchMarkerLabelsSide === true ? 'switched' : 'standard'}` +
+      `${prefix}${props.switchMarkerLabelsSide ? 'switched' : 'standard'}` +
       `${prefix}${isReversed.value ? 'rtl' : 'ltr'}`
     )
   })
@@ -448,7 +446,7 @@ export default function useSlider({
   ])
 
   function onPan(event) {
-    if (event.isFinal === true) {
+    if (event.isFinal) {
       if (dragging.value !== void 0) {
         updatePosition(event.evt)
         // only if touch, because we also have mousedown/up:
@@ -458,7 +456,7 @@ export default function useSlider({
       }
       active.value = false
       focus.value = false
-    } else if (event.isFirst === true) {
+    } else if (event.isFirst) {
       dragging.value = getDragging(event.evt)
       updatePosition(event.evt)
       updateValue()
@@ -569,7 +567,7 @@ export default function useSlider({
         h('div', { class: 'q-slider__focus-ring fit' })
       ]
 
-      if (props.label === true || props.labelAlways === true) {
+      if (props.label === true || props.labelAlways) {
         thumbContent.push(
           h(
             'div',
@@ -684,7 +682,7 @@ export default function useSlider({
     ]
 
     if (props.markerLabels !== false) {
-      const action = props.switchMarkerLabelsSide === true ? 'unshift' : 'push'
+      const action = props.switchMarkerLabelsSide ? 'unshift' : 'push'
 
       content[action](
         h(

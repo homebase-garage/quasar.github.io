@@ -72,9 +72,9 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-rating row inline items-center' +
-        ` q-rating--${editable.value === true ? '' : 'non-'}editable` +
+        ` q-rating--${editable.value ? '' : 'non-'}editable` +
         (props.noDimming === true ? ' q-rating--no-dimming' : '') +
-        (props.disable === true ? ' disabled' : '') +
+        (props.disable ? ' disabled' : '') +
         (props.color !== void 0 && !Array.isArray(props.color)
           ? ` text-${props.color}`
           : '')
@@ -140,7 +140,7 @@ export default createComponent({
       const acc = [],
         icons = iconData.value,
         ceil = Math.ceil(props.modelValue),
-        tabindex = editable.value === true ? 0 : null
+        tabindex = editable.value ? 0 : null
 
       const halfIndex =
         props.iconHalf === void 0 || ceil === props.modelValue ? -1 : ceil
@@ -219,10 +219,10 @@ export default createComponent({
     const attributes = computed(() => {
       const attrs = { role: 'radiogroup' }
 
-      if (props.disable === true) {
+      if (props.disable) {
         attrs['aria-disabled'] = 'true'
       }
-      if (props.readonly === true) {
+      if (props.readonly) {
         attrs['aria-readonly'] = 'true'
       }
 
@@ -230,7 +230,7 @@ export default createComponent({
     })
 
     function set(value) {
-      if (editable.value === true) {
+      if (editable.value) {
         const model = between(
             Number.parseInt(value, 10),
             1,
@@ -245,7 +245,7 @@ export default createComponent({
     }
 
     function setHoverValue(value) {
-      if (editable.value === true) {
+      if (editable.value) {
         mouseModel.value = value
       }
     }
@@ -322,7 +322,7 @@ export default createComponent({
         )
       })
 
-      if (props.name !== void 0 && props.disable !== true) {
+      if (props.name !== void 0 && !props.disable) {
         injectFormInput(child, 'push')
       }
 

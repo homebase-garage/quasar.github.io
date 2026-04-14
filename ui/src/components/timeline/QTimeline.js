@@ -8,6 +8,9 @@ import { createComponent } from '../../utils/private.create/create.js'
 import { hSlot } from '../../utils/private.render/render.js'
 import { timelineKey } from '../../utils/private.symbols/symbols.js'
 
+const sideValues = ['left', 'right']
+const layoutValues = ['dense', 'comfortable', 'loose']
+
 export default createComponent({
   name: 'QTimeline',
 
@@ -21,12 +24,12 @@ export default createComponent({
     side: {
       type: String,
       default: 'right',
-      validator: v => ['left', 'right'].includes(v)
+      validator: v => sideValues.includes(v)
     },
     layout: {
       type: String,
       default: 'dense',
-      validator: v => ['dense', 'comfortable', 'loose'].includes(v)
+      validator: v => layoutValues.includes(v)
     }
   },
 
@@ -39,7 +42,7 @@ export default createComponent({
     const classes = computed(
       () =>
         `q-timeline q-timeline--${props.layout} q-timeline--${props.layout}--${props.side}` +
-        (isDark.value === true ? ' q-timeline--dark' : '')
+        (isDark.value ? ' q-timeline--dark' : '')
     )
 
     return () => h('ul', { class: classes.value }, hSlot(slots.default))

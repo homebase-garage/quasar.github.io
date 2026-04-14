@@ -534,7 +534,7 @@ export default createComponent({
       const width = size.value,
         position = between(evt.distance.x, 0, width)
 
-      if (evt.isFinal === true) {
+      if (evt.isFinal) {
         const opened = position >= Math.min(75, width)
 
         if (opened === true) {
@@ -556,7 +556,7 @@ export default createComponent({
       )
       applyBackdrop(between(position / width, 0, 1))
 
-      if (evt.isFirst === true) {
+      if (evt.isFirst) {
         flagPanning.value = true
       }
     }
@@ -572,7 +572,7 @@ export default createComponent({
           ? between(evt.distance.x, 0, width)
           : 0
 
-      if (evt.isFinal === true) {
+      if (evt.isFinal) {
         const opened = Math.abs(position) < Math.min(75, width)
 
         if (opened === true) {
@@ -590,7 +590,7 @@ export default createComponent({
       applyPosition(stateDirection.value * position)
       applyBackdrop(between(1 - position / width, 0, 1))
 
-      if (evt.isFirst === true) {
+      if (evt.isFirst) {
         flagPanning.value = true
       }
     }

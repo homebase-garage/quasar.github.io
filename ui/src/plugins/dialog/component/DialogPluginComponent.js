@@ -74,12 +74,12 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-dialog-plugin' +
-        (isDark.value === true ? ' q-dialog-plugin--dark q-dark' : '') +
+        (isDark.value ? ' q-dialog-plugin--dark q-dark' : '') +
         (props.progress !== false ? ' q-dialog-plugin--progress' : '')
     )
 
     const vmColor = computed(
-      () => props.color || (isDark.value === true ? 'amber' : 'primary')
+      () => props.color || (isDark.value ? 'amber' : 'primary')
     )
 
     const spinner = computed(() =>
@@ -203,7 +203,7 @@ export default createComponent({
     }
 
     function getSection(sectionClass, text) {
-      return props.html === true
+      return props.html
         ? h(QCardSection, {
             class: sectionClass,
             innerHTML: text
@@ -248,7 +248,7 @@ export default createComponent({
       return h(
         QCardActions,
         {
-          class: props.stackButtons === true ? 'items-end' : '',
+          class: props.stackButtons ? 'items-end' : '',
           vertical: props.stackButtons,
           align: 'right'
         },

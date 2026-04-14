@@ -88,12 +88,12 @@ export default createComponent({
 
     const classes = computed(
       () =>
-        `q-skeleton q-skeleton--${isDark.value === true ? 'dark' : 'light'} q-skeleton--type-${props.type}` +
+        `q-skeleton q-skeleton--${isDark.value ? 'dark' : 'light'} q-skeleton--type-${props.type}` +
         (props.animation !== 'none'
           ? ` q-skeleton--anim q-skeleton--anim-${props.animation}`
           : '') +
-        (props.square === true ? ' q-skeleton--square' : '') +
-        (props.bordered === true ? ' q-skeleton--bordered' : '')
+        (props.square ? ' q-skeleton--square' : '') +
+        (props.bordered ? ' q-skeleton--bordered' : '')
     )
 
     return () =>

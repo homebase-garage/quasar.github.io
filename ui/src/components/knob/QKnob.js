@@ -276,7 +276,7 @@ export default createComponent({
         default: slots.default
       }
 
-      if (editable.value === true && props.name !== void 0) {
+      if (editable.value && props.name !== void 0) {
         child.internal = getNameInput
       }
 

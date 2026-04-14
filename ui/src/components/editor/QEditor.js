@@ -510,12 +510,12 @@ export default createComponent({
     const classes = computed(
       () =>
         `q-editor q-editor--${isViewingSource.value === true ? 'source' : 'default'}` +
-        (props.disable === true ? ' disabled' : '') +
-        (inFullscreen.value === true ? ' fullscreen column' : '') +
-        (props.square === true ? ' q-editor--square no-border-radius' : '') +
-        (props.flat === true ? ' q-editor--flat' : '') +
-        (props.dense === true ? ' q-editor--dense' : '') +
-        (isDark.value === true ? ' q-editor--dark q-dark' : '')
+        (props.disable ? ' disabled' : '') +
+        (inFullscreen.value ? ' fullscreen column' : '') +
+        (props.square ? ' q-editor--square no-border-radius' : '') +
+        (props.flat ? ' q-editor--flat' : '') +
+        (props.dense ? ' q-editor--dense' : '') +
+        (isDark.value ? ' q-editor--dark q-dark' : '')
     )
 
     const innerClass = computed(() => [
@@ -528,7 +528,7 @@ export default createComponent({
     ])
 
     const attributes = computed(() =>
-      props.disable === true ? { 'aria-disabled': 'true' } : {}
+      props.disable ? { 'aria-disabled': 'true' } : {}
     )
 
     function onInput() {
@@ -731,7 +731,7 @@ export default createComponent({
         {
           ref: rootRef,
           class: classes.value,
-          style: { height: inFullscreen.value === true ? '100%' : null },
+          style: { height: inFullscreen.value ? '100%' : null },
           ...attributes.value,
           onFocusin,
           onFocusout

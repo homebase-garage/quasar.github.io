@@ -64,15 +64,13 @@ export default createComponent({
     const classes = computed(
       () =>
         'q-splitter no-wrap ' +
-        `${props.horizontal === true ? 'q-splitter--horizontal column' : 'q-splitter--vertical row'}` +
-        ` q-splitter--${props.disable === true ? 'disabled' : 'workable'}` +
-        (isDark.value === true ? ' q-splitter--dark' : '')
+        `${props.horizontal ? 'q-splitter--horizontal column' : 'q-splitter--vertical row'}` +
+        ` q-splitter--${props.disable ? 'disabled' : 'workable'}` +
+        (isDark.value ? ' q-splitter--dark' : '')
     )
 
-    const propName = computed(() =>
-      props.horizontal === true ? 'height' : 'width'
-    )
-    const side = computed(() => (props.reverse !== true ? 'before' : 'after'))
+    const propName = computed(() => (props.horizontal ? 'height' : 'width'))
+    const side = computed(() => (props.reverse ? 'after' : 'before'))
 
     const computedLimits = computed(() =>
       props.limits !== void 0
@@ -95,10 +93,10 @@ export default createComponent({
     let __dir, __maxValue, __value, __multiplier, __normalized
 
     function pan(evt) {
-      if (evt.isFirst === true) {
+      if (evt.isFirst) {
         const size = rootRef.value.getBoundingClientRect()[propName.value]
 
-        __dir = props.horizontal === true ? 'up' : 'left'
+        __dir = props.horizontal ? 'up' : 'left'
         __maxValue = props.unit === '%' ? 100 : size
         __value = Math.min(
           __maxValue,
@@ -106,15 +104,15 @@ export default createComponent({
           Math.max(computedLimits.value[0], props.modelValue)
         )
         __multiplier =
-          (props.reverse !== true ? 1 : -1) *
-          (props.horizontal === true ? 1 : $q.lang.rtl === true ? -1 : 1) *
+          (props.reverse ? -1 : 1) *
+          (props.horizontal ? 1 : $q.lang.rtl === true ? -1 : 1) *
           (props.unit === '%' ? (size === 0 ? 0 : 100 / size) : 1)
 
         rootRef.value.classList.add('q-splitter--active')
         return
       }
 
-      if (evt.isFinal === true) {
+      if (evt.isFinal) {
         if (__normalized !== props.modelValue) {
           emit('update:modelValue', __normalized)
         }
@@ -127,7 +125,7 @@ export default createComponent({
         __value +
         __multiplier *
           (evt.direction === __dir ? -1 : 1) *
-          evt.distance[props.horizontal === true ? 'y' : 'x']
+          evt.distance[props.horizontal ? 'y' : 'x']
 
       __normalized = Math.min(
         __maxValue,
@@ -138,7 +136,7 @@ export default createComponent({
       sideRefs[side.value].value.style[propName.value] =
         getCSSValue(__normalized)
 
-      if (props.emitImmediately === true && props.modelValue !== __normalized) {
+      if (props.emitImmediately && props.modelValue !== __normalized) {
         emit('update:modelValue', __normalized)
       }
     }
@@ -149,7 +147,7 @@ export default createComponent({
         pan,
         void 0,
         {
-          [props.horizontal === true ? 'vertical' : 'horizontal']: true,
+          [props.horizontal ? 'vertical' : 'horizontal']: true,
           prevent: true,
           stop: true,
           mouse: true,
@@ -190,7 +188,7 @@ export default createComponent({
             ref: sideRefs.before,
             class: [
               'q-splitter__panel q-splitter__before' +
-                (props.reverse === true ? ' col' : ''),
+                (props.reverse ? ' col' : ''),
               props.beforeClass
             ],
             style: styles.value.before
@@ -203,7 +201,7 @@ export default createComponent({
           {
             class: ['q-splitter__separator', props.separatorClass],
             style: props.separatorStyle,
-            'aria-disabled': props.disable === true ? 'true' : void 0
+            'aria-disabled': props.disable ? 'true' : void 0
           },
           [
             hDir(
@@ -223,7 +221,7 @@ export default createComponent({
             ref: sideRefs.after,
             class: [
               'q-splitter__panel q-splitter__after' +
-                (props.reverse === true ? '' : ' col'),
+                (props.reverse ? '' : ' col'),
               props.afterClass
             ],
             style: styles.value.after

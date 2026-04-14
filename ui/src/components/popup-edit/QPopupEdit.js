@@ -194,7 +194,7 @@ export default createComponent({
     })
 
     return () => {
-      if (props.disable === true) return
+      if (props.disable) return
 
       return h(
         QMenu,

@@ -204,7 +204,7 @@ export default {
 
   computed: {
     computedHandleHold1() {
-      return this.disable === true ? void 0 : this.handleHold1
+      return this.disable ? void 0 : this.handleHold1
     }
   },
 

@@ -68,7 +68,7 @@ export default createComponent({
 
     const modelRatio = computed(() => methods.convertModelToRatio(model.value))
     const ratio = computed(() =>
-      state.active.value === true ? curRatio.value : modelRatio.value
+      state.active.value ? curRatio.value : modelRatio.value
     )
 
     const selectionBarStyle = computed(() => {
@@ -96,9 +96,7 @@ export default createComponent({
     })
 
     const trackContainerEvents = computed(() => {
-      if (state.editable.value !== true) {
-        return {}
-      }
+      if (!state.editable.value) return {}
 
       return $q.platform.is.mobile
         ? { onClick: methods.onMobileClick }

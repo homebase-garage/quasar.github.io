@@ -66,7 +66,7 @@ export default createComponent({
     )
 
     function pull(event) {
-      if (event.isFinal === true) {
+      if (event.isFinal) {
         if (pulling.value === true) {
           pulling.value = false
 
@@ -86,7 +86,7 @@ export default createComponent({
         return false
       }
 
-      if (event.isFirst === true) {
+      if (event.isFirst) {
         if (
           getVerticalScrollPosition(localScrollTarget) !== 0 ||
           event.direction !== 'down'

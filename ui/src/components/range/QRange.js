@@ -102,10 +102,10 @@ export default createComponent({
     )
 
     const ratioMin = computed(() =>
-      state.active.value === true ? curMinRatio.value : modelMinRatio.value
+      state.active.value ? curMinRatio.value : modelMinRatio.value
     )
     const ratioMax = computed(() =>
-      state.active.value === true ? curMaxRatio.value : modelMaxRatio.value
+      state.active.value ? curMaxRatio.value : modelMaxRatio.value
     )
 
     const selectionBarStyle = computed(() => {

@@ -74,7 +74,7 @@ function getChanges(evt, ctx, isFinal) {
   let synthetic = false
 
   if (dir === void 0 && isFinal === false) {
-    if (ctx.event.isFirst === true || ctx.event.lastDir === void 0) {
+    if (ctx.event.isFirst || ctx.event.lastDir === void 0) {
       return {}
     }
 
@@ -309,10 +309,7 @@ export default createDirective(
                   if (ctx.handler(payload) === false) {
                     ctx.end(evt)
                   } else {
-                    if (
-                      ctx.styleCleanup === void 0 &&
-                      ctx.event.isFirst === true
-                    ) {
+                    if (ctx.styleCleanup === void 0 && ctx.event.isFirst) {
                       start()
                     }
 
@@ -376,7 +373,7 @@ export default createDirective(
                   ctx.initialEvent.target.dispatchEvent(ctx.initialEvent.event)
                 }
               } else if (ctx.event.detected === true) {
-                if (ctx.event.isFirst === true) {
+                if (ctx.event.isFirst) {
                   ctx.handler(
                     getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx).payload
                   )

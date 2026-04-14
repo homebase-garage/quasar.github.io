@@ -43,7 +43,7 @@ export default function useDatetime(props, $q) {
     () => props.disable !== true && props.readonly !== true
   )
 
-  const tabindex = computed(() => (editable.value === true ? 0 : -1))
+  const tabindex = computed(() => (editable.value ? 0 : -1))
 
   const headerClass = computed(() => {
     const cls = []

@@ -107,7 +107,7 @@ export default createComponent({
       name: nameProp.value,
       ...attrs,
       id: state.targetUid.value,
-      disabled: state.editable.value !== true
+      disabled: !state.editable.value
     }))
 
     const fieldClass = computed(

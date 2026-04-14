@@ -54,7 +54,7 @@ export default createComponent({
     })
 
     const isDisabled = computed(
-      () => props.disable === true || $fab.showing.value !== true
+      () => props.disable || $fab.showing.value !== true
     )
 
     function click(e) {

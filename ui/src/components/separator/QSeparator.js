@@ -38,7 +38,7 @@ export default createComponent({
     const isDark = useDark(props, vm.proxy.$q)
 
     const orientation = computed(() =>
-      props.vertical === true ? 'vertical' : 'horizontal'
+      props.vertical ? 'vertical' : 'horizontal'
     )
 
     const orientClass = computed(() => ` q-separator--${orientation.value}`)
@@ -53,14 +53,14 @@ export default createComponent({
       () =>
         `q-separator${orientClass.value}${insetClass.value}` +
         (props.color !== void 0 ? ` bg-${props.color}` : '') +
-        (isDark.value === true ? ' q-separator--dark' : '')
+        (isDark.value ? ' q-separator--dark' : '')
     )
 
     const style = computed(() => {
       const acc = {}
 
       if (props.size !== void 0) {
-        acc[props.vertical === true ? 'width' : 'height'] = props.size
+        acc[props.vertical ? 'width' : 'height'] = props.size
       }
 
       if (props.spaced !== false) {
@@ -71,8 +71,7 @@ export default createComponent({
               ? `${margins[props.spaced]}px`
               : props.spaced
 
-        const dir =
-          props.vertical === true ? ['Left', 'Right'] : ['Top', 'Bottom']
+        const dir = props.vertical ? ['Left', 'Right'] : ['Top', 'Bottom']
 
         acc[`margin${dir[0]}`] = acc[`margin${dir[1]}`] = size
       }

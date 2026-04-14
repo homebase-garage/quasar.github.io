@@ -70,49 +70,41 @@ export default function useCheckbox(type, getInner) {
 
   const index = computed(() => {
     const val = toRaw(props.val)
-    return modelIsArray.value === true
+    return modelIsArray.value
       ? props.modelValue.findIndex(opt => toRaw(opt) === val)
       : -1
   })
 
   const isTrue = computed(() =>
-    modelIsArray.value === true
+    modelIsArray.value
       ? index.value !== -1
       : toRaw(props.modelValue) === toRaw(props.trueValue)
   )
 
   const isFalse = computed(() =>
-    modelIsArray.value === true
+    modelIsArray.value
       ? index.value === -1
       : toRaw(props.modelValue) === toRaw(props.falseValue)
   )
 
   const isIndeterminate = computed(() => !isTrue.value && !isFalse.value)
-
-  const tabindex = computed(() =>
-    props.disable === true ? -1 : props.tabindex || 0
-  )
-
+  const tabindex = computed(() => (props.disable ? -1 : props.tabindex || 0))
   const classes = computed(
     () =>
       `q-${type} cursor-pointer no-outline row inline no-wrap items-center` +
-      (props.disable === true ? ' disabled' : '') +
-      (isDark.value === true ? ` q-${type}--dark` : '') +
-      (props.dense === true ? ` q-${type}--dense` : '') +
-      (props.leftLabel === true ? ' reverse' : '')
+      (props.disable ? ' disabled' : '') +
+      (isDark.value ? ` q-${type}--dark` : '') +
+      (props.dense ? ` q-${type}--dense` : '') +
+      (props.leftLabel ? ' reverse' : '')
   )
 
   const innerClass = computed(() => {
-    const state =
-      isTrue.value === true
-        ? 'truthy'
-        : isFalse.value === true
-          ? 'falsy'
-          : 'indet'
+    const state = isTrue.value ? 'truthy' : isFalse.value ? 'falsy' : 'indet'
+
     const color =
       props.color !== void 0 &&
       (props.keepColor === true ||
-        (type === 'toggle' ? isTrue.value === true : isFalse.value !== true))
+        (type === 'toggle' ? isTrue.value : !isFalse.value))
         ? ` text-${props.color}`
         : ''
 
@@ -126,9 +118,9 @@ export default function useCheckbox(type, getInner) {
       Object.assign(prop, {
         // see https://vuejs.org/guide/extras/render-function.html#creating-vnodes (.prop)
         '.checked': isTrue.value,
-        '^checked': isTrue.value === true ? 'checked' : void 0,
+        '^checked': isTrue.value ? 'checked' : void 0,
         name: props.name,
-        value: modelIsArray.value === true ? props.val : props.trueValue
+        value: modelIsArray.value ? props.val : props.trueValue
       })
     }
 
@@ -145,12 +137,12 @@ export default function useCheckbox(type, getInner) {
       'aria-checked':
         isIndeterminate.value === true
           ? 'mixed'
-          : isTrue.value === true
+          : isTrue.value
             ? 'true'
             : 'false'
     }
 
-    if (props.disable === true) {
+    if (props.disable) {
       attrs['aria-disabled'] = 'true'
     }
 
@@ -163,14 +155,14 @@ export default function useCheckbox(type, getInner) {
       refocusTarget(e)
     }
 
-    if (props.disable !== true) {
+    if (!props.disable) {
       emit('update:modelValue', getNextValue(), e)
     }
   }
 
   function getNextValue() {
-    if (modelIsArray.value === true) {
-      if (isTrue.value === true) {
+    if (modelIsArray.value) {
+      if (isTrue.value) {
         const val = [...props.modelValue]
         val.splice(index.value, 1)
         return val
@@ -179,11 +171,11 @@ export default function useCheckbox(type, getInner) {
       return [...props.modelValue, props.val]
     }
 
-    if (isTrue.value === true) {
+    if (isTrue.value) {
       if (props.toggleOrder !== 'ft' || !props.toggleIndeterminate) {
         return props.falseValue
       }
-    } else if (isFalse.value === true) {
+    } else if (isFalse.value) {
       if (props.toggleOrder === 'ft' || !props.toggleIndeterminate) {
         return props.trueValue
       }

@@ -77,7 +77,7 @@ export default function useModelToggle({
   }
 
   function hide(evt) {
-    if (__QUASAR_SSR_SERVER__ || props.disable === true) return
+    if (__QUASAR_SSR_SERVER__ || props.disable) return
 
     const listener = props['onUpdate:modelValue'] !== void 0
 
@@ -111,7 +111,7 @@ export default function useModelToggle({
   }
 
   function processModelChange(val) {
-    if (props.disable === true && val === true) {
+    if (props.disable && val === true) {
       if (props['onUpdate:modelValue'] !== void 0) {
         emit('update:modelValue', false)
       }

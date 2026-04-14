@@ -414,7 +414,7 @@ export default createComponent({
 
     function shouldAbortInteraction() {
       return (
-        vmIsDestroyed(vm) === true ||
+        vmIsDestroyed(vm) ||
         // if we have limited options, can we actually set any?
         (viewValidOptions.value !== null &&
           (viewValidOptions.value.values.length === 0 ||
@@ -437,9 +437,9 @@ export default createComponent({
     }
 
     function onPan(event) {
-      if (shouldAbortInteraction() === true) return
+      if (shouldAbortInteraction()) return
 
-      if (event.isFirst === true) {
+      if (event.isFirst) {
         draggingClockRect = getClockRect()
         dragCache = updateClock(event.evt, draggingClockRect)
         return
@@ -447,7 +447,7 @@ export default createComponent({
 
       dragCache = updateClock(event.evt, draggingClockRect, dragCache)
 
-      if (event.isFinal === true) {
+      if (event.isFinal) {
         draggingClockRect = false
         dragCache = null
         goToNextView()
@@ -553,7 +553,7 @@ export default createComponent({
     }
 
     function onClick(evt) {
-      if (shouldAbortInteraction() !== true) {
+      if (!shouldAbortInteraction()) {
         // onMousedown() has already updated the offset
         // (on desktop only, through mousedown event)
         if (!$q.platform.is.desktop) {
@@ -565,7 +565,7 @@ export default createComponent({
     }
 
     function onMousedown(evt) {
-      if (shouldAbortInteraction() !== true) {
+      if (!shouldAbortInteraction()) {
         updateClock(evt, getClockRect())
       }
     }

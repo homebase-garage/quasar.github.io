@@ -564,7 +564,7 @@ export default createComponent({
 
     function toggleOption(opt, keepOpen) {
       if (
-        state.editable.value !== true ||
+        !state.editable.value ||
         opt === void 0 ||
         isOptionDisabled.value(opt) === true
       ) {
@@ -792,7 +792,7 @@ export default createComponent({
       if (
         e.target === void 0 ||
         e.target.id !== state.targetUid.value ||
-        state.editable.value !== true
+        !state.editable.value
       ) {
         return
       }
@@ -1006,7 +1006,7 @@ export default createComponent({
             {
               key: 'option-' + i,
               removable:
-                state.editable.value === true &&
+                state.editable.value &&
                 isOptionDisabled.value(scope.opt) !== true,
               dense: true,
               textColor: props.color,
@@ -1223,7 +1223,7 @@ export default createComponent({
             nextTick(() => {
               state.innerLoading.value = false
 
-              if (state.editable.value === true) {
+              if (state.editable.value) {
                 if (keepClosed === true) {
                   if (menu.value) hidePopup()
                 } else if (menu.value) {
@@ -1450,7 +1450,7 @@ export default createComponent({
     }
 
     function showPopup(e) {
-      if (state.editable.value !== true) return
+      if (!state.editable.value) return
 
       if (hasDialog) {
         state.onControlFocusin(e)
@@ -1611,7 +1611,7 @@ export default createComponent({
 
       getControlChild: () => {
         if (
-          state.editable.value !== false &&
+          state.editable.value &&
           (dialog.value || // dialog always has menu displayed, so need to render it
             !noOptions.value ||
             slots['no-option'] !== void 0)

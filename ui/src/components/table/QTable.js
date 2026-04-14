@@ -175,9 +175,7 @@ export default createComponent({
 
     const rootRef = ref(null)
     const virtScrollRef = ref(null)
-    const hasVirtScroll = computed(
-      () => props.grid !== true && props.virtualScroll === true
-    )
+    const hasVirtScroll = computed(() => !props.grid && props.virtualScroll)
 
     const cardDefaultClass = computed(
       () =>
@@ -191,11 +189,11 @@ export default createComponent({
     const containerClass = computed(
       () =>
         `q-table__container q-table--${props.separator}-separator column no-wrap` +
-        (props.grid === true ? ' q-table--grid' : cardDefaultClass.value) +
+        (props.grid ? ' q-table--grid' : cardDefaultClass.value) +
         (isDark.value ? ' q-table--dark' : '') +
         (props.dense ? ' q-table--dense' : '') +
         (props.wrapCells ? '' : ' q-table--no-wrap') +
-        (inFullscreen.value === true ? ' fullscreen scroll' : '')
+        (inFullscreen.value ? ' fullscreen scroll' : '')
     )
 
     const rootContainerClass = computed(
@@ -352,9 +350,7 @@ export default createComponent({
     }
 
     function getBody() {
-      if (props.grid === true) {
-        return getGridBody()
-      }
+      if (props.grid) return getGridBody()
 
       const header = props.hideHeader !== true ? getTHead : null
 
@@ -750,7 +746,7 @@ export default createComponent({
             )
       })
 
-      if (singleSelection.value === true && props.grid !== true) {
+      if (singleSelection.value === true && !props.grid) {
         child.unshift(h('th', { class: 'q-table--col-auto-width' }, ' '))
       } else if (multipleSelection.value === true) {
         const slot = slots['header-selection']
@@ -827,10 +823,10 @@ export default createComponent({
     })
 
     function getBottomDiv() {
-      if (props.hideBottom === true) return
+      if (props.hideBottom) return
 
       if (nothingToDisplay.value === true) {
-        if (props.hideNoData === true) return
+        if (props.hideNoData) return
 
         const message =
           props.loading === true
@@ -871,7 +867,7 @@ export default createComponent({
       }
 
       const child =
-        props.hideSelectedBanner !== true &&
+        !props.hideSelectedBanner &&
         hasSelectionMode.value === true &&
         rowsSelectedNumber.value > 0
           ? [
@@ -885,7 +881,7 @@ export default createComponent({
             ]
           : []
 
-      if (props.hidePagination !== true) {
+      if (!props.hidePagination) {
         return h(
           'div',
           {
@@ -1029,12 +1025,11 @@ export default createComponent({
     }
 
     function getGridHeader() {
-      const child =
-        props.gridHeader === true
-          ? [h('table', { class: 'q-table' }, [getTHead(h)])]
-          : props.loading === true && slots.loading === void 0
-            ? getProgress(h)
-            : void 0
+      const child = props.gridHeader
+        ? [h('table', { class: 'q-table' }, [getTHead(h)])]
+        : props.loading === true && slots.loading === void 0
+          ? getProgress(h)
+          : void 0
 
       return h('div', { class: 'q-table__middle' }, child)
     }
@@ -1183,7 +1178,7 @@ export default createComponent({
       const child = [getTopDiv()]
       const data = { ref: rootRef, class: rootContainerClass.value }
 
-      if (props.grid === true) {
+      if (props.grid) {
         child.push(getGridHeader())
       } else {
         Object.assign(data, {

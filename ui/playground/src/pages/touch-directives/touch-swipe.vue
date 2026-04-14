@@ -240,7 +240,7 @@ export default {
 
   computed: {
     computedHandleSwipe() {
-      return this.disable === true ? void 0 : this.handleSwipe
+      return this.disable ? void 0 : this.handleSwipe
     }
   },
 
