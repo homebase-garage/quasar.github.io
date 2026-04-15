@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import fse from 'fs-extra'
 
 import { build as viteBuild } from 'vite'
-import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
+import { rolldown, watch as rolldownWatch } from 'rolldown'
 
 import { progress } from './utils/logger.js'
 
@@ -72,10 +72,11 @@ export class AppTool {
       threadName
     )
 
-    const rolldownResult = await rolldownBuild(rolldownConfig)
+    const bundle = await rolldown(rolldownConfig)
+    await bundle.write(rolldownConfig.output)
+    await bundle.close()
 
     done('___ compiled with success by Rolldown')
-    return rolldownResult
   }
 
   cleanArtifacts(dir) {

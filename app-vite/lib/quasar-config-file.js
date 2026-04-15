@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url'
 import { existsSync, readFileSync } from 'node:fs'
 import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
-import { build as rolldownBuild, watch as rolldownWatch } from 'rolldown'
+import { rolldown, watch as rolldownWatch } from 'rolldown'
 import { watch as chokidarWatch } from 'chokidar'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 
@@ -603,13 +603,16 @@ export class QuasarConfigFile {
     )
   }
 
-  #build() {
+  async #build() {
     log(
       `Compiling ${basename(this.#ctx.appPaths.quasarConfigFilename)} (${this.#confEnv.envBanner})`
     )
 
+    let bundle
     try {
-      return rolldownBuild(this.#getRolldownConfig())
+      const rolldownConfig = this.#getRolldownConfig()
+      bundle = await rolldown(rolldownConfig)
+      await bundle.write(rolldownConfig.output)
     } catch (err) {
       fse.removeSync(this.#tempFile)
       console.log()
@@ -619,6 +622,8 @@ export class QuasarConfigFile {
         'FAIL'
       )
     }
+
+    await bundle.close()
   }
 
   // exits process on first build, otherwise
