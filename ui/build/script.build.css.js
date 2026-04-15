@@ -10,7 +10,6 @@ import {
   resolveToRoot,
   writeFile
 } from './build.utils.js'
-import prepareDiff from './prepare-diff.js'
 
 const postCssRtl = postcss([rtl({})])
 const sassUseRE = /@use\s+['"][^'"]+['"]/g
@@ -55,21 +54,22 @@ function getConcatenatedContent(src, noBanner) {
 }
 
 function generateUMD(code, middleName, ext = '') {
-  return writeFile(`dist/quasar${middleName}${ext}.css`, code, true).then(
-    textCode => {
-      const { code: transformedCode } = transform({
-        code: Buffer.from(textCode),
-        minify: true,
-        targets: BUILD_TARGETS.LIGHTNING_CSS
-      })
+  return writeFile(`dist/quasar${middleName}${ext}.css`, code, {
+    summary: true,
+    gzip: true
+  }).then(textCode => {
+    const { code: transformedCode } = transform({
+      code: Buffer.from(textCode),
+      minify: true,
+      targets: BUILD_TARGETS.LIGHTNING_CSS
+    })
 
-      return writeFile(
-        `dist/quasar${middleName}${ext}.prod.css`,
-        transformedCode,
-        true
-      )
-    }
-  )
+    return writeFile(
+      `dist/quasar${middleName}${ext}.prod.css`,
+      transformedCode,
+      { summary: true, gzip: true }
+    )
+  })
 }
 
 function renderAsset(cssCode, middleName = '') {
@@ -95,7 +95,6 @@ async function generateBase(source) {
 
   return Promise.all([
     renderAsset(cssCode),
-
     getConcatenatedContent(depsList).then(code => writeFile(sassDistDest, code))
   ])
 }
@@ -109,10 +108,13 @@ async function generateAddon(source) {
   return renderAsset(cssCode, '.addon')
 }
 
-export function buildCss(withDiff) {
-  if (withDiff) prepareDiff('dist/quasar.sass')
+export async function buildCss(withDiff) {
+  if (withDiff) {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
+    prepareDiff('dist/quasar.sass')
+  }
 
-  Promise.all([
+  await Promise.all([
     generateBase('src/css/index.sass'),
     generateAddon('src/css/flex-addon.sass')
   ]).catch(err => {

@@ -1,7 +1,6 @@
 import { join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import fse from 'fs-extra'
-import zlib from 'node:zlib'
 import { blue, gray, green, magenta, red, underline } from 'kolorist'
 import { table } from 'table'
 
@@ -10,6 +9,7 @@ const cssRE = /\.(css|sass)$/
 const tsRE = /\.ts$/
 const jsonRE = /\.json$/
 
+let zlib = null
 const tableData = []
 
 export const BUILD_TARGETS = getBuildTargets()
@@ -95,7 +95,7 @@ process.on('exit', code => {
       underline('Type'),
       underline('Filename'),
       underline('Size'),
-      underline('Gzipped')
+      ...(zlib ? [underline('Gzipped')] : [])
     ])
 
     const output = table(tableData, {
@@ -103,7 +103,7 @@ process.on('exit', code => {
         0: { alignment: 'right' },
         1: { alignment: 'left' },
         2: { alignment: 'right' },
-        3: { alignment: 'right' }
+        ...(zlib ? { 3: { alignment: 'right' } } : {})
       }
     })
 
@@ -126,32 +126,28 @@ function getDestinationInfo(dest) {
   if (jsonRE.test(dest)) {
     return {
       banner: gray('[json]'),
-      tableEntryType: gray('json'),
-      toTable: false
+      tableEntryType: gray('json')
     }
   }
 
   if (jsRE.test(dest)) {
     return {
       banner: green('[js]  '),
-      tableEntryType: green('js'),
-      toTable: dest.includes('dist/quasar')
+      tableEntryType: green('js')
     }
   }
 
   if (cssRE.test(dest)) {
     return {
       banner: blue('[css] '),
-      tableEntryType: blue('css'),
-      toTable: true
+      tableEntryType: blue('css')
     }
   }
 
   if (tsRE.test(dest)) {
     return {
       banner: magenta('[ts]  '),
-      tableEntryType: magenta('ts'),
-      toTable: false
+      tableEntryType: magenta('ts')
     }
   }
 
@@ -159,41 +155,60 @@ function getDestinationInfo(dest) {
   process.exit(1)
 }
 
-export function writeFile(dest, code, zip) {
-  const {
-    banner: localBanner,
-    tableEntryType,
-    toTable
-  } = getDestinationInfo(dest)
+export async function enableGzip() {
+  const { default: zlibFn } = await import('node:zlib')
+  zlib = zlibFn
+}
+
+export function writeFile(dest, code, { summary = false, gzip = false } = {}) {
+  const { banner: writeFileBanner, tableEntryType } = getDestinationInfo(dest)
 
   const fileSize = getSize(code)
   const filePath = relative(process.cwd(), dest)
 
-  return new Promise((resolvePromise, reject) => {
-    function report(gzippedString, gzippedSize) {
-      console.log(
-        `${localBanner} ${filePath.padEnd(49)} ${fileSize.padStart(8)}${gzippedString || ''}`
-      )
+  let msg = `${writeFileBanner} ${filePath.padEnd(55)} ${fileSize.padStart(8)}`
+  const tableEntry = summary ? [tableEntryType, filePath, fileSize] : null
 
-      if (toTable) {
-        tableData.push([tableEntryType, filePath, fileSize, gzippedSize || '-'])
-      }
+  const promiseList = [
+    new Promise(done => {
+      fse.writeFile(dest, code, err => {
+        if (err) {
+          logError(`Failed to write file: ${dest}`)
+          console.error(err)
+          process.exit(1)
+        }
 
-      resolvePromise(code)
-    }
-
-    fse.writeFile(dest, code, err => {
-      if (err) return reject(err)
-      if (zip) {
-        zlib.gzip(code, (gzipErr, zipped) => {
-          if (gzipErr) return reject(gzipErr)
-          const size = getSize(zipped)
-          report(` (gzipped: ${size.padStart(8)})`, size)
-        })
-      } else {
-        report()
-      }
+        done()
+      })
     })
+  ]
+
+  if (zlib) {
+    if (gzip) {
+      promiseList.push(
+        new Promise(done => {
+          zlib.gzip(code, (gzipErr, zipped) => {
+            if (gzipErr) {
+              logError(`Failed to gzip file: ${dest}`)
+              tableEntry?.push('-')
+            } else {
+              msg += ` (gzipped: ${getSize(zipped).padStart(8)})`
+              tableEntry?.push(getSize(zipped))
+            }
+
+            done()
+          })
+        })
+      )
+    } else {
+      tableEntry?.push('-')
+    }
+  }
+
+  return Promise.all(promiseList).then(() => {
+    console.log(msg)
+    if (tableEntry !== null) tableData.push(tableEntry)
+    return code
   })
 }
 
@@ -205,7 +220,7 @@ export function readJsonFile(file) {
   return JSON.parse(fse.readFileSync(file, 'utf8'))
 }
 
-export function writeFileIfChanged(dest, newContent, zip) {
+export function writeFileIfChanged(dest, newContent, opts) {
   let currentContent = ''
   try {
     currentContent = fse.readFileSync(dest, 'utf8')
@@ -213,8 +228,8 @@ export function writeFileIfChanged(dest, newContent, zip) {
 
   return newContent.split(/[\n\r]+/).join('\n') !==
     currentContent.split(/[\n\r]+/).join('\n')
-    ? writeFile(dest, newContent, zip)
-    : Promise.resolve()
+    ? writeFile(dest, newContent, opts)
+    : Promise.resolve(newContent)
 }
 
 export function logError(err) {

@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-import { build as rolldownBuild } from 'rolldown'
+import { rolldown } from 'rolldown'
 
 import {
   BUILD_TARGETS,
@@ -9,8 +9,6 @@ import {
   version,
   writeFile
 } from './build.utils.js'
-
-import prepareDiff from './prepare-diff.js'
 
 const importRE = /import\s*\{([\w,\s]+)\}\s*from\s*(['"])([a-zA-Z0-9-@/]+)\2;?/g
 const umdTempFilesList = []
@@ -25,143 +23,127 @@ const builds = [
   // Client entry-point used by @quasar/vite-plugin for DEV only.
   // Also used as entry-point in package.json.
   {
-    platform: 'browser',
-    input: resolveToRoot('src/index.dev.js'),
-    output: {
-      banner,
-      format: 'esm',
-      file: resolveToRoot('dist/quasar.client.js')
-    },
-    external: ['vue'],
-    transform: {
-      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
-      define: {
-        // Any change to the flags should be reflected
-        // to src/flags.dev.js as well.
-        __QUASAR_VERSION__: `'${version}'`,
-        __QUASAR_SSR_SERVER__: 'false'
+    inputConfig: {
+      platform: 'browser',
+      input: resolveToRoot('src/index.dev.js'),
+      external: ['vue'],
+      transform: {
+        target: BUILD_TARGETS.ROLLDOWN_BROWSER,
+        define: {
+          // Any change to the flags should be reflected
+          // to src/flags.dev.js as well.
+          __QUASAR_VERSION__: `'${version}'`,
+          __QUASAR_SSR_SERVER__: 'false'
+        }
       }
-    }
+    },
+    outputList: [
+      {
+        outputConfig: {
+          format: 'esm'
+        },
+        file: resolveToRoot('dist/quasar.client.js'),
+        writeArgs: { summary: true }
+      }
+    ]
   },
 
-  // SSR server prod entry-point (ESM - used by @quasar/app-vite)
+  // SSR server prod entry-point
+  //   -> ESM - used by @quasar/app-vite
+  //.  -> CJS - used by @quasar/app-webpack
   // (no flags; not required to replace them)
   {
-    platform: 'node',
-    input: resolveToRoot('src/index.ssr.js'),
-    output: {
-      banner,
-      format: 'esm',
-      minify: true,
-      file: resolveToRoot('dist/quasar.server.prod.js')
-    },
-    external: ['vue'],
-    transform: {
-      target: BUILD_TARGETS.ROLLDOWN_NODE,
-      define: {
-        __QUASAR_VERSION__: `'${version}'`,
-        __QUASAR_SSR__: 'true',
-        __QUASAR_SSR_SERVER__: 'true',
-        __QUASAR_SSR_CLIENT__: 'false',
-        __QUASAR_SSR_PWA__: 'false'
+    inputConfig: {
+      platform: 'node',
+      input: resolveToRoot('src/index.ssr.js'),
+      external: ['vue'],
+      transform: {
+        target: BUILD_TARGETS.ROLLDOWN_NODE,
+        define: {
+          __QUASAR_VERSION__: `'${version}'`,
+          __QUASAR_SSR__: 'true',
+          __QUASAR_SSR_SERVER__: 'true',
+          __QUASAR_SSR_CLIENT__: 'false',
+          __QUASAR_SSR_PWA__: 'false'
+        }
       }
-    }
+    },
+    outputList: [
+      {
+        outputConfig: {
+          format: 'esm',
+          minify: true
+        },
+        file: resolveToRoot('dist/quasar.server.prod.js'),
+        writeArgs: { summary: true }
+      },
+      {
+        outputConfig: {
+          format: 'cjs',
+          minify: true
+        },
+        file: resolveToRoot('dist/quasar.server.prod.cjs'),
+        writeArgs: { summary: true }
+      }
+    ]
   },
 
-  // SSR server prod entry-point (CJS - used by @quasar/app-webpack)
-  // (no flags; not required to replace them)
+  // UMD entry
   {
-    platform: 'node',
-    input: resolveToRoot('src/index.ssr.js'),
-    output: {
-      banner,
-      format: 'cjs',
-      minify: true,
-      file: resolveToRoot('dist/quasar.server.prod.cjs')
-    },
-    external: ['vue'],
-    transform: {
-      target: BUILD_TARGETS.ROLLDOWN_NODE,
-      define: {
-        __QUASAR_VERSION__: `'${version}'`,
-        __QUASAR_SSR__: 'true',
-        __QUASAR_SSR_SERVER__: 'true',
-        __QUASAR_SSR_CLIENT__: 'false',
-        __QUASAR_SSR_PWA__: 'false'
-      }
-    }
-  },
-
-  // UMD dev entry
-  {
-    platform: 'browser',
-    input: resolveToRoot('src/index.umd.js'),
-    output: {
-      banner,
-      format: 'iife',
-      file: resolveToRoot('dist/quasar.umd.js'),
-      globals: {
-        vue: 'window.Vue'
+    inputConfig: {
+      platform: 'browser',
+      input: resolveToRoot('src/index.umd.js'),
+      external: ['vue'],
+      transform: {
+        target: BUILD_TARGETS.ROLLDOWN_BROWSER,
+        define: {
+          __QUASAR_VERSION__: `'${version}'`,
+          __QUASAR_SSR__: 'false',
+          __QUASAR_SSR_SERVER__: 'false',
+          __QUASAR_SSR_CLIENT__: 'false',
+          __QUASAR_SSR_PWA__: 'false'
+        }
       }
     },
-    external: ['vue'],
-    transform: {
-      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
-      define: {
-        __QUASAR_VERSION__: `'${version}'`,
-        __QUASAR_SSR__: 'false',
-        __QUASAR_SSR_SERVER__: 'false',
-        __QUASAR_SSR_CLIENT__: 'false',
-        __QUASAR_SSR_PWA__: 'false'
+    outputList: [
+      {
+        outputConfig: {
+          format: 'iife',
+          globals: { vue: 'window.Vue' }
+        },
+        file: resolveToRoot('dist/quasar.umd.js'),
+        writeArgs: { summary: true }
+      },
+      {
+        outputConfig: {
+          format: 'iife',
+          globals: { vue: 'window.Vue' },
+          minify: true
+        },
+        file: resolveToRoot('dist/quasar.umd.prod.js'),
+        writeArgs: { summary: true, gzip: true }
       }
-    }
-  },
-
-  // UMD prod entry
-  {
-    platform: 'browser',
-    input: resolveToRoot('src/index.umd.js'),
-    output: {
-      banner,
-      format: 'iife',
-      minify: true,
-      file: resolveToRoot('dist/quasar.umd.prod.js'),
-      globals: {
-        vue: 'window.Vue'
-      }
-    },
-    external: ['vue'],
-    transform: {
-      target: BUILD_TARGETS.ROLLDOWN_BROWSER,
-      define: {
-        __QUASAR_VERSION__: `'${version}'`,
-        __QUASAR_SSR__: 'false',
-        __QUASAR_SSR_SERVER__: 'false',
-        __QUASAR_SSR_CLIENT__: 'false',
-        __QUASAR_SSR_PWA__: 'false'
-      }
-    }
+    ]
   }
 ]
 
-function build(buildList) {
-  return Promise.all(
-    buildList.map(rolldownConfig =>
-      rolldownBuild(rolldownConfig)
-        .then(result =>
-          writeFile(
-            rolldownConfig.output.file,
-            result.output[0].code,
-            rolldownConfig.minify === true
-          )
-        )
-        .catch(err => {
-          logError(`Rolldown build failed for ${rolldownConfig.input}`)
-          console.error(err)
-          process.exit(1)
+async function compile({ inputConfig, outputList }) {
+  try {
+    const bundle = await rolldown(inputConfig)
+    await Promise.all(
+      outputList.map(({ outputConfig, file, writeArgs = {} }) =>
+        bundle.generate({ ...outputConfig, banner }).then(result => {
+          writeFile(file, result.output[0].code, writeArgs)
         })
+      )
     )
-  )
+
+    await bundle.close()
+  } catch (err) {
+    logError(`Rolldown build failed for ${inputConfig.input}`)
+    console.error(err)
+    process.exit(1)
+  }
 }
 
 async function convertExternalImports(content) {
@@ -198,43 +180,55 @@ async function convertExternalImports(content) {
 }
 
 async function addUmdAssets(buildList, type, injectName, convertImports) {
-  const fileList = fse
-    .readdirSync(resolveToRoot(type))
-    .filter(file => umdTargetAssetRE.test(file))
+  const dirList = await fse.readdir(resolveToRoot(type))
+  const fileList = dirList.filter(file => umdTargetAssetRE.test(file))
+  const promiseList = []
 
   for (const file of fileList) {
     const name = file
       .slice(0, -3)
       .replaceAll(/-([a-zA-Z])/g, g => g[1].toUpperCase())
 
-    const inputCode = fse.readFileSync(resolveToRoot(`${type}/${file}`), 'utf8')
+    const inputCode = await fse.readFile(
+      resolveToRoot(`${type}/${file}`),
+      'utf8'
+    )
     const tempFile = resolveToRoot(`dist/${type}/temp.${file}`)
 
     umdTempFilesList.push(tempFile)
 
-    fse.writeFileSync(
-      tempFile,
-      (convertImports === true
-        ? await convertExternalImports(inputCode)
-        : inputCode
-      ).replace('export default ', `window.Quasar.${injectName}.${name} = `),
-      'utf8'
+    promiseList.push(
+      fse.writeFile(
+        tempFile,
+        (convertImports === true
+          ? await convertExternalImports(inputCode)
+          : inputCode
+        ).replace('export default ', `window.Quasar.${injectName}.${name} = `),
+        'utf8'
+      )
     )
 
     buildList.push({
-      platform: 'browser',
-      input: tempFile,
-      output: {
-        banner,
-        format: 'iife',
-        minify: true,
-        file: addExtension(resolveToRoot(`dist/${type}/${file}`), 'umd.prod')
+      inputConfig: {
+        platform: 'browser',
+        input: tempFile,
+        transform: {
+          target: BUILD_TARGETS.ROLLDOWN_BROWSER
+        }
       },
-      transform: {
-        target: BUILD_TARGETS.ROLLDOWN_BROWSER
-      }
+      outputList: [
+        {
+          outputConfig: {
+            format: 'iife',
+            minify: true
+          },
+          file: addExtension(resolveToRoot(`dist/${type}/${file}`), 'umd.prod')
+        }
+      ]
     })
   }
+
+  await Promise.all(promiseList)
 }
 
 function addExtension(filename, ext = 'prod') {
@@ -254,7 +248,7 @@ const runBuild = {
       addUmdAssets(builds, 'lang', 'Lang'),
       addUmdAssets(builds, 'icon-set', 'IconSet', true)
     ]).then(() => {
-      build(builds)
+      builds.map(compile)
     })
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -287,10 +281,8 @@ const runBuild = {
       addUmdAssets(builds, 'lang', 'Lang'),
       addUmdAssets(builds, 'icon-set', 'IconSet', true)
     ]).then(() => {
-      build(builds)
+      builds.map(compile)
     })
-
-    build(builds)
 
     const api = await import('./build.api.js').then(({ generate }) =>
       generate({ compact: true })
@@ -307,6 +299,7 @@ const runBuild = {
   },
 
   async types() {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
     prepareDiff('dist/types/index.d.ts')
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -322,11 +315,13 @@ const runBuild = {
   },
 
   async api() {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/api')
     import('./build.api.js').then(({ generate }) => generate())
   },
 
   async vetur() {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/vetur')
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -336,6 +331,7 @@ const runBuild = {
   },
 
   async webtypes() {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/web-types')
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -345,6 +341,7 @@ const runBuild = {
   },
 
   async transforms() {
+    const { default: prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/transforms')
     import('./build.transforms.js').then(({ generate }) => generate())
   }
