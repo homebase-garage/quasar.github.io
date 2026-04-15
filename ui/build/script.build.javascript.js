@@ -255,9 +255,6 @@ const runBuild = {
       generate({ compact: true })
     )
 
-    import('./build.vetur.js').then(({ generate }) =>
-      generate({ api, compact: true })
-    )
     import('./build.web-types.js').then(({ generate }) =>
       generate({ api, compact: true })
     )

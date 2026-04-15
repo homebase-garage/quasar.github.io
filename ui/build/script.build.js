@@ -14,7 +14,7 @@ const subtype = buildArgs[1]
 /*
   Build:
   * all: pnpm build
-  * js:  pnpm build js [fast|types|api|vetur|webtypes|transforms]
+  * js:  pnpm build js [fast|types|api|webtypes|transforms]
   * css: pnpm build css
 
   For gzipped output, add --gzip arg
@@ -36,7 +36,6 @@ console.log(` 📦 Building Quasar ${green(`v${version}`)}...\n`)
 createFolder('dist')
 
 if (!type || type === 'js') {
-  createFolder('dist/vetur')
   createFolder('dist/api')
   createFolder('dist/transforms')
   createFolder('dist/lang')

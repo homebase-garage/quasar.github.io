@@ -97,9 +97,5 @@
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   },
-  "vetur": {
-    "tags": "dist/vetur/quasar-tags.json",
-    "attributes": "dist/vetur/quasar-attributes.json"
-  },
   "web-types": "dist/web-types/web-types.json"
 }
