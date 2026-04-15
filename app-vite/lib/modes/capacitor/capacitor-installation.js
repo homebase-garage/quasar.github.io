@@ -128,13 +128,11 @@ async function addPlatform(target, appPaths, cacheProxy) {
 
   const { capBin, capVersion } = await cacheProxy.getModule('capCli')
 
-  if (capVersion >= 3) {
-    const nodePackager = await cacheProxy.getModule('nodePackager')
-    nodePackager.installPackage(`@capacitor/${target}@^${capVersion}.0.0`, {
-      displayName: 'Capacitor platform',
-      cwd: appPaths.capacitorDir
-    })
-  }
+  const nodePackager = await cacheProxy.getModule('nodePackager')
+  nodePackager.installPackage(`@capacitor/${target}@^${capVersion}.0.0`, {
+    displayName: 'Capacitor platform',
+    cwd: appPaths.capacitorDir
+  })
 
   log(`Adding Capacitor platform "${target}"`)
   spawnSync(capBin, ['add', target], { cwd: appPaths.capacitorDir })
