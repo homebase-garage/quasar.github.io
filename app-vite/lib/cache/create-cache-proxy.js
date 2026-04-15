@@ -13,6 +13,13 @@ export function createCacheProxy(ctx) {
       return value !== void 0 ? value : (runtimeCache[key] = getInitialValue())
     },
 
+    getAsyncRuntime: async (key, getInitialValue) => {
+      const value = runtimeCache[key]
+      return value !== void 0
+        ? value
+        : (runtimeCache[key] = await getInitialValue())
+    },
+
     setRuntime: (key, value) => {
       runtimeCache[key] = value
     },

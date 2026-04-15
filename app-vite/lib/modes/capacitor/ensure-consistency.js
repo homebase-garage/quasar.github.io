@@ -17,10 +17,6 @@ export async function ensureDeps({ appPaths, cacheProxy }) {
   const nodePackager = await cacheProxy.getModule('nodePackager')
   nodePackager.install({
     cwd: appPaths.capacitorDir,
-    // See https://github.com/orgs/pnpm/discussions/4735
-    // We also started creating an empty pnpm-workspace.yaml file in src-capacitor as of app-vite v2.4.1
-    // which addresses all cases without requiring explicit ignore-workspace flag all the time.
-    // However, we are keeping this for backward compatibility of the scaffolded projects and just in case.
     params: nodePackager.name === 'pnpm' ? ['i', '--ignore-workspace'] : void 0,
     displayName: 'Capacitor'
   })

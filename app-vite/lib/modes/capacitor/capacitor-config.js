@@ -1,5 +1,4 @@
 import { join } from 'node:path'
-import { readFileSync } from 'node:fs'
 
 import { createViteConfig, extendViteConfig } from '../../config-tools.js'
 import { escapeRegexString } from '../../utils/escape-regex-string.js'
@@ -18,16 +17,16 @@ export const quasarCapacitorConfig = {
     })
     const { appPaths, cacheProxy } = quasarConf.ctx
 
-    const { capacitorRE, target, injectAliases } = cacheProxy.getRuntime(
-      'runtimeCapacitorConfig',
-      () => {
-        const { dependencies } = JSON.parse(
-          readFileSync(appPaths.resolve.capacitor('package.json'), 'utf8')
+    const { capacitorRE, target, injectAliases } =
+      await cacheProxy.getAsyncRuntime('runtimeCapacitorConfig', async () => {
+        const { default: json } = await import(
+          appPaths.resolve.capacitor('package.json'),
+          { with: { type: 'json' } }
         )
 
         const localTarget = appPaths.resolve.capacitor('node_modules')
 
-        const depsList = Object.keys(dependencies)
+        const depsList = Object.keys(json.dependencies)
         const localCapacitorRE = new RegExp(
           '^(' + depsList.map(escapeRegexString).join('|') + ')'
         )
@@ -44,8 +43,7 @@ export const quasarCapacitorConfig = {
             })
           }
         }
-      }
-    )
+      })
 
     injectAliases(cfg.resolve.alias)
 

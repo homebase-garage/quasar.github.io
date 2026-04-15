@@ -180,6 +180,10 @@ type CacheProxyModuleKey =
   | "workboxBuild";
 interface CacheProxy {
   getRuntime: (key: string, getInitialValue: () => any) => any;
+  getAsyncRuntime: (
+    key: string,
+    getInitialValue: () => Promise<any>
+  ) => Promise<any>;
   setRuntime: (key: string, value: any) => void;
   getModule: (key: CacheProxyModuleKey) => Promise<any>;
 }
