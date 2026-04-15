@@ -110,7 +110,7 @@ async function generateAddon(source) {
 
 export async function buildCss(withDiff) {
   if (withDiff) {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
+    const { prepareDiff } = await import('./prepare-diff.js')
     prepareDiff('dist/quasar.sass')
   }
 

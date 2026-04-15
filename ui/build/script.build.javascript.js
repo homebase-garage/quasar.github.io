@@ -285,9 +285,6 @@ const runBuild = {
       generate({ compact: true })
     )
 
-    import('./build.vetur.js').then(({ generate }) =>
-      generate({ api, compact: true })
-    )
     import('./build.web-types.js').then(({ generate }) =>
       generate({ api, compact: true })
     )
@@ -296,7 +293,7 @@ const runBuild = {
   },
 
   async types() {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
+    const { prepareDiff } = await import('./prepare-diff.js')
     prepareDiff('dist/types/index.d.ts')
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -312,23 +309,13 @@ const runBuild = {
   },
 
   async api() {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
+    const { prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/api')
     import('./build.api.js').then(({ generate }) => generate())
   },
 
-  async vetur() {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
-    await prepareDiff('dist/vetur')
-
-    const api = await import('./build.api.js').then(({ generate }) =>
-      generate({ compact: true })
-    )
-    import('./build.vetur.js').then(({ generate }) => generate({ api }))
-  },
-
   async webtypes() {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
+    const { prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/web-types')
 
     const api = await import('./build.api.js').then(({ generate }) =>
@@ -338,7 +325,7 @@ const runBuild = {
   },
 
   async transforms() {
-    const { default: prepareDiff } = await import('./prepare-diff.js')
+    const { prepareDiff } = await import('./prepare-diff.js')
     await prepareDiff('dist/transforms')
     import('./build.transforms.js').then(({ generate }) => generate())
   }

@@ -11,7 +11,7 @@ import { relativeToRoot, resolveToRoot } from './build.utils.js'
  *
  * @param {string} locationPath
  */
-export default function prepareDiff(locationPath) {
+export function prepareDiff(locationPath) {
   const absolutePath = resolveToRoot(locationPath)
 
   // If there is no "old" file/folder, then there is no diff (everything will be new)
