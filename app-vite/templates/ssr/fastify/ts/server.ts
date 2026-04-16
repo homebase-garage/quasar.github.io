@@ -8,7 +8,11 @@
  * anything you import here.
  */
 
-import express from 'express'
+import Fastify from 'fastify'
+import type { FastifyInstance, FastifyServerOptions, FastifyHttpsOptions, FastifyRequest, FastifyReply } from 'fastify'
+import type { Server } from 'node:https'
+import middie from '@fastify/middie'
+import serveStatic from 'serve-static'
 import {
   defineSsrCreate,
   defineSsrInjectDevMiddleware,
@@ -18,23 +22,42 @@ import {
   defineSsrRenderPreloadTag
 } from '#q-app/wrappers'
 
+declare module "#q-app" {
+  interface SsrDriver {
+    app: FastifyInstance;
+    listenResult: FastifyInstance;
+    request: FastifyRequest;
+    response: FastifyReply;
+  }
+}
+
 /**
  * Create your webserver and return its instance.
  * If needed, prepare your webserver to receive
  * connect-like middlewares.
  */
-export const create = defineSsrCreate(async (/* { ... } */) => {
-  const app = express()
+export const create = defineSsrCreate(async ({ devHttpsOptions }) => {
+  const opts = {} as FastifyServerOptions & Partial<FastifyHttpsOptions<Server>>
 
-  // attackers can use this header to detect apps running Express
-  // and then launch specifically-targeted attacks
-  app.disable('x-powered-by')
+  /**
+   * For production HTTPS you can use the /src-ssr/server-assets folder
+   * to place your certificates and then read them here to create the server.
+   */
+  if (import.meta.env.QUASAR_DEV && devHttpsOptions) {
+    opts.https = devHttpsOptions
+  }
+
+  const app = Fastify(opts)
+
+  // Needed for fallthrough support of serve-static
+  // (and Vite Dev Server in development too)
+  await app.register(middie)
 
   // place here any middlewares that
   // absolutely need to run before anything else
   if (import.meta.env.QUASAR_PROD) {
-    const { default: compression } = await import('compression')
-    app.use(compression())
+    const { default: fastifyCompress } = await import('@fastify/compress')
+    app.register(fastifyCompress)
   }
 
   return app
@@ -44,10 +67,8 @@ export const create = defineSsrCreate(async (/* { ... } */) => {
  * Used by Quasar SSR dev server to inject middleware into the webserver.
  * It uses it to handle Vite dev server, handle public paths, etc.
  * The given middleware is compatible with `node:http`'s Server, Express, Connect, etc.
- *
- * Can be async: defineSsrInjectDevMiddleware(async ({ app }) => { ... })
  */
-export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
+export const injectDevMiddleware = defineSsrInjectDevMiddleware(async ({ app }) => {
   return (middleware) => {
     app.use(middleware)
   }
@@ -64,29 +85,20 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
  * For production, you can instead export your
  * handler for serverless use or whatever else fits your needs.
  */
-export const listen = defineSsrListen(async ({ app, devHttpsOptions, port }) => {
-  if (import.meta.env.QUASAR_DEV) {
-    if (devHttpsOptions) {
-      const https = await import('node:https')
-      const server = https.createServer(devHttpsOptions, app)
-      return server.listen(port)
-    }
+export const listen = defineSsrListen(async ({ app, port }) => {
+  // Fastify manages the underlying Node HTTP/HTTPS server internally,
+  // bypassing the need to manually wrap it in node:http or node:https.
 
-    const http = await import('node:http')
-    const server = http.createServer(app)
-    return server.listen(port)
+  // '0.0.0.0' ensures the server is accessible over the local network (e.g., mobile testing) and Docker
+  await app.listen({ port, host: '0.0.0.0' })
+
+  if (import.meta.env.QUASAR_PROD) {
+    console.log(`🚀 Server listening at port ${port}`)
   }
 
-  /**
-   * For production HTTPS you can use the /src-ssr/server-assets folder
-   * to place your certificates and then read them here to create the server.
-   */
-
-  const http = await import('node:http')
-  const server = http.createServer(app)
-  return server.listen(port, () => {
-    console.log(`🚀 Server listening at port ${port}`)
-  })
+  // We return the Fastify instance itself.
+  // Quasar will automatically pass this to your defineSsrClose() block as 'listenResult'.
+  return app
 })
 
 /**
@@ -118,7 +130,11 @@ const maxAge = import.meta.env.QUASAR_DEV
  */
 export const serveStaticContent = defineSsrServeStaticContent(({ app, resolve }) => {
   return ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
-    const serveFn = express.static(resolve.public(pathToServe), { maxAge, ...opts })
+    const serveFn = serveStatic(resolve.public(pathToServe), {
+      maxAge,
+      ...opts,
+    })
+
     app.use(resolve.urlPath(urlPath), serveFn)
   }
 })

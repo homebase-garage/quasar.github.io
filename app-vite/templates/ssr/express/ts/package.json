@@ -1,0 +1,14 @@
+{
+  "name": "ssr",
+  "version": "1.0.0",
+  "description": "Quasar SSR server",
+  "private": true,
+  "dependencies": {
+    "express": "^5.0.0",
+    "compression": "^1.8.1"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/express": "^5.0.6"
+  }
+}

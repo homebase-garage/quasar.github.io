@@ -8,7 +8,7 @@
  * anything you import here.
  */
 
-import express from 'express'
+import Koa from 'koa'
 import {
   defineSsrCreate,
   defineSsrInjectDevMiddleware,
@@ -18,23 +18,28 @@ import {
   defineSsrRenderPreloadTag
 } from '#q-app/wrappers'
 
+declare module "#q-app" {
+  interface SsrDriver {
+    app: Koa;
+    listenResult: ReturnType<Koa['listen']>;
+    request: Koa.Request;
+    response: Koa.Response;
+  }
+}
+
 /**
  * Create your webserver and return its instance.
  * If needed, prepare your webserver to receive
  * connect-like middlewares.
  */
 export const create = defineSsrCreate(async (/* { ... } */) => {
-  const app = express()
-
-  // attackers can use this header to detect apps running Express
-  // and then launch specifically-targeted attacks
-  app.disable('x-powered-by')
+  const app = new Koa()
 
   // place here any middlewares that
   // absolutely need to run before anything else
   if (import.meta.env.QUASAR_PROD) {
-    const { default: compression } = await import('compression')
-    app.use(compression())
+    const { default: compress } = await import('koa-compress')
+    app.use(compress())
   }
 
   return app
@@ -44,12 +49,12 @@ export const create = defineSsrCreate(async (/* { ... } */) => {
  * Used by Quasar SSR dev server to inject middleware into the webserver.
  * It uses it to handle Vite dev server, handle public paths, etc.
  * The given middleware is compatible with `node:http`'s Server, Express, Connect, etc.
- *
- * Can be async: defineSsrInjectDevMiddleware(async ({ app }) => { ... })
  */
-export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
+export const injectDevMiddleware = defineSsrInjectDevMiddleware(async ({ app }) => {
+  const { default: koaConnect } = await import('koa-connect')
   return (middleware) => {
-    app.use(middleware)
+    // Wrap the Connect/Express-style dev middleware so Koa can process it
+    app.use(koaConnect(middleware))
   }
 })
 
@@ -65,27 +70,21 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
  * handler for serverless use or whatever else fits your needs.
  */
 export const listen = defineSsrListen(async ({ app, devHttpsOptions, port }) => {
-  if (import.meta.env.QUASAR_DEV) {
-    if (devHttpsOptions) {
-      const https = await import('node:https')
-      const server = https.createServer(devHttpsOptions, app)
-      return server.listen(port)
-    }
-
-    const http = await import('node:http')
-    const server = http.createServer(app)
-    return server.listen(port)
-  }
-
   /**
    * For production HTTPS you can use the /src-ssr/server-assets folder
    * to place your certificates and then read them here to create the server.
    */
 
-  const http = await import('node:http')
-  const server = http.createServer(app)
-  return server.listen(port, () => {
-    console.log(`🚀 Server listening at port ${port}`)
+  if (import.meta.env.QUASAR_DEV && devHttpsOptions) {
+    const https = await import('node:https')
+    const server = https.createServer(devHttpsOptions, app.callback())
+    return server.listen(port)
+  }
+
+  return app.listen(port, () => {
+    if (import.meta.env.QUASAR_PROD) {
+      console.log(`🚀 Server listening at port ${port}`)
+    }
   })
 })
 
@@ -113,13 +112,21 @@ const maxAge = import.meta.env.QUASAR_DEV
  *
  * Notice resolve.urlPath(urlPath) and resolve.public(pathToServe) usages.
  *
- * Can be async: defineSsrServeStaticContent(async ({ app, resolve }) => {
  * Can return an async function: return async ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
  */
-export const serveStaticContent = defineSsrServeStaticContent(({ app, resolve }) => {
+export const serveStaticContent = defineSsrServeStaticContent(async ({ app, resolve }) => {
+  const { default: serve } = await import('koa-static')
+  const { default: mount } = await import('koa-mount')
+
   return ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
-    const serveFn = express.static(resolve.public(pathToServe), { maxAge, ...opts })
-    app.use(resolve.urlPath(urlPath), serveFn)
+    // Note: koa-static uses 'maxage' (all lowercase), whereas Express uses 'maxAge'.
+    // Make sure the 'maxAge' variable defined earlier in your file is mapped correctly.
+    const { maxAge, ...otherOpts } = opts
+    const serveFn = serve(resolve.public(pathToServe), { maxage: maxAge, ...otherOpts })
+
+    // Koa's app.use() does not accept a path prefix like Express does.
+    // We must use koa-mount to simulate app.use('/path', middleware).
+    app.use(mount(resolve.urlPath(urlPath), serveFn))
   }
 })
 

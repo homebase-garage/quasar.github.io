@@ -4,8 +4,8 @@
  *
  * Runs in Node.js context.
  *
- * Make sure to pnpm/yarn/npm/bun install (in your project root)
- * anything you import here. Add to "dependencies" and not "devDependencies".
+ * Make sure to pnpm/yarn/npm/bun install (in /src-ssr folder)
+ * anything you import here.
  */
 
 import Fastify from 'fastify'

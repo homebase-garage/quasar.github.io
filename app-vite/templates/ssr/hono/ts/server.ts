@@ -8,7 +8,11 @@
  * anything you import here.
  */
 
-import express from 'express'
+import { lstatSync } from 'node:fs'
+import { Hono } from 'hono'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+import { serve } from '@hono/node-server'
+import { serveStatic } from '@hono/node-server/serve-static'
 import {
   defineSsrCreate,
   defineSsrInjectDevMiddleware,
@@ -18,23 +22,36 @@ import {
   defineSsrRenderPreloadTag
 } from '#q-app/wrappers'
 
+type NodeEnv = {
+  Bindings: {
+    incoming: IncomingMessage
+    outgoing: ServerResponse
+  }
+}
+
+declare module "#q-app" {
+  interface SsrDriver {
+    app: Hono<NodeEnv>;
+    listenResult: ReturnType<typeof serve>;
+    request: IncomingMessage;
+    response: ServerResponse;
+  }
+}
+
 /**
  * Create your webserver and return its instance.
  * If needed, prepare your webserver to receive
  * connect-like middlewares.
  */
 export const create = defineSsrCreate(async (/* { ... } */) => {
-  const app = express()
+  const app = new Hono<NodeEnv>()
 
-  // attackers can use this header to detect apps running Express
-  // and then launch specifically-targeted attacks
-  app.disable('x-powered-by')
 
   // place here any middlewares that
   // absolutely need to run before anything else
   if (import.meta.env.QUASAR_PROD) {
-    const { default: compression } = await import('compression')
-    app.use(compression())
+    const { compress } = await import('hono/compress')
+    app.use(compress())
   }
 
   return app
@@ -49,7 +66,22 @@ export const create = defineSsrCreate(async (/* { ... } */) => {
  */
 export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
   return (middleware) => {
-    app.use(middleware)
+    app.use('*', async (c, next) => {
+      // @hono/node-server exposes the raw Node.js req and res objects
+      const req = c.env.incoming
+      const res = c.env.outgoing
+
+      // Run the connect-style middleware (Vite Dev Server)
+      const passed = await new Promise(resolve => {
+        middleware(req, res, () => resolve(true))
+      })
+
+      // If the Vite middleware calls next(), it didn't handle the request,
+      // so we let Hono continue down the chain.
+      if (passed) {
+        await next()
+      }
+    })
   }
 })
 
@@ -65,16 +97,9 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
  * handler for serverless use or whatever else fits your needs.
  */
 export const listen = defineSsrListen(async ({ app, devHttpsOptions, port }) => {
-  if (import.meta.env.QUASAR_DEV) {
-    if (devHttpsOptions) {
-      const https = await import('node:https')
-      const server = https.createServer(devHttpsOptions, app)
-      return server.listen(port)
-    }
-
-    const http = await import('node:http')
-    const server = http.createServer(app)
-    return server.listen(port)
+  const opts: Parameters<typeof serve>[0] = {
+    fetch: app.fetch,
+    port
   }
 
   /**
@@ -82,11 +107,24 @@ export const listen = defineSsrListen(async ({ app, devHttpsOptions, port }) => 
    * to place your certificates and then read them here to create the server.
    */
 
-  const http = await import('node:http')
-  const server = http.createServer(app)
-  return server.listen(port, () => {
-    console.log(`🚀 Server listening at port ${port}`)
-  })
+  if (import.meta.env.QUASAR_DEV && devHttpsOptions) {
+    const { createServer } = await import('node:https')
+    opts.createServer = createServer
+    opts.serverOptions = { ...devHttpsOptions }
+  }
+  else {
+    const { createServer } = await import('node:http')
+    opts.createServer = createServer
+  }
+
+  return serve(
+    opts,
+    info => {
+      if (import.meta.env.QUASAR_PROD) {
+        console.log(`🚀 Server listening at port ${info.port}`)
+      }
+    }
+  )
 })
 
 /**
@@ -117,9 +155,33 @@ const maxAge = import.meta.env.QUASAR_DEV
  * Can return an async function: return async ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
  */
 export const serveStaticContent = defineSsrServeStaticContent(({ app, resolve }) => {
-  return ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
-    const serveFn = express.static(resolve.public(pathToServe), { maxAge, ...opts })
-    app.use(resolve.urlPath(urlPath), serveFn)
+  return ({ urlPath, pathToServe, opts = {} }) => {
+    const pubPath = resolve.public(pathToServe)
+    const isDir = lstatSync(pubPath).isDirectory()
+
+    const resolvedUrlPath = resolve.urlPath(urlPath)
+    const routePath = isDir
+      ? (resolvedUrlPath.endsWith('*') ? resolvedUrlPath : `${resolvedUrlPath}*`)
+      : resolvedUrlPath
+
+    const { maxAge: maxAgeOpt, ...serveOpts } = opts
+    const cacheAge = maxAgeOpt !== void 0 ? maxAgeOpt : maxAge
+
+    if (cacheAge > 0) {
+      app.get(routePath, async (c, next) => {
+        c.header('Cache-Control', `public, max-age=${cacheAge}`)
+        await next()
+      })
+    }
+
+    const staticOpts: Parameters<typeof serveStatic>[0] = { ...serveOpts }
+    if (isDir) {
+      staticOpts.root = pubPath
+    } else {
+      staticOpts.path = pubPath
+    }
+
+    app.use(routePath, serveStatic(staticOpts))
   }
 })
 

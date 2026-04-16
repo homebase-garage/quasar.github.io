@@ -1,4 +1,5 @@
 import { defineSsrMiddleware } from '#q-app/wrappers'
+import type { RenderError } from '#q-app'
 
 /**
  * This middleware should execute as last one
@@ -6,34 +7,32 @@ import { defineSsrMiddleware } from '#q-app/wrappers'
  * render the page with Vue
  */
 
-export default defineSsrMiddleware(({ app, publicPath, render, serve }) => {
+export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
   /**
-   * We act as the catch-all, manually verifying
-   * the method and base path.
+   * We capture any other Express route and hand it
+   * over to Vue and Vue Router to render our page
    */
-  app.use(async (ctx, next) => {
-    if (ctx.method !== 'GET' || !ctx.path.startsWith(publicPath)) {
-      return next()
-    }
-
-    ctx.type = 'text/html'
+  app.get(resolve.urlPath('{*path}'), async (req, res) => {
+    res.setHeader('Content-Type', 'text/html')
 
     try {
       // We hand over to Vue to render our page
-      const html = await render(/* the ssrContext: */ { req: ctx.request, res: ctx.response })
-      ctx.body = html
-    } catch (err) {
-      if (err.url) {
+      const html = await render(/* the ssrContext: */ { req, res })
+      res.send(html)
+    }
+    catch(err: unknown) {
+      const renderError = err as RenderError & Error
+
+      if (renderError.url) {
         // We were told to redirect to another URL
-        ctx.status = err.code || 302
-        ctx.redirect(err.url)
-      } else if (err.code === 404) {
+        const redirectCode = renderError.code || 302
+        res.redirect(redirectCode, renderError.url)
+      } else if (renderError.code === 404) {
         /**
          * Hmm, Vue Router could not find the requested route
          * and it does not have a "catch-all" route
          */
-        ctx.status = 404
-        ctx.body = '404 | Page Not Found'
+        res.status(404).send('404 | Page Not Found')
       } else if (import.meta.env.QUASAR_DEV) {
         /**
          * Well, we treat any other code as error;
@@ -43,13 +42,11 @@ export default defineSsrMiddleware(({ app, publicPath, render, serve }) => {
          *
          * Note that serve.error is available on dev only
          */
-        const { headers, html } = serve.error({ err, req: ctx.request })
-        ctx.status = 500
-        ctx.set(headers)
-        ctx.body = html
+        const { headers, html } = serve.error({ err: renderError, req })
+        res.set(headers).status(500).send(html)
       } else {
         if (import.meta.env.QUASAR_DEBUG) {
-          console.error(err.stack)
+          console.error(renderError.stack)
         }
 
         /**
@@ -57,8 +54,7 @@ export default defineSsrMiddleware(({ app, publicPath, render, serve }) => {
          * alternatively, create a route (/src/routes) for an error page and redirect to it
          * (just make sure that route won't crash too, otherwise you'll end up in an infinite loop)
          */
-        ctx.status = 500
-        ctx.body = '500 | Internal Server Error'
+        res.status(500).send('500 | Internal Server Error')
       }
     }
   })

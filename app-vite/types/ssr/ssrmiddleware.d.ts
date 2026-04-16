@@ -15,8 +15,14 @@ export interface RenderParams extends Pick<
 export interface RenderVueParams extends RenderParams, Record<string, any> {}
 
 export interface RenderError extends Error {
+  /**
+   * HTTP status code
+   */
   code: number;
-  url: string;
+  /**
+   * The URL to redirect to
+   */
+  url?: string;
 }
 
 interface SsrMiddlewareResolve {
@@ -48,19 +54,17 @@ interface SsrCreateParams {
    */
   port: number;
   /**
-   * `devHttpsApp` will be automatically made available in `listen`
-   * and middleware callback parameters if you use HTTPS in development.
-   *
-   * But, you can also ignore `devHttpsApp` and use this to configure
-   * the `app` to handle HTTPS requests.
+   * If you use HTTPS in development, this will hold the HTTPS server options
+   * from your /quasar.config file.
    */
-  devHttpsOptions: HttpsServerOptions;
+  devHttpsOptions?: HttpsServerOptions;
   resolve: SsrMiddlewareResolve;
   publicPath: string;
   folders: SsrMiddlewareFolders;
   /**
    * Uses Vue and Vue Router to render the requested URL path.
    *
+   * @throws {RenderError} when the rendering fails
    * @returns the rendered HTML string to return to the client
    */
   render: (ssrContext: RenderVueParams) => Promise<string>;
@@ -77,17 +81,13 @@ interface SsrServeStaticContentParams extends SsrCreateParams {
 interface SsrServeStaticFnParams {
   /**
    * The URL path to serve the static content at (without publicPath).
-   *
-   * @default '/'
    */
-  urlPath?: string;
+  urlPath: string;
 
   /**
    * The sub-path from the publicFolder or an absolute path.
-   *
-   * @default '.' (public folder itself)
    */
-  pathToServe?: string;
+  pathToServe: string;
 
   /**
    * Other custom options...
@@ -102,11 +102,11 @@ type SsrServeStaticFn = (
 
 export type SsrServeStaticContentCallback = (
   params: SsrServeStaticContentParams
-) => SsrServeStaticFn;
+) => SsrServeStaticFn | Promise<SsrServeStaticFn>;
 
 type SsrRenderErrorFn = (params: {
   err: RenderError;
-  req: IncomingMessage | Http2ServerRequest;
+  req: SsrDriverTypes["request"];
   projectRootFolder?: string;
 }) => { statusCode: number; headers: Record<string, string>; html: string };
 
@@ -127,12 +127,6 @@ interface SsrMiddlewareServe {
 
 interface SsrMiddlewareParams extends SsrServeStaticContentParams {
   serve: SsrMiddlewareServe;
-  /**
-   * If you use HTTPS in development, this will be the
-   * actual server that listens for clients.
-   * It is a Node https.Server instance wrapper over the original "app".
-   */
-  devHttpsApp?: HttpsServer;
 }
 
 export type SsrMiddlewareCallback = (

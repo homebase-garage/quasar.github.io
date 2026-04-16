@@ -8,7 +8,6 @@ export {
   RenderParams,
   RenderVueParams,
   RenderError,
-  RenderErrorParams,
   SsrMiddlewareCallback,
   SsrCreateCallback,
   SsrInjectDevMiddlewareCallback,
@@ -17,4 +16,5 @@ export {
   SsrServeStaticContentCallback,
   SsrRenderPreloadTagCallback
 } from "./ssrmiddleware";
+
 export { QSsrContext };

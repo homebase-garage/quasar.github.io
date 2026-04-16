@@ -8,7 +8,9 @@
  * anything you import here.
  */
 
-import express from 'express'
+import express from 'express';
+import type { Application, Request, Response } from 'express';
+import type { Server } from "node:http";
 import {
   defineSsrCreate,
   defineSsrInjectDevMiddleware,
@@ -17,6 +19,15 @@ import {
   defineSsrServeStaticContent,
   defineSsrRenderPreloadTag
 } from '#q-app/wrappers'
+
+declare module "#q-app" {
+  interface SsrDriver {
+    app: Application;
+    listenResult: Server;
+    request: Request;
+    response: Response;
+  }
+}
 
 /**
  * Create your webserver and return its instance.
