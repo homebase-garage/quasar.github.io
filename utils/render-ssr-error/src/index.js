@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs'
-
 import { getErrorDetails } from './error-details.js'
 import { getStack } from './stack.js'
 import { getEnv } from './env.js'
@@ -16,22 +14,20 @@ const after = readFile('after')
 
 /**
  * @param {{
- *  err: Error;
+ *  renderError: Error;
  *  req: import('node:http').IncomingMessage | import('node:http2').Http2ServerRequest;
- *  projectRootFolder?: string;
+ *  rootFolder: string;
  * }} params
  */
 export default function renderSSRError({
-  err,
+  renderError,
   req,
-  projectRootFolder = process.cwd()
+  rootFolder // the host app's root folder
 }) {
   const data = {
-    project: {
-      rootFolder: projectRootFolder
-    },
-    error: getErrorDetails(err),
-    stack: getStack(err, projectRootFolder),
+    rootFolder,
+    error: getErrorDetails(renderError),
+    stack: getStack(renderError, rootFolder),
     env: getEnv(req)
   }
 
@@ -41,16 +37,14 @@ export default function renderSSRError({
   // )
 
   return {
-    statusCode: 500,
-
-    headers: {
+    errorHeaders: {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       Pragma: 'no-cache',
       Expires: '0'
     },
 
-    html:
+    errorHtml:
       before +
       JSON.stringify(data).replaceAll('</script>', String.raw`<\/script>`) +
       after

@@ -4,12 +4,16 @@ import { join, normalize, resolve, sep } from 'node:path'
 import { fatal } from './logger.js'
 import { cliDir, resolveToCliDir } from './cli-runtime.js'
 
+/**
+ * When changing here, also update the one in render-ssr-error/src/index.js
+ */
 const quasarConfigList = [
   { name: 'quasar.config.js', inputFormat: 'esm' },
   { name: 'quasar.config.ts', inputFormat: 'ts' }
 ]
 
-function getAppInfo(appDir) {
+function getAppInfo() {
+  let appDir = process.cwd()
   while (appDir.length !== 0 && appDir.at(-1) !== sep) {
     for (const { name, inputFormat } of quasarConfigList) {
       const quasarConfigFilename = join(appDir, name)
@@ -44,9 +48,8 @@ function getPrefixDir(ctx) {
   return parts.join('-')
 }
 
-export function getAppPaths({ ctx, rootDir, defineHiddenProp } = {}) {
-  const { appDir, quasarConfigFilename, quasarConfigInputFormat } =
-    getAppInfo(rootDir)
+export function getAppPaths({ ctx, defineHiddenProp } = {}) {
+  const { appDir, quasarConfigFilename, quasarConfigInputFormat } = getAppInfo()
 
   const publicDir = resolve(appDir, 'public')
   const srcDir = resolve(appDir, 'src')

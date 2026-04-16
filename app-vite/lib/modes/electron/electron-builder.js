@@ -39,8 +39,7 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #writePackageJson() {
-    const { appPkg } = this.ctx.pkg
-    const pkg = merge({}, appPkg)
+    const pkg = merge({}, this.ctx.pkg.appPkg)
 
     if (pkg.dependencies) {
       pkg.dependencies = getFixedDeps(

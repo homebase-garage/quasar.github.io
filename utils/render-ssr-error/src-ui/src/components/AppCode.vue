@@ -9,7 +9,7 @@
       class="app-code__links row items-center q-px-md q-pb-md text-white bg-dark"
     >
       <div>Open in:</div>
-      <q-btn
+      <QBtn
         v-for="link in entry.links"
         :key="link.label"
         class="q-ml-sm"
@@ -33,7 +33,7 @@ import store from 'src/assets/store.js'
 
 // Protocols expect absolute paths, with forward slashes even on Windows
 const toAbsolutePath = path =>
-  `${data.project.rootFolder}/${path}`.replaceAll('\\', '/')
+  `${data.rootFolder}/${path}`.replaceAll('\\', '/')
 
 const editorList = [
   {

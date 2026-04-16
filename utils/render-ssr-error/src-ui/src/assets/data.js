@@ -1,9 +1,6 @@
 export default import.meta.env.DEV
   ? {
-      project: {
-        // this is dynamically injected
-        rootFolder: '/qaz-v-js'
-      },
+      rootFolder: '/qaz-v-js',
       error: {
         name: 'ReferenceError',
         message: 'window is not defined'

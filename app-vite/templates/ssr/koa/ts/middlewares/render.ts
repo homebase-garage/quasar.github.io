@@ -46,10 +46,10 @@ export default defineSsrMiddleware(({ app, publicPath, render, serve }) => {
          *
          * Note that serve.error is available on dev only
          */
-        const { headers, html } = serve.error({ err: renderError, req: ctx.request })
+        const { errorHeaders, errorHtml } = serve.error({ renderError, req: ctx.request })
         ctx.status = 500
-        ctx.set(headers)
-        ctx.body = html
+        ctx.set(errorHeaders)
+        ctx.body = errorHtml
       } else {
         if (import.meta.env.QUASAR_DEBUG) {
           console.error(renderError.stack)

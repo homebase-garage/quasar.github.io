@@ -105,10 +105,9 @@ export type SsrServeStaticContentCallback = (
 ) => SsrServeStaticFn | Promise<SsrServeStaticFn>;
 
 type SsrRenderErrorFn = (params: {
-  err: RenderError;
+  renderError: RenderError;
   req: SsrDriverTypes["request"];
-  projectRootFolder?: string;
-}) => { statusCode: number; headers: Record<string, string>; html: string };
+}) => { errorHeaders: Record<string, string>; errorHtml: string };
 
 interface SsrMiddlewareServe {
   /**

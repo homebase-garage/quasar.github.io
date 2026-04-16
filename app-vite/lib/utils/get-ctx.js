@@ -54,7 +54,6 @@ export function getCtx(opts = {}) {
 
   ctx.appPaths = getAppPaths({
     ctx,
-    rootDir: opts.rootDir || process.cwd(),
     defineHiddenProp
   })
 

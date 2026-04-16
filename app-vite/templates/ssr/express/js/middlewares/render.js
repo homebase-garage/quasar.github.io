@@ -19,12 +19,12 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
       const html = await render(/* the ssrContext: */ { req, res })
       res.send(html)
     }
-    catch(err) {
-      if (err.url) {
+    catch(renderError) {
+      if (renderError.url) {
         // We were told to redirect to another URL
-        const redirectCode = err.code || 302
-        res.redirect(redirectCode, err.url)
-      } else if (err.code === 404) {
+        const redirectCode = renderError.code || 302
+        res.redirect(redirectCode, renderError.url)
+      } else if (renderError.code === 404) {
         /**
          * Hmm, Vue Router could not find the requested route
          * and it does not have a "catch-all" route
@@ -39,11 +39,11 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
          *
          * Note that serve.error is available on dev only
          */
-        const { headers, html } = serve.error({ err, req })
-        res.set(headers).status(500).send(html)
+        const { errorHeaders, errorHtml } = serve.error({ renderError, req })
+        res.set(errorHeaders).status(500).send(errorHtml)
       } else {
         if (import.meta.env.QUASAR_DEBUG) {
-          console.error(err.stack)
+          console.error(renderError.stack)
         }
 
         /**

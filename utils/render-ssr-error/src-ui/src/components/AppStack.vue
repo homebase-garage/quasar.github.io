@@ -1,7 +1,7 @@
 <template>
-  <q-scroll-area class="app-stack">
-    <q-list separator>
-      <q-item
+  <QScrollArea class="app-stack">
+    <QList separator>
+      <QItem
         v-for="(entry, index) of data.stack"
         :key="index"
         clickable
@@ -9,7 +9,7 @@
         :class="stackMeta[index].class"
         @click="stackMeta[index].onClick"
       >
-        <q-item-section>
+        <QItemSection>
           <div>
             <span class="app-stack__entry-fn">{{ entry.functionName }}</span>
             <span class="app-stack__entry-as q-mx-xs text-no-wrap">as</span>
@@ -31,10 +31,10 @@
               >:{{ entry.columnNumber }}</span
             >)
           </div>
-        </q-item-section>
-      </q-item>
-    </q-list>
-  </q-scroll-area>
+        </QItemSection>
+      </QItem>
+    </QList>
+  </QScrollArea>
 </template>
 
 <script setup>

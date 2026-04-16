@@ -16,7 +16,7 @@ export default defineConfig(() => ({
 
     quasar({
       sassVariables: 'src/quasar.variables.sass',
-      autoImportComponentCase: 'combined'
+      autoImportComponentCase: 'pascal'
     }),
 
     singleFile()
@@ -24,8 +24,7 @@ export default defineConfig(() => ({
 
   resolve: {
     alias: {
-      src: resolve('src'),
-      quasar: resolve('../../../ui')
+      src: resolve('src')
     }
   },
 
