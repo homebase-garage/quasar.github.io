@@ -28,19 +28,13 @@ const resolveUrlPath = publicPath === '/'
 
 const rootFolder = fileURLToPath(new URL('.', import.meta.url))
 const publicFolder = join(rootFolder, 'client')
+const serverAssetsFolder = join(rootFolder, 'server-assets')
 
 const clientManifest = JSON.parse(
   readFileSync(join(rootFolder, './quasar.manifest.json'),
   'utf-8'
   )
 )
-
-function resolvePublicFolder () {
-  const dir = join(...arguments)
-  return isAbsolute(dir)
-    ? dir
-    : join(publicFolder, dir)
-}
 
 function renderModulesPreload (modules, opts) {
   let links = ''
@@ -127,13 +121,15 @@ const middlewareParams = {
   port,
   resolve: {
     urlPath: resolveUrlPath,
-    root () { return join(rootFolder, ...arguments) },
-    public: resolvePublicFolder
+    root: (...args) => join(rootFolder, ...args),
+    public: (...args) => join(publicFolder, ...args),
+    serverAssets: (...args) => join(serverAssetsFolder, ...args)
   },
   publicPath,
   folders: {
     root: rootFolder,
-    public: publicFolder
+    public: publicFolder,
+    serverAssets: serverAssetsFolder
   },
   render
 }

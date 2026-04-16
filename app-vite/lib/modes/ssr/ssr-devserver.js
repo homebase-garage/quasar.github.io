@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { isAbsolute, join } from 'node:path'
+import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createServer, createServerModuleRunner } from 'vite'
 import { watch as chokidarWatch } from 'chokidar'
@@ -70,17 +70,20 @@ export class QuasarModeDevserver extends AppDevserver {
 
     const { appPaths } = this.ctx
 
+    const rootFolder = appPaths.appDir
     const publicFolder = appPaths.resolve.app('public')
+    const serverAssetsFolder = appPaths.resolve.ssr('server-assets')
+
     this.#pathMap = {
-      rootFolder: appPaths.appDir,
+      rootFolder,
       publicFolder,
+      serverAssetsFolder,
       templatePath: appPaths.resolve.app('index.html'),
       serverFile: appPaths.resolve.entry('compiled-dev-webserver.js'),
       serverEntryFile: appPaths.resolve.entry('server-entry.js'),
-      resolvePublicFolder(...args) {
-        const dir = join(...args)
-        return isAbsolute(dir) ? dir : join(publicFolder, dir)
-      }
+      resolveRootFolder: (...args) => join(rootFolder, ...args),
+      resolveServerAssetsFolder: (...args) => join(serverAssetsFolder, ...args),
+      resolvePublicFolder: (...args) => join(publicFolder, ...args)
     }
 
     this.registerDiff('webserver', (quasarConf, diffMap) => [
@@ -319,20 +322,21 @@ export class QuasarModeDevserver extends AppDevserver {
       pathToFileURL(this.#pathMap.serverFile) + '?t=' + Date.now()
     )
     const { publicPath } = this.#appOptions
-    const { resolvePublicFolder } = this.#pathMap
 
     const middlewareParams = {
       port: this.#appOptions.port,
       devHttpsOptions: quasarConf.devServer.https,
       resolve: {
         urlPath: this.#appOptions.resolveUrlPath,
-        root: (...args) => join(this.#pathMap.rootFolder, ...args),
-        public: resolvePublicFolder
+        root: this.#pathMap.resolveRootFolder,
+        public: this.#pathMap.resolvePublicFolder,
+        serverAssets: this.#pathMap.resolveServerAssetsFolder
       },
       publicPath,
       folders: {
         root: this.#pathMap.rootFolder,
-        public: this.#pathMap.publicFolder
+        public: this.#pathMap.publicFolder,
+        serverAssets: this.#pathMap.serverAssetsFolder
       },
       render: this.#appOptions.render
     }
@@ -349,7 +353,7 @@ export class QuasarModeDevserver extends AppDevserver {
         return renderSSRError({
           renderError,
           req,
-          rootFolder: quasarConf.ctx.appPaths.appDir
+          rootFolder: this.#pathMap.rootFolder
         })
       }
     }

@@ -40,11 +40,17 @@ interface SsrMiddlewareResolve {
    * @param paths paths to join
    */
   public(...paths: string[]): string;
+  /**
+   * Resolve folder path to the "server-assets" folder. Under the hood, it does a path.join()
+   * @param paths paths to join
+   */
+  serverAssets(...paths: string[]): string;
 }
 
 interface SsrMiddlewareFolders {
   root: string;
   public: string;
+  serverAssets: string;
 }
 
 interface SsrCreateParams {
