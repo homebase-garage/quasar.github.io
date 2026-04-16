@@ -284,7 +284,8 @@ export function createNodeRolldownConfig(
     output: {
       format,
       codeSplitting: false,
-      sourcemap: quasarConf.metaConf.debugging ? 'inline' : false
+      minify: quasarConf.build.minify,
+      sourcemap: quasarConf.build.sourcemap
     },
 
     resolve: {
@@ -299,7 +300,6 @@ export function createNodeRolldownConfig(
 
     transform: {
       target: quasarConf.build.target.node,
-      minify: quasarConf.build.minify !== false,
       define: {
         ...quasarConf.metaConf[
           shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'
@@ -330,7 +330,8 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
     output: {
       format: 'iife',
       codeSplitting: false,
-      sourcemap: quasarConf.metaConf.debugging ? 'inline' : false
+      minify: quasarConf.build.minify,
+      sourcemap: quasarConf.build.sourcemap
     },
 
     resolve: {
@@ -341,7 +342,6 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
 
     transform: {
       target,
-      minify: quasarConf.build.minify !== false,
       define: {
         ...quasarConf.metaConf[
           shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'
