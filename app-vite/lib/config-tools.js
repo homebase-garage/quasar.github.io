@@ -3,7 +3,6 @@ import vueVitePlugin from '@vitejs/plugin-vue'
 import { mergeConfig } from 'vite'
 import { merge } from 'webpack-merge'
 
-import { cliPkg } from './utils/cli-runtime.js'
 import { getPackage } from './utils/get-package.js'
 import { log, tip, warn } from './utils/logger.js'
 import {
@@ -13,8 +12,6 @@ import {
 
 import { quasarViteIndexHtmlTransformPlugin } from './plugins/vite.index-html-transform.js'
 import { quasarViteStripFilenameHashesPlugin } from './plugins/vite.strip-filename-hashes.js'
-
-const cliPkgDependencies = Object.keys(cliPkg.dependencies || {})
 
 async function parseVitePlugins(entries, appDir, compileId) {
   const acc = []
@@ -280,24 +277,6 @@ export function createNodeRolldownConfig(
   quasarConf,
   { shippedToClient, format }
 ) {
-  const {
-    ctx: {
-      pkg: { appPkg },
-      cacheProxy
-    }
-  } = quasarConf
-
-  const externalsList = cacheProxy.getRuntime('externalRolldownParam', () =>
-    [
-      ...cliPkgDependencies,
-      ...Object.keys(appPkg.dependencies || {}),
-      ...Object.keys(appPkg.devDependencies || {})
-    ].filter(
-      // the possible imports of '#q-app/wrappers' / '@quasar/app-vite/wrappers'
-      dep => dep !== cliPkg.name
-    )
-  )
-
   return {
     platform: 'node',
     tsconfig: false,
@@ -327,12 +306,7 @@ export function createNodeRolldownConfig(
         ],
         ...quasarConf.build.define
       }
-    },
-
-    // we use a fresh list since this can be tampered with by the user:
-    external: [...externalsList],
-
-    plugins: []
+    }
   }
 }
 

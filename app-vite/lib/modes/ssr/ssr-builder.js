@@ -1,11 +1,10 @@
 import { join } from 'node:path'
 import { writeFileSync } from 'node:fs'
-import { merge } from 'webpack-merge'
 import { stringifyJSON } from 'confbox'
 
 import { AppBuilder } from '../../app-builder.js'
 import { quasarSsrConfig } from './ssr-config.js'
-import { cliPkg } from '../../utils/cli-runtime.js'
+import { cliDir, cliPkg } from '../../utils/cli-runtime.js'
 import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 import {
   getProdSsrRenderTemplateFileContent,
@@ -95,34 +94,42 @@ export class QuasarModeBuilder extends AppBuilder {
     this.copyFiles(patterns)
   }
 
-  #writePackageJson() {
-    const { appPkg } = this.ctx.pkg
+  async #writePackageJson() {
+    const {
+      appPaths,
+      pkg: { appPkg }
+    } = this.ctx
 
-    const localAppPkg = merge({}, appPkg)
-    const appDeps = getFixedDeps(
-      localAppPkg.dependencies || {},
-      this.ctx.appPaths.appDir
+    const rootAppDeps = getFixedDeps(appPkg.dependencies, appPaths.appDir)
+
+    const { default: ssrPkg } = await import(
+      appPaths.resolve.ssr('package.json'),
+      { with: { type: 'json' } }
     )
+    const ssrAppDeps = getFixedDeps(ssrPkg.dependencies, appPaths.ssrDir)
 
     const pkg = {
-      name: localAppPkg.name,
-      version: localAppPkg.version,
-      description: localAppPkg.description,
-      author: localAppPkg.author,
+      name: appPkg.name,
+      version: appPkg.version,
+      description: appPkg.description,
+      author: appPkg.author,
       private: true,
       type: 'module',
       module: 'index.js',
       scripts: {
         start: 'node index.js'
       },
-      dependencies: appDeps,
-      engines: localAppPkg.engines,
-      browserslist: localAppPkg.browserslist
+      dependencies: { ...rootAppDeps, ...ssrAppDeps },
+      engines: appPkg.engines
     }
 
     if (this.quasarConf.ssr.manualStoreSerialization !== true) {
-      pkg.dependencies['serialize-javascript'] =
-        cliPkg.dependencies['serialize-javascript']
+      const version = getFixedDeps(
+        { 'serialize-javascript': cliPkg.dependencies['serialize-javascript'] },
+        cliDir
+      )
+
+      pkg.dependencies['serialize-javascript'] = version['serialize-javascript']
     }
 
     if (typeof this.quasarConf.ssr.extendPackageJson === 'function') {

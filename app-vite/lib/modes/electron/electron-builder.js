@@ -53,7 +53,6 @@ export class QuasarModeBuilder extends AppBuilder {
 
     // we don't need this (also, faster install time & smaller bundles)
     delete pkg.devDependencies
-    delete pkg.browserslist
     delete pkg.scripts
     delete pkg.quasarCli
 

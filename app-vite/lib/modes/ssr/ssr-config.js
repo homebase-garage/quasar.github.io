@@ -100,14 +100,16 @@ export const quasarSsrConfig = {
     return extendViteConfig(cfg, quasarConf, { isServer: true })
   },
 
-  // returns a Promise
-  webserver: quasarConf => {
+  webserver: async quasarConf => {
     const cfg = createNodeRolldownConfig(quasarConf, {
       compileId: 'ssr-webserver',
       format: 'esm',
       shippedToClient: false
     })
-    const { appPaths } = quasarConf.ctx
+    const {
+      appPaths,
+      pkg: { appPkg }
+    } = quasarConf.ctx
 
     cfg.transform.define = {
       ...cfg.transform.define,
@@ -118,9 +120,16 @@ export const quasarSsrConfig = {
     if (quasarConf.ctx.dev) {
       cfg.input = appPaths.resolve.entry('ssr-dev-webserver.js')
       cfg.output.file = appPaths.resolve.entry('compiled-dev-webserver.js')
+      cfg.external = [/node_modules/]
     } else {
+      const { default: ssrPkg } = await import(
+        appPaths.resolve.ssr('package.json'),
+        { with: { type: 'json' } }
+      )
+
       cfg.external = [
-        ...cfg.external,
+        ...Object.keys(appPkg.dependencies || {}),
+        ...Object.keys(ssrPkg.dependencies || {}),
         'vue/server-renderer',
         'vue/compiler-sfc',
         './render-template.js',
