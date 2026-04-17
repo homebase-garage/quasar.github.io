@@ -1,4 +1,4 @@
-// `quasar` package has some Quasar CLI-specific features, e.g. $q.cordova, 'quasar/wrappers', etc.
+// `quasar` package has some Quasar CLI-specific features, e.g. $q.cordova, etc.
 // Those types should not be available in there when not using Quasar CLI
 // So, we augment the `quasar` package with these features from each engine (app-vite, app-webpack)
 
@@ -11,4 +11,3 @@ export * from "./configuration";
 export * from "./route";
 export * from "./ssr";
 export * from "./app-extension";
-import "./ui-wrappers";
