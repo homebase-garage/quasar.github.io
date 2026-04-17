@@ -45,7 +45,9 @@
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts"
+      "types": "./types/index.d.ts",
+      "node": "./exports/wrappers.js",
+      "import": "./exports/wrappers.js"
     },
     "./client": {
       "types": "./types/client/src.d.ts"
@@ -65,11 +67,6 @@
     "./package.json": "./package.json",
     "./bin/quasar": {
       "node": "./bin/quasar.js"
-    },
-    "./wrappers": {
-      "types": "./types/app-wrappers.d.ts",
-      "node": "./exports/wrappers.js",
-      "import": "./exports/wrappers.js"
     },
     "./bex/background": {
       "types": "./types/bex/entrypoints/background.d.ts",

@@ -1,4 +1,4 @@
-import { defineSsrMiddleware } from '#q-app/wrappers'
+import { defineSsrMiddleware } from '#q-app'
 
 /**
  * This middleware should execute as last one

@@ -1,4 +1,4 @@
-import { defineSsrMiddleware } from "#q-app/wrappers";
+import { defineSsrMiddleware } from "#q-app";
 import type {
   SsrRenderRedirectError,
   SsrRenderRouteNotFoundError

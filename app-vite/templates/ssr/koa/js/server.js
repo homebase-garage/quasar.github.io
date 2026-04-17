@@ -16,7 +16,7 @@ import {
   defineSsrListen,
   defineSsrRenderPreloadTag,
   defineSsrServeStaticContent
-} from '#q-app/wrappers'
+} from '#q-app'
 
 /**
  * Create your webserver and return its instance.

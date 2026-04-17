@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 
 import { mergeConfig } from 'vite'
-import { defineConfig } from '#q-app/wrappers'
+import { defineConfig } from '#q-app'
 
 const rootFolder = import.meta.dirname
 const resolve = _path => join(rootFolder, _path)

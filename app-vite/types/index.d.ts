@@ -11,3 +11,4 @@ export * from "./configuration";
 export * from "./route";
 export * from "./ssr";
 export * from "./app-extension";
+export * from "./app-wrappers";

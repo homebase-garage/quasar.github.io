@@ -16,7 +16,7 @@ import {
   defineSsrListen,
   defineSsrRenderPreloadTag,
   defineSsrServeStaticContent
-} from "#q-app/wrappers";
+} from "#q-app";
 
 declare module "#q-app" {
   interface SsrDriver {

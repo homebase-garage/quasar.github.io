@@ -12,7 +12,7 @@
  *    @quasar/app-vite v2
  *    @quasar/app-webpack v4
  *
- * Use the new wrappers from #q-app/wrappers
+ * Use the new wrappers from #q-app instead
  *******************************************************/
 
 export function boot(callback) {

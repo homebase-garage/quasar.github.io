@@ -20,7 +20,7 @@ import {
   defineSsrListen,
   defineSsrRenderPreloadTag,
   defineSsrServeStaticContent
-} from "#q-app/wrappers";
+} from "#q-app";
 
 interface NodeEnv {
   Bindings: {
