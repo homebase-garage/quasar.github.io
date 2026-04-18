@@ -10,7 +10,7 @@ import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
     await this.#buildFiles()
-    await this.#writePackageJson()
+    this.#writePackageJson()
     this.#copyElectronFiles()
 
     this.printSummary(join(this.quasarConf.build.distDir, 'UnPackaged'))
@@ -39,16 +39,21 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #writePackageJson() {
-    const pkg = merge({}, this.ctx.pkg.appPkg)
+    const {
+      appPaths,
+      pkg: { appPkg, modePkg }
+    } = this.ctx
 
-    if (pkg.dependencies) {
-      pkg.dependencies = getFixedDeps(
-        pkg.dependencies,
-        this.ctx.appPaths.appDir
-      )
-      delete pkg.dependencies['@quasar/extras']
-      delete pkg.dependencies['register-service-worker']
-    }
+    const pkg = merge({}, appPkg)
+
+    pkg.dependencies = getFixedDeps(pkg.dependencies, appPaths.appDir)
+    delete pkg.dependencies['@quasar/extras']
+    delete pkg.dependencies['register-service-worker']
+
+    Object.assign(
+      pkg.dependencies,
+      getFixedDeps(modePkg.dependencies, appPaths.electronDir)
+    )
 
     // we don't need this (also, faster install time & smaller bundles)
     delete pkg.devDependencies
@@ -94,7 +99,7 @@ export class QuasarModeBuilder extends AppBuilder {
     nodePackager.install({
       cwd: join(this.quasarConf.build.distDir, 'UnPackaged'),
       params: this.quasarConf.electron.unPackagedInstallParams,
-      displayName: 'UnPackaged folder production',
+      displayName: 'UnPackaged production folder',
       env: 'production'
     })
 
@@ -107,9 +112,7 @@ export class QuasarModeBuilder extends AppBuilder {
         unpackagedDir: join(this.quasarConf.build.distDir, 'UnPackaged')
       })
 
-      if (result && result.then) {
-        await result
-      }
+      if (result && result.then) await result
 
       log()
       log('[SUCCESS] Done running beforePackaging()')
@@ -132,7 +135,7 @@ export class QuasarModeBuilder extends AppBuilder {
         bundlerName === 'packager'
           ? bundler({
               ...bundlerConfig,
-              electronVersion: getPackageJson('electron', appPaths.appDir)
+              electronVersion: getPackageJson('electron', appPaths.electronDir)
                 .version
             })
           : bundler.build(bundlerConfig)

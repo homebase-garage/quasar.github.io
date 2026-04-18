@@ -93,11 +93,12 @@ print({ key: 'Important local packages', section: true })
   'rolldown',
   'typescript',
   'workbox-build',
-  'register-service-worker',
-  'electron',
-  '@electron/packager',
-  'electron-builder'
+  'register-service-worker'
 ].forEach(pkg => print(safePkgInfo(pkg, appPaths.appDir)))
+
+;['electron', '@electron/packager', 'electron-builder'].forEach(pkg =>
+  print(safePkgInfo(pkg, appPaths.electronDir))
+)
 
 ;[
   '@capacitor/core',

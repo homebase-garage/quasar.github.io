@@ -26,7 +26,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
     const electronPkgPath = getPackagePath(
       'electron/package.json',
-      this.ctx.appPaths.appDir
+      this.ctx.appPaths.electronDir
     )
     const electronPkg = JSON.parse(readFileSync(electronPkgPath, 'utf8'))
 

@@ -17,32 +17,33 @@ function isValidName(bundlerName) {
   return ['packager', 'builder'].includes(bundlerName)
 }
 
-function installBundler(bundlerName, nodePackager) {
+function installBundler(bundlerName, nodePackager, appPaths) {
   const bundler = bundlerMap[bundlerName]
 
   nodePackager.installPackage(`${bundler.pkg}@^${bundler.version}`, {
+    cwd: appPaths.electronDir,
     isDevDependency: true,
     displayName: bundler.pkg
   })
 }
 
-function hasPackage(pkgName, appPkg) {
+function hasPackage(pkgName, modePkg) {
   return (
-    ((appPkg.devDependencies && appPkg.devDependencies[pkgName]) ||
-      (appPkg.dependencies && appPkg.dependencies[pkgName])) !== void 0
+    ((modePkg.devDependencies && modePkg.devDependencies[pkgName]) ||
+      (modePkg.dependencies && modePkg.dependencies[pkgName])) !== void 0
   )
 }
 
 export async function createInstance({
   appPaths,
-  pkg: { appPkg },
+  pkg: { modePkg },
   cacheProxy
 }) {
   const nodePackager = await cacheProxy.getModule('nodePackager')
 
   function bundlerIsInstalled(bundlerName) {
     const bundler = bundlerMap[bundlerName]
-    return hasPackage(bundler.pkg, appPkg)
+    return hasPackage(bundler.pkg, modePkg)
   }
 
   function ensureInstall(bundlerName) {
@@ -51,7 +52,7 @@ export async function createInstance({
     }
 
     if (!bundlerIsInstalled(bundlerName)) {
-      installBundler(bundlerName, nodePackager)
+      installBundler(bundlerName, nodePackager, appPaths)
     }
   }
 
@@ -72,7 +73,7 @@ export async function createInstance({
   // "{ default }" (@electron/packager v18) or directly the package (electron-builder);
   function getBundler(bundlerName) {
     const bundler = bundlerMap[bundlerName]
-    return getPackage(bundler.pkg, appPaths.appDir)
+    return getPackage(bundler.pkg, appPaths.electronDir)
   }
 
   return {

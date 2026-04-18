@@ -32,15 +32,25 @@ async function preloadScript(quasarConf, name) {
   const { appPaths } = quasarConf.ctx
 
   cfg.input = appPaths.resolve.electron(name)
-  cfg.output.file = quasarConf.ctx.dev
-    ? appPaths.resolve.entry(`preload/${scriptName}.cjs`)
-    : join(quasarConf.build.distDir, `UnPackaged/preload/${scriptName}.cjs`)
+  cfg.resolve.modules = [
+    'node_modules',
+    appPaths.resolve.electron('node_modules')
+  ]
+  cfg.external.unshift('electron')
 
-  cfg.transform.define = {
-    ...cfg.transform.define,
-    'import.meta.env.QUASAR_PUBLIC_FOLDER': quasarConf.ctx.dev
-      ? JSON.stringify(appPaths.publicDir)
-      : '"."'
+  if (quasarConf.ctx.dev) {
+    cfg.output.file = appPaths.resolve.entry(`preload/${scriptName}.cjs`)
+    cfg.transform.define['import.meta.env.QUASAR_PUBLIC_FOLDER'] =
+      JSON.stringify(appPaths.publicDir)
+  } else {
+    cfg.output.file = join(
+      quasarConf.build.distDir,
+      `UnPackaged/preload/${scriptName}.cjs`
+    )
+    cfg.transform.define['import.meta.env.QUASAR_PUBLIC_FOLDER'] = '"."'
+    cfg.external.push(
+      ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {})
+    )
   }
 
   return {
@@ -64,7 +74,8 @@ export const quasarElectronConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-electron',
-      shippedToClient: true
+      shippedToClient: true,
+      modeDeps: quasarConf.ctx.pkg.modePkg.dependencies
     })
 
     if (quasarConf.ctx.prod) {
@@ -83,11 +94,6 @@ export const quasarElectronConfig = {
     })
     const { appPaths } = quasarConf.ctx
 
-    cfg.input = quasarConf.sourceFiles.electronMain
-    cfg.output.file = quasarConf.ctx.dev
-      ? appPaths.resolve.entry('electron-main.js')
-      : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
-
     cfg.transform.define = {
       ...cfg.transform.define,
       ...(quasarConf.ctx.dev
@@ -105,6 +111,23 @@ export const quasarElectronConfig = {
             'import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION': '".cjs"',
             'import.meta.env.QUASAR_PUBLIC_FOLDER': '"."'
           })
+    }
+
+    cfg.input = quasarConf.sourceFiles.electronMain
+    cfg.output.file = quasarConf.ctx.dev
+      ? appPaths.resolve.entry('electron-main.js')
+      : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
+
+    cfg.resolve.modules = [
+      'node_modules',
+      appPaths.resolve.electron('node_modules')
+    ]
+    cfg.external.unshift('electron')
+
+    if (quasarConf.ctx.prod) {
+      cfg.external.push(
+        ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {})
+      )
     }
 
     return extendRolldownConfig(
