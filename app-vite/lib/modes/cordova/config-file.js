@@ -4,7 +4,6 @@ import fs from 'node:fs'
 import et from 'elementtree'
 
 import { log, warn } from '../../utils/logger.js'
-import { ensureConsistency } from './cordova-consistency.js'
 
 function setFields(root, cfg) {
   Object.keys(cfg).forEach(key => {
@@ -38,8 +37,6 @@ export class CordovaConfigFile {
   prepare(quasarConf) {
     const { ctx } = quasarConf
     const { appPaths } = ctx
-
-    ensureConsistency({ appPaths })
 
     this.#ctx = ctx
     this.#filePath = appPaths.resolve.cordova('config.xml')

@@ -3,7 +3,6 @@ import { parseJSON, stringifyJSON } from 'confbox'
 
 import { log } from '../../utils/logger.js'
 import { getPackageJson } from '../../utils/get-package-json.js'
-import { ensureConsistency } from './capacitor-consistency.js'
 
 const sslSkipVersion = {
   5: '^0.3.0',
@@ -21,8 +20,6 @@ export class CapacitorConfigFile {
     this.#ctx = quasarConf.ctx
 
     const { appPaths, cacheProxy } = quasarConf.ctx
-
-    await ensureConsistency(this.#ctx)
 
     this.#updateCapPkg(quasarConf)
     log('Updated src-capacitor/package.json')
@@ -96,11 +93,11 @@ export class CapacitorConfigFile {
   #updateCapPkg(quasarConf) {
     const {
       appPaths,
-      pkg: { appPkg }
+      pkg: { appPkg, modePkg }
     } = this.#ctx
 
     const capPkgPath = appPaths.resolve.capacitor('package.json')
-    const capPkg = parseJSON(fs.readFileSync(capPkgPath, 'utf8'))
+    const capPkg = structuredClone(modePkg)
 
     Object.assign(capPkg, {
       name: quasarConf.capacitor.appName || appPkg.name,

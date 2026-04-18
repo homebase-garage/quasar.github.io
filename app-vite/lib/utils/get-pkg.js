@@ -9,9 +9,10 @@ import { getPackageJson } from '../utils/get-package-json.js'
  *
  * @returns {import('../../types/configuration/context').InternalQuasarContext['pkg']}
  */
-export function getPkg(appPaths) {
+export function getPkg(appPaths, mode) {
   const { appDir, cliDir } = appPaths
   const appPkgPath = appPaths.resolve.app('package.json')
+  const modePkgPath = appPaths.resolve.app(`src-${mode}/package.json`)
 
   let appPkg = {}
   let lastAppPkgModifiedTime = 0
@@ -33,12 +34,36 @@ export function getPkg(appPaths) {
     return appPkg
   }
 
+  let modePkg = {}
+  let lastModePkgModifiedTime = 0
+
+  function getModePackageJson() {
+    const { mtime } = statSync(modePkgPath)
+
+    if (mtime !== lastModePkgModifiedTime) {
+      lastModePkgModifiedTime = mtime
+      try {
+        // This may get updated and written, so use parseJSON to preserve formatting
+        modePkg = parseJSON(readFileSync(modePkgPath, 'utf8'))
+      } catch (err) {
+        warning("Could not parse mode's package.json. The file is malformed:")
+        console.error(err)
+      }
+    }
+
+    return modePkg
+  }
+
   const acc = {
     quasarPkg: getPackageJson('quasar', appDir),
     vitePkg: getPackageJson('vite', appDir) || getPackageJson('vite', cliDir)
   }
 
   Object.defineProperty(acc, 'appPkg', { get: getAppPackageJson })
+
+  if (mode && mode !== 'spa') {
+    Object.defineProperty(acc, 'modePkg', { get: getModePackageJson })
+  }
 
   return acc
 }

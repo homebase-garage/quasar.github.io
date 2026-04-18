@@ -57,7 +57,7 @@ export function getCtx(opts = {}) {
     defineHiddenProp
   })
 
-  defineHiddenProp(ctx, 'pkg', getPkg(ctx.appPaths))
+  defineHiddenProp(ctx, 'pkg', getPkg(ctx.appPaths, opts.mode))
   defineHiddenProp(ctx, 'cacheProxy', createCacheProxy(ctx))
   defineHiddenProp(ctx, 'appExt', createAppExt(ctx))
 

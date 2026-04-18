@@ -1,9 +1,5 @@
 import fs from 'node:fs'
 
-/**
- * To be used for Capacitor v1 & v2 only
- */
-
 export function fixAndroidCleartext(appPaths, action) {
   const androidManifestPath = appPaths.resolve.cordova(
     'platforms/android/app/src/main/AndroidManifest.xml'
