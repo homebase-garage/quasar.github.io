@@ -46,14 +46,7 @@ export class QuasarModeBuilder extends AppBuilder {
 
     const pkg = merge({}, appPkg)
 
-    pkg.dependencies = getFixedDeps(pkg.dependencies, appPaths.appDir)
-    delete pkg.dependencies['@quasar/extras']
-    delete pkg.dependencies['register-service-worker']
-
-    Object.assign(
-      pkg.dependencies,
-      getFixedDeps(modePkg.dependencies, appPaths.electronDir)
-    )
+    pkg.dependencies = getFixedDeps(modePkg.dependencies, appPaths.electronDir)
 
     // we don't need this (also, faster install time & smaller bundles)
     delete pkg.devDependencies

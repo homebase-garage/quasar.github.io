@@ -119,17 +119,18 @@ export const quasarSsrConfig = {
       cfg.input = appPaths.resolve.entry('ssr-dev-webserver.js')
       cfg.output.file = appPaths.resolve.entry('compiled-dev-webserver.js')
     } else {
+      cfg.input = appPaths.resolve.entry('ssr-prod-webserver.js')
+      cfg.output.file = join(quasarConf.build.distDir, 'index.js')
+
       cfg.external.push(
+        ...Object.keys(quasarConf.ctx.pkg.appPkg.dependencies || {}),
         ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {}),
-        // 'vue/server-renderer', // included already from appPkg.dependencies
-        // 'vue/compiler-sfc', // included already from appPkg.dependencies
+        'vue/server-renderer',
+        'vue/compiler-sfc',
         './render-template.js',
         './quasar.manifest.json',
         './server/server-entry.js'
       )
-
-      cfg.input = appPaths.resolve.entry('ssr-prod-webserver.js')
-      cfg.output.file = join(quasarConf.build.distDir, 'index.js')
     }
 
     cfg.resolve.modules = ['node_modules', appPaths.resolve.ssr('node_modules')]

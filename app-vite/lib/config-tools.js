@@ -327,9 +327,7 @@ export function createNodeRolldownConfig(
           : ['.cjs', '.js', '.mjs', '.ts', '.json']
     },
 
-    external: quasarConf.ctx.dev
-      ? [/node_modules/]
-      : Object.keys(quasarConf.ctx.pkg.appPkg.dependencies || {}),
+    external: quasarConf.ctx.dev ? [/node_modules/] : [],
 
     transform: {
       target: quasarConf.build.target.node,

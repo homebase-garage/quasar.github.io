@@ -36,10 +36,12 @@ async function preloadScript(quasarConf, name) {
     'node_modules',
     appPaths.resolve.electron('node_modules')
   ]
+
   cfg.external.unshift('electron')
 
   if (quasarConf.ctx.dev) {
     cfg.output.file = appPaths.resolve.entry(`preload/${scriptName}.cjs`)
+
     cfg.transform.define['import.meta.env.QUASAR_PUBLIC_FOLDER'] =
       JSON.stringify(appPaths.publicDir)
   } else {
@@ -47,7 +49,9 @@ async function preloadScript(quasarConf, name) {
       quasarConf.build.distDir,
       `UnPackaged/preload/${scriptName}.cjs`
     )
+
     cfg.transform.define['import.meta.env.QUASAR_PUBLIC_FOLDER'] = '"."'
+
     cfg.external.push(
       ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {})
     )
