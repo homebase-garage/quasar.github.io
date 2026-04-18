@@ -1,4 +1,6 @@
 import { createRequire } from 'node:module'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { resolvePathSync } from 'mlly'
 
 /**
@@ -19,14 +21,25 @@ export function getPackagePath(pkgName, dir) {
   try {
     return resolvePathSync(pkgName, { url: dir })
   } catch {
-    /* do nothing, let the next method try as well */
+    /* Do nothing, let the next method try as well */
   }
 
+  /**
+   * Some packages have "exports" field in their package.json,
+   * but they don't mention the required file in it, so we try to
+   * check if the file/folder exists for ourselves.
+   */
+  const packagePath = join(dir, 'node_modules', pkgName)
+  if (existsSync(packagePath)) return packagePath
+
   try {
+    /**
+     * Final try, by using legacy method:
+     */
     return require.resolve(pkgName, {
       paths: [dir]
     })
   } catch {
-    /* do and return nothing */
+    /* Else... do and return nothing */
   }
 }
