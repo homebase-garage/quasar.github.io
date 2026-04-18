@@ -1,7 +1,7 @@
 import fse from 'fs-extra'
 import inquirer from 'inquirer'
 
-import { ensureDeps } from './ensure-consistency.js'
+import { ensureConsistency } from './ssr-consistency.js'
 import { log, warn } from '../../utils/logger.js'
 import { isModeInstalled } from '../modes-utils.js'
 
@@ -13,6 +13,8 @@ import { isModeInstalled } from '../modes-utils.js'
  */
 export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
   if (isModeInstalled(appPaths, 'ssr')) {
+    await ensureConsistency({ appPaths, cacheProxy })
+
     if (silent !== true) {
       warn('SSR support detected already. Aborting.')
     }
@@ -47,7 +49,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
     appPaths.ssrDir
   )
 
-  await ensureDeps({ appPaths, cacheProxy })
+  await ensureConsistency({ appPaths, cacheProxy })
 
   log('SSR support was added')
 }

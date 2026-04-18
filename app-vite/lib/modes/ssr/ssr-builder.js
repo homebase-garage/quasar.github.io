@@ -20,7 +20,7 @@ export class QuasarModeBuilder extends AppBuilder {
   async build() {
     await this.#buildWebserver()
     await this.#copyWebserverFiles()
-    await this.#writePackageJson()
+    this.#writePackageJson()
 
     if (this.quasarConf.ssr.pwa) {
       // also update pwa-builder.js when changing here
@@ -94,19 +94,14 @@ export class QuasarModeBuilder extends AppBuilder {
     this.copyFiles(patterns)
   }
 
-  async #writePackageJson() {
+  #writePackageJson() {
     const {
       appPaths,
-      pkg: { appPkg }
+      pkg: { appPkg, modePkg }
     } = this.ctx
 
     const rootAppDeps = getFixedDeps(appPkg.dependencies, appPaths.appDir)
-
-    const { default: ssrPkg } = await import(
-      appPaths.resolve.ssr('package.json'),
-      { with: { type: 'json' } }
-    )
-    const ssrAppDeps = getFixedDeps(ssrPkg.dependencies, appPaths.ssrDir)
+    const ssrAppDeps = getFixedDeps(modePkg.dependencies, appPaths.ssrDir)
 
     const pkg = {
       name: appPkg.name,

@@ -134,7 +134,11 @@ middlewareParams.serve = { static: serveStatic }
 <% if (quasarConf.ssr.pwa) { %>
 // serve the service worker with no cache
 <% /* Keep SsrServeStaticFnParams["opts"] in sync */ %>
-await serveStatic({ urlPath: '/<%= quasarConf.pwa.swFilename %>', pathToServe: '<%= quasarConf.pwa.swFilename %>', opts: { maxAge: 0 } })
+await serveStatic({
+  urlPath: '/<%= quasarConf.pwa.swFilename %>',
+  pathToServe: '<%= quasarConf.pwa.swFilename %>',
+  opts: { maxAge: 0 }
+})
 <% } %>
 
 // serve "client" folder (includes the "public" folder)

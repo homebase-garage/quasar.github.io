@@ -100,16 +100,14 @@ export const quasarSsrConfig = {
     return extendViteConfig(cfg, quasarConf, { isServer: true })
   },
 
-  webserver: async quasarConf => {
+  // returns a Promise
+  webserver: quasarConf => {
     const cfg = createNodeRolldownConfig(quasarConf, {
       compileId: 'ssr-webserver',
       format: 'esm',
       shippedToClient: false
     })
-    const {
-      appPaths,
-      pkg: { appPkg }
-    } = quasarConf.ctx
+    const { appPaths } = quasarConf.ctx
 
     cfg.transform.define = {
       ...cfg.transform.define,
@@ -120,31 +118,21 @@ export const quasarSsrConfig = {
     if (quasarConf.ctx.dev) {
       cfg.input = appPaths.resolve.entry('ssr-dev-webserver.js')
       cfg.output.file = appPaths.resolve.entry('compiled-dev-webserver.js')
-      cfg.external = [/node_modules/]
     } else {
-      const { default: ssrPkg } = await import(
-        appPaths.resolve.ssr('package.json'),
-        { with: { type: 'json' } }
-      )
-
-      cfg.external = [
-        ...Object.keys(appPkg.dependencies || {}),
-        ...Object.keys(ssrPkg.dependencies || {}),
-        'vue/server-renderer',
-        'vue/compiler-sfc',
+      cfg.external.push(
+        ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {}),
+        // 'vue/server-renderer', // included already from appPkg.dependencies
+        // 'vue/compiler-sfc', // included already from appPkg.dependencies
         './render-template.js',
         './quasar.manifest.json',
         './server/server-entry.js'
-      ]
+      )
 
       cfg.input = appPaths.resolve.entry('ssr-prod-webserver.js')
       cfg.output.file = join(quasarConf.build.distDir, 'index.js')
     }
 
-    cfg.resolve.modules = [
-      appPaths.resolve.app('node_modules'),
-      appPaths.resolve.ssr('node_modules')
-    ]
+    cfg.resolve.modules = ['node_modules', appPaths.resolve.ssr('node_modules')]
 
     return extendRolldownConfig(
       cfg,

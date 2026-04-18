@@ -1,8 +1,9 @@
 {
-  "name": "ssr",
+  "name": "quasar-ssr-app-fastify",
   "version": "1.0.0",
   "private": true,
-  "description": "Quasar SSR server",
+  "description": "Quasar SSR server folder",
+  "type": "module",
   "dependencies": {
     "@fastify/compress": "^8.3.1",
     "@fastify/static": "^9.1.1",

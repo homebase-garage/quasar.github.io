@@ -1,7 +1,8 @@
 {
-  "name": "ssr",
+  "name": "quasar-ssr-app-hono",
   "version": "1.0.0",
-  "description": "Quasar SSR server",
+  "description": "Quasar SSR server folder",
+  "type": "module",
   "private": true,
   "dependencies": {
     "hono": "^4.12.12",

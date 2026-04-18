@@ -1,8 +1,9 @@
 {
-  "name": "ssr",
+  "name": "quasar-ssr-app-koa",
   "version": "1.0.0",
-  "description": "Quasar SSR server",
+  "description": "Quasar SSR server folder",
   "private": true,
+  "type": "module",
   "dependencies": {
     "koa": "^3.2.0",
     "koa-compress": "^5.2.1",
