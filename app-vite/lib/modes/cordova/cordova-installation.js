@@ -3,7 +3,7 @@ import inquirer from 'inquirer'
 
 import { fatal, log, warn } from '../../utils/logger.js'
 import { spawnSync } from '../../utils/spawn.js'
-import { ensureConsistency, ensureWWW } from './ensure-consistency.js'
+import { ensureConsistency, ensureWWW } from './cordova-consistency.js'
 import { isModeInstalled } from '../modes-utils.js'
 
 /**

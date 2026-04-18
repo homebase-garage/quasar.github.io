@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import et from 'elementtree'
 
 import { log, warn } from '../../utils/logger.js'
-import { ensureConsistency } from './ensure-consistency.js'
+import { ensureConsistency } from './cordova-consistency.js'
 
 function setFields(root, cfg) {
   Object.keys(cfg).forEach(key => {

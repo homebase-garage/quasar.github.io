@@ -5,7 +5,7 @@ import { globSync } from 'tinyglobby'
 import { log, warn } from '../../utils/logger.js'
 import { spawnSync } from '../../utils/spawn.js'
 
-import { ensureConsistency, ensureDeps } from './ensure-consistency.js'
+import { ensureConsistency, ensureDeps } from './capacitor-consistency.js'
 import { isModeInstalled } from '../modes-utils.js'
 import { renderTemplate } from '../../utils/template.js'
 
