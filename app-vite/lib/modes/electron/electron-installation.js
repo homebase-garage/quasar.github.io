@@ -1,6 +1,7 @@
 import fse from 'fs-extra'
 
 import { log, warn } from '../../utils/logger.js'
+import { getPackageJson } from '../../utils/get-package-json.js'
 import { isModeInstalled } from '../modes-utils.js'
 import { ensureConsistency } from './electron-consistency.js'
 
@@ -34,6 +35,12 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
   )
 
   await ensureConsistency({ appPaths, cacheProxy })
+
+  const modePkgPath = appPaths.resolve.electron('package.json')
+  const electronPkg = getPackageJson('electron', appPaths.electronDir)
+  const modePkg = JSON.parse(fse.readFileSync(modePkgPath, 'utf8'))
+  modePkg.devDependencies.electron = `^${electronPkg.version}`
+  fse.writeFileSync(modePkgPath, JSON.stringify(modePkg, null, 2))
 
   log('Electron support was added')
 }
