@@ -122,7 +122,6 @@ export class QuasarModeBuilder extends AppBuilder {
     const bundlerResult = await getBundler(bundlerName)
     const bundler =
       bundlerResult.packager /* @electron/packager v19+ */ ||
-      bundlerResult.default /* @electron/packager v18 */ ||
       bundlerResult /* electron-builder */
     const pkgBanner = `electron/${bundlerName}`
 
