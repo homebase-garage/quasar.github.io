@@ -50,7 +50,7 @@ import { isModeInstalled } from '../modes/modes-utils.js'
 
 async function run() {
   const [action, mode] = argv._
-  const ctx = getCtx({ mode })
+  const ctx = getCtx({ mode: 'spa' })
 
   if (!['add', 'remove'].includes(action)) {
     console.log()
@@ -102,7 +102,7 @@ async function run() {
   // Ensure types are re-generated accordingly
   const { QuasarConfigFile } = await import('../quasar-config-file.js')
   const quasarConfFile = new QuasarConfigFile({
-    ctx: action === 'remove' ? getCtx({ mode: 'spa' }) : ctx,
+    ctx,
     // host and port don't matter for this command
     port: 9000,
     host: 'localhost'

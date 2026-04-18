@@ -106,6 +106,10 @@ function generateTsConfig(quasarConf, fsUtils) {
       fse.readFileSync(appPaths.resolve.electron('package.json'), 'utf8')
     )
 
+    // We alias `electron` itself because it's a runtime dep
+    // (and specified in devDependencies)
+    aliasMap['electron'] = join(target, 'electron')
+
     Object.keys(json.dependencies || {}).forEach(dep => {
       aliasMap[dep] = join(target, dep)
     })
