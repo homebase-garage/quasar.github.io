@@ -42,6 +42,5 @@ export function removeMode({ ctx: { appPaths } }) {
 
   log('Removing Browser Extension source folder')
   fse.removeSync(appPaths.bexDir)
-
   log('Browser Extension support was removed')
 }

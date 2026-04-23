@@ -23,7 +23,6 @@ export function getCtx(opts = {}) {
     modeName: opts.mode,
     target: {},
     targetName: opts.target,
-    emulator: opts.emulator,
     arch: {},
     archName: opts.arch,
     bundler: {},

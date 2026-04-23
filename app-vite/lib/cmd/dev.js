@@ -10,7 +10,6 @@ const argv = parseArgs(process.argv.slice(2), {
   alias: {
     m: 'mode',
     T: 'target', // cordova/capacitor/bex mode only
-    e: 'emulator', // cordova-mode only
     p: 'port',
     H: 'hostname',
     i: 'ide',
@@ -58,18 +57,9 @@ if (argv.help) {
     --nocolor        Disable colored output
     --help, -h       Displays this message
 
-    Only for Cordova mode:
+    Only for Capacitor & Cordova modes:
     --target, -T     (required) App target [android|ios]
-    --emulator, -e   (optional) Emulator name
-                        Examples: iPhone-7, iPhone-X
-                        iPhone-X,com.apple.CoreSimulator.SimRuntime.iOS-12-2
-    --ide, -i        Open IDE (Android Studio / XCode) instead of letting Cordova
-                       boot up the emulator / building in terminal, in which case
-                       the "--emulator" param will have no effect
-
-
-    Only for Capacitor mode:
-    --target, -T     (required) App target [android|ios]
+    --ide, -i        (prod only) Open IDE to build the app instead of using CLI tools
 
     Only for BEX mode:
     --target, -T     (required) Browser family target [chrome|firefox]
@@ -132,7 +122,6 @@ const { getCtx } = await import('../utils/get-ctx.js')
 const ctx = getCtx({
   mode: argv.mode,
   target: argv.target,
-  emulator: argv.emulator,
   dev: true,
   vueDevtools: argv.devtools
 })

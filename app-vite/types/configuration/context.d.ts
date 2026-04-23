@@ -63,13 +63,6 @@ interface CordovaQuasarContext extends BaseQuasarContext {
   };
   /** App target name. */
   readonly targetName: QuasarCordovaTargets;
-  /**
-   * Emulator name, may be present only for Cordova mode.
-   *
-   * @example
-   * 'iPhone-7', 'iPhone-X', 'iPhone-X', 'com.apple.CoreSimulator.SimRuntime.iOS-12-2'
-   */
-  readonly emulator: string;
 }
 
 interface BaseElectronQuasarContext extends BaseQuasarContext {

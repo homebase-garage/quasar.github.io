@@ -62,31 +62,19 @@ export class QuasarModeDevserver extends AppDevserver {
   async #runCordova(quasarConf) {
     this.#stopCordova()
 
-    if (this.argv.ide) {
-      await this.#runCordovaCommand(quasarConf, [
-        'prepare',
-        this.#target,
-        ...this.argv._
-      ])
+    await this.#runCordovaCommand(quasarConf, [
+      'prepare',
+      this.#target,
+      ...this.argv._
+    ])
 
-      await openIDE({
-        mode: 'cordova',
-        bin: quasarConf.bin,
-        target: this.#target,
-        dev: true,
-        appPaths: this.ctx.appPaths
-      })
-
-      return
-    }
-
-    const args = ['run', this.#target]
-
-    if (this.ctx.emulator) {
-      args.push(`--target=${this.ctx.emulator}`)
-    }
-
-    await this.#runCordovaCommand(quasarConf, [...args, ...this.argv._])
+    await openIDE({
+      mode: 'cordova',
+      bin: quasarConf.bin,
+      target: this.#target,
+      dev: true,
+      appPaths: this.ctx.appPaths
+    })
   }
 
   #stopCordova() {

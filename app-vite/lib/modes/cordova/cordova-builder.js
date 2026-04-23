@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { AppBuilder } from '../../app-builder.js'
 import { quasarCordovaConfig } from './cordova-config.js'
 
-import { fatal, log, warn } from '../../utils/logger.js'
+import { log, warn } from '../../utils/logger.js'
 import { CordovaConfigFile } from './config-file.js'
 import { spawn } from '../../utils/spawn.js'
 import { openIDE } from '../../utils/open-ide.js'
@@ -158,7 +158,13 @@ export class QuasarModeBuilder extends AppBuilder {
         this.#cleanup()
 
         if (code) {
-          fatal('Cordova CLI has failed', 'FAIL')
+          console.log()
+          console.log(' ⚠️  Cordova CLI has failed to build!')
+          console.log(
+            ' ⚠️  As an alternative, you can use the "--ide" param and build from the IDE.'
+          )
+          console.log()
+          process.exit(1)
         }
 
         resolve()
