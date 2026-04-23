@@ -20,7 +20,8 @@ export const quasarPwaConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-pwa',
-      shippedToClient: true
+      shippedToClient: true,
+      modeDeps: quasarConf.ctx.pkg.modePkg.dependencies
     })
 
     // also update ssr-config.js when changing here
@@ -164,6 +165,8 @@ export const quasarPwaConfig = {
 
     cfg.input = quasarConf.sourceFiles.pwaServiceWorker
     cfg.output.file = appPaths.resolve.entry('compiled-custom-sw.js')
+
+    cfg.resolve.modules = ['node_modules', appPaths.resolve.pwa('node_modules')]
 
     return extendRolldownConfig(
       cfg,

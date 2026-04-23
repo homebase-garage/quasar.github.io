@@ -1,23 +1,8 @@
 import fse from 'fs-extra'
 
+import { ensureConsistency } from './pwa-consistency.js'
 import { log, warn } from '../../utils/logger.js'
 import { isModeInstalled } from '../modes-utils.js'
-
-const defaultVersion = '^7.0.0'
-
-const pwaDevDeps = {
-  'workbox-core': defaultVersion,
-  'workbox-routing': defaultVersion,
-  'workbox-strategies': defaultVersion,
-  'workbox-expiration': defaultVersion,
-  'workbox-precaching': defaultVersion,
-  'workbox-cacheable-response': defaultVersion,
-  'workbox-build': defaultVersion
-}
-
-const pwaDeps = {
-  'register-service-worker': '^1.7.2'
-}
 
 /**
  * @param {{
@@ -27,37 +12,30 @@ const pwaDeps = {
  */
 export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
   if (isModeInstalled(appPaths, 'pwa')) {
+    await ensureConsistency({ appPaths, cacheProxy })
+
     if (silent !== true) {
       warn('PWA support detected already. Aborting.')
     }
     return
   }
 
-  const nodePackager = await cacheProxy.getModule('nodePackager')
-  nodePackager.installPackage(
-    Object.entries(pwaDevDeps).map(([name, version]) => `${name}@${version}`),
-    { isDevDependency: true, displayName: 'PWA dev dependencies' }
-  )
-  nodePackager.installPackage(
-    Object.entries(pwaDeps).map(([name, version]) => `${name}@${version}`),
-    { displayName: 'PWA dependencies' }
-  )
-
   log('Creating PWA source folder...')
 
-  const hasTypescript = await cacheProxy.getModule('hasTypescript')
-  const format = hasTypescript ? 'ts' : 'js'
-
-  fse.copySync(appPaths.resolve.cli(`templates/pwa/${format}`), appPaths.pwaDir)
-
-  log('Copying PWA icons to /public/icons/ (if they are not already there)...')
+  fse.copySync(appPaths.resolve.cli(`templates/pwa/common`), appPaths.pwaDir)
   fse.copySync(
-    appPaths.resolve.cli('templates/pwa-icons'),
+    appPaths.resolve.cli('templates/pwa/icons'),
     appPaths.resolve.app('public/icons'),
     {
       overwrite: false
     }
   )
+
+  const hasTypescript = await cacheProxy.getModule('hasTypescript')
+  const format = hasTypescript ? 'ts' : 'js'
+  fse.copySync(appPaths.resolve.cli(`templates/pwa/${format}`), appPaths.pwaDir)
+
+  await ensureConsistency({ appPaths, cacheProxy })
 
   log('PWA support was added')
 }
@@ -67,7 +45,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
  *   ctx: import('../../../types/configuration/context').InternalQuasarContext,
  * }} options
  */
-export async function removeMode({ ctx: { appPaths, cacheProxy } }) {
+export function removeMode({ ctx: { appPaths } }) {
   if (!isModeInstalled(appPaths, 'pwa')) {
     warn('No PWA support detected. Aborting.')
     return
@@ -75,14 +53,5 @@ export async function removeMode({ ctx: { appPaths, cacheProxy } }) {
 
   log('Removing PWA source folder')
   fse.removeSync(appPaths.pwaDir)
-
-  const nodePackager = await cacheProxy.getModule('nodePackager')
-  nodePackager.uninstallPackage(Object.keys(pwaDevDeps), {
-    displayName: 'PWA dev dependencies'
-  })
-  nodePackager.uninstallPackage(Object.keys(pwaDeps), {
-    displayName: 'PWA dependencies'
-  })
-
   log('PWA support was removed')
 }
