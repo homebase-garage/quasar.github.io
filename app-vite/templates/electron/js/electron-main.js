@@ -4,7 +4,6 @@ import os from 'node:os'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
-const currentDir = import.meta.dirname
 
 let mainWindow
 
@@ -13,7 +12,7 @@ async function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
+    icon: path.resolve(import.meta.dirname, 'icons/icon.png'), // tray icon
     width: 1000,
     height: 600,
     useContentSize: true,
@@ -21,7 +20,7 @@ async function createWindow () {
       contextIsolation: true,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
       preload: path.resolve(
-        currentDir,
+        import.meta.dirname,
         path.join(import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
       )
     }
@@ -48,8 +47,6 @@ async function createWindow () {
   })
 }
 
-app.whenReady().then(createWindow)
-
 app.on('window-all-closed', () => {
   if (platform !== 'darwin') {
     app.quit()
@@ -60,4 +57,8 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+app.on("ready", () => {
+  createWindow()
 })
