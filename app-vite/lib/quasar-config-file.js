@@ -1257,8 +1257,6 @@ export class QuasarConfigFile {
         String(Boolean(this.#ctx.mode[mode]))
     })
 
-    console.log(cfg.build.define)
-
     if (
       this.#ctx.mode.bex ||
       this.#ctx.mode.capacitor ||

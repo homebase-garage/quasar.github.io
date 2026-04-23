@@ -4,9 +4,6 @@ import { join, normalize, resolve, sep } from 'node:path'
 import { fatal } from './logger.js'
 import { cliDir, resolveToCliDir } from './cli-runtime.js'
 
-/**
- * When changing here, also update the one in render-ssr-error/src/index.js
- */
 const quasarConfigList = [
   { name: 'quasar.config.js', inputFormat: 'esm' },
   { name: 'quasar.config.ts', inputFormat: 'ts' }
