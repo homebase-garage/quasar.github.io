@@ -23,8 +23,8 @@ packages:
 # - utils/ssr-helpers
 
 catalog:
-  vue: ^3.5.31
-  vue-router: ^5.0.4
+  vue: ^3.5.33
+  vue-router: ^5.0.6
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
