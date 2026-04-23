@@ -1,9 +1,8 @@
-import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 
 import menu from '../../src/assets/menu.js'
 
-const prefix = fileURLToPath(new URL('../../src/pages', import.meta.url))
+const prefix = normalize(join(import.meta.dirname, '../../src/pages'))
 
 let prev = null
 export const flatMenu = {}

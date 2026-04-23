@@ -1,11 +1,10 @@
-import { relative } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize, relative } from 'node:path'
 import fse from 'fs-extra'
 
 import { getTestFile } from './testFile.js'
 
-const testFilePath = fileURLToPath(new URL('__temp.js', import.meta.url))
-const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
+const testFilePath = join(import.meta.dirname, '__temp.js')
+const rootFolder = normalize(join(import.meta.dirname, '../..'))
 
 const ctxOverride = {
   testFileAbsolute: testFilePath,

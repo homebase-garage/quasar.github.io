@@ -1,8 +1,6 @@
-import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 
-const rootFolder = fileURLToPath(new URL('..', import.meta.url))
-const resolve = file => join(rootFolder, file)
+const resolve = file => join(import.meta.dirname, '..', file)
 
 export default {
   input: resolve('src/index.js'),

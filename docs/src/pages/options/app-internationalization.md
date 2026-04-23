@@ -128,7 +128,7 @@ $ bun add --dev @intlify/unplugin-vue-i18n
 Then we edit the /quasar.config file:
 
 ```js /quasar.config file
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
 // ...
 
@@ -147,7 +147,7 @@ build: {
         ssr: ctx.modeName === 'ssr',
 
         // you need to set i18n resource including paths !
-        include: [fileURLToPath(new URL('./src/i18n', import.meta.url))]
+        include: [join(import.meta.dirname, 'src/i18n')]
       }
     ]
   ]

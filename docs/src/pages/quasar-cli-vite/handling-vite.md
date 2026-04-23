@@ -289,13 +289,13 @@ We will use `utils` as an example, which may be used as `import { formatTime } f
 1. Through `/quasar.config file > build > alias` property. This is the simplest way to add a folder alias. Use an absolute path to your alias. Example:
 
 ```js /quasar.config file
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
 export default ctx => {
   return {
     build: {
       alias: {
-        utils: fileURLToPath(new URL('./src/utils', import.meta.url))
+        utils: join(import.meta.dirname, 'src/utils')
       }
     }
   }
@@ -305,15 +305,13 @@ export default ctx => {
 2. By extending the Vite config directly. Do not assign to `viteConf.resolve.alias` directly to preserve the built-in aliases, use `Object.assign` instead or return an Object with your extra aliases. Always use absolute paths.
 
 ```js /quasar.config file
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
 export default ctx => {
   return {
     build: {
       extendViteConf(viteConf, { isServer, isClient }) {
-        Object.assign(viteConf.resolve.alias, {
-          utils: fileURLToPath(new URL('./src/utils', import.meta.url))
-        })
+        viteConf.resolve.alias.utils = join(import.meta.dirname, 'src/utils')
       }
     }
   }

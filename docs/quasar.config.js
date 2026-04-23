@@ -1,5 +1,5 @@
 import { defineConfig } from '#q-app/wrappers'
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
@@ -22,8 +22,8 @@ export default defineConfig(ctx => ({
       SEARCH_INDEX: 'quasar-v2',
       ...(ctx.dev
         ? {
-            FS_QUASAR_FOLDER: fileURLToPath(
-              new URL('../ui', import.meta.url)
+            FS_QUASAR_FOLDER: normalize(
+              join(import.meta.dirname, '../ui')
             ).replace('\\', '/')
           }
         : {})

@@ -1,6 +1,5 @@
 import { existsSync } from 'node:fs'
 import { join, normalize, sep } from 'node:path'
-import { fileURLToPath } from 'node:url'
 
 const quasarConfigFilenameList = [
   'quasar.config.js',
@@ -28,8 +27,7 @@ function getAppInfo() {
 }
 
 const { appDir, quasarConfigFilename } = getAppInfo()
-
-const cliDir = fileURLToPath(new URL('..', import.meta.url))
+const cliDir = normalize(join(import.meta.dirname, '..'))
 
 export default {
   cliDir,

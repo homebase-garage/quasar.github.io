@@ -1,8 +1,7 @@
-import { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize, resolve } from 'node:path'
 import fse from 'fs-extra'
 
-const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
+const rootFolder = normalize(join(import.meta.dirname, '../..'))
 
 function readJsonFile(ctx) {
   const jsonFileBasename = ctx.localName.replace('.js', '.json')

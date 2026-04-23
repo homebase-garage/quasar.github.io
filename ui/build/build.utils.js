@@ -1,5 +1,4 @@
-import { join, relative, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize, relative, resolve } from 'node:path'
 import fse from 'fs-extra'
 import { blue, gray, green, magenta, red, underline } from 'kolorist'
 import { table } from 'table'
@@ -62,7 +61,7 @@ export function capitalize(str) {
   return str.at(0).toUpperCase() + str.slice(1)
 }
 
-export const rootFolder = fileURLToPath(new URL('..', import.meta.url))
+export const rootFolder = normalize(join(import.meta.dirname, '..'))
 
 export function resolveToRoot(...pathList) {
   return resolve(rootFolder, ...pathList)

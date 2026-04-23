@@ -1,10 +1,16 @@
-import { basename, dirname, relative, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import {
+  basename,
+  dirname,
+  join,
+  normalize,
+  relative,
+  resolve
+} from 'node:path'
 import fse from 'fs-extra'
 
 import { camelCase } from './specs.utils.js'
 
-const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
+const rootFolder = normalize(join(import.meta.dirname, '../..'))
 const jsRE = /\.js$/
 
 export function createCtx(target) {

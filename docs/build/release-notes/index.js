@@ -1,10 +1,9 @@
-import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 import fse from 'fs-extra'
 
 import request from './request.js'
 
-const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
+const rootFolder = normalize(join(import.meta.dirname, '../..'))
 
 const api = {
   v2: {

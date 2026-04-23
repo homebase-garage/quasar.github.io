@@ -1,10 +1,9 @@
 // cp node_modules/quasar/dist/api/* public/quasar-api/
 
-import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 import fse from 'fs-extra'
 
-const rootFolder = fileURLToPath(new URL('..', import.meta.url))
+const rootFolder = normalize(join(import.meta.dirname, '..'))
 
 const sourceList = [
   join(rootFolder, 'node_modules/quasar/dist/api'),

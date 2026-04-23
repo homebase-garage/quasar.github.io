@@ -1,11 +1,10 @@
-import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 import { globSync } from 'tinyglobby'
 
 const moduleIdRE = /^examples:/
 const resolvedIdPrefix = '\0examples:'
 
-const targetFolder = fileURLToPath(new URL('../src/examples', import.meta.url))
+const targetFolder = normalize(join(import.meta.dirname, '../src/examples'))
 
 function devLoad(id) {
   if (id.startsWith(resolvedIdPrefix)) {

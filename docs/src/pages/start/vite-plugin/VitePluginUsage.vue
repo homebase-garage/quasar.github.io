@@ -329,7 +329,7 @@ myApp.mount('#app')
 )
 
 const extraImports = computed(() =>
-  useSassVariables.value ? "import { fileURLToPath } from 'node:url'\n" : ''
+  useSassVariables.value ? "import { join } from 'node:path'\n" : ''
 )
 
 const vitePluginOptions = computed(() => {
@@ -341,9 +341,7 @@ const vitePluginOptions = computed(() => {
 
   if (useSassVariables.value) {
     acc.push(
-      '      sassVariables: fileURLToPath(\n' +
-        "        new URL('./src/quasar-variables.sass', import.meta.url)\n" +
-        '      )'
+      "      sassVariables: join(import.meta.dirname, 'src/quasar-variables.sass')"
     )
   }
 

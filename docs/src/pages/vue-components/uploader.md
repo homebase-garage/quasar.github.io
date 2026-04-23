@@ -125,7 +125,7 @@ import throttle from 'express-throttle-bandwidth'
 const app = express()
 
 const port = process.env.PORT || 4444
-const folder = fileURLToPath(new URL('./files', import.meta.url))
+const folder = path.join(import.meta.dirname, 'files')
 
 if (!fs.existsSync(folder)) {
   fs.mkdirSync(folder)

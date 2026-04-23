@@ -1,13 +1,12 @@
-import { fileURLToPath } from 'node:url'
-import { join } from 'node:path'
+import { join, normalize } from 'node:path'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 import { quasar, transformAssetUrls } from '../../src/index.js'
 
-const playgroundFolder = fileURLToPath(
-  new URL('../../playground', import.meta.url)
+const playgroundFolder = normalize(
+  join(import.meta.dirname, '../../playground')
 )
 const resolve = _path => join(playgroundFolder, _path)
 

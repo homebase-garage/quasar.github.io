@@ -3,7 +3,7 @@
 
 import { defineConfig } from '#q-app/wrappers';
 <% if (scope.preset.i18n) { %>
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 <% } %>
 
 export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
@@ -85,7 +85,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
           ssr: ctx.modeName === 'ssr',
 
           // you need to set i18n resource including paths !
-          include: [ fileURLToPath(new URL('./src/i18n', import.meta.url)) ]
+          include: [ join(import.meta.dirname, 'src/i18n') ]
         }]<% if (scope.preset.eslint) { %>,<% } %>
 
 <% } %>

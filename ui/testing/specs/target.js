@@ -1,7 +1,7 @@
-import { fileURLToPath } from 'node:url'
+import { join, normalize } from 'node:path'
 import { globSync } from 'tinyglobby'
 
-const rootFolder = fileURLToPath(new URL('../..', import.meta.url))
+const rootFolder = normalize(join(import.meta.dirname, '../..'))
 
 export function getTargetList(argv) {
   const exceptionFileRE = /test|index\.js$|__/
