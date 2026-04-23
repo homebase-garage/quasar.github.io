@@ -90,7 +90,7 @@ await utils.prompts(scope, [
   },
   {
     type: (_, { overwrite } = {}) => {
-      if (!overwrite) {
+      if (overwrite === false) {
         utils.logger.fatal('Scaffolding cancelled')
       }
       return null
