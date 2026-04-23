@@ -91,10 +91,12 @@ print({ key: 'Important local packages', section: true })
   'pinia',
   'vite',
   'rolldown',
-  'typescript',
-  'workbox-build',
-  'register-service-worker'
+  'typescript'
 ].forEach(pkg => print(safePkgInfo(pkg, appPaths.appDir)))
+
+;['workbox-build', 'register-service-worker'].forEach(pkg =>
+  print(safePkgInfo(pkg, appPaths.pwaDir))
+)
 
 ;['electron', '@electron/packager', 'electron-builder'].forEach(pkg =>
   print(safePkgInfo(pkg, appPaths.electronDir))

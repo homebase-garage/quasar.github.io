@@ -115,6 +115,17 @@ function generateTsConfig(quasarConf, fsUtils) {
     })
   }
 
+  if (isModeInstalled(appPaths, 'pwa')) {
+    const target = appPaths.resolve.pwa('node_modules')
+    const json = JSON.parse(
+      fse.readFileSync(appPaths.resolve.pwa('package.json'), 'utf8')
+    )
+
+    Object.keys(json.dependencies || {}).forEach(dep => {
+      aliasMap[dep] = join(target, dep)
+    })
+  }
+
   const paths = {}
   Object.keys(aliasMap).forEach(alias => {
     const rawPath = aliasMap[alias]

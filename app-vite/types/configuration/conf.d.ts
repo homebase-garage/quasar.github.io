@@ -34,8 +34,8 @@ type DevServerOptions = Omit<ViteServerOptions, "open" | "https"> & {
  *  rootComponent: 'src/App.vue',
  *  router: 'src/router/index',
  *  store: 'src/stores/index',
- *  pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
- *  pwaServiceWorker: 'src-pwa/custom-service-worker',
+ *  pwaRegisterServiceWorker: 'src-pwa/register-sw',
+ *  pwaServiceWorker: 'src-pwa/custom-sw',
  *  pwaManifestFile: 'src-pwa/manifest.json',
  *  electronMain: 'src-electron/electron-main',
  *  bexManifestFile: 'src-bex/manifest.json'
