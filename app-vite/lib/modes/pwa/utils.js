@@ -55,6 +55,7 @@ export function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
     name: appPkg.productName || appPkg.name || 'Quasar App',
     short_name: id,
     description: appPkg.description,
+    display_override: ['fullscreen', 'minimal-ui'],
     display: 'standalone',
     start_url: quasarConf.build.publicPath,
     ...JSON.parse(readFileSync(quasarConf.metaConf.pwaManifestFile, 'utf8'))
