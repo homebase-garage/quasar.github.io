@@ -8,6 +8,8 @@ const platform = process.platform || os.platform();
 let mainWindow: BrowserWindow | undefined;
 
 async function createWindow() {
+  if (mainWindow) return;
+
   /**
    * Initial window options
    */
@@ -54,11 +56,9 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (mainWindow === undefined) {
-    void createWindow();
-  }
+  void createWindow();
 });
 
-app.on("ready", () => {
+app.on('ready', () => {
   void createWindow();
 });

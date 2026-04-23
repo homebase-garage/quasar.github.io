@@ -8,6 +8,8 @@ const platform = process.platform || os.platform()
 let mainWindow
 
 async function createWindow () {
+  if (mainWindow) return
+
   /**
    * Initial window options
    */
@@ -53,12 +55,5 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
-
-app.on("ready", () => {
-  createWindow()
-})
+app.on('activate', createWindow)
+app.on('ready', createWindow)
