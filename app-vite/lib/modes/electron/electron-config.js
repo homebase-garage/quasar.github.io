@@ -53,7 +53,7 @@ async function preloadScript(quasarConf, name) {
     cfg.transform.define['import.meta.env.QUASAR_PUBLIC_FOLDER'] = '"."'
 
     cfg.external.push(
-      ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {})
+      ...Object.keys(quasarConf.ctx.pkg.electronPkg.dependencies || {})
     )
   }
 
@@ -79,11 +79,10 @@ export const quasarElectronConfig = {
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-electron',
       shippedToClient: true,
-      modeDeps: {
-        ...quasarConf.ctx.pkg.modePkg.dependencies,
-        electron: quasarConf.ctx.pkg.modePkg.devDependencies.electron
-      }
+      modeDeps: quasarConf.ctx.pkg.electronPkg.dependencies
     })
+
+    cfg.optimizeDeps.exclude = ['electron']
 
     if (quasarConf.ctx.prod) {
       cfg.build.outDir = join(quasarConf.build.distDir, 'UnPackaged')
@@ -133,7 +132,7 @@ export const quasarElectronConfig = {
 
     if (quasarConf.ctx.prod) {
       cfg.external.push(
-        ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {})
+        ...Object.keys(quasarConf.ctx.pkg.electronPkg.dependencies || {})
       )
     }
 

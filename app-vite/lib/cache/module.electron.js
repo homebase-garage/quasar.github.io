@@ -36,14 +36,14 @@ function hasPackage(pkgName, modePkg) {
 
 export async function createInstance({
   appPaths,
-  pkg: { modePkg },
+  pkg: { electronPkg },
   cacheProxy
 }) {
   const nodePackager = await cacheProxy.getModule('nodePackager')
 
   function bundlerIsInstalled(bundlerName) {
     const bundler = bundlerMap[bundlerName]
-    return hasPackage(bundler.pkg, modePkg)
+    return hasPackage(bundler.pkg, electronPkg)
   }
 
   function ensureInstall(bundlerName) {

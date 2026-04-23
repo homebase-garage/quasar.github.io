@@ -41,12 +41,15 @@ export class QuasarModeBuilder extends AppBuilder {
   #writePackageJson() {
     const {
       appPaths,
-      pkg: { appPkg, modePkg }
+      pkg: { appPkg, electronPkg }
     } = this.ctx
 
     const pkg = merge({}, appPkg)
 
-    pkg.dependencies = getFixedDeps(modePkg.dependencies, appPaths.electronDir)
+    pkg.dependencies = getFixedDeps(
+      electronPkg.dependencies,
+      appPaths.electronDir
+    )
 
     // we don't need this (also, faster install time & smaller bundles)
     delete pkg.devDependencies

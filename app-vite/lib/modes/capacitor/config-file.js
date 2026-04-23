@@ -93,11 +93,11 @@ export class CapacitorConfigFile {
   #updateCapPkg(quasarConf) {
     const {
       appPaths,
-      pkg: { appPkg, modePkg }
+      pkg: { appPkg, capacitorPkg }
     } = this.#ctx
 
     const capPkgPath = appPaths.resolve.capacitor('package.json')
-    const capPkg = structuredClone(modePkg)
+    const capPkg = structuredClone(capacitorPkg)
 
     Object.assign(capPkg, {
       name: quasarConf.capacitor.appName || appPkg.name,

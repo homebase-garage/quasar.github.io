@@ -23,7 +23,10 @@ export const quasarSsrConfig = {
   viteClient: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-ssr-client',
-      shippedToClient: true
+      shippedToClient: true,
+      modeDeps: quasarConf.ssr.pwa
+        ? quasarConf.ctx.pkg.pwaPkg.dependencies
+        : void 0
     })
     const { appPaths } = quasarConf.ctx
 
@@ -61,7 +64,10 @@ export const quasarSsrConfig = {
   viteServer: async quasarConf => {
     let cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-ssr-server',
-      shippedToClient: false
+      shippedToClient: false,
+      modeDeps: quasarConf.ssr.pwa
+        ? quasarConf.ctx.pkg.pwaPkg.dependencies
+        : void 0
     })
 
     const { appPaths } = quasarConf.ctx
@@ -124,7 +130,7 @@ export const quasarSsrConfig = {
 
       cfg.external.push(
         ...Object.keys(quasarConf.ctx.pkg.appPkg.dependencies || {}),
-        ...Object.keys(quasarConf.ctx.pkg.modePkg.dependencies || {}),
+        ...Object.keys(quasarConf.ctx.pkg.ssrPkg.dependencies || {}),
         'vue/server-renderer',
         'vue/compiler-sfc',
         './render-template.js',

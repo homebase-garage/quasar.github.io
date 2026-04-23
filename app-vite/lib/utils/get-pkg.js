@@ -5,69 +5,60 @@ import { warning } from './logger.js'
 import { getPackageJson } from '../utils/get-package-json.js'
 
 /**
+ * Only Quasar CLI modes which install deps in their own
+ * /src-<mode>/package.json, so that they can be injected
+ * into the context and accessed via ctx.pkg
+ */
+const modesList = ['ssr', 'pwa', 'electron', 'capacitor']
+
+function injectPkg(acc, propName, pkgPath) {
+  let pkg = {}
+  let lastModePkgModifiedTime = 0
+
+  Object.defineProperty(acc, propName, {
+    get: () => {
+      if (!existsSync(pkgPath)) return {}
+
+      const { mtime } = statSync(pkgPath)
+
+      if (mtime !== lastModePkgModifiedTime) {
+        lastModePkgModifiedTime = mtime
+        try {
+          // This may get updated and written, so use parseJSON to preserve formatting
+          pkg = parseJSON(readFileSync(pkgPath, 'utf8'))
+        } catch (err) {
+          warning(`Could not parse ${pkgPath}. The file is malformed:`)
+          console.error(err)
+        }
+      }
+
+      return pkg
+    }
+  })
+}
+
+/**
  * @param {import('../../types/app-paths').QuasarAppPaths} appPaths
  *
  * @returns {import('../../types/configuration/context').InternalQuasarContext['pkg']}
  */
-export function getPkg(appPaths, mode) {
+export function getPkg(appPaths) {
   const { appDir, cliDir } = appPaths
-  const appPkgPath = appPaths.resolve.app('package.json')
-  const modePkgPath = appPaths.resolve.app(`src-${mode}/package.json`)
-
-  let appPkg = {}
-  let lastAppPkgModifiedTime = 0
-
-  function getAppPackageJson() {
-    if (!existsSync(appPkgPath)) return {}
-
-    const { mtime } = statSync(appPkgPath)
-
-    if (mtime !== lastAppPkgModifiedTime) {
-      lastAppPkgModifiedTime = mtime
-      try {
-        // This may get updated and written, so use parseJSON to preserve formatting
-        appPkg = parseJSON(readFileSync(appPkgPath, 'utf8'))
-      } catch (err) {
-        warning("Could not parse app's package.json. The file is malformed:")
-        console.error(err)
-      }
-    }
-
-    return appPkg
-  }
-
-  let modePkg = {}
-  let lastModePkgModifiedTime = 0
-
-  function getModePackageJson() {
-    if (!existsSync(modePkgPath)) return {}
-
-    const { mtime } = statSync(modePkgPath)
-
-    if (mtime !== lastModePkgModifiedTime) {
-      lastModePkgModifiedTime = mtime
-      try {
-        // This may get updated and written, so use parseJSON to preserve formatting
-        modePkg = parseJSON(readFileSync(modePkgPath, 'utf8'))
-      } catch (err) {
-        warning("Could not parse mode's package.json. The file is malformed:")
-        console.error(err)
-      }
-    }
-
-    return modePkg
-  }
 
   const acc = {
     quasarPkg: getPackageJson('quasar', appDir),
     vitePkg: getPackageJson('vite', appDir) || getPackageJson('vite', cliDir)
   }
 
-  Object.defineProperty(acc, 'appPkg', { get: getAppPackageJson })
+  injectPkg(acc, 'appPkg', appPaths.resolve.app('package.json'))
 
-  if (mode && mode !== 'spa') {
-    Object.defineProperty(acc, 'modePkg', { get: getModePackageJson })
-  }
+  modesList.forEach(modeName => {
+    injectPkg(
+      acc,
+      `${modeName}Pkg`,
+      appPaths.resolve.app(`src-${modeName}/package.json`)
+    )
+  })
 
   return acc
 }

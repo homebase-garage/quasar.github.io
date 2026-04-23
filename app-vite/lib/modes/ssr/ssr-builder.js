@@ -97,11 +97,11 @@ export class QuasarModeBuilder extends AppBuilder {
   #writePackageJson() {
     const {
       appPaths,
-      pkg: { appPkg, modePkg }
+      pkg: { appPkg, ssrPkg }
     } = this.ctx
 
     const rootAppDeps = getFixedDeps(appPkg.dependencies, appPaths.appDir)
-    const ssrAppDeps = getFixedDeps(modePkg.dependencies, appPaths.ssrDir)
+    const ssrAppDeps = getFixedDeps(ssrPkg.dependencies, appPaths.ssrDir)
 
     const pkg = {
       name: appPkg.name,

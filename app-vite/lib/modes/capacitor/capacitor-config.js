@@ -10,13 +10,13 @@ export const quasarCapacitorConfig = {
   vite: async quasarConf => {
     const {
       appPaths,
-      pkg: { modePkg }
+      pkg: { capacitorPkg }
     } = quasarConf.ctx
 
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-capacitor',
       shippedToClient: true,
-      modeDeps: modePkg.dependencies
+      modeDeps: capacitorPkg.dependencies
     })
 
     if (quasarConf.ctx.prod) {
