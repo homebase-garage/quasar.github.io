@@ -6,7 +6,6 @@ import { merge } from 'webpack-merge'
 
 import { getPackage } from './utils/get-package.js'
 import { log, tip, warn } from './utils/logger.js'
-import { escapeRegexString } from './utils/escape-regex-string.js'
 import {
   BASELINE_WIDELY_AVAILABLE,
   BASELINE_WIDELY_AVAILABLE_TARGET_STRING
@@ -248,25 +247,13 @@ export async function createViteConfig(
   }
 
   if (modeDeps) {
-    const target = appPaths.resolve.app(`${ctx.modeName}/node_modules`)
-
-    const depsList = Object.keys(modeDeps)
-    const depsRE = new RegExp(
-      '^(' + depsList.map(escapeRegexString).join('|') + ')'
-    )
+    const target = appPaths.resolve.app(`src-${ctx.modeName}/node_modules`)
 
     // we need to set alias as mode deps
     // are installed in /src-{modeName} and not in root
     // so it breaks Vite
-    depsList.forEach(dep => {
+    Object.keys(modeDeps).forEach(dep => {
       viteConf.resolve.alias[dep] = join(target, dep)
-    })
-
-    viteConf.plugins.unshift({
-      name: `quasar:resolve-${ctx.modeName}-deps`,
-      resolveId(id) {
-        if (depsRE.test(id)) return join(target, id)
-      }
     })
   }
 
