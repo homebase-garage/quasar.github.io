@@ -30,7 +30,15 @@ import {
   getQuasarConfEnv
 } from './utils/env.js'
 
-const quasarModesList = ['bex', 'capacitor', 'cordova', 'pwa', 'spa', 'ssr']
+const quasarModesList = [
+  'bex',
+  'capacitor',
+  'cordova',
+  'electron',
+  'pwa',
+  'spa',
+  'ssr'
+]
 
 const urlRegex = /^http(s)?:\/\//i
 const defaultPortMapping = {
