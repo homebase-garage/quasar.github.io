@@ -48,7 +48,6 @@ export default defineConfig((/* ctx */) => ({
     // define: {},
     // ignorePublicFolder: true,
     // minify: false,
-    // polyfillModulePreload: true,
     // distDir
 
     // extendViteConf (viteConf) {},

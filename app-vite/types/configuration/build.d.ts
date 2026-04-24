@@ -382,11 +382,6 @@ interface QuasarStaticBuildConfiguration {
   useFilenameHashes?: boolean;
 
   /**
-   * whether to inject module preload polyfill.
-   * @default false
-   */
-  polyfillModulePreload?: boolean;
-  /**
    * Ignores the public folder.
    * @default false
    */

@@ -943,7 +943,6 @@ export class QuasarConfigFile {
         sourcemap: cfg.metaConf.debugging,
 
         useFilenameHashes: true,
-        polyfillModulePreload: false,
         distDir: join('dist', this.#ctx.modeName),
 
         htmlMinifyOptions: {

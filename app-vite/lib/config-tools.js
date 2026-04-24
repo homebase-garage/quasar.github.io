@@ -183,8 +183,6 @@ export async function createViteConfig(
         compileId === 'vite-ssr-server'
           ? build.target.node
           : build.target.browser,
-      modulePreload:
-        build.polyfillModulePreload === true ? true : { polyfill: false },
       emptyOutDir: false,
       minify: build.minify,
       sourcemap: build.sourcemap
