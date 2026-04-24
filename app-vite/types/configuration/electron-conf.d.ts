@@ -11,6 +11,14 @@ type ElectronPackagerOptions = ElectronPackager.Options;
 
 interface QuasarBaseElectronConfiguration {
   /**
+   * Whether to add a Content Security Policy (CSP) meta tag to the generated HTML file.
+   * This can be set to `false` to disable the CSP, or you can provide a custom CSP string.
+   *
+   * @default "default-src 'self'; script-src 'self' 'unsafe-inline';"
+   */
+  csp?: false | string;
+
+  /**
    * The list of content scripts (js/ts) that you want embedded.
    * Each entry in the list should be a filename (WITHOUT its extension) from /src-electron/
    *
