@@ -7,6 +7,8 @@ import {
   extendViteConfig
 } from '../../config-tools.js'
 
+import { quasarVitePluginElectronCSP } from './vite-plugin.csp.js'
+
 /**
  * Warning!
  *
@@ -91,6 +93,10 @@ export const quasarElectronConfig = {
 
     if (quasarConf.ctx.prod) {
       cfg.build.outDir = join(quasarConf.build.distDir, 'UnPackaged')
+    }
+
+    if (quasarConf.electron.csp) {
+      cfg.plugins.push(quasarVitePluginElectronCSP(quasarConf))
     }
 
     return extendViteConfig(cfg, quasarConf, { isClient: true })

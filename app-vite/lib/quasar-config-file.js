@@ -1395,6 +1395,11 @@ export class QuasarConfigFile {
 
         ensureInstall(cfg.electron.bundler)
       }
+
+      if (cfg.electron.csp === void 0) {
+        cfg.electron.csp =
+          "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
+      }
     }
 
     const entryScriptAbsolutePath = appPaths.resolve.entry('client-entry.js')
