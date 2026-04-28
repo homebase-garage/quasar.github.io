@@ -68,17 +68,14 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(
         const req = c.env.incoming;
         const res = c.env.outgoing;
 
-        const passed: boolean = await new Promise(resolve => {
-          middleware(req, res, () => {
-            resolve(true);
-          });
-        });
+        const { promise, resolve } = Promise.withResolvers();
+        middleware(req, res, () => { resolve(true) });
 
         /**
          * If the Vite middleware calls next(), it didn't handle the request,
          * so we let Hono continue down the chain.
          */
-        if (passed) await next();
+        if (await promise) await next();
       });
     }
 );

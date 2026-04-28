@@ -34,7 +34,7 @@ export class QuasarModeBuilder extends AppBuilder {
 
   async build() {
     await this.#buildFiles()
-    return this.#packageFiles()
+    await this.#packageFiles()
   }
 
   async #buildFiles() {
@@ -146,22 +146,23 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #runCordovaCommand(args) {
-    return new Promise(resolve => {
-      spawn('cordova', args, { cwd: this.ctx.appPaths.cordovaDir }, code => {
-        this.#cleanup()
+    const { promise, resolve } = Promise.withResolvers()
+    spawn('cordova', args, { cwd: this.ctx.appPaths.cordovaDir }, code => {
+      this.#cleanup()
 
-        if (code) {
-          console.log()
-          console.log(' ⚠️  Cordova CLI has failed to build!')
-          console.log(
-            ' ⚠️  As an alternative, you can use the "--ide" param and build from the IDE.'
-          )
-          console.log()
-          process.exit(1)
-        }
+      if (code) {
+        console.log()
+        console.log(' ⚠️  Cordova CLI has failed to build!')
+        console.log(
+          ' ⚠️  As an alternative, you can use the "--ide" param and build from the IDE.'
+        )
+        console.log()
+        process.exit(1)
+      }
 
-        resolve()
-      })
+      resolve()
     })
+
+    return promise
   }
 }

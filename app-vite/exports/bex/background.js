@@ -99,9 +99,9 @@ function connectToDevServer(devServerPort, wsToken) {
         break
       } catch {
         console.log('[QBex|HMR] Could not re-connect. Retrying...')
-        await new Promise(resolve => {
-          setTimeout(resolve, 1000)
-        })
+        const { promise, resolve } = Promise.withResolvers()
+        setTimeout(resolve, 1000)
+        await promise
         tries++
       }
     }

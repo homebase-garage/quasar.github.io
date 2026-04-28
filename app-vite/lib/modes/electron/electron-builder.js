@@ -133,32 +133,33 @@ export class QuasarModeBuilder extends AppBuilder {
       bundlerResult /* electron-builder */
     const pkgBanner = `electron/${bundlerName}`
 
-    return new Promise((resolve, reject) => {
-      const done = progress('Bundling app with ___...', pkgBanner)
+    const { promise, resolve, reject } = Promise.withResolvers()
+    const done = progress('Bundling app with ___...', pkgBanner)
 
-      const bundlePromise =
-        bundlerName === 'packager'
-          ? bundler({
-              ...bundlerConfig,
-              electronVersion: getPackageJson('electron', appPaths.electronDir)
-                .version
-            })
-          : bundler.build(bundlerConfig)
+    const bundlePromise =
+      bundlerName === 'packager'
+        ? bundler({
+            ...bundlerConfig,
+            electronVersion: getPackageJson('electron', appPaths.electronDir)
+              .version
+          })
+        : bundler.build(bundlerConfig)
 
-      bundlePromise
-        .then(() => {
-          log()
-          done(`${pkgBanner} built the app`)
-          log()
-          resolve()
-        })
-        .catch(err => {
-          log()
-          warn(`${pkgBanner} could not build`, 'FAIL')
-          log()
-          console.error(err + '\n')
-          reject(err)
-        })
-    })
+    bundlePromise
+      .then(() => {
+        log()
+        done(`${pkgBanner} built the app`)
+        log()
+        resolve()
+      })
+      .catch(err => {
+        log()
+        warn(`${pkgBanner} could not build`, 'FAIL')
+        log()
+        console.error(err + '\n')
+        reject(err)
+      })
+
+    return promise
   }
 }

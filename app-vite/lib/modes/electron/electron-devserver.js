@@ -8,10 +8,10 @@ import { spawn } from '../../utils/spawn.js'
 import { getPackagePath } from '../../utils/get-package-path.js'
 import { quasarElectronConfig } from './electron-config.js'
 
-function wait(time) {
-  return new Promise(resolve => {
-    setTimeout(resolve, time)
-  })
+function delay(time) {
+  const { promise, resolve } = Promise.withResolvers()
+  setTimeout(resolve, time)
+  return promise
 }
 
 export class QuasarModeDevserver extends AppDevserver {
@@ -124,7 +124,7 @@ export class QuasarModeDevserver extends AppDevserver {
 
       // on some OSes a small delay is needed
       // so that resources are freed on kill
-      await wait(100)
+      await delay(100)
     }
 
     this.#pid = spawn(

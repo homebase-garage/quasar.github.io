@@ -113,64 +113,65 @@ export class BexBridge {
   /**
    * @returns {Promise<void>}
    */
-  connectToBackground() {
+  async connectToBackground() {
     if (this.#type === 'background') {
-      return Promise.reject(
-        'The background script itself does not need to connect'
-      )
+      // oxlint-disable-next-line no-throw-literal
+      throw 'The background script itself does not need to connect'
     }
 
     if (this.isConnected) {
-      return Promise.reject('The bridge is already connected')
+      // oxlint-disable-next-line no-throw-literal
+      throw 'The bridge is already connected'
     }
 
     const portToBackground = runtime.connect({ name: this.portName })
+    const { promise, resolve, reject } = Promise.withResolvers()
 
-    return new Promise((resolve, reject) => {
-      const onPacket = packet => {
-        if (!this.isConnected) {
-          /**
-           * We rely on the fact that upon connection is established
-           * the background script will send a @quasar:ports event
-           */
-          this.isConnected = true
-          this.log('Connected to the background script.')
-          this.portMap = { background: portToBackground }
-          resolve()
-        }
-
-        this.#onPacket(packet)
+    const onPacket = packet => {
+      if (!this.isConnected) {
+        /**
+         * We rely on the fact that upon connection is established
+         * the background script will send a @quasar:ports event
+         */
+        this.isConnected = true
+        this.log('Connected to the background script.')
+        this.portMap = { background: portToBackground }
+        resolve()
       }
 
-      const onDisconnect = () => {
-        if (
-          runtime.lastError?.message?.includes('Could not establish connection')
-        ) {
-          this.isConnected = false
-          portToBackground.onMessage.removeListener(onPacket)
-          portToBackground.onMessage.removeListener(onDisconnect)
-          reject('Could not connect to the background script.')
-          return
-        }
+      this.#onPacket(packet)
+    }
 
+    const onDisconnect = () => {
+      if (
+        runtime.lastError?.message?.includes('Could not establish connection')
+      ) {
         this.isConnected = false
-
-        for (const id in this.messageMap) {
-          const item = this.messageMap[id]
-          item.reject('Connection was closed')
-        }
-
-        this.portMap = {}
-        this.portList = []
-        this.messageMap = {}
-        this.chunkMap = {}
-
-        this.log('Closed connection with the background script.')
+        portToBackground.onMessage.removeListener(onPacket)
+        portToBackground.onMessage.removeListener(onDisconnect)
+        reject('Could not connect to the background script.')
+        return
       }
 
-      portToBackground.onMessage.addListener(onPacket)
-      portToBackground.onDisconnect.addListener(onDisconnect)
-    })
+      this.isConnected = false
+
+      for (const id in this.messageMap) {
+        const item = this.messageMap[id]
+        item.reject('Connection was closed')
+      }
+
+      this.portMap = {}
+      this.portList = []
+      this.messageMap = {}
+      this.chunkMap = {}
+
+      this.log('Closed connection with the background script.')
+    }
+
+    portToBackground.onMessage.addListener(onPacket)
+    portToBackground.onDisconnect.addListener(onDisconnect)
+
+    await promise
   }
 
   /**
@@ -325,19 +326,20 @@ export class BexBridge {
       )
     }
 
-    return new Promise((resolve, reject) => {
-      this.messageMap[id] = {
-        portName: to,
-        resolve: responsePayload => {
-          delete this.messageMap[id]
-          resolve(responsePayload)
-        },
-        reject: err => {
-          delete this.messageMap[id]
-          reject(err)
-        }
+    const { promise, resolve, reject } = Promise.withResolvers()
+    this.messageMap[id] = {
+      portName: to,
+      resolve: responsePayload => {
+        delete this.messageMap[id]
+        resolve(responsePayload)
+      },
+      reject: err => {
+        delete this.messageMap[id]
+        reject(err)
       }
-    })
+    }
+
+    await promise
   }
 
   /**

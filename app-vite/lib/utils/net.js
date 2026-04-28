@@ -51,28 +51,30 @@ export async function findClosestOpenPort(port, host) {
 }
 
 export function isPortAvailable(port, host) {
-  return new Promise((resolve, reject) => {
-    const tester = net
-      .createServer()
-      .once('error', err => {
-        if (err.code === 'EADDRNOTAVAIL') {
-          reject(new Error('ERROR_NETWORK_ADDRESS_NOT_AVAIL'))
-        } else if (err.code === 'EADDRINUSE') {
-          resolve(false) // host/port in use
-        } else {
-          reject(err)
-        }
-      })
-      .once('listening', () => {
-        tester
-          .once('close', () => {
-            resolve(true) // found available host/port
-          })
-          .close()
-      })
-      .on('error', err => {
+  const { promise, resolve, reject } = Promise.withResolvers()
+
+  const tester = net
+    .createServer()
+    .once('error', err => {
+      if (err.code === 'EADDRNOTAVAIL') {
+        reject(new Error('ERROR_NETWORK_ADDRESS_NOT_AVAIL'))
+      } else if (err.code === 'EADDRINUSE') {
+        resolve(false) // host/port in use
+      } else {
         reject(err)
-      })
-      .listen(port, host)
-  })
+      }
+    })
+    .once('listening', () => {
+      tester
+        .once('close', () => {
+          resolve(true) // found available host/port
+        })
+        .close()
+    })
+    .on('error', err => {
+      reject(err)
+    })
+    .listen(port, host)
+
+  return promise
 }

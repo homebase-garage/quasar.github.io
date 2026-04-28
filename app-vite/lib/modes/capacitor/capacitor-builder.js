@@ -19,7 +19,7 @@ export class QuasarModeBuilder extends AppBuilder {
     this.#packagedDir = join(this.quasarConf.build.distDir, this.ctx.targetName)
 
     await this.#buildFiles()
-    return this.#packageFiles()
+    await this.#packageFiles()
   }
 
   async #buildFiles() {
@@ -66,17 +66,18 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #runCapacitorCommand(args, capBin) {
-    return new Promise(resolve => {
-      spawn(capBin, args, { cwd: this.ctx.appPaths.capacitorDir }, code => {
-        this.#cleanup()
+    const { promise, resolve } = Promise.withResolvers()
+    spawn(capBin, args, { cwd: this.ctx.appPaths.capacitorDir }, code => {
+      this.#cleanup()
 
-        if (code) {
-          fatal('Capacitor CLI has failed', 'FAIL')
-        }
+      if (code) {
+        fatal('Capacitor CLI has failed', 'FAIL')
+      }
 
-        resolve()
-      })
+      resolve()
     })
+
+    return promise
   }
 
   async #buildIos() {

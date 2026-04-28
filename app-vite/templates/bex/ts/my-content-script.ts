@@ -92,11 +92,11 @@ bridge.on('test', async message => {
 });
 bridge.on('test', message => {
   console.log(message);
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ banner: 'Hello from a content-script!' });
-    }, 1000);
-  });
+  const { promise, resolve } = Promise.withResolvers();
+  setTimeout(() => {
+    resolve({ banner: 'Hello from a content-script!' });
+  }, 1000);
+  return promise;
 });
 
 // Broadcast a message to background, app & the other content scripts

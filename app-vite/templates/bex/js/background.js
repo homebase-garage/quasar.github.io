@@ -39,18 +39,19 @@ bridge.on('getTime', () => {
 })
 
 bridge.on('storage.get', ({ payload }) => {
-  return new Promise(resolve => {
-    if (payload === void 0) {
-      chrome.storage.local.get(null, items => {
-        // Group the values up into an array to take advantage of the bridge's chunk splitting.
-        resolve(Object.values(items))
-      })
-    } else {
-      chrome.storage.local.get([payload], items => {
-        resolve(items[payload])
-      })
-    }
-  })
+  const { promise, resolve } = Promise.withResolvers()
+  if (payload === void 0) {
+    chrome.storage.local.get(null, items => {
+      // Group the values up into an array to take advantage of the bridge's chunk splitting.
+      resolve(Object.values(items))
+    })
+  } else {
+    chrome.storage.local.get([payload], items => {
+      resolve(items[payload])
+    })
+  }
+
+  return promise
 })
 // Usage:
 // bridge.send({
@@ -119,11 +120,11 @@ bridge.on('test', async message => {
 })
 bridge.on('test', message => {
   console.log(message)
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ banner: 'Hello from background!' })
-    }, 1000)
-  })
+  const { promise, resolve } = Promise.withResolvers()
+  setTimeout(() => {
+    resolve({ banner: 'Hello from background!' })
+  }, 1000)
+  return promise
 })
 
 // Broadcast a message to app & content scripts

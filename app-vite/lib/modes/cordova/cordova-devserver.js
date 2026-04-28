@@ -88,20 +88,21 @@ export class QuasarModeDevserver extends AppDevserver {
   #runCordovaCommand(quasarConf, args) {
     this.#cordovaConfigFile.prepare(quasarConf)
 
-    return new Promise(resolve => {
-      this.#pid = spawn(
-        'cordova',
-        args,
-        { cwd: this.ctx.appPaths.cordovaDir },
-        code => {
-          this.#cleanup()
-          if (code) {
-            fatal('Cordova CLI has failed', 'FAIL')
-          }
-          resolve()
+    const { promise, resolve } = Promise.withResolvers()
+    this.#pid = spawn(
+      'cordova',
+      args,
+      { cwd: this.ctx.appPaths.cordovaDir },
+      code => {
+        this.#cleanup()
+        if (code) {
+          fatal('Cordova CLI has failed', 'FAIL')
         }
-      )
-    })
+        resolve()
+      }
+    )
+
+    return promise
   }
 
   #cleanup() {

@@ -41,68 +41,76 @@ export class QuasarModeBuilder extends AppBuilder {
     const file = join(dir, zipName)
 
     const output = fse.createWriteStream(file)
-    return new Promise((resolve, reject) => {
-      output.on('error', reject)
-      output.on('close', () => {
-        done(`Bundle has been generated at: ${file}`)
-        resolve()
-      })
+    const { promise, resolve, reject } = Promise.withResolvers()
 
-      // The callback fires every time fflate generates a chunk of the ZIP file
-      const zip = new Zip((err, chunk, final) => {
-        if (err) return reject(err)
-        output.write(chunk)
-        if (final) output.end()
-      })
+    output.on('error', reject)
+    output.on('close', () => {
+      done(`Bundle has been generated at: ${file}`)
+      resolve()
+    })
 
-      // Recursively walk the directory
-      const walkDirectory = async currentDir => {
-        const items = await fse.readdir(currentDir)
+    // The callback fires every time fflate generates a chunk of the ZIP file
+    const zip = new Zip((err, chunk, final) => {
+      if (err) return reject(err)
+      output.write(chunk)
+      if (final) output.end()
+    })
 
-        for (const item of items) {
-          const fullPath = join(currentDir, item)
-          const relativePath = relative(dir, fullPath)
+    // Recursively walk the directory
+    const walkDirectory = async currentDir => {
+      const items = await fse.readdir(currentDir)
 
-          // Skip the zip file being generated, identical to the archiver filter
-          if (relativePath === zipName) continue
+      for (const item of items) {
+        const fullPath = join(currentDir, item)
+        const relativePath = relative(dir, fullPath)
 
-          const stat = await fse.stat(fullPath)
+        // Skip the zip file being generated, identical to the archiver filter
+        if (relativePath === zipName) continue
 
-          if (stat.isDirectory()) {
-            await walkDirectory(fullPath) // Recurse into directories
-          } else if (stat.isFile()) {
-            const posixPath = relativePath.split(sep).join('/')
-            const deflater = new ZipDeflate(posixPath, { level: 9 })
-            zip.add(deflater)
+        const stat = await fse.stat(fullPath)
 
-            await new Promise((res, rej) => {
-              const readStream = fse.createReadStream(fullPath)
+        if (stat.isDirectory()) {
+          await walkDirectory(fullPath) // Recurse into directories
+        } else if (stat.isFile()) {
+          const posixPath = relativePath.split(sep).join('/')
+          const deflater = new ZipDeflate(posixPath, { level: 9 })
+          zip.add(deflater)
 
-              // Node Buffers are Uint8Arrays under the hood, so fflate accepts them directly
-              readStream.on('data', chunk => deflater.push(chunk, false))
-              readStream.on('error', rej)
-              readStream.on('end', () => {
-                // Passing `true` as the second argument signals EOF for this file
-                deflater.push(new Uint8Array(0), true)
-                res()
-              })
-            })
-          } else {
-            // Ignore things like sockets or symlinks and emit a warning
-            if (typeof warn === 'function') {
-              warn(`Skipping unsupported entry type at ${fullPath}`)
-            }
+          const {
+            promise: localPromise,
+            resolve: localResolve,
+            reject: localReject
+          } = Promise.withResolvers()
+
+          const readStream = fse.createReadStream(fullPath)
+
+          // Node Buffers are Uint8Arrays under the hood, so fflate accepts them directly
+          readStream.on('data', chunk => deflater.push(chunk, false))
+          readStream.on('error', localReject)
+          readStream.on('end', () => {
+            // Passing `true` as the second argument signals EOF for this file
+            deflater.push(new Uint8Array(0), true)
+            localResolve()
+          })
+
+          await localPromise
+        } else {
+          // Ignore things like sockets or symlinks and emit a warning
+          if (typeof warn === 'function') {
+            warn(`Skipping unsupported entry type at ${fullPath}`)
           }
         }
       }
+    }
 
-      // Start the walk then finalize the zip when done
-      walkDirectory(dir)
-        .then(() => zip.end())
-        .catch(err => {
-          zip.terminate()
-          reject(err)
-        })
-    })
+    // Start the walk then finalize the zip when done
+    walkDirectory(dir)
+      .then(() => zip.end())
+      .catch(err => {
+        zip.terminate()
+        reject(err)
+      })
+
+    return promise
   }
 }

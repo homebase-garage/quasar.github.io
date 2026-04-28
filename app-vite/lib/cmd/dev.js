@@ -87,7 +87,7 @@ async function startVueDevtools(ctx, devtoolsPort) {
 
   let vueDevtoolsBin = getPackagePath('.bin/vue-devtools', appDir)
 
-  function run() {
+  async function run() {
     log('Booting up remote Vue Devtools...')
     spawn(vueDevtoolsBin, [], {
       env: {
@@ -97,9 +97,9 @@ async function startVueDevtools(ctx, devtoolsPort) {
     })
 
     log('Waiting for remote Vue Devtools to initialize...')
-    return new Promise(resolve => {
-      setTimeout(resolve, 1000)
-    })
+    const { promise, resolve } = Promise.withResolvers()
+    setTimeout(resolve, 1000)
+    await promise
   }
 
   if (vueDevtoolsBin !== void 0) {
@@ -112,10 +112,8 @@ async function startVueDevtools(ctx, devtoolsPort) {
 
   // a small delay is a must, otherwise require.resolve
   // after a installing the dependencies will fail
-  return new Promise(resolve => {
-    vueDevtoolsBin = getPackagePath('.bin/vue-devtools', appDir)
-    run().then(resolve)
-  })
+  vueDevtoolsBin = getPackagePath('.bin/vue-devtools', appDir)
+  await run()
 }
 
 const { getCtx } = await import('../utils/get-ctx.js')
