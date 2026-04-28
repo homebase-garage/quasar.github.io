@@ -273,7 +273,7 @@ export class QuasarConfigFile {
           '#q-app': '@quasar/app-vite'
         },
 
-        extensions: ['.js', '.ts', '.mjs', '.mts', '.json']
+        extensions: ['.js', '.ts', '.json']
       },
 
       transform: {

@@ -311,8 +311,8 @@ export function createNodeRolldownConfig(
       },
       extensions:
         format === 'esm'
-          ? ['.mjs', '.js', '.cjs', '.ts', '.json']
-          : ['.cjs', '.js', '.mjs', '.ts', '.json']
+          ? ['.js', '.ts', '.json', '.jsx', '.tsx']
+          : ['.cjs', '.js', '.ts', '.json', '.jsx', '.tsx']
     },
 
     external: quasarConf.ctx.dev ? [/node_modules/] : [],
