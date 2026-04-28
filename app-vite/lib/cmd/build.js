@@ -63,10 +63,11 @@ if (argv.help) {
                       - Has special meaning when building with Electron mode and using
                         electron-builder as bundler
     --debug, -d     Build for debugging purposes
-    --skip-pkg, -s  Build only UI (skips creating Cordova/Capacitor/Electron executables)
+    --skip-pkg, -s  Build only UI (skips creating Cordova/Capacitor/Electron executables or BEX zip file)
                       - Cordova (it only fills in /src-cordova/www folder with the UI code)
                       - Capacitor (it only fills in /src-capacitor/www folder with the UI code)
                       - Electron (it only creates the /dist/electron/UnPackaged folder)
+                      - BEX (it only creates the /dist/bex-* folder)
     --nocolor       Disable colored output
     --help, -h      Displays this message
 

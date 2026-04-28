@@ -10,23 +10,29 @@ import { copyBexAssets, createManifest } from './bex-utils.js'
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
     const viteConfig = await quasarBexConfig.vite(this.quasarConf)
-    await this.buildWithVite('BEX UI', viteConfig)
 
     const { err, scriptList } = createManifest(this.quasarConf)
     if (err !== void 0) process.exit(1)
 
-    for (const entry of scriptList) {
-      const contentConfig = await quasarBexConfig.bexScript(
-        this.quasarConf,
-        entry
-      )
-      await this.buildWithRolldown(`Bex Script (${entry.name})`, contentConfig)
-    }
-
     copyBexAssets(this.quasarConf)
 
+    await Promise.all([
+      this.buildWithVite('BEX UI', viteConfig),
+
+      ...scriptList.map(entry =>
+        quasarBexConfig
+          .bexScript(this.quasarConf, entry)
+          .then(contentConfig =>
+            this.buildWithRolldown(`Bex Script (${entry.name})`, contentConfig)
+          )
+      )
+    ])
+
     this.printSummary(this.quasarConf.build.distDir)
-    await this.#bundlePackage(this.quasarConf.build.distDir)
+
+    if (this.argv['skip-pkg'] !== true) {
+      await this.#bundlePackage(this.quasarConf.build.distDir)
+    }
   }
 
   #bundlePackage(dir) {
