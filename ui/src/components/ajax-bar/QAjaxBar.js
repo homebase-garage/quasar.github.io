@@ -68,6 +68,7 @@ function highjackAjax(stackEntry) {
 
   if (highjackCount > 1) return
 
+  // oxlint-disable-next-line func-name-matching
   xhr.prototype.open = function qOpen(method, url, ...restArgs) {
     const stopStack = []
 

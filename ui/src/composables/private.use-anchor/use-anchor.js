@@ -114,6 +114,7 @@ export default function useAnchor({
       }
     })
 
+    // oxlint-disable-next-line func-name-matching
     configureAnchorEl = function configureAnchorElFn(
       context = props.contextMenu
     ) {

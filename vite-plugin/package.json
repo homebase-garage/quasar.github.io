@@ -54,7 +54,7 @@
     "test:runtime": "vitest run --config ./testing/runtime/vitest.config.js"
   },
   "devDependencies": {
-    "@vue/test-utils": "^2.4.6",
+    "@vue/test-utils": "^2.4.9",
     "fs-extra": "^11.3.4",
     "jsdom": "^29.0.2",
     "pug": "^3.0.4",

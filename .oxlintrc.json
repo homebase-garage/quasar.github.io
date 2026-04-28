@@ -110,6 +110,7 @@
     "no-this-in-exported-function": "off",
     "promise/always-return": "off",
     "promise/no-promise-in-callback": "off",
+    "no-underscore-dangle": "off",
 
     /** Correctness rule overrides */
     "no-unused-vars": [

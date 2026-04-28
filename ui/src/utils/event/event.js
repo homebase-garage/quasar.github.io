@@ -6,6 +6,7 @@ export const listenOpts = {
 
 try {
   const opts = Object.defineProperty({}, 'passive', {
+    // oxlint-disable-next-line getter-return
     get() {
       Object.assign(listenOpts, {
         hasPassive: true,
