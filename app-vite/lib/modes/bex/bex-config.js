@@ -73,6 +73,8 @@ export const quasarBexConfig = {
       'import.meta.env.QUASAR_BEX_SCRIPT_NAME': `"${entry.name}"`
     }
 
+    cfg.external = Object.keys(quasarConf.ctx.pkg.bexPkg.dependencies || {})
+
     if (quasarConf.ctx.dev) {
       // Vite 6.0.9+ compat; we need the token!
       Object.assign(cfg.transform.define, {

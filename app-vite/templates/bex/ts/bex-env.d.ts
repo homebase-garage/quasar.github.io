@@ -1,4 +1,5 @@
 /// <reference types="@quasar/app-vite/client/bex" />
+/// <reference types="@types/chrome" />
 
 /**
  * Uncomment and add types for your custom environment

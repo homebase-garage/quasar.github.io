@@ -126,6 +126,17 @@ function generateTsConfig(quasarConf, fsUtils) {
     })
   }
 
+  if (isModeInstalled(appPaths, 'bex')) {
+    const target = appPaths.resolve.bex('node_modules')
+    const json = JSON.parse(
+      fse.readFileSync(appPaths.resolve.bex('package.json'), 'utf8')
+    )
+
+    Object.keys(json.dependencies || {}).forEach(dep => {
+      aliasMap[dep] = join(target, dep)
+    })
+  }
+
   const paths = {}
   Object.keys(aliasMap).forEach(alias => {
     const rawPath = aliasMap[alias]
