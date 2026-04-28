@@ -22,16 +22,16 @@ const headStartTagRE = /(<head[^>]*)(>)/i
 const headEndRE = /(<\/head>)/i
 const bodyStartTagRE = /(<body[^>]*)(>)/i
 
+const hrefSrcRE = /(href|src)\s*=\s*(['"])(.+)(['"])/gi
+
 export const entryPointMarkup = '<!-- quasar:entry-point -->'
 export const attachMarkup = '<div id="q-app"></div>'
 
 function injectPublicPath(html, publicPath) {
-  return html.replaceAll(
-    /(href|src)\s*=\s*(['"])(.+)(['"])/gi,
-    (_, att, pre, val, post) =>
-      absoluteUrlRE.test(val.trim())
-        ? `${att}=${pre}${val}${post}`
-        : `${att}=${pre}${publicPath + val}${post}`
+  return html.replaceAll(hrefSrcRE, (_, att, pre, val, post) =>
+    absoluteUrlRE.test(val.trim())
+      ? `${att}=${pre}${val}${post}`
+      : `${att}=${pre}${publicPath + val}${post}`
   )
 }
 
