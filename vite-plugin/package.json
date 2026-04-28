@@ -56,7 +56,7 @@
   "devDependencies": {
     "@vue/test-utils": "^2.4.9",
     "fs-extra": "^11.3.4",
-    "jsdom": "^29.0.2",
+    "jsdom": "29.0.1",
     "pug": "^3.0.4",
     "quasar": "workspace:*",
     "rolldown": "^1.0.0-rc.17",
