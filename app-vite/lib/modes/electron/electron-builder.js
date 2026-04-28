@@ -21,21 +21,30 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   async #buildFiles() {
-    const viteConfig = await quasarElectronConfig.vite(this.quasarConf)
-    await this.buildWithVite('Electron UI', viteConfig)
+    await Promise.all([
+      quasarElectronConfig
+        .vite(this.quasarConf)
+        .then(viteConfig => this.buildWithVite('Electron UI', viteConfig)),
 
-    const mainConfig = await quasarElectronConfig.main(this.quasarConf)
-    await this.buildWithRolldown('Electron Main', mainConfig)
+      quasarElectronConfig
+        .main(this.quasarConf)
+        .then(mainConfig =>
+          this.buildWithRolldown('Electron Main', mainConfig)
+        ),
 
-    const preloadList = await quasarElectronConfig.preloadScriptList(
-      this.quasarConf
-    )
-    for (const preloadScript of preloadList) {
-      await this.buildWithRolldown(
-        `Electron Preload (${preloadScript.scriptName})`,
-        preloadScript.rolldownConfig
-      )
-    }
+      quasarElectronConfig
+        .preloadScriptList(this.quasarConf)
+        .then(preloadList =>
+          Promise.all(
+            preloadList.map(preloadScript =>
+              this.buildWithRolldown(
+                `Electron Preload (${preloadScript.scriptName})`,
+                preloadScript.rolldownConfig
+              )
+            )
+          )
+        )
+    ])
   }
 
   #writePackageJson() {
