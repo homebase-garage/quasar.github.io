@@ -106,142 +106,122 @@ let bootPromise = Promise.allSettled([
 // state of our application before actually rendering it.
 // Since data fetching is async, this function is expected to
 // return a Promise that resolves to the app instance.
-export default ssrContext => {
-  return new Promise(async (resolve, reject) => {
-    <% if (bootEntries.length !== 0) { %>
-    if (bootFunctions === null) {
-      bootFunctions = await bootPromise
-      bootPromise = null
+export default async ssrContext => {
+  <% if (bootEntries.length !== 0) { %>
+  if (bootFunctions === null) {
+    bootFunctions = await bootPromise
+    bootPromise = null
+  }
+  <% } %>
+
+  const {
+    app, router<%= quasarConf.metaConf.hasStore ? ', store' : '' %>
+  } = await createQuasarApp(createApp, qUserOptions, ssrContext)
+
+  <% if (bootEntries.length !== 0) { %>
+  let bootRedirect = false
+  const bootRedirectFn = (url, httpStatusCode) => {
+    bootRedirect = {
+      // interface SsrRenderRedirectError
+      redirectUrl: getRedirectUrl(url, router),
+      redirectHttpStatusCode:
+        redirectStatusCodeList.includes(httpStatusCode)
+          ? httpStatusCode
+          : 302
     }
-    <% } %>
+  }
 
-    const {
-      app, router<%= quasarConf.metaConf.hasStore ? ', store' : '' %>
-    } = await createQuasarApp(createApp, qUserOptions, ssrContext)
+  for (let i = 0; i < bootFunctions.length; i++) {
+    await bootFunctions[ i ]({
+      app,
+      router,
+      <%= quasarConf.metaConf.hasStore ? 'store,' : '' %>
+      ssrContext,
+      redirect: bootRedirectFn,
+      urlPath: getUrlPath(ssrContext),
+      publicPath
+    })
 
-    <% if (bootEntries.length !== 0) { %>
-    let hasRedirected = false
-    const redirect = (url, httpStatusCode) => {
-      hasRedirected = true
-      reject({
-        // interface SsrRenderRedirectError
-        redirectUrl: getRedirectUrl(url, router),
-        redirectHttpStatusCode:
-          redirectStatusCodeList.includes(httpStatusCode)
-            ? httpStatusCode
-            : 302
-      })
+    if (bootRedirect) throw bootRedirect
+  }
+  <% } %>
+
+  app.use(router)
+
+  const urlPath = getUrlPath(ssrContext)<% if (quasarConf.build.publicPath !== '/') { %>.replace(publicPath, '/')<% } %>
+
+  const { fullPath } = router.resolve(urlPath)
+  if (fullPath !== urlPath) {
+    throw {
+      // interface SsrRenderRedirectError
+      redirectUrl: <%= quasarConf.build.publicPath === '/' ? 'fullPath' : 'addPublicPath(fullPath)' %>,
+      redirectHttpStatusCode: 302
     }
+  }
 
-    for (let i = 0; hasRedirected === false && i < bootFunctions.length; i++) {
-      try {
-        await bootFunctions[ i ]({
-          app,
-          router,
-          <%= quasarConf.metaConf.hasStore ? 'store,' : '' %>
-          ssrContext,
-          redirect,
-          urlPath: getUrlPath(ssrContext),
-          publicPath
-        })
-      }
-      catch (err) {
-        if (!hasRedirected) reject(err)
-        return
-      }
+  // set router's location
+  router.push(urlPath).catch(() => {})
+
+  // wait until router has resolved possible async hooks
+  await router.isReady()
+
+  let matchedComponents = router.currentRoute.value.matched
+    .filter(record => record.components !== void 0)
+    .flatMap(record => Object.values(record.components))
+
+  // no matched routes
+  if (matchedComponents.length === 0) {
+    // interface SsrRenderRouteNotFoundError
+    throw { routeNotFound: true }
+  }
+
+  <% if (quasarConf.preFetch) { %>
+  let prefetchRedirect = false
+  const prefetchRedirectFn = (url, httpStatusCode) => {
+    prefetchRedirect = {
+      // interface SsrRenderRedirectError
+      redirectUrl: getRedirectUrl(url, router),
+      redirectHttpStatusCode:
+        redirectStatusCodeList.includes(httpStatusCode)
+          ? httpStatusCode
+          : 302
     }
+  }
 
-    if (hasRedirected) return
-    <% } %>
+  // filter and convert all components to their preFetch methods
+  matchedComponents = matchedComponents
+    .filter(m => (
+      typeof m.preFetch === 'function'
+      // Class components return the component options (and the preFetch hook) inside __c property
+      || (m.__c !== void 0 && typeof m.__c.preFetch === 'function')
+    ))
+    .map(m => m.__c !== void 0 ? m.__c.preFetch : m.preFetch)
 
-    app.use(router)
+  if (appPrefetch !== false) {
+    matchedComponents.unshift(appPrefetch)
+  }
 
-    const urlPath = getUrlPath(ssrContext)<% if (quasarConf.build.publicPath !== '/') { %>.replace(publicPath, '/')<% } %>
+  // Call preFetch hooks on components matched by the route.
+  // A preFetch hook dispatches a store action and returns a Promise,
+  // which is resolved when the action is complete and store state has been
+  // updated.
+  await matchedComponents
+  .reduce(
+    (promise, preFetchFn) => promise.then(() => prefetchRedirect === false && preFetchFn({
+      <% if (quasarConf.metaConf.hasStore) { %>store,<% } %>
+      ssrContext,
+      currentRoute: router.currentRoute.value,
+      redirect: prefetchRedirectFn,
+      urlPath: getUrlPath(ssrContext),
+      publicPath
+    })),
+    Promise.resolve()
+  )
 
-    const { fullPath } = router.resolve(urlPath)
+  if (prefetchRedirect) throw prefetchRedirect
+  <% } %>
 
-    if (fullPath !== urlPath) {
-      return reject({
-        // interface SsrRenderRedirectError
-        redirectUrl: <%= quasarConf.build.publicPath === '/' ? 'fullPath' : 'addPublicPath(fullPath)' %>,
-        redirectHttpStatusCode: 302
-      })
-    }
+  <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
 
-    // set router's location
-    router.push(urlPath).catch(() => {})
-
-    // wait until router has resolved possible async hooks
-    router.isReady().then(() => {
-      let matchedComponents = router.currentRoute.value.matched
-        .filter(record => record.components !== void 0)
-        .flatMap(record => Object.values(record.components))
-
-      // no matched routes
-      if (matchedComponents.length === 0) {
-        // interface SsrRenderRouteNotFoundError
-        return reject({ routeNotFound: true })
-      }
-
-      <% if (quasarConf.preFetch) { %>
-      let hasRedirected = false
-      const redirect = (url, httpStatusCode) => {
-        hasRedirected = true
-        reject({
-          // interface SsrRenderRedirectError
-          redirectUrl: getRedirectUrl(url, router),
-          redirectHttpStatusCode:
-            redirectStatusCodeList.includes(httpStatusCode)
-              ? httpStatusCode
-              : 302
-        })
-      }
-
-      // filter and convert all components to their preFetch methods
-      matchedComponents = matchedComponents
-        .filter(m => (
-          typeof m.preFetch === 'function'
-          // Class components return the component options (and the preFetch hook) inside __c property
-          || (m.__c !== void 0 && typeof m.__c.preFetch === 'function')
-        ))
-        .map(m => m.__c !== void 0 ? m.__c.preFetch : m.preFetch)
-
-      if (appPrefetch !== false) {
-        matchedComponents.unshift(appPrefetch)
-      }
-
-      // Call preFetch hooks on components matched by the route.
-      // A preFetch hook dispatches a store action and returns a Promise,
-      // which is resolved when the action is complete and store state has been
-      // updated.
-      matchedComponents
-      .reduce(
-        (promise, preFetchFn) => promise.then(() => hasRedirected === false && preFetchFn({
-          <% if (quasarConf.metaConf.hasStore) { %>store,<% } %>
-          ssrContext,
-          currentRoute: router.currentRoute.value,
-          redirect,
-          urlPath: getUrlPath(ssrContext),
-          publicPath
-        })),
-        Promise.resolve()
-      )
-      .then(() => {
-        if (hasRedirected) return
-
-        <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
-
-        resolve(app)
-      })
-      .catch(reject)
-
-      <% } else { %>
-
-        <% if (quasarConf.metaConf.hasStore && quasarConf.ssr.manualStoreSsrContextInjection !== true) { %>ssrContext.state = unref(store.state)<% } %>
-
-        resolve(app)
-
-      <% } %>
-    }).catch(reject)
-  })
+  return app
 }
