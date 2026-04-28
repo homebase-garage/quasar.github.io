@@ -30,27 +30,24 @@ function compileSass(src) {
   })
 }
 
-function getConcatenatedContent(src, noBanner) {
-  return new Promise(resolve => {
-    let code = ''
-    const localBanner = noBanner !== true ? banner : ''
+function getConcatenatedContent(src) {
+  let code = ''
 
-    src.forEach(file => {
-      code += readFile(file) + '\n'
-    })
-
-    code = code
-      // remove imports
-      .replaceAll(/@import\s+'[^']+'[\s\r\n]+/g, '')
-      // remove comments
-      .replaceAll(/(\/\*[\w'-.,`\s\r\n*@]*\*\/)|(\/\/[^\r\n]*)/g, '')
-
-    code = moveUseStatementsToTop(code)
-      // remove unnecessary newlines
-      .replaceAll(/[\r\n]+/g, '\r\n')
-
-    resolve(localBanner + code)
+  src.forEach(file => {
+    code += readFile(file) + '\n'
   })
+
+  code = code
+    // remove imports
+    .replaceAll(/@import\s+'[^']+'[\s\r\n]+/g, '')
+    // remove comments
+    .replaceAll(/(\/\*[\w'-.,`\s\r\n*@]*\*\/)|(\/\/[^\r\n]*)/g, '')
+
+  code = moveUseStatementsToTop(code)
+    // remove unnecessary newlines
+    .replaceAll(/[\r\n]+/g, '\r\n')
+
+  return banner + code
 }
 
 function generateUMD(code, middleName, ext = '') {
@@ -92,10 +89,11 @@ async function generateBase(source) {
   // remove @charset declaration -- breaks Vite usage
   const cssCode = result.css.toString().replace('@charset "UTF-8";', '')
   const depsList = result.loadedUrls
+  const concatenatedContent = getConcatenatedContent(depsList)
 
   return Promise.all([
     renderAsset(cssCode),
-    getConcatenatedContent(depsList).then(code => writeFile(sassDistDest, code))
+    writeFile(sassDistDest, concatenatedContent)
   ])
 }
 

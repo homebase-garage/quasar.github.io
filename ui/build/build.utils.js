@@ -219,14 +219,15 @@ export function readJsonFile(file) {
   return JSON.parse(fse.readFileSync(file, 'utf8'))
 }
 
+const newlineRE = /[\n\r]+/
 export function writeFileIfChanged(dest, newContent, opts) {
   let currentContent = ''
   try {
     currentContent = fse.readFileSync(dest, 'utf8')
   } catch {}
 
-  return newContent.split(/[\n\r]+/).join('\n') !==
-    currentContent.split(/[\n\r]+/).join('\n')
+  return newContent.split(newlineRE).join('\n') !==
+    currentContent.split(newlineRE).join('\n')
     ? writeFile(dest, newContent, opts)
     : Promise.resolve(newContent)
 }
