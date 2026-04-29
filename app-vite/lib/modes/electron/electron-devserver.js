@@ -35,13 +35,6 @@ export class QuasarModeDevserver extends AppDevserver {
       electronPkg.bin.electron
     )
 
-    this.registerDiff('viteElectron', (quasarConf, diffMap) => [
-      quasarConf.electron.csp,
-
-      // extends 'vite' diff
-      ...diffMap.vite(quasarConf)
-    ])
-
     this.registerDiff('electron', (quasarConf, diffMap) => [
       quasarConf.devServer,
       quasarConf.electron.extendElectronMainConf,
@@ -59,7 +52,7 @@ export class QuasarModeDevserver extends AppDevserver {
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
-    if (diff('viteElectron', quasarConf)) {
+    if (diff('vite', quasarConf)) {
       return queue(() => this.#runVite(quasarConf))
     }
 
