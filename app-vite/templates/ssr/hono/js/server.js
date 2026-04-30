@@ -23,8 +23,6 @@ import {
 
 /**
  * Create your webserver and return its instance.
- * If needed, prepare your webserver to receive
- * connect-like middlewares.
  */
 export const create = defineSsrCreate(async (/* { ... } */) => {
   const app = new Hono()
