@@ -215,11 +215,7 @@ export default function useAnchor({
   onMounted(() => {
     pickAnchorEl()
 
-    if (
-      avoidEmit !== true &&
-      props.modelValue === true &&
-      anchorEl.value === null
-    ) {
+    if (!avoidEmit && props.modelValue && anchorEl.value === null) {
       emit('update:modelValue', false)
     }
   })
