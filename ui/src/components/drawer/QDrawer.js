@@ -119,18 +119,30 @@ export default createComponent({
     )
 
     const isMini = computed(() => props.mini && !belowBreakpoint.value)
-
     const size = computed(() => (isMini.value ? props.miniWidth : props.width))
+    const fixed = computed(
+      () =>
+        props.overlay ||
+        props.miniToOverlay ||
+        $layout.view.value.includes(rightSide.value ? 'R' : 'L') ||
+        ($q.platform.is.ios && $layout.isContainer.value)
+    )
 
     const showing = ref(
-      props.showIfAbove && !belowBreakpoint.value
-        ? true
-        : props.modelValue === true
+      (props.showIfAbove && !belowBreakpoint.value) || props.modelValue === true
+    )
+
+    const onLayout = computed(
+      () => !props.overlay && showing.value && !belowBreakpoint.value
+    )
+
+    const onScreenOverlay = computed(
+      () => props.overlay && showing.value && !belowBreakpoint.value
     )
 
     const hideOnRouteChange = computed(
       () =>
-        !props.persistent && (!belowBreakpoint.value || onScreenOverlay.value)
+        !props.persistent && (belowBreakpoint.value || onScreenOverlay.value)
     )
 
     function handleShow(evt, noEvent) {
@@ -216,22 +228,6 @@ export default createComponent({
           ? props.miniWidth
           : size.value
         : 0
-    )
-
-    const fixed = computed(
-      () =>
-        props.overlay ||
-        props.miniToOverlay ||
-        $layout.view.value.includes(rightSide.value ? 'R' : 'L') ||
-        ($q.platform.is.ios && $layout.isContainer.value)
-    )
-
-    const onLayout = computed(
-      () => !props.overlay && showing.value && !belowBreakpoint.value
-    )
-
-    const onScreenOverlay = computed(
-      () => props.overlay && showing.value && !belowBreakpoint.value
     )
 
     const backdropClass = computed(
