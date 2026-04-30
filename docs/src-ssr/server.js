@@ -10,8 +10,6 @@
 
 import { lstatSync } from 'node:fs'
 import { Hono } from 'hono'
-import { serve } from '@hono/node-server'
-import { serveStatic } from '@hono/node-server/serve-static'
 import {
   defineSsrClose,
   defineSsrCreate,
@@ -23,19 +21,8 @@ import {
 
 /**
  * Create your webserver and return its instance.
- * If needed, prepare your webserver to receive
- * connect-like middlewares.
  */
-export const create = defineSsrCreate(async (/* { ... } */) => {
-  const app = new Hono()
-
-  if (import.meta.env.QUASAR_PROD) {
-    const { compress } = await import('hono/compress')
-    app.use(compress())
-  }
-
-  return app
-})
+export const create = defineSsrCreate(() => new Hono())
 
 /**
  * Used by Quasar SSR dev server to inject middleware into the webserver.
@@ -110,6 +97,8 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(
  */
 export const listen = defineSsrListen(
   async ({ app, devHttpsOptions, port }) => {
+    if (import.meta.env.QUASAR_PROD) return
+
     const opts = {
       fetch: app.fetch,
       port
@@ -123,7 +112,7 @@ export const listen = defineSsrListen(
      * or directly play with folders.serverAssets.
      */
 
-    if (import.meta.env.QUASAR_DEV && devHttpsOptions) {
+    if (devHttpsOptions) {
       const { createServer } = await import('node:https')
       opts.createServer = createServer
       opts.serverOptions = { ...devHttpsOptions }
@@ -132,11 +121,8 @@ export const listen = defineSsrListen(
       opts.createServer = createServer
     }
 
-    return serve(opts, info => {
-      if (import.meta.env.QUASAR_PROD) {
-        console.log(`🚀 Server listening at port ${info.port}`)
-      }
-    })
+    const { serve } = await import('@hono/node-server')
+    return serve(opts)
   }
 )
 
@@ -164,8 +150,9 @@ const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
  * Can return an async function: return async ({ urlPath = '/', pathToServe = '.', opts = {} }) => {
  */
 export const serveStaticContent = defineSsrServeStaticContent(
-  ({ app, resolve }) =>
-    ({ urlPath, pathToServe, opts = {} }) => {
+  async ({ app, resolve }) => {
+    const { serveStatic } = await import('@hono/node-server/serve-static')
+    return ({ urlPath, pathToServe, opts = {} }) => {
       const pubPath = resolve.public(pathToServe)
       const isDir = lstatSync(pubPath).isDirectory()
 
@@ -194,6 +181,7 @@ export const serveStaticContent = defineSsrServeStaticContent(
         })
       )
     }
+  }
 )
 
 const jsRE = /\.js$/

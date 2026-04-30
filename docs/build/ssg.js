@@ -1,9 +1,6 @@
 import { join, normalize } from 'node:path'
-import axios from 'axios'
 import fse from 'fs-extra'
 import { globSync } from 'tinyglobby'
-
-axios.defaults.withCredentials = true
 
 const rootFolder = normalize(join(import.meta.dirname, '..'))
 const baseUrl = 'http://localhost:3111'
@@ -31,14 +28,21 @@ const lightRouteList = [
     .map(entry => 'layout/gallery/' + entry)
 ]
 
-// start server
-await import('../dist/quasar.dev/index.js')
+const { renderSsrContext } = await import('../dist/quasar.dev/index.js')
+
+function get(url, theme) {
+  return renderSsrContext({
+    req: {
+      url: baseUrl + url,
+      headers: {
+        cookie: `theme=${theme}`
+      }
+    }
+  })
+}
 
 for (const theme of themeList) {
-  await axios
-    .get(baseUrl + '/get-a-404', {
-      headers: { Cookie: `theme=${theme}` }
-    })
+  await get('/get-a-404', theme)
     .catch(err => {
       console.error(
         '[ Quasar SSG ] Failed to render 404 page for theme:',
@@ -47,18 +51,15 @@ for (const theme of themeList) {
       console.error(err)
       process.exit(1)
     })
-    .then(res => {
+    .then(html => {
       const file = join(clientDir, `index-404-${theme}.html`)
       fse.ensureFileSync(file)
-      fse.writeFileSync(file, res.data, 'utf8')
+      fse.writeFileSync(file, html, 'utf8')
       console.log(`[ Quasar SSG ] [ ${theme} ] Rendered 404 page`)
     })
 
   for (const _path of themedRouteList) {
-    await axios
-      .get(baseUrl + '/' + _path, {
-        headers: { Cookie: `theme=${theme}` }
-      })
+    await get('/' + _path, theme)
       .catch(err => {
         console.error('[ Quasar SSG ] Failed to render:', {
           theme,
@@ -67,27 +68,26 @@ for (const theme of themeList) {
         if (err) console.error(err)
         process.exit(1)
       })
-      .then(res => {
+      .then(html => {
         const file = join(clientDir, _path, `index-${theme}.html`)
         fse.ensureFileSync(file)
-        fse.writeFileSync(file, res.data, 'utf8')
+        fse.writeFileSync(file, html, 'utf8')
         console.log(`[ Quasar SSG ] [ ${theme} ] Rendered: /${_path}`)
       })
   }
 }
 
 for (const _path of lightRouteList) {
-  await axios
-    .get(baseUrl + '/' + _path)
+  await get('/' + _path, 'light')
     .catch(err => {
       console.error('[ Quasar SSG ] Failed to render path:', _path)
       if (err) console.error(err)
       process.exit(1)
     })
-    .then(res => {
+    .then(html => {
       const file = join(clientDir, _path, 'index.html')
       fse.ensureFileSync(file)
-      fse.writeFileSync(file, res.data, 'utf8')
+      fse.writeFileSync(file, html, 'utf8')
       console.log(`[ Quasar SSG ] [ light (only) ] Rendered: /${_path}`)
     })
 }
