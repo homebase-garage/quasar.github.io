@@ -80,7 +80,6 @@ export default defineConfig(ctx => ({
 
   ssr: {
     pwa: ctx.prod,
-    prodPort: 3111,
     middlewares: ['render']
   },
 

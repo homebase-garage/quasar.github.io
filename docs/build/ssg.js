@@ -3,7 +3,7 @@ import fse from 'fs-extra'
 import { globSync } from 'tinyglobby'
 
 const rootFolder = normalize(join(import.meta.dirname, '..'))
-const baseUrl = 'http://localhost:3111'
+const baseUrl = 'http://localhost'
 const clientDir = join(rootFolder, 'dist/quasar.dev/client')
 const themeList = ['light', 'dark']
 
@@ -91,5 +91,3 @@ for (const _path of lightRouteList) {
       console.log(`[ Quasar SSG ] [ light (only) ] Rendered: /${_path}`)
     })
 }
-
-process.exit(0)

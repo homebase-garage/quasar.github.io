@@ -8,7 +8,6 @@
  * anything you import here.
  */
 
-import { lstatSync } from 'node:fs'
 import { Hono } from 'hono'
 import {
   defineSsrClose,
@@ -151,7 +150,9 @@ const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
  */
 export const serveStaticContent = defineSsrServeStaticContent(
   async ({ app, resolve }) => {
+    const { lstatSync } = await import('node:fs')
     const { serveStatic } = await import('@hono/node-server/serve-static')
+
     return ({ urlPath, pathToServe, opts = {} }) => {
       const pubPath = resolve.public(pathToServe)
       const isDir = lstatSync(pubPath).isDirectory()
