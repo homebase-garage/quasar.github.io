@@ -344,10 +344,6 @@ function getApiCount(parsedApi, tabs, innerTabs) {
   return acc
 }
 
-const getJsonUrl = import.meta.env.QUASAR_DEV
-  ? file => `/@fs/${import.meta.env.FS_QUASAR_FOLDER}/dist/api/${file}.json`
-  : file => `/quasar-api/${file}.json`
-
 const props = defineProps({
   file: {
     type: String,
@@ -423,7 +419,7 @@ function onFilterClick() {
 
 if (import.meta.env.QUASAR_CLIENT) {
   onMounted(() => {
-    fetch(getJsonUrl(props.file))
+    fetch(`/quasar-api/${props.file}.json`)
       .then(response => response.json())
       .then(json => {
         parseApiFile(props.file, json)

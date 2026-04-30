@@ -1,5 +1,4 @@
 import { defineConfig } from '#q-app'
-import { join, normalize } from 'node:path'
 
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
@@ -17,14 +16,7 @@ export default defineConfig(ctx => ({
 
     define: {
       'import.meta.env.DOCS_BRANCH': '"dev"',
-      'import.meta.env.SEARCH_INDEX': '"quasar-v2"',
-      ...(ctx.dev
-        ? {
-            'import.meta.env.FS_QUASAR_FOLDER': JSON.stringify(
-              normalize(join(import.meta.dirname, '../ui')).replace('\\', '/')
-            )
-          }
-        : {})
+      'import.meta.env.SEARCH_INDEX': '"quasar-v2"'
     },
 
     viteVuePluginOptions: {

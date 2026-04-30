@@ -1,9 +1,9 @@
 // cp node_modules/quasar/dist/api/* public/quasar-api/
 
-import { join, normalize } from 'node:path'
+import { join } from 'node:path'
 import fse from 'fs-extra'
 
-const rootFolder = normalize(join(import.meta.dirname, '..'))
+const rootFolder = join(import.meta.dirname, '..')
 
 const sourceList = [
   join(rootFolder, 'node_modules/quasar/dist/api'),
@@ -12,9 +12,7 @@ const sourceList = [
 
 function getSource() {
   for (const source of sourceList) {
-    if (fse.existsSync(source)) {
-      return source
-    }
+    if (fse.existsSync(source)) return source
   }
 
   console.error('Quasar API folder not found. Please build Quasar UI first.')

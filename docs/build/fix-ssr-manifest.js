@@ -6,11 +6,12 @@
  * See ./chunks.js for more info.
  */
 
+import { join } from 'node:path'
 import { readFileSync, writeFileSync } from 'node:fs'
 
-const manifestPath = new URL(
-  '../dist/quasar.dev/quasar.manifest.json',
-  import.meta.url
+const manifestPath = join(
+  import.meta.dirname,
+  '../dist/quasar.dev/quasar.manifest.json'
 )
 const manifestJson = JSON.parse(readFileSync(manifestPath, 'utf8'))
 
