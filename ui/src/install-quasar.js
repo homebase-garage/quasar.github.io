@@ -114,6 +114,7 @@ export default __QUASAR_SSR_SERVER__
       })
 
       if (ssrContext._modules === void 0) {
+        // TODO: remove in Quasar v3; needed only by q/app-webpack
         // not OK. means the SSR build is not using @quasar/ssr-helpers,
         // but we shouldn't crash the app
         ssrContext._modules = []
