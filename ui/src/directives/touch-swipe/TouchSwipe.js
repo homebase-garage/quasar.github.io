@@ -45,9 +45,11 @@ export default createDirective(
 
         beforeMount(el, { value, arg, modifiers }) {
           // early return, we don't need to do anything
-          if (modifiers.mouse !== true && !client.has.touch) return
+          if (!modifiers.mouse && !client.has.touch) return
 
-          const mouseCapture = modifiers.mouseCapture === true ? 'Capture' : ''
+          const mouseCapture =
+            // account for UMD too where modifiers will be lowercased to work
+            modifiers.mouseCapture || modifiers.mousecapture ? 'Capture' : ''
 
           const ctx = {
             handler: value,
@@ -240,12 +242,10 @@ export default createDirective(
 
           el.__qtouchswipe = ctx
 
-          if (modifiers.mouse === true) {
+          if (modifiers.mouse) {
             // account for UMD too where modifiers will be lowercased to work
             const capture =
-              modifiers.mouseCapture === true || modifiers.mousecapture === true
-                ? 'Capture'
-                : ''
+              modifiers.mouseCapture || modifiers.mousecapture ? 'Capture' : ''
 
             addEvt(ctx, 'main', [
               [el, 'mousedown', 'mouseStart', `passive${capture}`]
