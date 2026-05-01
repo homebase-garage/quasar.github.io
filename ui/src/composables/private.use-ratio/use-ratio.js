@@ -5,13 +5,14 @@ export const useRatioProps = {
 }
 
 export default function useRatio(props, naturalRatio) {
-  // return ratioStyle
   return computed(() => {
-    const ratio = Number(
-      props.ratio || (naturalRatio !== void 0 ? naturalRatio.value : void 0)
-    )
+    const rawValue = props.ratio || naturalRatio?.value
+    if (typeof rawValue === 'string' && rawValue.trim() === '') {
+      return null
+    }
 
-    return !Number.isNaN(ratio) && ratio > 0
+    const ratio = Number(rawValue)
+    return Number.isFinite(ratio) && ratio > 0
       ? { paddingBottom: `${100 / ratio}%` }
       : null
   })
