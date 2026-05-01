@@ -18,6 +18,7 @@ function showHelp(exitCode = 0) {
     $ specs -t utils
 
     $ specs -t QIcon -g props.name
+    $ specs -t utils/uid
 
   Options
     --target, -t        Target a component/directive/plugin/composable/other

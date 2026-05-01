@@ -1,10 +1,10 @@
-import { describe, expect, test } from 'vitest'
+import { describe, test } from 'vitest'
 
 import uid from './uid.js'
 
 describe('[uid API]', () => {
-  describe('[Functions]', () => {
-    describe('[(function)default]', () => {
+  describe('[Variables]', () => {
+    describe('[(variable)default]', () => {
       test('has correct return value', () => {
         const result = uid()
         expect(result).toBeTypeOf('string')
