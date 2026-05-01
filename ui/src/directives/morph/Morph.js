@@ -84,8 +84,9 @@ function insertArgs(arg, ctx) {
   ctx.name = opts[0]
   ctx.group = opts[1]
 
+  const parsedOpt = Number.parseFloat(opts[2])
   Object.assign(ctx.opts, {
-    duration: Number.isNaN(opts[2]) ? 300 : Number.parseFloat(opts[2]),
+    duration: Number.isFinite(parsedOpt) ? parsedOpt : 300,
     waitFor: opts[3]
   })
 }

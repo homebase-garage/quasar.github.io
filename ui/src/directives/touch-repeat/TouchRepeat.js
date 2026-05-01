@@ -44,9 +44,10 @@ export default createDirective(
         beforeMount(el, { modifiers, value, arg }) {
           const keyboard = Object.keys(modifiers).reduce((acc, key) => {
             if (keyRegex.test(key)) {
-              const keyCode = Number.isNaN(Number.parseInt(key, 10))
+              const parsedKey = Number.parseInt(key, 10)
+              const keyCode = Number.isNaN(parsedKey)
                 ? keyCodes[key.toLowerCase()]
-                : Number.parseInt(key, 10)
+                : parsedKey
 
               if (keyCode >= 0) acc.push(keyCode)
             }

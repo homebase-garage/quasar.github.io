@@ -17,8 +17,7 @@ function getDepth(value) {
   if (value === false) return 0
   if (value === true || value === void 0) return 1
 
-  const depth = Number.parseInt(value, 10)
-  return Number.isNaN(depth) ? 0 : depth
+  return Number.parseInt(value, 10) || 0
 }
 
 export default createDirective(

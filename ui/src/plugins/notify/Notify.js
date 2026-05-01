@@ -112,11 +112,13 @@ function addNotification(config, $q, originalApi) {
   if (invalidTimeoutValues.includes(notif.timeout)) {
     notif.timeout = 5000
   } else {
-    const t = Number(notif.timeout) // we catch exponential notation too with Number() casting
-    if (Number.isNaN(t) || t < 0) {
+    // we catch exponential notation too
+    const t = Number.parseFloat(notif.timeout)
+    if (!Number.isFinite(t) || t < 0) {
       return logError('wrong timeout', config)
     }
-    notif.timeout = Number.isFinite(t) ? t : 0
+
+    notif.timeout = t
   }
 
   if (notif.timeout === 0) {

@@ -137,7 +137,7 @@ export default createComponent({
       get: () => props.modelValue,
       set: val => {
         val = Number.parseInt(val, 10)
-        if (props.disable || Number.isNaN(val)) return
+        if (props.disable || !Number.isFinite(val)) return
 
         const value = between(val, minProp.value, maxProp.value)
         if (props.modelValue !== value) {

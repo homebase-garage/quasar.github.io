@@ -400,19 +400,13 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
   const { regex, map } = getRegexData(mask, langOpts)
 
   const match = str.match(regex)
-
-  if (match === null) {
-    return date
-  }
+  if (match === null) return date
 
   let tzString = ''
 
   if (map.X !== void 0 || map.x !== void 0) {
-    const stamp = Number.parseInt(match[map.X !== void 0 ? map.X : map.x], 10)
-
-    if (Number.isNaN(stamp) || stamp < 0) {
-      return date
-    }
+    const stamp = Number.parseInt(match[map.X ?? map.x], 10)
+    if (Number.isNaN(stamp) || stamp < 0) return date
 
     const d = new Date(stamp * (map.X !== void 0 ? 1000 : 1))
 
@@ -433,9 +427,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
 
     if (map.M !== void 0) {
       date.month = Number.parseInt(match[map.M], 10)
-      if (date.month < 1 || date.month > 12) {
-        return date
-      }
+      if (date.month < 1 || date.month > 12) return date
     } else if (map.MMM !== void 0) {
       date.month = monthsShort.indexOf(match[map.MMM]) + 1
     } else if (map.MMMM !== void 0) {
@@ -454,9 +446,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
           ? new Date(date.year, date.month, 0).getDate()
           : jalaaliMonthLength(date.year, date.month)
 
-      if (date.day > maxDay) {
-        return date
-      }
+      if (date.day > maxDay) return date
     }
 
     if (map.H !== void 0) {
@@ -470,6 +460,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
       ) {
         date.hour += 12
       }
+
       date.hour = date.hour % 24
     }
 
@@ -504,7 +495,7 @@ export function __splitDate(str, mask, dateLocale, calendar, defaultModel) {
 }
 
 export function isValid(date) {
-  return typeof date === 'number' ? true : !Number.isNaN(Date.parse(date))
+  return Number.isFinite(date) || Number.isFinite(Date.parse(date))
 }
 
 export function buildDate(mod, utc) {

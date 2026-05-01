@@ -29,20 +29,22 @@ function encode(value) {
   return value
 }
 
+const numberRE = /^-?\d+$/
+
 function decode(value) {
   const length = value.length
-  if (length < 9) {
-    // then it wasn't encoded by us
-    return value
-  }
+
+  // if it wasn't encoded by us
+  if (length < 9) return value
 
   const type = value.slice(0, 8)
   const source = value.slice(9)
 
   switch (type) {
     case '__q_date': {
-      const number = Number(source)
-      return new Date(Number.isNaN(number) ? source : number)
+      return new Date(
+        numberRE.test(source) ? Number.parseInt(source, 10) : source
+      )
     }
 
     case '__q_expr': {

@@ -134,6 +134,11 @@ function normalizeElements(opts) {
   }
 }
 
+function getOpacity(value, fallback) {
+  const parsed = Number.parseFloat(value)
+  return Number.isFinite(parsed) ? Math.max(0, Math.min(1, parsed)) : fallback
+}
+
 function normalizeOptions(options) {
   if (typeof options === 'number') {
     options = {
@@ -145,19 +150,20 @@ function normalizeOptions(options) {
     }
   }
 
+  const parsedDuration = Number.parseInt(options.duration, 10)
+  const parsedDelay = Number.parseInt(options.delay, 10)
+
   return {
     ...options,
 
     waitFor: options.waitFor === void 0 ? 0 : options.waitFor,
 
-    duration: Number.isNaN(options.duration)
-      ? 300
-      : Number.parseInt(options.duration, 10),
+    duration: Number.isNaN(parsedDuration) ? 300 : parsedDuration,
+    delay: Number.isNaN(parsedDelay) ? 0 : parsedDelay,
     easing:
       typeof options.easing === 'string' && options.easing.length !== 0
         ? options.easing
         : 'ease-in-out',
-    delay: Number.isNaN(options.delay) ? 0 : Number.parseInt(options.delay, 10),
     fill:
       typeof options.fill === 'string' && options.fill.length !== 0
         ? options.fill
@@ -174,12 +180,8 @@ function normalizeOptions(options) {
     keepToClone: options.keepToClone === true || options.keeptoclone === true,
 
     tween: options.tween === true,
-    tweenFromOpacity: Number.isNaN(options.tweenFromOpacity)
-      ? 0.6
-      : Number.parseFloat(options.tweenFromOpacity),
-    tweenToOpacity: Number.isNaN(options.tweenToOpacity)
-      ? 0.5
-      : Number.parseFloat(options.tweenToOpacity)
+    tweenFromOpacity: getOpacity(options.tweenFromOpacity, 0.6),
+    tweenToOpacity: getOpacity(options.tweenToOpacity, 0.5)
   }
 }
 

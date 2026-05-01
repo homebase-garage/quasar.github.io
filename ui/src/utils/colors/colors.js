@@ -152,22 +152,21 @@ export function textToRgb(str) {
   }
 
   const color = str.replaceAll(' ', '')
-
   const m = reRGBA.exec(color)
-
-  if (m === null) {
-    return hexToRgb(color)
-  }
+  if (m === null) return hexToRgb(color)
 
   const rgb = {
-    r: Math.min(255, Number.parseInt(m[2], 10)),
-    g: Math.min(255, Number.parseInt(m[3], 10)),
-    b: Math.min(255, Number.parseInt(m[4], 10))
+    r: Math.min(255, Math.max(0, Number.parseInt(m[2], 10))),
+    g: Math.min(255, Math.max(0, Number.parseInt(m[3], 10))),
+    b: Math.min(255, Math.max(0, Number.parseInt(m[4], 10)))
   }
 
   if (m[1]) {
     const alpha = Number.parseFloat(m[5])
-    rgb.a = Math.min(1, Number.isNaN(alpha) ? 1 : alpha) * 100
+    const safeAlpha = Number.isFinite(alpha)
+      ? Math.max(0, Math.min(1, alpha))
+      : 1
+    rgb.a = Math.round(safeAlpha * 100)
   }
 
   return rgb
