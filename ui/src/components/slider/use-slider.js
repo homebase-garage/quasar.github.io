@@ -132,12 +132,12 @@ export default function useSlider({
   )
 
   const innerMin = computed(() =>
-    Number.isNaN(props.innerMin) || props.innerMin < props.min
+    !Number.isFinite(props.innerMin) || props.innerMin < props.min
       ? props.min
       : props.innerMin
   )
   const innerMax = computed(() =>
-    Number.isNaN(props.innerMax) || props.innerMax > props.max
+    !Number.isFinite(props.innerMax) || props.innerMax > props.max
       ? props.max
       : props.innerMax
   )
@@ -147,9 +147,7 @@ export default function useSlider({
   )
 
   const roundValueFn = computed(() => {
-    if (props.step === 0) {
-      return v => v
-    }
+    if (props.step === 0) return v => v
 
     const decimals = (String(props.step).trim().split('.')[1] || '').length
     return v => Number.parseFloat(v.toFixed(decimals))

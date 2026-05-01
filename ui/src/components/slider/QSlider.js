@@ -61,10 +61,9 @@ export default createComponent({
     watch(
       () =>
         `${props.modelValue}|${state.innerMin.value}|${state.innerMax.value}`,
-      normalizeModel
+      normalizeModel,
+      { immediate: true }
     )
-
-    normalizeModel()
 
     const modelRatio = computed(() => methods.convertModelToRatio(model.value))
     const ratio = computed(() =>
