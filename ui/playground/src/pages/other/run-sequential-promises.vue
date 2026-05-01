@@ -1,5 +1,8 @@
 <template>
   <div class="q-layout-padding run-sequential-promises">
+    <div class="text-h5 q-mb-md"
+      >requires multiple runs (10+) to capture all outcomes</div
+    >
     <q-markup-table separator="cell" flat bordered dense>
       <thead>
         <tr>
@@ -41,17 +44,11 @@
           </td>
           <td class="text-left">
             <div class="row items-center no-wrap">
-              <q-btn
-                unelevated
-                label="Copy"
-                no-caps
-                size="xs"
-                dense
-                color="primary"
-                class="q-mr-xs"
-                @click="test.copy"
-              />
               <pre>{{ test.result }}</pre>
+            </div>
+            <div v-if="test.expected">
+              <div class="text-weight-bold">({{ test.id }}) -> Expected:</div>
+              <pre>{{ test.expected }}</pre>
             </div>
           </td>
         </tr>
@@ -61,7 +58,7 @@
 </template>
 
 <script setup>
-import { Notify, copyToClipboard, is, runSequentialPromises } from 'quasar'
+import { is, runSequentialPromises } from 'quasar'
 import { ref } from 'vue'
 
 const testList = ref([])
@@ -70,54 +67,41 @@ function runTest(fixture, runFn) {
   const index = testList.value.length
 
   testList.value[index] = {
-    type: fixture[0],
-    proposed: fixture[1],
-    abortOnFail: fixture[2],
-    threads: fixture[3],
+    id: fixture[0], // Unique Human Name
+    type: fixture[1],
+    proposed: fixture[2],
+    abortOnFail: fixture[3],
+    threads: fixture[4],
 
     icon: 'auto_mode',
     outcome: 'running',
     result: '...',
-    color: 'grey',
-
-    copy: () => {
-      copyToClipboard(testList.value[index].result)
-        .then(() => {
-          Notify.create({
-            type: 'positive',
-            message: 'Copied result to clipboard'
-          })
-        })
-        .catch(() => {
-          Notify.create({
-            type: 'negative',
-            message: 'Could not copy to clipboard'
-          })
-        })
-    }
+    expected: '',
+    color: 'grey'
   }
 
-  runFn((result, success) => {
+  runFn((result, success, expected) => {
     Object.assign(testList.value[index], {
       icon: success ? 'done' : 'cancel',
       outcome: success ? 'as expected' : 'FAIL',
       result: JSON.stringify(result),
+      expected: success ? '' : JSON.stringify(expected),
       color: success ? 'green' : 'negative'
     })
   })
 }
 
-function getPromiseList(fail) {
+function getPromiseList(name, fail) {
   return [
     resultAggregator =>
-      new Promise((resolve, reject) => {
+      new Promise(resolve => {
         if (resultAggregator.length !== 5) {
-          reject('resultAggregator is NOT a 5 element array')
-        } else {
-          setTimeout(() => {
-            resolve('one')
-          }, Math.random() * 1000)
+          throw new Error(`${name}: resultAggregator is NOT a 5 element array`)
         }
+
+        setTimeout(() => {
+          resolve('one')
+        }, Math.random() * 1000)
       }),
 
     () =>
@@ -139,218 +123,51 @@ function getPromiseList(fail) {
       }),
 
     resultAggregator =>
-      new Promise((resolve, reject) => {
+      new Promise(resolve => {
         if (!Array.isArray(resultAggregator)) {
-          reject('resultAggregator is NOT an array')
-        } else {
-          setTimeout(() => {
-            resolve('four')
-          }, Math.random() * 1000)
+          throw new TypeError(`${name}: resultAggregator is NOT an array`)
         }
+
+        setTimeout(() => {
+          resolve('four')
+        }, Math.random() * 1000)
       }),
 
     resultAggregator =>
-      new Promise((resolve, reject) => {
-        if (resultAggregator[0].status !== 'fulfilled') {
-          reject('resultAggregator does NOT have result of first promise')
-        } else if (resultAggregator[0].value !== 'one') {
-          reject(
-            'resultAggregator does NOT have correct value for first promise'
-          )
-        } else {
-          setTimeout(() => {
-            resolve('five')
-          }, Math.random() * 1000)
+      new Promise(resolve => {
+        const firstPromiseResult = resultAggregator[0]
+        if (firstPromiseResult) {
+          if (firstPromiseResult.status !== 'fulfilled') {
+            throw new Error(
+              `${name}: resultAggregator has wrong status for first promise -> ${firstPromiseResult.status}`
+            )
+          } else if (firstPromiseResult.value !== 'one') {
+            throw new Error(
+              `${name}: resultAggregator does NOT have correct value for first promise -> ${firstPromiseResult.value}`
+            )
+          }
         }
+
+        setTimeout(() => {
+          resolve('five')
+        }, Math.random() * 1000)
       })
   ]
 }
 
-runTest(['list', 'resolve all', 'yes', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseList(), { abortOnFail: true })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'fulfilled', value: 'two' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-runTest(['list', 'resolve all', '-', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseList(), { abortOnFail: false })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'fulfilled', value: 'two' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-runTest(['list', 'resolve all', 'yes', '2 thread'], setResult => {
-  runSequentialPromises(getPromiseList(), {
-    abortOnFail: true,
-    threadsNumber: 2
-  })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'fulfilled', value: 'two' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-runTest(['list', 'resolve all', '-', '2 thread'], setResult => {
-  runSequentialPromises(getPromiseList(), {
-    abortOnFail: false,
-    threadsNumber: 2
-  })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'fulfilled', value: 'two' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-runTest(['list', 'reject 2nd', 'yes', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseList(true), { abortOnFail: true })
-    .then(list => {
-      setResult(list, false)
-    })
-    .catch(err => {
-      setResult(
-        err,
-        is.deepEqual(err, {
-          key: 1,
-          status: 'rejected',
-          reason: 'cannot settle promise 2',
-          resultAggregator: [
-            { key: 0, status: 'fulfilled', value: 'one' },
-            { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
-            null,
-            null,
-            null
-          ]
-        })
-      )
-    })
-})
-
-runTest(['list', 'reject 2nd', '-', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseList(true), { abortOnFail: false })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-runTest(['list', 'reject 2nd', 'yes', '2 threads'], setResult => {
-  runSequentialPromises(getPromiseList(true), {
-    abortOnFail: true,
-    threadsNumber: 2
-  })
-    .then(list => {
-      setResult(list, false)
-    })
-    .catch(err => {
-      setResult(
-        err,
-        is.deepEqual(err, {
-          key: 1,
-          status: 'rejected',
-          reason: 'cannot settle promise 2',
-          resultAggregator: [
-            { key: 0, status: 'fulfilled', value: 'one' },
-            { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
-            null,
-            null,
-            null
-          ]
-        })
-      )
-    })
-})
-
-runTest(['list', 'reject 2nd', '-', '2 threads'], setResult => {
-  runSequentialPromises(getPromiseList(true), {
-    abortOnFail: false,
-    threadsNumber: 2
-  })
-    .then(list => {
-      setResult(
-        list,
-        is.deepEqual(list, [
-          { key: 0, status: 'fulfilled', value: 'one' },
-          { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
-          { key: 2, status: 'fulfilled', value: 'three' },
-          { key: 3, status: 'fulfilled', value: 'four' },
-          { key: 4, status: 'fulfilled', value: 'five' }
-        ])
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
-
-function getPromiseMap(fail) {
+function getPromiseMap(name, fail) {
   return {
     one: resultAggregator =>
-      new Promise((resolve, reject) => {
+      new Promise(resolve => {
         if (Object.keys(resultAggregator).length !== 5) {
-          reject('resultAggregator is NOT a 5 element mapping')
-        } else {
-          setTimeout(() => {
-            resolve('one')
-          }, Math.random() * 1000)
+          throw new Error(
+            `${name}: resultAggregator is NOT a 5 element mapping`
+          )
         }
+
+        setTimeout(() => {
+          resolve('one')
+        }, Math.random() * 1000)
       }),
 
     two: () =>
@@ -372,225 +189,425 @@ function getPromiseMap(fail) {
       }),
 
     four: resultAggregator =>
-      new Promise((resolve, reject) => {
+      new Promise(resolve => {
         if (
           Array.isArray(resultAggregator) ||
           Object(resultAggregator) !== resultAggregator
         ) {
-          reject('resultAggregator is NOT a mapped object')
-        } else {
-          setTimeout(() => {
-            resolve('four')
-          }, Math.random() * 1000)
+          throw new Error(`${name}: resultAggregator is NOT a mapped object`)
         }
+
+        setTimeout(() => {
+          resolve('four')
+        }, Math.random() * 1000)
       }),
 
     five: resultAggregator =>
-      new Promise((resolve, reject) => {
-        if (resultAggregator.one.status !== 'fulfilled') {
-          reject('resultAggregator does NOT have result of first promise')
-        } else if (resultAggregator.one.value !== 'one') {
-          reject(
-            'resultAggregator does NOT have correct value for first promise'
-          )
-        } else {
-          setTimeout(() => {
-            resolve('five')
-          }, Math.random() * 1000)
+      new Promise(resolve => {
+        if (resultAggregator.one) {
+          if (resultAggregator.one.status !== 'fulfilled') {
+            throw new Error(
+              `${name}: resultAggregator has wrong status for first promise -> ${resultAggregator.one.status}`
+            )
+          } else if (resultAggregator.one.value !== 'one') {
+            throw new Error(
+              `${name}: resultAggregator does NOT have correct value for first promise -> ${resultAggregator.one.value}`
+            )
+          }
         }
+
+        setTimeout(() => {
+          resolve('five')
+        }, Math.random() * 1000)
       })
   }
 }
 
-runTest(['map', 'resolve all', 'yes', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(), { abortOnFail: true })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: { key: 'two', status: 'fulfilled', value: 'two' },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
+function isFailureEqualWithThreadsAndAbortOnFail(result, expected) {
+  const { resultAggregator, ...rest } = result
+  const { resultAggregator: expectedResultAggregator, ...expectedRest } =
+    expected
 
-runTest(['map', 'resolve all', '-', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(), { abortOnFail: false })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: { key: 'two', status: 'fulfilled', value: 'two' },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
+  if (!is.deepEqual(rest, expectedRest)) return false
 
-runTest(['map', 'resolve all', 'yes', '2 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(), {
-    abortOnFail: true,
-    threadsNumber: 2
+  if (Array.isArray(expectedResultAggregator)) {
+    if (!Array.isArray(resultAggregator)) return false
+    if (resultAggregator.length !== expectedResultAggregator.length) {
+      return false
+    }
+
+    if (!is.deepEqual(resultAggregator[1], expectedResultAggregator[1])) {
+      return false
+    }
+  } else {
+    if (
+      Array.isArray(resultAggregator) ||
+      Object(resultAggregator) !== resultAggregator
+    ) {
+      return false
+    }
+
+    const expectedKeys = Object.keys(expectedResultAggregator)
+    const resultKeys = Object.keys(resultAggregator)
+
+    if (expectedKeys.length !== resultKeys.length) return false
+
+    if (!is.deepEqual(resultAggregator.two, expectedResultAggregator.two)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * LIST TESTS
+ */
+
+runTest(['LIST_BASIC_SYNC', 'list', 'resolve all', 'yes', 1], setResult => {
+  const expected = [
+    { key: 0, status: 'fulfilled', value: 'one' },
+    { key: 1, status: 'fulfilled', value: 'two' },
+    { key: 2, status: 'fulfilled', value: 'three' },
+    { key: 3, status: 'fulfilled', value: 'four' },
+    { key: 4, status: 'fulfilled', value: 'five' }
+  ]
+  runSequentialPromises(getPromiseList('LIST_BASIC_SYNC'), {
+    abortOnFail: true
   })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: { key: 'two', status: 'fulfilled', value: 'two' },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
+    .then(list => setResult(list, is.deepEqual(list, expected), expected))
+    .catch(err => setResult(err, false, expected))
 })
 
-runTest(['map', 'resolve all', '-', '2 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(), {
-    abortOnFail: false,
-    threadsNumber: 2
+runTest(['LIST_CONTINUE_ON_FAIL', 'list', 'resolve all', '-', 1], setResult => {
+  const expected = [
+    { key: 0, status: 'fulfilled', value: 'one' },
+    { key: 1, status: 'fulfilled', value: 'two' },
+    { key: 2, status: 'fulfilled', value: 'three' },
+    { key: 3, status: 'fulfilled', value: 'four' },
+    { key: 4, status: 'fulfilled', value: 'five' }
+  ]
+  runSequentialPromises(getPromiseList('LIST_CONTINUE_ON_FAIL'), {
+    abortOnFail: false
   })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: { key: 'two', status: 'fulfilled', value: 'two' },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
+    .then(list => setResult(list, is.deepEqual(list, expected), expected))
+    .catch(err => setResult(err, false, expected))
 })
 
-runTest(['map', 'reject 2nd', 'yes', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(true), { abortOnFail: true })
-    .then(resultAggregator => {
-      setResult(resultAggregator, false)
+runTest(
+  ['LIST_MULTI_THREAD_ABORT', 'list', 'resolve all', 'yes', 2],
+  setResult => {
+    const expected = [
+      { key: 0, status: 'fulfilled', value: 'one' },
+      { key: 1, status: 'fulfilled', value: 'two' },
+      { key: 2, status: 'fulfilled', value: 'three' },
+      { key: 3, status: 'fulfilled', value: 'four' },
+      { key: 4, status: 'fulfilled', value: 'five' }
+    ]
+    runSequentialPromises(getPromiseList('LIST_MULTI_THREAD_ABORT'), {
+      abortOnFail: true,
+      threadsNumber: 2
     })
-    .catch(err => {
-      setResult(
-        err,
-        is.deepEqual(err, {
+      .then(list => setResult(list, is.deepEqual(list, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+runTest(
+  ['LIST_MULTI_THREAD_CONTINUE', 'list', 'resolve all', '-', 2],
+  setResult => {
+    const expected = [
+      { key: 0, status: 'fulfilled', value: 'one' },
+      { key: 1, status: 'fulfilled', value: 'two' },
+      { key: 2, status: 'fulfilled', value: 'three' },
+      { key: 3, status: 'fulfilled', value: 'four' },
+      { key: 4, status: 'fulfilled', value: 'five' }
+    ]
+    runSequentialPromises(getPromiseList('LIST_MULTI_THREAD_CONTINUE'), {
+      abortOnFail: false,
+      threadsNumber: 2
+    })
+      .then(list => setResult(list, is.deepEqual(list, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+runTest(
+  ['LIST_SINGLE_THREAD_REJECT', 'list', 'reject 2nd', 'yes', 1],
+  setResult => {
+    const expected = {
+      key: 1,
+      status: 'rejected',
+      reason: 'cannot settle promise 2',
+      resultAggregator: [
+        { key: 0, status: 'fulfilled', value: 'one' },
+        { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
+        null,
+        null,
+        null
+      ]
+    }
+    runSequentialPromises(getPromiseList('LIST_SINGLE_THREAD_REJECT', true), {
+      abortOnFail: true
+    })
+      .then(list => setResult(list, false, expected))
+      .catch(err => setResult(err, is.deepEqual(err, expected), expected))
+  }
+)
+
+runTest(
+  ['LIST_SINGLE_THREAD_IGNORE_FAIL', 'list', 'reject 2nd', '-', 1],
+  setResult => {
+    const expected = [
+      { key: 0, status: 'fulfilled', value: 'one' },
+      { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
+      { key: 2, status: 'fulfilled', value: 'three' },
+      { key: 3, status: 'fulfilled', value: 'four' },
+      { key: 4, status: 'fulfilled', value: 'five' }
+    ]
+    runSequentialPromises(
+      getPromiseList('LIST_SINGLE_THREAD_IGNORE_FAIL', true),
+      { abortOnFail: false }
+    )
+      .then(list => setResult(list, is.deepEqual(list, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+runTest(
+  ['LIST_MULTI_THREAD_REJECT', 'list', 'reject 2nd', 'yes', 2],
+  setResult => {
+    const expected = {
+      key: 1,
+      status: 'rejected',
+      reason: 'cannot settle promise 2',
+      resultAggregator: [
+        { key: 0, status: 'fulfilled', value: 'one' },
+        { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
+        null,
+        null,
+        null
+      ]
+    }
+    runSequentialPromises(getPromiseList('LIST_MULTI_THREAD_REJECT', true), {
+      abortOnFail: true,
+      threadsNumber: 2
+    })
+      .then(list => setResult(list, false, expected))
+      .catch(err =>
+        setResult(
+          err,
+          isFailureEqualWithThreadsAndAbortOnFail(err, expected),
+          expected
+        )
+      )
+  }
+)
+
+runTest(
+  ['LIST_MULTI_THREAD_IGNORE_FAIL', 'list', 'reject 2nd', '-', 2],
+  setResult => {
+    const expected = [
+      { key: 0, status: 'fulfilled', value: 'one' },
+      { key: 1, status: 'rejected', reason: 'cannot settle promise 2' },
+      { key: 2, status: 'fulfilled', value: 'three' },
+      { key: 3, status: 'fulfilled', value: 'four' },
+      { key: 4, status: 'fulfilled', value: 'five' }
+    ]
+    runSequentialPromises(
+      getPromiseList('LIST_MULTI_THREAD_IGNORE_FAIL', true),
+      {
+        abortOnFail: false,
+        threadsNumber: 2
+      }
+    )
+      .then(list => setResult(list, is.deepEqual(list, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+/**
+ * MAP TESTS
+ */
+
+runTest(['MAP_BASIC_SYNC', 'map', 'resolve all', 'yes', 1], setResult => {
+  const expected = {
+    one: { key: 'one', status: 'fulfilled', value: 'one' },
+    two: { key: 'two', status: 'fulfilled', value: 'two' },
+    three: { key: 'three', status: 'fulfilled', value: 'three' },
+    four: { key: 'four', status: 'fulfilled', value: 'four' },
+    five: { key: 'five', status: 'fulfilled', value: 'five' }
+  }
+  runSequentialPromises(getPromiseMap('MAP_BASIC_SYNC'), { abortOnFail: true })
+    .then(res => setResult(res, is.deepEqual(res, expected), expected))
+    .catch(err => setResult(err, false, expected))
+})
+
+runTest(['MAP_CONTINUE_ON_FAIL', 'map', 'resolve all', '-', 1], setResult => {
+  const expected = {
+    one: { key: 'one', status: 'fulfilled', value: 'one' },
+    two: { key: 'two', status: 'fulfilled', value: 'two' },
+    three: { key: 'three', status: 'fulfilled', value: 'three' },
+    four: { key: 'four', status: 'fulfilled', value: 'four' },
+    five: { key: 'five', status: 'fulfilled', value: 'five' }
+  }
+  runSequentialPromises(getPromiseMap('MAP_CONTINUE_ON_FAIL'), {
+    abortOnFail: false
+  })
+    .then(res => setResult(res, is.deepEqual(res, expected), expected))
+    .catch(err => setResult(err, false, expected))
+})
+
+runTest(
+  ['MAP_MULTI_THREAD_ABORT', 'map', 'resolve all', 'yes', 2],
+  setResult => {
+    const expected = {
+      one: { key: 'one', status: 'fulfilled', value: 'one' },
+      two: { key: 'two', status: 'fulfilled', value: 'two' },
+      three: { key: 'three', status: 'fulfilled', value: 'three' },
+      four: { key: 'four', status: 'fulfilled', value: 'four' },
+      five: { key: 'five', status: 'fulfilled', value: 'five' }
+    }
+    runSequentialPromises(getPromiseMap('MAP_MULTI_THREAD_ABORT'), {
+      abortOnFail: true,
+      threadsNumber: 2
+    })
+      .then(res => setResult(res, is.deepEqual(res, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+runTest(
+  ['MAP_MULTI_THREAD_CONTINUE', 'map', 'resolve all', '-', 2],
+  setResult => {
+    const expected = {
+      one: { key: 'one', status: 'fulfilled', value: 'one' },
+      two: { key: 'two', status: 'fulfilled', value: 'two' },
+      three: { key: 'three', status: 'fulfilled', value: 'three' },
+      four: { key: 'four', status: 'fulfilled', value: 'four' },
+      five: { key: 'five', status: 'fulfilled', value: 'five' }
+    }
+    runSequentialPromises(getPromiseMap('MAP_MULTI_THREAD_CONTINUE'), {
+      abortOnFail: false,
+      threadsNumber: 2
+    })
+      .then(res => setResult(res, is.deepEqual(res, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
+
+runTest(
+  ['MAP_SINGLE_THREAD_REJECT', 'map', 'reject 2nd', 'yes', 1],
+  setResult => {
+    const expected = {
+      key: 'two',
+      status: 'rejected',
+      reason: 'cannot settle promise 2',
+      resultAggregator: {
+        one: { key: 'one', status: 'fulfilled', value: 'one' },
+        two: {
           key: 'two',
           status: 'rejected',
-          reason: 'cannot settle promise 2',
-          resultAggregator: {
-            one: { key: 'one', status: 'fulfilled', value: 'one' },
-            two: {
-              key: 'two',
-              status: 'rejected',
-              reason: 'cannot settle promise 2'
-            },
-            three: null,
-            four: null,
-            five: null
-          }
-        })
+          reason: 'cannot settle promise 2'
+        },
+        three: null,
+        four: null,
+        five: null
+      }
+    }
+    runSequentialPromises(getPromiseMap('MAP_SINGLE_THREAD_REJECT', true), {
+      abortOnFail: true
+    })
+      .then(res => setResult(res, false, expected))
+      .catch(err =>
+        setResult(
+          err,
+          isFailureEqualWithThreadsAndAbortOnFail(err, expected),
+          expected
+        )
       )
-    })
-})
+  }
+)
 
-runTest(['map', 'reject 2nd', '-', '1 thread'], setResult => {
-  runSequentialPromises(getPromiseMap(true), { abortOnFail: false })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: {
-            key: 'two',
-            status: 'rejected',
-            reason: 'cannot settle promise 2'
-          },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
-    })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
+runTest(
+  ['MAP_SINGLE_THREAD_IGNORE_FAIL', 'map', 'reject 2nd', '-', 1],
+  setResult => {
+    const expected = {
+      one: { key: 'one', status: 'fulfilled', value: 'one' },
+      two: {
+        key: 'two',
+        status: 'rejected',
+        reason: 'cannot settle promise 2'
+      },
+      three: { key: 'three', status: 'fulfilled', value: 'three' },
+      four: { key: 'four', status: 'fulfilled', value: 'four' },
+      five: { key: 'five', status: 'fulfilled', value: 'five' }
+    }
+    runSequentialPromises(
+      getPromiseMap('MAP_SINGLE_THREAD_IGNORE_FAIL', true),
+      { abortOnFail: false }
+    )
+      .then(res => setResult(res, is.deepEqual(res, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
 
-runTest(['map', 'reject 2nd', 'yes', '2 threads'], setResult => {
-  runSequentialPromises(getPromiseMap(true), {
-    abortOnFail: true,
-    threadsNumber: 2
-  })
-    .then(resultAggregator => {
-      setResult(resultAggregator, false)
-    })
-    .catch(err => {
-      setResult(
-        err,
-        is.deepEqual(err, {
+runTest(
+  ['MAP_MULTI_THREAD_REJECT', 'map', 'reject 2nd', 'yes', 2],
+  setResult => {
+    const expected = {
+      key: 'two',
+      status: 'rejected',
+      reason: 'cannot settle promise 2',
+      resultAggregator: {
+        one: { key: 'one', status: 'fulfilled', value: 'one' },
+        two: {
           key: 'two',
           status: 'rejected',
-          reason: 'cannot settle promise 2',
-          resultAggregator: {
-            one: { key: 'one', status: 'fulfilled', value: 'one' },
-            two: {
-              key: 'two',
-              status: 'rejected',
-              reason: 'cannot settle promise 2'
-            },
-            three: null,
-            four: null,
-            five: null
-          }
-        })
-      )
+          reason: 'cannot settle promise 2'
+        },
+        three: null,
+        four: null,
+        five: null
+      }
+    }
+    runSequentialPromises(getPromiseMap('MAP_MULTI_THREAD_REJECT', true), {
+      abortOnFail: true,
+      threadsNumber: 2
     })
-})
+      .then(res => setResult(res, false, expected))
+      .catch(err =>
+        setResult(
+          err,
+          isFailureEqualWithThreadsAndAbortOnFail(err, expected),
+          expected
+        )
+      )
+  }
+)
 
-runTest(['map', 'reject 2nd', '-', '2 threads'], setResult => {
-  runSequentialPromises(getPromiseMap(true), {
-    abortOnFail: false,
-    threadsNumber: 2
-  })
-    .then(resultAggregator => {
-      setResult(
-        resultAggregator,
-        is.deepEqual(resultAggregator, {
-          one: { key: 'one', status: 'fulfilled', value: 'one' },
-          two: {
-            key: 'two',
-            status: 'rejected',
-            reason: 'cannot settle promise 2'
-          },
-          three: { key: 'three', status: 'fulfilled', value: 'three' },
-          four: { key: 'four', status: 'fulfilled', value: 'four' },
-          five: { key: 'five', status: 'fulfilled', value: 'five' }
-        })
-      )
+runTest(
+  ['MAP_MULTI_THREAD_IGNORE_FAIL', 'map', 'reject 2nd', '-', 2],
+  setResult => {
+    const expected = {
+      one: { key: 'one', status: 'fulfilled', value: 'one' },
+      two: {
+        key: 'two',
+        status: 'rejected',
+        reason: 'cannot settle promise 2'
+      },
+      three: { key: 'three', status: 'fulfilled', value: 'three' },
+      four: { key: 'four', status: 'fulfilled', value: 'four' },
+      five: { key: 'five', status: 'fulfilled', value: 'five' }
+    }
+    runSequentialPromises(getPromiseMap('MAP_MULTI_THREAD_IGNORE_FAIL', true), {
+      abortOnFail: false,
+      threadsNumber: 2
     })
-    .catch(err => {
-      setResult(err, false)
-    })
-})
+      .then(res => setResult(res, is.deepEqual(res, expected), expected))
+      .catch(err => setResult(err, false, expected))
+  }
+)
 </script>
 
 <style lang="sass">

@@ -10,10 +10,10 @@ function parsePromises(sequentialPromises) {
   }
 
   const resultKeys = Object.keys(sequentialPromises)
-  const resultAggregator = {}
-  resultKeys.forEach(keyName => {
-    resultAggregator[keyName] = null
-  })
+  const resultAggregator = resultKeys.reduce((acc, key) => {
+    acc[key] = null
+    return acc
+  }, {})
 
   return {
     isList: false,
