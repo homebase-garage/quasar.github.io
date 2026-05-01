@@ -124,9 +124,8 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave() {
     this.hideBottomSheet()
-    next()
   }
 }
 </script>

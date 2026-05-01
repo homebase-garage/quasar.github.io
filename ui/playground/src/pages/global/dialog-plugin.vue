@@ -807,9 +807,8 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave() {
     this.hideDialog()
-    next()
   }
 }
 </script>
