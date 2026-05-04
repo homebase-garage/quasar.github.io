@@ -19,7 +19,7 @@ Notice the `/src-electron/package.json` file in your generated `/src-electron` f
 }
 ```
 
-Installing [Electron specific packages](https://zeke.github.io/electron.atom.io/userland/most_downloaded_packages) packages:
+Installing [Electron specific packages](https://zeke.github.io/electron.atom.io/userland/most_downloaded_packages):
 
 ```tabs
 <<| bash Yarn |>>
