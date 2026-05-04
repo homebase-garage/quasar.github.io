@@ -5,7 +5,7 @@ desc: (@quasar/app-vite) How to handle PWA-specific dependencies.
 
 Notice that the generated `/src-pwa/package.json` file in your generated `/src-pwa` folder. The purpose of it is for you to be able to install packages used by the PWA mode directly under this folder (and not pollute the common `/src`).
 
-```js /src-pwa/package.json
+```json /src-pwa/package.json
 {
   "name": "quasar-pwa-app",
   "version": "1.0.0",

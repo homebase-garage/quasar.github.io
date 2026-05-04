@@ -96,45 +96,17 @@ bridge
 
 ### Popup/devtools/options page
 
-```tabs App (/src/...) vue components
-<<| html Composition API + script setup |>>
+```html App (/src/...) vue components
 <template>
   <div />
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
+  import { useQuasar } from 'quasar'
+  const $q = useQuasar()
 
-// Use $q.bex (the bridge)
-// $q.bex.portName is "app"
-</script>
-<<| html Composition API + script |>>
-<template>
-  <div />
-</template>
-
-<script>
-import { useQuasar } from 'quasar'
-
-export default {
-  setup () {
-    const $q = useQuasar()
-    // Use $q.bex (the bridge)
-    // $q.bex.portName is "app"
-  }
-}
-</script>
-<<| html Options API |>>
-<template>
-  <div />
-</template>
-
-<script>
-export default {
-  // Use this.$q.bex (the bridge)
-  // this.$q.bex.portName is "app"
-}
+  // Use $q.bex (the bridge)
+  // $q.bex.portName is "app"
 </script>
 ```
 

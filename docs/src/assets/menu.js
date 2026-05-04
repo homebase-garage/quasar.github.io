@@ -1093,6 +1093,10 @@ export default [
             path: 'preparation'
           },
           {
+            name: 'Installing BEX deps',
+            path: 'installing-bex-dependencies'
+          },
+          {
             name: 'Configuring BEX',
             path: 'configuring-bex'
           },
@@ -1119,6 +1123,10 @@ export default [
           {
             name: 'Content Scripts',
             path: 'content-scripts'
+          },
+          {
+            name: 'BEX with Typescript',
+            path: 'bex-with-typescript'
           }
         ]
       },
