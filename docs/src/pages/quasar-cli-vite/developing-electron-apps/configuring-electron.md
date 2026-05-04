@@ -36,14 +36,14 @@ electron: {
   extendPackageJson?: (pkg: { [index in string]: any }) => void;
 
   /**
-   * Extend the Esbuild config that is used for the electron-main thread
+   * Extend the Rolldown config that is used for the electron-main thread
    */
-  extendElectronMainConf?: (config: EsbuildConfiguration) => void;
+  extendElectronMainConf?: (config: RolldownOptions) => void;
 
   /**
-   * Extend the Esbuild config that is used for the electron-preload thread
+   * Extend the Rolldown config that is used for the electron-preload thread
    */
-  extendElectronPreloadConf?: (config: EsbuildConfiguration) => void;
+  extendElectronPreloadConf?: (config: RolldownOptions) => void;
 
   /**
    * You have to choose to use either packager or builder.

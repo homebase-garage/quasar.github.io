@@ -1,6 +1,28 @@
 ---
 title: Electron Build Commands
 desc: (@quasar/app-vite) The Quasar CLI list of commands when developing or building a desktop app.
+scope:
+  distTree:
+    l: dist-electron
+    c:
+      - l: Packaged
+        e: 'Packaged by @electron/packager or electron-builder'
+      - l: UnPackaged
+        c:
+          - l: assets/...
+            e: 'Vite compiled /src assets'
+          - l: electron-assets
+            e: '/src-electron/electron-assets copied as-is'
+            c:
+              - l: icons/
+                e: 'Electron app icons'
+          - l: node_modules/
+          - l: index.html
+          - l: package.json
+          - l: electron-main.js
+          - l: electron-preload.cjs
+            e: '(Electron has only CJS support for the preload scripts)'
+          - l: '...contents of /public'
 ---
 
 ## Developing
@@ -20,7 +42,7 @@ $ quasar dev -m electron '--' --no-sandbox --disable-setuid-sandbox
 
 It opens up an Electron window with dev-tools included. You have HMR for the renderer process and changes to main process are also picked up (but the latter restarts the Electron window on each change).
 
-Check how you can tweak Esbuild config Object for the Main Process and the Preload script on the [Configuring Electron](/quasar-cli-vite/developing-electron-apps/configuring-electron) page.
+Check how you can tweak Rolldown config Object for the Main Process and the Preload script on the [Configuring Electron](/quasar-cli-vite/developing-electron-apps/configuring-electron) page.
 
 ### Chrome DevTools
 
@@ -57,6 +79,10 @@ $ quasar build -m electron -d
 # ..or the longer form
 $ quasar build -m electron --debug
 ```
+
+Here is the folder structure of the outcome:
+
+<DocTree :def="scope.distTree" />
 
 ### A note for non-Windows users
 

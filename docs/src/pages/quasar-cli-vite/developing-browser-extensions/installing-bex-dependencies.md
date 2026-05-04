@@ -3,7 +3,7 @@ title: Installing BEX-specific dependencies
 desc: (@quasar/app-vite) How to handle BEX-specific dependencies.
 ---
 
-Notice that the generated `/src-bex/package.json` file in your generated `/src-bex` folder. The purpose of it is for you to be able to install packages used by the BEX mode directly under this folder (and not pollute the common `/src`).
+Notice the `/src-bex/package.json` file in your generated `/src-bex` folder. The purpose of it is for you to be able to install packages used by the BEX mode directly under this folder (and not pollute the common `/src`).
 
 ```tabs /src-bex/package.json
 <<| json Javascript |>>

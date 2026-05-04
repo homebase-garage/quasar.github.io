@@ -20,6 +20,11 @@ const routes = [
     path: '/quasar-cli-vite/handling-process-env',
     redirect: '/quasar-cli-vite/handling-import-meta-env'
   },
+  {
+    path: '/quasar-cli-vite/developing-electron-apps/electron-packages',
+    redirect:
+      '/quasar-cli-vite/developing-electron-apps/installing-electron-dependencies'
+  },
 
   // shortcuts
   { path: '/start', redirect: '/start/quick-start' },

@@ -11,15 +11,15 @@ Before upgrading Electron, please consult its release notes. Are there breaking 
 
 ```tabs
 <<| bash Yarn |>>
-# from the root of your Quasar project
+# from /src-electron:
 $ yarn upgrade electron@latest
 <<| bash NPM |>>
-# from the root of your Quasar project
+# from /src-electron:
 $ npm install electron@latest
 <<| bash PNPM |>>
-# from the root of your Quasar project
+# from /src-electron:
 $ pnpm add electron@latest
 <<| bash Bun |>>
-# from the root of your Quasar project
+# from /src-electron:
 $ bun add electron@latest
 ```

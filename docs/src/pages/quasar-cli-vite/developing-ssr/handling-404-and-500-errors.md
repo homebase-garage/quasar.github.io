@@ -57,7 +57,7 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
           // create a route (/src/routes) for an error page and redirect to it
           res.status(500).send('500 | Internal Server Error')
 
-          if (import.meta.env.DEBUG) {
+          if (import.meta.env.QUASAR_DEBUG) {
             console.error(err.stack)
           }
         }

@@ -102,10 +102,10 @@ return {
     extendPackageJson?: (pkg: { [index in string]: any }) => void;
 
     /**
-     * Extend the Esbuild config that is used for the SSR webserver
+     * Extend the Rolldown config that is used for the SSR webserver
      * (which includes the SSR middlewares)
      */
-    extendSSRWebserverConf?: (config: EsbuildConfiguration) => void;
+    extendSSRWebserverConf?: (config: RolldownOptions) => void;
   }
 }
 ```
@@ -191,15 +191,15 @@ Notice a few things:
 
 1. If you import anything from node_modules, then make sure that the package is specified in package.json > "dependencies" and NOT in "devDependencies".
 
-2. The `/src-ssr/middlewares` is built through a separate Esbuild config. You can extend the Esbuild configuration of these files through the `/quasar.config` file:
+2. The `/src-ssr/middlewares` is built through a separate Rolldown config. You can extend the Rolldown configuration of these files through the `/quasar.config` file:
 
 ```js /quasar.config file
 return {
   // ...
   ssr: {
     // ...
-    extendSSRWebserverConf(esbuildConf) {
-      // tamper with esbuildConf here
+    extendSSRWebserverConf(rolldownConf) {
+      // tamper with rolldownConf here
     }
   }
 }

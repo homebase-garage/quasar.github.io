@@ -901,7 +901,7 @@ export default [
             path: 'build-commands'
           },
           {
-            name: 'Installing PWA deps',
+            name: 'Installing PWA Deps',
             path: 'installing-pwa-dependencies'
           },
           {
@@ -1039,6 +1039,10 @@ export default [
             path: 'preparation'
           },
           {
+            name: 'Installing Electron Deps',
+            path: 'installing-electron-dependencies'
+          },
+          {
             name: 'Configuring Electron',
             path: 'configuring-electron'
           },
@@ -1053,10 +1057,6 @@ export default [
           {
             name: 'Preload Script',
             path: 'electron-preload-script'
-          },
-          {
-            name: 'Electron Packages',
-            path: 'electron-packages'
           },
           {
             name: 'Accessing files',
@@ -1093,7 +1093,7 @@ export default [
             path: 'preparation'
           },
           {
-            name: 'Installing BEX deps',
+            name: 'Installing BEX Deps',
             path: 'installing-bex-dependencies'
           },
           {

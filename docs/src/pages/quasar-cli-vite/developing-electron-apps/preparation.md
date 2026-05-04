@@ -5,19 +5,24 @@ scope:
   tree:
     l: src-electron
     c:
-      - l: icons
-        e: Icons of your app for all platforms
+      - l: electron-assets
+        e: Assets that can be referenced from electron files
         c:
-          - l: icon.icns
-            e: Icon file for Darwin (MacOS) platform
-          - l: icon.ico
-            e: Icon file for win32 (Windows) platform
-          - l: icon.png
-            e: Tray icon file for all platforms
+          - l: icons
+            e: Icons of your app for all platforms
+            c:
+              - l: icon.icns
+                e: Icon file for Darwin (MacOS) platform
+              - l: icon.ico
+                e: Icon file for win32 (Windows) platform
+              - l: icon.png
+                e: Tray icon file for all platforms
       - l: electron-preload.js
         e: '(or .ts) Electron preload script (injects Node.js stuff into renderer thread)'
       - l: electron-main.js
         e: '(or .ts) Main thread code'
+      - l: package.json
+        e: 'helps install Electron only deps directly under /src-electron'
       - l: electron-env.d.ts
         e: 'TypeScript only'
 ---

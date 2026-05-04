@@ -77,10 +77,10 @@ pwa: {
   injectPwaMetaTags?: boolean | ((injectParam: InjectPwaMetaTagsParams) => string);
 
   /**
-   * Extend the Esbuild config that is used for the custom service worker
+   * Extend the Rolldown config that is used for the custom service worker
    * (if using it through workboxMode: 'InjectManifest')
    */
-  extendPWACustomSWConf?: (config: EsbuildConfiguration) => void;
+  extendPWACustomSWConf?: (config: RolldownOptions) => void;
 
   /**
    * Extend/configure the Workbox GenerateSW options
