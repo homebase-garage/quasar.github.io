@@ -41,43 +41,35 @@ importance
   <div> GPS position: <strong>{{ position }}</strong> </div>
 </template>
 
-<script>
+<script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { Geolocation } from '@capacitor/geolocation'
 
-  export default {
-    setup() {
-      const position = ref('determining...')
+  const position = ref('determining...')
 
-      function getCurrentPosition() {
-        Geolocation.getCurrentPosition().then(newPosition => {
-          console.log('Current', newPosition)
-          position.value = newPosition
-        })
-      }
-
-      let geoId
-
-      onMounted(() => {
-        getCurrentPosition()
-
-        // we start listening
-        geoId = Geolocation.watchPosition({}, (newPosition, err) => {
-          console.log('New GPS position')
-          position.value = newPosition
-        })
-      })
-
-      onBeforeUnmount(() => {
-        // we do cleanup
-        Geolocation.clearWatch(geoId)
-      })
-
-      return {
-        position
-      }
-    }
+  function getCurrentPosition() {
+    Geolocation.getCurrentPosition().then(newPosition => {
+      console.log('Current', newPosition)
+      position.value = newPosition
+    })
   }
+
+  let geoId
+
+  onMounted(() => {
+    getCurrentPosition()
+
+    // we start listening
+    geoId = Geolocation.watchPosition({}, (newPosition, err) => {
+      console.log('New GPS position')
+      position.value = newPosition
+    })
+  })
+
+  onBeforeUnmount(() => {
+    // we do cleanup
+    Geolocation.clearWatch(geoId)
+  })
 </script>
 ```
 
@@ -100,33 +92,24 @@ importance
   </div>
 </template>
 
-<script>
+<script setup>
   import { ref } from 'vue'
   import { Camera, CameraResultType } from '@capacitor/camera'
 
-  export default {
-    setup() {
-      const imageSrc = ref('')
+  const imageSrc = ref('')
 
-      async function captureImage() {
-        const image = await Camera.getPhoto({
-          quality: 90,
-          allowEditing: true,
-          resultType: CameraResultType.Uri
-        })
+  async function captureImage() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
+    })
 
-        // The result will vary on the value of the resultType option.
-        // CameraResultType.Uri - Get the result from image.webPath
-        // CameraResultType.Base64 - Get the result from image.base64String
-        // CameraResultType.DataUrl - Get the result from image.dataUrl
-        imageSrc.value = image.webPath
-      }
-
-      return {
-        imageSrc,
-        captureImage
-      }
-    }
+    // The result will vary on the value of the resultType option.
+    // CameraResultType.Uri - Get the result from image.webPath
+    // CameraResultType.Base64 - Get the result from image.base64String
+    // CameraResultType.DataUrl - Get the result from image.dataUrl
+    imageSrc.value = image.webPath
   }
 </script>
 ```
@@ -173,27 +156,18 @@ importance
   </div>
 </template>
 
-<script>
+<script setup>
   import { ref, onMounted } from 'vue'
   import { Device } from '@capacitor/device'
 
-  export default {
-    setup() {
-      const model = ref('Please wait...')
-      const manufacturer = ref('Please wait...')
+  const model = ref('Please wait...')
+  const manufacturer = ref('Please wait...')
 
-      onMounted(() => {
-        Device.getInfo().then(info => {
-          model.value = info.model
-          manufacturer.value = info.manufacturer
-        })
-      })
-
-      return {
-        model,
-        manufacturer
-      }
-    }
-  }
+  onMounted(() => {
+    Device.getInfo().then(info => {
+      model.value = info.model
+      manufacturer.value = info.manufacturer
+    })
+  })
 </script>
 ```

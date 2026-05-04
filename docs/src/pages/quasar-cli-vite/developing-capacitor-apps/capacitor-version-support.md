@@ -3,7 +3,7 @@ title: Capacitor versions
 desc: (@quasar/app-vite) Supported Capacitor versions in Quasar. How to upgrade to a newer Capacitor version.
 ---
 
-The officially supported versions of Capacitor are v1 through v6.
+The officially supported versions of Capacitor are v5+.
 
 ## Upgrading Capacitor
 
@@ -108,61 +108,3 @@ dependencies: {
 ```
 
 The `@capacitor/app` and `@capacitor/splash-screen` are optional, but it helps Quasar with some UI functionality if they are installed.
-
-## Capacitor v4
-
-Assuming that you've installed Capacitor mode already, this is how your dependencies in `/src-capacitor/package.json` should look like:
-
-```json /src-capacitor/package.json
-dependencies: {
-  "@capacitor/app": "^4.0.0",
-  "@capacitor/cli": "^4.0.0",
-  "@capacitor/core": "^4.0.0",
-  "@capacitor/splash-screen": "^4.0.0"
-}
-```
-
-The `@capacitor/app` and `@capacitor/splash-screen` are optional, but it helps Quasar with some UI functionality if they are installed.
-
-## Capacitor v3
-
-::: warning Known issue
-HTTPS devserver (through quasar.config file > devServer > https: true) is not supported. If you are using Capacitor plugins that depend on it, it's better to upgrade to the newer supported Capacitor versions.
-:::
-
-Assuming that you've installed Capacitor mode already, this is how your dependencies in `/src-capacitor/package.json` should look like:
-
-```json /src-capacitor/package.json
-dependencies: {
-  "@capacitor/app": "^1.0.0",
-  "@capacitor/cli": "^3.0.0",
-  "@capacitor/core": "^3.0.0",
-  "@capacitor/splash-screen": "^1.0.0"
-}
-```
-
-The `@capacitor/app` and `@capacitor/splash-screen` are optional, but it helps Quasar with some UI functionality if they are installed.
-
-More info for [Switch to automatic Android plugin loading](https://capacitorjs.com/docs/updating/3-0#switch-to-automatic-android-plugin-loading).
-
-## Capacitor v2
-
-Assuming that you've installed Capacitor mode already, this is how your dependencies in `/src-capacitor/package.json` should look like:
-
-```json /src-capacitor/package.json
-dependencies: {
-  "@capacitor/cli": "^2.0.0",
-  "@capacitor/core": "^2.0.0"
-}
-```
-
-## Capacitor v1
-
-Assuming that you've installed Capacitor mode already, this is how your dependencies in `/src-capacitor/package.json` should look like:
-
-```json /src-capacitor/package.json
-dependencies: {
-  "@capacitor/cli": "^1.0.0",
-  "@capacitor/core": "^1.0.0"
-}
-```
