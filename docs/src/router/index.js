@@ -25,16 +25,6 @@ export default function appRouter() {
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE)
   })
 
-  Router.beforeEach(to => {
-    if (to.fullPath.startsWith('/quasar-cli/')) {
-      return {
-        path: to.fullPath.replace('/quasar-cli/', '/quasar-cli-webpack/'),
-        query: to.query,
-        hash: to.hash
-      }
-    }
-  })
-
   if (import.meta.env.QUASAR_CLIENT) {
     Router.afterEach(to => {
       gtag('config', 'G-WRH1VBGG35', {

@@ -1,15 +1,5 @@
 export const sponsors = {
   platinum: [
-    {
-      src: 'Dreamonkey.svg',
-      name: 'Dreamonkey Srl',
-      href: 'https://dreamonkey.com/'
-    },
-    {
-      src: 'HapagLloyd.svg',
-      name: 'Hapag-Lloyd',
-      href: 'https://www.hapag-lloyd.com'
-    },
     { src: 'iRewind.svg', name: 'iRewind', href: 'https://irewind.com/' }
   ],
   gold: [],

@@ -15,35 +15,6 @@ const routeMap = {
 }
 
 const routes = [
-  // legacy redirecting
-  {
-    path: '/quasar-cli/supporting-ie',
-    redirect: '/quasar-cli-webpack/browser-compatibility'
-  },
-  {
-    path: '/quasar-cli/modern-build',
-    redirect: '/quasar-cli-webpack/browser-compatibility'
-  },
-  {
-    path: '/quasar-cli/quasar-conf-js',
-    redirect: '/quasar-cli-webpack/quasar-config-file'
-  },
-  {
-    path: '/contribution-guide',
-    redirect: '/how-to-contribute/contribution-guide'
-  },
-
-  {
-    path: '/quasar-cli-webpack/quasar-config-js',
-    redirect: '/quasar-cli-webpack/quasar-config-file'
-  },
-  {
-    path: '/quasar-cli-vite/quasar-config-js',
-    redirect: '/quasar-cli-vite/quasar-config-file'
-  },
-
-  { path: '/vue-components/file-picker', redirect: '/vue-components/file' },
-
   // shortcuts
   { path: '/start', redirect: '/start/quick-start' },
   { path: '/vue-components', redirect: '/components' },

@@ -3,7 +3,7 @@ title: App Extension Index API
 desc: The API for the index script of a Quasar App Extension. Provides access to Quasar context, registers new CLI commands, extends Webpack config and more.
 ---
 
-This page refers to `src/index.js` file, which is executed on `quasar dev` and `quasar build`. This is the main process where you can modify the build to suit the needs of your App Extension. For instance, registering a boot file, modifying the webpack process, registering CSS, registering a UI component, registering a Quasar CLI command, etc.
+This page refers to `src/index.js` file, which is executed on `quasar dev` and `quasar build`. This is the main process where you can modify the build to suit the needs of your App Extension. For instance, registering a boot file, modifying the Vite configuration, registering CSS, registering a UI component, registering a Quasar CLI command, etc.
 
 Example of basic structure of the file:
 
@@ -61,7 +61,6 @@ api.resolve.app('src/my-file.js')
 api.resolve.src('my-file.js')
 
 // resolves to root/public of app
-// (@quasar/app-webpack v3.4+ or @quasar/app-vite v1+)
 api.resolve.public('my-image.png')
 
 // resolves to root/src-pwa of app
@@ -87,7 +86,7 @@ api.resolve.bex('some-file.js')
 
 Contains the full path (String) to the root of the app on which this App Extension is running.
 
-### api.hasTypescript <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.hasTypescript
 
 ```js
 /**
@@ -96,7 +95,7 @@ Contains the full path (String) to the root of the app on which this App Extensi
 await api.hasTypescript()
 ```
 
-### api.hasLint <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.hasLint
 
 ```js
 /**
@@ -105,7 +104,7 @@ await api.hasTypescript()
 await api.hasLint()
 ```
 
-### api.getStorePackageName <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.getStorePackageName
 
 ```js
 /**
@@ -114,7 +113,7 @@ await api.hasLint()
 await api.getStorePackageName()
 ```
 
-### api.getNodePackagerName <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.getNodePackagerName
 
 ```js
 /**
@@ -136,12 +135,12 @@ Example of semver condition: `'1.x || >=2.5.0 || 5.0.0 - 7.2.3'`.
  * @param {string} packageName
  * @param {string} semverCondition
  */
-api.compatibleWith('@quasar/app', '1.x')
+api.compatibleWith('@quasar/app-vite', '3.x')
 ```
 
 ```js A more complex example
 if (api.hasVite) {
-  api.compatibleWith('@quasar/app-vite', '^2.0.0')
+  api.compatibleWith('@quasar/app-vite', '^3.0.0')
 } else {
   api.compatbileWith('@quasar/app-webpack', '^4.0.0')
 }
@@ -234,16 +233,7 @@ export default function (api, ctx) {
     // make sure my-ext boot file is registered
     conf.boot.push('~quasar-app-extension-my-ext/src/boot/my-ext-bootfile.js')
 
-    if (api.hasVite !== true) {
-      // make sure boot file transpiles
-      conf.build.webpackTranspileDependencies.push(
-        /quasar-app-extension-my-ext[\\/]src[\\/]boot/
-      )
-      // if boot file imports anything, make sure that
-      // the regex above matches those files too!
-    }
-
-    // make sure my-ext css goes through webpack
+    // make sure my-ext css goes through Vite
     conf.css.push('~quasar-app-extension-my-ext/src/component/my-ext.sass')
   })
 }
@@ -511,176 +501,6 @@ if (api.hasVite) {
   api.extendBexScriptsConf((esbuildConf, api) => {
     // add/remove/change Quasar CLI generated esbuild config object
     // that is used for the SSR webserver (includes SSR middlewares)
-  })
-}
-```
-
-## @quasar/app-webpack only
-
-### api.chainWebpack
-
-Chain webpack config
-
-```js
-/**
- * @param {function} fn
- *   (chain: ChainObject, invoke: Object {isClient, isServer}, api) => undefined
- */
-if (api.hasWebpack) {
-  api.chainWebpack((chain, { isClient, isServer }, api) => {
-    // add/remove/change chain (Webpack chain Object)
-  })
-}
-```
-
-The configuration is a Webpack chain Object. The API for it is described on [webpack-chain](https://github.com/neutrinojs/webpack-chain) docs.
-
-### api.extendWebpack
-
-Extend webpack config
-
-```js
-/**
- * @param {function} fn
- *   (cfg: Object, invoke: Object {isClient, isServer}, api) => undefined
- */
-if (api.hasWebpack) {
-  api.extendWebpack((cfg, { isClient, isServer }, api) => {
-    // add/remove/change cfg (Webpack configuration Object)
-  })
-}
-```
-
-### api.chainWebpackMainElectronProcess
-
-Chain webpack config of the main electron process
-
-```js
-/**
- * @param {function} fn
- *   (chain: ChainObject) => undefined
- */
-if (api.hasWebpack) {
-  api.chainWebpackMainElectronProcess((chain, { isClient, isServer }, api) => {
-    // add/remove/change chain (Webpack chain Object)
-  })
-}
-```
-
-### api.extendWebpackMainElectronProcess
-
-Extend webpack config Object of the main electron process
-
-```js
-/**
- * @param {function} fn
- *   (cfg: Object) => undefined
- */
-if (api.hasWebpack) {
-  api.extendWebpackMainElectronProcess((cfg, { isClient, isServer }, api) => {
-    // add/remove/change cfg (Webpack configuration Object)
-  })
-}
-```
-
-### api.chainWebpackPreloadElectronProcess
-
-Chain webpack config of the preload electron process
-
-```js
-/**
- * @param {function} fn
- *   (chain: ChainObject) => undefined
- */
-if (api.hasWebpack) {
-  api.chainWebpackPreloadElectronProcess(
-    (chain, { isClient, isServer }, api) => {
-      // add/remove/change chain (Webpack chain Object)
-    }
-  )
-}
-```
-
-### api.extendWebpackPreloadElectronProcess
-
-Extend webpack config Object of the preload electron process
-
-```js
-/**
- * @param {function} fn
- *   (cfg: Object) => undefined
- */
-if (api.hasWebpack) {
-  api.extendWebpackPreloadElectronProcess(
-    (cfg, { isClient, isServer }, api) => {
-      // add/remove/change cfg (Webpack configuration Object)
-    }
-  )
-}
-```
-
-### api.chainWebpackWebserver
-
-Chain webpack config of SSR webserver (includes the SSR middlewares from /src-ssr/middlewares)
-
-```js
-/**
- * @param {function} fn
- *   (chain: ChainObject) => undefined
- */
-if (api.hasWebpack) {
-  api.chainWebpackWebserver((chain, { isClient, isServer }, api) => {
-    // add/remove/change chain (Webpack chain Object)
-    // isClient is always "false" and isServer is always "true"
-  })
-}
-```
-
-### api.extendWebpackWebserver
-
-Extend webpack config Object of SSR webserver (includes the SSR middlewares from /src-ssr/middlewares)
-
-```js
-/**
- * @param {function} fn
- *   (cfg: Object) => undefined
- */
-if (api.hasWebpack) {
-  api.extendWebpackWebserver((cfg, { isClient, isServer }, api) => {
-    // add/remove/change cfg (Webpack configuration Object)
-    // isClient is always "false" and isServer is always "true"
-  })
-}
-```
-
-### api.chainWebpackCustomSW
-
-Chain webpack config for the custom service worker when using InjectManifest (content of /src-pwa/custom-service-worker.js):
-
-```js
-/**
- * @param {function} fn
- *   (cfg: ChainObject) => undefined
- */
-if (api.hasWebpack) {
-  api.chainWebpackCustomSW((cfg, { isClient, isServer }, api) => {
-    // add/remove/change cfg (Webpack chain Object)
-  })
-}
-```
-
-### api.extendWebpackCustomSW
-
-Extend webpack config Object for the custom service worker when using InjectManifest (content of /src-pwa/custom-service-worker.js):
-
-```js
-/**
- * @param {function} fn
- *   (chain: Object) => undefined
- */
-if (api.hasWebpack) {
-  api.extendWebpackCustomSW((chain, { isClient, isServer }, api) => {
-    // add/remove/change chain (Webpack configuration Object)
   })
 }
 ```

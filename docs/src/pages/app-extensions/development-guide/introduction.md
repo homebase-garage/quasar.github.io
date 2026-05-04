@@ -192,33 +192,6 @@ $ quasar ext invoke my-ext
 
 This will trigger the installation of our new App Extension. You need to redo these two steps each time you make changes and you want to test them.
 
-Additionally, if you would like to have HMR (hot module reload) capabilities in your test app while developing your App Extension, then your `quasar.config file > devServer > watchFiles` would look like this:
-
-```js
-// quasar.config file for
-// Quasar CLI with Webpack (@quasar/app-webpack)
-
-devServer: {
-  // be sure to change <myextid> below to
-  // your App Extension name:
-  watchFiles: ['/node_modules/quasar-app-extension-<myextid>/*']
-}
-```
-
-#### @quasar/app-webpack
-
-You might want to extend the Webpack config. Assuming you are using the [`chainWebpack`](/quasar-cli-webpack/handling-webpack#usage-with-quasar-conf-js) method, your `quasar.config file > build > chainWebpack` should look like this:
-
-```js
-chainWebpack (chain) {
-  chain.merge({
-    snapshot: {
-      managedPaths: []
-    }
-  })
-},
-```
-
 #### @quasar/app-vite
 
 You might want to extend the Vite config. Assuming you are using the [`extendViteConf`](/quasar-cli-vite/handling-vite#updating-vite-config) method, your `quasar.config file > build > extendViteConf` should look like this:
@@ -249,7 +222,7 @@ You need to redo these install steps and issue the uninvoke command each time yo
 
 In the sections above we described how to test the prompts, install and uninstall scripts. Now it's time for the index script, which is the heart of your App Extension.
 
-This is where you can tamper with all `quasar.config` file options, extend the Webpack configuration, register Quasar CLI commands, start up external services required for developing your app and many more.
+This is where you can tamper with all `quasar.config` file options, extend the Vite configuration, register Quasar CLI commands, start up external services required for developing your app and many more.
 
 As a result, the index script is run each time `$ quasar dev` and `$ quasar build` are executed.
 

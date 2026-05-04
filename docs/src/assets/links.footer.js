@@ -60,39 +60,6 @@ export const footerLinks = [
     ]
   },
   {
-    name: 'Quasar CLI with Webpack',
-    children: [
-      {
-        name: 'Developing SPA',
-        path: '/quasar-cli-webpack/developing-spa/introduction'
-      },
-      {
-        name: 'Developing SSR',
-        path: '/quasar-cli-webpack/developing-ssr/introduction'
-      },
-      {
-        name: 'Developing PWA',
-        path: '/quasar-cli-webpack/developing-pwa/introduction'
-      },
-      {
-        name: 'Developing Capacitor Apps',
-        path: '/quasar-cli-webpack/developing-capacitor-apps/introduction'
-      },
-      {
-        name: 'Developing Cordova Apps',
-        path: '/quasar-cli-webpack/developing-cordova-apps/introduction'
-      },
-      {
-        name: 'Developing Electron Apps',
-        path: '/quasar-cli-webpack/developing-electron-apps/introduction'
-      },
-      {
-        name: 'Developing Browser Extensions',
-        path: '/quasar-cli-webpack/developing-browser-extensions/introduction'
-      }
-    ]
-  },
-  {
     name: 'Icon Genie CLI',
     extract: 'icongenie'
   },

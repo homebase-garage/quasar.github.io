@@ -53,12 +53,7 @@ export const versionLinks = [
         header: 'Older CLI Releases'
       },
       {
-        name: '@quasar/app-vite v1',
-        path: 'https://legacy-app.quasar.dev/',
-        external: true
-      },
-      {
-        name: '@quasar/app-webpack v3',
+        name: 'Legacy @quasar/app-*',
         path: 'https://legacy-app.quasar.dev/',
         external: true
       },
@@ -178,15 +173,9 @@ const tools = {
       external: true
     },
     {
-      name: 'Stackblitz (Vite)',
+      name: 'Stackblitz',
       icon: fasBolt,
       path: 'https://stackblitz.quasar.dev',
-      external: true
-    },
-    {
-      name: 'Stackblitz (Webpack)',
-      icon: fasBolt,
-      path: 'https://stackblitz-webpack.quasar.dev',
       external: true
     },
     {

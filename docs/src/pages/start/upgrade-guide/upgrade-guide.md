@@ -102,10 +102,7 @@ This guide refers to converting/upgrading to a project with `@quasar/app-webpack
 <br><br>
 All the other pages of the current documentation website that you are reading now refer to the latest version of both q/app-vite & q/app-webpack. For the old q/app-webpack or q/app-vite, the documentation is [here](https://legacy-app.quasar.dev/home).
 <br><br>
-The links for the upgrade guide to the newest CLI versions (to be processed after you've gone through all the information on this page):
-
-- [Quasar CLI with Vite Upgrade Guide](/quasar-cli-vite/upgrade-guide)
-- [Quasar CLI with Webpack Upgrade Guide](/quasar-cli-webpack/upgrade-guide).
+The links for the upgrade guide to the newest CLI versions (to be processed after you've gone through all the information on this page): [Quasar CLI with Vite Upgrade Guide](/quasar-cli-vite/upgrade-guide)
 
 <br>
 After going through this page, we recommend you to eventually switch to the superior Quasar CLI with Vite (q/app-vite). The steps would be:

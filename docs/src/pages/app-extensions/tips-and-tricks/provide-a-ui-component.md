@@ -51,7 +51,7 @@ export default function (api) {
   api.compatibleWith('quasar', '^2.0.0')
 
   if (api.hasVite) {
-    api.compatibleWith('@quasar/app-vite', '^2.0.0')
+    api.compatibleWith('@quasar/app-vite', '^3.0.0')
   } else {
     // api.hasWebpack is true
     api.compatibleWith('@quasar/app-webpack', '^4.0.0')
@@ -79,22 +79,14 @@ function extendConf(conf, api) {
     '~quasar-app-extension-my-component/src/boot/register-my-component.js'
   )
 
-  // @quasar/app-vite does not need this
-  if (api.hasVite !== true) {
-    // make sure boot & component files get transpiled
-    conf.build.transpileDependencies.push(
-      /quasar-app-extension-my-component[\\/]src/
-    )
-  }
-
-  // make sure my-component css goes through webpack to avoid ssr issues
+  // make sure my-component css goes through Vite to avoid ssr issues
   conf.css.push(
     '~quasar-app-extension-my-component/src/component/MyComponent.sass'
   )
 }
 ```
 
-Finally, let's see how the boot file would look like. Make sure that you read the [@quasar/app-vite Boot files](/quasar-cli-vite/boot-files) / [@quasar/app-webpack Boot files](/quasar-cli-webpack/boot-files) documentation and understand what a Boot file is first.
+Finally, let's see how the boot file would look like. Make sure that you read the [@quasar/app-vite Boot files](/quasar-cli-vite/boot-files) documentation and understand what a Boot file is first.
 
 ```js File: /src/boot/register-my-component.js
 import MyComponent from '../component/MyComponent.vue'

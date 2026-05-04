@@ -47,7 +47,6 @@ api.resolve.app('src/my-file.js')
 api.resolve.src('my-file.js')
 
 // resolves to root/public of app
-// (@quasar/app-webpack v3.4+ or @quasar/app-vite v1+)
 api.resolve.public('my-image.png')
 
 // resolves to root/src-pwa of app
@@ -70,7 +69,7 @@ api.resolve.bex('some-file.js')
 
 Contains the full path (String) to the root of the app on which this App Extension is running.
 
-### api.hasTypescript <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.hasTypescript
 
 ```js
 /**
@@ -79,7 +78,7 @@ Contains the full path (String) to the root of the app on which this App Extensi
 await api.hasTypescript()
 ```
 
-### api.hasLint <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.hasLint
 
 ```js
 /**
@@ -88,7 +87,7 @@ await api.hasTypescript()
 await api.hasLint()
 ```
 
-### api.getStorePackageName <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.getStorePackageName
 
 ```js
 /**
@@ -97,7 +96,7 @@ await api.hasLint()
 await api.getStorePackageName()
 ```
 
-### api.getNodePackagerName <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
+### api.getNodePackagerName
 
 ```js
 /**

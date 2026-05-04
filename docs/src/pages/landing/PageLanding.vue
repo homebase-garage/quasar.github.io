@@ -36,7 +36,7 @@
         <div
           class="intro-section__sponsors-heading q-mt-xl text-weight-bold text-brand-primary text-size-16 text-capitalize"
         >
-          Our Platinum sponsors
+          Our Platinum sponsor
         </div>
         <div class="row justify-center full-width">
           <sponsor-tile

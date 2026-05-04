@@ -10,9 +10,8 @@ The user's answers are stored into `/quasar.extensions.json` (root of project fo
 Example of basic structure of the file:
 
 ```js
-// For @quasar/app-vite 1.6+ and @quasar/app-webpack v3.11+
-//   1. It can be async
-//   2. It receives the "api" param
+// 1. It can be async
+// 2. It receives the "api" param
 export default function (api) {
   return [
     // questions
@@ -98,13 +97,7 @@ The following is not an exhaustive list of possible types of questions and by no
 }
 ```
 
-## The API param <q-badge label="@quasar/app-vite 1.6+" /> <q-badge label="@quasar/app-webpack 3.11+" />
-
-::: warning COMPATIBILITY WARNING
-The `api` param has been introduced in @quasar/app-vite v1.6+ and @quasar/app-webpack v3.11+.
-
-Older versions of these CLIs will not supply any param.
-:::
+## The API param
 
 ### api.engine
 
@@ -134,7 +127,6 @@ api.resolve.app('src/my-file.js')
 api.resolve.src('my-file.js')
 
 // resolves to root/public of app
-// (@quasar/app-webpack v3.4+ or @quasar/app-vite v1+)
 api.resolve.public('my-image.png')
 
 // resolves to root/src-pwa of app
@@ -206,12 +198,12 @@ Example of semver condition: `'1.x || >=2.5.0 || 5.0.0 - 7.2.3'`.
  * @param {string} packageName
  * @param {string} semverCondition
  */
-api.compatibleWith(packageName, '1.x')
+api.compatibleWith(packageName, '3.x')
 ```
 
 ```js A more complex example:
 if (api.hasVite) {
-  api.compatibleWith('@quasar/app-vite', '^2.0.0')
+  api.compatibleWith('@quasar/app-vite', '^3.0.0')
 } else {
   api.compatbileWith('@quasar/app-webpack', '^4.0.0')
 }

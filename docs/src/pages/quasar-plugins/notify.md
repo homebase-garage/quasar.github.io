@@ -101,7 +101,7 @@ There are four predefined types out of the box that you can use: "positive", "ne
 
 <DocExample title="Out of the box types" file="PredefinedTypesDefault" />
 
-Furthermore, you can register your own types or even override the predefined ones. The best place to do this would be in a [@quasar/app-vite Boot File](/quasar-cli-vite/boot-files) or a [@quasar/app-webpack Boot File](/quasar-cli-webpack/boot-files).
+Furthermore, you can register your own types or even override the predefined ones. The best place to do this would be in a [@quasar/app-vite Boot File](/quasar-cli-vite/boot-files).
 
 <DocExample title="Custom type" file="PredefinedTypesCustom" />
 
@@ -166,7 +166,7 @@ dismiss()
 
 There are two ways of setting default configuration that will apply to all Notifications: through quasar.config file > framework > config > notify Object (see Installation section) or programmatically (see below).
 
-We'll describe setting the defaults through a [@quasar/app-vite Boot File](/quasar-cli-vite/boot-files) or a [@quasar/app-webpack Boot File](/quasar-cli-webpack/boot-files) (works the same anywhere in your code, but a boot file ensures this is run before your app starts):
+We'll describe setting the defaults through a [@quasar/app-vite Boot File](/quasar-cli-vite/boot-files) (works the same anywhere in your code, but a boot file ensures this is run before your app starts):
 
 First we create the boot file. Let's name it "notify-defaults.js".
 

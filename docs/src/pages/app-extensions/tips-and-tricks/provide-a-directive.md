@@ -49,7 +49,7 @@ export default function (api) {
   api.compatibleWith('quasar', '^2.0.0')
 
   if (api.hasVite) {
-    api.compatibleWith('@quasar/app-vite', '^2.0.0')
+    api.compatibleWith('@quasar/app-vite', '^3.0.0')
   } else {
     // api.hasWebpack is true
     api.compatibleWith('@quasar/app-webpack', '^4.0.0')
@@ -76,18 +76,10 @@ function extendConf(conf, api) {
   conf.boot.push(
     '~quasar-app-extension-my-directive/src/boot/register-my-directive.js'
   )
-
-  // @quasar/app-vite does not need this
-  if (api.hasVite !== true) {
-    // make sure boot & other files get transpiled
-    conf.build.webpackTranspileDependencies.push(
-      /quasar-app-extension-my-directive[\\/]src/
-    )
-  }
 }
 ```
 
-Finally, let's see how the boot file would look like. Make sure that you read the [@quasar/app-vite Boot files](/quasar-cli-vite/boot-files) / [@quasar/app-webpack Boot files](/quasar-cli-webpack/boot-files) documentation and understand what a Boot file is first.
+Finally, let's see how the boot file would look like. Make sure that you read the [@quasar/app-vite Boot files](/quasar-cli-vite/boot-files) documentation and understand what a Boot file is first.
 
 ```js File: /src/boot/my-directive.js
 import MyDirective from '../directive/MyDirective.js'

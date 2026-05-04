@@ -313,8 +313,6 @@ $ pnpm lint
 
 Running `pnpm dev` starts up a dev server which uses HMR (Hot Module Reload) for Quasar source code. You can easily test your changes by making necessary changes to `/dev` `*.vue` files.
 
-<!-- TODO: Add app-vite, app-webpack, and vite-plugin instructions, or at least briefly mention them -->
-
 ## Financial Contribution
 
 Quasar Framework is an MIT-licensed open source project. Its ongoing development is made possible thanks to the support by these awesome [backers](https://github.com/quasarframework/quasar/blob/dev/backers.md).

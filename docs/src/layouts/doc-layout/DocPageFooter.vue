@@ -61,15 +61,6 @@
           >Razvan Stoenescu</a
         >
       </div>
-      <div>
-        This website has been designed in collaboration with
-        <a
-          href="https://www.dreamonkey.com/"
-          target="_blank"
-          class="text-brand-accent text-weight-bold"
-          >Dreamonkey Srl</a
-        >
-      </div>
     </div>
   </div>
 </template>

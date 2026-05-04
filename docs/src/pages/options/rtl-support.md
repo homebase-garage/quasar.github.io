@@ -46,16 +46,6 @@ export default {
 }
 ```
 
-### Quasar CLI with Webpack
-
-To enable it, you need to edit the `/quasar.config` file:
-
-```js
-build: {
-  rtl: true
-}
-```
-
 ### Vite Plugin
 
 You first need to install `postcss-rtlcss` package:
@@ -138,7 +128,6 @@ Let's discuss about each of these requirements:
 
 3. Optional: _Treat devland source CSS as RTL_.
    By default, Quasar assumes that all styles are written in LTR direction and generates corresponding RTL styles for them. Should you wish to write your own css directly in RTL then you need to:
-   - (Quasar CLI with Webpack) set quasar.config file > "build" > rtl > "source" to `rtl`
    - (Quasar CLI with Vite / Quasar Vite plugin) set `postcssRtlCss({ source: 'rtl' })` in /postcss.config.js
 
 ::: tip

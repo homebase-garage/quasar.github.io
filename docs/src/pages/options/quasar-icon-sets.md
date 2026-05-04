@@ -127,26 +127,6 @@ export default defineBoot(async () => {
     // let's not break the app, so catching error
   }
 })
-<<| js With @quasar/app-webpack |>>
-import { defineBoot } from '#q-app/wrappers'
-import { IconSet } from 'quasar'
-
-export default defineBoot(async () => {
-  const iconSetName = 'mdi-v7' // ... some logic to determine it (use Cookies Plugin?)
-
-  try {
-    await import(
-      /* webpackInclude: /(mdi-v7|fontawesome-v6)\.js$/ */
-      'quasar/icon-set/' + iconSetName
-    ).then(setDefinition => {
-      IconSet.set(setDefinition.default)
-    })
-  }
-  catch (err) {
-    // Requested Quasar Icon Set does not exist,
-    // let's not break the app, so catching error
-  }
-})
 ```
 
 Then register this boot file into the `/quasar.config` file:
@@ -154,10 +134,6 @@ Then register this boot file into the `/quasar.config` file:
 ```js
 boot: ['quasar-icon-set']
 ```
-
-::: warning Always constrain a dynamic import
-Notice the use of the [Webpack magic comment](https://webpack.js.org/api/module-methods/#magic-comments) - `webpackInclude`. Otherwise all the available icon set files will be bundled, resulting in an increase in the compilation time and the bundle size. See [Caveat for dynamic imports](/quasar-cli-webpack/lazy-loading#caveat-for-dynamic-imports)
-:::
 
 ### Dynamic (on SSR)
 
@@ -180,28 +156,6 @@ export default defineBoot(async ({ ssrContext }) => {
 
   try {
     iconSetList[ `../../node_modules/quasar/icon-set/${ iconSetName }.js` ]().then(lang => {
-      IconSet.set(setDefinition.default, ssrContext)
-    })
-  }
-  catch (err) {
-    console.error(err)
-    // Requested Quasar Icon Set does not exist,
-    // let's not break the app, so catching error
-  }
-})
-<<| js With @quasar/app-webpack |>>
-import { defineBoot } from '#q-app/wrappers'
-import { IconSet } from 'quasar'
-
-// ! NOTICE ssrContext param:
-export default defineBoot(async ({ ssrContext }) => {
-  const iconSetName = 'mdi-v7' // ... some logic to determine it (use Cookies Plugin?)
-
-  try {
-    await import(
-      /* webpackInclude: /(mdi-v7|fontawesome-v6)\.js$/ */
-      'quasar/icon-set/' + iconSetName
-    ).then(setDefinition => {
       IconSet.set(setDefinition.default, ssrContext)
     })
   }
