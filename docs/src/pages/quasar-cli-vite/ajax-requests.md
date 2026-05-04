@@ -9,7 +9,7 @@ If you haven't selected Axios during the project initialization then you should 
 (Here you can also specify additional settings for your axios instance)
 
 ```js /src/boot/axios.js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import axios from 'axios'
 
 const api = axios.create({ baseURL: 'https://api.example.com' })

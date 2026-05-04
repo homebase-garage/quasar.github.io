@@ -30,7 +30,7 @@ A boot file is a simple JavaScript file which can optionally export a function. 
 | `redirect`   | Function to call to redirect to another URL. Accepts String (full URL) or a Vue Router location String or Object. |
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 export default defineBoot(({ app, router, store }) => {
   // something to do
 })
@@ -39,7 +39,7 @@ export default defineBoot(({ app, router, store }) => {
 Boot files can also be async:
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 export default defineBoot(async ({ app, router, store }) => {
   // something to do
   await something()
@@ -49,7 +49,7 @@ export default defineBoot(async ({ app, router, store }) => {
 Notice the `defineBoot` import. This is essentially a no-op function, but its purpose is to help with a better IDE autocomplete experience:
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 
 export default defineBoot(async ({ app, router, store }) => {
   // something to do
@@ -307,7 +307,7 @@ In order to better understand how a boot file works and what it does, you need t
 ### Axios
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import axios from 'axios'
 
 const api = axios.create({ baseURL: 'https://api.example.com' })
@@ -330,7 +330,7 @@ export { axios, api }
 ### vue-i18n
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { createI18n } from 'vue-i18n'
 import messages from 'src/i18n'
 
@@ -351,7 +351,7 @@ export default defineBoot(({ app }) => {
 Some boot files might need to interfere with Vue Router configuration:
 
 ```js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 
 export default defineBoot(({ router, store }) => {
   router.beforeEach((to, from, next) => {

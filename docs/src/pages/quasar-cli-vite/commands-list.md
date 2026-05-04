@@ -126,23 +126,16 @@ $ quasar dev -h
     --port, -p       A port number on which to start the application
     --hostname, -H   A hostname to use for serving the application
     --devtools, -d   Open remote Vue Devtools
+    --nocolor        Disable colored output
     --help, -h       Displays this message
 
-    Only for Cordova mode:
+    Only for Capacitor & Cordova modes:
     --target, -T     (required) App target [android|ios]
-    --emulator, -e   (optional) Emulator name
-                        Examples: iPhone-7, iPhone-X
-                        iPhone-X,com.apple.CoreSimulator.SimRuntime.iOS-12-2
-    --ide, -i        Open IDE (Android Studio / XCode) instead of letting Cordova
-                       boot up the emulator / building in terminal, in which case
-                       the "--emulator" param will have no effect
-
-
-    Only for Capacitor mode:
-    --target, -T     (required) App target [android|ios]
+    --ide, -i        (prod only) Open IDE to build the app instead of using CLI tools
 
     Only for BEX mode:
-    --target, -T     (required) Browser family target [chrome|firefox]
+    --target, -T     Browser family target [chrome|firefox]
+                       (default: chrome)
 ```
 
 The Quasar development server allows you to develop your App by compiling and maintaining code in-memory. A web server will serve your App while offering hot-reload out of the box. Running in-memory offers faster rebuilds when you change your code.
@@ -259,10 +252,12 @@ $ quasar build -h
                       - Has special meaning when building with Electron mode and using
                         electron-builder as bundler
     --debug, -d     Build for debugging purposes
-    --skip-pkg, -s  Build only UI (skips creating Cordova/Capacitor/Electron executables)
+    --skip-pkg, -s  Build only UI (skips creating Cordova/Capacitor/Electron executables or BEX zip file)
                       - Cordova (it only fills in /src-cordova/www folder with the UI code)
                       - Capacitor (it only fills in /src-capacitor/www folder with the UI code)
                       - Electron (it only creates the /dist/electron/UnPackaged folder)
+                      - BEX (it only creates the /dist/bex-* folder)
+    --nocolor       Disable colored output
     --help, -h      Displays this message
 
     ONLY for Cordova and Capacitor mode:
@@ -283,7 +278,8 @@ $ quasar build -h
                      - see https://www.electron.build/configuration/publish
 
     Only for BEX mode:
-    --target, -T     (required) Browser family target [chrome|firefox]
+    --target, -T     Browser family target [chrome|firefox]
+                       (default: chrome)
 ```
 
 The Quasar CLI can pack everything together and optimize your App for production. It minifies source code, extracts vendor components, leverages browser cache and much more.
@@ -632,29 +628,21 @@ $ quasar serve -h
   Options
     --port, -p              Port to use (default: 4000)
     --hostname, -H          Address to use (default: 0.0.0.0)
-    --gzip, -g              Compress content (default: true)
     --silent, -s            Suppress log message
-    --colors                Log messages with colors (default: true)
+    --cors                  Enable CORS
     --open, -o              Open browser window after starting
-    --cache, -c <number>    Cache time (max-age) in seconds;
-                            Does not apply to /service-worker.js
-                            (default: 86400 - 24 hours)
-    --micro, -m <seconds>   Use micro-cache (default: 1 second)
 
-    --history               Use history api fallback;
+    --index, -i <path>      Index url path (default: index.html)
+    --history               Use history mode;
                               All requests fallback to /index.html,
-                              unless using "--index" parameter
-    --index, -i <file>      History mode (only!) index url path
-                              (default: index.html)
+                              or whatever "--index" parameter specifies
+                              (default: false)
 
     --https                 Enable HTTPS
     --cert, -C [path]       Path to SSL cert file (Optional)
     --key, -K [path]        Path to SSL key file (Optional)
-    --proxy <file.mjs>      Proxy specific requests defined in file;
-                            File must export Array ({ path, rule })
-                            See example below. "rule" is defined at:
-                            https://github.com/chimurai/http-proxy-middleware
-    --cors                  Enable CORS for all requests
+
+    --nocolor               Disable colored output
     --help, -h              Displays this message
 
   Proxy file example

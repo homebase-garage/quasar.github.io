@@ -104,7 +104,7 @@ Quasar CLI: If your desired Quasar Icon Set must be dynamically selected (exampl
 
 ```tabs /src/boot/quasar-icon-set.js
 <<| js With @quasar/app-vite |>>
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { IconSet } from 'quasar'
 
 // relative path to your node_modules/quasar/..
@@ -141,7 +141,7 @@ When dealing with SSR, we can't use singleton objects because that would pollute
 
 ```tabs /src/boot/quasar-icon-set.js
 <<| js With @quasar/app-vite |>>
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { IconSet } from 'quasar'
 
 // relative path to your node_modules/quasar/..
@@ -202,7 +202,7 @@ methods: {
 If you want to do this outside of a .vue file (and you are NOT on SSR mode) then you can
 
 ```js /src/boot/some-boot-file.js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { IconSet } from 'quasar'
 import mdiIconSet from 'quasar/icon-set/mdi-v7.js'
 

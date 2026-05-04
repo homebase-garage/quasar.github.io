@@ -73,7 +73,7 @@ See the following sections for the features and build modes you are using.
 If you are using Pinia, Quasar CLI augments the `router` property inside `.quasar/pinia.d.ts` automatically. So, don't manually add the `router` property from the `PiniaCustomProperties` interface in the `src/stores/index.ts` file.
 
 ```diff /src/stores/index.ts
-import { defineStore } from '#q-app/wrappers'
+import { defineStore } from '#q-app'
 import { createPinia } from 'pinia'
 - import { type Router } from 'vue-router';
 

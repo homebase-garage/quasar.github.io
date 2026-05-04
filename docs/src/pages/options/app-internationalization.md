@@ -37,7 +37,7 @@ $ bun add vue-i18n
 
 ```tabs
 <<| js JS |>>
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { createI18n } from 'vue-i18n'
 import messages from 'src/i18n'
 
@@ -52,7 +52,7 @@ export default defineBoot(({ app }) => {
   app.use(i18n)
 })
 <<| js TypeScript |>>
-import { defineBoot } from '#q-app/wrappers';
+import { defineBoot } from '#q-app';
 import { createI18n } from 'vue-i18n';
 
 import messages from 'src/i18n';

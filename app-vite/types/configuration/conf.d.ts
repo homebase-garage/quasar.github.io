@@ -29,7 +29,6 @@ type DevServerOptions = Omit<ViteServerOptions, "open" | "https"> & {
  * All paths must be relative to the root folder of your project.
  *
  * @default
- * ```typescript
  * {
  *  rootComponent: 'src/App.vue',
  *  router: 'src/router/index',
@@ -40,7 +39,6 @@ type DevServerOptions = Omit<ViteServerOptions, "open" | "https"> & {
  *  electronMain: 'src-electron/electron-main',
  *  bexManifestFile: 'src-bex/manifest.json'
  * }
- * ```
  */
 interface QuasarSourceFilesConfiguration {
   rootComponent?: string;

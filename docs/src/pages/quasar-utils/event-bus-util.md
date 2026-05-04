@@ -54,7 +54,7 @@ Alternatively, when on a Quasar CLI project, for your convenience (so NOT requir
 
 ```js A Quasar CLI boot file (let's say /src/boot/bus.js)
 import { EventBus } from 'quasar'
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 
 export default defineBoot(({ app }) => {
   const bus = new EventBus()

@@ -11,10 +11,10 @@ It's important to note that the Service Worker (which gets automatically generat
 
 Add the [register-service-worker](https://github.com/yyx990803/register-service-worker) npm package in your package.json file as a dependency (if it's not already there).
 
-```js /src-pwa/register-service-worker.js
+```js /src-pwa/register-sw.js
 import { register } from 'register-service-worker'
 
-register(process.env.SERVICE_WORKER_FILE, {
+register(import.meta.env.QUASAR_SERVICE_WORKER_FILE, {
   ready(registration) {
     console.log('Service worker is active.')
   },

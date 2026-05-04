@@ -75,11 +75,12 @@ interface InvokeParams {
 
 interface BuildTargetOptions {
   /**
-   * @default ['es2022', 'firefox115', 'chrome115', 'safari14']
+   * @default 'baseline-widely-available'
+   * @example ['es2022', 'firefox115', 'chrome115', 'safari14']
    */
   browser?: string | string[];
   /**
-   * @example 'node20'
+   * @example 'node22'
    */
   node?: string;
 }
@@ -158,10 +159,15 @@ interface QuasarBuildEnv {
 
 interface QuasarStaticBuildConfiguration {
   /**
+   * @default
+   * {
+   *   browser: 'baseline-widely-available',
+   *   node: 'node22'
+   * }
    * @example
    * {
    *   browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],
-   *   node: 'node20'
+   *   node: 'node24'
    * }
    */
   target?: BuildTargetOptions;
@@ -208,7 +214,6 @@ interface QuasarStaticBuildConfiguration {
    * @see https://v2.quasar.dev/quasar-cli-vite/handling-vite#adding-vite-plugins
    *
    * @example
-   * // ESM
    * import { somePlugin } from 'some-plugin'
    * // ...
    * [
@@ -223,22 +228,6 @@ interface QuasarStaticBuildConfiguration {
    *   [ somePlugin, { ...pluginOptions... }, { server: true, client: true } ],
    *
    *   somePlugin({ ...pluginOptions... })
-   * ]
-   *
-   * @example
-   * // CJS
-   * [
-   *   [ 'some-plugin', { ...pluginOptions... } ],
-   *
-   *   // disable running on client or server threads (set server/client to false):
-   *   [ 'some-plugin', { ...pluginOptions... }, { server: true, client: true } ],
-   *
-   *   [ require('some-plugin'), { ...pluginOptions... } ],
-   *
-   *   // disable running on client or server threads (set server/client to false):
-   *   [ require('some-plugin'), { ...pluginOptions... }, { server: true, client: true } ],
-   *
-   *   require('some-plugin')({ ...pluginOptions... })
    * ]
    */
   vitePlugins?: PluginEntry[];

@@ -75,6 +75,6 @@ Depending on which features/presets you are using, you can add the related optio
 
 ```json
 {
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
 ```

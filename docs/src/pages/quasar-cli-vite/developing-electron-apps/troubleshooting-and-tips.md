@@ -13,7 +13,7 @@ While we're at it, why not also open devtools by default when we're on dev mode.
 function createWindow () {
   mainWindow = new BrowserWindow({ ... })
 
-  if (process.env.DEBUGGING) {
+  if (import.meta.env.DEBUG) {
     // if on DEV or Production with debug enabled
     mainWindow.webContents.openDevTools()
   }

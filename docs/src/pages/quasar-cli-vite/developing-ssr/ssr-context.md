@@ -37,7 +37,7 @@ export default {
   // ...
   setup () {
     // we need to guard it and call it only on SSR server-side:
-    const ssrContext = process.env.SERVER ? useSSRContext() : null
+    const ssrContext = import.meta.env.QUASAR_SERVER ? useSSRContext() : null
     // ...do something with it
   }
 }

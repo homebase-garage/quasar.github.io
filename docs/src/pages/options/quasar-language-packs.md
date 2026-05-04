@@ -68,7 +68,7 @@ For **Quasar UMD**, check what tags you may still need to include in your HTML f
 Quasar CLI: If your desired Quasar Language Pack must be dynamically selected (example: depends on a cookie), then you need to create a boot file: `$ quasar new boot quasar-lang-pack [--format ts]`. This will create `/src/boot/quasar-lang-pack.js` file. Edit it to:
 
 ```js With @quasar/app-vite
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { Lang } from 'quasar'
 
 // relative path to your node_modules/quasar/..
@@ -103,7 +103,7 @@ boot: ['quasar-lang-pack']
 When dealing with SSR, we can't use singleton objects because that would pollute sessions. As a result, as opposed to the dynamical example above (read it first!), you must also specify the `ssrContext` from your boot file:
 
 ```js With @quasar/app-vite
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { Lang } from 'quasar'
 
 // relative path to your node_modules/quasar/..
@@ -213,7 +213,7 @@ methods: {
 If you want to do this outside of a .vue file (and you are NOT on SSR mode) then you can
 
 ```js /src/boot/some-boot-file.js
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import { Lang } from 'quasar'
 
 export default defineBoot(() {

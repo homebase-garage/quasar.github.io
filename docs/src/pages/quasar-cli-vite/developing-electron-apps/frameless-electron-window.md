@@ -49,7 +49,7 @@ mainWindow = new BrowserWindow({
 
 enable(mainWindow.webContents) // <-- add this
 
-mainWindow.loadURL(process.env.APP_URL)
+mainWindow.loadURL(import.meta.env.QUASAR_APP_URL)
 
 // ...
 ```
@@ -124,19 +124,19 @@ export default {
   setup() {
     // we rely upon
     function minimize() {
-      if (process.env.MODE === 'electron') {
+      if (import.meta.env.QUASAR_ELECTRON_MODE) {
         window.myWindowAPI.minimize()
       }
     }
 
     function toggleMaximize() {
-      if (process.env.MODE === 'electron') {
+      if (import.meta.env.QUASAR_ELECTRON_MODE) {
         window.myWindowAPI.toggleMaximize()
       }
     }
 
     function closeApp() {
-      if (process.env.MODE === 'electron') {
+      if (import.meta.env.QUASAR_ELECTRON_MODE) {
         window.myWindowAPI.close()
       }
     }

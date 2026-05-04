@@ -22,7 +22,7 @@ You will need at least one SSR middleware file which handles the rendering of th
 A SSR middleware file is a simple JavaScript file which exports a function. Quasar will then call the exported function when it prepares the Nodejs server (Express) app and additionally pass an Object as param (which will be detailed in the next section).
 
 ```js
-import { defineSsrMiddleware } from '#q-app/wrappers'
+import { defineSsrMiddleware } from '#q-app'
 
 export default defineSsrMiddleware(
   ({ app, port, resolve, publicPath, folders, render, serve }) => {
@@ -280,7 +280,7 @@ export default ({ app, resolve, render, serve }) => {
         // if we're in dev mode, then we can use Quasar CLI
         // to display a nice error page that contains the stack
         // and other useful information
-        else if (process.env.DEV) {
+        else if (import.meta.env.QUASAR_DEV) {
           // serve.error is available on dev only
           serve.error({ err, req, res })
         }
@@ -293,7 +293,7 @@ export default ({ app, resolve, render, serve }) => {
           // create a route (/src/routes) for an error page and redirect to it
           res.status(500).send('500 | Internal Server Error')
 
-          if (process.env.DEBUGGING) {
+          if (import.meta.env.DEBUG) {
             console.error(err.stack)
           }
         }

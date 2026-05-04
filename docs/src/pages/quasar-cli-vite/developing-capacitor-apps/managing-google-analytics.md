@@ -58,7 +58,7 @@ $ quasar new boot google-analytics [--format ts]
 Then we edit the newly created file: `/src/boot/google-analytics.js`:
 
 ```js
-import { defineRouter } from '#q-app/wrappers'
+import { defineRouter } from '#q-app'
 import ga from 'analytics.js'
 
 export default defineRouter(({ router }) => {

@@ -773,8 +773,8 @@ export default [
         path: 'handling-vite'
       },
       {
-        name: 'Handling process.env',
-        path: 'handling-process-env'
+        name: 'Handling import.meta.env',
+        path: 'handling-import-meta-env'
       },
       {
         name: 'State Management with Pinia',

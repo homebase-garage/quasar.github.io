@@ -69,7 +69,7 @@ mainWindow = new BrowserWindow({
 
 enable(mainWindow.webContents) // <-- add this
 
-mainWindow.loadURL(process.env.APP_URL)
+mainWindow.loadURL(import.meta.env.QUASAR_APP_URL)
 
 // ...
 ```
@@ -107,5 +107,8 @@ import { fileURLToPath } from 'url'
 
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
 
-const publicFolder = path.resolve(currentDir, process.env.QUASAR_PUBLIC_FOLDER)
+const publicFolder = path.resolve(
+  currentDir,
+  import.meta.env.QUASAR_PUBLIC_FOLDER
+)
 ```

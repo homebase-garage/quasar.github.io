@@ -15,6 +15,12 @@ const routeMap = {
 }
 
 const routes = [
+  // legacy redirects
+  {
+    path: '/quasar-cli-vite/handling-process-env',
+    redirect: '/quasar-cli-vite/handling-import-meta-env'
+  },
+
   // shortcuts
   { path: '/start', redirect: '/start/quick-start' },
   { path: '/vue-components', redirect: '/components' },

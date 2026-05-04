@@ -138,7 +138,7 @@ However, should you wish to manually hydrate it yourself, you need to set quasar
 ```js Some boot file
 // MAKE SURE TO CONFIGURE THIS BOOT FILE
 // TO RUN ONLY ON CLIENT-SIDE
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 
 export default defineBoot(({ store }) => {
   // For Pinia

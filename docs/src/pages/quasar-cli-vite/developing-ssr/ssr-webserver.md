@@ -30,7 +30,7 @@ import {
   defineSsrClose,
   defineSsrServeStaticContent,
   defineSsrRenderPreloadTag
-} from '#q-app/wrappers'
+} from '#q-app'
 
 /**
  * Create your webserver and return its instance.
@@ -62,7 +62,7 @@ export const create = defineSsrCreate((/* { ... } */) => {
 
   // place here any middlewares that
   // absolutely need to run before anything else
-  if (process.env.PROD) {
+  if (import.meta.env.QUASAR_PROD) {
     app.use(compression())
   }
 
@@ -120,7 +120,7 @@ export const injectDevMiddleware = defineSsrInjectDevMiddleware(({ app }) => {
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
   const server = devHttpsApp || app
   return server.listen(port, () => {
-    if (process.env.PROD) {
+    if (import.meta.env.QUASAR_PROD) {
       console.log('Server listening at port ' + port)
     }
   })
@@ -162,7 +162,7 @@ export const close = defineSsrClose(({ listenResult }) => {
   return listenResult.close()
 })
 
-const maxAge = process.env.DEV ? 0 : 1000 * 60 * 60 * 24 * 30
+const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
 
 /**
  * Should return a function that will be used to configure the webserver
@@ -280,7 +280,7 @@ $ bun add connect
 ```
 
 ```js src-ssr/server.js
-import { defineSsrCreate } from '#q-app/wrappers'
+import { defineSsrCreate } from '#q-app'
 import connect from 'connect'
 import compression from 'compression'
 
@@ -288,7 +288,7 @@ export const create = defineSsrCreate((/* { ... } */) => {
   const app = connect()
 
   // Place any middleware that needs to run before anything else
-  if (process.env.PROD) {
+  if (import.meta.env.QUASAR_PROD) {
     app.use(compression())
   }
 
@@ -318,7 +318,7 @@ import {
   defineSsrListen,
   defineSsrClose,
   defineSsrServeStaticContent
-} from '#q-app/wrappers'
+} from '#q-app'
 import Fastify from 'fastify'
 
 // If using TypeScript, also enable the following:
@@ -342,7 +342,7 @@ export const create = defineSsrCreate(async ({ devHttpsOptions }) => {
   })
 
   // Place any middleware that needs to run before anything else
-  if (process.env.PROD) {
+  if (import.meta.env.QUASAR_PROD) {
     await app.register(import('@fastify/compress'))
   }
 
@@ -368,7 +368,7 @@ export const close = defineSsrClose(({ listenResult }) => {
   return listenResult.close()
 })
 
-const maxAge = process.env.DEV ? 0 : 1000 * 60 * 60 * 24 * 30
+const maxAge = import.meta.env.QUASAR_DEV ? 0 : 1000 * 60 * 60 * 24 * 30
 
 export const serveStaticContent = defineSsrServeStaticContent(
   ({ app, resolve }) => {
@@ -389,7 +389,7 @@ export const serveStaticContent = defineSsrServeStaticContent(
 ```
 
 ```js src-ssr/middlewares/render.js
-import { defineSsrMiddleware } from '#q-app/wrappers'
+import { defineSsrMiddleware } from '#q-app'
 
 export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
   app.get(resolve.urlPath('*'), async (req, res) => {
@@ -406,12 +406,12 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
         return res.status(404).send('404 | Page Not Found')
       }
 
-      if (process.env.DEV) {
+      if (import.meta.env.QUASAR_DEV) {
         serve.error({ err, req, res })
       } else {
         res.status(500).send('500 | Internal Server Error')
 
-        if (process.env.DEBUGGING) {
+        if (import.meta.env.QUASAR_DEBUG) {
           console.error(err.stack)
         }
       }
@@ -428,7 +428,7 @@ This is the default option that you get when adding SSR support in a Quasar CLI 
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
   const server = devHttpsApp || app
   return server.listen(port, () => {
-    if (process.env.PROD) {
+    if (import.meta.env.QUASAR_PROD) {
       console.log('Server listening at port ' + port)
     }
   })
@@ -442,9 +442,9 @@ If you have a serverless infrastructure, then you generally need to export a han
 Say that your serverless service requires you to name export a variable called `handler`. Then what you'd need to do is:
 
 ```js src-ssr/server.js
-import { defineSsrListen } from '#q-app/wrappers'
+import { defineSsrListen } from '#q-app'
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
-  if (process.env.DEV) {
+  if (import.meta.env.QUASAR_DEV) {
     // for dev, start listening on the created server
     const server = devHttpsApp || app
     return server.listen(port, () => {
@@ -467,11 +467,11 @@ Should you require to export a handler of form `(event, context, callback) => vo
 You will need to manually yarn/npm install the `serverless-http` package.
 
 ```js src-ssr/server.js
-import { defineSsrListen } from '#q-app/wrappers'
+import { defineSsrListen } from '#q-app'
 import serverless from 'serverless-http'
 
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
-  if (process.env.DEV) {
+  if (import.meta.env.QUASAR_DEV) {
     // for dev, start listening on the created server
     const server = devHttpsApp || app
     return server.listen(port, () => {
@@ -487,11 +487,11 @@ export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
 #### Example: Firebase function
 
 ```js src-ssr/server.js
-import { defineSsrListen } from '#q-app/wrappers'
+import { defineSsrListen } from '#q-app'
 import * as functions from 'firebase-functions'
 
 export const listen = defineSsrListen(({ app, devHttpsApp, port }) => {
-  if (process.env.DEV) {
+  if (import.meta.env.QUASAR_DEV) {
     // for dev, start listening on the created server
     const server = devHttpsApp || app
     return server.listen(port, () => {

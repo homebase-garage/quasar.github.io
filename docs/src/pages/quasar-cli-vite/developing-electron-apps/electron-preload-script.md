@@ -29,7 +29,7 @@ function createWindow () {
       // HERE IS THE MAGIC:
       preload: path.resolve(
         currentDir,
-        path.join(process.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
+        path.join(import.meta.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + import.meta.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
       )
     }
   })

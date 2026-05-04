@@ -17,7 +17,7 @@ The `/src/router/routes.js` needs to import your website/app's Pages and Layouts
 When using Pinia, the store is not directly importable from other scripts, but it is passed to the exported function of `/src/router/index.js`, so it can be accessed from there. For example you can use the `Router.beforeEach` method to check authentication in the router:
 
 ```js /src/router.js
-import { defineRouter } from '#q-app/wrappers'
+import { defineRouter } from '#q-app'
 
 export default defineRouter(({ store /*, ssrContext */ }) => {
   // ...

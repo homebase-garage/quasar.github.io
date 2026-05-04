@@ -27,7 +27,7 @@ import { Cookies } from 'quasar'
 
 // you need access to `ssrContext`
 function (ssrContext) {
-  const cookies = process.env.SERVER
+  const cookies = import.meta.env.QUASAR_SERVER
     ? Cookies.parseSSR(ssrContext)
     : Cookies // otherwise we're on client
 

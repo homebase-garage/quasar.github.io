@@ -1,9 +1,9 @@
 ---
-title: Handling process.env
-desc: (@quasar/app-vite) How to differentiate the runtime procedure based on process.env in a Quasar app.
+title: Handling import.meta.env
+desc: (@quasar/app-vite) How to differentiate the runtime procedure based on import.meta.env in a Quasar app.
 ---
 
-Using `process.env` can help you in many ways:
+Using `import.meta.env` can help you in many ways:
 
 - differentiating runtime procedure depending on Quasar Mode (SPA/PWA/Cordova/Electron)
 - differentiating runtime procedure depending if running a dev or production build
@@ -11,29 +11,29 @@ Using `process.env` can help you in many ways:
 
 ## Values provided by Quasar CLI
 
-| `process∙env∙<name>` | Type    | Meaning                                                                                      |
-| -------------------- | ------- | -------------------------------------------------------------------------------------------- |
-| `DEV`                | Boolean | Code runs in development mode                                                                |
-| `PROD`               | Boolean | Code runs in production mode                                                                 |
-| `DEBUGGING`          | Boolean | Code runs in development mode or `--debug` flag was set for production mode                  |
-| `CLIENT`             | Boolean | Code runs on client (not on server)                                                          |
-| `SERVER`             | Boolean | Code runs on server (not on client)                                                          |
-| `MODE`               | String  | Quasar CLI mode (`spa`, `pwa`, ...)                                                          |
-| `NODE_ENV`           | String  | Has two possible values: `production` or `development`                                       |
-| `TARGET`             | String  | Can be `ios` or `android` for Cordova/Capacitor modes and `chrome` or `firefox` for BEX mode |
+| `import.meta.env.<name>` | Type    | Meaning                                                                                      |
+| ------------------------ | ------- | -------------------------------------------------------------------------------------------- |
+| `QUASAR_DEV`             | Boolean | Code runs in development mode                                                                |
+| `QUASAR_PROD`            | Boolean | Code runs in production mode                                                                 |
+| `QUASAR_DEBUG`           | Boolean | Code runs in development mode or `--debug` flag was set for production mode                  |
+| `QUASAR_CLIENT`          | Boolean | Code runs on client (not on server)                                                          |
+| `QUASAR_SERVER`          | Boolean | Code runs on server (not on client)                                                          |
+| `QUASAR_MODE`            | String  | Quasar CLI mode (`spa`, `pwa`, ...)                                                          |
+| `QUASAR_<MODE>_MODE`     | Boolean | Code runs in `<MODE>` Quasar mode. Example: QUASAR_ELECTRON_MODE                             |
+| `QUASAR_TARGET`          | String  | Can be `ios` or `android` for Cordova/Capacitor modes and `chrome` or `firefox` for BEX mode |
 
 ## Example
 
 ```js
-if (process.env.DEV) {
+if (import.meta.env.QUASAR_DEV) {
   console.log(`I'm on a development build`)
 }
 
-// process∙env∙MODE is the <mode> in
+// import.meta.env.MODE is the <mode> in
 // "quasar dev/build -m <mode>"
 // (defaults to 'spa' if -m parameter is not specified)
 
-if (process.env.MODE === 'electron') {
+if (import.meta.env.QUASAR_MODE === 'electron') {
   import('@electron/remote').then(({ BrowserWindow }) => {
     const win = BrowserWindow.getFocusedWindow()
 
@@ -44,14 +44,19 @@ if (process.env.MODE === 'electron') {
     }
   })
 }
+
+// alternatively, use:
+if (import.meta.env.QUASAR_ELECTRON_MODE) {
+  // ...
+}
 ```
 
 ## Stripping out code
 
-When compiling your website/app, `if ()` branches depending on process.env are evaluated, and if the expression is `false`, they get stripped out of the file. Example:
+When compiling your website/app, `if ()` branches depending on import.meta.env are evaluated, and if the expression is `false`, they get stripped out of the file. Example:
 
 ```js
-if (process.env.DEV) {
+if (import.meta.env.QUASAR_DEV) {
   console.log('dev')
 } else {
   console.log('build')
@@ -65,23 +70,28 @@ console.log('build')
 
 Notice above that the `if`s are evaluated and also completely stripped out at compile-time, resulting in a smaller bundle.
 
-## Import based on process.env
+## Import based on import.meta.env
 
 You can combine what you learned in the section above with dynamic imports:
 
 ```js
-if (process.env.MODE === 'electron') {
+if (import.meta.env.QUASAR_MODE === 'electron') {
   import('my-fancy-npm-package').then(package => {
     // notice "default" below, which is the prop with which
     // you can access what your npm imported package exports
     package.default.doSomething()
   })
 }
+
+// alternatively:
+if (import.meta.env.QUASAR_ELECTRON_MODE) {
+  // ...
+}
 ```
 
-## Adding to process.env
+## Adding to import.meta.env
 
-You can add your own definitions to `process.env` through the `/quasar.config` file.
+You can add your own definitions to `import.meta.env` through the `/quasar.config` file.
 
 It's important to understand the different types of environment variables.
 
@@ -106,7 +116,7 @@ export default defineConfig(ctx => {
 })
 ```
 
-Then, in your website/app, you can access `process∙env∙API`, and it will point to one of those two links above, depending on dev or production build type.
+Then, in your website/app, you can access `import.meta.env.API`, and it will point to one of those two links above, depending on dev or production build type.
 
 You can even combine it with values from the `quasar dev/build` env variables:
 
@@ -133,15 +143,9 @@ Expanding a bit on the env dotfiles support. These files will be detected and us
 ```
 .env                                # loaded in all cases
 .env.local                          # loaded in all cases, ignored by git
-.env.[dev|prod]                     # loaded for dev or prod only
-.env.local.[dev|prod]               # loaded for dev or prod only, ignored by git
-.env.[quasarMode]                   # loaded for specific Quasar CLI mode only
-.env.local.[quasarMode]             # loaded for specific Quasar CLI mode only, ignored by git
-.env.[dev|prod].[quasarMode]        # loaded for specific Quasar CLI mode and dev|prod only
-.env.local.[dev|prod].[quasarMode]  # loaded for specific Quasar CLI mode and dev|prod only, ignored by git
 ```
 
-...where "ignored by git" assumes a default project folder created after releasing this package, otherwise add `.env.local*` to your `/.gitignore` file.
+...where "ignored by git" assumes a default project folder created after releasing this package, otherwise add `.env.local` to your `/.gitignore` file.
 
 You can also configure the files above to be picked up from a different folder or even add more files to the list:
 
@@ -250,12 +254,6 @@ console.log(process.env.BAR) // ❌ It's not defined in `build > env`
 # order matters!
 .env                                # loaded in all cases
 .env.local                          # loaded in all cases, ignored by git
-.env.[dev|prod]                     # loaded for dev or prod only
-.env.local.[dev|prod]               # loaded for dev or prod only, ignored by git
-.env.[quasarMode]                   # loaded for specific Quasar CLI mode only
-.env.local.[quasarMode]             # loaded for specific Quasar CLI mode only, ignored by git
-.env.[dev|prod].[quasarMode]        # loaded for specific Quasar CLI mode and dev|prod only
-.env.local.[dev|prod].[quasarMode]  # loaded for specific Quasar CLI mode and dev|prod only, ignored by git
 ```
 
 If the `/.env` doesn't exist or there is a typo in the file name:
