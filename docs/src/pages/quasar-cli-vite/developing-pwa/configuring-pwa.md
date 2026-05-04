@@ -7,12 +7,18 @@ scope:
   tree:
     l: src-pwa
     c:
-      - l: register-service-worker.js
+      - l: register-sw.js
         e: '(or .ts) UI code *managing* service worker'
       - l: manifest.json
         e: Your PWA manifest file
-      - l: custom-service-worker.js
-        e: '(or .ts) Optional custom service worker file (injectManifest mode ONLY)'
+      - l: custom-sw.js
+        e: '(or .ts) Optional custom service worker file (InjectManifest mode ONLY)'
+      - l: package.json
+        e: 'helps install PWA only deps directly under /src-pwa'
+      - l: pwa-end.d.ts
+        e: 'TypeScript only'
+      - l: tsconfig.json
+        e: 'TypeScript only'
 ---
 
 ## Service Worker
@@ -23,12 +29,12 @@ Adding PWA mode to a Quasar project means a new folder will be created: `/src-pw
 
 You can freely edit these files. Notice a few things:
 
-1. `register-service-worker.js` is automatically imported into your app (like any other /src file). It registers the service worker (created by Workbox or your custom one, depending on workbox plugin mode -- quasar.config file > pwa > workboxPluginMode) and you can listen for Service Worker's events. You can use ES6 code.
-2. `custom-service-worker.js` will be your service worker file ONLY if workbox plugin mode is set to "injectManifest" (quasar.config file > pwa > workboxMode: 'injectManifest'). Otherwise, Quasar and Workbox will create a service-worker file for you.
+1. `register-sw.js` is automatically imported into your app (like any other /src file). It registers the service worker (created by Workbox or your custom one, depending on workbox plugin mode -- quasar.config file > pwa > workboxPluginMode) and you can listen for Service Worker's events.
+2. `custom-sw.js` will be your service worker file ONLY if workbox plugin mode is set to "InjectManifest" (quasar.config file > pwa > workboxMode: 'InjectManifest'). Otherwise, Quasar and Workbox will create a service-worker file for you.
 3. It makes sense to run [Lighthouse](https://developers.google.com/web/tools/lighthouse/) tests on production builds only.
 
 ::: tip
-Read more on `register-service-worker.js` and how to interact with the Service Worker on [Handling Service Worker](/quasar-cli-vite/developing-pwa/handling-service-worker) documentation page.
+Read more on `register-sw.js` and how to interact with the Service Worker on [Handling Service Worker](/quasar-cli-vite/developing-pwa/handling-service-worker) documentation page.
 :::
 
 ## quasar.config file
@@ -88,8 +94,8 @@ pwa: {
 }
 
 sourceFiles: {
-  pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
-  pwaServiceWorker: 'src-pwa/custom-service-worker',
+  pwaRegisterServiceWorker: 'src-pwa/register-sw',
+  pwaServiceWorker: 'src-pwa/custom-sw',
   pwaManifestFile: 'src-pwa/manifest.json',
 }
 ```
@@ -174,34 +180,34 @@ pwa: {
 
 ## Picking Workbox mode
 
-There are two Workbox operating modes: **generateSW** (default) and **injectManifest**.
+There are two Workbox operating modes: **GenerateSW** (default) and **InjectManifest**.
 
 Setting the mode that you want to use is done through the `/quasar.config` file:
 
 ```js /quasar.config file
 pwa: {
-  workboxMode: 'generateSW',
+  workboxMode: 'GenerateSW',
   extendGenerateSWOptions (cfg) {
-    // configure workbox on generateSW
+    // configure workbox on GenerateSW
   }
 }
 
 pwa: {
-  workboxMode: 'injectManifest',
+  workboxMode: 'InjectManifest',
   extendInjectManifestOptions (cfg) {
-    // configure workbox on injectManifest
+    // configure workbox on InjectManifest
   }
 }
 ```
 
-### generateSW
+### GenerateSW
 
-When to use generateSW:
+When to use GenerateSW:
 
 - You want to precache files.
 - You have simple runtime configuration needs (e.g. the configuration allows you to define routes and strategies).
 
-When NOT to use generateSW:
+When NOT to use GenerateSW:
 
 - You want to use other Service Worker features (i.e. Web Push).
 - You want to import additional scripts or add additional logic.
@@ -225,26 +231,27 @@ When NOT to use InjectManifest:
 
 ::: tip TIPS
 
-- If you want to use this mode, you will have to write the service worker (`/src-pwa/custom-service-worker.js`) file by yourself.
+- If you want to use this mode, you will have to write the service worker (`/src-pwa/custom-sw.js`) file by yourself.
 - Please check the available workboxOptions for this mode on [Workbox website](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-build#.injectManifest).
   :::
 
-The following snippet is the default code for a custom service worker (`/src-pwa/custom-service-worker.js`) which mimics the behavior of `generateSW` mode:
+The following snippet is the default code for a custom service worker (`/src-pwa/custom-sw.js`) which mimics the behavior of `generateSW` mode:
 
-```js
+```tabs /src-pwa/custom-sw file
+<<| js custom-sw.js |>>
 /*
  * This file (which will be your service worker)
  * is picked up by the build system ONLY if
- * quasar.config file > pwa > workboxMode is set to "injectManifest"
+ * quasar.config file > pwa > workboxMode is set to "InjectManifest"
  */
 
 import { clientsClaim } from 'workbox-core'
+import { NavigationRoute, registerRoute } from 'workbox-routing'
 import {
-  precacheAndRoute,
   cleanupOutdatedCaches,
-  createHandlerBoundToURL
+  createHandlerBoundToURL,
+  precacheAndRoute
 } from 'workbox-precaching'
-import { registerRoute, NavigationRoute } from 'workbox-routing'
 
 self.skipWaiting()
 clientsClaim()
@@ -254,9 +261,9 @@ precacheAndRoute(self.__WB_MANIFEST)
 
 cleanupOutdatedCaches()
 
-// Non-SSR fallbacks to index.html
-// Production SSR fallbacks to offline.html (except for dev)
 if (import.meta.env.QUASAR_PROD) {
+  // Non-SSR fallbacks to index.html
+  // Production SSR fallbacks to offline.html (except for dev)
   registerRoute(
     new NavigationRoute(
       createHandlerBoundToURL(import.meta.env.QUASAR_PWA_FALLBACK_HTML),
@@ -268,6 +275,47 @@ if (import.meta.env.QUASAR_PROD) {
       }
     )
   )
+}
+<<| js custom-sw.ts |>>
+/*
+ * This file (which will be your service worker)
+ * is picked up by the build system ONLY if
+ * quasar.config file > pwa > workboxMode is set to "InjectManifest"
+ */
+
+import { clientsClaim } from "workbox-core";
+import { NavigationRoute, registerRoute } from "workbox-routing";
+import {
+  cleanupOutdatedCaches,
+  createHandlerBoundToURL,
+  precacheAndRoute
+} from "workbox-precaching";
+
+declare const self: ServiceWorkerGlobalScope &
+  typeof globalThis & { skipWaiting: () => void };
+
+void self.skipWaiting();
+clientsClaim();
+
+// Use with precache injection
+precacheAndRoute(self.__WB_MANIFEST);
+
+cleanupOutdatedCaches();
+
+if (import.meta.env.QUASAR_PROD) {
+  // Non-SSR fallbacks to index.html
+  // Production SSR fallbacks to offline.html (except for dev)
+  registerRoute(
+    new NavigationRoute(
+      createHandlerBoundToURL(import.meta.env.QUASAR_PWA_FALLBACK_HTML),
+      {
+        denylist: [
+          new RegExp(import.meta.env.QUASAR_PWA_SERVICE_WORKER_REGEX),
+          /workbox-(.)*\.js$/
+        ]
+      }
+    )
+  );
 }
 ```
 

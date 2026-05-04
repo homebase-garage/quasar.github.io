@@ -104,7 +104,7 @@ declare namespace NodeJS {
 }
 ```
 
-```ts /src-pwa/custom-service-worker.ts
+```ts /src-pwa/custom-sw.ts
 // at the top of the file
 declare const self: ServiceWorkerGlobalScope &
   typeof globalThis & { skipWaiting: () => void }

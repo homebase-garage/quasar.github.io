@@ -1197,7 +1197,7 @@ electron: {
 
 ### Quasar App CLI PWA mode
 
-If you are using Workbox in InjectManifest mode, then it's useful to know that the `/src-pwa/custom-service-worker.js` is now being compiled too. This means that in your code you can now import with relative path too.
+If you are using Workbox in InjectManifest mode, then it's useful to know that the `/src-pwa/custom-sw.js` is now being compiled too. This means that in your code you can now import with relative path too.
 
 Due to the upgrade to Webpack 5, you will need to also upgrade `workbox-webpack-plugin` to v6+.
 

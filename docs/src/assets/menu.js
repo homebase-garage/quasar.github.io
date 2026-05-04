@@ -901,6 +901,10 @@ export default [
             path: 'build-commands'
           },
           {
+            name: 'Installing PWA deps',
+            path: 'installing-pwa-dependencies'
+          },
+          {
             name: 'Configuring PWA',
             path: 'configuring-pwa'
           },
