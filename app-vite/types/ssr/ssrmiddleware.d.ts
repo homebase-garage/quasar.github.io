@@ -26,36 +26,51 @@ export interface SsrRenderRedirectError {
 
 interface SsrMiddlewareResolve {
   /**
-   * Whenever you define a route (with app.use(), app.get(), app.post() etc), you should use the resolve.urlPath() method so that you'll also keep into account the configured publicPath (quasar.config file > build > publicPath).
+   * Whenever you define a route (with app.use(), app.get(), app.post() etc),
+   * you should use the resolve.urlPath() method so that you'll also keep
+   * into account the configured publicPath (quasar.config file > build > publicPath).
    */
   readonly urlPath: (url: string) => string;
   /**
-   * Resolve folder path to the root (of the project in dev and of the distributables in production). Under the hood, it does a path.join()
+   * Resolve folder path to the root (of the project in dev and of the
+   * distributables in production). Under the hood, it does a path.join()
    * @param paths paths to join
    */
   readonly root: (...paths: string[]) => string;
   /**
-   * Resolve folder path to the "public" folder. Under the hood, it does a path.join()
+   * Resolve folder path to the "/public" folder. Under the hood, it does a path.join()
    * @param paths paths to join
    */
   readonly public: (...paths: string[]) => string;
   /**
-   * Resolve folder path to the "server-assets" folder. Under the hood, it does a path.join()
+   * Resolve folder path to the "/src-ssr/server-assets" folder. Under the hood, it does a path.join()
    * @param paths paths to join
    */
   readonly serverAssets: (...paths: string[]) => string;
 }
 
 interface SsrMiddlewareFolders {
+  /**
+   * The root folder absolute path of the project in development
+   * and of the distributables in production.
+   */
   readonly root: string;
+  /**
+   * The "/public" folder absolute path
+   * at runtime (dev or prod).
+   */
   readonly public: string;
+  /**
+   * The "/src-ssr/server-assets" folder absolute path
+   * at runtime (dev or prod).
+   */
   readonly serverAssets: string;
 }
 
 interface SsrCreateParams {
   /**
-   * Terminal PORT env var or the default configured port
-   * for the SSR webserver
+   * On dev: devServer port;
+   * On prod: process.env.PORT or quasar.config > ssr > prodPort
    */
   readonly port: number;
   /**
@@ -64,6 +79,9 @@ interface SsrCreateParams {
    */
   readonly devHttpsOptions?: HttpsServerOptions;
   readonly resolve: SsrMiddlewareResolve;
+  /**
+   * The configured quasar.config file > build > publicPath
+   */
   readonly publicPath: string;
   readonly folders: SsrMiddlewareFolders;
   /**
@@ -80,6 +98,9 @@ export type SsrCreateCallback = (
 ) => SsrDriverTypes["app"] | Promise<SsrDriverTypes["app"]>;
 
 interface SsrServeStaticContentParams extends SsrCreateParams {
+  /**
+   * Webserver app instance or whatever is returned from src-ssr/server -> create()
+   */
   readonly app: SsrDriverTypes["app"];
 }
 
@@ -121,10 +142,14 @@ type SsrRenderErrorFn = (params: {
 
 interface SsrMiddlewareServe {
   /**
-   * It's essentially a wrapper over express.static() with a few convenient tweaks:
+   * It's essentially a wrapper to serve static content with a few convenient tweaks:
    * - the pathToServe is a path resolved to the "public" folder out of the box
    * - the opts are the same as for express.static()
-   * - opts.maxAge is used by default, taking into account the quasar.config file > ssr > maxAge configuration; this sets how long the respective file(s) can live in browser's cache
+   * - opts.maxAge is used by default, taking into account the
+   *    quasar.config file > ssr > maxAge configuration;
+   *    this sets how long the respective file(s) can live in browser's cache
+   *
+   * The return value is whatever you return from by src-ssr/server -> serveStaticContent()
    */
   readonly static: SsrServeStaticFn;
   /**
