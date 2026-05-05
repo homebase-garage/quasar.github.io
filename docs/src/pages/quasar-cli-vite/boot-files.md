@@ -195,6 +195,10 @@ boot: [ctx.mode.electron ? 'some-file' : '']
 Please be mindful when redirecting as you might configure the app to go into an infinite redirect loop.
 :::
 
+::: warning
+Please remember to return from the function immediately after calling `redirect()`.
+:::
+
 ```js
 export default defineBoot(({ urlPath, redirect }) => {
   // ...
@@ -205,6 +209,21 @@ export default defineBoot(({ urlPath, redirect }) => {
   }
   // ...
 })
+```
+
+Here is the definition for it:
+
+```ts
+readonly redirect: (
+  url: string | RouteLocationRaw,
+  /**
+   * HTTP status code to use for the redirection.
+   * Only used in SSR mode.
+   *
+   * @default 302
+   */
+  httpStatusCode?: HttpRedirectStatusCode
+) => void;
 ```
 
 The `redirect()` method accepts a String (full URL) or a Vue Router location String or Object. On SSR it can receive a second parameter which should be a Number for any of the HTTP STATUS codes that redirect the browser (3xx ones).
@@ -251,37 +270,6 @@ redirect('/#/one') // WRONG!
 ```
 
 :::
-
-As it was mentioned in the previous sections, the default export of a boot file can return a Promise. If this Promise gets rejected with an Object that contains a "url" property, then Quasar CLI will redirect the user to that URL:
-
-```js
-export default defineBoot(({ urlPath }) => {
-  return new Promise((resolve, reject) => {
-    // ...
-    const isAuthorized = // ...
-    if (!isAuthorized && !urlPath.startsWith('/login')) {
-      // the "url" param here is of the same type
-      // as for "redirect" above
-      reject({ url: '/login' })
-      return
-    }
-    // ...
-  })
-})
-```
-
-Or a simpler equivalent:
-
-```js
-export default defineBoot(() => {
-  // ...
-  const isAuthorized = // ...
-  if (!isAuthorized && !urlPath.startsWith('/login')) {
-    return Promise.reject({ url: '/login' })
-  }
-  // ...
-})
-```
 
 ### Quasar App Flow
 

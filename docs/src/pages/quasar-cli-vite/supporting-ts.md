@@ -56,14 +56,19 @@ You might want to check the requirements for it [here](/quasar-cli-vite/linter).
 If you chose TypeScript support when scaffolding the project, the following declaration file was automatically scaffolded for you. If TypeScript support wasn't enabled during project creation, create it:
 
 ```ts /src/env.d.ts
-declare namespace NodeJS {
-  interface ProcessEnv {
-    NODE_ENV: string
-    VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined
-    VUE_ROUTER_BASE: string | undefined
-    // Define any custom env variables you have here, if you wish
-  }
-}
+/**
+ * Uncomment and add types for your custom environment
+ * variables to avoid TypeScript errors
+ * when using them via import.meta.env.VARIABLE_NAME
+ *
+ * Example:
+ *
+ * interface ImportMetaEnv {
+ *   readonly MY_VAR: string
+ *   readonly MY_OTHER_VAR: boolean
+ * }
+ */
+// interface ImportMetaEnv {}
 ```
 
 See the following sections for the features and build modes you are using.
@@ -90,81 +95,14 @@ declare module 'pinia' {
 }
 ```
 
-### PWA mode
+### Quasar modes
 
-If you are using [PWA mode](/quasar-cli-vite/developing-pwa/introduction), make the following modifications to your project, and create any files that do not exist:
+Please refer to:
 
-```ts /src-pwa/pwa-env.d.ts
-declare namespace NodeJS {
-  interface ProcessEnv {
-    SERVICE_WORKER_FILE: string
-    PWA_FALLBACK_HTML: string
-    PWA_SERVICE_WORKER_REGEX: string
-  }
-}
-```
-
-```ts /src-pwa/custom-sw.ts
-// at the top of the file
-declare const self: ServiceWorkerGlobalScope &
-  typeof globalThis & { skipWaiting: () => void }
-```
-
-```json /src-pwa/tsconfig.json
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "lib": ["WebWorker", "ESNext"]
-  },
-  "include": ["*.ts", "*.d.ts"]
-}
-```
-
-### Electron mode
-
-If you are using [Electron mode](/quasar-cli-vite/developing-electron-apps/introduction), add the section below to your project.
-
-```ts /src-electron/electron-env.d.ts
-declare namespace NodeJS {
-  interface ProcessEnv {
-    QUASAR_PUBLIC_FOLDER: string
-    QUASAR_ELECTRON_PRELOAD_FOLDER: string
-    QUASAR_ELECTRON_PRELOAD_EXTENSION: string
-    APP_URL: string
-  }
-}
-```
-
-### BEX mode
-
-If you are using [BEX mode](/quasar-cli-vite/developing-browser-extensions/introduction), add the section below to your project. You may need to adjust it to your needs depending on the events you are using. The key is the event name, the value is a tuple where the first element is the input and the second is the output type.
-
-```ts /src-bex/background.ts
-declare module '@quasar/app-vite' {
-  interface BexEventMap {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log: [{ message: string; data?: any[] }, never]
-    getTime: [never, number]
-
-    'storage.get': [{ key: string | null }, any]
-    'storage.set': [{ key: string; value: any }, any]
-    'storage.remove': [{ key: string }, any]
-    /* eslint-enable @typescript-eslint/no-explicit-any */
-  }
-}
-```
-
-You'll also need this in every content script file:
-
-```ts /src-bex/my-content-script.ts
-declare module '@quasar/app-vite' {
-  interface BexEventMap {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    'some.event': [{ someProp: string }, void]
-    /* eslint-enable @typescript-eslint/no-explicit-any */
-  }
-}
-```
+- [PWA with Typescript](/quasar-cli-vite/developing-pwa/pwa-with-typescript) page.
+- [Electron with Typescript](/quasar-cli-vite/developing-electron-apps/electron-with-typescript) page.
+- [BEX with Typescript](/quasar-cli-vite/developing-browser-extensions/bex-with-typescript) page.
+- [SSR with Typescript](/quasar-cli-vite/developing-ssr/ssr-with-typescript) page.
 
 ## Configuring TypeScript
 
