@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+import { LoadingBar, useQuasar } from 'quasar'
 import { computed, markRaw, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -109,43 +109,45 @@ function resetSearch() {
   activeId.value = null
 }
 
-let requestId = 0,
-  fetchTimer
+let controller
+let fetchTimer
 
 function fetchQuery(val, onResult, onError) {
-  const localRequestId = requestId
-  clearTimeout(fetchTimer)
+  controller = new AbortController()
+  const { signal } = controller
 
   fetchTimer = setTimeout(() => {
-    if (localRequestId !== requestId) return
+    if (signal.aborted) return
 
-    const xhr = new XMLHttpRequest()
-    const data = JSON.stringify({
-      q: val,
-      limit: 15,
-      cropLength: 50,
-      attributesToCrop: ['content'],
-      attributesToHighlight: ['content']
-    })
-
-    xhr.addEventListener('load', function onLoad() {
-      if (localRequestId === requestId) onResult(JSON.parse(this.responseText))
-    })
-
-    xhr.addEventListener('error', () => {
-      if (localRequestId === requestId) onError()
-    })
-
-    xhr.open(
-      'POST',
-      `https://search.quasar.dev/indexes/${import.meta.env.SEARCH_INDEX}/search`
+    LoadingBar.start()
+    fetch(
+      `https://search.quasar.dev/indexes/${import.meta.env.SEARCH_INDEX}/search`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer b7a6ea9a9978a4e4d994c1f9451210327f207441adbcf04a4aada3d17d829359'
+        },
+        body: JSON.stringify({
+          q: val,
+          limit: 15,
+          cropLength: 50,
+          attributesToCrop: ['content'],
+          attributesToHighlight: ['content']
+        })
+      }
     )
-    xhr.setRequestHeader('Content-Type', 'application/json')
-    xhr.setRequestHeader(
-      'Authorization',
-      'Bearer b7a6ea9a9978a4e4d994c1f9451210327f207441adbcf04a4aada3d17d829359'
-    )
-    xhr.send(data)
+      .then(res => res.json())
+      .then(data => {
+        if (!signal.aborted) onResult(data)
+      })
+      .catch(() => {
+        if (!signal.aborted) onError()
+      })
+      .finally(() => {
+        if (!signal.aborted) LoadingBar.stop()
+      })
   }, 400)
 }
 
@@ -294,7 +296,9 @@ function onResultError() {
 }
 
 watch(terms, val => {
-  requestId++
+  clearTimeout(fetchTimer)
+  controller?.abort()
+  controller = null
 
   if (!val) {
     resetSearch()
