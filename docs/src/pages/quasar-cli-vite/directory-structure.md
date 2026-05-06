@@ -5,8 +5,8 @@ scope:
   tree:
     l: '.'
     c:
-      - l: public
-        e: Pure static assets (directly copied)
+      - l: public/
+        e: Pure static assets (copied as-is)
         url: '/quasar-cli-vite/handling-assets#static-assets-public'
       - l: src
         c:
@@ -50,6 +50,8 @@ scope:
               - l: '<store>...'
           - l: App.vue
             e: Root Vue component of your App
+          - l: env.d.ts
+            e: Typescript only
       - l: src-ssr/
         e: SSR specific code (like production Node.js webserver)
         url: '/quasar-cli-vite/developing-ssr/introduction'
