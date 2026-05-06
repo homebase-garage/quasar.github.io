@@ -147,7 +147,7 @@
     "typescript": "^5.9.3",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "workbox-build": "^7.4.0"
+    "workbox-build": "^7.4.1"
   },
   "peerDependencies": {
     "@electron/packager": ">= 19",

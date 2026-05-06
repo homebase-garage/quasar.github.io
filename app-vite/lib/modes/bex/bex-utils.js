@@ -42,13 +42,13 @@ export function createManifest(quasarConf) {
   }
 
   if (json.manifest_version === 2) {
-    json.browser_action = json.browser_action || {}
+    json.browser_action ||= {}
 
     if (json.browser_action.default_title === void 0) {
       json.browser_action.default_title = json.name
     }
   } else if (json.manifest_version === 3) {
-    json.action = json.action || {}
+    json.action ||= {}
     if (json.action.default_title === void 0) {
       json.action.default_title = json.name
     }

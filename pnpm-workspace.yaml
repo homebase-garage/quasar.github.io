@@ -18,7 +18,7 @@ packages:
 # - icongenie
 
 catalog:
-  vue: ^3.5.33
+  vue: ^3.5.34
   vue-router: ^5.0.6
 
 onlyBuiltDependencies:

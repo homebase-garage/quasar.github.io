@@ -31,12 +31,12 @@ if (cmd === 'create') {
   const { getPackagePath } = await import('../lib/get-package-path.js')
 
   const localFile =
-    appPaths.appDir !== void 0
-      ? getPackagePath('@quasar/app-vite/bin/quasar') || // Quasar 2.0
+    appPaths.appDir === void 0
+      ? void 0
+      : getPackagePath('@quasar/app-vite/bin/quasar') || // Quasar 2.0
         getPackagePath('@quasar/app-webpack/bin/quasar') || // Quasar 2.0
         getPackagePath('@quasar/app/bin/quasar') || // legacy Quasar 1.0 & partial Quasar 2.0
         getPackagePath('quasar-cli/bin/quasar') // legacy Quasar <1.0
-      : void 0
 
   if (localFile) {
     process.env.QUASAR_CLI_VERSION = cliPkg.version

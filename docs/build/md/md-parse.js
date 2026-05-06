@@ -25,7 +25,7 @@ export default function mdParse(code, id) {
   const { data: frontMatter, content } = parseFrontMatter(code)
 
   frontMatter.id = id
-  frontMatter.title = frontMatter.title || 'Generic Page'
+  frontMatter.title ||= 'Generic Page'
 
   if (frontMatter.related !== void 0) {
     frontMatter.related = frontMatter.related.map(entry =>

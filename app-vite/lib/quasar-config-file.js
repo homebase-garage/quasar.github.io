@@ -1108,7 +1108,7 @@ export class QuasarConfigFile {
     })
 
     // make sure we have preFetch in config
-    cfg.preFetch = cfg.preFetch || false
+    cfg.preFetch ||= false
 
     if (
       this.#ctx.mode.capacitor &

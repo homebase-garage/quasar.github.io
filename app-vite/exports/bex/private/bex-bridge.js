@@ -209,7 +209,7 @@ export class BexBridge {
       return
     }
 
-    const target = this.listeners[event] || (this.listeners[event] = [])
+    const target = (this.listeners[event] ||= [])
     target.push({ type: 'on', callback })
     this.log(`Added a listener for event: "${event}".`)
   }
@@ -229,7 +229,7 @@ export class BexBridge {
       return
     }
 
-    const target = this.listeners[event] || (this.listeners[event] = [])
+    const target = (this.listeners[event] ||= [])
     target.push({ type: 'once', callback })
     this.log(`Added a one-time listener for event: "${event}".`)
   }

@@ -308,7 +308,7 @@ const info = [
   .map(
     msg =>
       ' ' +
-      (msg[0] !== '' ? msg[0].padEnd(20, '.') : filler) +
+      (msg[0] === '' ? filler : msg[0].padEnd(20, '.')) +
       ' ' +
       green(msg[1])
   )

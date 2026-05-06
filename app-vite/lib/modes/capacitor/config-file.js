@@ -72,7 +72,7 @@ export class CapacitorConfigFile {
     }
 
     if (quasarConf.ctx.dev) {
-      capJson.server = capJson.server || {}
+      capJson.server ||= {}
       capJson.server.url = quasarConf.metaConf.APP_URL
       if (target === 'android') {
         capJson.server.cleartext = true

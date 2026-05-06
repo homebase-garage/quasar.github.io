@@ -1,3 +1,5 @@
+// oxlint-disable no-eq-null
+
 export function isDeepEqual(a, b) {
   if (a === b) return true
 
@@ -66,7 +68,7 @@ export function isDeepEqual(a, b) {
       return true
     }
 
-    // oxlint-disable-next-line eqeqeq no-eq-null
+    // oxlint-disable-next-line eqeqeq
     if (a.buffer != null && a.buffer.constructor === ArrayBuffer) {
       length = a.length
 

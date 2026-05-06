@@ -148,10 +148,10 @@ function getGitUser() {
     email = exec('git config --get user.email')
   } catch {}
 
-  name = name && JSON.stringify(name.toString().trim()).slice(1, -1)
-  email = email && ' <' + email.toString().trim() + '>'
-
-  return (name || '') + (email || '')
+  return (
+    (name ? JSON.stringify(name.toString().trim()).slice(1, -1) : '') +
+    (email ? ' <' + email.toString().trim() + '>' : '')
+  )
 }
 
 /**

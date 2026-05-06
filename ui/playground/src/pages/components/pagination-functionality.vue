@@ -265,6 +265,7 @@ export default {
   },
 
   computed: {
+    // oxlint-disable-next-line vue/return-in-computed-property
     toFn() {
       if (this.useToFn && !this.inputType) {
         return page => ({ query: { page } })

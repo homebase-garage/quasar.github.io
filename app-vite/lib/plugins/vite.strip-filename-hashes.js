@@ -22,9 +22,8 @@ export function quasarViteStripFilenameHashesPlugin() {
     enforce: 'post',
 
     config: viteConf => {
-      viteConf.build.rolldownOptions = viteConf.build.rolldownOptions || {}
-      viteConf.build.rolldownOptions.output =
-        viteConf.build.rolldownOptions.output || {}
+      viteConf.build.rolldownOptions ||= {}
+      viteConf.build.rolldownOptions.output ||= {}
 
       const target = viteConf.build.rolldownOptions.output
       const assetsDir = (viteConf.build.assetsDir || 'assets') + '/'

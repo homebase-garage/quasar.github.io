@@ -38,7 +38,7 @@ export async function createQuasarScript({ scope, utils }) {
 
   // ensure it's defined since if not selecting ESLint,
   // user won't be asked about it hence it won't be defined
-  scope.prettier = scope.prettier || false
+  scope.prettier ||= false
 
   utils.createTargetDir(scope)
   utils.renderTemplate('BASE', scope)

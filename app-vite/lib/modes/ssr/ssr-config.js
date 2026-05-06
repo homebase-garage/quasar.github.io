@@ -53,7 +53,7 @@ export const quasarSsrConfig = {
 
     // dev has js entry-point, while prod has index.html
     if (quasarConf.ctx.dev) {
-      cfg.build.rolldownOptions = cfg.build.rolldownOptions || {}
+      cfg.build.rolldownOptions ||= {}
       cfg.build.rolldownOptions.input =
         appPaths.resolve.entry('client-entry.js')
     }

@@ -9,7 +9,7 @@ export default class EventBus {
   }
 
   on(name, callback, ctx) {
-    ;(this.__stack[name] || (this.__stack[name] = [])).push({
+    ;(this.__stack[name] ||= []).push({
       fn: callback,
       ctx
     })

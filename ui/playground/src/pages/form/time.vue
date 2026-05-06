@@ -195,6 +195,7 @@ export default {
       if (this.fullWidth) {
         return 'width: 100%;'
       }
+      return null
     }
   },
 

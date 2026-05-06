@@ -151,12 +151,14 @@ export default {
           ? 'fixed-top-left'
           : 'absolute-top-left'
       }
+      return null
     },
 
     card1Class() {
       if (this.card1Position !== null) {
         return this.card1Position === true ? 'fixed-bottom' : 'absolute-bottom'
       }
+      return null
     },
 
     div2Text() {

@@ -161,7 +161,9 @@
     "sort-vars": "off",
     "import/max-dependencies": "off",
     "unicorn/no-array-callback-reference": "off",
-    "unicorn/prefer-query-selector": "off"
+    "unicorn/prefer-query-selector": "off",
+    "require-unicode-regexp": "off",
+    "unicorn/no-negated-condition": "off"
   },
 
   "overrides": [

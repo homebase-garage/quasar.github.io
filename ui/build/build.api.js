@@ -611,9 +611,9 @@ function getApiWithMixins(api, mainFile) {
 
     api = merge(
       {},
-      content.mixins !== void 0
-        ? getApiWithMixins(content, mixinFile)
-        : content,
+      content.mixins === void 0
+        ? content
+        : getApiWithMixins(content, mixinFile),
       api
     )
   })
@@ -876,7 +876,7 @@ function parseObject({
           (obj.definition !== void 0 || obj.values !== void 0)
         ) {
           const matchedProp =
-            obj.definition !== void 0 ? 'definition' : 'values'
+            obj.definition === void 0 ? 'values' : 'definition'
 
           printErrorAndExit(
             `"examples" is not needed because there is "${matchedProp}"; remove it`
