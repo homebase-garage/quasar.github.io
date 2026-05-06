@@ -30,11 +30,14 @@ import { Quasar } from 'quasar'
 import { markRaw } from 'vue'
 import <%= quasarConf.metaConf.needsAppMountHook ? 'AppComponent' : 'RootComponent' %> from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
 
-<% if (quasarConf.metaConf.hasStore) { %>import createStore from 'app/<%= quasarConf.sourceFiles.store %>'<% } %>
+<% if (quasarConf.metaConf.hasStore) { %>
+import createStore from 'app/<%= quasarConf.sourceFiles.store %>'
+<% } %>
 import createRouter from 'app/<%= quasarConf.sourceFiles.router %>'
 
 <% if (quasarConf.metaConf.needsAppMountHook) { %>
 import { defineComponent, h, onMounted<%= quasarConf.ctx.mode.ssr && quasarConf.ssr.manualPostHydrationTrigger !== true ? ', getCurrentInstance' : '' %> } from 'vue'
+
 const RootComponent = defineComponent({
   name: 'AppWrapper',
   setup (props) {
