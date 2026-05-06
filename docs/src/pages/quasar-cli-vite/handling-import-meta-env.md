@@ -200,6 +200,8 @@ You will need to provide type definitions for your defines. Depending on where y
 - ...and so on for each Quasar CLI Mode
 
 ```ts Example with /src/env.d.ts
+/// <reference types="@quasar/app-vite/client" />
+
 /**
  * Add types for your custom environment
  * variables to avoid TypeScript errors

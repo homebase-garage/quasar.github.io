@@ -1,3 +1,5 @@
+/// <reference types="@quasar/app-vite/client" />
+
 /**
  * Uncomment and add types for your custom environment
  * variables to avoid TypeScript errors

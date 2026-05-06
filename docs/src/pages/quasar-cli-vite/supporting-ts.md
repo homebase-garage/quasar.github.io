@@ -56,6 +56,8 @@ You might want to check the requirements for it [here](/quasar-cli-vite/linter).
 If you chose TypeScript support when scaffolding the project, the following declaration file was automatically scaffolded for you. If TypeScript support wasn't enabled during project creation, create it:
 
 ```ts /src/env.d.ts
+/// <reference types="@quasar/app-vite/client" />
+
 /**
  * Uncomment and add types for your custom environment
  * variables to avoid TypeScript errors
