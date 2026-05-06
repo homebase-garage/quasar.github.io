@@ -7,12 +7,17 @@ export async function createQuasarScript({ scope, utils }) {
       initial: 0,
       choices: [
         {
-          title: 'Quasar App CLI with Vite',
-          value: 'vite-2',
+          title: '@quasar/app-vite v3 beta',
+          value: 'vite-3',
           description: 'recommended'
         },
         {
-          title: 'Quasar App CLI with Webpack',
+          title: '@quasar/app-vite v2',
+          value: 'vite-2',
+          description: 'deprecated'
+        },
+        {
+          title: '@quasar/app-webpack v4',
           value: 'webpack-4',
           description: 'deprecated'
         }

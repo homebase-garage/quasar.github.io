@@ -1,6 +1,6 @@
 {
   "name": "@quasar/app-vite",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "description": "Quasar Framework App CLI with Vite",
   "keywords": [
     "cli",
@@ -87,6 +87,11 @@
     "./electron/preload": {
       "types": "./types/electron/preload-runtime.d.ts",
       "import": "./exports/electron/preload-runtime.js"
+    },
+    "./eslint": {
+      "require": "./exports/eslint/eslint.cjs",
+      "node": "./exports/eslint/eslint.js",
+      "import": "./exports/eslint/eslint.js"
     },
     "./lib/testing.js": {
       "import": "./exports/testing/testing.js"
