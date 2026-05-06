@@ -57,8 +57,6 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       // vueDevtools,
       // vueOptionsAPI: false,
 
-      // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-
       // publicPath: '/',
       // analyze: true,
       // env: {},
