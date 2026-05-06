@@ -484,8 +484,8 @@ importers:
   utils/render-ssr-error:
     dependencies:
       stack-trace:
-        specifier: ^1.0.0-pre2
-        version: 1.0.0-pre2
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@quasar/extras':
         specifier: workspace:*
@@ -5295,9 +5295,9 @@ packages:
   sprintf-js@1.1.3:
     resolution: {integrity: sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==}
 
-  stack-trace@1.0.0-pre2:
-    resolution: {integrity: sha512-2ztBJRek8IVofG9DBJqdy2N5kulaacX30Nz7xmkYF6ale9WBVmIy6mFBchvGX7Vx/MyjBhx+Rcxqrj+dbOnQ6A==}
-    engines: {node: '>=16'}
+  stack-trace@1.0.0:
+    resolution: {integrity: sha512-H6D7134xi6qONvh7ZHKgviXf+rd3vhGBSvebPZCaUkd8zvQ+7PtDw6CljPTe4cXWNf2IKZGNqw6VJXSb9IgBpA==}
+    engines: {node: '>=20.0.0'}
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
@@ -10998,7 +10998,7 @@ snapshots:
   sprintf-js@1.1.3:
     optional: true
 
-  stack-trace@1.0.0-pre2: {}
+  stack-trace@1.0.0: {}
 
   stackback@0.0.2: {}
 

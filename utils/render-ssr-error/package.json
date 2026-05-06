@@ -1,6 +1,6 @@
 {
   "name": "@quasar/render-ssr-error",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Renders SSR errors for Quasar CLI",
   "homepage": "https://quasar.dev",
   "bugs": "https://github.com/quasarframework/quasar/issues",
@@ -33,7 +33,7 @@
     "build:package": "node ./build/index.js"
   },
   "dependencies": {
-    "stack-trace": "^1.0.0-pre2"
+    "stack-trace": "^1.0.0"
   },
   "devDependencies": {
     "@quasar/extras": "workspace:*",
