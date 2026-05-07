@@ -243,9 +243,7 @@ export default createComponent({
 
     function stop() {
       sessions = Math.max(0, sessions - 1)
-      if (sessions > 0) {
-        return sessions
-      }
+      if (sessions > 0) return sessions
 
       if (timer !== null) {
         clearTimeout(timer)
