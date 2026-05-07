@@ -26,7 +26,7 @@
     "utils/render-ssr-error/compiled-assets/"
   ],
 
-  "plugins": ["vue", "import", "eslint", "promise", "vue", "unicorn"],
+  "plugins": ["vue", "import", "eslint", "promise", "unicorn"],
 
   "categories": {
     "style": "error",
