@@ -13,23 +13,34 @@ npm install
 ```bash
 quasar dev
 ```
-<% if (scope.preset.eslint) { %>
+<% if (scope.linter === 'oxlint') { %>
+
+### Format & Lint the files
+```bash
+yarn lint
+# or pnpm/npm/bun run lint
+```
+
+...or just check formatting & linting:
+
+```bash
+yarn run lint:check
+# or pnpm/npm/bun run lint:check
+```
+<% } else if (scope.linter === 'eslint') { %>
 
 ### Lint the files
 ```bash
 yarn lint
-# or
-npm run lint
+# or pnpm/npm/bun run lint
 ```
-<% if (scope.prettier) { %>
 
 ### Format the files
 ```bash
-yarn format
-# or
-npm run format
+yarn run format
+# or pnpm/npm/bun run format
 ```
-<% } } %>
+<% } %>
 
 ### Build the app for production
 ```bash

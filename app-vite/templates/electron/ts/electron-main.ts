@@ -3,7 +3,7 @@ import path from "node:path";
 import os from "node:os";
 import {
   registerQuasarRuntime,
-  resolveElectronAssetsPath,
+  resolveElectronAssetsPath
 } from "#q-app/electron/main";
 
 // needed in case process is undefined under Linux

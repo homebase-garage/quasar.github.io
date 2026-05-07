@@ -171,7 +171,10 @@ if (scope.skipDepsInstall !== true) {
       process.exit(0)
     }
 
-    if (scope.preset.lint) {
+    if (
+      scope.linter === 'oxlint' ||
+      scope.preset.lint // legacy eslint
+    ) {
       try {
         await utils.lintFolder(scope)
       } catch {
@@ -179,6 +182,7 @@ if (scope.skipDepsInstall !== true) {
       }
     }
 
+    // legacy eslint + prettier
     if (scope.prettier) {
       try {
         await utils.formatFolder(scope)

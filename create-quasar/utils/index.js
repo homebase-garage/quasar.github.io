@@ -226,9 +226,11 @@ function installDeps(scope) {
 function lintFolder(scope) {
   return runCommand(
     scope.packageManager,
-    scope.packageManager === 'npm'
-      ? ['run', 'lint', '--', '--fix']
-      : ['run', 'lint', '--fix'],
+    scope.linter === 'oxlint'
+      ? ['run', 'lint']
+      : scope.packageManager === 'npm'
+        ? ['run', 'lint', '--', '--fix']
+        : ['run', 'lint', '--fix'],
     { cwd: scope.projectFolder }
   )
 }

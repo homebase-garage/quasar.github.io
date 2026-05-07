@@ -11,8 +11,8 @@ export async function createQuasarScript({ scope, utils }) {
           selected: true
         },
         {
-          title: 'Linting (vite-plugin-checker + ESLint + vue-tsc)',
-          value: 'eslint',
+          title: 'Linting & Formatting (oxlint + oxfmt or ESLint + prettier)',
+          value: 'linting',
           description: 'recommended',
           selected: true
         },
@@ -29,16 +29,23 @@ export async function createQuasarScript({ scope, utils }) {
       format: utils.convertArrayToObject
     },
     {
-      type: (_, { preset }) => (preset.eslint ? 'confirm' : null),
-      name: 'prettier',
-      initial: true,
-      message: 'Add Prettier for code formatting?'
+      type: (_, { preset }) => (preset.linting ? 'select' : null),
+      name: 'linter',
+      message: 'Project linter & formatter:',
+      choices: [
+        {
+          title: 'oxlint + oxfmt',
+          value: 'oxlint',
+          description:
+            'recommended (but full .vue support is still in progress)'
+        },
+        {
+          title: 'ESLint + vite-plugin-checker + prettier',
+          value: 'eslint'
+        }
+      ]
     }
   ])
-
-  // ensure it's defined since if not selecting ESLint,
-  // user won't be asked about it hence it won't be defined
-  scope.prettier ||= false
 
   utils.createTargetDir(scope)
   utils.renderTemplate('BASE', scope)
@@ -47,7 +54,8 @@ export async function createQuasarScript({ scope, utils }) {
   utils.renderTemplate(css, scope)
 
   if (scope.preset.i18n) utils.renderTemplate('i18n', scope)
-  if (scope.preset.eslint) utils.renderTemplate('eslint', scope)
-  if (scope.prettier) utils.renderTemplate('prettier', scope)
   if (scope.preset.pinia) utils.renderTemplate('pinia', scope)
+
+  if (scope.linter === 'oxlint') utils.renderTemplate('oxlint', scope)
+  else if (scope.linter === 'eslint') utils.renderTemplate('eslint', scope)
 }
