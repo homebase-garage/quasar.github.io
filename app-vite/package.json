@@ -147,7 +147,6 @@
   "devDependencies": {
     "pinia": "^3.0.4",
     "quasar": "workspace:^",
-    "typescript": "^6.0.3",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },

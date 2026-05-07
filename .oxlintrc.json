@@ -6,6 +6,8 @@
     "**/.quasar/",
 
     "app-vite/templates/",
+    "app-vite/types/client/",
+    "app-vite/types/globals.d.ts",
 
     "create-quasar/templates/",
     "!create-quasar/templates/**/create-quasar-script.js",
@@ -22,9 +24,17 @@
 
     "ui/icon-set/svg-*.js",
     "ui/lang/index.json",
+    "ui/types/shim-icon-set.d.ts",
+    "ui/types/shim-lang.d.ts",
 
     "utils/render-ssr-error/compiled-assets/"
   ],
+
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "maxWarnings": 10
+  },
 
   "plugins": ["vue", "import", "eslint", "promise", "unicorn"],
 
