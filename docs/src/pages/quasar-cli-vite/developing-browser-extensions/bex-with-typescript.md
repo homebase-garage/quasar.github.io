@@ -60,8 +60,8 @@ declare module '@quasar/app-vite' {
     getTime: [never, number];
 
     'storage.get': [string | undefined, any];
-    'storage.set': [{ key: string; value: any }, void];
-    'storage.remove': [string, void];
+    'storage.set': [{ key: string; value: any }, Promise<void>];
+    'storage.remove': [string, Promise<void>];
   }
 }
 
