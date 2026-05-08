@@ -1,6 +1,4 @@
 import { join } from 'node:path'
-
-import { mergeConfig } from 'vite'
 import { defineConfig } from '#q-app'
 
 const rootFolder = import.meta.dirname
@@ -43,16 +41,14 @@ export default defineConfig(ctx => ({
     // vitePlugins: [],
 
     extendViteConf(viteConf, { isServer }) {
-      viteConf.server = mergeConfig(viteConf.server, {
-        fs: {
-          allow: [
-            // for quasar package (ui folder) and related deps
-            '..',
-            // due to workspace hoisting, some deps might come from the root node_modules
-            '../..'
-          ]
-        }
-      })
+      viteConf.server.fs ||= {}
+      viteConf.server.fs.allow ||= []
+      viteConf.server.fs.allow.push(
+        // for quasar package (ui folder) and related deps
+        '..',
+        // due to workspace hoisting, some deps might come from the root node_modules
+        '../..'
+      )
 
       if (isServer) {
         viteConf.resolve.alias.quasar = resolve('../src/index.ssr.js')

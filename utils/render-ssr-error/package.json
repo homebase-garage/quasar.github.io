@@ -38,6 +38,7 @@
   "devDependencies": {
     "@quasar/extras": "workspace:*",
     "@quasar/vite-plugin": "workspace:^",
+    "@vitejs/plugin-vue": "^6.0.6",
     "prismjs": "^1.29.0",
     "quasar": "workspace:*",
     "vite": "^8.0.11",

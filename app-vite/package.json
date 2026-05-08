@@ -145,6 +145,7 @@
     "webpack-merge": "^6.0.1"
   },
   "devDependencies": {
+    "@quasar/extras": "workspace:*",
     "pinia": "^3.0.4",
     "quasar": "workspace:^",
     "vue": "catalog:",
@@ -152,6 +153,7 @@
   },
   "peerDependencies": {
     "@electron/packager": ">= 19",
+    "builder-util": ">= 26",
     "electron-builder": ">= 22",
     "pinia": "^2.0.0 || ^3.0.0",
     "quasar": "^2.16.0",
