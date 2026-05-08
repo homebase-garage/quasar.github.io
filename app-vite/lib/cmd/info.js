@@ -26,6 +26,7 @@ if (argv.help) {
 }
 
 import os from 'node:os'
+import { existsSync } from 'node:fs'
 import { sync as spawnSync } from 'cross-spawn'
 
 import { getCtx } from '../utils/get-ctx.js'
@@ -70,7 +71,7 @@ print({
   value: green(`${os.type()}(${os.release()}) - ${os.platform()}/${os.arch()}`),
   section: true
 })
-print({ key: 'NodeJs', value: green(process.version.slice(1)) })
+print({ key: 'Node.js', value: green(process.version.slice(1)) })
 print({ key: 'Global packages', section: true })
 print({ key: '  NPM', value: getSpawnOutput('npm') })
 print({ key: '  yarn', value: getSpawnOutput('yarn') })
@@ -94,20 +95,26 @@ print({ key: 'Important local packages', section: true })
   'typescript'
 ].forEach(pkg => print(safePkgInfo(pkg, appPaths.appDir)))
 
-;['workbox-build', 'register-service-worker'].forEach(pkg =>
-  print(safePkgInfo(pkg, appPaths.pwaDir))
-)
+if (existsSync(appPaths.pwaDir)) {
+  ;['workbox-build', 'register-service-worker'].forEach(pkg =>
+    print(safePkgInfo(pkg, appPaths.pwaDir))
+  )
+}
 
-;['electron', '@electron/packager', 'electron-builder'].forEach(pkg =>
-  print(safePkgInfo(pkg, appPaths.electronDir))
-)
+if (existsSync(appPaths.electronDir)) {
+  ;['electron', '@electron/packager', 'electron-builder'].forEach(pkg =>
+    print(safePkgInfo(pkg, appPaths.electronDir))
+  )
+}
 
-;[
-  '@capacitor/core',
-  '@capacitor/cli',
-  '@capacitor/android',
-  '@capacitor/ios'
-].forEach(pkg => print(safePkgInfo(pkg, appPaths.capacitorDir)))
+if (existsSync(appPaths.capacitorDir)) {
+  ;[
+    '@capacitor/core',
+    '@capacitor/cli',
+    '@capacitor/android',
+    '@capacitor/ios'
+  ].forEach(pkg => print(safePkgInfo(pkg, appPaths.capacitorDir)))
+}
 
 print({ key: 'Quasar App Extensions', section: true })
 
@@ -118,16 +125,5 @@ if (extensionList.length !== 0) {
 } else {
   print({ key: '  *None installed*' })
 }
-
-print({ key: 'Networking', section: true })
-print({ key: '  Host', value: green(os.hostname()) })
-
-import { getExternalNetworkInterface } from '../utils/net.js'
-getExternalNetworkInterface().forEach(intf => {
-  print({
-    key: `  ${intf.deviceName}`,
-    value: green(intf.address)
-  })
-})
 
 console.log()
