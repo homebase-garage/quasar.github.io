@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 interface ImportMetaEnv {
   readonly QUASAR_DEV: boolean;
   readonly QUASAR_PROD: boolean;
