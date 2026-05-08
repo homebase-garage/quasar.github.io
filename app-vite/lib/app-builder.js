@@ -32,28 +32,9 @@ export class AppBuilder extends AppTool {
   copyFiles(patterns, targetFolder = this.quasarConf.build.distDir) {
     patterns.forEach(entry => {
       const from = this.ctx.appPaths.resolve.app(entry.from)
-      if (!fse.existsSync(from)) return
-
-      const to = join(targetFolder, entry.to, basename(from))
-      if (entry.from !== '.npmrc') {
-        fse.copySync(from, to)
-        return
+      if (fse.existsSync(from)) {
+        fse.copySync(from, join(targetFolder, entry.to, basename(from)))
       }
-
-      // handle .npmrc separately
-      let content = this.readFile(from)
-
-      if (!content.includes('shamefully-hoist')) {
-        content += '\n# needed by pnpm\nshamefully-hoist=true'
-      }
-      // very important, otherwise PNPM creates symlinks which is NOT
-      // what we want for an Electron app that should run cross-platform
-      if (!content.includes('node-linker')) {
-        content +=
-          '\n# pnpm needs this otherwise it creates symlinks\nnode-linker=hoisted'
-      }
-
-      this.writeFile(to, content)
     })
   }
 

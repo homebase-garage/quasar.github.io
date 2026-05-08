@@ -85,7 +85,8 @@ export class QuasarModeBuilder extends AppBuilder {
       '.yarnrc',
       'package-lock.json',
       'yarn.lock',
-      'src-electron/electron-assets'
+      'src-electron/electron-assets',
+      'src-electron/pnpm-workspace.yaml'
       // pnpm-lock.yaml & bun.lockb should be ignored since
       // it errors out with devDeps in package.json
       // (error: lockfile has changes, but lockfile is frozen)

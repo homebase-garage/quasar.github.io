@@ -164,12 +164,15 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #copyWebserverFiles() {
-    const patterns = ['.npmrc', '.yarnrc', 'src-ssr/server-assets'].map(
-      filename => ({
-        from: filename,
-        to: '.'
-      })
-    )
+    const patterns = [
+      '.npmrc',
+      '.yarnrc',
+      'src-ssr/server-assets',
+      'src-ssr/pnpm-workspace.yaml'
+    ].map(filename => ({
+      from: filename,
+      to: '.'
+    }))
 
     this.copyFiles(patterns)
   }
