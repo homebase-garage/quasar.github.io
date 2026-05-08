@@ -1,15 +1,219 @@
 ---
-title: Linter
-desc: (@quasar/app-vite) How to configure a code linter in a Quasar app.
+title: Lint and Format Code
+desc: (@quasar/app-vite) How to configure a code linter and a formatter in a Quasar app.
 ---
+
+## Oxlint + Oxfmt
+
+[Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) are next-generation, Rust-based tools from the [Oxc](https://oxc.rs) (JavaScript Oxidation Compiler) ecosystem, designed to replace traditional JavaScript/TypeScript linters and formatters with a heavy emphasis on speed and developer experience.
+
+### Installation
+
+```tabs
+<<| bash Yarn |>>
+$ yarn add --dev oxlint oxfmt
+<<| bash NPM |>>
+$ npm install --save-dev oxlint oxfmt
+<<| bash PNPM |>>
+$ pnpm add -D oxlint oxfmt
+<<| bash Bun |>>
+$ bun add --dev oxlint oxfmt
+```
+
+For Typescript projects, you will need to use Typescript 7 and install additional dependencies:
+
+```json Typescript only: /package.json
+{
+  "devDependencies": {
+    "oxlint-tsgolint": "^0.x",
+    "typescript": "npm:@typescript/typescript6@^6.0.0"
+  }
+}
+```
+
+### Package.json scripts
+
+```json /package.json
+"scripts": {
+  "lint": "oxfmt && oxlint --fix",
+  "lint:check": "oxfmt --check && oxlint",
+}
+```
+
+### Configuration files
+
+Create the following files:
+
+```tabs oxlint configuration
+<<| json JS projects: /.oxlintrc.json |>>
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+
+  "ignorePatterns": [
+    "**/node_modules/",
+    "dist/",
+    "quasar.config.*.temporary.compiled*",
+    ".quasar/",
+    "src-cordova/",
+    "src-capacitor/"
+  ],
+
+  "options": {
+    "maxWarnings": 10
+  },
+
+  "plugins": ["vue", "import", "eslint", "promise", "unicorn"],
+
+  "categories": {
+    "correctness": "error"
+    // "style": "error",
+    // "pedantic": "warn",
+    // "suspicious": "error",
+    // "perf": "error",
+    // "restriction": "error"
+  },
+
+  "rules": {},
+
+  "env": {
+    "builtin": true
+  }
+}
+<<| ts Typescript projects: /oxlint.config.ts |>>
+import { defineConfig } from 'oxlint'
+
+export default defineConfig({
+  $schema: './node_modules/oxlint/configuration_schema.json',
+
+  ignorePatterns: [
+    '**/node_modules/',
+    'dist/',
+    'quasar.config.*.temporary.compiled*',
+    '.quasar/',
+    'src-cordova/',
+    'src-capacitor/'
+  ],
+
+  options: {
+    typeAware: true,
+    typeCheck: true,
+    maxWarnings: 10
+  },
+
+  plugins: ['typescript', 'vue', 'import', 'eslint', 'promise', 'unicorn'],
+
+  categories: {
+    correctness: 'error'
+    // style: 'error',
+    // pedantic: 'warn',
+    // suspicious: 'error',
+    // perf: 'error',
+    // restriction: 'error'
+  },
+
+  rules: {},
+
+  env: {
+    builtin: true
+  }
+})
+```
+
+```tabs oxfmt configuration
+<<| json JS projects: /.oxfmtrc.json |>>
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+
+  "ignorePatterns": [
+    "**/node_modules/",
+    "dist/",
+    "quasar.config.*.temporary.compiled*",
+    ".quasar/",
+    "src-cordova/",
+    "src-capacitor/"
+  ],
+
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "htmlWhitespaceSensitivity": "strict",
+  "semi": false,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "trailingComma": "none",
+  "useTabs": false,
+  "vueIndentScriptAndStyle": false
+}
+<<| ts Typescript projects: /oxfmt.config.ts |>>
+import { defineConfig } from 'oxfmt'
+
+export default defineConfig({
+  $schema: './node_modules/oxfmt/configuration_schema.json',
+
+  ignorePatterns: [
+    '**/node_modules/',
+    'dist/',
+    'quasar.config.*.temporary.compiled*',
+    '.quasar/',
+    'src-cordova/',
+    'src-capacitor/'
+  ],
+
+  printWidth: 80,
+  arrowParens: 'avoid',
+  bracketSpacing: true,
+  bracketSameLine: false,
+  htmlWhitespaceSensitivity: 'strict',
+  semi: true,
+  singleQuote: false,
+  quoteProps: 'as-needed',
+  trailingComma: 'none',
+  useTabs: false,
+  vueIndentScriptAndStyle: false
+})
+```
+
+### VSCode configuration
+
+```tabs /.vscode/settings.json
+<<| json Javascript |>>
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+  "oxc.fmt.configPath": ".oxfmtrc.json",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true
+}
+<<| json Typescript |>>
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  },
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true
+}
+```
+
+Play nice with other devs using your project and recommend them to install the appropriate extension. And don't forget to install it yourself too:
+
+```json /.vscode/extensions.json
+{
+  "recommendations": ["oxc.oxc-vscode"]
+}
+```
+
+## ESLint + Prettier
 
 Having a code linter (like [ESLint v9+](https://eslint.org/)) in place is highly recommended and ensures your code looks legible. It also helps you capture some errors before even running the code.
 
 When you scaffold a Quasar project folder it will ask you if you want ESLint (also prettier as a code formatter).
 
-## Javascript projects
+### Javascript projects
 
-### Needed dependencies
+#### Needed dependencies
 
 ```tabs
 <<| bash Yarn |>>
@@ -35,7 +239,7 @@ $ pnpm add -D prettier@3 @vue/eslint-config-prettier
 $ bun add --dev prettier@3 @vue/eslint-config-prettier
 ```
 
-### The quasar.config file settings
+#### The quasar.config file settings
 
 ```diff [highlight=3-8] /quasar.config file
 build: {
@@ -50,7 +254,7 @@ build: {
 }
 ```
 
-### The ESLint configuration
+#### The ESLint configuration
 
 ```js /eslint.config.js
 import js from '@eslint/js'
@@ -129,9 +333,9 @@ export default [
 ]
 ```
 
-## TypeScript projects
+### TypeScript projects
 
-### Dependencies
+#### Dependencies
 
 ```tabs
 <<| bash Yarn |>>
@@ -157,7 +361,7 @@ $ pnpm add -D prettier@3 @vue/eslint-config-prettier
 $ bun add --dev prettier@3 @vue/eslint-config-prettier
 ```
 
-### The quasar.config settings
+#### The quasar.config settings
 
 ```diff [highlight=3-9] /quasar.config file
 build: {
@@ -173,7 +377,7 @@ build: {
 }
 ```
 
-### ESLint configuration file
+#### ESLint configuration file
 
 ```js /eslint.config.js
 import js from '@eslint/js'
@@ -268,7 +472,7 @@ export default defineConfigWithVueTs(
 )
 ```
 
-## Performance and ignoring files
+### Performance and ignoring files
 
 ::: warning
 Please be sure to ignore unused files to increase performance. If you lint unused files/folders the UX will degrade significantly.
@@ -304,7 +508,7 @@ Notice that `pluginQuasar.configs.recommended()` from a few sections above will 
 ]
 ```
 
-## Lint Rules
+### Lint Rules
 
 The linting rules can be removed, changed, or added. Notice some things:
 

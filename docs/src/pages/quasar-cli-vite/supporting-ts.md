@@ -3,7 +3,7 @@ title: Supporting TypeScript
 desc: (@quasar/app-vite) How to enable support for TypeScript in a Quasar app.
 related:
   - /quasar-cli-vite/quasar-config-file
-  - /quasar-cli-vite/linter
+  - /quasar-cli-vite/lint-and-format-code
 ---
 
 If you didn't select TypeScript support when creating your project, you can still add it later. This guide will show you how to add TypeScript support to your existing JavaScript-based Quasar project.
@@ -49,7 +49,7 @@ If you forget to add the `tsconfig.json` file, the application will break at com
 
 ## Linting setup
 
-You might want to check the requirements for it [here](/quasar-cli-vite/linter).
+You might want to check the requirements for it [here](/quasar-cli-vite/lint-and-format-code).
 
 ## TypeScript Declaration Files
 

@@ -25,6 +25,14 @@ const routes = [
     redirect:
       '/quasar-cli-vite/developing-electron-apps/installing-electron-dependencies'
   },
+  {
+    path: '/quasar-cli-vite/linter',
+    redirect: '/quasar-cli-vite/lint-and-format-code'
+  },
+  {
+    path: '/quasar-cli-vite/convert-to-quasar-cli-with-vite',
+    redirect: '/quasar-cli-vite/convert-app-webpack-to-app-vite'
+  },
 
   // shortcuts
   { path: '/start', redirect: '/start/quick-start' },

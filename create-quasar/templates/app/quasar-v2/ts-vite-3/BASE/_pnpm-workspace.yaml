@@ -1,1 +1,5 @@
 # https://pnpm.io/settings
+
+# required by Vite 8
+allowBuilds:
+  esbuild: true

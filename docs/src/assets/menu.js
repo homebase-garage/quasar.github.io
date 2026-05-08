@@ -717,12 +717,12 @@ export default [
         path: 'upgrade-guide'
       },
       {
-        name: 'The quasar.config file',
+        name: 'The /quasar.config File',
         path: 'quasar-config-file'
       },
       {
-        name: 'Convert project to CLI with Vite',
-        path: 'convert-to-quasar-cli-with-vite'
+        name: 'Convert q/app-webpack Project',
+        path: 'convert-app-webpack-to-app-vite'
       },
       {
         name: 'Browser Compatibility',
@@ -785,8 +785,8 @@ export default [
         path: 'state-management-with-pinia'
       },
       {
-        name: 'Linter',
-        path: 'linter'
+        name: 'Lint and Format Code',
+        path: 'lint-and-format-code'
       },
       {
         name: 'Testing & Auditing',
