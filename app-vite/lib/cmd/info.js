@@ -60,6 +60,24 @@ function safePkgInfo(pkg, dir) {
       }
 }
 
+function safeMultiPkgInfo(pkg, dirList) {
+  for (const dir of dirList) {
+    const json = getPackageJson(pkg, dir)
+
+    if (json !== void 0) {
+      return {
+        key: `  ${String(json.name).trim()}`,
+        value: `${green(String(json.version).trim())}${json.description ? ` -- ${json.description}` : ''}`
+      }
+    }
+  }
+
+  return {
+    key: `  ${pkg}`,
+    value: gray('Not installed')
+  }
+}
+
 function print(m) {
   console.log(
     `${m.section ? '\n' : ''}${m.key}${m.value === void 0 ? '' : ' - ' + m.value}`
@@ -90,10 +108,12 @@ print({ key: 'Important local packages', section: true })
   'vue',
   'vue-router',
   'pinia',
-  'vite',
-  'rolldown',
   'typescript'
 ].forEach(pkg => print(safePkgInfo(pkg, appPaths.appDir)))
+
+;['vite', 'rolldown'].forEach(pkg =>
+  print(safeMultiPkgInfo(pkg, [appPaths.appDir, appPaths.cliDir]))
+)
 
 if (existsSync(appPaths.pwaDir)) {
   ;['workbox-build', 'register-service-worker'].forEach(pkg =>
