@@ -826,6 +826,8 @@ Instead of diffing here, you might want to check the next pages (even if you sti
 - Middlewares: check out examples with Hono/Express/Fastify/Koa: [SSR Middleware](/quasar-cli-vite/developing-ssr/ssr-middleware); or remove and add SSR mode again.
 - Check out the [SSR Handling of 404 and 500 Errors](/quasar-cli-vite/developing-ssr/handling-404-and-500-errors) page.
 - If using a serverless architecture, then check out the new [Serverless](/quasar-cli-vite/developing-ssr/ssr-webserver#serverless) section in SSR Webserver page.
+- You might also want to use thew new `/src-ssr/server-assets` folder (create it). This is copied as-is to dist and can be used in dev too, through `resolve.serverAssets()` or `folders.serverAssets`.
+- One more thing to note, for SSR middlewares: `serve.error()` has been changed to `serve.devError()` (with new params).
 
 ## Other considerations
 
