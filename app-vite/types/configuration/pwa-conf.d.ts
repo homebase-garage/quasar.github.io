@@ -114,17 +114,32 @@ export interface QuasarPwaConfiguration {
 
   /**
    * Extend the Rolldown config that is used for the custom service worker
-   * (if using it through workboxMode: 'InjectManifest')
+   * (if using it through workboxMode: 'InjectManifest').
+   *
+   * Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendPWACustomSWConf?: (config: RolldownOptions) => void;
+  extendPWACustomSWConf?: (
+    config: RolldownOptions
+  ) => void | RolldownOptions | Promise<void | RolldownOptions>;
 
   /**
-   * Extend/configure the Workbox GenerateSW options
+   * Extend/configure the Workbox GenerateSW options.
+   *
+   * Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendGenerateSWOptions?: (config: GenerateSWOptions) => void;
+  extendGenerateSWOptions?: (
+    config: GenerateSWOptions
+  ) => void | GenerateSWOptions | Promise<void | GenerateSWOptions>;
 
   /**
-   * Extend/configure the Workbox InjectManifest options
+   * Extend/configure the Workbox InjectManifest options.
+   *
+   * Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendInjectManifestOptions?: (config: InjectManifestOptions) => void;
+  extendInjectManifestOptions?: (
+    config: InjectManifestOptions
+  ) => void | InjectManifestOptions | Promise<void | InjectManifestOptions>;
 }

@@ -1,4 +1,5 @@
 import { join } from 'node:path'
+import { merge } from 'webpack-merge'
 
 import { escapeRegexString } from '../../utils/escape-regex-string.js'
 import {
@@ -33,13 +34,13 @@ export const quasarPwaConfig = {
   },
 
   // exported to ssr-config.js as well
-  workbox: quasarConf => {
+  workbox: async quasarConf => {
     const {
       ctx,
       pwa: { workboxMode }
     } = quasarConf
     const { appPaths, pkg } = ctx
-    const opts = {}
+    let opts = {}
 
     if (ctx.dev) {
       // dev resources are not optimized (contain maps, unminified code)
@@ -103,14 +104,20 @@ export const quasarPwaConfig = {
       }
 
       if (typeof quasarConf.pwa.extendGenerateSWOptions === 'function') {
-        quasarConf.pwa.extendGenerateSWOptions(opts)
+        const overrides = await quasarConf.pwa.extendGenerateSWOptions(opts)
+        if (Object(overrides) === overrides) {
+          opts = merge({}, opts, overrides)
+        }
       }
 
       if (
         ctx.mode.ssr &&
         typeof quasarConf.ssr.pwaExtendGenerateSWOptions === 'function'
       ) {
-        quasarConf.ssr.pwaExtendGenerateSWOptions(opts)
+        const overrides = await quasarConf.ssr.pwaExtendGenerateSWOptions(opts)
+        if (Object(overrides) === overrides) {
+          opts = merge({}, opts, overrides)
+        }
       }
     } else {
       // else workboxMode is "InjectManifest"
@@ -125,14 +132,22 @@ export const quasarPwaConfig = {
       }
 
       if (typeof quasarConf.pwa.extendInjectManifestOptions === 'function') {
-        quasarConf.pwa.extendInjectManifestOptions(opts)
+        const overrides = await quasarConf.pwa.extendInjectManifestOptions(opts)
+        if (Object(overrides) === overrides) {
+          opts = merge({}, opts, overrides)
+        }
       }
 
       if (
         ctx.mode.ssr &&
         typeof quasarConf.ssr.pwaExtendInjectManifestOptions === 'function'
       ) {
-        quasarConf.ssr.pwaExtendInjectManifestOptions(opts)
+        const overrides =
+          await quasarConf.ssr.pwaExtendInjectManifestOptions(opts)
+
+        if (Object(overrides) === overrides) {
+          opts = merge({}, opts, overrides)
+        }
       }
 
       opts.swSrc = appPaths.resolve.entry('compiled-custom-sw.js')

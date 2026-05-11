@@ -4,7 +4,7 @@ import { merge } from 'webpack-merge'
 
 import { warn } from '../../utils/logger.js'
 
-export function createManifest(quasarConf) {
+export async function createManifest(quasarConf) {
   let json
   const bexManifestPath = quasarConf.metaConf.bexManifestFile
 
@@ -61,7 +61,10 @@ export function createManifest(quasarConf) {
   }
 
   if (typeof quasarConf.bex.extendBexManifestJson === 'function') {
-    quasarConf.bex.extendBexManifestJson(json)
+    const overrides = await quasarConf.bex.extendBexManifestJson(json)
+    if (Object(overrides) === overrides) {
+      json = merge({}, json, overrides)
+    }
   }
 
   // also changes .ts -> .js and .tsx -> .jsx

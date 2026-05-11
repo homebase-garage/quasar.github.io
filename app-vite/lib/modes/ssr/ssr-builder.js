@@ -19,7 +19,7 @@ const ssrManifestIdQueryReplaceRE = /vue\?vue.*$/
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
     this.#copyWebserverFiles()
-    this.#writePackageJson()
+    await this.#writePackageJson()
 
     if (this.quasarConf.ssr.pwa) {
       // also update pwa-builder.js when changing here
@@ -177,7 +177,7 @@ export class QuasarModeBuilder extends AppBuilder {
     this.copyFiles(patterns)
   }
 
-  #writePackageJson() {
+  async #writePackageJson() {
     const {
       appPaths,
       pkg: { appPkg, ssrPkg }
@@ -186,7 +186,7 @@ export class QuasarModeBuilder extends AppBuilder {
     const rootAppDeps = getFixedDeps(appPkg.dependencies, appPaths.appDir)
     const ssrAppDeps = getFixedDeps(ssrPkg.dependencies, appPaths.ssrDir)
 
-    const pkg = {
+    let pkg = {
       name: appPkg.name,
       version: appPkg.version,
       description: appPkg.description,
@@ -210,7 +210,10 @@ export class QuasarModeBuilder extends AppBuilder {
     }
 
     if (typeof this.quasarConf.ssr.extendPackageJson === 'function') {
-      this.quasarConf.ssr.extendPackageJson(pkg)
+      const overrides = await this.quasarConf.ssr.extendPackageJson(pkg)
+      if (Object(overrides) === overrides) {
+        pkg = merge({}, pkg, overrides)
+      }
     }
 
     this.writeFile('package.json', stringifyJSON(pkg, { indent: 2 }))

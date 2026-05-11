@@ -48,16 +48,26 @@ return {
      * Specify Workbox options which will be applied on top of
      *  `pwa > extendGenerateSWOptions()`.
      * More info: https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
+     *
+     * Can directly modify the "config" parameter or
+     * return a new one that will be merged with the default one.
      */
-    pwaExtendGenerateSWOptions?: (config: object) => void;
+    pwaExtendGenerateSWOptions?: (
+      config: GenerateSWOptions
+    ) => void | GenerateSWOptions | Promise<void | GenerateSWOptions>;
 
     /**
      * Extend/configure the Workbox InjectManifest options
      * Specify Workbox options which will be applied on top of
      *  `pwa > extendInjectManifestOptions()`.
      * More info: https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
+     *
+     * Can directly modify the "config" parameter or
+     * return a new one that will be merged with the default one.
      */
-    pwaExtendInjectManifestOptions?: (config: object) => void;
+    pwaExtendInjectManifestOptions?: (
+      config: InjectManifestOptions
+    ) => void | InjectManifestOptions | Promise<void | InjectManifestOptions>;
 
     /**
      * Manually serialize the store state and provide it yourself
@@ -103,14 +113,25 @@ return {
 
     /**
      * Add/remove/change properties of production generated package.json
+     *
+     * Can directly modify the "pkg" parameter or
+     * return a new one that will be merged with the default one.
      */
-    extendPackageJson?: (pkg: { [index in string]: any }) => void;
+    extendPackageJson?: (pkg: { [index in string]: any }) =>
+      | void
+      | { [index in string]: any }
+      | Promise<void | { [index in string]: any }>;
 
     /**
      * Extend the Rolldown config that is used for the SSR webserver
-     * (which includes the SSR middlewares)
+     * (which includes the SSR middlewares).
+     *
+     * Can directly modify the "config" parameter or
+     * return a new one that will be merged with the default one.
      */
-    extendSSRWebserverConf?: (config: RolldownOptions) => void;
+    extendSSRWebserverConf?: (
+      config: RolldownOptions
+    ) => void | RolldownOptions | Promise<void | RolldownOptions>;
 
     /**
      * The named exports to use for the production generated SSR index.js script.

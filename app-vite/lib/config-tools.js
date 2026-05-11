@@ -261,7 +261,7 @@ export async function createViteConfig(
   return viteConf
 }
 
-export function extendViteConfig(viteConf, quasarConf, invokeParams) {
+export async function extendViteConfig(viteConf, quasarConf, invokeParams) {
   const opts = {
     isClient: false,
     isServer: false,
@@ -269,8 +269,8 @@ export function extendViteConfig(viteConf, quasarConf, invokeParams) {
   }
 
   if (typeof quasarConf.build.extendViteConf === 'function') {
-    const overrides = quasarConf.build.extendViteConf(viteConf, opts)
-    if (overrides) {
+    const overrides = await quasarConf.build.extendViteConf(viteConf, opts)
+    if (Object(overrides) === overrides) {
       viteConf = mergeConfig(viteConf, overrides)
     }
   }
@@ -373,7 +373,7 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
   }
 }
 
-export function extendRolldownConfig(
+export async function extendRolldownConfig(
   rolldownConfig,
   quasarConfTarget,
   ctx,
@@ -381,7 +381,10 @@ export function extendRolldownConfig(
 ) {
   // example: quasarConf.ssr.extendSSRWebserverConf
   if (typeof quasarConfTarget[methodName] === 'function') {
-    quasarConfTarget[methodName](rolldownConfig)
+    const overrides = await quasarConfTarget[methodName](rolldownConfig)
+    if (Object(overrides) === overrides) {
+      rolldownConfig = merge({}, rolldownConfig, overrides)
+    }
   }
 
   const promise = ctx.appExt.runAppExtensionHook(methodName, async hook => {

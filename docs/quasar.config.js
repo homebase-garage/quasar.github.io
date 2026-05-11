@@ -2,7 +2,6 @@ import { defineConfig } from '#q-app'
 
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
-import { codeSplitting } from './build/chunks.js'
 
 export default defineConfig(ctx => ({
   boot: [{ path: 'gdpr', server: false }],
@@ -25,12 +24,16 @@ export default defineConfig(ctx => ({
 
     vitePlugins: [mdPlugin, examplesPlugin(ctx.prod)],
 
-    extendViteConf(viteConf, { isClient }) {
+    extendViteConf(_viteConf, { isClient }) {
       if (ctx.prod && isClient) {
-        viteConf.build.chunkSizeWarningLimit = 650
-        viteConf.build.rolldownOptions = {
-          output: {
-            codeSplitting
+        return {
+          build: {
+            chunkSizeWarningLimit: 650,
+            rolldownOptions: {
+              output: {
+                codeSplitting
+              }
+            }
           }
         }
       }

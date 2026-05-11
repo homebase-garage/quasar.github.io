@@ -32,18 +32,34 @@ electron: {
 
   /**
    * Add/remove/change properties of production generated package.json
+   *
+   * Can directly modify the "pkg" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendPackageJson?: (pkg: { [index in string]: any }) => void;
+  extendPackageJson?: (pkg: { [index in string]: any }) =>
+    | void
+    | { [index in string]: any }
+    | Promise<void | { [index in string]: any }>;
 
   /**
-   * Extend the Rolldown config that is used for the electron-main thread
+   * Extend the Rolldown config that is used for the electron-main thread.
+   *
+   * Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendElectronMainConf?: (config: RolldownOptions) => void;
+  extendElectronMainConf?: (
+    config: RolldownOptions
+  ) => void | RolldownOptions | Promise<void | RolldownOptions>;
 
   /**
-   * Extend the Rolldown config that is used for the electron-preload thread
+   * Extend the Rolldown config that is used for the electron-preload thread.
+   *
+   * Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
    */
-  extendElectronPreloadConf?: (config: RolldownOptions) => void;
+  extendElectronPreloadConf?: (
+    config: RolldownOptions
+  ) => void | RolldownOptions | Promise<void | RolldownOptions>;
 
   /**
    * You have to choose to use either packager or builder.

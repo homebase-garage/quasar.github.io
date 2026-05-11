@@ -40,19 +40,27 @@ export default defineConfig(ctx => ({
 
     // vitePlugins: [],
 
-    extendViteConf(viteConf, { isServer }) {
-      viteConf.server.fs ||= {}
-      viteConf.server.fs.allow ||= []
-      viteConf.server.fs.allow.push(
-        // for quasar package (ui folder) and related deps
-        '..',
-        // due to workspace hoisting, some deps might come from the root node_modules
-        '../..'
-      )
+    extendViteConf(_viteConf, { isServer }) {
+      const conf = {
+        fs: {
+          allow: [
+            // for quasar package (ui folder) and related deps
+            '..',
+            // due to workspace hoisting, some deps might come from the root node_modules
+            '../..'
+          ]
+        }
+      }
 
       if (isServer) {
-        viteConf.resolve.alias.quasar = resolve('../src/index.ssr.js')
+        conf.resolve = {
+          alias: {
+            quasar: resolve('../src/index.ssr.js')
+          }
+        }
       }
+
+      return conf
     }
   },
 

@@ -16,8 +16,29 @@ You might want to release new versions of your Quasar App Extensions with suppor
 api.compatibleWith(
   '@quasar/app-vite',
 - '^2.0.0'
-+ '^3.0.0'
++ '^3.0.0-beta.8'
 )
+```
+
+Some breaking changes:
+
+- Removed `api.hasLint()`.
+- All `api.extendX(fn, api)` methods can now be async and optionally return a (Rolldown/etc) config that will be merged with the default one.
+
+Example:
+
+```js
+api.extendSSRWebserverConf((rolldownConf, api) => {
+  // add/remove/change Quasar CLI generated Rolldown config object
+
+  // New! Now, optionally, we can also return a config object that will
+  // be merged into the default one
+  return {
+    output: {
+      banner: '/**! My Banner */'
+    }
+  }
+})
 ```
 
 ## Bird's eye view on what's new
@@ -61,12 +82,12 @@ $ bun create quasar@latest
 
 ### /package.json
 
-Edit your `/package.json` on the `@quasar/app-vite` entry and assign it `^3.0.0`:
+Edit your `/package.json` on the `@quasar/app-vite` entry and assign it `^3.0.0-beta.8`:
 
 ```diff /package.json
 "devDependencies": {
 - "@quasar/app-vite": "^2.0.0",
-+ "@quasar/app-vite": "^3.0.0"
++ "@quasar/app-vite": "^3.0.0-beta.8"
 }
 ```
 
@@ -421,7 +442,8 @@ Make sure to update your `/quasar.config` file with the newest specs in order to
 - Boot files & preFetch > redirect() usage has changed. Need to return immediately after calling it. No longer supporting throwing an error (or returning a Promise) with the `{ url }` syntax. Directly use `redirect()` instead.
 - The /quasar.config file can come with `.js` or `.ts` extensions only. Dropped support for `.cjs`, `.mjs`, `.cts` and `.mts`.
 - All Quasar Modes now need to install their specific dependencies directly under their `/src-<mode>` folder. On the Typescript front, we've reworked all `/src-<mode>/<mode>-env.d.ts` files too for increased ease of use (and partly due to the process.env to import.meta.env switch).
-- Replaced `esbuild` tool with `Rolldown` for all the specific Quasar mode files (under their `/src-<mode>` folders). This also has impact over all the /quasar.config `extendX()` methods, as they will now receive a Rollup config object.
+- Replaced `esbuild` tool with `Rolldown` for all the specific Quasar mode files (under their `/src-<mode>` folders). This also has impact over all the /quasar.config `extendX()` methods, as they will now receive a Rolldown config object.
+- All /quasar.config `extendX()` methods can now be async and optionally return a (Rolldown/etc) config that will be merged with the default one.
 - Dropped support for Capacitor v4 and below
 - Dropped support for `@electron/packager` v18 and below
 - Cordova with iOS now uses the modern build system. The `noIosLegacyBuildFlag` has been removed.

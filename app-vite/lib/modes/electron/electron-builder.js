@@ -10,9 +10,8 @@ import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
     await this.#buildFiles()
-    this.#writePackageJson()
-    this.#copyElectronFiles()
 
+    this.#copyElectronFiles()
     this.printSummary(join(this.quasarConf.build.distDir, 'UnPackaged'))
 
     if (this.argv['skip-pkg'] !== true) {
@@ -22,6 +21,8 @@ export class QuasarModeBuilder extends AppBuilder {
 
   async #buildFiles() {
     await Promise.all([
+      this.#writePackageJson(),
+
       quasarElectronConfig
         .vite(this.quasarConf)
         .then(viteConfig => this.buildWithVite('Electron UI', viteConfig)),
@@ -47,13 +48,13 @@ export class QuasarModeBuilder extends AppBuilder {
     ])
   }
 
-  #writePackageJson() {
+  async #writePackageJson() {
     const {
       appPaths,
       pkg: { appPkg, electronPkg }
     } = this.ctx
 
-    const pkg = merge({}, appPkg)
+    let pkg = merge({}, appPkg)
 
     pkg.dependencies = getFixedDeps(
       electronPkg.dependencies,
@@ -68,7 +69,10 @@ export class QuasarModeBuilder extends AppBuilder {
     pkg.main = './electron-main.js'
 
     if (typeof this.quasarConf.electron.extendPackageJson === 'function') {
-      this.quasarConf.electron.extendPackageJson(pkg)
+      const overrides = await this.quasarConf.electron.extendPackageJson(pkg)
+      if (Object(overrides) === overrides) {
+        pkg = merge({}, pkg, overrides)
+      }
     }
 
     this.writeFile(

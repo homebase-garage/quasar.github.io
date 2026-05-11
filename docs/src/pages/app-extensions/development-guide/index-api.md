@@ -435,7 +435,7 @@ if (api.hasVite) {
 ```js
 /**
  * @param {function} fn
- *   (rolldownConf: RollupOptions, api) => undefined
+ *   (rolldownConf: RolldownOptions, api) => undefined
  */
 if (api.hasVite) {
   api.extendSSRWebserverConf((rolldownConf, api) => {
@@ -450,7 +450,7 @@ if (api.hasVite) {
 ```js
 /**
  * @param {function} fn
- *   (rolldownConf: RollupOptions, api) => undefined
+ *   (rolldownConf: RolldownOptions, api) => undefined
  */
 if (api.hasVite) {
   api.extendElectronMainConf((rolldownConf, api) => {
@@ -465,7 +465,7 @@ if (api.hasVite) {
 ```js
 /**
  * @param {function} fn
- *   (rolldownConf: RollupOptions, api) => undefined
+ *   (rolldownConf: RolldownOptions, api) => undefined
  */
 if (api.hasVite) {
   api.extendElectronPreloadConf((rolldownConf, api) => {
@@ -480,7 +480,7 @@ if (api.hasVite) {
 ```js
 /**
  * @param {function} fn
- *   (rolldownConf: RollupOptions, api) => undefined
+ *   (rolldownConf: RolldownOptions, api) => undefined
  */
 if (api.hasVite) {
   api.extendPWACustomSWConf((rolldownConf, api) => {
@@ -495,7 +495,7 @@ if (api.hasVite) {
 ```js
 /**
  * @param {function} fn
- *   (rolldownConf: RollupOptions, api) => undefined
+ *   (rolldownConf: RolldownOptions, api) => undefined
  */
 if (api.hasVite) {
   api.extendBexScriptsConf((rolldownConf, api) => {
