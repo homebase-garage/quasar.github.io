@@ -616,9 +616,10 @@ contextBridge.exposeInMainWorld('quasarRuntime', quasarRuntime)
 
 ### Main script
 
-And you might also want to update your `/src-electron/electron-main` script. If the diff below seems confusing, check the whole file after this:
+And you might also want to update your `/src-electron/electron-main` script:
 
-```diff /src-electron/electron-main
+```tabs /src-electron/electron-main
+<<| diff Diff |>>
 - import { fileURLToPath } from 'url'
 - const currentDir = fileURLToPath(new URL('.', import.meta.url));
 
@@ -681,12 +682,7 @@ And you might also want to update your `/src-electron/electron-main` script. If 
 +     app.quit();
 +   }
 + });
-```
-
-Here is the full `/src-electron/electron-main` file, if the diff above seems confusing:
-
-```tabs /src-electron/electron-main
-<<| js Javascript |>>
+<<| js Full (JS) |>>
 import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
 import os from 'node:os'
@@ -748,7 +744,7 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-<<| ts Typescript |>>
+<<| ts Full (Typescript) |>>
 import { BrowserWindow, app } from "electron";
 import path from "node:path";
 import os from "node:os";
