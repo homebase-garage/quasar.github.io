@@ -598,6 +598,8 @@ Make sure to update your `/quasar.config` file with the newest specs in order to
 
 We are introducing `quasarRuntime`. [More info](/quasar-cli-vite/developing-electron-apps/electron-accessing-files).
 
+Move your `/src-electron/icons` to `/src-electron/electron-assets/icons` (create the new `electron-assets` folder).
+
 ### Preload script
 
 ```js /src-electron/electron-preload (Optional!)
