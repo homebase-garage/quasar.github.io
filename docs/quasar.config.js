@@ -2,6 +2,7 @@ import { defineConfig } from '#q-app'
 
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
+import { codeSplitting } from './build/chunks.js'
 
 export default defineConfig(ctx => ({
   boot: [{ path: 'gdpr', server: false }],
