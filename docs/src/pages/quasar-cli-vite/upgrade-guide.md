@@ -16,7 +16,7 @@ You might want to release new versions of your Quasar App Extensions with suppor
 api.compatibleWith(
   '@quasar/app-vite',
 - '^2.0.0'
-+ '^3.0.0-beta.9'
++ '^3.0.0-beta.10'
 )
 ```
 
@@ -24,7 +24,7 @@ Removed `api.hasLint()`.
 
 All `api.extendX(fn, api)` methods can now be async and optionally return a (Rolldown/etc) config that will be merged with the default one.
 
-```js // api.extendX() example
+```js api.extendX() example
 api.extendSSRWebserverConf((rolldownConf, api) => {
   // add/remove/change Quasar CLI generated Rolldown config object
 
@@ -163,7 +163,7 @@ api.extendBexManifestJson: (
 
 - 🖥️ Revamped Electron Mode: We’ve added lots of new features to make desktop development smoother. Similar to SSR, we've introduced a /src-electron/electron-assets folder. Referencing files from here (or from the /public folder) is now much easier via new utility methods available in both /src-electron and /src.
 
-- 🛣️ Vue Router: First-class support for the [filename-based routing](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing)
+- 🛣️ Vue Router: First-class support for the [filename-based routing](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
 
 - 🛠️ Modernized Core: The codebase has been updated to take full advantage of Node.js v22+ features, alongside countless other small but significant improvements across all Quasar modes to boost your productivity.
 
@@ -193,7 +193,15 @@ Edit your `/package.json` on the `@quasar/app-vite` entry:
 ```diff /package.json
 "devDependencies": {
 - "@quasar/app-vite": "^2.0.0",
-+ "@quasar/app-vite": "^3.0.0-beta.9"
++ "@quasar/app-vite": "^3.0.0-beta.10"
+}
+```
+
+Make sure you also have Vue Router v5+ too, which is now the minimum version required!
+
+```json /package.json
+"devDependencies": {
+  "vue-router": "^5.0.6"
 }
 ```
 
