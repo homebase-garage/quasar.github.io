@@ -1,7 +1,8 @@
 import { Plugin, UserConfig as ViteUserConfig } from "vite";
 import { Options as VuePluginOptions } from "@vitejs/plugin-vue";
-import { QuasarHookParams } from "./conf";
 import { CompilerOptions, TypeAcquisition } from "typescript";
+import { QuasarHookParams } from "./conf";
+import type { Options as VueRouterVitePluginOptions } from "vue-router/dist/unplugin/options.d.mts";
 
 interface HtmlMinifierOptions {
   caseSensitive?: boolean;
@@ -58,32 +59,6 @@ type StripEnums<T extends Record<string, any>> = {
             ? undefined
             : any;
 };
-interface TSConfig {
-  compilerOptions?: StripEnums<CompilerOptions>;
-  exclude?: string[];
-  compileOnSave?: boolean;
-  extends?: string | string[];
-  files?: string[];
-  include?: string[];
-  typeAcquisition?: TypeAcquisition;
-}
-
-interface InvokeParams {
-  readonly isClient: boolean;
-  readonly isServer: boolean;
-}
-
-interface BuildTargetOptions {
-  /**
-   * @default 'baseline-widely-available'
-   * @example ['es2022', 'firefox115', 'chrome115', 'safari14']
-   */
-  browser?: string | string[];
-  /**
-   * @example 'node22'
-   */
-  node?: string;
-}
 
 interface PluginEntryRunOptions {
   readonly server?: boolean;
@@ -102,61 +77,6 @@ type PluginEntry =
   | undefined
   | false;
 
-interface QuasarBuildEnv {
-  /**
-   * For security reasons, only variables with this prefix from the env files
-   * and Node.js process.env will be exposed to the code shipped to the client.
-   * The client app code includes Electron main & preload scripts, as they get
-   * shipped to the client side as well.
-   *
-   * Such variables exposed to the client app code should not contain sensitive
-   * information such as API keys.
-   *
-   * Avoid setting it to 'QUASAR_' so it won't conflict with
-   * Quasar's own environment variables.
-   *
-   * Setting it to an empty string will default to
-   * the default value (QCLI_).
-   *
-   * @default 'QCLI_'
-   */
-  clientPrefix?: string | string[];
-  /**
-   * Setting this prefix will filter out env files variables and Node.js process.env
-   * variables that are exposed to the backend code (like the SSR server-side).
-   *
-   * Avoid setting it to 'QUASAR_' so it won't conflict with
-   * Quasar's own environment variables.
-   *
-   * @default ''
-   */
-  backendPrefix?: string | string[];
-  /**
-   * Folder where Quasar CLI should look for .env* files.
-   * Can be an absolute path or a relative path to project root directory.
-   *
-   * @default appPaths.appDir
-   */
-  folder?: string | string[];
-  /**
-   * Additional .env* files to be loaded.
-   * Each entry can be an absolute path or a relative path to
-   * quasar.config > build > env > folder.
-   *
-   * @example ['.env.somefile', '../.env.someotherfile']
-   */
-  file?: string | string[];
-  /**
-   * Filter the env files variables & Node.js process.env variables
-   * that are exposed to the app code. This does not affects props
-   * assigned directly to the quasar.config > build > define prop.
-   */
-  filter?: (
-    env: Record<string, string>,
-    type: "client" | "backend"
-  ) => Record<string, string>;
-}
-
 interface QuasarStaticBuildConfiguration {
   /**
    * @default
@@ -170,7 +90,73 @@ interface QuasarStaticBuildConfiguration {
    *   node: 'node24'
    * }
    */
-  target?: BuildTargetOptions;
+  target?: {
+    /**
+     * @default 'baseline-widely-available'
+     * @example ['es2022', 'firefox115', 'chrome115', 'safari14']
+     */
+    browser?: string | string[];
+    /**
+     * @example 'node22'
+     */
+    node?: string;
+  };
+
+  /**
+   * Public path of your app.
+   * Use it when your public path is something else,
+   * like _“<protocol>://<domain>/some/nested/folder”_ – in this case,
+   * it means the distributables are in _“some/nested/folder”_ on your webserver.
+   *
+   * @default '/'
+   */
+  publicPath?: string;
+
+  /**
+   * Sets [Vue Router mode](https://router.vuejs.org/guide/essentials/history-mode.html).
+   * History mode requires configuration on your deployment web server too.
+   * For Capacitor and Electron, it's always 'hash' for [compatibility reasons](https://github.com/quasarframework/quasar/issues/17322#issuecomment-2191987962).
+   *
+   * @default 'hash'
+   */
+  vueRouterMode?: "hash" | "history";
+
+  /**
+   * Sets Vue Router base.
+   * Should not need to configure this, unless absolutely needed.
+   */
+  vueRouterBase?: string;
+
+  /**
+   * Automatically open remote Vue Devtools when running in development mode.
+   */
+  vueDevtools?: boolean;
+
+  /**
+   * Should the Vue Options API be available? If all your components only use Composition API
+   * it would make sense performance-wise to disable Vue Options API for a compile speedup.
+   *
+   * @default false
+   */
+  vueOptionsAPI?: boolean;
+
+  /**
+   * Do you want to analyze the production bundles?
+   * Generates and opens an HTML report.
+   *
+   * @default false
+   */
+  analyze?: boolean;
+
+  /**
+   * Folder where Quasar CLI should generate the distributables.
+   * Relative path to project root directory.
+   *
+   * @default 'dist/{ctx.modeName}' For all modes except Cordova.
+   * @default 'src-cordova/www' For Cordova mode.
+   */
+  distDir?: string;
+
   /**
    * Extend the Vite config generated by Quasar CLI.
    *
@@ -201,14 +187,40 @@ interface QuasarStaticBuildConfiguration {
    */
   extendViteConf?: (
     config: ViteUserConfig,
-    invokeParams: InvokeParams
+    invokeParams: {
+      readonly isClient: boolean;
+      readonly isServer: boolean;
+    }
   ) => ViteUserConfig | void | Promise<ViteUserConfig | void>;
+
+  /**
+   * Should you want to use Vue Router's filename-based routing feature.
+   * Set to `true` or an options object for vue-router/vite plugin (to override
+   * or add to the default options).
+   *
+   * https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
+   * https://router.vuejs.org/file-based-routing/configuration.html
+   *
+   * Default options supplied to vue-router/vite plugin when enabled:
+   *   filenameBasedRouting: {
+   *     // where are paths relative to
+   *     root: <root_project_folder>,
+   *
+   *     // where to generate the types (if on Typescript projects):
+   *     dts: './src/typed-router.d.ts',
+   *   }
+   *
+   * @default false
+   */
+  filenameBasedRouting?: boolean | VueRouterVitePluginOptions;
+
   /**
    * Options to supply to @vitejs/plugin-vue
    *
    * @see https://v2.quasar.dev/quasar-cli-vite/handling-vite#vite-vue-plugin-options
    */
   viteVuePluginOptions?: VuePluginOptions;
+
   /**
    * Vite plugins
    *
@@ -232,6 +244,7 @@ interface QuasarStaticBuildConfiguration {
    * ]
    */
   vitePlugins?: PluginEntry[];
+
   /**
    * @see https://v2.quasar.dev/quasar-cli-vite/handling-vite#folder-aliases
    *
@@ -242,6 +255,7 @@ interface QuasarStaticBuildConfiguration {
    * }
    */
   alias?: { [key: string]: string };
+
   /**
    * Configuration for TypeScript integration.
    */
@@ -268,7 +282,15 @@ interface QuasarStaticBuildConfiguration {
      *
      * If you don't have dynamic logic, you can directly modify your `tsconfig.json` file instead.
      */
-    extendTsConfig?: (tsConfig: TSConfig) => void;
+    extendTsConfig?: (tsConfig: {
+      compilerOptions?: StripEnums<CompilerOptions>;
+      exclude?: string[];
+      compileOnSave?: boolean;
+      extends?: string | string[];
+      files?: string[];
+      include?: string[];
+      typeAcquisition?: TypeAcquisition;
+    }) => void;
 
     /**
      * Generate a shim file for `*.vue` files to process them as plain Vue component instances.
@@ -281,54 +303,6 @@ interface QuasarStaticBuildConfiguration {
      */
     vueShim?: boolean;
   };
-  /**
-   * Public path of your app.
-   * Use it when your public path is something else,
-   * like _“<protocol>://<domain>/some/nested/folder”_ – in this case,
-   * it means the distributables are in _“some/nested/folder”_ on your webserver.
-   *
-   * @default '/'
-   */
-  publicPath?: string;
-  /**
-   * Sets [Vue Router mode](https://router.vuejs.org/guide/essentials/history-mode.html).
-   * History mode requires configuration on your deployment web server too.
-   * For Capacitor and Electron, it's always 'hash' for [compatibility reasons](https://github.com/quasarframework/quasar/issues/17322#issuecomment-2191987962).
-   *
-   * @default 'hash'
-   */
-  vueRouterMode?: "hash" | "history";
-  /**
-   * Sets Vue Router base.
-   * Should not need to configure this, unless absolutely needed.
-   */
-  vueRouterBase?: string;
-  /**
-   * Automatically open remote Vue Devtools when running in development mode.
-   */
-  vueDevtools?: boolean;
-  /**
-   * Should the Vue Options API be available? If all your components only use Composition API
-   * it would make sense performance-wise to disable Vue Options API for a compile speedup.
-   *
-   * @default false
-   */
-  vueOptionsAPI?: boolean;
-  /**
-   * Do you want to analyze the production bundles?
-   * Generates and opens an HTML report.
-   *
-   * @default false
-   */
-  analyze?: boolean;
-  /**
-   * Folder where Quasar CLI should generate the distributables.
-   * Relative path to project root directory.
-   *
-   * @default 'dist/{ctx.modeName}' For all modes except Cordova.
-   * @default 'src-cordova/www' For Cordova mode.
-   */
-  distDir?: string;
 
   /**
    * Define global constant replacements. Entries will be defined as globals
@@ -358,7 +332,60 @@ interface QuasarStaticBuildConfiguration {
    * Configuration related to the environment variables loaded from
    * .env* files and Node.js process.env injections.
    */
-  env?: QuasarBuildEnv;
+  env?: {
+    /**
+     * For security reasons, only variables with this prefix from the env files
+     * and Node.js process.env will be exposed to the code shipped to the client.
+     * The client app code includes Electron main & preload scripts, as they get
+     * shipped to the client side as well.
+     *
+     * Such variables exposed to the client app code should not contain sensitive
+     * information such as API keys.
+     *
+     * Avoid setting it to 'QUASAR_' so it won't conflict with
+     * Quasar's own environment variables.
+     *
+     * Setting it to an empty string will default to
+     * the default value (QCLI_).
+     *
+     * @default 'QCLI_'
+     */
+    clientPrefix?: string | string[];
+    /**
+     * Setting this prefix will filter out env files variables and Node.js process.env
+     * variables that are exposed to the backend code (like the SSR server-side).
+     *
+     * Avoid setting it to 'QUASAR_' so it won't conflict with
+     * Quasar's own environment variables.
+     *
+     * @default ''
+     */
+    backendPrefix?: string | string[];
+    /**
+     * Folder where Quasar CLI should look for .env* files.
+     * Can be an absolute path or a relative path to project root directory.
+     *
+     * @default appPaths.appDir
+     */
+    folder?: string | string[];
+    /**
+     * Additional .env* files to be loaded.
+     * Each entry can be an absolute path or a relative path to
+     * quasar.config > build > env > folder.
+     *
+     * @example ['.env.somefile', '../.env.someotherfile']
+     */
+    file?: string | string[];
+    /**
+     * Filter the env files variables & Node.js process.env variables
+     * that are exposed to the app code. This does not affects props
+     * assigned directly to the quasar.config > build > define prop.
+     */
+    filter?: (
+      env: Record<string, string>,
+      type: "client" | "backend"
+    ) => Record<string, string>;
+  };
 
   /**
    * Build production assets with or without the hash part in filenames.

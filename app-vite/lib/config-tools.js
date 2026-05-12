@@ -207,6 +207,18 @@ export async function createViteConfig(
     ]
   }
 
+  const { filenameBasedRouting } = quasarConf.build
+  if (filenameBasedRouting) {
+    const vueRouterVite = await ctx.cacheProxy.getModule('vueRouter')
+    viteConf.plugins.unshift(
+      vueRouterVite({
+        // protect against the Vite plugin mutating its own options
+        // and triggering endless cfg diff loop
+        ...filenameBasedRouting
+      })
+    )
+  }
+
   if (compileId !== 'vite-ssr-server') {
     if (ctx.prod && quasarConf.build.useFilenameHashes !== true) {
       viteConf.plugins.push(quasarViteStripFilenameHashesPlugin())

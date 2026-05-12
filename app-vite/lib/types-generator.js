@@ -204,6 +204,16 @@ function generateTsConfig(quasarConf, fsUtils) {
     ]
   }
 
+  if (quasarConf.build.filenameBasedRouting) {
+    tsConfig.compilerOptions.moduleResolution = 'Bundler'
+    tsConfig.vueCompilerOptions = {
+      plugins: [
+        'vue-router/volar/sfc-route-blocks',
+        'vue-router/volar/sfc-typed-router'
+      ]
+    }
+  }
+
   quasarConf.build.typescript.extendTsConfig?.(tsConfig)
 
   fsUtils.writeFileSync('tsconfig.json', JSON.stringify(tsConfig, null, 2))

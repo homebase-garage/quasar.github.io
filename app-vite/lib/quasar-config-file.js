@@ -742,6 +742,7 @@ export class QuasarConfigFile {
 
     const metaConf = {
       debugging: Boolean(this.#ctx.dev || this.#ctx.debug),
+      hasTypescript: await this.#ctx.cacheProxy.getModule('hasTypescript'),
       needsAppMountHook: false,
       vueDevtools: false,
       versions: { ...this.#versions }, // used by entry templates
@@ -936,6 +937,8 @@ export class QuasarConfigFile {
 
     cfg.build = merge(
       {
+        filenameBasedRouting: false,
+
         viteVuePluginOptions: {
           isProduction: this.#ctx.prod,
           template: {
@@ -1024,6 +1027,24 @@ export class QuasarConfigFile {
 
     if (!cfg.build.target.node) {
       cfg.build.target.node = 'node22'
+    }
+
+    if (cfg.build.filenameBasedRouting) {
+      const defaultOptions = {
+        // where are paths relative to
+        root: this.#ctx.appPaths.appDir,
+
+        ...(cfg.metaConf.hasTypescript
+          ? // where to generate the types
+            { dts: './src/typed-router.d.ts' }
+          : {})
+      }
+
+      const { filenameBasedRouting } = cfg.build
+      cfg.build.filenameBasedRouting =
+        Object(filenameBasedRouting) === filenameBasedRouting
+          ? merge({}, defaultOptions, filenameBasedRouting)
+          : defaultOptions
     }
 
     if (this.#ctx.mode.ssr) {
