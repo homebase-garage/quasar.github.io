@@ -18,7 +18,9 @@ const ssrManifestIdQueryReplaceRE = /vue\?vue.*$/
 
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
+    this.cleanArtifacts()
     this.#copyWebserverFiles()
+
     await this.#writePackageJson()
 
     if (this.quasarConf.ssr.pwa) {

@@ -9,6 +9,7 @@ import { copyBexAssets, createManifest } from './bex-utils.js'
 
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
+    this.cleanArtifacts()
     const viteConfig = await quasarBexConfig.vite(this.quasarConf)
 
     const { err, scriptList } = await createManifest(this.quasarConf)

@@ -9,6 +9,7 @@ import { getFixedDeps } from '../../utils/get-fixed-deps.js'
 
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
+    this.cleanArtifacts()
     await this.#buildFiles()
 
     this.#copyElectronFiles()

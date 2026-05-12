@@ -3,6 +3,8 @@ import { quasarSpaConfig } from './spa-config.js'
 
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
+    this.cleanArtifacts()
+
     const viteConfig = await quasarSpaConfig.vite(this.quasarConf)
     await this.buildWithVite('SPA UI', viteConfig)
 

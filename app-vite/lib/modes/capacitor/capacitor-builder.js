@@ -16,6 +16,7 @@ export class QuasarModeBuilder extends AppBuilder {
   #packagedDir
 
   async build() {
+    this.cleanArtifacts()
     this.#packagedDir = join(this.quasarConf.build.distDir, this.ctx.targetName)
 
     await this.#buildFiles()

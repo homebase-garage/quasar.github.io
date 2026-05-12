@@ -307,7 +307,8 @@ export function createNodeRolldownConfig(
       format,
       codeSplitting: false,
       minify: quasarConf.build.minify,
-      sourcemap: quasarConf.build.sourcemap
+      sourcemap: quasarConf.build.sourcemap,
+      cleanDir: false
     },
 
     resolve: {
@@ -355,7 +356,8 @@ export function createBrowserRolldownConfig(quasarConf, { shippedToClient }) {
       format: 'iife',
       codeSplitting: false,
       minify: quasarConf.build.minify,
-      sourcemap: quasarConf.build.sourcemap
+      sourcemap: quasarConf.build.sourcemap,
+      cleanDir: false
     },
 
     resolve: {

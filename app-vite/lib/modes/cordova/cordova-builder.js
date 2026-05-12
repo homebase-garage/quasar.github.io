@@ -33,6 +33,8 @@ export class QuasarModeBuilder extends AppBuilder {
   #cordovaConfigFile = new CordovaConfigFile()
 
   async build() {
+    this.cleanArtifacts()
+
     await this.#buildFiles()
     await this.#packageFiles()
   }

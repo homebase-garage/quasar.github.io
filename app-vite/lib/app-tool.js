@@ -19,9 +19,6 @@ export class AppTool {
   }
 
   async buildWithVite(threadName, viteConfig) {
-    // ensure clean build
-    this.cleanArtifacts(viteConfig.build.outDir)
-
     const done = progress(
       'Compiling of ___ with Vite in progress...',
       threadName
@@ -79,7 +76,7 @@ export class AppTool {
     done('___ compiled with success by Rolldown')
   }
 
-  cleanArtifacts(dir) {
+  cleanArtifacts(dir = this.quasarConf.build.distDir) {
     if (dir.endsWith(cordovaWWW)) {
       fse.emptyDirSync(dir)
     } else if (dir.endsWith(capacitorWWW)) {
