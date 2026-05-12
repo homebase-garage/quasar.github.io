@@ -1,5 +1,5 @@
 // Configuration for your app
-// https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
+// https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file
 
 import { defineConfig } from '#q-app/wrappers'
 <% if (scope.preset.i18n) { %>
@@ -8,19 +8,19 @@ import { join } from 'node:path'
 
 export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
   return {
-    // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/prefetch-feature
     // preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    // https://v2.quasar.dev/quasar-cli-vite/boot-files
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/boot-files
     boot: [
 <% if (scope.preset.i18n) { %>
       'i18n'
 <% } %>
     ],
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file#css
     css: [
       'app.<%= scope.preset.sass ? 'scss' : 'css' %>'
     ],
@@ -39,7 +39,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       'material-icons', // optional, you are not bound to it
     ],
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file#build
     build: {
       target: {
         browser: 'baseline-widely-available',
@@ -97,13 +97,13 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
 <% } %>
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file#devserver
     devServer: {
       // https: true,
       open: true // opens browser window automatically
     },
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file#framework
     framework: {
       config: {},
 
@@ -125,7 +125,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
     // https://v2.quasar.dev/options/animations
     animations: [],
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#sourcefiles
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/quasar-config-file#sourcefiles
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
     //   router: 'src/router/index',
@@ -138,7 +138,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
     //   bexManifestFile: 'src-bex/manifest.json
     // },
 
-    // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-ssr/configuring-ssr
     ssr: {
       prodPort: 3000, // The default port that the production server should use
                       // (gets superseded if process.env.PORT is specified at runtime)
@@ -162,7 +162,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       // pwaExtendInjectManifestOptions (cfg) {}
     },
 
-    // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-pwa/configuring-pwa
     pwa: {
       workboxMode: 'GenerateSW' // 'GenerateSW' or 'InjectManifest'
       // swFilename: 'sw.js',
@@ -175,17 +175,17 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       // extendInjectManifestOptions (cfg) {}
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-cordova-apps/configuring-cordova
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-electron-apps/configuring-electron
     electron: {
       // extendElectronMainConf (esbuildConf) {},
       // extendElectronPreloadConf (esbuildConf) {},
@@ -220,7 +220,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       }
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
+    // https://legacy-app.quasar.dev/quasar-cli-vite-v2/developing-browser-extensions/configuring-bex
     bex: {
       // extendBexScriptsConf (esbuildConf) {},
       // extendBexManifestJson (json) {},
