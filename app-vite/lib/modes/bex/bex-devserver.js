@@ -97,7 +97,7 @@ export class QuasarModeDevserver extends AppDevserver {
     }
 
     const { err: manifestErr, scriptList: manifestScriptList } =
-      createManifest(quasarConf)
+      await createManifest(quasarConf)
     if (manifestErr !== void 0) process.exit(1)
 
     const setScripts = jsList => {
@@ -115,8 +115,8 @@ export class QuasarModeDevserver extends AppDevserver {
       ignoreInitial: true
     }).on(
       'change',
-      debounce(() => {
-        const { err, scriptList } = createManifest(quasarConf)
+      debounce(async () => {
+        const { err, scriptList } = await createManifest(quasarConf)
         if (err !== void 0) return
 
         const newSnapshot = setScripts(scriptList)

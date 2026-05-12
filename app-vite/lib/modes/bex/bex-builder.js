@@ -11,7 +11,7 @@ export class QuasarModeBuilder extends AppBuilder {
   async build() {
     const viteConfig = await quasarBexConfig.vite(this.quasarConf)
 
-    const { err, scriptList } = createManifest(this.quasarConf)
+    const { err, scriptList } = await createManifest(this.quasarConf)
     if (err !== void 0) process.exit(1)
 
     copyBexAssets(this.quasarConf)
