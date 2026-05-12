@@ -200,7 +200,7 @@ Edit your `/package.json` on the `@quasar/app-vite` entry:
 Make sure you also have Vue Router v5+ too, which is now the minimum version required!
 
 ```json /package.json
-"devDependencies": {
+"dependencies": {
   "vue-router": "^5.0.6"
 }
 ```
