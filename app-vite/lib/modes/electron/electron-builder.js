@@ -80,7 +80,7 @@ export class QuasarModeBuilder extends AppBuilder {
       }
     }
 
-    await quasarConf.ctx.appExt.runAppExtensionHook(
+    await this.ctx.appExt.runAppExtensionHook(
       'extendElectronPackageJson',
       async hook => {
         log(

@@ -110,7 +110,7 @@ export const quasarPwaConfig = {
         }
       }
 
-      await quasarConf.ctx.appExt.runAppExtensionHook(
+      await ctx.appExt.runAppExtensionHook(
         'extendPWAGenerateSWOptions',
         async hook => {
           log(
@@ -132,7 +132,7 @@ export const quasarPwaConfig = {
           }
         }
 
-        await quasarConf.ctx.appExt.runAppExtensionHook(
+        await ctx.appExt.runAppExtensionHook(
           'extendSSRGenerateSWOptions',
           async hook => {
             log(
@@ -166,7 +166,7 @@ export const quasarPwaConfig = {
         }
       }
 
-      await quasarConf.ctx.appExt.runAppExtensionHook(
+      await ctx.appExt.runAppExtensionHook(
         'extendPWAInjectManifestOptions',
         async hook => {
           log(
@@ -191,7 +191,7 @@ export const quasarPwaConfig = {
           }
         }
 
-        await quasarConf.ctx.appExt.runAppExtensionHook(
+        await ctx.appExt.runAppExtensionHook(
           'extendSSRInjectManifestOptions',
           async hook => {
             log(

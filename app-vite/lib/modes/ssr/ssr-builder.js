@@ -218,7 +218,7 @@ export class QuasarModeBuilder extends AppBuilder {
       }
     }
 
-    await quasarConf.ctx.appExt.runAppExtensionHook(
+    await this.ctx.appExt.runAppExtensionHook(
       'extendSSRPackageJson',
       async hook => {
         log(
