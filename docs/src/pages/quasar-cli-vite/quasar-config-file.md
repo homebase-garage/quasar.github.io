@@ -581,17 +581,21 @@ interface QuasarStaticBuildConfiguration {
    * Set to `true` or an options object for vue-router/vite plugin (to override
    * or add to the default options).
    *
+   * Restart the dev server and your IDE when toggling this option,
+   * or run "quasar prepare" command.
+   *
    * https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
+   *
    * https://router.vuejs.org/file-based-routing/configuration.html
    *
    * Default options supplied to vue-router/vite plugin when enabled:
-   *   filenameBasedRouting: {
-   *     // where are paths relative to
-   *     root: <root_project_folder>,
-   *
-   *     // where to generate the types (if on Typescript projects):
-   *     dts: './src/typed-router.d.ts',
-   *   }
+   * @example
+   * {
+   *   // where are paths relative to:
+   *   root: <root_project_dir>,
+   *   // where to generate the types (if on Typescript projects):
+   *   dts: './src/typed-router.d.ts',
+   * }
    *
    * @default false
    */

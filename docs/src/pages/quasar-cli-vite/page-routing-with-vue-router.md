@@ -71,15 +71,26 @@ If you are developing a SSR app, then you can check out the [ssrContext](/quasar
 
 ### How to enable
 
-Should you want to use Vue Router's filename-based routing, rather than manually handling the `/src/router/routes` file, then you can enable it:
+Should you want to use Vue Router's filename-based routing, rather than manually handling the `/src/router/routes` file, then kill the devserver (if running), then edit:
 
 ```ts /quasar.config file
 build: {
-  filenameBasedRouting?: boolean | VueRouterVitePluginOptions;
+  /**
+   * Should you want to use Vue Router's filename-based routing feature.
+   * Set to `true` or an options object for vue-router/vite plugin (to override
+   * or add to the default options).
+   *
+   * Restart the dev server and your IDE when toggling this option,
+   * or run "quasar prepare" command.
+   *
+   * @type boolean | VueRouterVitePluginOptions
+   * @default false
+   */
+  filenameBasedRouting: true
 }
 ```
 
-Then edit your `/src/router/index.js|ts` file:
+You also need to edit:
 
 ```diff /src/router/index file
 - import routes from './routes'
@@ -99,6 +110,8 @@ export default defineRouter((/* { store, ssrContext } */) => {
   return Router
 })
 ```
+
+Please note that you need to restart the dev server after toggling this option, or run "quasar prepare" command. You might also need to restart your IDE afterwards, too.
 
 ### Folder structure
 
