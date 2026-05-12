@@ -11,6 +11,13 @@ export async function createQuasarScript({ scope, utils }) {
           selected: true
         },
         {
+          title: 'Vue Router filename-based routing',
+          value: 'filenameBasedRouting',
+          description:
+            'https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing',
+          selected: true
+        },
+        {
           title: 'Linting & Formatting (oxlint + oxfmt or ESLint + prettier)',
           value: 'linting',
           description: 'recommended',
@@ -23,7 +30,8 @@ export async function createQuasarScript({ scope, utils }) {
         },
         {
           title: 'Internationalization (vue-i18n)',
-          value: 'i18n'
+          value: 'i18n',
+          description: 'https://vue-i18n.intlify.dev'
         }
       ],
       format: utils.convertArrayToObject
@@ -58,4 +66,11 @@ export async function createQuasarScript({ scope, utils }) {
 
   if (scope.linter === 'oxlint') utils.renderTemplate('oxlint', scope)
   else if (scope.linter === 'eslint') utils.renderTemplate('eslint', scope)
+
+  utils.renderTemplate(
+    scope.preset.filenameBasedRouting
+      ? 'filenameBasedRouting'
+      : 'manualRouting',
+    scope
+  )
 }
