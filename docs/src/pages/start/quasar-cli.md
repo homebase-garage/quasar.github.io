@@ -44,12 +44,7 @@ $ bun install -g @quasar/cli
 $ bun create quasar@latest
 ```
 
-Pick `Quasar CLI with Vite` if you want:
-
-- Faster dev server start
-- Faster hot updates
-- Faster build
-- Superior PWA, SSR and BEX Quasar modes (more features)
+Pick `App with Quasar CLI`.
 
 <q-btn icon-right="launch" no-wrap label="View Components" to="/components" />
 
@@ -57,7 +52,7 @@ Pick `Quasar CLI with Vite` if you want:
 
 ::: tip Requirements:
 
-- Node.js v22+ for Quasar CLI with Vite.
+- Node.js v22+ for Quasar CLI.
 - Yarn v1 (classic), PNPM, NPM or Bun.
   :::
 
