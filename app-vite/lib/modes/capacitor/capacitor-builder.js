@@ -83,7 +83,13 @@ export class QuasarModeBuilder extends AppBuilder {
 
   async #buildIos() {
     const buildType = this.quasarConf.metaConf.debugging ? 'debug' : 'release'
-    const args = `xcodebuild -workspace App.xcworkspace -scheme App -configuration ${buildType} -derivedDataPath`
+    const workspaceArg = fse.existsSync(
+      this.ctx.appPaths.resolve.capacitor('ios/App/App.xcworkspace')
+    )
+      ? ' -workspace App.xcworkspace'
+      : ''
+
+    const args = `xcodebuild${workspaceArg} -scheme App -configuration ${buildType} -derivedDataPath`
 
     log('Building iOS app...')
 
