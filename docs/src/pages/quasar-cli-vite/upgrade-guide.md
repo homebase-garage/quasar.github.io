@@ -16,7 +16,7 @@ You might want to release new versions of your Quasar App Extensions with suppor
 api.compatibleWith(
   '@quasar/app-vite',
 - '^2.0.0'
-+ '^3.0.0-beta.8'
++ '^3.0.0-beta.9'
 )
 ```
 
@@ -163,6 +163,8 @@ api.extendBexManifestJson: (
 
 - 🖥️ Revamped Electron Mode: We’ve added lots of new features to make desktop development smoother. Similar to SSR, we've introduced a /src-electron/electron-assets folder. Referencing files from here (or from the /public folder) is now much easier via new utility methods available in both /src-electron and /src.
 
+- 🛣️ Vue Router: First-class support for the [filename-based routing](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing)
+
 - 🛠️ Modernized Core: The codebase has been updated to take full advantage of Node.js v22+ features, alongside countless other small but significant improvements across all Quasar modes to boost your productivity.
 
 ## Start the upgrade
@@ -186,12 +188,12 @@ $ bun create quasar@latest
 
 ### /package.json
 
-Edit your `/package.json` on the `@quasar/app-vite` entry and assign it `^3.0.0-beta.8`:
+Edit your `/package.json` on the `@quasar/app-vite` entry:
 
 ```diff /package.json
 "devDependencies": {
 - "@quasar/app-vite": "^2.0.0",
-+ "@quasar/app-vite": "^3.0.0-beta.8"
++ "@quasar/app-vite": "^3.0.0-beta.9"
 }
 ```
 
@@ -382,6 +384,9 @@ build: {
 
 +  vueOptionsAPI // change to "true" if needed; defaults to "false" now!
 -  polyfillModulePreload // deferring to Vite's default
+
++  // new! Vue Router v5+ filename-based routing
++  filenameBasedRouting: boolean | VueRouterVitePluginOptions
 },
 
 sourceFiles: {
@@ -868,6 +873,12 @@ You may also want to switch your linting and formatting to `oxlint` and `oxfmt`.
 As of writing these lines, the support for `.vue` files is not yet fully ready, but you will still be able to enjoy it a lot.
 
 [More info](/quasar-cli-vite/lint-and-format-code#oxlint-oxfmt)
+
+### Filename-based routing with Vue Router v5+
+
+We now have first-class support for Vue Router's filename-based routing.
+
+You might want to [give it a try](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
 
 ## Final Note
 

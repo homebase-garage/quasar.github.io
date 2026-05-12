@@ -745,8 +745,8 @@ export default [
         path: 'css-preprocessors'
       },
       {
-        name: 'Routing',
-        path: 'routing'
+        name: 'Page Routing with VueRouter',
+        path: 'page-routing-with-vue-router'
       },
       {
         name: 'Lazy Loading - Code Splitting',

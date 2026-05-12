@@ -11,7 +11,7 @@ The `ssrContext` Object is the SSR context with which all the app's Vue componen
 The `ssrContext` Object is available only on SSR builds, on the server-side compilation (when `import.meta.env.QUASAR_SERVER` is boolean `true`).
 :::
 
-Among other places, it is supplied as parameter to [boot files](/quasar-cli-vite/boot-files), to the [Pinia instance](/quasar-cli-vite/state-management-with-pinia) and [Vue Router](/quasar-cli-vite/routing) initialization functions, and to the [preFetch](/quasar-cli-vite/prefetch-feature) method:
+Among other places, it is supplied as parameter to [boot files](/quasar-cli-vite/boot-files), to the [Pinia instance](/quasar-cli-vite/state-management-with-pinia) and [Vue Router](/quasar-cli-vite/page-routing-with-vue-router) initialization functions, and to the [preFetch](/quasar-cli-vite/prefetch-feature) method:
 
 ```js
 // a boot file

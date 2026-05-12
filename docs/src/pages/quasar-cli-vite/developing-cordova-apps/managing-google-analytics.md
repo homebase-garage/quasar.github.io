@@ -15,7 +15,7 @@ You'll need to include a `<script>` tag provided by Google in `/index.html`, whi
 
 ## Prerequisites
 
-- Make sure all your routes have a name and path parameter specified. Otherwise, they cannot be posted to the `ga.logPage` function. Please refer to [Routing](/quasar-cli-vite/routing) for more info on routing.
+- Make sure all your routes have a name and path parameter specified. Otherwise, they cannot be posted to the `ga.logPage` function. Please refer to [Page Routing with Vue Router](/quasar-cli-vite/page-routing-with-vue-router) for more info on routing.
 - Have Basic knowledge of Google Analytics
 
 ## Preparation

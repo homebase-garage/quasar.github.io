@@ -33,7 +33,7 @@ scope:
             url: '/quasar-cli-vite/boot-files'
           - l: router
             e: Vue Router
-            url: '/quasar-cli-vite/routing'
+            url: '/quasar-cli-vite/page-routing-with-vue-router'
             c:
               - l: index.js
                 e: (or .ts) Vue Router definition

@@ -3,6 +3,12 @@ title: Lazy Loading / Code Splitting
 desc: (@quasar/app-vite) How to create async chunks in a Quasar CLI with Vite app.
 ---
 
+::: tip Important!
+This page refers to a project where [Filename-Based Routing](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing) is **NOT** enabled.
+
+When this feature is enabled, the default config will automatically lazy load all the layouts and pages, so you don't need this guide.
+:::
+
 When your website/app is small, you can load all layouts/pages/components into the initial bundle and serve everything at startup. But when your code gets complex and has many layouts/pages/components, it won't be optimal to do this as it will massively impact loading time. Fortunately, there is a way to solve this.
 
 We'll cover how you can lazy load / code split parts of your app so that they are automatically requested only on demand. This is done through dynamic imports. Let's start with an example and then convert it so that we use lazy loading -- we'll focus this example on loading a page, but the same principle can be applied to load anything (assets, JSONs, ...).

@@ -33,6 +33,10 @@ const routes = [
     path: '/quasar-cli-vite/convert-to-quasar-cli-with-vite',
     redirect: '/quasar-cli-vite/convert-app-webpack-to-app-vite'
   },
+  {
+    path: '/quasar-cli-vite/routing',
+    redirect: '/quasar-cli-vite/page-routing-with-vue-router'
+  },
 
   // shortcuts
   { path: '/start', redirect: '/start/quick-start' },
