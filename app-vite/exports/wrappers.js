@@ -19,3 +19,8 @@ export const defineSsrListen = wrapper
 export const defineSsrClose = wrapper
 export const defineSsrServeStaticContent = wrapper
 export const defineSsrRenderPreloadTag = wrapper
+
+export const defineInstallScript = wrapper
+export const defineUninstallScript = wrapper
+export const definePromptsScript = wrapper
+export const defineIndexScript = wrapper

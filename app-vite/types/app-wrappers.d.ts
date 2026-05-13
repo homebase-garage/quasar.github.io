@@ -15,6 +15,13 @@ import type {
   SsrServeStaticContentCallback
 } from "./ssr";
 
+import type {
+  IndexAPICallback,
+  InstallAPICallback,
+  PromptsAPICallback,
+  UninstallAPICallback
+} from "./app-extension";
+
 /** Some arguments are available only if you enable the related mode: `store` when using the Store, `ssrContext` when using SSR, etc */
 
 export function defineConfig(callback: ConfigureCallback): ConfigureCallback;
@@ -48,3 +55,17 @@ export function defineSsrServeStaticContent(
 export function defineSsrRenderPreloadTag(
   callback: SsrRenderPreloadTagCallback
 ): SsrRenderPreloadTagCallback;
+
+export function defineIndexScript(callback: IndexAPICallback): IndexAPICallback;
+
+export function defineInstallScript(
+  callback: InstallAPICallback
+): InstallAPICallback;
+
+export function defineUninstallScript(
+  callback: UninstallAPICallback
+): UninstallAPICallback;
+
+export function definePromptsScript(
+  callback: PromptsAPICallback
+): PromptsAPICallback;

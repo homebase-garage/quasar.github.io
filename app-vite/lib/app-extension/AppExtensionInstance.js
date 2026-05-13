@@ -314,7 +314,7 @@ export class AppExtensionInstance {
   }
 
   #scriptsTargetFolderList = ['dist', 'src']
-  #scriptsExtensionList = ['', '.js', '.mjs', '.cjs']
+  #scriptsExtensionList = ['', '.js', '.ts', '.mjs', '.cjs']
   /**
    * Returns the absolute path to the script file.
    *

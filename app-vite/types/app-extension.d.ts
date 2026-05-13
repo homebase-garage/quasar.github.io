@@ -1,10 +1,11 @@
-import { UserConfig as ViteUserConfig } from "vite";
-import { GenerateSWOptions, InjectManifestOptions } from "workbox-build";
+import type { UserConfig as ViteUserConfig } from "vite";
+import type { GenerateSWOptions, InjectManifestOptions } from "workbox-build";
+import type { RolldownOptions } from "rolldown";
+import type { Answers, Question } from "inquirer";
 import { IResolve } from "./app-paths";
 import { QuasarConf, ResolvedQuasarConfValue } from "./configuration/conf";
 import { QuasarContext } from "./configuration/context";
 import { PwaManifestOptions } from "./configuration/pwa-conf";
-import { RolldownOptions } from "rolldown";
 
 type ExtendViteConfHandler = (
   fn: (
@@ -53,7 +54,7 @@ interface SharedIndexInstallAPI {
 type Callback<T> = (callback: T) => void;
 
 export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
-  readonly prompts: Record<string, unknown>;
+  readonly prompts: Answers;
 
   readonly extendQuasarConf: Callback<
     (
@@ -264,9 +265,11 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   >;
 }
 
+export type IndexAPICallback = (api: IndexAPI) => void;
+
 type ExitLogHandler = (msg: string) => void;
 export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
-  readonly prompts: Record<string, unknown>;
+  readonly prompts: Answers;
 
   readonly extendPackageJson: (extPkg: object | string) => void;
   readonly extendJsonFile: (file: string, newData: object) => void;
@@ -279,14 +282,18 @@ export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
   readonly onExitLog: ExitLogHandler;
 }
 
+export type InstallAPICallback = (api: InstallAPI) => void;
+
 export interface UninstallAPI extends BaseAPI {
-  readonly prompts: Record<string, unknown>;
+  readonly prompts: Answers;
 
   readonly getPersistentConf: GetPersistentConfHandler;
   readonly hasExtension: HasExtensionHandler;
   readonly removePath: (__path: string) => void;
   readonly onExitLog: ExitLogHandler;
 }
+
+export type UninstallAPICallback = (api: UninstallAPI) => void;
 
 export interface PromptsAPI extends BaseAPI {
   readonly compatibleWith: (
@@ -300,3 +307,5 @@ export interface PromptsAPI extends BaseAPI {
   readonly hasExtension: HasExtensionHandler;
   readonly getPackageVersion: (packageName: string) => string | undefined;
 }
+
+export type PromptsAPICallback = (api: PromptsAPI) => Question[];
