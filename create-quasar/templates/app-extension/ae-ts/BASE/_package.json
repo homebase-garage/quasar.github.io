@@ -1,39 +1,31 @@
 {
-  "name": "quasar-app-extension-<%= scope.name %>-monorepo",
+  "name": "quasar-app-extension",
+  "version": "0.0.1",
   "private": true,
-  <% if (scope.packageManagerField) { %>"packageManager": "<%= scope.packageManagerField %>",<% } %>
+  "description": "A Quasar App Extension",
   "author": "<%= scope.author %>",
   "type": "module",
-  <% if (scope.packageManager?.name !== 'pnpm') { %>"workspaces": [
-    "app-extension",
-    "playground/*"
-  ],<% } %>
   "scripts": {
-    <% if (scope.packageManager) { %>
-    "build": <% if (['pnpm', 'bun'].includes(scope.packageManager.name)) { %>"<%= scope.packageManager.name %> --filter ./app-extension build"<% } else if (scope.packageManager.name === 'yarn') { %>"yarn workspace <%= scope.pkgName %> build"<% } else { %>"npm run --workspace <%= scope.pkgName %> build"<% } %>,
-    "dev:vite": <% if (['pnpm', 'bun'].includes(scope.packageManager.name)) { %>"<%= scope.packageManager.name %> --filter ./playground/quasar-cli-vite dev"<% } else if (scope.packageManager.name === 'yarn') { %>"yarn workspace playground-quasar-cli-vite dev"<% } else { %>"npm run --workspace playground-quasar-cli-vite dev"<% } %>,
-    "dev:webpack": <% if (['pnpm', 'bun'].includes(scope.packageManager.name)) { %>"<%= scope.packageManager.name %> --filter ./playground/quasar-cli-webpack dev"<% } else if (scope.packageManager.name === 'yarn') { %>"yarn workspace playground-quasar-cli-webpack dev"<% } else { %>"npm run --workspace playground-quasar-cli-webpack dev"<% } %>,
-    "format": <% if (scope.packageManager.name === 'pnpm') { %>"pnpm format:root && pnpm --recursive format"<% } else if (scope.packageManager.name === 'bun') { %>"bun format:root && bun --filter '*' format"<% } else if (scope.packageManager.name === 'yarn') { %>"yarn format:root && yarn workspace <%= scope.pkgName %> format"<% } else { %>"npm run format:root && npm run --workspaces format"<% } %>,
-    <% } else { %>
-    "build": "pnpm --filter ./app-extension build",
-    "dev:vite": "pnpm --filter ./playground/quasar-cli-vite dev",
-    "dev:webpack": "pnpm --filter ./playground/quasar-cli-webpack dev",
-    "format": "pnpm format:root && pnpm --recursive format",
-    <% } %>
-    "lint": "eslint",
-    "format:root": "prettier --write \"./*.{json,md,vue,js,ts,yml}\" \"./.vscode/*.json\" --ignore-path .gitignore"
+<% if (scope.preset.oxlint) { %>
+    "lint": "oxfmt && oxlint --fix",
+    "lint:check": "oxfmt --check && oxlint",
+<% } %>
+    "dev": "pnpm --filter playground dev",
+    "invoke": "pnpm --filter playground invoke",
+    "cycle": "pnpm --filter playground cycle",
+    "postinstall": "pnpm --filter playground prepare"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@types/eslint": "^9.6.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/node": "^20.12.8",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-vue": "^9.27.0",
-    "globals": "^17.4.0",
-    "prettier": "^3.8.1",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.0.1"
-  }
+<% if (scope.preset.oxlint) { %>
+    "oxfmt": "^0.x",
+    "oxlint": "^1.63.0",
+    "oxlint-tsgolint": "^0.22.1",
+<% } %>
+    "typescript": "npm:@typescript/typescript6@^6.0.0"
+  },
+  "engines": {
+    "node": "^28 || ^26 || ^24 || ^22.12",
+    "pnpm": ">= 11"
+  },
+  "productName": "Quasar App Extension"
 }

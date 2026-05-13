@@ -1,36 +1,43 @@
-Quasar App Extension <%= scope.name %>
-===
+# Quasar App Extension "<%= scope.aeShortName %>"
 
-_Be sure to change this readme as appropriate for your app extension._
+## Developing
 
-_Think about the organization of this file and how the information will be beneficial to the user._
+- Use PNPM v11+.
+- Notice /package.json scripts:
 
-> Add a short description of your App Extension. What does it do? How is it beneficial? Why would someone want to use it?
-
-<%= scope.description %>
-
-# Install
 ```bash
-quasar ext add <%= scope.name %>
-```
-Quasar CLI will retrieve it from the NPM registry and install the extension to your project.
-
-<% if (scope.preset.prompts) { %>
-## Prompts
-
-> Explain the prompts here
+<% if (scope.preset.oxlint) { %>
+# Lint & format
+$ pnpm run lint
+$ pnpm run lint:check
 
 <% } %>
-# Uninstall
-```bash
-quasar ext remove <%= scope.name %>
+# Use playground to develop;
+# Helps you test the Index script as well
+$ pnpm run dev
+$ pnpm run dev -m ssr
+
+# Invokes the AE into /playground when needed
+# (like when changing the scripts themselves);
+# Helps you run the Install & Prompts scripts
+$ pnpm run invoke
+
+# Uninstall & re-install AE;
+# Helps you mainly to run the Uninstall script
+$ pnpm run cycle
 ```
 
-# Info
-> Add longer information here that will help the user of your app extension.
+## Publishing
 
-# Other Info
-> Add other information that's not as important to know
+- Make sure to edit /ae/README.md.
+- In order to publish the AE, do it from within /ae folder:
 
-# Donate
+```bash
+# from /ae folder ONLY:
+pnpm login
+pnpm publish
+```
+
+## Donate
+
 If you appreciate the work that went into this App Extension, please consider [donating to Quasar](https://donate.quasar.dev).

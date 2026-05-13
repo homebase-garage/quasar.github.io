@@ -2,4 +2,5 @@
 
 # required by Vite 8
 allowBuilds:
+  '@parcel/watcher': true
   esbuild: true

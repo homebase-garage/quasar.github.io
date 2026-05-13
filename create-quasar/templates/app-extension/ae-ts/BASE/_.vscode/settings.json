@@ -1,12 +1,17 @@
 {
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "search.exclude": {
+    "playground/dist/": true,
+    "playground/.quasar/": true,
+    "playground/quasar.config.js.temporary.*": true
+  }<% if (scope.preset.oxlint) { %>,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.oxc": "always"
   },
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
-  "eslint.workingDirectories": ["./app-extension", "./ui", "./playground/*"],
-  "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "oxc.fmt.configPath": "oxfmt.config.ts",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true
+<% } %>
 }

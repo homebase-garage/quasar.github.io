@@ -195,6 +195,7 @@ If you're using PNPM v11, edit your `/pnpm-workspace.yaml` file. No longer needi
 
 # required by Vite 8
 allowBuilds:
+  '@parcel/watcher': true
   esbuild: true
 ```
 
@@ -379,6 +380,7 @@ Still for PNPM, edit your root project file `/pnpm-workspace.yaml`:
 -  - esbuild
 
 + allowBuilds:
++.  '@parcel/watcher': true
 +   esbuild: true
 <<| diff PNPM v10 |>>
 - shamefullyHoist: true
@@ -387,6 +389,7 @@ Still for PNPM, edit your root project file `/pnpm-workspace.yaml`:
 -  - esbuild
 
 + onlyBuiltDependencies:
++.  '@parcel/watcher': true
 +   esbuild: true
 ```
 

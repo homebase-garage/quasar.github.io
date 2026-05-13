@@ -53,14 +53,9 @@ await utils.prompts(scope, [
         description: 'spa/pwa/ssr/bex/electron/capacitor/cordova'
       },
       {
-        title: 'AppExtension (AE) for Quasar CLI',
+        title: 'AppExtension for Quasar CLI',
         value: 'app-extension',
-        description: 'Quasar CLI AE'
-      },
-      {
-        title: 'Quasar UI kit',
-        value: 'ui-kit',
-        description: 'Vue component and/or directive'
+        description: 'AE'
       }
     ]
   },

@@ -1,0 +1,20 @@
+{
+  "name": "<%= scope.aeFullName %>",
+  "version": "0.0.1",
+  "description": "<%= scope.description %>",
+  "author": "<%= scope.author %>",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "catalog:",
+    "quasar": "catalog:",
+    "vue": "catalog:"
+  },
+  "engines": {
+    "node": ">= 22"
+  }
+}

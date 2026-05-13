@@ -1,35 +1,43 @@
-<img src="https://img.shields.io/npm/v/<%= pkgName %>.svg?label=<%= pkgName %>">
+# Quasar App Extension "<%= scope.aeShortName %>"
 
-Compatible with:
+## Developing
 
-- Quasar UI v2 and Vue 3
-- Quasar CLI with Vite v1.5+ and v2
-- Quasar CLI with Webpack v3.10+ and v4
-
-# Structure
-
-- [/app-extension](app-extension) - App Extension for Quasar CLI
-- [/playground](playground) - collection of playground apps to test the UI and App Extension
-
-# Development
+- Use PNPM v11+.
+- Notice /package.json scripts:
 
 ```bash
-$ <%= scope.packageManager?.name ?? 'pnpm' %> i # install the dependencies
+<% if (scope.preset.oxlint) { %>
+# Lint & format
+$ pnpm run lint
+$ pnpm run lint:check
 
-$ <%= scope.packageManager?.name ?? 'pnpm' %> build # build the app-extension. Run this after making any change in ./app-extension
+<% } %>
+# Use playground to develop;
+# Helps you test the Index script as well
+$ pnpm run dev
+$ pnpm run dev -m ssr
 
-$ <%= scope.packageManager?.name ?? 'pnpm' %> dev:vite # start the app-vite playground
-$ <%= scope.packageManager?.name ?? 'pnpm' %> dev:webpack # start the app-webpack playground
+# Invokes the AE into /playground when needed
+# (like when changing the scripts themselves);
+# Helps you run the Install & Prompts scripts
+$ pnpm run invoke
+
+# Uninstall & re-install AE;
+# Helps you mainly to run the Uninstall script
+$ pnpm run cycle
 ```
 
-For more development-related explanation, see:
-- [`app-extension/src/runtime/README.md`](app-extension/src/runtime/README.md)
-<% if (scope.preset.install) { %>- [`app-extension/src/templates/README.md`](app-extension/src/templates/README.md)<% } %>
+## Publishing
 
-# Donate
+- Make sure to edit /ae/README.md.
+- In order to publish the AE, do it from within /ae folder:
 
-If you appreciate the work that went into this project, please consider [donating to Quasar](https://donate.quasar.dev).
+```bash
+# from /ae folder ONLY:
+pnpm login
+pnpm publish
+```
 
-# License
+## Donate
 
-MIT (c) <%= scope.author %>
+If you appreciate the work that went into this App Extension, please consider [donating to Quasar](https://donate.quasar.dev).
