@@ -63,17 +63,15 @@ export default {
 
     removeTags(text) {
       return text.length > 25
-        ? text
-            .replaceAll(new RegExp('<b>', 'g'), '')
-            .replaceAll(new RegExp('</b>', 'g'), '')
+        ? text.replaceAll(/<b>/, '').replaceAll(/<\/b>/, '')
         : text
     },
 
     addTags(text) {
       return text
-        .replaceAll(new RegExp('<b>', 'g'), '')
-        .replaceAll(new RegExp('</b>', 'g'), '')
-        .replaceAll(new RegExp('bacon', 'g'), '<i>bacon</i>')
+        .replaceAll(/<b>/, '')
+        .replaceAll(/<\/b>/, '')
+        .replaceAll(/bacon/, '<i>bacon</i>')
     },
 
     onBlur() {

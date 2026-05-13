@@ -16,7 +16,7 @@
     "@quasar/extras": "workspace:*",
     "@quasar/vite-plugin": "workspace:^",
     "@vitejs/plugin-vue": "^6.0.6",
-    "@vitest/ui": "^4.1.5",
+    "@vitest/ui": "^4.1.6",
     "@vue/test-utils": "^2.4.10",
     "acorn": "^8.16.0",
     "fs-extra": "^11.3.5",
@@ -24,7 +24,7 @@
     "prompts": "^2.4.2",
     "tinyglobby": "^0.2.16",
     "vite": "^8.0.11",
-    "vitest": "^4.1.5",
+    "vitest": "^4.1.6",
     "vue": "catalog:",
     "vue-router": "catalog:"
   }
