@@ -763,7 +763,7 @@ export class QuasarConfigFile {
           )
           const overrides = await hook.fn(rawQuasarConf, hook.api)
           if (Object(overrides) === overrides) {
-            rawQuasarConf = mergeConfig(rawQuasarConf, overrides)
+            rawQuasarConf = merge(rawQuasarConf, overrides)
           }
         }
       )

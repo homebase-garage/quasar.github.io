@@ -265,7 +265,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   >;
 }
 
-export type IndexAPICallback = (api: IndexAPI) => void;
+export type IndexAPICallback = (api: IndexAPI) => void | Promise<void>;
 
 type ExitLogHandler = (msg: string) => void;
 export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
@@ -282,7 +282,7 @@ export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
   readonly onExitLog: ExitLogHandler;
 }
 
-export type InstallAPICallback = (api: InstallAPI) => void;
+export type InstallAPICallback = (api: InstallAPI) => void | Promise<void>;
 
 export interface UninstallAPI extends BaseAPI {
   readonly prompts: Answers;
@@ -293,7 +293,7 @@ export interface UninstallAPI extends BaseAPI {
   readonly onExitLog: ExitLogHandler;
 }
 
-export type UninstallAPICallback = (api: UninstallAPI) => void;
+export type UninstallAPICallback = (api: UninstallAPI) => void | Promise<void>;
 
 export interface PromptsAPI extends BaseAPI {
   readonly compatibleWith: (
@@ -308,4 +308,6 @@ export interface PromptsAPI extends BaseAPI {
   readonly getPackageVersion: (packageName: string) => string | undefined;
 }
 
-export type PromptsAPICallback = (api: PromptsAPI) => Question[];
+export type PromptsAPICallback = (
+  api: PromptsAPI
+) => Question[] | Promise<Question[]>;

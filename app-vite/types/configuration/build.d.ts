@@ -176,12 +176,10 @@ interface QuasarStaticBuildConfiguration {
    * @example
    * ```js
    * // directly modify the config object
-   * import { mergeConfig } from 'vite'
-   * // ...
    * extendViteConf(config) {
-   *   config.optimizeDeps = mergeConfig(config.optimizeDeps, {
-   *     include: ['some-package']
-   *   }, false)
+   *   config.optimizeDeps ||= {}
+   *   config.optimizeDeps.include ||= []
+   *   config.optimizeDeps.include.push('some-package)
    * }
    * ```
    */
