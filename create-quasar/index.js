@@ -39,6 +39,11 @@ if (scope.projectFolder) {
 }
 
 const defaultProjectFolder = 'quasar-project'
+const isPnpm =
+  // invoked directly, not through a package manager
+  !utils.runningPackageManager ||
+  // only available for pnpm
+  utils.runningPackageManager.name === 'pnpm'
 
 await utils.prompts(scope, [
   {
@@ -53,9 +58,14 @@ await utils.prompts(scope, [
         description: 'spa/pwa/ssr/bex/electron/capacitor/cordova'
       },
       {
-        title: 'AppExtension for Quasar CLI',
+        title:
+          'AppExtension for Quasar CLI' +
+          (isPnpm
+            ? ''
+            : ' (PNPM only, run "pnpm create quasar@latest" to select)'),
         value: 'app-extension',
-        description: 'AE'
+        description: isPnpm ? 'AE (with PNPM only)' : null,
+        disabled: !isPnpm
       }
     ]
   },
@@ -137,8 +147,8 @@ if (scope.skipDepsInstall !== true) {
                 { title: 'No, I will handle that myself', value: false }
               ]
             : [
-                { title: 'Yes, use Yarn (recommended)', value: 'yarn' },
                 { title: 'Yes, use PNPM (recommended)', value: 'pnpm' },
+                { title: 'Yes, use Yarn (recommended)', value: 'yarn' },
                 { title: 'Yes, use NPM', value: 'npm' },
                 { title: 'Yes, use Bun', value: 'bun' },
                 { title: 'No, I will handle that myself', value: false }

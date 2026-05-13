@@ -70,4 +70,9 @@ export async function createQuasarScript({ scope, utils }) {
   if (scope.preset.uninstall) utils.renderTemplate(`${dir}/uninstall`, scope)
 
   if (scope.preset.oxlint) utils.renderTemplate(`${dir}/oxlint`, scope)
+
+  if (!utils.runningPackageManager) {
+    // if invoked directly, not through a package manager, default to pnpm
+    utils.runningPackageManager = { name: 'pnpm' }
+  }
 }
