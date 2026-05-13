@@ -1149,13 +1149,14 @@ export class QuasarConfigFile {
         cfg.metaConf.needsAppMountHook = true
       }
 
-      if (cfg.ssr.middlewares.length !== 0) {
-        cfg.ssr.middlewares = cfg.ssr.middlewares
-          .filter(Boolean)
-          .map(parseAssetProperty('app/src-ssr/middlewares'))
-          .filter(asset => asset.path)
-          .filter(uniquePathFilter)
-      }
+      cfg.ssr.middlewares =
+        cfg.ssr.middlewares.length !== 0
+          ? cfg.ssr.middlewares
+              .filter(Boolean)
+              .map(parseAssetProperty('app/src-ssr/middlewares'))
+              .filter(asset => asset.path)
+              .filter(uniquePathFilter)
+          : ['render'].map(parseAssetProperty('app/src-ssr/middlewares'))
 
       if (cfg.ssr.pwa) {
         // install pwa mode if it's missing
