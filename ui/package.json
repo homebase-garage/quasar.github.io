@@ -89,7 +89,8 @@
     "sass-embedded": "^1.98.0",
     "table": "^6.8.2",
     "tinyglobby": "^0.2.16",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "webpack-merge": "^6.0.1"
   },
   "engines": {
     "node": ">= 10.18.1",
