@@ -1,6 +1,5 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import MagicString from 'magic-string'
 
 const dirnameReplacement = '__quasar_inject_dirname__'
 const filenameReplacement = '__quasar_inject_filename__'
@@ -51,15 +50,7 @@ export function quasarRolldownInjectReplacementsPlugin() {
         prefix += `const ${importMetaFilenameReplacement} = ${idPath};\n`
       }
 
-      if (!prefix) return null
-
-      const s = new MagicString(code)
-      s.prepend(prefix)
-
-      return {
-        code: s.toString(),
-        map: s.generateMap({ source: id, hires: true })
-      }
+      return prefix ? { code: prefix + code } : null
     }
   }
 }

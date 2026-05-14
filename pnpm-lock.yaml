@@ -107,9 +107,6 @@ importers:
       kolorist:
         specifier: ^1.8.0
         version: 1.8.0
-      magic-string:
-        specifier: ^0.30.21
-        version: 0.30.21
       minimist:
         specifier: ^1.2.8
         version: 1.2.8
