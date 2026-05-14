@@ -14,7 +14,48 @@ import { defineUninstallScript } from '@quasar/app-vite'
 export default defineUninstallScript((/* api */) => {})
 ```
 
+::: warning
+You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
+
+On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite` (or legacy `@quasar/app-webpack`, depending on the project). However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
+:::
+
 ## The API param
+
+### api.ctx
+
+Same as the `ctx` from the `/quasar.config` file.
+
+```js api.ctx example:
+{
+  appPaths: {
+    cliDir: '...absolute path of it',
+    appDir: '...absolute path of it',
+    srcDir: '...absolute path of it',
+    publicDir: '...absolute path of it',
+    pwaDir: '...absolute path of it',
+    ssrDir: '...absolute path of it',
+    cordovaDir: '...absolute path of it',
+    capacitorDir: '...absolute path of it',
+    electronDir: '...absolute path of it',
+    bexDir: '...absolute path of it',
+    quasarConfigFilename: '...absolute path of the quasar.config file',
+    quasarConfigInputFormat: 'js', // or 'ts'
+    resolve: {
+      cli: (...paths) => theAbsolutePathToCliDir,
+      app: (...paths) => theAbsolutePathToAppDir,
+      src: (...paths) => theAbsolutePathToAppSrcDir,
+      public: (...paths) => theAbsolutePathToPublicDir,
+      pwa: (...paths) => theAbsolutePathToAppSrcPwaDir,
+      ssr: (...paths) => theAbsolutePathToAppSrcSsrDir,
+      cordova: (...paths) => theAbsolutePathToAppSrcCordovaDir,
+      capacitor: (...paths) => theAbsolutePathToAppSrcCapacitorDir,
+      electron: (...paths) => theAbsolutePathToAppSrcElectronDir,
+      bex: (...paths) => theAbsolutePathToAppSrcBexDir
+    }
+  }
+}
+```
 
 ### api.engine
 

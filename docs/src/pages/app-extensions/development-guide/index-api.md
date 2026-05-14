@@ -14,6 +14,12 @@ import { defineIndexScript } from '@quasar/app-vite'
 export default defineIndexScript(api => {})
 ```
 
+::: warning
+You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
+
+On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite` (or legacy `@quasar/app-webpack`, depending on the project). However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
+:::
+
 ## The API param
 
 ### api.ctx
@@ -28,6 +34,50 @@ if (api.ctx.dev && api.ctx.mode.electron) {
     // do something when running quasar dev and
     // with Electron mode
   })
+}
+```
+
+```js api.ctx example:
+{
+  dev: true,
+  prod: false,
+  mode: { spa: true },
+  modeName: 'spa',
+  target: {},
+  targetName: undefined,
+  arch: {},
+  archName: undefined,
+  bundler: {},
+  bundlerName: undefined,
+  debug: false,
+  publish: undefined,
+  vueDevtools: false,
+  appPaths: {
+    cliDir: '...absolute path of it',
+    appDir: '...absolute path of it',
+    srcDir: '...absolute path of it',
+    publicDir: '...absolute path of it',
+    pwaDir: '...absolute path of it',
+    ssrDir: '...absolute path of it',
+    cordovaDir: '...absolute path of it',
+    capacitorDir: '...absolute path of it',
+    electronDir: '...absolute path of it',
+    bexDir: '...absolute path of it',
+    quasarConfigFilename: '...absolute path of the quasar.config file',
+    quasarConfigInputFormat: 'js', // or 'ts'
+    resolve: {
+      cli: (...paths) => theAbsolutePathToCliDir,
+      app: (...paths) => theAbsolutePathToAppDir,
+      src: (...paths) => theAbsolutePathToAppSrcDir,
+      public: (...paths) => theAbsolutePathToPublicDir,
+      pwa: (...paths) => theAbsolutePathToAppSrcPwaDir,
+      ssr: (...paths) => theAbsolutePathToAppSrcSsrDir,
+      cordova: (...paths) => theAbsolutePathToAppSrcCordovaDir,
+      capacitor: (...paths) => theAbsolutePathToAppSrcCapacitorDir,
+      electron: (...paths) => theAbsolutePathToAppSrcElectronDir,
+      bex: (...paths) => theAbsolutePathToAppSrcBexDir
+    }
+  }
 }
 ```
 
@@ -440,7 +490,8 @@ api.extendViteConf: (
 
 // Example:
 api.extendViteConf((viteConf, { isClient, isServer }, api) => {
-  // add/remove/change Quasar CLI generated Vite config object
+  // add/remove/change Quasar CLI generated Vite config object;
+  // similar in use to /quasar.config > build > extendViteConf
 })
 ```
 
@@ -461,7 +512,8 @@ api.extendSSRWebserverConf: (
 
 // Example:
 api.extendSSRWebserverConf((rolldownConf, api) => {
-  // add/remove/change Quasar CLI generated Rolldown config object
+  // add/remove/change Quasar CLI generated Rolldown config object;
+  // similar in use to /quasar.config > ssr > extendSSRWebserverConf
 })
 ```
 
@@ -484,7 +536,8 @@ api.extendSSRPackageJson: (
 
 // Example:
 api.extendSSRPackageJson((pkgJson, api) => {
-  // add/remove/change pkgJson
+  // add/remove/change pkgJson;
+  // similar in use to /quasar.config > ssr > extendSSRPackageJson
 })
 ```
 
@@ -507,7 +560,8 @@ api.extendSSRGenerateSWOptions: (
 
 // Example:
 api.extendSSRGenerateSWOptions((config, api) => {
-  // add/remove/change config
+  // add/remove/change config;
+  // similar in use to /quasar.config > ssr > extendSSRGenerateSWOptions
 })
 ```
 
@@ -530,7 +584,8 @@ api.extendSSRInjectManifestOptions: (
 
 // Example:
 api.extendSSRInjectManifestOptions((config, api) => {
-  // add/remove/change config
+  // add/remove/change config;
+  // similar in use to /quasar.config > ssr > extendSSRInjectManifestOptions
 })
 ```
 
@@ -550,7 +605,8 @@ api.extendElectronMainConf: (
 
 // Example:
 api.extendElectronMainConf((rolldownConf, api) => {
-  // add/remove/change Quasar CLI generated Rolldown config object
+  // add/remove/change Quasar CLI generated Rolldown config object;
+  // similar in use to /quasar.config > electron > extendElectronMainConf
 })
 ```
 
@@ -570,7 +626,8 @@ api.extendElectronPreloadConf: (
 
 // Example:
 api.extendElectronPreloadConf((rolldownConf, api) => {
-  // add/remove/change Quasar CLI generated Rolldown config object
+  // add/remove/change Quasar CLI generated Rolldown config object;
+  // similar in use to /quasar.config > electron > extendElectronPreloadConf
 })
 ```
 
@@ -593,7 +650,8 @@ api.extendElectronPackageJson: (
 
 // Example:
 api.extendElectronPackageJson((pkgJson, api) => {
-  // add/remove/change pkgJson
+  // add/remove/change pkgJson;
+  // similar in use to /quasar.config > electron > extendElectronPackageJson
 })
 ```
 
@@ -614,7 +672,8 @@ api.extendPWACustomSWConf: (
 
 // Example:
 api.extendPWACustomSWConf((rolldownConf, api) => {
-  // add/remove/change Quasar CLI generated Rolldown config object
+  // add/remove/change Quasar CLI generated Rolldown config object;
+  // similar in use to /quasar.config > pwa > extendPWACustomSWConf
 })
 ```
 
@@ -635,7 +694,8 @@ api.extendPWAManifestJson: (
 
 // Example:
 api.extendPWAManifestJson((json, api) => {
-  // add/remove/change json
+  // add/remove/change json;
+  // similar in use to /quasar.config > pwa > extendPWAManifestJson
 })
 ```
 
@@ -655,7 +715,8 @@ api.extendPWAGenerateSWOptions: (
 
 // Example:
 api.extendPWAGenerateSWOptions((config, api) => {
-  // add/remove/change config
+  // add/remove/change config;
+  // similar in use to /quasar.config > pwa > extendPWAGenerateSWOptions
 })
 ```
 
@@ -675,7 +736,8 @@ api.extendPWAInjectManifestOptions: (
 
 // Example:
 api.extendPWAInjectManifestOptions((config, api) => {
-  // add/remove/change config
+  // add/remove/change config;
+  // similar in use to /quasar.config > pwa > extendPWAInjectManifestOptions
 })
 ```
 
@@ -696,7 +758,8 @@ api.extendBexScriptsConf: (
 
 // Example:
 api.extendBexScriptsConf((rolldownConf, api) => {
-  // add/remove/change Quasar CLI generated Rolldown config object
+  // add/remove/change Quasar CLI generated Rolldown config object;
+  // similar in use to /quasar.config > bex > extendBexScriptsConf
 })
 ```
 
@@ -717,6 +780,7 @@ api.extendBexManifestJson: (
 
 // Example:
 api.extendBexManifestJson((json, api) => {
-  // add/remove/change json
+  // add/remove/change json;
+  // similar in use to /quasar.config > bex > extendBexManifestJson
 })
 ```

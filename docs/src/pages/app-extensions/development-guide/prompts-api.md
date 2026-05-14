@@ -18,6 +18,12 @@ export default definePromptsScript((/* api */) => {
 })
 ```
 
+::: warning
+You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
+
+On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite` (or legacy `@quasar/app-webpack`, depending on the project). However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
+:::
+
 You will have access to `api.prompts` (which holds your App Extension's answers) in [Install](/app-extensions/development-guide/install-api), [Index](/app-extensions/development-guide/index-api) and [Uninstall](/app-extensions/development-guide/uninstall-api).
 
 Let's now focus on the structure of the returned Array which defines the questions. The sections below offer examples for the most used types of questions.
@@ -97,6 +103,41 @@ The following is not an exhaustive list of possible types of questions and by no
 ```
 
 ## The API param
+
+### api.ctx
+
+Same as the `ctx` from the `/quasar.config` file.
+
+```js api.ctx example:
+{
+  appPaths: {
+    cliDir: '...absolute path of it',
+    appDir: '...absolute path of it',
+    srcDir: '...absolute path of it',
+    publicDir: '...absolute path of it',
+    pwaDir: '...absolute path of it',
+    ssrDir: '...absolute path of it',
+    cordovaDir: '...absolute path of it',
+    capacitorDir: '...absolute path of it',
+    electronDir: '...absolute path of it',
+    bexDir: '...absolute path of it',
+    quasarConfigFilename: '...absolute path of the quasar.config file',
+    quasarConfigInputFormat: 'js', // or 'ts'
+    resolve: {
+      cli: (...paths) => theAbsolutePathToCliDir,
+      app: (...paths) => theAbsolutePathToAppDir,
+      src: (...paths) => theAbsolutePathToAppSrcDir,
+      public: (...paths) => theAbsolutePathToPublicDir,
+      pwa: (...paths) => theAbsolutePathToAppSrcPwaDir,
+      ssr: (...paths) => theAbsolutePathToAppSrcSsrDir,
+      cordova: (...paths) => theAbsolutePathToAppSrcCordovaDir,
+      capacitor: (...paths) => theAbsolutePathToAppSrcCapacitorDir,
+      electron: (...paths) => theAbsolutePathToAppSrcElectronDir,
+      bex: (...paths) => theAbsolutePathToAppSrcBexDir
+    }
+  }
+}
+```
 
 ### api.engine
 
