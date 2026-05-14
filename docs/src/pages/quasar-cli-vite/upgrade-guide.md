@@ -145,6 +145,10 @@ api.extendBexManifestJson: (
 ) => void | object | Promise<void | object>;
 ```
 
+There's also new wrappers that `@quasar/app-vite` now supplies for the Index/Prompts/Install/Uninstall scripts. IDE auto-completion, here we come.
+
+We've also massively upgraded the dev setup for AEs. You might want to do a top to bottom read of the AE docs again, starting with [AE Development Guide](/app-extensions/development-guide/introduction) and spawn a new AE project folder to take advantage of all the new goodies. **TS variant included!**
+
 ## Bird's eye view on what's new
 
 - ⚡ Blazing Fast Compilation: We've replaced esbuild with Rolldown for /src-\* folders and completely redesigned the build architecture. Build steps are now parallelized across all Quasar modes, resulting in significantly faster speeds and a smaller footprint for your production distributables.
