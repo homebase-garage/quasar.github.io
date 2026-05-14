@@ -63,6 +63,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
     ) => QuasarConf | void | Promise<QuasarConf | void>
   >;
 
+  /**
+   * Similar in use to /quasar.config > build > extendViteConf
+   */
   readonly extendViteConf: ExtendViteConfHandler;
 
   /**
@@ -71,6 +74,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > bex > extendBexScriptsConf
    */
   readonly extendBexScriptsConf: Callback<
     (
@@ -85,6 +90,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > bex > extendBexManifestJson
    */
   readonly extendBexManifestJson: (
     json: object,
@@ -96,6 +103,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > electron > extendElectronMainConf
    */
   readonly extendElectronMainConf: Callback<
     (
@@ -109,6 +118,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > electron > extendElectronPreloadConf
    */
   readonly extendElectronPreloadConf: Callback<
     (
@@ -122,6 +133,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "pkgJson" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > electron > extendElectronPackageJson
    */
   readonly extendElectronPackageJson: (
     pkgJson: { [index in string]: any },
@@ -137,6 +150,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > pwa > extendPWAManifestJson
    */
   readonly extendPWAManifestJson: (
     json: PwaManifestOptions,
@@ -149,6 +164,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > pwa > extendPWACustomSWConf
    */
   readonly extendPWACustomSWConf: Callback<
     (
@@ -162,6 +179,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > pwa > extendPWAGenerateSWOptions
    */
   readonly extendPWAGenerateSWOptions: (
     config: GenerateSWOptions,
@@ -173,6 +192,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > pwa > extendPWAInjectManifestOptions
    */
   readonly extendPWAInjectManifestOptions: (
     config: InjectManifestOptions,
@@ -185,6 +206,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "rolldownConf" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > ssr > extendSSRWebserverConf
    */
   readonly extendSSRWebserverConf: Callback<
     (
@@ -198,6 +221,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "pkgJson" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > ssr > extendSSRPackageJson
    */
   readonly extendSSRPackageJson: (
     pkgJson: { [index in string]: any },
@@ -215,6 +240,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > ssr > extendSSRGenerateSWOptions
    */
   readonly extendSSRGenerateSWOptions: (
     config: GenerateSWOptions,
@@ -229,6 +256,8 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * Similar in use to /quasar.config > ssr > extendSSRInjectManifestOptions
    */
   readonly extendSSRInjectManifestOptions: (
     config: InjectManifestOptions,
