@@ -53,7 +53,11 @@ if (argv._.length !== 0 && argv._.length !== 2) {
 }
 
 const { getCtx } = await import('../utils/get-ctx.js')
-const { appExt } = getCtx()
+const { appExt } = getCtx({
+  mode: 'spa',
+  debug: false,
+  prod: true
+})
 
 if (argv._.length === 0) {
   if (appExt.extensionList.length === 0) {
