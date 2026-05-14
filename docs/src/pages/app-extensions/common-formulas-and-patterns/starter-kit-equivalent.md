@@ -9,10 +9,6 @@ scope:
       - l: package.json
       - l: src
         c:
-          - l: runtime
-            c:
-              - l: my-starter-kit-boot.js
-                e: (or .ts)
           - l: templates
             c:
               - l: common-files
@@ -191,7 +187,7 @@ When the App Extension gets uninstall, we need to do some cleanup. But beware wh
 ```js
 import { defineUninstallScript } from '@quasar/app-vite'
 
-// we yarn added it to our App Extension,
+// we PNPM added it to our App Extension,
 // so we can import the following:
 import rimraf from 'rimraf'
 
@@ -220,6 +216,6 @@ export default defineUninstallScript(api => {
 })
 ```
 
-Notice that we are requesting `rimraf` npm package. This means that we pnpm/yarn/npm/bun added it into our App Extension project (the /ae folder). This is here as example so that you are aware that the dependencies that you use need to be supplied by your AE.
+Notice that we are requesting `rimraf` npm package. This means that we pnpm added it into our App Extension project (the /ae folder). This is here as example so that you are aware that the dependencies that you use need to be supplied by your AE.
 
 Alternatively, you can use [api.removePath](/app-extensions/development-guide/uninstall-api#api-removepath).
