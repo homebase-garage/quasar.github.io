@@ -12,9 +12,17 @@ Example of basic structure of the file:
 ```js /ae/src/prompts.js (or .ts)
 import { definePromptsScript } from '@quasar/app-vite'
 
-// can be async
-export default definePromptsScript((/* api */) => {
-  return []
+export default definePromptsScript(async (/* api */) => {
+  /**
+   * Use @clack/prompts, inquirer or whatever you want
+   * (and make sure to PNPM install the package in /ae)
+   * to prompt the user, then return the answers object
+   */
+
+  const answers = /* ...prompt user... */
+
+  // type PromptsScriptAnswers<Key extends string = string> = Record<Key, any>
+  return answers
 })
 ```
 
@@ -25,82 +33,6 @@ On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/ap
 :::
 
 You will have access to `api.prompts` (which holds your App Extension's answers) in [Install](/app-extensions/development-guide/install-api), [Index](/app-extensions/development-guide/index-api) and [Uninstall](/app-extensions/development-guide/uninstall-api).
-
-Let's now focus on the structure of the returned Array which defines the questions. The sections below offer examples for the most used types of questions.
-
-## Questions format
-
-::: warning
-The following is not an exhaustive list of possible types of questions and by no means it describes the full API available. Check out [Inquirer.js](https://github.com/SBoudrias/Inquirer.js#readme) for that (which is used by Quasar CLI under the hood).
-:::
-
-### String
-
-```js
-{
-  // "description" will be the variable
-  // storing the answer
-  name: 'description'
-  type: 'input',
-  required: false, // optional
-  message: 'Project description',
-  default: 'A Quasar Framework app', // optional
-}
-```
-
-```js
-{
-  name: 'source_build',
-  type: 'input',
-  required: true, // optional
-  message:
-    'If you want a separate file to be the source image during production, please specify it here: ',
-  validate: (input) => {
-    // ...do something ...
-  },
-  default: (answers) => {
-    return answers.source_dev || defaultImg
-  }
-}
-```
-
-### Confirm
-
-```js
-{
-  // "featureX" will be the variable
-  // storing the answer
-  name: 'featureX',
-  type: 'confirm',
-  message: 'Use Feature X?',
-  default: true // optional
-}
-```
-
-### List of choices
-
-```js
-{
-  // "iconSet" will be the variable
-  // storing the answer
-  name: 'iconSet',
-  type: 'list',
-  message: 'Choose Icon Set',
-  choices: [
-    {
-      name: 'Material Icons (recommended)',
-      value: 'material-icons', // value of the answer variable
-      short: 'Material Icons' // Short name displayed after user picks this
-    },
-    {
-      name: 'Fontawesome v6',
-      value: 'fontawesome-v6', // value of the answer variable
-      short: 'Fontawesome v6' // Short name displayed after user picks this
-    }
-    // ... all other choices
-  ]
-}
-```
 
 ## The API param
 
@@ -233,7 +165,7 @@ api.compatibleWith(packageName, '3.x')
 ```
 
 ```js A more complex example:
-api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.14')
+api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.15')
 ```
 
 ### api.hasPackage

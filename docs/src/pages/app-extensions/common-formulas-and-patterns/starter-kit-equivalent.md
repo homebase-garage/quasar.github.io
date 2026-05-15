@@ -69,6 +69,60 @@ For the intents of this example, we'll be creating the following folder structur
 
 <DocTree :def="scope.tree" />
 
+## The Prompts script
+
+The prompts script below uses [@clack/prompts](https://www.npmjs.com/package/@clack/prompts), but you can replace it with anything if you want to. Just remember to install the prompt package that you are using (in `/ae`, into `dependencies`, since it will be a runtime dependency).
+
+This script will be called upon AE installation/invoking procedure.
+
+```js File: /ae/src/prompts.js (or .ts)
+/**
+ * Quasar App Extension prompts script
+ * https://quasar.dev/app-extensions/development-guide/prompts-api
+ */
+
+import { definePromptsScript } from '@quasar/app-vite'
+import { intro, outro, confirm, text, group, cancel } from '@clack/prompts'
+
+export default definePromptsScript(async (/* api */) => {
+  intro('Starter Kit App Extension')
+
+  const answers = await group(
+    {
+      serviceA: () => confirm({ message: 'Do you want service "A"?' }),
+      serviceB: () => confirm({ message: 'Do you want service "B"?' }),
+      productName: ({ results }) => {
+        if (!results.serviceB) return
+        return text({
+          message: 'Since you want service "B", what is the Product Name?',
+          initialValue: 'MyProduct',
+          validate(value) {
+            if (value.length === 0) return 'Please enter a product name'
+          }
+        })
+      },
+      publishService: () =>
+        confirm({
+          message: 'Do you want the publishing service?',
+          initialValue: true
+        })
+    },
+    {
+      // On Cancel callback that wraps the group
+      // So if the user cancels one of the prompts in the group this function will be called
+      onCancel: (/* { results } */) => {
+        cancel('Operation cancelled.')
+        process.exit(0)
+      }
+    }
+  )
+
+  outro('Thanks for answering the questions!')
+
+  return answers
+})
+```
+
 ## The Install script
 
 The install script below is only rendering files into the hosted app. Notice the `src/templates` folder above, where we decided to keep these templates.
@@ -82,7 +136,7 @@ export default defineInstallScript(api => {
   // hard dependencies, as in a minimum version of the "quasar"
   // package or a minimum version of Quasar App CLI
   api.compatibleWith('quasar', '^2.0.0')
-  api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.14')
+  api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.15')
 
   // We render some files into the hosting project
 
@@ -118,7 +172,7 @@ export default defineIndexScript(api => {
   // hard dependencies, as in a minimum version of the "quasar"
   // package or a minimum version of Quasar App CLI
   api.compatibleWith('quasar', '^2.0.0')
-  api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.14')
+  api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.15')
 
   // Here we extend the /quasar.config file;
   // (extendQuasarConf() will be defined later in this tutorial, continue reading)
