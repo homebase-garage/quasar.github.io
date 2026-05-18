@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 type ScriptType = "js" | "ts";
 type AppEngine = "vite-2" | "vite-3";
 type PackageManager = "yarn" | "npm" | "pnpm";
@@ -23,7 +25,8 @@ export async function createProject({
   const scope = {
     nogit: false,
     projectType: "app",
-    projectFolder: "test-project",
+    projectFolder: join(process.cwd(), "test-project"),
+    projectFolderName: "test-project",
     overwrite: true,
     packageManager,
 
