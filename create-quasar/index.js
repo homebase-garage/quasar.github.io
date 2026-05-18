@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import parseArgs from 'minimist'
-import { dirname } from 'node:path'
+import { join } from 'node:path'
 
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
@@ -13,14 +13,15 @@ const argv = parseArgs(process.argv.slice(2), {
 
 const { createProjectFolder } = await import('./create-project-folder.js')
 const scope = {
-  // Usage: `pnpm create quasar <project-folder>`
-  projectFolder: argv._[0]?.trim(),
   // Usage: `pnpm create quasar --nogit`
   nogit: argv.nogit
 }
 
-if (scope.projectFolder) {
-  scope.projectFolderName = dirname(scope.projectFolder)
+// Usage: `pnpm create quasar <project-folder>`
+const dir = argv._[0]?.trim()
+if (dir) {
+  scope.projectFolder = join(process.cwd(), dir)
+  scope.projectFolderName = dir
 }
 
 await createProjectFolder(scope)
