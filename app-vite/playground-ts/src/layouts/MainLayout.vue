@@ -23,7 +23,7 @@
 
         <EssentialLink
           v-for="link in linksList"
-          :key="link.title"
+          :key="link.label"
           v-bind="link"
         />
       </q-list>
@@ -43,43 +43,43 @@ import EssentialLink, {
 
 const linksList: EssentialLinkProps[] = [
   {
-    title: 'Docs',
+    label: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
     link: 'https://quasar.dev'
   },
   {
-    title: 'Github',
+    label: 'Github',
     caption: 'github.com/quasarframework',
     icon: 'code',
     link: 'https://github.com/quasarframework'
   },
   {
-    title: 'Discord Chat Channel',
+    label: 'Discord Chat Channel',
     caption: 'chat.quasar.dev',
     icon: 'chat',
     link: 'https://chat.quasar.dev'
   },
   {
-    title: 'Forum',
+    label: 'Forum',
     caption: 'forum.quasar.dev',
     icon: 'record_voice_over',
     link: 'https://forum.quasar.dev'
   },
   {
-    title: 'Twitter',
+    label: 'Twitter',
     caption: '@quasarframework',
     icon: 'rss_feed',
     link: 'https://twitter.quasar.dev'
   },
   {
-    title: 'Facebook',
+    label: 'Facebook',
     caption: '@QuasarFramework',
     icon: 'public',
     link: 'https://facebook.quasar.dev'
   },
   {
-    title: 'Quasar Awesome',
+    label: 'Quasar Awesome',
     caption: 'Community Quasar projects',
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'

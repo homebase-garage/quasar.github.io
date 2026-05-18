@@ -17,7 +17,7 @@ import { computed, ref } from 'vue';
 import type { Todo, Meta } from './models';
 
 interface Props {
-  label: string;
+  title: string;
   todos?: Todo[];
   meta: Meta;
   active: boolean;

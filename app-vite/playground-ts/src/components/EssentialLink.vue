@@ -5,7 +5,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label>{{ label }}</q-item-label>
       <q-item-label caption>{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 export interface EssentialLinkProps {
-  title: string
+  label: string
   caption?: string
   link?: string
   icon?: string

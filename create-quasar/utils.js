@@ -284,17 +284,9 @@ async function runCommand({
 }
 
 async function installDeps(scope) {
-  const args = ['install']
-
-  // Related to scripts/create-test-project.ts
-  if (process.env.CREATE_TEST_PROJECT_OVERRIDE === 'true') {
-    // If we don't use this flag, then the test project will become part of the monorepo and fail to install properly
-    args.push('--ignore-workspace')
-  }
-
   const hadError = await runCommand({
     cmd: scope.packageManager,
-    args,
+    args: ['install'],
     cwd: scope.projectFolder,
     message: `Installing dependencies using ${scope.packageManager.toUpperCase()}...`,
     successMessage: 'Dependencies installed successfully!',
