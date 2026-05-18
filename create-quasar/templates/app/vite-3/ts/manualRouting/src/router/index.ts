@@ -6,7 +6,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 
-import routes from './routes.ts';
+import routes from './routes';
 
 /*
  * If not building with SSR mode, you can
