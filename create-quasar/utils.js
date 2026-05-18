@@ -423,16 +423,6 @@ function ensureOutsideProject() {
 
 // to be used with promptUser() only
 const commonPrompts = {
-  scriptType: () =>
-    select({
-      message: 'Pick script type:',
-      initialValue: 'js',
-      options: [
-        { label: 'Javascript', value: 'js' },
-        { label: 'Typescript', value: 'ts' }
-      ]
-    }),
-
   productName: () =>
     text({
       message:

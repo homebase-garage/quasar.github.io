@@ -6,14 +6,15 @@ export async function createQuasarScript({ scope, utils }) {
         initialValues: ['sass', 'eslint'],
         options: [
           {
+            label: 'Typescript support',
+            value: 'typescript'
+          },
+          {
             label: 'Sass CSS preprocessor',
             value: 'sass'
           },
           {
-            label:
-              'Linting (ESLint + vite-plugin-checker' +
-              (scope.scriptType === 'ts' ? ' + vue-tsc' : '') +
-              ')',
+            label: 'Linting (ESLint + vite-plugin-checker + vue-tsc)',
             value: 'eslint',
             hint: 'recommended'
           },
@@ -48,21 +49,22 @@ export async function createQuasarScript({ scope, utils }) {
     title: 'Scaffolding Quasar App...'
   })
 
+  const dir = scope.preset.typescript ? 'ts' : 'js'
   utils.createTargetDir(scope)
-  utils.renderTemplate(`${scope.scriptType}/BASE`, scope)
+  utils.renderTemplate(`${dir}/BASE`, scope)
 
   const css = scope.preset.sass ? 'sass' : 'css'
-  utils.renderTemplate(`${scope.scriptType}/${css}`, scope)
+  utils.renderTemplate(`${dir}/${css}`, scope)
 
-  if (scope.preset.i18n) utils.renderTemplate(`${scope.scriptType}/i18n`, scope)
+  if (scope.preset.i18n) utils.renderTemplate(`${dir}/i18n`, scope)
   if (scope.preset.eslint) {
-    utils.renderTemplate(`${scope.scriptType}/eslint`, scope)
+    utils.renderTemplate(`${dir}/eslint`, scope)
   }
   if (scope.prettier) {
-    utils.renderTemplate(`${scope.scriptType}/prettier`, scope)
+    utils.renderTemplate(`${dir}/prettier`, scope)
   }
   if (scope.preset.pinia) {
-    utils.renderTemplate(`${scope.scriptType}/pinia`, scope)
+    utils.renderTemplate(`${dir}/pinia`, scope)
   }
 
   log.success('Quasar App scaffolded successfully!')

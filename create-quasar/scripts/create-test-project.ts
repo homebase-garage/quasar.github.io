@@ -28,7 +28,9 @@ export async function createProject({
     overwrite: true,
     packageManager,
 
-    scriptType,
+    preset: scriptType === "ts" ? ["typescript"] : [],
+    linter: "",
+    prettier: false, // legacy, vite-2 only
     engine: appEngine,
 
     name: "test-project",
@@ -37,15 +39,11 @@ export async function createProject({
   };
 
   if (appEngine === "vite-3") {
-    Object.assign(scope, {
-      preset: ["sass", "linting"],
-      linter: "oxlint"
-    });
+    scope.preset.push("sass", "linting");
+    scope.linter = "oxlint";
   } else if (appEngine === "vite-2") {
-    Object.assign(scope, {
-      preset: ["sass", "eslint"],
-      prettier: true
-    });
+    scope.preset.push("sass", "eslint");
+    scope.prettier = true;
   }
 
   const { createProjectFolder } = await import("../create-project-folder.js");

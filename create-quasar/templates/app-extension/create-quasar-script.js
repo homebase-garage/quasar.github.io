@@ -28,6 +28,16 @@ export async function createQuasarScript({ scope, utils }) {
         message: 'Pick features:',
         initialValues: ['prompts', 'install', 'uninstall', 'oxlint'],
         options: {
+          Tooling: [
+            {
+              label: 'Typescript support',
+              value: 'typescript'
+            },
+            {
+              label: 'oxlint + oxfmt',
+              value: 'oxlint'
+            }
+          ],
           'AE Scripts': [
             {
               label: 'Prompts script',
@@ -41,17 +51,9 @@ export async function createQuasarScript({ scope, utils }) {
               label: 'Uninstall script',
               value: 'uninstall'
             }
-          ],
-          'Linting & Formatting': [
-            {
-              label: 'oxlint + oxfmt',
-              value: 'oxlint'
-            }
           ]
         }
-      }),
-
-    scriptType: utils.commonPrompts.scriptType
+      })
   })
 
   const log = utils.prompts.taskLog({
@@ -65,21 +67,22 @@ export async function createQuasarScript({ scope, utils }) {
   scope.aeFullName = `${org}quasar-app-extension-${name}`
   scope.linter = scope.preset.oxlint ? 'oxlint' : null
 
+  const dir = scope.preset.typescript ? 'ts' : 'js'
   utils.createTargetDir(scope)
-  utils.renderTemplate(`${scope.scriptType}/BASE`, scope)
+  utils.renderTemplate(`${dir}/BASE`, scope)
 
   if (scope.preset.prompts) {
-    utils.renderTemplate(`${scope.scriptType}/prompts`, scope)
+    utils.renderTemplate(`${dir}/prompts`, scope)
   }
   if (scope.preset.install) {
-    utils.renderTemplate(`${scope.scriptType}/install`, scope)
+    utils.renderTemplate(`${dir}/install`, scope)
   }
   if (scope.preset.uninstall) {
-    utils.renderTemplate(`${scope.scriptType}/uninstall`, scope)
+    utils.renderTemplate(`${dir}/uninstall`, scope)
   }
 
   if (scope.preset.oxlint) {
-    utils.renderTemplate(`${scope.scriptType}/oxlint`, scope)
+    utils.renderTemplate(`${dir}/oxlint`, scope)
   }
 
   log.success('App Extension scaffolded successfully!')

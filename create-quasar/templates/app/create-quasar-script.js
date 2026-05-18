@@ -1,8 +1,6 @@
 export async function createQuasarScript({ scope, utils }) {
   const packageName = utils.inferPackageName(scope.projectFolderName)
   await utils.promptUser(scope, {
-    scriptType: utils.commonPrompts.scriptType,
-
     engine: () =>
       utils.prompts.select({
         message: 'Pick Quasar App CLI variant:',
