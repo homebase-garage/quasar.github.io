@@ -16,7 +16,7 @@ You might want to release new versions of your Quasar App Extensions with suppor
 api.compatibleWith(
   '@quasar/app-vite',
 - '^2.0.0'
-+ '^3.0.0-beta.16'
++ '^3.0.0-rc.1'
 )
 ```
 
@@ -147,6 +147,18 @@ api.extendBexManifestJson: (
 
 There's also new wrappers that `@quasar/app-vite` now supplies for the Index/Prompts/Install/Uninstall scripts. IDE auto-completion, here we come.
 
+The short form of running CLI commands provided by an App Extension has been removed:
+
+```bash
+# works, still good; the way to go!
+$ quasar run <ext-id> <cmd> [...args]
+
+# this will NO LONGER WORK:
+$ quasar <ext-id> <cmd> [...args]
+```
+
+And the params for [api.registerCommand()](/app-extensions/common-formulas-and-patterns/provide-cli-commands) have changed.
+
 We've also massively upgraded the dev setup for AEs. You might want to do a top to bottom read of the AE docs again, starting with [AE Development Guide](/app-extensions/development-guide/introduction) and spawn a new AE project folder to take advantage of all the new goodies. **TS variant included!**
 
 ## Bird's eye view on what's new
@@ -214,7 +226,7 @@ Edit your `/package.json` on the `@quasar/app-vite` entry:
 ```diff /package.json
 "devDependencies": {
 - "@quasar/app-vite": "^2.0.0",
-+ "@quasar/app-vite": "^3.0.0-beta.16"
++ "@quasar/app-vite": "^3.0.0-rc.1"
 }
 ```
 
@@ -924,6 +936,18 @@ You might want to [give it a try](/quasar-cli-vite/page-routing-with-vue-router#
 ### New CLI option: --nocolor
 
 By default, all CLI commands output colored text in the terminal (when not running in a CI environment). Should you wish to avoid this, use the `--nocolor` when you run any of the CLI commands.
+
+### Running AE commands
+
+The short form of running CLI commands provided by an App Extension has been removed:
+
+```bash
+# works, still good; the way to go!
+$ quasar run <ext-id> <cmd> [...args]
+
+# this will NO LONGER WORK:
+$ quasar <ext-id> <cmd> [...args]
+```
 
 ## Final Note
 

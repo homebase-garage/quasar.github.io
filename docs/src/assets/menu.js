@@ -1192,6 +1192,49 @@ export default [
     ]
   },
   {
+    name: 'Quasar Utils',
+    icon: 'healing',
+    path: 'quasar-utils',
+    children: [
+      {
+        name: 'Date Utils',
+        path: 'date-utils'
+      },
+      {
+        name: 'Color Utils',
+        path: 'color-utils'
+      },
+      {
+        name: 'DOM Utils',
+        path: 'dom-utils'
+      },
+      {
+        name: 'Morph Utils',
+        path: 'morph-utils'
+      },
+      {
+        name: 'Formatter Utils',
+        path: 'formatter-utils'
+      },
+      {
+        name: 'Scrolling Utils',
+        path: 'scrolling-utils'
+      },
+      {
+        name: 'Type Checking Utils',
+        path: 'type-checking-utils'
+      },
+      {
+        name: 'EventBus Util',
+        path: 'event-bus-util'
+      },
+      {
+        name: 'Other Utils',
+        path: 'other-utils'
+      }
+    ]
+  },
+  {
     name: 'App Extensions',
     icon: 'note_add',
     path: 'app-extensions',
@@ -1245,6 +1288,10 @@ export default [
             path: 'provide-ui-elements'
           },
           {
+            name: 'Provide CLI commands',
+            path: 'provide-cli-commands'
+          },
+          {
             name: 'Inject Quasar Plugin',
             path: 'inject-quasar-plugin'
           },
@@ -1253,49 +1300,6 @@ export default [
             path: 'json-api'
           }
         ]
-      }
-    ]
-  },
-  {
-    name: 'Quasar Utils',
-    icon: 'healing',
-    path: 'quasar-utils',
-    children: [
-      {
-        name: 'Date Utils',
-        path: 'date-utils'
-      },
-      {
-        name: 'Color Utils',
-        path: 'color-utils'
-      },
-      {
-        name: 'DOM Utils',
-        path: 'dom-utils'
-      },
-      {
-        name: 'Morph Utils',
-        path: 'morph-utils'
-      },
-      {
-        name: 'Formatter Utils',
-        path: 'formatter-utils'
-      },
-      {
-        name: 'Scrolling Utils',
-        path: 'scrolling-utils'
-      },
-      {
-        name: 'Type Checking Utils',
-        path: 'type-checking-utils'
-      },
-      {
-        name: 'EventBus Util',
-        path: 'event-bus-util'
-      },
-      {
-        name: 'Other Utils',
-        path: 'other-utils'
       }
     ]
   }

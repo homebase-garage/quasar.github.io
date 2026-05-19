@@ -182,7 +182,7 @@ api.compatibleWith('@quasar/app-vite', '3.x')
 ```
 
 ```js A more complex example
-api.compatibleWith('@quasar/app-vite', '^3.0.0-beta.16')
+api.compatibleWith('@quasar/app-vite', '^3.0.0-rc.1')
 ```
 
 ### api.hasPackage
@@ -300,19 +300,42 @@ Notice the tidle (`~`) in front of the paths. This tells Quasar CLI that the pat
 
 ### api.registerCommand
 
-Register a command that will become available as `quasar run <ext-id> <cmd> [args]` (or the short form: `quasar <ext-id> <cmd> [args]`).
+Register a command that will become available as `quasar run <ext-id> <cmd> [...args]`.
 
 ```js
 /**
  * @param {string} commandName
  * @param {function} fn
- *   ({ args: [ string, ... ], params: {object} }) => ?Promise
+ *   (processArgv: string[]) => ?Promise
  */
-api.registerCommand('start', ({ args, params }) => {
+api.registerCommand('start', processArgv => {
   // do something here
   // this registers the "start" command
   // and this handler is executed when running
   // $ quasar run <ext-id> start
+})
+```
+
+Example with defining and parsing arguments:
+
+```js
+// import { parseArgs } from 'node:util'
+
+api.registerCommand('fun', () => {
+  try {
+    const { values, positionals } = parseArgs({
+      options: {
+        name: { type: 'string', short: 'n' },
+        debug: { type: 'boolean' }
+      },
+      strict: true,
+      allowPositionals: true
+    })
+
+    console.log(values, positionals)
+  } catch (err) {
+    console.error(err.message)
+  }
 })
 ```
 

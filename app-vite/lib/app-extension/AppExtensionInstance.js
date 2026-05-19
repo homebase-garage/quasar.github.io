@@ -259,7 +259,7 @@ export class AppExtensionInstance {
   async run() {
     if (!this.isInstalled) {
       aeWarn(this.extId, 'Quasar App Extension is missing...')
-      process.exit(1, 'ext-missing')
+      process.exit(1)
     }
 
     const script = await this.#getScript('index', true)

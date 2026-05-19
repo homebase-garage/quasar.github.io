@@ -2,8 +2,7 @@ import { getArgv } from '../utils/get-argv.js'
 
 const argv = getArgv(
   {
-    nocolor: { type: 'boolean' },
-    help: { type: 'boolean', short: 'h' }
+    nocolor: { type: 'boolean' }
   },
   { strict: false }
 )
@@ -11,17 +10,15 @@ const argv = getArgv(
 const extId = argv._[0]
 const cmd = argv._[1]
 
-if (!extId || argv.help) {
+if (!extId) {
   console.log(`
   Description
     Run app extension provided commands
 
   Usage
-    $ quasar run <extension-id> <cmd> [args, params]
-    $ quasar <extension-id> <cmd> [args, params]
+    $ quasar run <extension-id> <cmd> [...args]
 
     $ quasar run iconify create pic -s --mark some_file
-    $ quasar iconify create pic -s --mark some_file
         # Note: "iconify" is an example and not a real extension.
         # Looks for installed extension called "iconify"
         # (quasar-app-extension-iconify extension package)
@@ -30,10 +27,8 @@ if (!extId || argv.help) {
 
   Options
     --nocolor        Disable colored output
-    --help, -h       Displays this message
   `)
 
-  argv.__warn?.()
   process.exit(0)
 }
 
@@ -59,35 +54,30 @@ const list = () => {
     return
   }
 
-  log(`Listing "${extId}" App Extension commands`)
-  log()
-
-  for (const hookCmd in hooks.commands) {
-    console.log(`  > ${hookCmd}`)
-  }
-
-  console.log()
+  const cmdList = Object.keys(hooks.commands).join(' | ')
+  aeLog(extId, `Command list: ${cmdList}`)
 }
 
 if (!cmd) {
   list()
   process.exit(0)
 }
-if (!hooks.commands[cmd]) {
+
+const fn = hooks.commands[cmd]
+if (!fn) {
+  list()
   warn()
   aeWarn(extId, `App Extension has no command called "${cmd}"`)
   warn()
-  list()
   process.exit(1)
 }
 
-const command = hooks.commands[cmd]
-
-aeLog(extId, `Running command "${cmd}"`)
+aeLog(extId, `Running App Extension command "${cmd}"`)
 log()
 
-const { _, ...params } = argv
-await command({
-  args: _.slice(2),
-  params
-})
+process.argv = [
+  ...process.argv.slice(0, 2),
+  ...process.argv.slice(4).filter(arg => arg !== '--nocolor')
+]
+
+await fn(process.argv)

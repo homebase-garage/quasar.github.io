@@ -270,10 +270,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
 
   readonly registerCommand: (
     commandName: string,
-    fn: (params: {
-      args: string[];
-      params: Record<string, any>;
-    }) => Promise<void> | void
+    fn: (processArgv: string[]) => Promise<void> | void
   ) => void;
 
   readonly registerDescribeApi: (name: string, relativePath: string) => void;

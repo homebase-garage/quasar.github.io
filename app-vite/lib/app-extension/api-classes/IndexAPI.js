@@ -205,7 +205,7 @@ export class IndexAPI extends BaseAPI {
    *
    * @param {string} commandName
    * @param {function} fn
-   *   ({ args: [ string, ... ], params: {object} }) => ?Promise
+   *   (processArgv: string[]) => ?Promise
    */
   registerCommand(commandName, fn) {
     this.#hooks.commands[commandName] = fn
