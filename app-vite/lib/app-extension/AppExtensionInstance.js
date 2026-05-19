@@ -1,7 +1,7 @@
 import { relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { closeSync, openSync, readSync } from 'node:fs'
 import fse from 'fs-extra'
-import { isBinaryFileSync as isBinary } from 'isbinaryfile'
 
 import { IndexAPI } from './api-classes/IndexAPI.js'
 import { InstallAPI } from './api-classes/InstallAPI.js'
@@ -63,7 +63,7 @@ async function renderFile(
 
   fse.ensureFileSync(targetPath)
 
-  if (rawCopy || isBinary(sourcePath)) {
+  if (rawCopy || isBinaryFile(sourcePath)) {
     fse.copyFileSync(sourcePath, targetPath)
   } else {
     const rawContent = fse.readFileSync(sourcePath, 'utf8')
@@ -117,6 +117,19 @@ async function renderFolders({ source, rawCopy, scope }, ctx) {
     }
 
     await renderFile({ sourcePath, targetPath, rawCopy, scope }, ctx)
+  }
+}
+
+function isBinaryFile(sourcePath) {
+  const buffer = Buffer.alloc(512)
+  const fd = openSync(sourcePath, 'r')
+
+  try {
+    const bytesRead = readSync(fd, buffer, 0, 512, 0)
+    // If the file contains a null byte, it's almost certainly binary
+    return buffer.subarray(0, bytesRead).includes(0x00)
+  } finally {
+    closeSync(fd)
   }
 }
 
