@@ -233,7 +233,11 @@ export class QuasarModeDevserver extends AppDevserver {
     updateTemplate()
 
     this.#viteWatcherList.push(
-      chokidarWatch(this.#pathMap.templatePath).on('change', updateTemplate)
+      chokidarWatch(this.#pathMap.templatePath).on('change', () => {
+        updateTemplate()
+        logServerMessage('Template updated', this.#pathMap.templatePath)
+        this.#viteClient.ws.send({ type: 'full-reload' })
+      })
     )
 
     const viteModuleRunner = createServerModuleRunner(
