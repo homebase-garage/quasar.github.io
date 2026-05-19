@@ -1,24 +1,39 @@
 #!/usr/bin/env node
 
-import parseArgs from 'minimist'
 import { join } from 'node:path'
+import { parseArgs } from 'node:util'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    n: 'nogit'
-  },
+function getArgv() {
+  try {
+    return parseArgs({
+      options: {
+        nogit: { type: 'boolean', alias: 'n', default: false }
+      },
+      strict: true,
+      allowPositionals: true
+    })
+  } catch (err) {
+    console.warn(
+      'Error ⚠️  ' +
+        (err?.code === 'ERR_PARSE_ARGS_UNKNOWN_OPTION'
+          ? err.message
+          : 'Unknown error while parsing arguments')
+    )
+    console.log()
+    process.exit(1)
+  }
+}
 
-  boolean: ['n']
-})
+const { values, positionals } = getArgv()
 
 const { createProjectFolder } = await import('./create-project-folder.js')
 const scope = {
   // Usage: `pnpm create quasar --nogit`
-  nogit: argv.nogit
+  nogit: values.nogit
 }
 
 // Usage: `pnpm create quasar <project-folder>`
-const dir = argv._[0]?.trim()
+const dir = positionals[0]?.trim()
 if (dir) {
   scope.projectFolder = join(process.cwd(), dir)
   scope.projectFolderName = dir
