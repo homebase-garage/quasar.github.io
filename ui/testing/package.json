@@ -9,8 +9,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "clipboardy": "^5.3.1",
-    "minimist": "^1.2.8"
+    "clipboardy": "^5.3.1"
   },
   "devDependencies": {
     "@quasar/extras": "workspace:*",

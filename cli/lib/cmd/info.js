@@ -1,11 +1,9 @@
-import parseArgs from 'minimist'
 import { green, red } from 'kolorist'
+import { getArgv } from '../get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help'
-  },
-  boolean: ['h']
+const argv = getArgv({
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -20,6 +18,8 @@ if (argv.help) {
     --nocolor       Disable colored output
     --help, -h     Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 

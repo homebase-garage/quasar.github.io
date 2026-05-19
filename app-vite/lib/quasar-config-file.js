@@ -1189,7 +1189,9 @@ export class QuasarConfigFile {
         !this.#ctx.mode.capacitor
       ) {
         cfg.metaConf.openBrowser =
-          !isCI && process.stdout.isTTY ? cfg.devServer.open : false
+          !isCI && process.stdout.isTTY && process.env.NODE_ENV !== 'test'
+            ? cfg.devServer.open
+            : false
       }
 
       delete cfg.devServer.open

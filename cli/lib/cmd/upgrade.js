@@ -1,14 +1,12 @@
-import parseArgs from 'minimist'
+import { getArgv } from '../get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    i: 'install',
-    p: 'prerelease',
-    m: 'major',
-    r: 'registry',
-    h: 'help'
-  },
-  boolean: ['h', 'i', 'p', 'm']
+const argv = getArgv({
+  install: { type: 'boolean', short: 'i' },
+  prerelease: { type: 'boolean', short: 'p' },
+  major: { type: 'boolean', short: 'm' },
+  registry: { type: 'string', short: 'r' },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -28,7 +26,7 @@ if (argv.help) {
     # but will not carry out the install
     $ quasar upgrade
 
-    # checks for pre-releases (alpha/beta) also:
+    # checks for pre-releases (alpha/beta/rc) also:
     $ quasar upgrade -p
 
     # checks for major new releases (includes breaking changes):
@@ -40,7 +38,7 @@ if (argv.help) {
 
   Options
     --install, -i     Also perform package upgrades
-    --prerelease, -p  Allow pre-release versions (alpha/beta)
+    --prerelease, -p  Allow pre-release versions (alpha/beta/rc)
     --major, -m       Allow newer major versions (breaking changes)
     --registry, -r    NPM registry URL
                         * default is taken from your machine's npm config
@@ -48,6 +46,8 @@ if (argv.help) {
     --nocolor         Disable colored output
     --help, -h        Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 

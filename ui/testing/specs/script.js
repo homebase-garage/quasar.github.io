@@ -1,6 +1,6 @@
 // oxlint-disable import/first
 
-function showHelp(exitCode = 0) {
+function showHelp() {
   console.log(`
   Description
     UI test files validator & generator
@@ -28,23 +28,24 @@ function showHelp(exitCode = 0) {
     --ci, -c            Validate & create specs while in CI mode
     --help, -h          Show this help message
   `)
-  process.exit(exitCode)
+  process.exit(0)
 }
 
-import parseArgs from 'minimist'
+import { parseArgs } from 'node:util'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    t: 'target',
-    g: 'generate',
-    c: 'ci',
-    d: 'dry-run',
-    h: 'help'
+const { values, positionals } = parseArgs({
+  options: {
+    target: { type: 'string', short: 't' },
+    generate: { type: 'string', short: 'g' },
+    ci: { type: 'boolean', short: 'c', default: false },
+    'dry-run': { type: 'boolean', short: 'd', default: false },
+    help: { type: 'boolean', short: 'h' }
   },
-  boolean: ['h', 'c', 'd'],
-  string: ['t', 'g']
+  strict: true,
+  allowPositionals: true
 })
 
+const argv = { ...values, _: positionals }
 if (argv.help) showHelp()
 
 import { getTargetList } from './target.js'

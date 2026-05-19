@@ -1,28 +1,27 @@
-import parseArgs from 'minimist'
+import { getArgv } from '../get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    p: 'port',
-    H: 'hostname',
-    s: 'silent',
-    cors: 'cors',
-    o: 'open',
-    i: 'index',
-    sw: 'sw',
-    history: 'history',
-    https: 'https',
-    C: 'cert',
-    K: 'key',
-    P: 'proxy',
-    h: 'help'
+const argv = getArgv({
+  port: {
+    type: 'string',
+    short: 'p',
+    default: process.env.PORT || '4000'
   },
-  boolean: ['https', 'history', 'https', 'cors'],
-  string: ['H', 'C', 'K', 'i'],
-  default: {
-    p: process.env.PORT || 4000,
-    H: process.env.HOSTNAME || '0.0.0.0',
-    i: 'index.html'
-  }
+  hostname: {
+    type: 'string',
+    short: 'H',
+    default: process.env.HOSTNAME || '0.0.0.0'
+  },
+  silent: { type: 'boolean', short: 's' },
+  cors: { type: 'boolean' },
+  open: { type: 'boolean', short: 'o' },
+  index: { type: 'string', short: 'i', default: 'index.html' },
+  sw: { type: 'boolean' },
+  history: { type: 'boolean' },
+  https: { type: 'boolean' },
+  C: { type: 'string' },
+  K: { type: 'string' },
+  P: { type: 'string' },
+  h: { type: 'boolean' }
 })
 
 if (argv.help) {
@@ -66,6 +65,8 @@ if (argv.help) {
     ]
     --> will be transformed into app.use(path, httpProxyMiddleware(rule))
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 
@@ -268,7 +269,7 @@ import { serve } from '@hono/node-server'
 
 const server = serve({
   fetch: app.fetch,
-  port: argv.port,
+  port: Number.parseInt(argv.port, 10),
   hostname: argv.hostname,
   ...(await getHttpOptions())
 })
@@ -315,20 +316,22 @@ const info = [
 
 console.log('\n' + info.join('\n') + '\n')
 
-if (argv.open) {
-  const { isMinimalTerminal } = await import('../is-terminal.js')
-  if (!isMinimalTerminal) {
-    const url = getListeningUrl(
-      argv.hostname === '0.0.0.0' ? 'localhost' : argv.hostname
-    )
+if (
+  argv.open &&
+  process.stdout.isTTY &&
+  process.env.NODE_ENV !== 'test' &&
+  (await import('ci-info').then(({ isCI }) => !isCI))
+) {
+  const url = getListeningUrl(
+    argv.hostname === '0.0.0.0' ? 'localhost' : argv.hostname
+  )
 
-    log('Opening default browser at ' + url + '\n')
-    const { default: open } = await import('open')
+  log('Opening default browser at ' + url + '\n')
+  const { default: open } = await import('open')
 
-    // oxlint-disable-next-line unicorn/prefer-top-level-await
-    open(url).catch(() => {
-      warn('Failed to open default browser')
-      warn()
-    })
-  }
+  // oxlint-disable-next-line unicorn/prefer-top-level-await
+  open(url).catch(() => {
+    warn('Failed to open default browser')
+    warn()
+  })
 }

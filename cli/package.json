@@ -54,13 +54,10 @@
     "hono": "^4.12.18",
     "http-proxy-middleware": "^3.0.5",
     "kolorist": "^1.8.0",
-    "minimist": "^1.2.8",
     "open": "^11.0.0",
     "update-notifier": "^7.3.1"
   },
   "engines": {
-    "node": ">= 20.20.0",
-    "npm": ">= 5.6.0",
-    "yarn": ">= 1.6.0"
+    "node": ">= 20.20.0"
   }
 }
