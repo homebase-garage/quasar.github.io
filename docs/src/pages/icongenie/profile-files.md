@@ -77,13 +77,13 @@ Some examples for `assets` from which you can extract the syntax for every type 
   {
     "generator": "icns",
     "name": "icon.icns",
-    "folder": "src-electron/icons"
+    "folder": "src-electron/electron-assets/icons"
   },
 
   {
     "generator": "ico",
     "name": "icon.ico",
-    "folder": "src-electron/icons"
+    "folder": "src-electron/electron-assets/icons"
   },
 
   {
