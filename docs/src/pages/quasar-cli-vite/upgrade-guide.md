@@ -889,22 +889,13 @@ Instead of diffing here, you might want to check the next pages (even if you sti
 
 ## Other considerations
 
-### CSP (Content Security Policy)
+### Switching to Oxlint and Oxfmt
 
-You may want to add a CSP meta tag in your `/index.html`. This is especially useful for Electron mode where a warning about the lack of one is displayed, but it's a good security measure for all Quasar Modes too:
+You may also want to switch your linting and formatting to `oxlint` and `oxfmt`. In our opinion, this is the future anyway. At some point in the near future, Quasar's project scaffolding package will only offer this for linting.
 
-```html
-<!doctype html>
-<html>
-  <head>
-    <!-- add to the head -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';<% if (ctx.dev) { %> connect-src 'self' ws://localhost:*; worker-src 'self' blob:;<% } %>"
-    />
-  </head>
-</html>
-```
+As of writing these lines, the support for `.vue` files is not yet fully ready, but you will still be able to enjoy it a lot.
+
+[More info](/quasar-cli-vite/lint-and-format-code#oxlint-oxfmt)
 
 ### Typescript 7
 
@@ -918,14 +909,6 @@ You may also want to upgrade to Typescript 7, which is written in Go for extra s
 ```
 
 Once they release TS 7 directly under the `typescript`, this is what you may want to use. Disregard the `6` in the name. It's not a mistake.
-
-### Switching to Oxlint and Oxfmt
-
-You may also want to switch your linting and formatting to `oxlint` and `oxfmt`. In our opinion, this is the future anyway. At some point in the near future, Quasar's project scaffolding package will only offer this for linting.
-
-As of writing these lines, the support for `.vue` files is not yet fully ready, but you will still be able to enjoy it a lot.
-
-[More info](/quasar-cli-vite/lint-and-format-code#oxlint-oxfmt)
 
 ### Filename-based routing with Vue Router v5+
 
@@ -947,6 +930,23 @@ $ quasar run <ext-id> <cmd> [...args]
 
 # this will NO LONGER WORK:
 $ quasar <ext-id> <cmd> [...args]
+```
+
+### CSP (Content Security Policy)
+
+You may want to add a CSP meta tag in your `/index.html`. This is especially useful for Electron mode where a warning about the lack of one is displayed, but it's a good security measure for all Quasar Modes too:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <!-- add to the head -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';<% if (ctx.dev) { %> connect-src 'self' ws://localhost:*; worker-src 'self' blob:;<% } %>"
+    />
+  </head>
+</html>
 ```
 
 ## Final Note
