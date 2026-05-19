@@ -8,6 +8,9 @@ Familiarize yourself with the list of available commands inside a Quasar project
 ```bash
 $ quasar -h
 
+  Running @quasar/cli v<...>
+  Running @quasar/app-vite v<...>
+
   Example usage
     $ quasar <command> <options>
 
@@ -16,6 +19,7 @@ $ quasar -h
     $ quasar <command> -h
 
   Options
+    --nocolor     Disable colored output (can be used with any command)
     --version, -v Print Quasar App CLI version
 
   Commands
@@ -145,38 +149,44 @@ The Quasar development server allows you to develop your App by compiling and ma
 Based on what you want to develop, you can start the development server by using "quasar dev" command as follows:
 
 ```bash
-# Developing a SPA
-$ quasar dev
-# ...or
-$ quasar dev -m spa
+$ quasar dev -h
 
-# Developing for SSR
-$ quasar dev -m ssr
+  Description
+    Starts the app in development mode (HMR, error reporting, etc)
 
-# Developing a PWA
-$ quasar dev -m pwa
+  Usage
+    $ quasar dev
+    $ quasar dev -p <port number>
 
-# Developing a BEX for production
-$ quasar dev -m bex
+    $ quasar dev -m ssr
 
-# Developing a Mobile App (through Cordova)
-$ quasar dev -m cordova -T [android|ios]
-# or the short form:
-$ quasar dev -m [android|ios]
+    # alias for "quasar dev -m capacitor -T ios"
+    $ quasar dev -m ios
 
-# Developing an Electron App
-$ quasar dev -m electron
+    # alias for "quasar dev -m capacitor -T android"
+    $ quasar dev -m android
 
-# Developing a Browser Extension (BEX)
-$ quasar dev -m bex -T [chrome|firefox]
+    # passing extra parameters and/or options to
+    # underlying "cordova" or "electron" executables:
+    $ quasar dev -m cordova -T ios -- some params --and options --here
+    $ quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
+    # when on Windows and using Powershell:
+    $ quasar dev -m cordova -T ios '--' some params --and options --here
+    $ quasar dev -m electron '--' --no-sandbox --disable-setuid-sandbox
 
-# passing extra parameters and/or options to
-# underlying "cordova" or "electron" executables:
-$ quasar dev -m ios -- some params --and options --here
-$ quasar dev -m electron -- --no-sandbox --disable-setuid-sandbox
-# when on Windows and using Powershell:
-$ quasar dev -m ios '--' some params --and options --here
-$ quasar dev -m electron '--' --no-sandbox --disable-setuid-sandbox
+  Options
+    --mode, -m       App mode [spa|ssr|pwa|cordova|capacitor|electron|bex] (default: spa)
+    --port, -p       A port number on which to start the application
+    --hostname, -H   A hostname to use for serving the application
+    --target, -T     App target
+                       - Capacitor & Cordova: [android|ios]
+                       - Bex: [chrome|firefox]
+    --devtools, -d   Open remote Vue Devtools
+    --nocolor        Disable colored output
+    --help, -h       Displays this message
+
+    Only for Capacitor & Cordova modes:
+    --ide, -i        (prod only) Open IDE to build the app instead of using CLI tools
 ```
 
 If you wish to change the hostname or port serving your App you have 3 options:
@@ -219,21 +229,15 @@ $ quasar build -h
 
   Usage
     $ quasar build
-    $ quasar build -p <port number>
 
     $ quasar build -m ssr
-
-    # alias for "quasar build -m cordova -T ios"
-    $ quasar build -m ios
-
-    # alias for "quasar build -m cordova -T android"
-    $ quasar build -m android
+    $ quasar build -m capacitor -T ios
 
     # passing extra parameters and/or options to
     # underlying "cordova" executable:
-    $ quasar build -m ios -- some params --and options --here
+    $ quasar build -m electron -- some params --and options --here
     # when on Windows and using Powershell:
-    $ quasar build -m ios '--' some params --and options --here
+    $ quasar build -m electron '--' some params --and options --here
 
   Options
     --mode, -m      App mode [spa|ssr|pwa|cordova|capacitor|electron|bex] (default: spa)
@@ -274,12 +278,8 @@ $ quasar build -h
                           [ia32|x64|armv7l|arm64|all]
 
     ONLY for electron-builder (when using "publish" parameter):
-    --publish, -P  Publish options [onTag|onTagOrDraft|always|never]
-                     - see https://www.electron.build/configuration/publish
-
-    Only for BEX mode:
-    --target, -T     Browser family target [chrome|firefox]
-                       (default: chrome)
+    --publish, -P   Publish options [onTag|onTagOrDraft|always|never]
+                      - see https://www.electron.build/configuration/publish
 ```
 
 The Quasar CLI can pack everything together and optimize your App for production. It minifies source code, extracts vendor components, leverages browser cache and much more.
@@ -299,8 +299,8 @@ $ quasar build -m pwa
 # Build a BEX for production
 $ quasar build -m bex -T [chrome|firefox]
 
-# Build a Mobile App (through Cordova)
-$ quasar build -m cordova -T [android|ios]
+# Build a Mobile App (through Capacitor)
+$ quasar build -m capacitor -T [android|ios]
 # or the short form:
 $ quasar build -m [android|ios]
 
@@ -309,9 +309,9 @@ $ quasar build -m electron
 
 # passing extra parameters and/or options to
 # underlying "cordova" executable:
-$ quasar build -m ios -- some params --and options --here
+$ quasar build -m cordova -T ios -- some params --and options --here
 # when on Windows and using Powershell:
-$ quasar build -m ios '--' some params --and options --here
+$ quasar build -m cordova -T ios '--' some params --and options --here
 
 # Create a production build with ability to debug it
 # (has source-maps and code is NOT minified)
@@ -324,6 +324,10 @@ Prepares your project folder for the IDE, making autocompletion and other IDE fe
 
 ```bash
 $ quasar prepare
+
+# silent (no terminal output)
+$ quasar prepare --silent
+$ quasar prepare -s
 ```
 
 ## Clean
@@ -374,6 +378,7 @@ $ quasar new -h
     $ quasar new store -f ts myStore
 
   Options
+    --nocolor             Disable colored output
     --help, -h            Displays this message
 
     --format -f <option>  (optional) Use a supported format for the template.
@@ -400,6 +405,7 @@ $ quasar mode -h
   Options
     --yes, -y     Skips the "Are you sure?" question
                   when removing a Quasar mode
+    --nocolor     Disable colored output
     --help, -h    Displays this message
 ```
 
@@ -469,6 +475,7 @@ $ quasar describe -h
     --injection, -i       Displays the API injection
     --quasar, -q          Displays the API quasar conf options
     --docs, -d            Opens the docs API URL
+    --nocolor             Disable colored output
     --help, -h            Displays this message
 ```
 
@@ -546,6 +553,7 @@ $ quasar inspect -h
                           -p module.rules
                           -p plugins
     --thread, -t     Display only one specific app mode config thread
+    --nocolor        Disable colored output
     --help, -h       Displays this message
 ```
 
@@ -579,6 +587,7 @@ $ quasar ext -h
     $ quasar ext uninvoke <ext-id>
 
   Options
+    --nocolor        Disable colored output
     --help, -h       Displays this message
 ```
 
@@ -605,6 +614,7 @@ $ quasar run -h
         # with "pic" argument and "-s --mark some_file" params
 
   Options
+    --nocolor        Disable colored output
     --help, -h       Displays this message
 ```
 
