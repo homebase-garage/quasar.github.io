@@ -14,7 +14,7 @@
     "format": "prettier --write \"**/*.{js,vue,css<% if (scope.preset.sass) { %>,scss<% } %>,html,md,json}\" --ignore-path .gitignore",<% } %>
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare"
+    "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
     <% if (scope.preset.i18n) { %>"vue-i18n": "^11.3.0",<% } %>

@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "quasar dev",
     "build": "quasar build",
-    "prepare": "quasar prepare",
+    "prepare": "quasar prepare --silent",
     "invoke": "quasar ext invoke <%= scope.aeShortName %>",
     "cycle": "quasar ext uninvoke <%= scope.aeShortName %> && quasar ext invoke <%= scope.aeShortName %>"
   },
