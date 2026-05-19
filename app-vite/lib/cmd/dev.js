@@ -2,32 +2,24 @@ if (process.env.NODE_ENV === void 0) {
   process.env.NODE_ENV = 'development'
 }
 
-import parseArgs from 'minimist'
-
+import { getArgv } from '../utils/get-argv.js'
 import { aeLog, log } from '../utils/logger.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    m: 'mode',
-    T: 'target', // cordova/capacitor/bex mode only
-    p: 'port',
-    H: 'hostname',
-    i: 'ide',
-    h: 'help',
-    d: 'devtools'
-  },
-  boolean: ['h', 'i', 'd'],
-  string: ['m', 'T', 'H'],
-  default: {
-    m: 'spa'
-  }
+const argv = getArgv({
+  mode: { type: 'string', short: 'm', default: 'spa' },
+  target: { type: 'string', short: 'T' }, // cordova/capacitor/bex mode only
+  port: { type: 'string', short: 'p' },
+  hostname: { type: 'string', short: 'H' },
+  devtools: { type: 'boolean', short: 'd' },
+  ide: { type: 'boolean', short: 'i' },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
   console.log(`
   Description
-    Starts the app in development mode (hot-code reloading, error
-    reporting, etc)
+    Starts the app in development mode (HMR, error reporting, etc)
 
   Usage
     $ quasar dev
@@ -53,18 +45,19 @@ if (argv.help) {
     --mode, -m       App mode [spa|ssr|pwa|cordova|capacitor|electron|bex] (default: spa)
     --port, -p       A port number on which to start the application
     --hostname, -H   A hostname to use for serving the application
+    --target, -T     App target
+                       - Capacitor & Cordova: [android|ios]
+                       - Bex: [chrome|firefox]
     --devtools, -d   Open remote Vue Devtools
     --nocolor        Disable colored output
     --help, -h       Displays this message
 
     Only for Capacitor & Cordova modes:
-    --target, -T     (required) App target [android|ios]
     --ide, -i        (prod only) Open IDE to build the app instead of using CLI tools
 
-    Only for BEX mode:
-    --target, -T     Browser family target [chrome|firefox]
-                       (default: chrome)
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 

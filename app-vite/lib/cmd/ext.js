@@ -1,10 +1,8 @@
-import parseArgs from 'minimist'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help'
-  },
-  boolean: ['h']
+const argv = getArgv({
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 function showHelp() {
@@ -39,10 +37,11 @@ function showHelp() {
 
 if (argv.help) {
   showHelp()
+  argv.__warn?.()
   process.exit(0)
 }
 
-import { log, warn } from '../utils/logger.js'
+import { log, warn, dot } from '../utils/logger.js'
 import { green } from 'kolorist'
 
 if (argv._.length !== 0 && argv._.length !== 2) {
@@ -64,14 +63,14 @@ if (argv._.length === 0) {
     log(' No App Extensions are installed')
     log(' You can look for "quasar-app-extension-*" in npm registry.')
   } else {
-    console.log()
+    console.log('Installed App Extensions:')
 
     for (const ext of appExt.extensionList) {
       const prompts = ext.getPrompts()
       const hasPrompts = Object.keys(prompts).length !== 0
 
       console.log(
-        `App Extension [ ${green(ext.extId)} ]${hasPrompts ? ' with prompts:' : ''}`
+        `  ${green(dot)} ${ext.extId}${hasPrompts ? ' (with prompts)' : ''}`
       )
 
       if (hasPrompts) {

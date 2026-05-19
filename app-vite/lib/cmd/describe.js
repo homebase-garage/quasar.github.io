@@ -1,34 +1,34 @@
-import parseArgs from 'minimist'
 import { green, italic, red, underline } from 'kolorist'
 
 import { dot, fatal } from '../utils/logger.js'
+import { getArgv } from '../utils/get-argv.js'
 import { getApi } from '../utils/get-api.js'
 import { getCtx } from '../utils/get-ctx.js'
 
 const partArgs = {
-  p: 'props',
-  s: 'slots',
-  m: 'methods',
-  c: 'computedProps',
-  e: 'events',
-  v: 'value',
-  a: 'arg',
-  M: 'modifiers',
-  i: 'injection',
-  q: 'quasar',
-  d: 'docs'
+  props: 'p',
+  slots: 's',
+  methods: 'm',
+  computedProps: 'c',
+  events: 'e',
+  value: 'v',
+  arg: 'a',
+  modifiers: 'M',
+  injection: 'i',
+  quasar: 'q',
+  docs: 'd'
 }
 
 const partArgsKeys = Object.keys(partArgs)
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help',
-    f: 'filter',
-    ...partArgs
-  },
-  boolean: ['h', ...partArgsKeys],
-  string: ['f']
+const argv = getArgv({
+  filter: { type: 'string', short: 'f' },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' },
+  ...partArgsKeys.reduce((acc, key) => {
+    acc[key] = { type: 'boolean', short: partArgs[key] }
+    return acc
+  }, {})
 })
 
 const item = argv._[0]
@@ -77,6 +77,8 @@ if (!item || argv.help) {
     --nocolor             Disable colored output
     --help, -h            Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 
@@ -84,11 +86,11 @@ const ctx = getCtx()
 const apiParts = {}
 
 if (partArgsKeys.some(part => argv[part])) {
-  Object.values(partArgs).forEach(part => {
+  partArgsKeys.forEach(part => {
     apiParts[part] = argv[part]
   })
 } else {
-  Object.values(partArgs).forEach(part => {
+  partArgsKeys.forEach(part => {
     if (part !== 'docs') {
       apiParts[part] = true
     }

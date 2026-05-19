@@ -2,25 +2,19 @@ if (process.env.NODE_ENV === void 0) {
   process.env.NODE_ENV = 'production'
 }
 
-import parseArgs from 'minimist'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    m: 'mode',
-    T: 'target', // cordova/capacitor/bex mode only
-    A: 'arch',
-    b: 'bundler',
-    s: 'skip-pkg',
-    i: 'ide',
-    d: 'debug',
-    h: 'help',
-    P: 'publish'
-  },
-  boolean: ['h', 'd', 'u', 'i'],
-  string: ['m', 'T', 'P'],
-  default: {
-    m: 'spa'
-  }
+const argv = getArgv({
+  mode: { type: 'string', short: 'm', default: 'spa' },
+  target: { type: 'string', short: 'T' }, // cordova/capacitor/bex mode only
+  arch: { type: 'string', short: 'A' },
+  bundler: { type: 'string', short: 'b' },
+  'skip-pkg': { type: 'boolean', short: 's' },
+  ide: { type: 'boolean', short: 'i' },
+  debug: { type: 'boolean', short: 'd' },
+  publish: { type: 'string', short: 'P' },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -30,21 +24,15 @@ if (argv.help) {
 
   Usage
     $ quasar build
-    $ quasar build -p <port number>
 
     $ quasar build -m ssr
-
-    # alias for "quasar build -m cordova -T ios"
-    $ quasar build -m ios
-
-    # alias for "quasar build -m cordova -T android"
-    $ quasar build -m android
+    $ quasar build -m capacitor -T ios
 
     # passing extra parameters and/or options to
     # underlying "cordova" executable:
-    $ quasar build -m ios -- some params --and options --here
+    $ quasar build -m electron -- some params --and options --here
     # when on Windows and using Powershell:
-    $ quasar build -m ios '--' some params --and options --here
+    $ quasar build -m electron '--' some params --and options --here
 
   Options
     --mode, -m      App mode [spa|ssr|pwa|cordova|capacitor|electron|bex] (default: spa)
@@ -85,14 +73,12 @@ if (argv.help) {
                           [ia32|x64|armv7l|arm64|all]
 
     ONLY for electron-builder (when using "publish" parameter):
-    --publish, -P  Publish options [onTag|onTagOrDraft|always|never]
-                     - see https://www.electron.build/configuration/publish
-
-    Only for BEX mode:
-    --target, -T     Browser family target [chrome|firefox]
-                       (default: chrome)
+    --publish, -P   Publish options [onTag|onTagOrDraft|always|never]
+                      - see https://www.electron.build/configuration/publish
 
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 
@@ -129,12 +115,7 @@ const { addMode } = await import(
 await addMode({ ctx, silent: true, target: argv.target })
 
 const { QuasarConfigFile } = await import('../quasar-config-file.js')
-const quasarConfFile = new QuasarConfigFile({
-  ctx,
-  port: argv.port,
-  host: argv.hostname
-})
-
+const quasarConfFile = new QuasarConfigFile({ ctx })
 const quasarConf = await quasarConfFile.read()
 
 const { QuasarModeBuilder } = await import(

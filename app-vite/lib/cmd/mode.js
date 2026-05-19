@@ -1,13 +1,10 @@
-import parseArgs from 'minimist'
-
+import { getArgv } from '../utils/get-argv.js'
 import { createPromptSession, fatal, log, warn } from '../utils/logger.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    y: 'yes',
-    h: 'help'
-  },
-  boolean: ['y', 'h']
+const argv = getArgv({
+  yes: { type: 'boolean', short: 'y', default: false },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 function showHelp() {
@@ -27,12 +24,12 @@ function showHelp() {
     --nocolor     Disable colored output
     --help, -h    Displays this message
   `)
-  process.exit(0)
 }
 
 if (argv.help) {
   showHelp()
-  process.exit(1)
+  argv.__warn?.()
+  process.exit(0)
 }
 
 if (argv._.length !== 0 && argv._.length !== 2) {
@@ -74,7 +71,6 @@ async function run() {
 
   if (action === 'add') {
     const { addMode } = await import(`../modes/${mode}/${mode}-installation.js`)
-
     await addMode({ ctx })
   } else if (action === 'remove') {
     if (!isModeInstalled(ctx.appPaths, mode)) {

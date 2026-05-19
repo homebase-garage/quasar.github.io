@@ -13,6 +13,12 @@ import {
   yellow
 } from 'kolorist'
 
+let isSuppressed = false
+
+export function supressLogger() {
+  isSuppressed = true
+}
+
 export const dot = '•'
 
 /**
@@ -48,11 +54,13 @@ export function tip(msg) {
 }
 
 export function log(msg, pill) {
+  if (isSuppressed) return
   const pillBanner = pill !== void 0 ? green(`${pill} ${dot} `) : ''
   console.log(msg ? ` ${greenBanner} ${pillBanner}${msg}` : '')
 }
 
 export function warn(msg, pill) {
+  if (isSuppressed) return
   if (msg !== void 0) {
     const pillBanner = pill !== void 0 ? warningPill(pill) + ' ' : ''
     console.warn(` ${yellowBanner} ⚠️  ${pillBanner}${msg}`)
@@ -62,6 +70,7 @@ export function warn(msg, pill) {
 }
 
 export function fatal(msg, pill) {
+  if (isSuppressed) return
   if (msg !== void 0) {
     const pillBanner = pill !== void 0 ? errorPill(pill) + ' ' : ''
 
@@ -78,6 +87,7 @@ export function fatal(msg, pill) {
  */
 
 export function success(msg, title = 'SUCCESS') {
+  if (isSuppressed) return
   console.log(` ${greenBanner} ${successPill(title)} ${green(dot + ' ' + msg)}`)
 }
 export function getSuccess(msg, title) {
@@ -85,6 +95,7 @@ export function getSuccess(msg, title) {
 }
 
 export function info(msg, title = 'INFO') {
+  if (isSuppressed) return
   console.log(` ${greenBanner} ${infoPill(title)} ${green(dot)} ${msg}`)
 }
 export function getInfo(msg, title) {
@@ -92,6 +103,7 @@ export function getInfo(msg, title) {
 }
 
 export function error(msg, title = 'ERROR') {
+  if (isSuppressed) return
   console.log(` ${redBanner} ${errorPill(title)} ${red(dot + ' ' + msg)}`)
 }
 export function getError(msg, title = 'ERROR') {
@@ -99,6 +111,7 @@ export function getError(msg, title = 'ERROR') {
 }
 
 export function warning(msg, title = 'WARNING') {
+  if (isSuppressed) return
   console.log(
     ` ${yellowBanner} ${warningPill(title)} ${yellow(dot + ' ' + msg)}`
   )
@@ -112,12 +125,15 @@ export function getWarning(msg, title = 'WARNING') {
  */
 
 export function aeLog(extId, message) {
+  if (isSuppressed) return
   log(message, `AE (${extId})`)
 }
 export function aeWarn(extId, message) {
+  if (isSuppressed) return
   warn(message, `AE (${extId})`)
 }
 export function aeFatal(extId, message) {
+  if (isSuppressed) return
   fatal(message, `AE (${extId})`)
 }
 
@@ -245,7 +261,8 @@ export function enterAlternateScreen(message) {
 }
 
 export function exitAlternateScreen() {
-  if (!isCI) process.stdout.write('\u001B[?1049l')
+  if (isCI) return
+  process.stdout.write('\u001B[?1049l')
 }
 
 export function waitForKey() {

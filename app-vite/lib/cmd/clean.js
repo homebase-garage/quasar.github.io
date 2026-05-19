@@ -1,22 +1,13 @@
-import parseArgs from 'minimist'
-
+import { getArgv } from '../utils/get-argv.js'
 import { log } from '../utils/logger.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help',
-    e: 'entry',
-    c: 'cache',
-    d: 'dist',
-    q: 'qconf'
-  },
-  boolean: ['h', 'e', 'c', 'd', 'q'],
-  default: {
-    e: false,
-    c: false,
-    d: false,
-    q: false
-  }
+const argv = getArgv({
+  entry: { type: 'boolean', short: 'e', default: false },
+  cache: { type: 'boolean', short: 'c', default: false },
+  dist: { type: 'boolean', short: 'd', default: false },
+  qconf: { type: 'boolean', short: 'q', default: false },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -37,6 +28,8 @@ if (argv.help) {
     --nocolor      Disable colored output
     --help, -h     Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 

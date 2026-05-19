@@ -1,24 +1,13 @@
-import parseArgs from 'minimist'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    c: 'cmd',
-    m: 'mode',
-
-    d: 'depth',
-    p: 'node:path',
-
-    t: 'thread',
-
-    h: 'help'
-  },
-  boolean: ['h'],
-  string: ['c', 'm', 'p', 't'],
-  default: {
-    c: 'dev',
-    m: 'spa',
-    d: 2
-  }
+const argv = getArgv({
+  cmd: { type: 'string', short: 'c', default: 'dev' },
+  mode: { type: 'string', short: 'm', default: 'spa' },
+  depth: { type: 'string', short: 'd', default: '2' },
+  path: { type: 'string', short: 'p' },
+  thread: { type: 'string', short: 't' },
+  help: { type: 'boolean', short: 'h' },
+  nocolor: { type: 'boolean' }
 })
 
 if (argv.help) {
@@ -43,6 +32,8 @@ if (argv.help) {
     --nocolor        Disable colored output
     --help, -h       Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 

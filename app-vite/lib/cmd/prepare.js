@@ -1,13 +1,10 @@
-import parseArgs from 'minimist'
-
 import { log } from '../utils/logger.js'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    s: 'silent',
-    h: 'help'
-  },
-  boolean: ['s', 'h']
+const argv = getArgv({
+  silent: { type: 'boolean', short: 's', default: false },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -22,16 +19,21 @@ if (argv.help) {
     $ quasar prepare
 
   Options
-    --silent, -s    Suppress the startup banner
+    --silent, -s    Suppress the output
     --nocolor       Disable colored output
     --help, -h      Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 
 const { readFileSync } = await import('node:fs')
+const { supressLogger } = await import('../utils/logger.js')
 
-if (!argv.silent) {
+if (argv.silent) {
+  supressLogger()
+} else {
   console.log(
     readFileSync(new URL('../../assets/logo.art', import.meta.url), 'utf8')
   )

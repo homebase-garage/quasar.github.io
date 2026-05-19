@@ -1,21 +1,17 @@
-import parseArgs from 'minimist'
-
 import { dirname, join, relative } from 'node:path'
 import fs from 'node:fs'
 import fse from 'fs-extra'
 
 import { log, warn } from '../utils/logger.js'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help',
-    f: 'format'
-  },
-  boolean: ['h'],
-  string: ['f']
+const argv = getArgv({
+  format: { type: 'string', short: 'f' },
+  nocolor: { type: 'boolean' },
+  help: { type: 'boolean', short: 'h' }
 })
 
-function showHelp(returnCode) {
+function showHelp() {
   console.log(`
   Description
     Quickly scaffold files.
@@ -54,26 +50,25 @@ function showHelp(returnCode) {
                              * js - JS template
                              * ts - TS template
   `)
-  process.exit(returnCode)
 }
 
 function showError(message) {
-  console.log()
+  showHelp()
   warn(message)
-  showHelp(1)
+  warn()
+  process.exit(1)
 }
 
 if (argv.help) {
-  showHelp(0)
+  showHelp()
+  argv.__warn?.()
+  process.exit(0)
 }
 
-console.log()
-
 if (argv._.length < 2) {
-  console.log()
-  warn(`Wrong number of parameters (${argv._.length}).`)
-  showHelp(1)
-  process.exit(1)
+  showError(
+    `Wrong number of parameters (${argv._.length}). Expected at least 2.`
+  )
 }
 
 import { getCtx } from '../utils/get-ctx.js'
@@ -220,6 +215,8 @@ async function getAsset(assetType) {
 
 const { relativePath, ext, reference } = await getAsset(type)
 const fullExt = `.${ext}`
+
+console.log()
 
 names.forEach(name => {
   const file = join(

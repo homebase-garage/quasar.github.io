@@ -1,11 +1,12 @@
-import parseArgs from 'minimist'
+import { getArgv } from '../utils/get-argv.js'
 
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    h: 'help'
+const argv = getArgv(
+  {
+    nocolor: { type: 'boolean' },
+    help: { type: 'boolean', short: 'h' }
   },
-  boolean: ['h']
-})
+  { strict: false }
+)
 
 const extId = argv._[0]
 const cmd = argv._[1]
@@ -31,17 +32,12 @@ if (!extId || argv.help) {
     --nocolor        Disable colored output
     --help, -h       Displays this message
   `)
+
+  argv.__warn?.()
   process.exit(0)
 }
 
-import { log, warn } from '../utils/logger.js'
-
-function getArgv({ _, ...params }) {
-  return {
-    args: _.slice(2),
-    params
-  }
-}
+import { log, warn, aeWarn, aeLog } from '../utils/logger.js'
 
 import { getCtx } from '../utils/get-ctx.js'
 const { appExt } = getCtx()
@@ -50,7 +46,7 @@ const ext = appExt.getInstance(extId)
 
 if (ext === void 0) {
   warn()
-  warn(`"${extId}" app extension is not installed`)
+  aeWarn(extId, 'No such App Extension is installed')
   warn()
   process.exit(1)
 }
@@ -59,11 +55,11 @@ const hooks = await ext.run()
 
 const list = () => {
   if (Object.keys(hooks.commands).length === 0) {
-    warn(`"${extId}" app extension has no commands registered`)
+    aeWarn(extId, `App Extension has no commands registered`)
     return
   }
 
-  log(`Listing "${extId}" app extension commands`)
+  log(`Listing "${extId}" App Extension commands`)
   log()
 
   for (const hookCmd in hooks.commands) {
@@ -79,7 +75,7 @@ if (!cmd) {
 }
 if (!hooks.commands[cmd]) {
   warn()
-  warn(`"${extId}" app extension has no command called "${cmd}"`)
+  aeWarn(extId, `App Extension has no command called "${cmd}"`)
   warn()
   list()
   process.exit(1)
@@ -87,7 +83,11 @@ if (!hooks.commands[cmd]) {
 
 const command = hooks.commands[cmd]
 
-log(`Running "${extId}" > "${cmd}" command`)
+aeLog(extId, `Running command "${cmd}"`)
 log()
 
-await command(getArgv(argv))
+const { _, ...params } = argv
+await command({
+  args: _.slice(2),
+  params
+})
