@@ -19,13 +19,15 @@ export class AppTool {
   }
 
   async buildWithVite(threadName, viteConfig) {
-    const done = progress(
-      'Compiling of ___ with Vite in progress...',
-      threadName
-    )
+    const done = progress({
+      tool: 'Vite',
+      waitAction: 'Compiling',
+      doneAction: 'Compiled',
+      target: threadName
+    })
 
     await viteBuild(viteConfig)
-    done('___ compiled with success by Vite')
+    done()
   }
 
   watchWithRolldown(threadName, rolldownConfig, onRebuildSuccess) {
@@ -42,13 +44,15 @@ export class AppTool {
 
     watcher.on('event', event => {
       if (event.code === 'START') {
-        done = progress(
-          'Compiling of ___ with Rolldown in progress...',
-          threadName
-        )
+        done = progress({
+          tool: 'Rolldown',
+          waitAction: 'Compiling',
+          doneAction: 'Compiled',
+          target: threadName
+        })
       } else if (event.code === 'BUNDLE_END') {
         event.result.close()
-        done('___ compiled with success by Rolldown')
+        done()
 
         if (isFirstBuild) {
           isFirstBuild = false
@@ -64,16 +68,18 @@ export class AppTool {
   }
 
   async buildWithRolldown(threadName, rolldownConfig) {
-    const done = progress(
-      'Compiling of ___ with Rolldown in progress...',
-      threadName
-    )
+    const done = progress({
+      tool: 'Rolldown',
+      waitAction: 'Compiling',
+      doneAction: 'Compiled',
+      target: threadName
+    })
 
     const bundle = await rolldown(rolldownConfig)
     await bundle.write(rolldownConfig.output)
     await bundle.close()
 
-    done('___ compiled with success by Rolldown')
+    done()
   }
 
   cleanArtifacts(dir = this.quasarConf.build.distDir) {

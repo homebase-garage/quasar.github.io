@@ -141,20 +141,17 @@ export function aeFatal(extId, message) {
  * Progress related
  */
 
-export function progress(msg, token) {
-  const parseMsg =
-    token !== void 0
-      ? text => text.replace('___', underline(green(token)))
-      : text => text
-
-  info(parseMsg(msg), 'WAIT')
+export function progress({ tool, waitAction, doneAction, target }) {
+  const targetBanner = target ? ' ' + underline(green(target)) : ''
+  info(`${tool} ${dot} ${waitAction}${targetBanner}`, 'WAIT')
 
   const startTime = Date.now()
-
-  return progressMessage => {
+  return () => {
     const diffTime = Date.now() - startTime
-    success(`${parseMsg(progressMessage)} ${dot} ${diffTime}ms`, 'DONE')
-    log()
+    success(
+      `${tool} ${dot} ${doneAction}${targetBanner} ${dot} ${diffTime}ms`,
+      'DONE'
+    )
   }
 }
 

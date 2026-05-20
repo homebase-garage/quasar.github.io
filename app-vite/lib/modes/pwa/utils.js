@@ -88,15 +88,16 @@ export async function buildPwaServiceWorker(quasarConf, workboxConfig) {
     pwa: { workboxMode }
   } = quasarConf
 
-  const done = progress(
-    'Compiling of the ___ with Workbox in progress...',
-    'Service Worker'
-  )
+  const done = progress({
+    tool: 'Workbox',
+    waitAction: 'Compiling',
+    doneAction: 'Compiled',
+    target: 'Service Worker'
+  })
 
   const buildMethod = workboxMethodMap[workboxMode]
   const workboxBuild = await cacheProxy.getModule('workboxBuild')
 
   await workboxBuild[buildMethod](workboxConfig)
-
-  done('The ___ compiled with success by Workbox')
+  done()
 }

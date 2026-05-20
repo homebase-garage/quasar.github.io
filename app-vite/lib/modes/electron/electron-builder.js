@@ -151,10 +151,15 @@ export class QuasarModeBuilder extends AppBuilder {
     const bundler =
       bundlerResult.packager /* @electron/packager v19+ */ ||
       bundlerResult /* electron-builder */
-    const pkgBanner = `electron/${bundlerName}`
 
     const { promise, resolve, reject } = Promise.withResolvers()
-    const done = progress('Bundling app with ___...', pkgBanner)
+    const tool = `electron/${bundlerName}`
+    const done = progress({
+      tool,
+      waitAction: 'Bundling',
+      doneAction: 'Bundled',
+      target: 'Application'
+    })
 
     const bundlePromise =
       bundlerName === 'packager'
@@ -168,13 +173,13 @@ export class QuasarModeBuilder extends AppBuilder {
     bundlePromise
       .then(() => {
         log()
-        done(`${pkgBanner} built the app`)
+        done()
         log()
         resolve()
       })
       .catch(err => {
         log()
-        warn(`${pkgBanner} could not build`, 'FAIL')
+        warn(`${tool} could not build`, 'FAIL')
         log()
         console.error(err + '\n')
         reject(err)

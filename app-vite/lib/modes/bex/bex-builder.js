@@ -37,8 +37,13 @@ export class QuasarModeBuilder extends AppBuilder {
   }
 
   #bundlePackage(dir) {
-    const done = progress('Bundling in progress...')
     const zipName = `Packaged.${this.ctx.pkg.appPkg.name}.zip`
+    const done = progress({
+      tool: 'ZIP',
+      waitAction: 'Bundling',
+      doneAction: 'Bundled',
+      target: zipName
+    })
     const file = join(dir, zipName)
 
     const output = fse.createWriteStream(file)
@@ -46,7 +51,8 @@ export class QuasarModeBuilder extends AppBuilder {
 
     output.on('error', reject)
     output.on('close', () => {
-      done(`Bundle has been generated at: ${file}`)
+      done()
+      console.log()
       resolve()
     })
 

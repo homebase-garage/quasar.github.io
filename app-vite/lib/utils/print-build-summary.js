@@ -241,7 +241,7 @@ export function printBuildSummary(distDir, showGzipped) {
 
   const table = getTable(widthMap)
 
-  console.log(' Build summary with important files:')
+  console.log('\n Build summary with important files:')
 
   table.printHeader()
   getAssetLines(assetList, showGzipped).forEach(table.printLine)

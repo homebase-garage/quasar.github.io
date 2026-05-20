@@ -311,7 +311,11 @@ export class QuasarModeDevserver extends AppDevserver {
   }
 
   async #bootWebserver(quasarConf) {
-    const done = progress('Booting Webserver...')
+    const done = progress({
+      tool: 'Webserver',
+      waitAction: 'Starting',
+      doneAction: 'Started'
+    })
 
     if (this.#webserver !== null) {
       await this.#webserver.close()
@@ -396,7 +400,7 @@ export class QuasarModeDevserver extends AppDevserver {
       }
     }
 
-    done('Webserver is ready')
+    done()
 
     this.printBanner(quasarConf)
     this.#viteClient?.ws.send({ type: 'full-reload' })
