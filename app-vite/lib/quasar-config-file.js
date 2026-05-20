@@ -4,7 +4,6 @@ import { existsSync, readFileSync } from 'node:fs'
 import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
 import { rolldown, watch as rolldownWatch } from 'rolldown'
-import { watch as chokidarWatch } from 'chokidar'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 import { isCI } from 'ci-info'
 
@@ -221,6 +220,7 @@ export class QuasarConfigFile {
 
   #watch = {
     buildId: 0,
+    chokidarWatch: null,
     isBuilding: false,
     resolveRead: null,
     onUpdate: null,
@@ -350,6 +350,8 @@ export class QuasarConfigFile {
         }
 
     if (this.#opts.watch) {
+      const { watch } = await import('chokidar')
+      this.#watch.chokidarWatch = watch
       this.#watch.resolveRead = resolve
       this.#createConfEnvWatcher()
       this.#watchBuild()
@@ -522,12 +524,13 @@ export class QuasarConfigFile {
       this.#confEnv = newConfEnv
     }, 300)
 
-    this.#watch.confEnvWatcher = chokidarWatch(
-      [this.#hostPackageJsonPath, ...this.#confEnv.watchEnvFiles],
-      {
-        ignoreInitial: true
-      }
-    )
+    this.#watch.confEnvWatcher = this.#watch
+      .chokidarWatch(
+        [this.#hostPackageJsonPath, ...this.#confEnv.watchEnvFiles],
+        {
+          ignoreInitial: true
+        }
+      )
       .on('add', onEnvChange)
       .on('change', onEnvChange)
       .on('unlink', onEnvChange)
@@ -538,12 +541,10 @@ export class QuasarConfigFile {
       this.#appEnvFilesChanged = true
       this.#handleAppEnvChange()
     }
-    this.#watch.appEnvWatcher = chokidarWatch(
-      [...initialAppEnv.watchEnvFiles],
-      {
+    this.#watch.appEnvWatcher = this.#watch
+      .chokidarWatch([...initialAppEnv.watchEnvFiles], {
         ignoreInitial: true
-      }
-    )
+      })
       .on('add', onChange)
       .on('change', onChange)
       .on('unlink', onChange)
