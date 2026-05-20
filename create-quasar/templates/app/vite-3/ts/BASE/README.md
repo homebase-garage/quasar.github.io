@@ -3,12 +3,11 @@
 ## Install the dependencies
 
 ```bash
-yarn
-# or
-npm install
+pnpm install
+# or: yarn/npm/bun install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Start the app in development mode (HMR, error reporting, etc.)
 
 ```bash
 quasar dev
@@ -19,14 +18,14 @@ quasar dev
 
 ```bash
 pnpm run lint
-# or yarn/npm/bun run lint
+# or: yarn/npm/bun run lint
 ```
 
 ...or just check formatting & linting:
 
 ```bash
 pnpm run lint:check
-# or yarn/npm/bun run lint:check
+# or: yarn/npm/bun run lint:check
 ```
 <% } else if (scope.linter === 'eslint') { %>
 
@@ -34,14 +33,14 @@ pnpm run lint:check
 
 ```bash
 pnpm run lint
-# or yarn/npm/bun run lint
+# or: yarn/npm/bun run lint
 ```
 
 ### Format the files
 
 ```bash
 pnpm run format
-# or yarn/npm/bun run format
+# or: yarn/npm/bun run format
 ```
 <% } %>
 
