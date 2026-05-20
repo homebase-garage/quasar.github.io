@@ -75,7 +75,7 @@ import { Lang } from 'quasar'
 // change to YOUR path
 const langList = import.meta.glob('../../node_modules/quasar/lang/*.js')
 // or just a select few (example below with only DE and FR):
-// import.meta.glob('../../node_modules/quasar/lang/(de|fr).js')
+// import.meta.glob('../../node_modules/quasar/lang/{de,fr}.js')
 
 export default defineBoot(async () => {
   const langIso = 'de' // ... some logic to determine it (use Cookies Plugin?)
@@ -110,7 +110,7 @@ import { Lang } from 'quasar'
 // change to YOUR path
 const langList = import.meta.glob('../../node_modules/quasar/lang/*.js')
 // or just a select few (example below with only DE and FR):
-// import.meta.glob('../../node_modules/quasar/lang/(de|fr).js')
+// import.meta.glob('../../node_modules/quasar/lang/{de,fr}.js')
 
 // ! NOTICE ssrContext param:
 export default defineBoot(async ({ ssrContext }) => {
@@ -155,7 +155,7 @@ Example with a QSelect to dynamically change the Quasar components language:
   import languages from 'quasar/lang/index.json'
   import { ref, watch } from 'vue'
 
-  const modules = import.meta.glob('../../node_modules/quasar/lang/(de|en-US|es).js')
+  const modules = import.meta.glob('../../node_modules/quasar/lang/{de,en-US,es}.js')
 
   const appLanguages = languages.filter(lang =>
     ['de', 'en-US', 'es'].includes(lang.isoName)
