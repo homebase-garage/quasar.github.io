@@ -127,6 +127,7 @@ import DocHeaderTextLinks from './DocHeaderTextLinks.vue'
 import DocHeaderIconLinks from './DocHeaderIconLinks.vue'
 
 import { useDocStore } from './store/index.js'
+
 const docStore = useDocStore()
 
 const logo = computed(() => {

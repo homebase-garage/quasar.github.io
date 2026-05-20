@@ -16,8 +16,8 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^17.0.2",
-    "oxfmt": "0.50.0",
-    "oxlint": "1.65.0",
+    "oxfmt": "0.51.0",
+    "oxlint": "1.66.0",
     "oxlint-tsgolint": "^0.23.0",
     "typescript": "npm:@typescript/typescript6@^6.0.0"
   },

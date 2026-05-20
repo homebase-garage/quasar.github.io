@@ -52,6 +52,7 @@
 
 <script>
 import { colors, setCssVar } from 'quasar'
+
 const { luminosity } = colors
 
 export default {

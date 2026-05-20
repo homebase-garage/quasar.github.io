@@ -30,6 +30,7 @@ import { existsSync } from 'node:fs'
 import { sync as spawnSync } from 'cross-spawn'
 
 import { getCtx } from '../utils/get-ctx.js'
+
 const {
   appPaths,
   appExt: { extensionList }

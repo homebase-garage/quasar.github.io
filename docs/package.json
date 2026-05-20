@@ -31,7 +31,7 @@
     "markdown-it": "^14.1.1",
     "markdown-it-container": "^4.0.0",
     "tinyglobby": "^0.2.10",
-    "toml": "^3.0.0",
+    "toml": "^4.1.1",
     "workbox-build": "^7.4.1"
   },
   "productName": "quasar-docs"

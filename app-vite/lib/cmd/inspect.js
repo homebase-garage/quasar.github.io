@@ -38,9 +38,11 @@ if (argv.help) {
 }
 
 import { ensureArgv } from '../utils/ensure-argv.js'
+
 ensureArgv(argv, 'inspect')
 
 import { getCtx } from '../utils/get-ctx.js'
+
 const ctx = getCtx({
   mode: argv.mode,
   target:
@@ -55,6 +57,7 @@ const ctx = getCtx({
 })
 
 import { displayBanner } from '../utils/banner.js'
+
 await displayBanner({ argv, ctx, cmd: argv.cmd })
 
 import { log, fatal } from '../utils/logger.js'
@@ -68,6 +71,7 @@ if (isModeInstalled(ctx.appPaths, argv.mode) !== true) {
 const depth = Number.parseInt(argv.depth, 10) || Infinity
 
 import { QuasarConfigFile } from '../quasar-config-file.js'
+
 const quasarConfFile = new QuasarConfigFile({
   ctx,
   port: argv.port,

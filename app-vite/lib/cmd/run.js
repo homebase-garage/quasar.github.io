@@ -35,6 +35,7 @@ if (!extId) {
 import { log, warn, aeWarn, aeLog } from '../utils/logger.js'
 
 import { getCtx } from '../utils/get-ctx.js'
+
 const { appExt } = getCtx()
 
 const ext = appExt.getInstance(extId)

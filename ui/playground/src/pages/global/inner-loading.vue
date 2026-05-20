@@ -56,6 +56,7 @@
 
 <script>
 import { QSpinnerGears } from 'quasar'
+
 export default {
   data() {
     return {

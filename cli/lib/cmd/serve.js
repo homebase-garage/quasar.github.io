@@ -186,6 +186,7 @@ if (argv.history) {
 }
 
 import { serveStatic } from '@hono/node-server/serve-static'
+
 const indexFile = argv.index.startsWith('/') ? argv.index.slice(1) : argv.index
 
 app.use(

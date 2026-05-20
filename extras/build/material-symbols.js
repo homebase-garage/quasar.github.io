@@ -9,6 +9,7 @@ const fetch = require('cross-fetch')
 const { writeFileSync } = require('node:fs')
 
 const cpus = require('node:os').cpus().length
+
 const maxJobCount = cpus * 2 - 1 || 1
 
 const skipped = {}
