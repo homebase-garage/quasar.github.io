@@ -219,6 +219,13 @@ allowBuilds:
   unrs-resolver: true
 ```
 
+Also, create a `pnpm-workspace.yaml` file inside `/src-<bex|pwa|electron|ssr>` with this content:
+
+```bash /src-<bex|pwa|electron|ssr>/pnpm-workspace.yaml
+# This file exists to force pnpm install deps here, regardless of upper workspaces
+# https://pnpm.io/settings
+```
+
 ### /package.json
 
 Edit your `/package.json` on the `@quasar/app-vite` entry:
@@ -379,48 +386,6 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
     "@types/express": "^5.0.6" // for TS only
   }
 }
-```
-
-### PNPM related
-
-If using PNPM, also create a `pnpm-workspace.yaml` file inside `/src-<bex|pwa|electron|ssr>` with this content:
-
-```bash /src-<bex|pwa|electron|ssr>/pnpm-workspace.yaml
-# This file exists to force pnpm install deps here, regardless of upper workspaces
-# https://pnpm.io/settings
-```
-
-Still for PNPM, edit your root project file `/pnpm-workspace.yaml`:
-
-```tabs root /pnpm-workspace.yaml
-<<| diff PNPM v11 |>>
-- shamefullyHoist: true
-- onlyBuiltDependencies:
--  - '@parcel/watcher'
--  - esbuild
-
-+ allowBuilds:
-+  '@parcel/watcher': true
-+  core-js: true
-+  electron-winstaller: true
-+  esbuild: true
-+  lightningcss: true
-+  rolldown: true
-+  unrs-resolver: true
-<<| diff PNPM v10 |>>
-- shamefullyHoist: true
-- onlyBuiltDependencies:
--  - '@parcel/watcher'
--  - esbuild
-
-+ onlyBuiltDependencies:
-+  '@parcel/watcher': true
-+  core-js: true
-+  electron-winstaller: true
-+  esbuild: true
-+  lightningcss: true
-+  rolldown: true
-+  unrs-resolver: true
 ```
 
 ### Notable /quasar.config file changes
