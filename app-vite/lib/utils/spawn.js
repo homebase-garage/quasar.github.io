@@ -20,8 +20,9 @@ const extraEnvParams = isCI
  Returns nothing, takes onFail
  */
 export async function spawnSync(cmd, params, opts, onFail) {
-  const targetFolder =
-    opts && opts.cwd ? ` in /${relative(process.cwd(), opts.cwd)}` : ''
+  const targetFolder = opts?.cwd
+    ? ` in /${relative(process.cwd(), opts.cwd)}`
+    : ''
   const message = `Running "${cmd} ${params.join(' ')}"${targetFolder}`
   const taskLog = await taskLogger(message)
 
@@ -71,8 +72,9 @@ export function spawn(cmd, params, opts, onClose) {
     fatal('Command name was not available. Please run again.')
   }
 
-  const targetFolder =
-    opts && opts.cwd ? ` in /${relative(process.cwd(), opts.cwd)}` : ''
+  const targetFolder = opts?.cwd
+    ? ` in /${relative(process.cwd(), opts.cwd)}`
+    : ''
 
   log(`Running "${cmd} ${params.join(' ')}"${targetFolder}`)
   log()
