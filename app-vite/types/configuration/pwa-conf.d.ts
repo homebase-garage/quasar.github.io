@@ -97,6 +97,8 @@ export interface QuasarPwaConfiguration {
    *
    * Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @param json {@link PwaManifestOptions}
    */
   extendPWAManifestJson?: (
     json: PwaManifestOptions
@@ -123,6 +125,8 @@ export interface QuasarPwaConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link RolldownOptions}
    */
   extendPWACustomSWConf?: (
     config: RolldownOptions
@@ -133,6 +137,8 @@ export interface QuasarPwaConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link GenerateSWOptions}
    */
   extendPWAGenerateSWOptions?: (
     config: GenerateSWOptions
@@ -143,6 +149,8 @@ export interface QuasarPwaConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link InjectManifestOptions}
    */
   extendPWAInjectManifestOptions?: (
     config: InjectManifestOptions

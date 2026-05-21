@@ -163,6 +163,8 @@ interface QuasarStaticBuildConfiguration {
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
+   * @param config {@link ViteUserConfig}
+   *
    * @example
    * // return overrides
    * extendViteConf: (config) => ({
@@ -209,6 +211,7 @@ interface QuasarStaticBuildConfiguration {
    * }
    *
    * @default false
+   * @type options {@link VueRouterVitePluginOptions}
    */
   filenameBasedRouting?: boolean | VueRouterVitePluginOptions;
 
@@ -216,6 +219,7 @@ interface QuasarStaticBuildConfiguration {
    * Options to supply to @vitejs/plugin-vue
    *
    * @see https://v2.quasar.dev/quasar-cli-vite/handling-vite#vite-vue-plugin-options
+   * @type options {@link VuePluginOptions}
    */
   viteVuePluginOptions?: VuePluginOptions;
 
@@ -240,6 +244,8 @@ interface QuasarStaticBuildConfiguration {
    *
    *   somePlugin({ ...pluginOptions... })
    * ]
+   *
+   * @type options {@link PluginEntry}
    */
   vitePlugins?: PluginEntry[];
 
@@ -423,18 +429,24 @@ interface QuasarStaticBuildConfiguration {
    * Prepare external services before `$ quasar dev` command runs
    * like starting some backend or any other service that the app relies on.
    * Can use async/await or directly return a Promise.
+   *
+   * @param params {@link QuasarHookParams}
    */
   beforeDev?: (params: QuasarHookParams) => void;
   /**
    * Run hook after Quasar dev server is started (`$ quasar dev`).
    * At this point, the dev server has been started and is available should you wish to do something with it.
    * Can use async/await or directly return a Promise.
+   *
+   * @param params {@link QuasarHookParams}
    */
   afterDev?: (params: QuasarHookParams) => void;
   /**
    * Run hook before Quasar builds app for production (`$ quasar build`).
    * At this point, the distributables folder hasn’t been created yet.
    * Can use async/await or directly return a Promise.
+   *
+   * @param params {@link QuasarHookParams}
    */
   beforeBuild?: (params: QuasarHookParams) => void;
   /**
@@ -442,6 +454,8 @@ interface QuasarStaticBuildConfiguration {
    * At this point, the distributables folder has been created and is available
    *  should you wish to do something with it.
    * Can use async/await or directly return a Promise.
+   *
+   * @param params {@link QuasarHookParams}
    */
   afterBuild?: (params: QuasarHookParams) => void;
   /**
@@ -481,6 +495,8 @@ interface QuasarDynamicBuildConfiguration {
    *    collapseBooleanAttributes: true,
    *    removeScriptTypeAttributes: true
    *  }
+   *
+   * @type options {@link HtmlMinifierOptions}
    */
   htmlMinifyOptions?: HtmlMinifierOptions;
   /**

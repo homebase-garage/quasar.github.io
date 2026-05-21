@@ -27,6 +27,8 @@ export interface QuasarSsrConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link GenerateSWOptions}
    */
   extendSSRGenerateSWOptions?: (
     config: GenerateSWOptions
@@ -40,6 +42,8 @@ export interface QuasarSsrConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link InjectManifestOptions}
    */
   extendSSRInjectManifestOptions?: (
     config: InjectManifestOptions
@@ -160,6 +164,8 @@ export interface QuasarSsrConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @type config {@link RolldownOptions}
    */
   extendSSRWebserverConf?: (
     config: RolldownOptions

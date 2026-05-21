@@ -17,13 +17,14 @@ type SerializableConfiguration<T> = {
 interface QuasarFrameworkConfiguration {
   /**
    * @see - QuasarConfOptions tab in API cards throughout the docs
+   * @type options {@link QuasarUIConfiguration}
    */
   config?: SerializableConfiguration<QuasarUIConfiguration>;
   /**
    * One of the Quasar IconSets
    *
    * @see https://v2.quasar.dev/options/quasar-icon-sets
-   *
+   * @type options {@link QuasarIconSets}
    * @example 'material-icons'
    */
   iconSet?: QuasarIconSets;
@@ -31,7 +32,6 @@ interface QuasarFrameworkConfiguration {
    * One of the Quasar language packs
    *
    * @see https://v2.quasar.dev/options/quasar-language-packs
-   *
    * @example 'en-US'
    * @example 'es'
    */

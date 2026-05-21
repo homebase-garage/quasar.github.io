@@ -1,7 +1,7 @@
 /**
  * Synchronously requests the main process to resolve the path to the
  * electron-assets directory.
- * * @param args Path segments to join to the base electron-assets path
+ * @param args Path segments to join to the base electron-assets path
  * @returns The fully resolved path
  */
 export declare function resolveElectronAssetsPath(...args: string[]): string;
@@ -14,7 +14,7 @@ export declare const electronAssetsDir: string;
 /**
  * Synchronously requests the main process to resolve the path to the
  * public directory.
- * * @param args Path segments to join to the base public path
+ * @param args Path segments to join to the base public path
  * @returns The fully resolved path
  */
 export declare function resolvePublicPath(...args: string[]): string;

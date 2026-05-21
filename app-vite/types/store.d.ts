@@ -1,18 +1,14 @@
 import { HasStore } from "quasar";
-import { Pinia } from "pinia";
+import type { Pinia } from "pinia";
 import { HasSsrParam } from "./ssr";
-
-type StoreInstance = Pinia;
 
 export type HasStoreParam = HasStore<{
   /**
-   * The store instance.
+   * The Pinia instance.
    */
-  readonly store: StoreInstance;
+  readonly store: Pinia;
 }>;
 
 export type StoreParams = {} & HasSsrParam;
 
-export type StoreCallback = (
-  params: StoreParams
-) => StoreInstance | Promise<StoreInstance>;
+export type StoreCallback = (params: StoreParams) => Pinia | Promise<Pinia>;

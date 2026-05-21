@@ -60,6 +60,8 @@ interface QuasarBaseElectronConfiguration {
    *  there is more platform granularity (and general polish) in builder.
    * Cross-compiling your binaries from one computer doesn’t really work with builder,
    *  or we haven’t found the recipe yet.
+   *
+   * @type options {@link QuasarElectronBundlersInternal}
    */
   // This property definition is here merely to avoid duplicating the TSDoc
   // It should not be optional, as TS cannot infer the discriminated union based on the absence of a field
@@ -88,6 +90,7 @@ interface QuasarElectronPackagerConfiguration extends QuasarBaseElectronConfigur
   /**
    * Electron-packager options.
    * `dir` and `out` properties are overwritten by Quasar CLI to ensure the best results.
+   * @type options {@link ElectronPackagerOptions}
    */
   packager?: Omit<ElectronPackagerOptions, "dir" | "out">;
 }
@@ -95,7 +98,10 @@ interface QuasarElectronPackagerConfiguration extends QuasarBaseElectronConfigur
 interface QuasarElectronBuilderConfiguration extends QuasarBaseElectronConfiguration {
   bundler: "builder";
 
-  /** Electron-builder options */
+  /**
+   * Electron-builder options
+   * @type options {@link ElectronBuilderConfiguration}
+   */
   builder?: ElectronBuilderConfiguration;
 }
 

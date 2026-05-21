@@ -1,4 +1,5 @@
 /// <reference types="@types/chrome" />
+
 import type { LiteralUnion } from "quasar";
 
 /**

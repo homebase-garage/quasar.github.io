@@ -17,6 +17,8 @@ interface QuasarBexConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @param config {@link RolldownOptions}
    */
   extendBexScriptsConf?: (
     config: RolldownOptions
@@ -30,6 +32,6 @@ interface QuasarBexConfiguration {
    * return a new one that will be merged with the default one.
    */
   extendBexManifestJson?: (
-    json: object
-  ) => void | object | Promise<void | object>;
+    json: Record<string, any>
+  ) => void | Record<string, any> | Promise<void | Record<string, any>>;
 }

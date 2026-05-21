@@ -52,7 +52,10 @@ interface QuasarSourceFilesConfiguration {
 }
 
 interface BaseQuasarConfiguration {
-  /** Boot files to load. Order is important. */
+  /**
+   * Boot files to load. Order is important.
+   * @type options {@link QuasarBootConfiguration}
+   */
   boot?: QuasarBootConfiguration;
   /**
    * Global CSS/Stylus/SCSS/SASS/... files from `/src/css/`,
@@ -64,6 +67,7 @@ interface BaseQuasarConfiguration {
   /**
    * What to import from [@quasar/extras](https://github.com/quasarframework/quasar/tree/dev/extras) package.
    * @example ['material-icons', 'roboto-font', 'ionicons-v4']
+   * @type fonts {@link QuasarFonts} | icons {@link QuasarExtrasIcons}
    */
   extras?: (QuasarFonts | QuasarExtrasIcons)[];
   /**
@@ -75,12 +79,15 @@ interface BaseQuasarConfiguration {
   /**
    * What Quasar language pack to use, what Quasar icon
    * set to use for Quasar components, etc.
+   *
+   * @type options {@link QuasarFrameworkConfiguration}
    */
   framework?: QuasarFrameworkConfiguration;
   /**
    * What [CSS animations](https://v2.quasar.dev/options/animations) to import.
    *
    * @example: [ 'bounceInLeft', 'bounceOutRight' ]
+   * @type options {@link QuasarAnimations}
    */
   animations?: "all" | QuasarAnimations[];
   /**
@@ -89,11 +96,19 @@ interface BaseQuasarConfiguration {
    * to ensure a correct config.
    * Note: if you're proxying the development server (i.e. using a cloud IDE),
    * set the `public` setting to your public application URL.
+   *
+   * @type options {@link DevServerOptions}
    */
   devServer?: DevServerOptions;
-  /** Build configuration options. */
+  /**
+   * Build configuration options.
+   * @type options {@link QuasarBuildConfiguration}
+   */
   build?: QuasarBuildConfiguration;
-  /** Change the default name of parts of your app. */
+  /**
+   * Change the default name of parts of your app.
+   * @type options {@link QuasarSourceFilesConfiguration}
+   */
   sourceFiles?: QuasarSourceFilesConfiguration;
 }
 
@@ -103,17 +118,35 @@ export interface QuasarHookParams {
 
 export interface QuasarConf
   extends BaseQuasarConfiguration, QuasarMobileConfiguration {
-  /** PWA specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa). */
+  /**
+   * PWA specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa).
+   * @type options {@link QuasarPwaConfiguration}
+   */
   pwa?: QuasarPwaConfiguration;
-  /** SSR specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr). */
+  /**
+   * SSR specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr).
+   * @type options {@link QuasarSsrConfiguration}
+   */
   ssr?: QuasarSsrConfiguration;
-  /** Capacitor specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor). */
+  /**
+   * Capacitor specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor).
+   * @type options {@link QuasarCapacitorConfiguration}
+   */
   capacitor?: QuasarCapacitorConfiguration;
-  /** Cordova specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova). */
+  /**
+   * Cordova specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-cordova-apps/configuring-cordova).
+   * @type options {@link QuasarCordovaConfiguration}
+   */
   cordova?: QuasarCordovaConfiguration;
-  /** Electron specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron). */
+  /**
+   * Electron specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron).
+   * @type options {@link QuasarElectronConfiguration}
+   */
   electron?: QuasarElectronConfiguration;
-  /** Bex specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-bex/configuring-bex). */
+  /**
+   * Bex specific [config](https://v2.quasar.dev/quasar-cli-vite/developing-bex/configuring-bex).
+   * @type options {@link QuasarBexConfiguration}
+   */
   bex?: QuasarBexConfiguration;
 }
 

@@ -31,7 +31,10 @@ interface BaseQuasarContext {
   readonly debug: boolean;
   /** True if opening remote Vue Devtools in development mode. */
   readonly vueDevtools: boolean;
-  /** Util dealing with app paths */
+  /**
+   * Util dealing with app paths
+   * @type paths {@link QuasarAppPaths}
+   */
   readonly appPaths: QuasarAppPaths;
 }
 
