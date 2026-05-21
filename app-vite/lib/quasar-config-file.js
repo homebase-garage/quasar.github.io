@@ -1017,9 +1017,15 @@ export class QuasarConfigFile {
       cfg.build
     )
 
-    cfg.build.define.__VUE_OPTIONS_API__ = String(
-      Boolean(cfg.build.vueOptionsAPI)
-    )
+    /**
+     * If user hasn't explicitly set __VUE_OPTIONS_API__,
+     * then we set it ourselves based on cfg.build.vueOptionsAPI.
+     */
+    if (cfg.build.define.__VUE_OPTIONS_API__ === void 0) {
+      cfg.build.define.__VUE_OPTIONS_API__ = String(
+        Boolean(cfg.build.vueOptionsAPI)
+      )
+    }
 
     Object.assign(
       cfg.build.define,
@@ -1028,6 +1034,22 @@ export class QuasarConfigFile {
         return acc
       }, {})
     )
+
+    /**
+     * Avoid Rolldown failing to build with "undefined" value in define.
+     *
+     * Also, avoid mismatch between Vite & Rolldown on non
+     * string values; Vite allows non stringified values, but
+     * Rolldown doesn't and it fails the build.
+     */
+    const { define } = cfg.build
+    for (const key in define) {
+      if (define[key] === void 0) {
+        delete define[key]
+      } else if (typeof define[key] !== 'string') {
+        define[key] = JSON.stringify(define[key])
+      }
+    }
 
     if (!cfg.build.target.browser) {
       cfg.build.target.browser = BASELINE_WIDELY_AVAILABLE_TARGET_STRING
