@@ -414,5 +414,14 @@ export async function extendRolldownConfig(
     }
   })
 
+  /**
+   * Avoid "import.meta.env is not defined"
+   * as this is not available in Node.js.
+   *
+   * Should be the last statement in "define",
+   * otherwise it will override all previous statements.
+   */
+  rolldownConfig.transform.define['import.meta.env'] = '{}'
+
   return rolldownConfig
 }

@@ -280,7 +280,16 @@ export class QuasarConfigFile {
         target: 'node22',
         define: {
           ...this.#confEnv.envDefineList,
-          ...quasarRolldownInjectReplacementsDefine
+          ...quasarRolldownInjectReplacementsDefine,
+
+          /**
+           * Avoid "import.meta.env is not defined"
+           * as this is not available in Node.js.
+           *
+           * Should be the last statement in "define",
+           * otherwise it will override all previous statements.
+           */
+          'import.meta.env': '{}'
         }
       },
 
