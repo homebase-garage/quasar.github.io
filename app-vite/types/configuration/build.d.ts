@@ -310,15 +310,19 @@ interface QuasarStaticBuildConfiguration {
    * Define global constant replacements. Entries will be defined as globals
    * during dev and statically replaced during build.
    *
-   * This gets supplied to Vite's own `define` option, which in turn uses Oxc's
-   * define feature to perform replacements, so value expressions must be a
-   * string that contains a JSON-serializable value (null, boolean, number,
-   * string, array, or object) or a single identifier.
+   * This gets supplied to Vite's & Rolldown's own "define" option,
+   * which in turn uses Oxc's "define" feature to perform replacements.
+   *
+   * All non-string values are automatically JSON.stringified by Quasar CLI.
+   * This ensures consistency between Vite & Rolldown builds and avoids Rolldown to fail.
    *
    * @example { __APP_VERSION__: JSON.stringify('v1.0.0') }
    * @example { __API_URL__: 'window.__backend_api_url' }
    */
-  define?: Record<string, string>;
+  define?: Record<
+    string,
+    string | number | boolean | undefined | null | any[] | Record<string, any>
+  >;
 
   /**
    * Sugar for `define` option. Define global constant replacements that will
@@ -328,7 +332,10 @@ interface QuasarStaticBuildConfiguration {
    * @example { SOME_DEFINE: 'my-string' } will be transformed into { 'import.meta.env.SOME_DEFINE': '"my-string"' }
    * @example { VERSION: 22 } will be transformed into { 'import.meta.env.VERSION': '22' }
    */
-  defineEnv?: Record<string, any>;
+  defineEnv?: Record<
+    string,
+    string | number | boolean | undefined | null | any[] | Record<string, any>
+  >;
 
   /**
    * Configuration related to the environment variables loaded from
