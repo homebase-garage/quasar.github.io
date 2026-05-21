@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { styleText } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { dirname, extname, join, normalize, resolve, sep } from 'node:path'
 import { execSync as exec } from 'node:child_process'
@@ -41,7 +42,18 @@ const prompts = {
   outro,
   taskLog,
   log,
-  note,
+  note: (msg, title) => {
+    /**
+     * Bug in @clack/prompts note formatting,
+     * so we need to reset the color for each line
+     */
+    const formattedMsg = msg
+      .split('\n')
+      .map(line => styleText('reset', line))
+      .join('\n')
+
+    note(formattedMsg, title)
+  },
   box
 }
 
