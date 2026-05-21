@@ -111,7 +111,7 @@ import { IconSet } from 'quasar'
 // change to YOUR path
 const iconSetList = import.meta.glob('../../node_modules/quasar/icon-set/*.js')
 // or just a select few (example below with only mdi-v7 and fontawesome-v6):
-// import.meta.glob('../../node_modules/quasar/icon-set/(mdi-v7,fontawesome-v6).js')
+// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v6}.js')
 
 export default defineBoot(async () => {
   const iconSetName = 'mdi-v7' // ... some logic to determine it (use Cookies Plugin?)
@@ -148,7 +148,7 @@ import { IconSet } from 'quasar'
 // change to YOUR path
 const iconSetList = import.meta.glob('../../node_modules/quasar/icon-set/*.js')
 // or just a select few (example below with only mdi-v7 and fontawesome-v6):
-// import.meta.glob('../../node_modules/quasar/icon-set/(mdi-v7,fontawesome-v6).js')
+// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v6}.js')
 
 // ! NOTICE ssrContext param:
 export default defineBoot(async ({ ssrContext }) => {
