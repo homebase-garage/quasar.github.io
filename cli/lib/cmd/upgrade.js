@@ -12,18 +12,17 @@ const argv = getArgv({
 if (argv.help) {
   console.log(`
   Description
-    Upgrades all quasar packages to their latest version
+    Upgrades all Quasar packages to their latest version
     which are compatible with the API that you are currently using
     (unless -m/--major param is used which may include breaking changes).
 
     Works only in a project folder by upgrading to latest minor versions
-    (or latest major versions if chosen to) of all quasar related packages.
+    (or latest major versions if chosen to) of all Quasar related packages.
 
     This will also upgrade official Quasar App Extensions.
 
   Usage
-    # checks for non-breaking change upgrades and displays them,
-    # but will not carry out the install
+    # will prompt you to install
     $ quasar upgrade
 
     # checks for pre-releases (alpha/beta/rc) also:
@@ -32,12 +31,12 @@ if (argv.help) {
     # checks for major new releases (includes breaking changes):
     $ quasar upgrade -m
 
-    # to perform the actual upgrade,
+    # to skip the install prompt and just do it,
     # combine any of the params above and add "-i" (or "--install"):
     $ quasar upgrade -i
 
   Options
-    --install, -i     Also perform package upgrades
+    --install, -i     Skips the install prompt and just does it
     --prerelease, -p  Allow pre-release versions (alpha/beta/rc)
     --major, -m       Allow newer major versions (breaking changes)
     --registry, -r    NPM registry URL
@@ -54,47 +53,84 @@ if (argv.help) {
 import fs from 'node:fs'
 import { green, red } from 'kolorist'
 
-import appPaths from '../app-paths.js'
-import { log, fatal, success } from '../logger.js'
+const { default: appPaths } = await import('../app-paths.js')
+const { createPromptSession } = await import('../logger.js')
+
+const promptSession = await createPromptSession('Quasar Packages Upgrade')
 
 if (appPaths.appDir === void 0) {
-  fatal(
-    'This command must be executed inside a Quasar project folder only.',
-    'Error'
+  promptSession.cancel(
+    'This command must be executed inside a Quasar project folder only.'
   )
+  process.exit(1)
 }
 
 if (!fs.existsSync(appPaths.resolve.app('node_modules'))) {
-  fatal('Please run npm/yarn/pnpm/bun install first\n', 'Error')
+  promptSession.cancel('Please run pnpm/yarn/npm/bun install first.')
+  process.exit(1)
 }
 
-import { appPkg } from '../app-pkg.js'
+const { appPkg } = await import('../app-pkg.js')
 
 const deps = {
   dependencies: [],
   devDependencies: []
 }
 
-import { nodePackager } from '../node-packager.js'
-import { getPackageJson } from '../get-package-json.js'
+const { nodePackager } = await import('../node-packager.js')
+const { getPackageJson } = await import('../get-package-json.js')
 
 if (argv.registry) {
   nodePackager.npmRegistryUrl = argv.registry
 }
 
-console.log()
-log(
-  `Gathering information from the NPM registry (${nodePackager.npmRegistryUrl})...`
+promptSession.log.info(
+  `Using NPM registry: ${green(nodePackager.npmRegistryUrl)}`
 )
-console.log()
 
 let quasarVersion = null
 let updateAvailable = false
 let skippedVersions = false
-let removeDeprecatedAppPkg = false
+
+const taskList = []
+const getVersionTask = async (
+  depsTarget,
+  packageName,
+  currentVersion,
+  currentVersionLabel
+) => {
+  const latestVersion = await nodePackager.getPackageLatestVersion({
+    packageName,
+    currentVersion,
+    majorVersion: argv.major,
+    preReleaseVersion: argv.prerelease
+  })
+
+  if (latestVersion === null) {
+    skippedVersions = true
+    return (
+      `${green(packageName)}: ${currentVersionLabel} → ${red('Skipping!')}` +
+      ` - NPM registry returned an error`
+    )
+  } else if (currentVersion !== latestVersion) {
+    depsTarget.push({
+      packageName,
+      latestVersion
+    })
+
+    updateAvailable = true
+    return `${green(packageName)}: ${currentVersionLabel} → ${green(latestVersion)}`
+  }
+
+  if (packageName === 'quasar') {
+    quasarVersion = latestVersion
+  }
+
+  return `${green(packageName)}: ${currentVersionLabel} ✅ `
+}
 
 for (const type of Object.keys(deps)) {
-  for (let packageName of Object.keys(appPkg[type] || {})) {
+  for (const packageName of Object.keys(appPkg[type] || {})) {
     // is it a Quasar package?
     if (
       packageName !== 'quasar' &&
@@ -105,61 +141,38 @@ for (const type of Object.keys(deps)) {
     }
 
     const json = getPackageJson(packageName)
-    const currentVersion = json ? json.version : null
+    const curVersion = json?.version || null
+    const curVersionLabel = curVersion === null ? red('Missing!') : curVersion
 
-    // q/app v3 has been renamed to q/app-webpack
-    if (
-      packageName === '@quasar/app' &&
-      currentVersion &&
-      currentVersion.startsWith('3.')
-    ) {
-      removeDeprecatedAppPkg = true
-      packageName = '@quasar/app-webpack'
-    }
-
-    const latestVersion = await nodePackager.getPackageLatestVersion({
-      packageName,
-      currentVersion,
-      majorVersion: argv.major,
-      preReleaseVersion: argv.prerelease
-    })
-
-    const current = currentVersion === null ? red('Missing!') : currentVersion
-
-    if (latestVersion === null) {
-      console.log(` ${green(packageName)}: ${current} → ${red('Skipping!')}`)
-      console.log(
-        `   (⚠️  NPM registry server (${nodePackager.npmRegistryUrl}) an error, so we cannot detect latest version)`
-      )
-      skippedVersions = true
-    } else if (currentVersion !== latestVersion) {
-      deps[type].push({
-        packageName,
-        latestVersion
-      })
-
-      updateAvailable = true
-
-      console.log(` ${green(packageName)}: ${current} → ${latestVersion}`)
-    }
-
-    if (packageName === 'quasar') {
-      quasarVersion = latestVersion
-    }
+    taskList.push(
+      // oxlint-disable-next-line unicorn/prefer-top-level-await
+      getVersionTask(deps[type], packageName, curVersion, curVersionLabel)
+    )
   }
 }
 
+let summary
+await promptSession.tasks([
+  {
+    title: 'Checking NPM registry for updates...',
+    task: async () => {
+      summary = await Promise.all(taskList)
+      return `Inquired NPM registry for updates`
+    }
+  }
+])
+
+promptSession.note(summary.join('\n'), 'Summary:')
+
 if (!updateAvailable) {
   if (skippedVersions) {
-    fatal(
-      `Some packages were skipped due to errors in the NPM registry server (${nodePackager.npmRegistryUrl}). Please try again later.\n`
+    promptSession.cancel(
+      `Some packages were skipped due to errors in the NPM registry server. Please try again later.`
     )
-  } else {
-    log(
-      `Congrats! All Quasar packages are up to date (according to ${nodePackager.npmRegistryUrl}).\n`
-    )
+    process.exit(1)
   }
 
+  promptSession.outro(`Congrats! All Quasar packages are up to date. ✅ `)
   process.exit(0)
 }
 
@@ -173,11 +186,6 @@ function getQuasarVersionPrefix(version) {
   return Number.isNaN(major) ? '' : `v${major}.`
 }
 
-console.log()
-console.log(
-  ` Used ${nodePackager.npmRegistryUrl} to check for latest versions.`
-)
-
 if (!argv.install) {
   const params = ['-i']
   if (argv.prerelease) params.push('-p')
@@ -185,58 +193,66 @@ if (!argv.install) {
 
   const urlPrefix = argv.major ? '' : getQuasarVersionPrefix(quasarVersion)
 
-  console.log(
-    ` See ${green(`https://${urlPrefix}quasar.dev/start/release-notes`)} for release notes.`
-  )
-  console.log(
-    ` Run "quasar upgrade ${params.join(' ')}" to do the actual upgrade.`
-  )
-  console.log()
-  process.exit(0)
+  if (
+    process.stdout.isTTY &&
+    (await import('ci-info').then(({ isCI }) => !isCI))
+  ) {
+    const initialValues = Object.keys(deps)
+      .reduce((acc, type) => {
+        acc.push(...deps[type])
+        return acc
+      }, [])
+      .map(dep => dep.packageName)
+
+    const { packageList } = await promptSession.prompt({
+      packageList: () =>
+        promptSession.multiselect({
+          message: `Pick packages to upgrade (unselect all to skip):`,
+          initialValues,
+          required: false,
+          options: Object.keys(deps).reduce(
+            (acc, type) => [
+              ...acc,
+              ...deps[type].map(dep => ({
+                value: dep.packageName,
+                label: `${dep.packageName} (${green(dep.latestVersion)})`
+              }))
+            ],
+            []
+          )
+        })
+    })
+
+    if (packageList.length !== 0) {
+      argv.install = true
+
+      if (packageList.length !== initialValues.length) {
+        Object.keys(deps).forEach(type => {
+          deps[type] = deps[type].filter(
+            dep => !packageList.includes(dep.packageName)
+          )
+        })
+      }
+    }
+  }
+
+  if (!argv.install) {
+    promptSession.note(
+      `See ${green(`https://${urlPrefix}quasar.dev/start/release-notes`)} for release notes.` +
+        `\nRun "quasar upgrade ${params.join(' ')}" to do the upgrade.`,
+      'Please note:'
+    )
+    promptSession.outro('Thank you!')
+    process.exit(0)
+  }
 }
 
 const {
   default: { removeSync }
 } = await import('fs-extra')
 
-if (removeDeprecatedAppPkg) {
-  console.log()
-  nodePackager.uninstallPackage('@quasar/app', {
-    displayName: 'deprecated @quasar/app'
-  })
-
-  // need to delete the package otherwise
-  // installing the new version might fail on Windows;
-  removeSync(appPaths.resolve.app('node_modules/@quasar/app'))
-
-  const tsConfigFile = appPaths.resolve.app('tsconfig.json')
-  if (fs.existsSync(tsConfigFile)) {
-    const content = fs.readFileSync(tsConfigFile, 'utf8')
-    fs.writeFileSync(
-      tsConfigFile,
-      content.replace(
-        '"@quasar/app/tsconfig-preset"',
-        '"@quasar/app-webpack/tsconfig-preset"'
-      ),
-      'utf8'
-    )
-  }
-
-  const quasarDTsFile = appPaths.resolve.app('src/quasar.d.ts')
-  if (fs.existsSync(quasarDTsFile)) {
-    const content = fs.readFileSync(quasarDTsFile, 'utf8')
-    fs.writeFileSync(
-      quasarDTsFile,
-      content.replace('"@quasar/app"', '"@quasar/app-webpack"'),
-      'utf8'
-    )
-  }
-}
-
 for (const type of Object.keys(deps)) {
-  if (deps[type].length === 0) {
-    continue
-  }
+  if (deps[type].length === 0) continue
 
   const packageList = []
 
@@ -256,23 +272,16 @@ for (const type of Object.keys(deps)) {
     )
   })
 
-  console.log()
-  nodePackager.installPackage(packageList, {
-    displayName:
-      packageList.join(' ') +
-      (type === 'devDependencies' ? ' as devDependencies' : ''),
+  await nodePackager.installPackage(packageList, {
     isDevDependency: type === 'devDependencies'
   })
 }
 
-console.log()
-
 if (skippedVersions) {
-  fatal(
-    `Partially upgraded Quasar packages. Some of them were skipped due to errors in the NPM registry server (${nodePackager.npmRegistryUrl}). Please try again later for those ones.`
+  promptSession.outro(
+    `⚠️  Partially upgraded Quasar packages. Some of them were skipped due to errors in the NPM registry server (${nodePackager.npmRegistryUrl}). Please try again later for those ones.`
   )
+  process.exit(1)
 } else {
-  success(
-    `Successfully upgraded Quasar packages (using npm registry: ${nodePackager.npmRegistryUrl}).\n`
-  )
+  promptSession.outro(`Upgraded Quasar packages ✅ `)
 }

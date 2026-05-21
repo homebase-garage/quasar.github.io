@@ -57,29 +57,44 @@ $ quasar [command-name] --help
 
 ## Upgrade
 
-Check (and optionally) upgrade Quasar packages from a Quasar project folder:
+Helper command to upgrade Quasar packages from a Quasar project folder:
 
 ```bash
-# view all options:
 $ quasar upgrade -h
 
-# checks for non-breaking change upgrades and displays them,
-# but will not carry out the install
-$ quasar upgrade
+  Description
+    Upgrades all Quasar packages to their latest version
+    which are compatible with the API that you are currently using
+    (unless -m/--major param is used which may include breaking changes).
 
-# checks for pre-releases (alpha/beta):
-$ quasar upgrade -p
+    Works only in a project folder by upgrading to latest minor versions
+    (or latest major versions if chosen to) of all Quasar related packages.
 
-# checks for major new releases (includes breaking changes):
-$ quasar upgrade -m
+    This will also upgrade official Quasar App Extensions.
 
-# use another npm registry url than what your machine is configured with:
-# (added in @quasar/cli v2.4)
-$ quasar upgrade -r https://registry.npmjs.org/
+  Usage
+    # will prompt you to install
+    $ quasar upgrade
 
-# to perform the actual upgrade,
-# combine any of the params above and add "-i" (or "--install"):
-$ quasar upgrade -i
+    # checks for pre-releases (alpha/beta/rc) also:
+    $ quasar upgrade -p
+
+    # checks for major new releases (includes breaking changes):
+    $ quasar upgrade -m
+
+    # to skip the install prompt and just do it,
+    # combine any of the params above and add "-i" (or "--install"):
+    $ quasar upgrade -i
+
+  Options
+    --install, -i     Skips the install prompt and just does it
+    --prerelease, -p  Allow pre-release versions (alpha/beta/rc)
+    --major, -m       Allow newer major versions (breaking changes)
+    --registry, -r    NPM registry URL
+                        * default is taken from your machine's npm config
+                        * example: https://registry.npmjs.org/
+    --nocolor         Disable colored output
+    --help, -h        Displays this message
 ```
 
 ::: warning Note for code editor terminals
