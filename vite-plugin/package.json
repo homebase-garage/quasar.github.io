@@ -44,8 +44,6 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint",
     "dev": "cd ./playground && pnpm dev",
     "build": "node ./build/clean.js && rolldown --config ./build/rolldown.config.js",
     "test": "pnpm test:usage && pnpm test:runtime",

@@ -41,10 +41,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint"
-  },
   "dependencies": {
     "@clack/prompts": "^1.4.0",
     "@hono/node-server": "^2.0.1",

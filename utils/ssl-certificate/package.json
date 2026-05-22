@@ -24,10 +24,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint"
-  },
   "dependencies": {
     "fs-extra": "^11.3.5",
     "selfsigned": "^5.5.0"

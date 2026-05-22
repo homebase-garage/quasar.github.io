@@ -45,10 +45,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint"
-  },
   "dependencies": {
     "ci-info": "^4.4.0",
     "cross-spawn": "^7.0.6",

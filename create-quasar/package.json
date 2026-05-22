@@ -24,8 +24,6 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint",
     "create-test-project": "tsx scripts/create-test-project.ts"
   },
   "dependencies": {

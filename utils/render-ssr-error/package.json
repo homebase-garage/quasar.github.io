@@ -25,8 +25,6 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint",
     "dev": "cd src-ui && vite",
     "build": "pnpm build:ui && pnpm build:package",
     "build:ui": "cd src-ui && vite build",

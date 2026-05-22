@@ -89,8 +89,6 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint",
     "dev": "pnpm --filter app-vite-playground-js dev",
     "dev:ts": "pnpm --filter app-vite-playground-ts dev",
     "build": "pnpm --filter app-vite-playground-js build",

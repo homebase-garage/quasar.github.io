@@ -196,8 +196,6 @@
     "access": "public"
   },
   "scripts": {
-    "lint": "oxfmt && oxlint --fix",
-    "lint:check": "oxfmt --check && oxlint",
     "build": "node build/index.js"
   },
   "devDependencies": {
