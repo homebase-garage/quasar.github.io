@@ -10,7 +10,7 @@
     "prepare-docs": "node build/copy-quasar-api.js",
     "dev": "pnpm prepare-docs && quasar dev",
     "dev:ssr": "pnpm prepare-docs && quasar dev -m ssr",
-    "build": "quasar clean && pnpm prepare-docs && node build/search.js && quasar build -m ssr && node build/fix-ssr-manifest.js && mkdir -p dist/quasar.dev/client/examples/ && cp -R src/examples/* dist/quasar.dev/client/examples/ && cp src-ssr/pnpm-workspace.yaml dist/quasar.dev/ && pnpm i --dir dist/quasar.dev && node build/ssg.js",
+    "build": "quasar clean && pnpm prepare-docs && node build/search.js && quasar build -m ssr --nosummary && node build/fix-ssr-manifest.js && mkdir -p dist/quasar.dev/client/examples/ && cp -R src/examples/* dist/quasar.dev/client/examples/ && cp src-ssr/pnpm-workspace.yaml dist/quasar.dev/ && pnpm i --dir dist/quasar.dev && node build/ssg.js",
     "relnotes": "node build/release-notes/index.js",
     "test": "echo \"No test specified\" && exit 0"
   },

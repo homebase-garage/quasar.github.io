@@ -163,10 +163,10 @@ importers:
   app-vite/playground-js:
     dependencies:
       '@quasar/extras':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../extras
       quasar:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../ui
       vue:
         specifier: 'catalog:'
@@ -176,16 +176,16 @@ importers:
         version: 5.0.7(@vue/compiler-sfc@3.5.34)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3))
     devDependencies:
       '@quasar/app-vite':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:..
 
   app-vite/playground-ts:
     dependencies:
       '@quasar/extras':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../extras
       quasar:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../ui
       vue:
         specifier: 'catalog:'
@@ -195,7 +195,7 @@ importers:
         version: 5.0.7(@vue/compiler-sfc@3.5.34)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3))
     devDependencies:
       '@quasar/app-vite':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:..
       '@types/node':
         specifier: ^22.19.11

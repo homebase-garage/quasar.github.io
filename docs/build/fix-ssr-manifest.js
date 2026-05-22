@@ -9,6 +9,8 @@
 import { join } from 'node:path'
 import { readFileSync, writeFileSync } from 'node:fs'
 
+console.log('Fixing SSR manifest...')
+
 const manifestPath = join(
   import.meta.dirname,
   '../dist/quasar.dev/quasar.manifest.json'

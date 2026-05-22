@@ -10,13 +10,13 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "workspace:^",
-    "quasar": "workspace:^",
+    "@quasar/extras": "workspace:*",
+    "quasar": "workspace:*",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {
-    "@quasar/app-vite": "workspace:^",
+    "@quasar/app-vite": "workspace:*",
     "@types/node": "^22.19.11"
   },
   "engines": {
