@@ -1061,13 +1061,11 @@ export class QuasarConfigFile {
 
     if (cfg.build.filenameBasedRouting) {
       const defaultOptions = {
-        // where are paths relative to
+        // where are paths relative to:
         root: this.#ctx.appPaths.appDir,
-
-        ...(cfg.metaConf.hasTypescript
-          ? // where to generate the types
-            { dts: './src/typed-router.d.ts' }
-          : {})
+        dts: cfg.metaConf.hasTypescript
+          ? './src/router/typed-router.d.ts'
+          : false
       }
 
       const { filenameBasedRouting } = cfg.build

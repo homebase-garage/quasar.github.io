@@ -135,7 +135,7 @@ When `filenameBasedRouting` is set to `true` or an options object is supplied (o
   root: <root_project_folder>,
 
   // where to generate the types (if on Typescript projects):
-  dts: './src/typed-router.d.ts',
+  dts: './src/router/typed-router.d.ts',
 }
 ```
 

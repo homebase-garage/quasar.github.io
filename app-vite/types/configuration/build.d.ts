@@ -207,7 +207,7 @@ interface QuasarStaticBuildConfiguration {
    *   // where are paths relative to:
    *   root: <root_project_dir>,
    *   // where to generate the types (if on Typescript projects):
-   *   dts: './src/typed-router.d.ts',
+   *   dts: './src/router/typed-router.d.ts',
    * }
    *
    * @default false
