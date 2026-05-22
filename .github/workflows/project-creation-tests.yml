@@ -26,7 +26,6 @@ jobs:
 
         startsWith(github.event.release.tag_name, 'quasar') ||
         startsWith(github.event.release.tag_name, '@quasar/extras') ||
-        startsWith(github.event.release.tag_name, '@quasar/app-webpack') ||
         startsWith(github.event.release.tag_name, '@quasar/app-vite')
       }}
 
