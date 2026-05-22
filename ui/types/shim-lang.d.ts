@@ -1,5 +1,4 @@
 declare module "quasar/lang/*" {
-  import { QuasarLanguage } from "quasar";
-  const lang: QuasarLanguage;
+  const lang: import("quasar").QuasarLanguage;
   export default lang;
 }

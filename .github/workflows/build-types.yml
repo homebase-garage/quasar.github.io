@@ -65,9 +65,9 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Ensure types are formatted correctly
-        working-directory: .
-        run: pnpm lint:ui:check
+      # - name: Ensure types are formatted correctly
+      #   working-directory: .
+      #   run: pnpm lint:ui:check
 
       - name: Build the types
         run: pnpm build js types

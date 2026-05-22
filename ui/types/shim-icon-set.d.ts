@@ -1,5 +1,4 @@
 declare module "quasar/icon-set/*" {
-  import { QuasarIconSet } from "quasar";
-  const iconSet: QuasarIconSet;
+  const iconSet: import("quasar").QuasarIconSet;
   export default iconSet;
 }
