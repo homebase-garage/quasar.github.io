@@ -869,7 +869,7 @@ You may also want to upgrade to Typescript 7, which is written in Go for extra s
 ```diff /package.json
 "devDependencies": {
 -  "typescript": "...",
-+  "typescript": "npm:@typescript/typescript6@^6.0.0"
++  "typescript": "npm:@typescript/native-preview@beta"
 }
 ```
 

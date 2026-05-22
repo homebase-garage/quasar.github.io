@@ -26,7 +26,7 @@ For Typescript projects, you will need to use Typescript 7 and install additiona
 {
   "devDependencies": {
     "oxlint-tsgolint": "^0.x",
-    "typescript": "npm:@typescript/typescript6@^6.0.0"
+    "typescript": "npm:@typescript/native-preview@beta"
   }
 }
 ```
