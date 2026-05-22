@@ -5,29 +5,6 @@ desc: (@quasar/app-vite) How to use Typescript with Quasar BEX
 
 In order to support BEX with Typescript, you will need to rename the extension for your files in /src-bex from `.js` to `.ts` and make the necessary TS code changes.
 
-Also create this file:
-
-```js /src-bex/bex-env.d.ts
-/// <reference types="@quasar/app-vite/client/bex" />
-/// <reference types="@types/chrome" />
-
-/**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * Example:
- *
- * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
- * }
- */
-// interface ImportMetaEnv {}
-```
-
-Other files:
-
 ```js /src-bex/background.ts
 /**
  * Importing the file below initializes the extension background.

@@ -18,8 +18,6 @@ scope:
         e: (or .ts) SSR webserver
       - l: package.json
         e: helps install SSR only deps directly under /src-ssr
-      - l: ssr-env.d.ts
-        e: TypeScript only
 ---
 
 We’ll be using Quasar CLI to develop and build a SSR website. The difference between building a SPA, Mobile App, Electron App, PWA or SSR is simply determined by the “mode” parameter in “quasar dev” and “quasar build” commands.

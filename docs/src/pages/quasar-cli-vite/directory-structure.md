@@ -39,6 +39,8 @@ scope:
                 e: (or .ts) Vue Router definition
               - l: routes.js
                 e: (or .ts) App Routes definitions
+              - l: typed-router.d.ts
+                e: Typescript only, along with build.filenameBasedRouting enabled
           - l: stores
             e: Pinia Stores
             url: '/quasar-cli-vite/state-management-with-pinia'
@@ -50,8 +52,6 @@ scope:
               - l: '<store>...'
           - l: App.vue
             e: Root Vue component of your App
-          - l: env.d.ts
-            e: Typescript only
       - l: src-ssr/
         e: SSR specific code (like production Node.js webserver)
         url: '/quasar-cli-vite/developing-ssr/introduction'
@@ -103,6 +103,8 @@ scope:
       - l: tsconfig.json
         e: TypeScript config
         url: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+      - l: env.d.ts
+        e: Typescript only
       - l: package.json
         e: npm scripts and dependencies
         url: https://docs.npmjs.com/cli/v9/configuring-npm/package-json

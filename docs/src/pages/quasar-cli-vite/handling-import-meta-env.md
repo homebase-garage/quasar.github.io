@@ -199,73 +199,61 @@ If the env doesn't exist in `import.meta.env`, e.g. `%NON_EXISTENT%`, it will be
 
 ## IntelliSense with Typescript
 
-You will need to provide type definitions for your defines. Depending on where you use them:
+Quasar CLI takes into account process.env, [dotenv files](/quasar-cli-vite/dotenv-files-support) and /quasar.config > build.define & build.defineEnv to automatically inject the types for it. No `env.d.ts` needed in your project folder.
 
-- /src/env.d.ts
-- /src-ssr/ssr-env.d.ts
-- /src-pwa/pwa-env.d.ts
-- ...and so on for each Quasar CLI Mode
+However, there are cases which are not auto-handled by Quasar CLI:
 
-```ts Example with /src/env.d.ts
-/// <reference types="@quasar/app-vite/client" />
+- Definitions coming from dotenv files used ONLY for the /quasar.config file itself, but not for your app also.
+- Dynamic process.env variables. Say you have a /package.json script: "dev:xyz": "XYZ=true quasar dev"; if you only define XYZ for this specific call, then on the other calls without XYZ=true the Quasar CLI won't be able to know about a possible XYZ definition so it won't inject it.
 
+For cases like above, you can define it yourself:
+
+```ts Example: /env.d.ts
 /**
- * Add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
+ * Add types (that are not auto-magically added by Quasar CLI already)
+ * for your custom variables to avoid TypeScript errors, like dynamic
+ * process.env variables or definitions in dotenv files configured ONLY
+ * for the /quasar.config file itself.
+ *
+ * @example
+ * interface ImportMetaEnv {
+ *   readonly MY_VAR: string;
+ *   readonly MY_OTHER_VAR: string;
+ * }
  */
-interface ImportMetaEnv {
-  readonly API: string
-}
+interface ImportMetaEnv {}
 ```
 
-## Troubleshooting
+## Wrong usage
 
-You might be getting `process is not defined` errors in the browser console if you are accessing the variables wrong or if you have a misconfiguration.
+You might be getting `X is undefined` errors in the browser console if you are accessing the variables in a wrong way or if you have a misconfiguration.
 
-### Wrong usage
-
-```js /quasar.config file
+```js
+// in /quasar.config file:
 build: {
   defineEnv: {
     FOO: 'hello',
   }
 }
+
+// in your app:
+console.log(import.meta.env.FOO) // ✅
+console.log(import.meta.env.foo) // ❌ Case sensitive
+console.log(import.meta.env.F0O) // ❌ Typo in the variable name (middle o is 0(zero))
+console.log(import.meta.env.BAR) // ❌ It's not defined in config
 ```
+
+For code in your `/src-ssr`, `/src-electron`, etc. (Quasar Mode folders) there are additional restrictions:
 
 ```js
 const { FOO } = import.meta.env // ❌ It doesn't allow destructuring or similar
-import.meta.env.FOO // ✅ It can only replace direct usage like this
+console.log(import.meta.env.FOO) // ✅ It can only replace direct usage like this
 
 function getEnv(name) {
   return import.meta.env[name] // ❌ It can't analyze dynamic usage
 }
 
-console.log(process) // ❌
-console.log(import.meta.env) // ❌
-// If you want to see a list of available env variables,
-// you can log the object you are passing to `build > env` inside the `quasar.config` file
-
-console.log(import.meta.env.FOO) // ✅
-console.log(import.meta.env.foo) // ❌ Case sensitive
-console.log(import.meta.env.F0O) // ❌ Typo in the variable name (middle o is 0(zero))
-```
-
-### Misconfiguration
-
-#### Manual definition
-
-```js /quasar.config file
-build: {
-  defineEnv: {
-    FOO: 'hello',
-  }
-}
-```
-
-```js
-console.log(import.meta.env.FOO) // ✅
-console.log(import.meta.env.BAR) // ❌ It's not defined in `build > defineEnv`
+console.log(import.meta.env) // ❌ It will output {}
 ```
 
 ## Other useful links

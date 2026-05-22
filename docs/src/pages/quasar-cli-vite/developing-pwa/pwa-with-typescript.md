@@ -7,25 +7,6 @@ In order to support PWA with Typescript, you will need to rename the extension f
 
 Also create these files:
 
-```js /src-pwa/pwa-env.d.ts
-/// <reference types="vite/client" />
-/// <reference types="@quasar/app-vite/client/pwa" />
-
-/**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * Example:
- *
- * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
- * }
- */
-// interface ImportMetaEnv {}
-```
-
 ```js /src-pwa/tsconfig.json
 {
   "extends": "../tsconfig.json",

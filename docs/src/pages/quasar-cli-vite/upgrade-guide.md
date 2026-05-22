@@ -480,116 +480,42 @@ bex: {
 
 ### Typescript changes
 
-Edit your `*-env.d.ts` files. Note that we are referencing types supplied by q/app-vite, so you don't have to write them yourself anymore.
+The only `.d.ts` file that you need will be in the root of your project folder:
 
-```tabs *-env.d.ts changes
-<<| diff /src/env.d.ts |>>
-- declare namespace NodeJS {
--   interface ProcessEnv {
--     NODE_ENV: string;
--     VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined;
--     VUE_ROUTER_BASE: string | undefined;
--   }
-- }
-
-/// <reference types="@quasar/app-vite/client" />
-
+```ts /env.d.ts
 /**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
+ * Add types (that are not auto-magically added by Quasar CLI already)
+ * for your custom variables to avoid TypeScript errors, like dynamic
+ * process.env variables or definitions in dotenv files configured ONLY
+ * for the /quasar.config file itself.
  *
- * Example:
- *
+ * @example
  * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
+ *   readonly MY_VAR: string;
+ *   readonly MY_OTHER_VAR: string;
  * }
  */
-// interface ImportMetaEnv {}
-<<| diff /src-pwa/pwa-env.d.ts |>>
-- declare namespace NodeJS {
--   interface ProcessEnv {
--     SERVICE_WORKER_FILE: string;
--     PWA_FALLBACK_HTML: string;
--     PWA_SERVICE_WORKER_REGEX: string;
--   }
-- }
-
-/// <reference types="@quasar/app-vite/client/pwa" />
-
-/**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * Example:
- *
- * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
- * }
- */
-// interface ImportMetaEnv {}
-<<| diff /src-ssr/ssr-env.d.ts |>>
-+ /// <reference types="@quasar/app-vite/client/ssr" />
-
-+ /**
-+  * Uncomment and add types for your custom environment
-+  * variables to avoid TypeScript errors
-+  * when using them via import.meta.env.VARIABLE_NAME
-+  *
-+  * Example:
-+  *
-+  * interface ImportMetaEnv {
-+  *   readonly MY_VAR: string
-+  *   readonly MY_OTHER_VAR: boolean
-+  * }
-+  */
-+ // interface ImportMetaEnv {}
-<<| diff /src-electron/electron-env.d.ts |>>
-- declare namespace NodeJS {
--   interface ProcessEnv {
--     QUASAR_PUBLIC_FOLDER: string;
--     QUASAR_ELECTRON_PRELOAD_FOLDER: string;
--     QUASAR_ELECTRON_PRELOAD_EXTENSION: string;
--     APP_URL: string;
--   }
-- }
-
-/// <reference types="@quasar/app-vite/client/electron" />
-
-/**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * Example:
- *
- * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
- * }
- */
-// interface ImportMetaEnv {}
-<<| diff /src-bex/bex-env.d.ts |>>
-/// <reference types="@quasar/app-vite/client/bex" />
-/// <reference types="@types/chrome" />
-
-/**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * Example:
- *
- * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
- * }
- */
-// interface ImportMetaEnv {}
+interface ImportMetaEnv {}
 ```
+
+You were previously using the following, which needs to be removed from all your `.d.ts` files. It would be a good idea to just have the `/env.d.ts` file defined above.
+
+```ts *env.d.ts
+/**
+ * REMOVE this! No longer needed.
+ * Delete the entire block:
+ */
+declare namespace NodeJS {
+  interface ProcessEnv {
+    NODE_ENV: string
+    VUE_ROUTER_MODE: 'hash' | 'history' | 'abstract' | undefined
+    VUE_ROUTER_BASE: string | undefined
+    // ...along with any other previously Quasar needed defines
+  }
+}
+```
+
+You can read about [import.meta.env](/quasar-cli-vite/handling-import-meta-env) and [dotenv files support](/quasar-cli-vite/dotenv-files-support).
 
 ### Install new deps
 
@@ -608,7 +534,7 @@ Make sure to update your `/quasar.config` file with the newest specs in order to
 - /quasar.config > `env` is now used by the new dotenv support. Dropped `build > rawDefine` as well. Use the new build > `define` & `defineEnv` instead. [Link](/quasar-cli-vite/handling-import-meta-env#adding-to-import-meta-env)
 - Boot files & preFetch > redirect() usage has changed. Need to return immediately after calling it. No longer supporting throwing an error (or returning a Promise) with the `{ url }` syntax. Directly use `redirect()` instead.
 - The /quasar.config file can come with `.js` or `.ts` extensions only. Dropped support for `.cjs`, `.mjs`, `.cts` and `.mts`.
-- All Quasar Modes now need to install their specific dependencies directly under their `/src-<mode>` folder. On the Typescript front, we've reworked all `/src-<mode>/<mode>-env.d.ts` files too for increased ease of use (and partly due to the process.env to import.meta.env switch).
+- All Quasar Modes now need to install their specific dependencies directly under their `/src-<mode>` folder.
 - Replaced `esbuild` tool with `Rolldown` for all the specific Quasar mode files (under their `/src-<mode>` folders). This also has impact over all the /quasar.config `extendX()` methods, as they will now receive a Rolldown config object.
 - All /quasar.config `extendX()` methods can now be async and optionally return a (Rolldown/etc) config that will be merged with the default one.
 - Dropped support for Capacitor v4 and below
@@ -873,13 +799,11 @@ You may also want to upgrade to Typescript 7, which is written in Go for extra s
 }
 ```
 
-Once they release TS 7 directly under the `typescript`, this is what you may want to use. Disregard the `6` in the name. It's not a mistake.
+Once the TS team releases TS 7 directly under the `typescript` package, this is what you may want to use.
 
 ### Filename-based routing with Vue Router v5+
 
-We now have first-class support for Vue Router's filename-based routing.
-
-You might want to [give it a try](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
+We now have first-class support for Vue Router's filename-based routing. You might want to [give it a try](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
 
 ### New CLI command options
 

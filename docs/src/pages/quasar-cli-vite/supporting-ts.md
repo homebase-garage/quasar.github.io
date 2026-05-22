@@ -14,18 +14,20 @@ If you selected TypeScript support when creating your project, you can skip this
 
 ## Installation of TypeScript Support
 
-Install the `typescript` package:
-
-```tabs
+```tabs Typescript 7
 <<| bash Yarn |>>
-$ yarn add --dev typescript@~5.5.3
+$ yarn add --dev npm:@typescript/native-preview@beta
 <<| bash NPM |>>
-$ npm install --save-dev typescript@~5.5.3
+$ npm install --save-dev npm:@typescript/native-preview@beta
 <<| bash PNPM |>>
-$ pnpm add -D typescript@~5.5.3
+$ pnpm add -D npm:@typescript/native-preview@beta
 <<| bash Bun |>>
-$ bun add --dev typescript@~5.5.3
+$ bun add --dev npm:@typescript/native-preview@beta
 ```
+
+::: tip
+Notice that the package name is not directly `typescript`, as per the TS team release notes on TS 7. Once the TS team releases TS 7 directly under the `typescript` package, replace it with that.
+:::
 
 Then, create `/tsconfig.json` file at the root of you project with this content:
 
@@ -55,22 +57,20 @@ You might want to check the requirements for it [here](/quasar-cli-vite/lint-and
 
 If you chose TypeScript support when scaffolding the project, the following declaration file was automatically scaffolded for you. If TypeScript support wasn't enabled during project creation, create it:
 
-```ts /src/env.d.ts
-/// <reference types="@quasar/app-vite/client" />
-
+```ts /env.d.ts
 /**
- * Uncomment and add types for your custom environment
- * variables to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
+ * Add types (that are not auto-magically added by Quasar CLI already)
+ * for your custom variables to avoid TypeScript errors, like dynamic
+ * process.env variables or definitions in dotenv files configured ONLY
+ * for the /quasar.config file itself.
  *
- * Example:
- *
+ * @example
  * interface ImportMetaEnv {
- *   readonly MY_VAR: string
- *   readonly MY_OTHER_VAR: boolean
+ *   readonly MY_VAR: string;
+ *   readonly MY_OTHER_VAR: string;
  * }
  */
-// interface ImportMetaEnv {}
+interface ImportMetaEnv {}
 ```
 
 See the following sections for the features and build modes you are using.
@@ -154,14 +154,12 @@ You can add it as a `postinstall` script to make sure it's run after installing 
 ```json /package.json
 {
   "scripts": {
-    "postinstall": "quasar prepare"
+    "postinstall": "quasar prepare --silent"
   }
 }
 ```
 
-Thanks to this setup, Capacitor dependencies are properly linked to the project's TypeScript configuration. That means you won't have to install dependencies twice, once in `/src-capacitor` and once in the root folder.
-
-Another benefit of this change is that folder aliases (`quasar.config file > build > alias`) are automatically recognized by TypeScript. So, you can remove `tsconfig.json > compilerOptions > paths`. If you are using a plugin like `vite-tsconfig-paths`, you can uninstall it and use `quasar.config file > build > alias` as the source of truth.
+Another benefit of this is that folder aliases (`quasar.config file > build > alias`) are automatically recognized by TypeScript. So, you can remove `tsconfig.json > compilerOptions > paths`. If you are using a plugin like `vite-tsconfig-paths`, you can uninstall it and use `quasar.config file > build > alias` as the source of truth.
 
 If you are using ESLint, we recommend enabling `@typescript-eslint/consistent-type-imports` rules in your ESLint configuration. If you don't have linting set up, we recommend using `verbatimModuleSyntax` in your `tsconfig.json` file as an alternative (_unlike ESLint rules, it's not auto-fixable_). These changes will help you unify your imports regarding regular and type-only imports. Please read [typescript-eslint Blog - Consistent Type Imports and Exports: Why and How](https://typescript-eslint.io/blog/consistent-type-imports-and-exports-why-and-how) for more information about this and how to set it up. Here is an example:
 

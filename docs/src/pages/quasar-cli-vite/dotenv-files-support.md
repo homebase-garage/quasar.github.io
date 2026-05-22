@@ -202,15 +202,15 @@ Quasar CLI detects dotenv files and uses them for the /quasar.config file itself
 }
 ```
 
-Usage in the `/quasar.config` file, given that you defined `HTML_MY_VAR` in `/.env`:
+Usage in the `/quasar.config` file, given that you defined `MY_VAR` in `/.env`:
 
 ```js /quasar.config file example
 import { defineConfig } from '#q-app'
 
 export default defineConfig(ctx => {
   return {
-    htmlVariables: {
-      myVar: import.meta.env.HTML_MY_VAR // <-- notice here
+    build: {
+      filenameBasedRouting: import.meta.env.MY_VAR === 'true'
     }
   }
 })

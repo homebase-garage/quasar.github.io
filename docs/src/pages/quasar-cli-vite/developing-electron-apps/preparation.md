@@ -23,8 +23,6 @@ scope:
         e: '(or .ts) Main thread code'
       - l: package.json
         e: 'helps install Electron only deps directly under /src-electron'
-      - l: electron-env.d.ts
-        e: 'TypeScript only'
 ---
 
 Before we dive in to the actual development, we need to do some preparation work.
