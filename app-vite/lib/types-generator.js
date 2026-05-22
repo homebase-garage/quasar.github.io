@@ -221,6 +221,7 @@ function generateTsConfig(quasarConf, fsUtils) {
 // When using TypeScript `moduleResolution: "bundler"`, it requires the file extension.
 // This may sound unusual, but that's because it seems to treat wildcard entries differently.
 const featureFlagsTemplate = `/* oxlint-disable */
+/* eslint-disable */
 import "quasar/dist/types/feature-flag.d.ts";
 
 declare module "quasar/dist/types/feature-flag.d.ts" {
@@ -271,12 +272,14 @@ function writeFeatureFlags(quasarConf, fsUtils) {
  * It also loads vite's client types.
  */
 const declarationsTemplate = `/* oxlint-disable */
+/* eslint-disable */
 /// <reference types="@quasar/app-vite" />
 /// <reference types="@quasar/app-vite/client" />
 `
 
 // Mocks all files ending in `.vue` showing them as plain Vue instances
 const vueShimsTemplate = `/* oxlint-disable */
+/* eslint-disable */
 declare module '*.vue' {
   import { DefineComponent } from 'vue';
   const component: DefineComponent;
@@ -285,6 +288,7 @@ declare module '*.vue' {
 `
 
 const piniaTemplate = `/* oxlint-disable */
+/* eslint-disable */
 import { Router } from 'vue-router';
 
 declare module 'pinia' {
@@ -294,20 +298,50 @@ declare module 'pinia' {
 }
 `
 
+const validDeclareConstKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+
 function getImportMetaEnvDeclaration(quasarConf) {
-  const keys = Object.keys(quasarConf.build.define).filter(
-    key =>
-      key.startsWith('import.meta.env.') &&
-      !key.startsWith('import.meta.env.QUASAR_')
-  )
+  const defineKeys = Object.keys(quasarConf.build.define)
+  const defineSet = new Set(defineKeys)
 
-  if (keys.length === 0) return ''
+  const clientEnvKeys = Object.keys(quasarConf.metaConf.clientEnvDefineList)
+  const clientSet = new Set(clientEnvKeys).difference(defineSet)
 
-  const declarations = keys
-    .map(key => `  readonly ${key.replace('import.meta.env.', '')}: string;`)
+  const backendEnvKeys = Object.keys(quasarConf.metaConf.backendEnvDefineList)
+  const backendSet = new Set(backendEnvKeys)
+    .difference(defineSet)
+    .difference(clientSet)
+
+  const importMetaEnv = [
+    ...defineKeys
+      .filter(
+        key =>
+          key.startsWith('import.meta.env.') &&
+          !key.startsWith('import.meta.env.QUASAR_')
+      )
+      .map(key => `  readonly ${key.replace('import.meta.env.', '')}: string;`),
+
+    ...[...clientSet].map(
+      key => `  readonly ${key.replace('import.meta.env.', '')}: string;`
+    ),
+
+    ...[...backendSet].map(
+      key => `  readonly ${key.replace('import.meta.env.', '')}?: string;`
+    )
+  ].join('\n')
+
+  const globalDeclaration = defineKeys
+    // implicit filtering out of `import.meta.env` keys
+    .filter(key => validDeclareConstKeyRE.test(key))
+    .map(key => `declare const ${key} = ${quasarConf.build.define[key]};`)
     .join('\n')
 
-  return `\ninterface ImportMetaEnv {\n${declarations}\n}\n`
+  return (
+    `\n// Automatically generated from raw build.define\n${globalDeclaration}\n` +
+    `\n// Automatically generated from process.env & dotenv files & build.define & build.defineEnv;` +
+    `\n// Backend-only are not available in client code, so they are marked as optional` +
+    `\ninterface ImportMetaEnv {\n${importMetaEnv}\n}\n`
+  )
 }
 
 /**

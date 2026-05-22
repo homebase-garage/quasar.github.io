@@ -1,10 +1,8 @@
 /**
- * Uncomment and add types for your custom environment
- * variables coming from dotenv files to avoid TypeScript errors
- * when using them via import.meta.env.VARIABLE_NAME
- *
- * No need to add what you supply to quasar.config > build > define & defineEnv,
- * as those are automatically added.
+ * Add types (that are not auto-magically added by Quasar CLI already)
+ * for your custom variables to avoid TypeScript errors, like dynamic
+ * process.env variables or definitions in dotenv files configured ONLY
+ * for the /quasar.config file itself.
  *
  * @example
  * interface ImportMetaEnv {

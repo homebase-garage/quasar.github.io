@@ -144,7 +144,6 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
  * Get the raw env definitions from the host project env files.
  */
 export function getAppEnv({ ctx, envCfg, useSnapshot }) {
-  const hasBackend = ctx.mode.ssr === true
   const localEnv = merge(
     {
       clientPrefix: defaultClientAppEnvPrefix,
@@ -193,26 +192,23 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
     clientEnvDefineList: parseEnvDefineList(rawFileEnv, clientPrefixRE)
   }
 
-  let backendBanner = ''
-  if (hasBackend) {
-    const backendPrefix = getEnvFilesPrefix({
-      prefix: localEnv.backendPrefix,
-      defaultPrefix: defaultBackendAppEnvPrefix,
-      banner: 'App envBackendPrefix'
-    })
-    const backendPrefixRE = Array.isArray(backendPrefix)
-      ? new RegExp(`^(${backendPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-      : new RegExp(`^${backendPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
-    const backendPrefixLabel = Array.isArray(backendPrefix)
-      ? backendPrefix.join(' | ')
-      : backendPrefix
+  const backendPrefix = getEnvFilesPrefix({
+    prefix: localEnv.backendPrefix,
+    defaultPrefix: defaultBackendAppEnvPrefix,
+    banner: 'App envBackendPrefix'
+  })
+  const backendPrefixRE = Array.isArray(backendPrefix)
+    ? new RegExp(`^(${backendPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
+    : new RegExp(`^${backendPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+  const backendPrefixLabel = Array.isArray(backendPrefix)
+    ? backendPrefix.join(' | ')
+    : backendPrefix
 
-    backendBanner = `${backendPrefix ? `Backend code prefix: ${backendPrefixLabel}` : 'No backend code prefix'}; `
-    result.backendEnvDefineList = parseEnvDefineList(
-      rawFileEnv,
-      backendPrefixRE
-    )
-  }
+  const backendBanner =
+    ctx.mode.ssr === true
+      ? `${backendPrefix ? `Backend code prefix: ${backendPrefixLabel}` : 'No backend code prefix'}; `
+      : ''
+  result.backendEnvDefineList = parseEnvDefineList(rawFileEnv, backendPrefixRE)
 
   result.envBanner =
     `${appEnvBannerPrefix} ` +
