@@ -54,7 +54,6 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       // vueDevtools,
 
       // publicPath: '/',
-      // analyze: true,
       // define: {},
       // defineEnv: {}
       // ignorePublicFolder: true,

@@ -407,6 +407,10 @@ build: {
 
 +  // new! Vue Router v5+ filename-based routing
 +  filenameBasedRouting: boolean | VueRouterVitePluginOptions
+
+-  // removed; add your preferred analyzer yourself;
+-  // example available below
+-  analyze
 },
 
 sourceFiles: {
@@ -478,6 +482,60 @@ bex: {
 +  // can now be async and optionally return object to be merged with default one
 +  extendBexScriptsConf (rolldownConf) {},
 }
+```
+
+Since `build.analyze` has been removed, here is how to manually do it now:
+
+```tabs Alternatives for build.analyze
+<<| js rollup-plugin-visualizer |>>
+// pnpm/yarn/npm/bun add -D rollup-plugin-visualizer
+// ...and yes, rollup-* as rollup plugins are compatible with Rolldown
+
+import { defineConfig } from '#q-app'
+
+export default defineConfig(ctx => {
+  return {
+    build: {
+      vitePlugins: [
+        ctx.prod
+          ? [
+              "rollup-plugin-visualizer",
+              {
+                open: true,
+                filename: ctx.appPaths.resolve.cache("stats.html")
+              },
+              { client: true }
+            ]
+          : null
+      ]
+    }
+  }
+})
+<<| js vite-bundle-analyzer |>>
+// pnpm/yarn/npm/bun add -D vite-bundle-analyzer
+
+import { defineConfig } from '#q-app'
+import { analyzer } from 'vite-bundle-analyzer'
+
+export default defineConfig(ctx => {
+  return {
+    build: {
+      vitePlugins: [
+        ctx.prod
+          ? [
+              analyzer,
+              {
+                openAnalyzer: true,
+                analyzerMode: "static",
+                fileName: ctx.appPaths.resolve.cache("stats.html")
+              },
+              { client: true }
+            ]
+          : null
+      ]
+    }
+  }
+})
 ```
 
 ### Typescript changes

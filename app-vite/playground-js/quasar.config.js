@@ -44,7 +44,6 @@ export default defineConfig((/* ctx */) => ({
     // vueDevtools,
 
     // publicPath: '/',
-    // analyze: true,
     // define: {},
     // defineEnv: {}
     // ignorePublicFolder: true,

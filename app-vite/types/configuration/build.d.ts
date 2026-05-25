@@ -141,14 +141,6 @@ interface QuasarStaticBuildConfiguration {
   vueOptionsAPI?: boolean;
 
   /**
-   * Do you want to analyze the production bundles?
-   * Generates and opens an HTML report.
-   *
-   * @default false
-   */
-  analyze?: boolean;
-
-  /**
    * Folder where Quasar CLI should generate the distributables.
    * Relative path to project root directory.
    *

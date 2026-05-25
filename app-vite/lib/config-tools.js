@@ -242,18 +242,6 @@ export async function createViteConfig(
     viteConf.server = merge({ warmup }, quasarConf.devServer)
   } else {
     viteConf.build.outDir = build.distDir
-
-    const analyze = quasarConf.build.analyze
-    if (analyze) {
-      const { visualizer } = await import('rollup-plugin-visualizer')
-      viteConf.plugins.push(
-        visualizer({
-          open: true,
-          filename: appPaths.resolve.cache('stats.html'),
-          ...(Object(analyze) === analyze ? analyze : {})
-        })
-      )
-    }
   }
 
   modeDeps?.forEach(({ dir, deps }) => {
