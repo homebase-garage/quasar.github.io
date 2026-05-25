@@ -63,7 +63,7 @@ if (argv.help) {
     // "proxy" param is hono/proxy
     export default ({ app, proxy }) => {
       app.get('/proxy/:path', (c) => {
-        return proxy('http://' + originServer + '/' + c.req.param('path'))
+        return proxy('http://some.api.com/' + c.req.param('path'))
       })
     }
   `)
