@@ -64,6 +64,8 @@ If you chose TypeScript support when scaffolding the project, the following decl
  * process.env variables or definitions in dotenv files configured ONLY
  * for the /quasar.config file itself.
  *
+ * https://quasar.dev/quasar-cli-vite/handling-import-meta-env#type-inference
+ *
  * @example
  * interface ImportMetaEnv {
  *   readonly MY_VAR: string;
