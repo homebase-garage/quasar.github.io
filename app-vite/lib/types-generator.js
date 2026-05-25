@@ -299,15 +299,41 @@ declare module 'pinia' {
 `
 
 const validDeclareConstKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+function getStrDefineType(value) {
+  if (value === 'true' || value === 'false') return 'boolean'
+  if (value === 'null') return 'null'
+
+  const trimmed = value.trim()
+  if (trimmed !== '') {
+    if (!Number.isNaN(Number(trimmed))) return 'number'
+
+    if (
+      (trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+      (trimmed.startsWith('Array(') && trimmed.endsWith(')')) ||
+      (trimmed.startsWith('new Array(') && trimmed.endsWith(')'))
+    ) {
+      return 'unknown[]'
+    }
+
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      return 'Record<string, unknown>'
+    }
+  }
+
+  return 'string'
+}
 
 function getImportMetaEnvDeclaration(quasarConf) {
-  const defineKeys = Object.keys(quasarConf.build.define)
+  const { define } = quasarConf.build
+  const { clientEnvDefineList, backendEnvDefineList } = quasarConf.metaConf
+
+  const defineKeys = Object.keys(define)
   const defineSet = new Set(defineKeys)
 
-  const clientEnvKeys = Object.keys(quasarConf.metaConf.clientEnvDefineList)
+  const clientEnvKeys = Object.keys(clientEnvDefineList)
   const clientSet = new Set(clientEnvKeys).difference(defineSet)
 
-  const backendEnvKeys = Object.keys(quasarConf.metaConf.backendEnvDefineList)
+  const backendEnvKeys = Object.keys(backendEnvDefineList)
   const backendSet = new Set(backendEnvKeys)
     .difference(defineSet)
     .difference(clientSet)
@@ -319,21 +345,26 @@ function getImportMetaEnvDeclaration(quasarConf) {
           key.startsWith('import.meta.env.') &&
           !key.startsWith('import.meta.env.QUASAR_')
       )
-      .map(key => `  readonly ${key.replace('import.meta.env.', '')}: string;`),
+      .map(
+        key =>
+          `  readonly ${key.replace('import.meta.env.', '')}: ${getStrDefineType(define[key])};`
+      ),
 
     ...[...clientSet].map(
-      key => `  readonly ${key.replace('import.meta.env.', '')}: string;`
+      key =>
+        `  readonly ${key.replace('import.meta.env.', '')}: ${getStrDefineType(clientEnvDefineList[key])};`
     ),
 
     ...[...backendSet].map(
-      key => `  readonly ${key.replace('import.meta.env.', '')}?: string;`
+      key =>
+        `  readonly ${key.replace('import.meta.env.', '')}?: ${getStrDefineType(backendEnvDefineList[key])};`
     )
   ].join('\n')
 
   const globalDeclaration = defineKeys
     // implicit filtering out of `import.meta.env` keys
     .filter(key => validDeclareConstKeyRE.test(key))
-    .map(key => `declare const ${key} = ${quasarConf.build.define[key]};`)
+    .map(key => `declare const ${key}: ${getStrDefineType(define[key])};`)
     .join('\n')
 
   return (

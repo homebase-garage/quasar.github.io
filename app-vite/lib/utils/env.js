@@ -272,13 +272,43 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
     }
   }
 
-  const { parsed } = dotEnvExpand({ processEnv: {}, parsed: env })
+  const { parsed } = dotEnvExpand({
+    // avoid polluting process.env
+    processEnv: {},
+    // make process.env available for expansion
+    parsed: { ...process.env, ...env }
+  })
 
   return {
+    // maintain the order of precedence: env files then process.env
     rawFileEnv: { ...parsed, ...process.env },
     watchEnvFiles,
     usedEnvFiles
   }
+}
+
+const asIsList = ['true', 'false', 'null']
+function getStrDefineValue(value) {
+  if (asIsList.includes(value)) return value
+
+  const trimmed = value.trim()
+  if (trimmed !== '') {
+    if (!Number.isNaN(Number(trimmed))) return value
+
+    if (
+      (trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+      (trimmed.startsWith('Array(') && trimmed.endsWith(')')) ||
+      (trimmed.startsWith('new Array(') && trimmed.endsWith(')'))
+    ) {
+      return value
+    }
+
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      return value
+    }
+  }
+
+  return JSON.stringify(value)
 }
 
 /**
@@ -289,7 +319,7 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
 function parseEnvDefineList(env, regex) {
   const validKeys = Object.keys(env).filter(key => regex.test(key))
   return validKeys.reduce((acc, key) => {
-    acc[`import.meta.env.${key}`] = JSON.stringify(env[key])
+    acc[`import.meta.env.${key}`] = getStrDefineValue(env[key])
     return acc
   }, {})
 }
