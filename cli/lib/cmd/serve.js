@@ -17,11 +17,11 @@ const argv = getArgv({
   index: { type: 'string', short: 'i', default: 'index.html' },
   sw: { type: 'boolean' },
   history: { type: 'boolean' },
+  proxy: { type: 'string', short: 'P' },
   https: { type: 'boolean' },
   C: { type: 'string' },
   K: { type: 'string' },
-  P: { type: 'string' },
-  h: { type: 'boolean' }
+  help: { type: 'boolean', short: 'h' }
 })
 
 if (argv.help) {
@@ -33,8 +33,8 @@ if (argv.help) {
     $ quasar serve [path]
     $ quasar serve . # serve current folder
 
-    If you serve a SSR folder built with the CLI then
-    control is yielded to /index.js and params have no effect.
+    If you serve a SSR dist folder built with Quasar CLI then
+    run "node index.js" instead.
 
   Options
     --port, -p              Port to use (default: 4000)
@@ -56,14 +56,16 @@ if (argv.help) {
     --nocolor               Disable colored output
     --help, -h              Displays this message
 
-  Proxy file example
-    export default [
-      {
-        path: '/api',
-        rule: { target: 'http://www.example.org' }
-      }
-    ]
-    --> will be transformed into app.use(path, httpProxyMiddleware(rule))
+    --proxy, -P [path]      Path to proxy definition file (Optional)
+
+  Proxy file example:
+    // https://hono.dev/docs/helpers/proxy
+    // "proxy" param is hono/proxy
+    export default ({ app, proxy }) => {
+      app.get('/proxy/:path', (c) => {
+        return proxy('http://' + originServer + '/' + c.req.param('path'))
+      })
+    }
   `)
 
   argv.__warn?.()
@@ -123,39 +125,16 @@ if (!argv.silent) {
 }
 
 if (argv.proxy) {
-  let file = (argv.proxy = getAbsolutePath(argv.proxy))
-  if (!existsSync(file)) {
-    fatal(`Proxy definition file not found: ${file}`)
+  argv.proxy = getAbsolutePath(argv.proxy)
+  if (!existsSync(argv.proxy)) {
+    fatal(`Proxy definition file not found: ${argv.proxy}`)
   }
 
-  // Import the config file and proxy middleware
-  file = await import(file)
-  const { createProxyMiddleware } = await import('http-proxy-middleware')
+  // Import the config file
+  const { default: proxyFn } = await import(argv.proxy)
+  const { proxy } = await import('hono/proxy')
 
-  const proxyEntries = file.default || file
-
-  proxyEntries.forEach(entry => {
-    const proxyFn = createProxyMiddleware(entry.rule)
-
-    // Wrap the Node.js middleware for Hono
-    // Note: Hono requires a wildcard to prefix-match. e.g., '/api/*' instead of '/api'
-    const routePath = entry.path.endsWith('/*') ? entry.path : `${entry.path}/*`
-
-    app.use(
-      routePath,
-      (c, next) =>
-        new Promise((resolveEntry, rejectEntry) => {
-          // Pass the raw Node.js req/res objects to http-proxy-middleware
-          proxyFn(c.env.incoming, c.env.outgoing, err => {
-            if (err) {
-              return rejectEntry(err)
-            }
-            // If the proxy middleware skips/falls through, continue Hono's chain
-            resolveEntry(next())
-          })
-        })
-    )
-  })
+  proxyFn({ app, proxy })
 }
 
 if (argv.history) {
@@ -304,7 +283,7 @@ const info = [
   ['Index file', argv.index],
   argv.history ? ['History mode', 'enabled'] : '',
   argv.cors ? ['CORS', 'enabled'] : '',
-  argv.proxy ? ['Proxy definitions', argv.proxy] : ''
+  argv.proxy ? ['Proxy file', argv.proxy] : ''
 ]
   .filter(Boolean)
   .map(

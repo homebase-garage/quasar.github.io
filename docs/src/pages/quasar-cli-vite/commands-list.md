@@ -636,7 +636,7 @@ $ quasar run -h
 
 ## Serve
 
-This command can be used in production too and it is being supplied by the global installation of `@quasar/cli` package.
+This command should NOT be used in production. It is rather a quick convenience way to test things out and it is being supplied by the global installation of `@quasar/cli` package.
 
 ```bash
 $ quasar serve -h
@@ -648,8 +648,8 @@ $ quasar serve -h
     $ quasar serve [path]
     $ quasar serve . # serve current folder
 
-    If you serve a SSR folder built with the CLI then
-    control is yielded to /index.js and params have no effect.
+    If you serve a SSR dist folder built with Quasar CLI then
+    run "node index.js" instead.
 
   Options
     --port, -p              Port to use (default: 4000)
@@ -671,14 +671,16 @@ $ quasar serve -h
     --nocolor               Disable colored output
     --help, -h              Displays this message
 
-  Proxy file example
-    export default [
-      {
-        path: '/api',
-        rule: { target: 'http://www.example.org' }
-      }
-    ]
-    --> will be transformed into app.use(path, httpProxyMiddleware(rule))
+    --proxy, -P [path]      Path to proxy definition file (Optional)
+
+  Proxy file example:
+    // https://hono.dev/docs/helpers/proxy
+    // "proxy" param is hono/proxy
+    export default ({ app, proxy }) => {
+      app.get('/proxy/:path', (c) => {
+        return proxy('http://' + originServer + '/' + c.req.param('path'))
+      })
+    }
 ```
 
 ### Custom Node.js server
