@@ -1,7 +1,7 @@
 import type { UserConfig as ViteUserConfig } from "vite";
 import type { GenerateSWOptions, InjectManifestOptions } from "workbox-build";
 import type { RolldownOptions } from "rolldown";
-import { IResolve } from "./app-paths";
+import { QuasarAppPathsResolve } from "./app-paths";
 import { QuasarConf, ResolvedQuasarConfValue } from "./configuration/conf";
 import { QuasarContext } from "./configuration/context";
 import { PwaManifestOptions } from "./configuration/pwa-conf";
@@ -21,14 +21,25 @@ type HasExtensionHandler = (extId: string) => boolean;
 interface BaseAPI {
   readonly engine: "@quasar/app-vite";
 
+  /**
+   * Quasar ctx (context) object.
+   * @type ctx {@link QuasarContext}
+   */
   readonly ctx: QuasarContext;
   readonly extId: string;
-  readonly resolve: IResolve;
+  /**
+   * Utility functions to resolve absolute paths to the app's various directories.
+   * @type resolve {@link QuasarAppPathsResolve}
+   */
+  readonly resolve: QuasarAppPathsResolve;
   readonly appDir: string;
 
   readonly hasVite: true;
   readonly hasWebpack: false;
 
+  /**
+   * Does the host app have TypeScript support?
+   */
   readonly hasTypescript: () => Promise<boolean>;
   readonly getStorePackageName: () => "pinia" | undefined;
   readonly getNodePackagerName: () => Promise<"npm" | "yarn" | "pnpm" | "bun">;
@@ -58,8 +69,18 @@ export type PromptsScriptAnswers<Key extends string = string> = Record<
 >;
 
 export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
+  /**
+   * Answers received from the Prompts Script (if any).
+   * @type prompts {@link PromptsScriptAnswers}
+   */
   readonly prompts: PromptsScriptAnswers;
 
+  /**
+   * Extend the Quasar configuration object that is used by the CLI.
+   *
+   * @param cfg {@link QuasarConf}
+   * @param api {@link IndexAPI}
+   */
   readonly extendQuasarConf: Callback<
     (
       cfg: QuasarConf,
@@ -69,6 +90,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
 
   /**
    * Similar in use to /quasar.config > build > extendViteConf
+   * @type extendViteConf {@link ExtendViteConfHandler}
    */
   readonly extendViteConf: ExtendViteConfHandler;
 
@@ -80,6 +102,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > bex > extendBexScriptsConf
+   *
+   * @param cfg {@link RolldownOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendBexScriptsConf: Callback<
     (
@@ -96,11 +121,14 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > bex > extendBexManifestJson
+   *
+   * @param json The content of /src-bex/manifest.json as a JavaScript object
+   * @param api {@link IndexAPI}
    */
   readonly extendBexManifestJson: (
-    json: object,
+    json: Record<string, any>,
     api: IndexAPI
-  ) => void | object | Promise<void | object>;
+  ) => void | Record<string, any> | Promise<void | Record<string, any>>;
 
   /**
    * Extend the Rolldown config that is used for the electron-main thread.
@@ -109,6 +137,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronMainConf
+   *
+   * @param cfg {@link RolldownOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendElectronMainConf: Callback<
     (
@@ -124,6 +155,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronPreloadConf
+   *
+   * @param cfg {@link RolldownOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendElectronPreloadConf: Callback<
     (
@@ -139,6 +173,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronPackageJson
+   *
+   * @param pkgJson The content of the generated package.json for Electron production build
+   * @param api {@link IndexAPI}
    */
   readonly extendElectronPackageJson: (
     pkgJson: { [index in string]: any },
@@ -156,6 +193,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAManifestJson
+   *
+   * @param json {@link PwaManifestOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendPWAManifestJson: (
     json: PwaManifestOptions,
@@ -170,6 +210,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWACustomSWConf
+   *
+   * @param cfg {@link RolldownOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendPWACustomSWConf: Callback<
     (
@@ -185,6 +228,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAGenerateSWOptions
+   *
+   * @param config {@link GenerateSWOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendPWAGenerateSWOptions: (
     config: GenerateSWOptions,
@@ -198,6 +244,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAInjectManifestOptions
+   *
+   * @param config {@link InjectManifestOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendPWAInjectManifestOptions: (
     config: InjectManifestOptions,
@@ -212,6 +261,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRWebserverConf
+   *
+   * @param cfg {@link RolldownOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendSSRWebserverConf: Callback<
     (
@@ -227,6 +279,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRPackageJson
+   *
+   * @param pkgJson The content of the generated package.json for SSR production build
+   * @param api {@link IndexAPI}
    */
   readonly extendSSRPackageJson: (
     pkgJson: { [index in string]: any },
@@ -247,6 +302,9 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRGenerateSWOptions
+   *
+   * @param config {@link GenerateSWOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendSSRGenerateSWOptions: (
     config: GenerateSWOptions,
@@ -264,17 +322,32 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRInjectManifestOptions
+   *
+   * @param config {@link InjectManifestOptions}
+   * @param api {@link IndexAPI}
    */
   readonly extendSSRInjectManifestOptions: (
     config: InjectManifestOptions,
     api: IndexAPI
   ) => void | InjectManifestOptions | Promise<void | InjectManifestOptions>;
 
+  /**
+   * Register a custom CLI command
+   *
+   * @param commandName The name of the command
+   * @param fn The function to execute when the command is called
+   */
   readonly registerCommand: (
     commandName: string,
     fn: (processArgv: string[]) => Promise<void> | void
   ) => void;
 
+  /**
+   * Register a component/directive/plugin Json API.
+   *
+   * @param name The name of the component/directive/plugin
+   * @param relativePath The relative path to the API file
+   */
   readonly registerDescribeApi: (name: string, relativePath: string) => void;
 
   readonly beforeDev: Callback<
@@ -301,6 +374,10 @@ export type IndexAPICallback = (api: IndexAPI) => void | Promise<void>;
 
 type ExitLogHandler = (msg: string) => void;
 export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
+  /**
+   * Answers received from the Prompts Script (if any).
+   * @type prompts {@link PromptsScriptAnswers}
+   */
   readonly prompts: PromptsScriptAnswers;
 
   readonly extendPackageJson: (extPkg: object | string) => void;
@@ -317,6 +394,10 @@ export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
 export type InstallAPICallback = (api: InstallAPI) => void | Promise<void>;
 
 export interface UninstallAPI extends BaseAPI {
+  /**
+   * Answers received from the Prompts Script (if any).
+   * @type prompts {@link PromptsScriptAnswers}
+   */
   readonly prompts: PromptsScriptAnswers;
 
   readonly getPersistentConf: GetPersistentConfHandler;

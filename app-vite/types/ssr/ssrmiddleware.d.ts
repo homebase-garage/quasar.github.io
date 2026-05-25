@@ -76,13 +76,23 @@ interface SsrCreateParams {
   /**
    * If you use HTTPS in development, this will hold the HTTPS server options
    * from your /quasar.config file.
+   *
+   * @type options {@link HttpsServerOptions}
    */
   readonly devHttpsOptions?: HttpsServerOptions;
+  /**
+   * Util fns to resolve paths.
+   * @param resolve {@link SsrMiddlewareResolve}
+   */
   readonly resolve: SsrMiddlewareResolve;
   /**
    * The configured quasar.config file > build > publicPath
    */
   readonly publicPath: string;
+  /**
+   * Absolute paths to important folders at runtime (dev or prod).
+   * @param folders {@link SsrMiddlewareFolders}
+   */
   readonly folders: SsrMiddlewareFolders;
   /**
    * Uses Vue and Vue Router to render the requested URL path.
@@ -150,16 +160,23 @@ interface SsrMiddlewareServe {
    *    this sets how long the respective file(s) can live in browser's cache
    *
    * The return value is whatever you return from by src-ssr/server -> serveStaticContent()
+   *
+   * @type static {@link SsrServeStaticFn}
    */
   readonly static: SsrServeStaticFn;
   /**
    * Displays a wealth of useful debug information (including the stack trace).
    * Warning: It's available only in development and NOT in production.
+   *
+   * @type devError {@link SsrRenderErrorFn}
    */
   readonly devError: SsrRenderErrorFn;
 }
 
 interface SsrMiddlewareParams extends SsrServeStaticContentParams {
+  /**
+   * @type serve {@link SsrMiddlewareServe}
+   */
   readonly serve: SsrMiddlewareServe;
 }
 

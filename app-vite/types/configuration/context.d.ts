@@ -156,6 +156,9 @@ interface BexQuasarContext extends BaseQuasarContext {
   readonly targetName: QuasarBexTargets;
 }
 
+/**
+ * Quasar ctx (context) object.
+ */
 export type QuasarContext =
   | SpaQuasarContext
   | PwaQuasarContext

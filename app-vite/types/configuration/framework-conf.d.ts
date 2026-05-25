@@ -32,6 +32,7 @@ interface QuasarFrameworkConfiguration {
    * One of the Quasar language packs
    *
    * @see https://v2.quasar.dev/options/quasar-language-packs
+   * @type options {@link QuasarLanguageCodes}
    * @example 'en-US'
    * @example 'es'
    */
@@ -84,6 +85,7 @@ interface QuasarFrameworkConfiguration {
    * something like `<component :is="dynamicName">` where `dynamicName` is a string that matches a Quasar component name.
    *
    * @example ['QAvatar', 'QChip']
+   * @type options {@link QuasarComponents}
    */
   components?: (keyof QuasarComponents)[];
   /**
@@ -94,12 +96,14 @@ interface QuasarFrameworkConfiguration {
    * in which you are using Quasar directives (e.g. v-intersection).
    *
    * @example ['Intersection', 'Mutation']
+   * @type options {@link QuasarDirectives}
    */
   directives?: (keyof QuasarDirectives)[];
   /**
    * Quasar plugins to be installed. Specify the ones you are using in your app.
    *
    * @example ['Notify', 'Loading', 'Meta', 'AppFullscreen']
+   * @type options {@link QuasarPlugins}
    */
   plugins?: (keyof QuasarPlugins)[];
 }

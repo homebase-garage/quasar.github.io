@@ -2,6 +2,9 @@ import { QVueGlobals } from "quasar";
 import { HasStoreParam } from "../store";
 import { SsrDriverTypes } from "./driver";
 
+/**
+ * Quasar SSR context object.
+ */
 export interface QSsrContext extends HasStoreParam {
   url?: string;
   originalUrl?: string;

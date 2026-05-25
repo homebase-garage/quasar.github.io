@@ -114,6 +114,7 @@ export interface QuasarPwaConfiguration {
    * Auto inject the PWA meta tags?
    * If using the function form, return HTML tags as one single string.
    * @default true
+   * @type injectParam {@link InjectPWAMetaTagsParams}
    */
   injectPWAMetaTags?:
     | boolean

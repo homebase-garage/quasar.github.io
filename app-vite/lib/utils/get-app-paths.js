@@ -47,6 +47,7 @@ function getPrefixDir(ctx) {
 
 export function getAppPaths({ ctx, defineHiddenProp } = {}) {
   const { appDir, quasarConfigFilename, quasarConfigInputFormat } = getAppInfo()
+  const prefixDir = getPrefixDir(ctx)
 
   const publicDir = resolve(appDir, 'public')
   const srcDir = resolve(appDir, 'src')
@@ -56,6 +57,8 @@ export function getAppPaths({ ctx, defineHiddenProp } = {}) {
   const capacitorDir = resolve(appDir, 'src-capacitor')
   const electronDir = resolve(appDir, 'src-electron')
   const bexDir = resolve(appDir, 'src-bex')
+
+  const cacheDir = join(appDir, 'node_modules/.q-cache', prefixDir)
 
   const acc = {
     cliDir,
@@ -68,6 +71,7 @@ export function getAppPaths({ ctx, defineHiddenProp } = {}) {
     capacitorDir,
     electronDir,
     bexDir,
+    cacheDir,
 
     quasarConfigFilename,
     quasarConfigInputFormat,
@@ -82,20 +86,13 @@ export function getAppPaths({ ctx, defineHiddenProp } = {}) {
       cordova: dir => join(cordovaDir, dir),
       capacitor: dir => join(capacitorDir, dir),
       electron: dir => join(electronDir, dir),
-      bex: dir => join(bexDir, dir)
+      bex: dir => join(bexDir, dir),
+      cache: dir => join(cacheDir, dir)
     }
   }
 
-  const prefixDir = getPrefixDir(ctx)
   const entryDir = resolve(appDir, '.quasar', prefixDir)
-
   defineHiddenProp(acc.resolve, 'entry', dir => join(entryDir, dir))
-
-  if (ctx !== void 0) {
-    const cacheDir = join(appDir, 'node_modules/.q-cache', prefixDir)
-    defineHiddenProp(acc, 'cacheDir', cacheDir)
-    defineHiddenProp(acc.resolve, 'cache', dir => join(cacheDir, dir))
-  }
 
   Object.freeze(acc.resolve)
   return Object.freeze(acc)

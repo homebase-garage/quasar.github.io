@@ -35,6 +35,8 @@ interface QuasarBaseElectronConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @param config {@link RolldownOptions}
    */
   extendElectronMainConf?: (
     config: RolldownOptions
@@ -45,6 +47,8 @@ interface QuasarBaseElectronConfiguration {
    *
    * Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
+   *
+   * @param config {@link RolldownOptions}
    */
   extendElectronPreloadConf?: (
     config: RolldownOptions
