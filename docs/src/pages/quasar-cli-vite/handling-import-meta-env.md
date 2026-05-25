@@ -445,7 +445,9 @@ console.log(
 ```
 
 ::: warning
-Arrays will be typed as `unknown[]`. Should you wish, in a Typescript project, you can use `as ....` to enhance its type wherever you reference the respective variable. Example: `import.meta.MY_ARR as number[]`
+Arrays will be typed as `unknown[]`. Should you wish, in a Typescript project, you can use `as ....` to enhance its type wherever you reference the respective variable. Example: `import.meta.MY_ARR as number[]`.
+
+Alternatively, you can declare it yourself in `/env.d.ts` and use /quasar.config > build > env > ignoreType to instruct Quasar CLI to skip declaring it.
 :::
 
 ## IntelliSense with Typescript
@@ -473,6 +475,26 @@ For cases like above, you can define it yourself:
  * }
  */
 interface ImportMetaEnv {}
+```
+
+For cases where the auto-type inference and declaration does not work for your specific case, you can instruct Quasar CLI to ignore it through the /quasar.config file and declare it yourself instead in `/env.d.ts`:
+
+```js
+build: {
+  env: {
+    /**
+     * Ignore auto-infering and declaring type for these variables;
+     * Variables can come from process.env (terminal variables) or
+     * dotenv files or quasar.config > build > define/defineEnv.
+     *
+     * Use the full variable name as transformed in the code.
+     * @example 'all' to ignore all variables
+     * @example ['import.meta.env.OTHER_VAR', '__SOME_VAR__'] to ignore specific variables.
+     * @default []
+     */
+    ignoreType: ['import.meta.env.MY_SPECIAL_VAR']
+  }
+}
 ```
 
 ## More on dotenv files
@@ -609,6 +631,17 @@ build: {
       env: Record<string, string>,
       type: "client" | "backend"
     ) => Record<string, string>;
+
+    /**
+     * Ignore auto-infering and declaring type for these variables;
+     * Variables can come from process.env (terminal variables) or
+     * dotenv files or quasar.config > build > define/defineEnv.
+     *
+     * Use the full variable name as transformed in the code.
+     * @example 'all' to ignore all variables
+     * @example ['import.meta.env.OTHER_VAR', '__SOME_VAR__'] to ignore specific variables.
+     */
+    ignoreType?: "all" | string[];
   }
 }
 ```

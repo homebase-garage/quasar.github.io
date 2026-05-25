@@ -396,6 +396,18 @@ interface QuasarStaticBuildConfiguration {
       env: Record<string, string>,
       type: "client" | "backend"
     ) => Record<string, string>;
+
+    /**
+     * Ignore auto-infering and declaring type for these variables;
+     * Variables can come from process.env (terminal variables) or
+     * dotenv files or quasar.config > build > define/defineEnv.
+     *
+     * Use the full variable name as transformed in the code.
+     * @example 'all' to ignore all variables
+     * @example ['import.meta.env.OTHER_VAR', '__SOME_VAR__'] to ignore specific variables.
+     * @default []
+     */
+    ignoreType?: "all" | string[];
   };
 
   /**

@@ -994,7 +994,10 @@ export class QuasarConfigFile {
 
         env: {
           clientPrefix: defaultClientAppEnvPrefix,
-          backendPrefix: defaultBackendAppEnvPrefix
+          backendPrefix: defaultBackendAppEnvPrefix,
+          file: [],
+          folder: [],
+          ignoreType: []
         },
 
         alias: {

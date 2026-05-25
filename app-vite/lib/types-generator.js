@@ -324,16 +324,30 @@ function getStrDefineType(value) {
 }
 
 function getImportMetaEnvDeclaration(quasarConf) {
-  const { define } = quasarConf.build
+  const { define, env } = quasarConf.build
+  if (env.ignoreType === 'all') {
+    return `\ninterface ImportMetaEnv {}\n`
+  }
+
   const { clientEnvDefineList, backendEnvDefineList } = quasarConf.metaConf
+  const ignoreType =
+    Array.isArray(env.ignoreType) && env.ignoreType.length !== 0
+      ? env.ignoreType
+      : false
 
-  const defineKeys = Object.keys(define)
+  let defineKeys = Object.keys(define)
+  let clientEnvKeys = Object.keys(clientEnvDefineList)
+  let backendEnvKeys = Object.keys(backendEnvDefineList)
+
+  if (ignoreType) {
+    const ignoreTypeSet = new Set(ignoreType)
+    defineKeys = defineKeys.filter(key => !ignoreTypeSet.has(key))
+    clientEnvKeys = clientEnvKeys.filter(key => !ignoreTypeSet.has(key))
+    backendEnvKeys = backendEnvKeys.filter(key => !ignoreTypeSet.has(key))
+  }
+
   const defineSet = new Set(defineKeys)
-
-  const clientEnvKeys = Object.keys(clientEnvDefineList)
   const clientSet = new Set(clientEnvKeys).difference(defineSet)
-
-  const backendEnvKeys = Object.keys(backendEnvDefineList)
   const backendSet = new Set(backendEnvKeys)
     .difference(defineSet)
     .difference(clientSet)
@@ -368,7 +382,9 @@ function getImportMetaEnvDeclaration(quasarConf) {
     .join('\n')
 
   return (
-    `\n// Automatically generated from raw build.define\n${globalDeclaration}\n` +
+    (globalDeclaration
+      ? `\n// Automatically generated from raw build.define\n${globalDeclaration}\n`
+      : '') +
     `\n// Automatically generated from process.env & dotenv files & build.define & build.defineEnv;` +
     `\n// Backend-only are not available in client code, so they are marked as optional` +
     `\ninterface ImportMetaEnv {\n${importMetaEnv}\n}\n`

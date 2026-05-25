@@ -79,6 +79,11 @@ function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
   return validPrefixList
 }
 
+function convertArrayOrStringToArray(value) {
+  if (Array.isArray(value)) return value
+  return value ? [value] : []
+}
+
 export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
   const localEnv = merge(
     {
@@ -90,11 +95,7 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
   )
 
   const fileList = isCI ? ['.env'] : ['.env', '.env.local']
-  const additionalFiles = Array.isArray(localEnv.file)
-    ? localEnv.file
-    : localEnv.file
-      ? [localEnv.file]
-      : []
+  const additionalFiles = convertArrayOrStringToArray(localEnv.file)
 
   if (additionalFiles.length !== 0) {
     // additional user-defined env files
@@ -105,9 +106,7 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
   const { rawFileEnv, watchEnvFiles, usedEnvFiles } = getFileEnvResult({
     appDir,
     fileList,
-    folderList: Array.isArray(localEnv.folder)
-      ? localEnv.folder
-      : [localEnv.folder]
+    folderList: convertArrayOrStringToArray(localEnv.folder)
   })
 
   const prefix = getEnvFilesPrefix({
@@ -156,11 +155,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
   )
 
   const fileList = isCI ? ['.env'] : ['.env', '.env.local']
-  const additionalFiles = Array.isArray(localEnv.file)
-    ? localEnv.file
-    : localEnv.file
-      ? [localEnv.file]
-      : []
+  const additionalFiles = convertArrayOrStringToArray(localEnv.file)
 
   if (additionalFiles.length !== 0) {
     // additional user-defined env files
@@ -171,9 +166,7 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
   const { rawFileEnv, watchEnvFiles, usedEnvFiles } = getFileEnvResult({
     appDir,
     fileList,
-    folderList: Array.isArray(localEnv.folder)
-      ? localEnv.folder
-      : [localEnv.folder]
+    folderList: convertArrayOrStringToArray(localEnv.folder)
   })
 
   const clientPrefix = getEnvFilesPrefix({
