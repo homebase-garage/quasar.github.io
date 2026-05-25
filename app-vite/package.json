@@ -1,6 +1,6 @@
 {
   "name": "@quasar/app-vite",
-  "version": "3.0.0-beta.24",
+  "version": "3.0.0-beta.25",
   "description": "Quasar Framework App CLI with Vite",
   "keywords": [
     "cli",
@@ -50,7 +50,7 @@
       "import": "./exports/wrappers.js"
     },
     "./client": {
-      "types": "./types/client.d.ts"
+      "types": "./exports/client/client.d.ts"
     },
     "./package.json": "./package.json",
     "./bin/quasar": {
@@ -69,11 +69,11 @@
       "import": "./exports/bex/private/bex-bridge.js"
     },
     "./electron/main": {
-      "types": "./types/electron/main-runtime.d.ts",
+      "types": "./exports/electron/main-runtime.d.ts",
       "import": "./exports/electron/main-runtime.js"
     },
     "./electron/preload": {
-      "types": "./types/electron/preload-runtime.d.ts",
+      "types": "./exports/electron/preload-runtime.d.ts",
       "import": "./exports/electron/preload-runtime.js"
     },
     "./eslint": {
@@ -82,6 +82,7 @@
       "import": "./exports/eslint/eslint.js"
     },
     "./testing": {
+      "types": "./exports/testing/testing.d.ts",
       "import": "./exports/testing/testing.js"
     }
   },

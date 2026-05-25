@@ -275,6 +275,8 @@ const declarationsTemplate = `/* oxlint-disable */
 /* eslint-disable */
 /// <reference types="@quasar/app-vite" />
 /// <reference types="@quasar/app-vite/client" />
+
+// https://quasar.dev/quasar-cli-vite/handling-import-meta-env#type-inference
 `
 
 // Mocks all files ending in `.vue` showing them as plain Vue instances

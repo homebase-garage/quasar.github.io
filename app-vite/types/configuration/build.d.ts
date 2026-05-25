@@ -402,6 +402,8 @@ interface QuasarStaticBuildConfiguration {
      * Variables can come from process.env (terminal variables) or
      * dotenv files or quasar.config > build > define/defineEnv.
      *
+     * https://v2.quasar.dev/quasar-cli-vite/handling-import-meta-env#type-inference
+     *
      * Use the full variable name as transformed in the code.
      * @example 'all' to ignore all variables
      * @example ['import.meta.env.OTHER_VAR', '__SOME_VAR__'] to ignore specific variables.
