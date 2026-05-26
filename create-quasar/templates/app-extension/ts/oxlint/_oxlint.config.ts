@@ -10,7 +10,8 @@ export default defineConfig({
     "/playground/quasar.config.*.temporary.compiled*",
     "/playground/.quasar/",
     "/playground/src-cordova/",
-    "/playground/src-capacitor/"
+    "/playground/src-capacitor/",
+    "/playground/src/router/typed-router.d.ts"
   ],
 
   options: {
