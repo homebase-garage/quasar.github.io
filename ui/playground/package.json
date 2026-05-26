@@ -6,7 +6,7 @@
   "author": "Razvan Stoenescu <razvan.stoenescu@gmail.com>",
   "type": "module",
   "scripts": {
-    "prepare:types": "quasar prepare",
+    "prepare:types": "quasar prepare --silent",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build"

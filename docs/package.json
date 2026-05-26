@@ -6,7 +6,7 @@
   "author": "Razvan Stoenescu <razvan.stoenescu@gmail.com>",
   "type": "module",
   "scripts": {
-    "prepare:types": "quasar prepare",
+    "prepare:types": "quasar prepare --silent",
     "prepare-docs": "node build/copy-quasar-api.js",
     "dev": "pnpm prepare-docs && quasar dev",
     "dev:ssr": "pnpm prepare-docs && quasar dev -m ssr",
