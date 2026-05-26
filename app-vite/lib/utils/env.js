@@ -12,8 +12,25 @@ import { encodeForDiff } from './encode-for-diff.js'
 const defaultQuasarConfEnvPrefix = ''
 export const defaultClientAppEnvPrefix = 'QCLI_'
 export const defaultBackendAppEnvPrefix = ''
-const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]+/
+const validEnvKeyRE = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
 const appEnvBannerPrefix = green(`Env ${dot}`)
+
+/**
+ * Filter out keys that cannot be used in JS
+ * as import.meta.env.[key]
+ * Examples: ProgramFiles(x86), BASH_FUNC_which%%
+ *
+ * Also, avoid sub-deps changing process.env, resulting
+ * in restarts of the devserver watching for config changes...
+ */
+const processEnv = Object.keys(process.env)
+  .filter(key => validEnvKeyRE.test(key))
+  .reduce((acc, key) => {
+    if (validEnvKeyRE.test(key)) {
+      acc[key] = process.env[key]
+    }
+    return acc
+  }, {})
 
 function getEnvFilesPrefix({ prefix, defaultPrefix, banner }) {
   if (!prefix) {
@@ -262,7 +279,7 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
 
   if (Object.keys(env).length === 0) {
     return {
-      rawFileEnv: { ...process.env },
+      rawFileEnv: { ...processEnv },
       watchEnvFiles,
       usedEnvFiles
     }
@@ -272,12 +289,12 @@ function getFileEnvResult({ appDir, fileList, folderList }) {
     // avoid polluting process.env
     processEnv: {},
     // make process.env available for expansion
-    parsed: { ...process.env, ...env }
+    parsed: { ...processEnv, ...env }
   })
 
   return {
     // maintain the order of precedence: env files then process.env
-    rawFileEnv: { ...parsed, ...process.env },
+    rawFileEnv: { ...parsed, ...processEnv },
     watchEnvFiles,
     usedEnvFiles
   }
@@ -307,11 +324,6 @@ function getStrDefineValue(value) {
   return JSON.stringify(value)
 }
 
-/**
- * Filter out keys that cannot be used in JS
- * as import.meta.env.[key]
- * Examples: ProgramFiles(x86), BASH_FUNC_which%%
- */
 function parseEnvDefineList(env, regex) {
   const validKeys = Object.keys(env).filter(key => regex.test(key))
   return validKeys.reduce((acc, key) => {
