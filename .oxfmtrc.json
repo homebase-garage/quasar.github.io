@@ -9,15 +9,7 @@
     "ui/icon-set/svg-*.js",
     "ui/lang/index.json",
 
-    "extras/bootstrap-icons/",
-    "extras/eva-icons/",
-    "extras/fontawesome-*/",
-    "extras/ionicons-*/",
-    "extras/line-awesome/",
-    "extras/material-*/",
-    "extras/mdi-*/",
-    "extras/roboto-*/",
-    "extras/themify/",
+    "extras/exports/",
 
     "create-quasar/templates/",
     "!create-quasar/templates/**/create-quasar-script.js",

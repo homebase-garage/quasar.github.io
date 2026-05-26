@@ -1,3 +1,16 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  getBanner,
+  writeExports
+} from './utils.js'
+
 const packageName = 'eva-icons'
 const distName = 'eva-icons'
 const iconSetName = 'Eva-Icons'
@@ -5,22 +18,13 @@ const prefix = 'eva'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, '../eva-icons')
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile,
-  getBanner
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, '../exports/eva-icons')
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/`
+)
 const iconTypes = ['fill', 'outline']
 let iconNames = new Set()
 
@@ -65,22 +69,26 @@ writeExports(
 // then update webfont files
 
 const webfont = ['Eva-Icons.woff2', 'Eva-Icons.woff']
+const banner = getBanner('Eva Icons', packageName)
 
 webfont.forEach(file => {
-  copySync(
-    resolve(__dirname, `../node_modules/${packageName}/style/fonts/${file}`),
-    resolve(__dirname, `../eva-icons/${file}`)
+  fse.copySync(
+    resolve(
+      import.meta.dirname,
+      `../node_modules/${packageName}/style/fonts/${file}`
+    ),
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
   from: resolve(
-    __dirname,
+    import.meta.dirname,
     `../node_modules/${packageName}/style/eva-icons.css`
   ),
-  to: resolve(__dirname, '../eva-icons/eva-icons.css'),
+  to: resolve(distFolder, 'eva-icons.css'),
   replaceFn: content =>
-    getBanner('Eva Icons', packageName) +
+    banner +
     content
       .replace('@font-face {', '@font-face {\nfont-display: block;')
       .replace('src: url("./fonts/Eva-Icons.eot");', '')
@@ -91,7 +99,7 @@ copyCssFile({
 })
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

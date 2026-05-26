@@ -1,3 +1,16 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  getBanner,
+  writeExports
+} from './utils.js'
+
 const packageName = '@mdi/svg'
 const distName = 'mdi-v7'
 const iconSetName = 'MDI'
@@ -5,22 +18,13 @@ const prefix = 'mdi'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, `../${distName}`)
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile,
-  getBanner
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, `../exports/${distName}`)
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/svg/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/svg/`
+)
 const svgFiles = globSync(svgFolder + '/**/*.svg')
 let iconNames = new Set()
 
@@ -60,30 +64,28 @@ writeExports(
 
 // then update webfont files
 
+const banner = getBanner('MaterialDesignIcons.com', packageName)
 const webfont = [
   'materialdesignicons-webfont.woff',
   'materialdesignicons-webfont.woff2'
 ]
 
 webfont.forEach(file => {
-  copySync(
-    resolve(__dirname, `../node_modules/@mdi/font/fonts/${file}`),
-    resolve(__dirname, `../${distName}/${file}`)
+  fse.copySync(
+    resolve(import.meta.dirname, `../node_modules/@mdi/font/fonts/${file}`),
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
   from: resolve(
-    __dirname,
+    import.meta.dirname,
     '../node_modules/@mdi/font/css/materialdesignicons.css'
   ),
-  to: resolve(__dirname, '../mdi-v7/mdi-v7.css'),
+  to: resolve(distFolder, 'mdi-v7.css'),
   replaceFn: content =>
     content
-      .replace(
-        '/* MaterialDesignIcons.com */',
-        getBanner('MaterialDesignIcons.com', packageName)
-      )
+      .replace('/* MaterialDesignIcons.com */', banner)
       .replace('/*# sourceMappingURL=materialdesignicons.css.map */', '')
       // has two "src:" lines, remove first then replace second:
       .replace(/src:[^;]+;/, '')
@@ -93,17 +95,17 @@ copyCssFile({
       )
 })
 
-copySync(
-  resolve(__dirname, '../node_modules/@mdi/font/LICENSE'),
-  resolve(__dirname, `../${distName}/license.md`)
+fse.copySync(
+  resolve(import.meta.dirname, '../node_modules/@mdi/font/LICENSE'),
+  resolve(distFolder, 'license.md')
 )
-copySync(
-  resolve(__dirname, '../node_modules/@mdi/svg/LICENSE'),
-  resolve(__dirname, `../${distName}/LICENSE`)
+fse.copySync(
+  resolve(import.meta.dirname, '../node_modules/@mdi/svg/LICENSE'),
+  resolve(distFolder, 'LICENSE')
 )
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

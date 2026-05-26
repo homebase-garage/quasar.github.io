@@ -1,3 +1,16 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  getBanner,
+  writeExports
+} from './utils.js'
+
 const packageName = 'themify-icons'
 const distName = 'themify'
 const iconSetName = 'Themify'
@@ -6,23 +19,14 @@ const version = '1.0.1'
 
 // ------------
 
-const tinyglobby = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, '../themify')
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile,
-  getBanner
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, '../exports/themify')
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/SVG/`)
-const svgFiles = tinyglobby.globSync(svgFolder + '/*.svg')
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/SVG/`
+)
+const svgFiles = globSync(svgFolder + '/*.svg')
 let iconNames = new Set()
 
 const svgExports = []
@@ -55,23 +59,27 @@ writeExports(iconSetName, version, distFolder, svgExports, typeExports, skipped)
 
 // then update webfont files
 
+const banner = getBanner('Themify Icons', packageName)
 const webfont = ['themify.woff']
 
 webfont.forEach(file => {
-  copySync(
-    resolve(__dirname, `../node_modules/${packageName}/fonts/${file}`),
-    resolve(__dirname, `../themify/${file}`)
+  fse.copySync(
+    resolve(
+      import.meta.dirname,
+      `../node_modules/${packageName}/fonts/${file}`
+    ),
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
   from: resolve(
-    __dirname,
+    import.meta.dirname,
     `../node_modules/${packageName}/css/themify-icons.css`
   ),
-  to: resolve(__dirname, '../themify/themify.css'),
+  to: resolve(distFolder, 'themify.css'),
   replaceFn: content =>
-    getBanner('Themify Icons', packageName) +
+    banner +
     content
       .replace(/src:[^;]+;/, '')
       .replace(/src:[^;]+;/, "src: url('./themify.woff') format('woff');")
@@ -80,7 +88,7 @@ copyCssFile({
 })
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

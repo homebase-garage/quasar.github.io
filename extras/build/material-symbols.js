@@ -1,15 +1,17 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import os from 'node:os'
+import fetch from 'cross-fetch'
+
+import { Queue, extractSvg, retry, sleep, writeExports } from './utils.js'
+
 const packageName = ''
 const iconSetName = 'Google Material Design Symbols'
 const prefix = 'sym_'
 
 // ------------
 
-const { resolve } = require('node:path')
-const fetch = require('cross-fetch')
-const { writeFileSync } = require('node:fs')
-
-const cpus = require('node:os').cpus().length
-
+const cpus = os.cpus().length
 const maxJobCount = cpus * 2 - 1 || 1
 
 const skipped = {}
@@ -17,8 +19,6 @@ const distFolder = {}
 const iconNames = {}
 const svgExports = {}
 const typeExports = {}
-
-const { extractSvg, writeExports, Queue, sleep, retry } = require('./utils')
 
 const themeMap = {
   outlined: 'Material Symbols Outlined',
@@ -67,82 +67,81 @@ function downloadIcon(icon) {
   )
 }
 
-async function run() {
-  try {
-    const response = await fetch(
-      'https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true'
-    )
-    const text = await response.text()
-    const data = JSON.parse(text.replace(")]}'", ''))
-    let icons = []
-    data.icons.forEach(val => {
-      for (const family in themeMap) {
-        if (val.unsupported_families.includes(themeMap[family])) return
-      }
+try {
+  const response = await fetch(
+    'https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true'
+  )
+  const text = await response.text()
+  const data = JSON.parse(text.replace(")]}'", ''))
+  let icons = []
+  data.icons.forEach(val => {
+    for (const family in themeMap) {
+      if (val.unsupported_families.includes(themeMap[family])) return
+    }
 
-      icons.push(val)
-    })
-    icons = icons.map((icon, index) => ({ index, ...icon }))
+    icons.push(val)
+  })
+  icons = icons.map((icon, index) => ({ index, ...icon }))
 
-    console.log('\nDownloading Google Material Design Symbols SVGs...')
+  console.log('\nDownloading Google Material Design Symbols SVGs...')
+  console.log(
+    `${icons.length} * ${Object.keys(themeMap).length} icons to download...(${icons.length * Object.keys(themeMap).length})`
+  )
+
+  Object.keys(themeMap).forEach(theme => {
+    if (skipped[theme] === void 0) skipped[theme] = []
+    if (svgExports[theme] === void 0) svgExports[theme] = []
+    if (typeExports[theme] === void 0) typeExports[theme] = []
+    if (iconNames[theme] === void 0) iconNames[theme] = new Set()
+    if (distFolder[theme] === void 0) {
+      distFolder[theme] = resolve(
+        import.meta.dirname,
+        `../exports/material-symbols-${theme}`
+      )
+    }
+  })
+
+  const queue = new Queue(
+    async icon => {
+      await retry(async ({ tries }) => {
+        await sleep((tries - 1) * 100)
+        await downloadIcon(icon)
+      })
+    },
+    { concurrency: maxJobCount }
+  )
+  queue.push(...icons)
+  await queue.wait({ empty: true })
+
+  console.log()
+
+  for (const theme in themeMap) {
+    // convert from Set to an array
+    iconNames[theme] = [...iconNames[theme]]
+
+    svgExports[theme].sort((a, b) => String(a).localeCompare(b))
+    typeExports[theme].sort((a, b) => String(a).localeCompare(b))
+    iconNames[theme].sort((a, b) => String(a).localeCompare(b))
+
     console.log(
-      `${icons.length} * ${Object.keys(themeMap).length} icons to download...(${icons.length * Object.keys(themeMap).length})`
+      `Updating SVG for ../material-symbols-${theme}; icon count: ${iconNames[theme].length}`
+    )
+    writeExports(
+      iconSetName,
+      packageName,
+      distFolder[theme],
+      svgExports[theme],
+      typeExports[theme],
+      skipped[theme]
     )
 
-    Object.keys(themeMap).forEach(theme => {
-      if (skipped[theme] === void 0) skipped[theme] = []
-      if (svgExports[theme] === void 0) svgExports[theme] = []
-      if (typeExports[theme] === void 0) typeExports[theme] = []
-      if (iconNames[theme] === void 0) iconNames[theme] = new Set()
-      if (distFolder[theme] === void 0) {
-        distFolder[theme] = resolve(__dirname, `../material-symbols-${theme}`)
-      }
-    })
-
-    const queue = new Queue(
-      async icon => {
-        await retry(async ({ tries }) => {
-          await sleep((tries - 1) * 100)
-          await downloadIcon(icon)
-        })
-      },
-      { concurrency: maxJobCount }
-    )
-    queue.push(icons)
-    await queue.wait({ empty: true })
-
-    console.log('')
-
-    Object.keys(themeMap).forEach(theme => {
-      // convert from Set to an array
-      iconNames[theme] = [...iconNames[theme]]
-
-      svgExports[theme].sort((a, b) => String(a).localeCompare(b))
-      typeExports[theme].sort((a, b) => String(a).localeCompare(b))
-      iconNames[theme].sort((a, b) => String(a).localeCompare(b))
-
-      console.log(
-        `Updating SVG for ../material-symbols-${theme}; icon count: ${iconNames[theme].length}`
-      )
-      writeExports(
-        iconSetName,
-        packageName,
-        distFolder[theme],
-        svgExports[theme],
-        typeExports[theme],
-        skipped[theme]
-      )
-
-      // write the JSON file
-      const file = resolve(distFolder[theme], 'icons.json')
-      writeFileSync(file, JSON.stringify(iconNames[theme], null, 2), 'utf8')
-    })
-  } catch (err) {
-    console.log('err', err)
-    throw err
+    // write the JSON file
+    const file = resolve(distFolder[theme], 'icons.json')
+    writeFileSync(file, JSON.stringify(iconNames[theme], null, 2), 'utf8')
   }
-
-  process.exit(0)
+} catch (err) {
+  console.log('err', err)
+  throw err
 }
 
-run()
+process.exit(0)

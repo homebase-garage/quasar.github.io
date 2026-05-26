@@ -1,3 +1,15 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  writeExports
+} from './utils.js'
+
 const packageName = 'bootstrap-icons'
 const distName = 'bootstrap-icons'
 const iconSetName = 'Bootstrap'
@@ -5,21 +17,13 @@ const prefix = 'bi'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, '../bootstrap-icons')
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, '../exports/bootstrap-icons')
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/icons/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/icons/`
+)
 const svgFiles = globSync(svgFolder + '/*.svg')
 let iconNames = new Set()
 
@@ -62,18 +66,21 @@ writeExports(
 const webfont = ['bootstrap-icons.woff', 'bootstrap-icons.woff2']
 
 webfont.forEach(file => {
-  copySync(
-    resolve(__dirname, `../node_modules/${packageName}/font/fonts/${file}`),
-    resolve(__dirname, `../bootstrap-icons/${file}`)
+  fse.copySync(
+    resolve(
+      import.meta.dirname,
+      `../node_modules/${packageName}/font/fonts/${file}`
+    ),
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
   from: resolve(
-    __dirname,
+    import.meta.dirname,
     `../node_modules/${packageName}/font/bootstrap-icons.css`
   ),
-  to: resolve(__dirname, '../bootstrap-icons/bootstrap-icons.css'),
+  to: resolve(distFolder, 'bootstrap-icons.css'),
   replaceFn: content =>
     content.replace(
       /src:[^;]+;/,
@@ -81,13 +88,13 @@ copyCssFile({
     )
 })
 
-copySync(
-  resolve(__dirname, `../node_modules/${packageName}/LICENSE`),
-  resolve(__dirname, '../bootstrap-icons/LICENSE')
+fse.copySync(
+  resolve(import.meta.dirname, `../node_modules/${packageName}/LICENSE`),
+  resolve(distFolder, 'LICENSE')
 )
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

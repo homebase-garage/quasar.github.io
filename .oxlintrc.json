@@ -12,15 +12,7 @@
     "create-quasar/templates/",
     "!create-quasar/templates/**/create-quasar-script.js",
 
-    "extras/bootstrap-icons/",
-    "extras/eva-icons/",
-    "extras/fontawesome-*/",
-    "extras/ionicons-*/",
-    "extras/line-awesome/",
-    "extras/material-*/",
-    "extras/mdi-*/",
-    "extras/roboto-*/",
-    "extras/themify/",
+    "extras/exports/",
 
     "ui/icon-set/svg-*.js",
     "ui/lang/index.json",
@@ -188,7 +180,7 @@
     },
 
     {
-      "files": ["{app-vite,cli,create-quasar,icongenie}/**"],
+      "files": ["{app-vite,cli,create-quasar,icongenie,extras}/**"],
       "env": {
         "node": true
       },
@@ -196,21 +188,6 @@
       "rules": {
         "import/first": "off",
         "node/no-process-env": "off"
-      }
-    },
-
-    {
-      "files": ["extras/**"],
-      "env": {
-        "node": true
-      },
-      "plugins": ["node"],
-      "rules": {
-        "import/first": "off",
-        "node/global-require": "off",
-        "node/no-process-env": "off",
-        "unicorn/prefer-module": "off",
-        "unicorn/prefer-top-level-await": "off"
       }
     },
 
@@ -233,7 +210,7 @@
     },
 
     {
-      "files": ["extras/**", "**/*.cjs"],
+      "files": ["**/*.cjs"],
       "rules": {
         "no-commonjs": "off",
         "unicorn/prefer-module": "off"

@@ -1,24 +1,20 @@
 <template>
   <div class="q-layout-padding">
     Icon Extras (SVG Viewer)
-    <div class="row justify-start items-center">
+    <div class="row items-center justify-start q-gutter-sm">
       <q-select
         v-model="selectedIcon"
         :options="iconOptions"
-        class="q-mb-sm"
         style="min-width: 300px"
+        outlined
+        dense
       />
-      <div class="q-ma-lg">Count: {{ iconSelectedKeys.length }}</div>
-      <q-input
-        v-model="filter"
-        class="q-ma-sm"
-        placeholder="Filter"
-        clearable
-      />
+      <div>Count: {{ iconSelectedKeys.length }}</div>
+      <q-input v-model="filter" placeholder="Filter" clearable outlined dense />
     </div>
-    <q-separator />
-    <div class="row justify-start items-center">
-      <div v-for="key in filtered" :key="key" class="q-ma-xs">
+    <q-separator class="q-my-sm" />
+    <div class="row items-center justify-start q-gutter-xs">
+      <div v-for="key in filtered" :key="key">
         <q-icon :name="iconSelected.icons[key]" size="md" color="primary" />
         <q-tooltip class="q-ma-sm">{{ key }}</q-tooltip>
       </div>

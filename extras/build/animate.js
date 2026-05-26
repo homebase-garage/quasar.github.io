@@ -1,15 +1,18 @@
+import { writeFileSync } from 'node:fs'
+import { basename, join, resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
 const packageName = 'animate.css'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { join, resolve, basename } = require('node:path')
+const distFolder = resolve(import.meta.dirname, '../exports/animate')
 
-const dist = resolve(__dirname, '../animate')
-
-const pkgFolder = resolve(__dirname, `../node_modules/${packageName}/`)
+const pkgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/`
+)
 const cssFiles = globSync(pkgFolder + '/source/*/*.css')
 const cssNames = new Set()
 
@@ -22,7 +25,7 @@ function extract(file) {
 
   if (cssNames.has(name)) return
 
-  copySync(file, join(dist, name + '.css'))
+  fse.copySync(file, join(distFolder, name + '.css'))
   cssNames.add(name)
 
   if (name.includes('In')) {
@@ -35,13 +38,12 @@ function extract(file) {
 }
 
 function getList(prefix) {
-  return `
-${prefix}generalAnimations = ${JSON.stringify(generalAnimations, null, 2)}
+  return `${prefix}generalAnimations = ${JSON.stringify(generalAnimations, null, 2)}
 
 ${prefix}inAnimations = ${JSON.stringify(inAnimations, null, 2)}
 
 ${prefix}outAnimations = ${JSON.stringify(outAnimations, null, 2)}
-`.replaceAll('"', "'")
+`
 }
 
 if (cssFiles.length === 0) {
@@ -55,33 +57,25 @@ if (cssFiles.length === 0) {
   inAnimations.sort()
   outAnimations.sort()
 
-  copySync(join(pkgFolder, 'LICENSE'), join(dist, 'LICENSE'))
-
-  const common = getList('module.exports.')
-
-  writeFileSync(join(dist, 'animate-list.js'), common, 'utf8')
-  writeFileSync(
-    join(dist, 'animate-list.mjs'),
-    getList('export const '),
-    'utf8'
-  )
-  writeFileSync(join(dist, 'animate-list.common.js'), common, 'utf8')
+  fse.copySync(join(pkgFolder, 'LICENSE'), join(distFolder, 'LICENSE'))
 
   writeFileSync(
-    join(dist, 'animate-list.d.ts'),
-    getList('export type ')
-      .replaceAll('[', '')
-      .replaceAll(']', ';')
-      .replaceAll(/ {2}'/g, "  | '")
-      .replaceAll(',', ''),
+    join(distFolder, 'animate-list.cjs'),
+    getList('module.exports.').replaceAll('"', "'"),
     'utf8'
   )
   writeFileSync(
-    join(dist, 'animate-list.common.d.ts'),
+    join(distFolder, 'animate-list.js'),
+    getList('export const ').replaceAll('"', "'"),
+    'utf8'
+  )
+
+  writeFileSync(
+    join(distFolder, 'animate-list.d.ts'),
     getList('export type ')
-      .replaceAll('[', '')
-      .replaceAll(']', ';')
-      .replaceAll(/ {2}'/g, "  | '")
+      .replaceAll(' [', '')
+      .replaceAll('\n]', ';')
+      .replaceAll(/ {2}"/g, '  | "')
       .replaceAll(',', ''),
     'utf8'
   )

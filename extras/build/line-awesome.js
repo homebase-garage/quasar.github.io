@@ -1,25 +1,29 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  getBanner,
+  writeExports
+} from './utils.js'
+
 const packageName = 'line-awesome'
 const distName = 'line-awesome'
 const iconSetName = 'Line Awesome'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, '../line-awesome')
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile,
-  getBanner
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, '../exports/line-awesome')
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/svg/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/svg/`
+)
 const svgFiles = globSync(svgFolder + '/*.svg')
 let iconNames = new Set()
 
@@ -59,6 +63,7 @@ writeExports(
 
 // then update webfont files
 
+const banner = getBanner('Line Awesome', packageName)
 const webfont = [
   'la-brands-400.woff',
   'la-brands-400.woff2',
@@ -69,23 +74,23 @@ const webfont = [
 ]
 
 webfont.forEach(file => {
-  copySync(
+  fse.copySync(
     resolve(
-      __dirname,
+      import.meta.dirname,
       `../node_modules/${packageName}/dist/line-awesome/fonts/${file}`
     ),
-    resolve(__dirname, `../line-awesome/${file}`)
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
   from: resolve(
-    __dirname,
+    import.meta.dirname,
     `../node_modules/${packageName}/dist/line-awesome/css/line-awesome.css`
   ),
-  to: resolve(__dirname, '../line-awesome/line-awesome.css'),
+  to: resolve(distFolder, 'line-awesome.css'),
   replaceFn: content =>
-    getBanner('Line Awesome', packageName) +
+    banner +
     content
       .replace(/src:[^;]+la-brands-400[^;]+;/, '')
       .replace(
@@ -104,13 +109,13 @@ copyCssFile({
       )
 })
 
-copySync(
-  resolve(__dirname, `../node_modules/${packageName}/LICENSE.md`),
-  resolve(__dirname, '../line-awesome/LICENSE.md')
+fse.copySync(
+  resolve(import.meta.dirname, `../node_modules/${packageName}/LICENSE.md`),
+  resolve(distFolder, 'LICENSE.md')
 )
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

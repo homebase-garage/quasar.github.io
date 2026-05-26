@@ -1,3 +1,10 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import { defaultNameMapper, extract, writeExports } from './utils.js'
+
 const packageName = 'ionicons'
 const distName = 'ionicons-v8'
 const iconSetName = 'Ionicons'
@@ -5,16 +12,13 @@ const prefix = 'ion'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync } = require('fs-extra')
-const { writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, `../${distName}`)
-const { defaultNameMapper, extract, writeExports } = require('./utils')
+const distFolder = resolve(import.meta.dirname, `../exports/${distName}`)
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/dist/svg/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/dist/svg/`
+)
 const svgFiles = globSync(svgFolder + '/*.svg')
 let iconNames = new Set()
 
@@ -52,13 +56,13 @@ writeExports(
   skipped
 )
 
-copySync(
-  resolve(__dirname, `../node_modules/${packageName}/LICENSE`),
-  resolve(__dirname, `../${distName}/LICENSE`)
+fse.copySync(
+  resolve(import.meta.dirname, `../node_modules/${packageName}/LICENSE`),
+  resolve(distFolder, 'LICENSE')
 )
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

@@ -1,3 +1,15 @@
+import { existsSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { globSync } from 'tinyglobby'
+import fse from 'fs-extra'
+
+import {
+  copyCssFile,
+  defaultNameMapper,
+  extract,
+  writeExports
+} from './utils.js'
+
 const packageName = '@fortawesome/fontawesome-free'
 const distName = 'fontawesome-v7'
 const iconSetName = 'Fontawesome Free'
@@ -5,21 +17,13 @@ const prefix = 'fa'
 
 // ------------
 
-const { globSync } = require('tinyglobby')
-const { copySync, removeSync } = require('fs-extra')
-const { existsSync, writeFileSync } = require('node:fs')
-const { resolve, join } = require('node:path')
-
 const skipped = []
-const distFolder = resolve(__dirname, `../${distName}`)
-const {
-  defaultNameMapper,
-  extract,
-  writeExports,
-  copyCssFile
-} = require('./utils')
+const distFolder = resolve(import.meta.dirname, `../exports/${distName}`)
 
-const svgFolder = resolve(__dirname, `../node_modules/${packageName}/svgs/`)
+const svgFolder = resolve(
+  import.meta.dirname,
+  `../node_modules/${packageName}/svgs/`
+)
 const iconTypes = ['brands', 'regular', 'solid']
 let iconNames = new Set()
 
@@ -79,30 +83,36 @@ const staleFiles = [
 ]
 
 staleFiles.forEach(file => {
-  const target = resolve(__dirname, `../${distName}/${file}`)
-  if (existsSync(target)) removeSync(target)
+  const target = resolve(distFolder, file)
+  if (existsSync(target)) fse.removeSync(target)
 })
 
 webfont.forEach(file => {
-  copySync(
-    resolve(__dirname, `../node_modules/${packageName}/webfonts/${file}`),
-    resolve(__dirname, `../${distName}/${file}`)
+  fse.copySync(
+    resolve(
+      import.meta.dirname,
+      `../node_modules/${packageName}/webfonts/${file}`
+    ),
+    resolve(distFolder, file)
   )
 })
 
 copyCssFile({
-  from: resolve(__dirname, `../node_modules/${packageName}/css/all.css`),
-  to: resolve(__dirname, `../${distName}/${distName}.css`),
+  from: resolve(
+    import.meta.dirname,
+    `../node_modules/${packageName}/css/all.css`
+  ),
+  to: resolve(distFolder, `${distName}.css`),
   replaceFn: content => content.replaceAll('../webfonts', '.')
 })
 
-copySync(
-  resolve(__dirname, `../node_modules/${packageName}/LICENSE.txt`),
-  resolve(__dirname, `../${distName}/LICENSE.txt`)
+fse.copySync(
+  resolve(import.meta.dirname, `../node_modules/${packageName}/LICENSE.txt`),
+  resolve(distFolder, 'LICENSE.txt')
 )
 
 // write the JSON file
-const file = resolve(__dirname, join('..', distName, 'icons.json'))
+const file = resolve(distFolder, 'icons.json')
 writeFileSync(file, JSON.stringify([...iconNames].sort(), null, 2), 'utf8')
 
 console.log(`${distName} done with ${iconNames.length} icons`)

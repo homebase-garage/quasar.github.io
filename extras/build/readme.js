@@ -1,9 +1,10 @@
-const { readFileSync, writeFileSync } = require('node:fs')
-const { resolve } = require('node:path')
-const { webfontRows, svgRows } = require('./readme-data')
+import { readFileSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 
-const extrasRoot = resolve(__dirname, '..')
-const extrasPkg = require('../package.json')
+import { svgRows, webfontRows } from './readme-data.js'
+import extrasPkg from '../package.json' with { type: 'json' }
+
+const extrasRoot = resolve(import.meta.dirname, '..')
 
 function resolvePackageSpecVersion(name) {
   const spec =
@@ -21,7 +22,7 @@ function resolvePackageSpecVersion(name) {
 }
 
 function resolveFileVersion(path, pattern) {
-  const content = readFileSync(resolve(extrasRoot, path), 'utf8')
+  const content = readFileSync(resolve(extrasRoot, 'exports', path), 'utf8')
   const match = content.match(pattern)
 
   if (match === null) {
@@ -94,9 +95,9 @@ function renderRows(rows, googleVersions, type) {
   })
 }
 
-module.exports.generateReadme = function generateReadme({ googleVersions }) {
+export function generateReadme({ googleVersions }) {
   const template = readFileSync(
-    resolve(__dirname, 'README.template.md'),
+    resolve(import.meta.dirname, 'README.template.md'),
     'utf8'
   )
   const webfontsTable = renderTable(

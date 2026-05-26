@@ -1,15 +1,18 @@
-const { cpus } = require('node:os')
-const { fork } = require('node:child_process')
-const { join } = require('node:path')
-const { Queue, sleep, retry } = require('./utils')
-const { generateReadme } = require('./readme')
+import { cpus } from 'node:os'
+import { fork } from 'node:child_process'
+import { join } from 'node:path'
+
+import { Queue, retry, sleep } from './utils.js'
+import { generateReadme } from './readme.js'
 
 const startTime = Date.now() // Add timing start
 
 const cpuCount = cpus().length
 const isParallel = cpuCount > 1
 const maxJobCount = Math.max(cpuCount * 2 - 1, 1)
-const runScript = isParallel ? fork : require
+const runScript = isParallel
+  ? (file, args, opts) => fork(file, args, opts)
+  : file => import(file)
 
 const materialFontVersions = {}
 
@@ -60,64 +63,61 @@ function handleChild(child) {
   })
 }
 
-function runJob(queue, scriptFile) {
+async function runJob(queue, scriptFile) {
   if (isParallel) {
     queue.push(scriptFile)
   } else {
-    runScript(join(__dirname, scriptFile))
+    await runScript(join(import.meta.dirname, scriptFile))
   }
 }
 
-async function generate() {
-  const queue = new Queue(
-    async scriptFile => {
-      await retry(async ({ tries }) => {
-        await sleep((tries - 1) * 100)
-        const child = runScript(join(__dirname, scriptFile), [], {
-          silent: true
-        })
-        await handleChild(child)
+const queue = new Queue(
+  async scriptFile => {
+    await retry(async ({ tries }) => {
+      await sleep((tries - 1) * 100)
+      const child = await runScript(join(import.meta.dirname, scriptFile), [], {
+        silent: true
       })
-    },
-    { concurrency: maxJobCount }
-  )
+      await handleChild(child)
+    })
+  },
+  { concurrency: maxJobCount }
+)
 
-  const jobs = [
-    './webfonts.js',
-    './animate.js',
-    './mdi-v7.js',
-    './fontawesome-v7.js',
-    './ionicons-v8.js',
-    './eva-icons.js',
-    './themify.js',
-    './line-awesome.js',
-    './bootstrap-icons.js',
-    // './material-icons.js', // hasn't updated in 2 years
-    './material-symbols.js',
-    './utils/buildExports.js'
-  ]
+const jobs = [
+  './webfonts.js',
+  './animate.js',
+  './mdi-v7.js',
+  './fontawesome-v7.js',
+  './ionicons-v8.js',
+  './eva-icons.js',
+  './themify.js',
+  './line-awesome.js',
+  './bootstrap-icons.js',
+  // './material-icons.js', // hasn't updated in 2 years
+  './material-symbols.js',
+  './package-json.js'
+]
 
-  for (const scriptFile of jobs) {
-    await runJob(queue, scriptFile)
-    if (
-      [
-        // './material-icons.js', // hasn't updated in 2 years
-        './material-symbols.js',
-        './utils/buildExports.js'
-      ].includes(scriptFile)
-    ) {
-      await queue.wait({ empty: true })
-    }
+for (const scriptFile of jobs) {
+  await runJob(queue, scriptFile)
+  if (
+    [
+      // './material-icons.js', // hasn't updated in 2 years
+      './material-symbols.js',
+      './package-json.js'
+    ].includes(scriptFile)
+  ) {
+    await queue.wait({ empty: true })
   }
-
-  generateReadme({ googleVersions: materialFontVersions })
-
-  console.log(JSON.stringify(materialFontVersions, null, 2))
-
-  // Add timing end and display duration
-  const endTime = Date.now()
-  const duration = endTime - startTime
-  console.log(`\nTotal execution time: ${duration}ms`)
 }
 
-generate()
+if (Object.keys(materialFontVersions).length !== 0) {
+  generateReadme({ googleVersions: materialFontVersions })
+  console.log(JSON.stringify(materialFontVersions, null, 2))
+}
+
+// Add timing end and display duration
+const endTime = Date.now()
+const duration = endTime - startTime
+console.log(`\nTotal execution time: ${duration}ms`)

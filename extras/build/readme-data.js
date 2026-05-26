@@ -41,14 +41,14 @@ const versionSources = {
   animate: packageSpec('animate.css')
 }
 
-module.exports.webfontRows = [
+export const webfontRows = [
   {
     vendor: 'Roboto Font',
     versionSource: versionSources.robotoFont,
     extrasName: '`roboto-font`',
     description: 'Recommended font along Material theme',
     notes: '',
-    license: '[License](roboto-font/LICENSE)'
+    license: '[License](exports/roboto-font/LICENSE)'
   },
   {
     vendor: 'Roboto Font Latin Extended',
@@ -56,7 +56,7 @@ module.exports.webfontRows = [
     extrasName: '`roboto-font-latin-ext`',
     description: 'Recommended font along Material theme',
     notes: '',
-    license: '[License](roboto-font-latin-ext/LICENSE)'
+    license: '[License](exports/roboto-font-latin-ext/LICENSE)'
   },
   {
     vendor:
@@ -65,7 +65,7 @@ module.exports.webfontRows = [
     extrasName: '`material-icons`',
     description: 'Material icons font',
     notes: 'Requires: @quasar/extras 1.2+',
-    license: '[License](material-icons/LICENSE)'
+    license: '[License](exports/material-icons/LICENSE)'
   },
   {
     vendor:
@@ -74,7 +74,7 @@ module.exports.webfontRows = [
     extrasName: '`material-icons-outlined`',
     description: 'Material icons outlined font',
     notes: 'Requires: @quasar/extras 1.2+',
-    license: '[License](material-icons-outlined/LICENSE)'
+    license: '[License](exports/material-icons-outlined/LICENSE)'
   },
   {
     vendor:
@@ -83,7 +83,7 @@ module.exports.webfontRows = [
     extrasName: '`material-icons-round`',
     description: 'Material icons round font',
     notes: 'Requires: @quasar/extras 1.2+',
-    license: '[License](material-icons-round/LICENSE)'
+    license: '[License](exports/material-icons-round/LICENSE)'
   },
   {
     vendor:
@@ -92,7 +92,7 @@ module.exports.webfontRows = [
     extrasName: '`material-icons-sharp`',
     description: 'Material icons sharp font',
     notes: 'Requires: @quasar/extras 1.2+',
-    license: '[License](material-icons-sharp/LICENSE)'
+    license: '[License](exports/material-icons-sharp/LICENSE)'
   },
   {
     vendor:
@@ -101,7 +101,7 @@ module.exports.webfontRows = [
     extrasName: '`material-symbols-outlined`',
     description: 'Material symbols outlined font',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-outlined/LICENSE)'
+    license: '[License](exports/material-symbols-outlined/LICENSE)'
   },
   {
     vendor:
@@ -110,7 +110,7 @@ module.exports.webfontRows = [
     extrasName: '`material-symbols-rounded`',
     description: 'Material symbols rounded font',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-rounded/LICENSE)'
+    license: '[License](exports/material-symbols-rounded/LICENSE)'
   },
   {
     vendor:
@@ -119,7 +119,7 @@ module.exports.webfontRows = [
     extrasName: '`material-symbols-sharp`',
     description: 'Material symbols sharp font',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-sharp/LICENSE)'
+    license: '[License](exports/material-symbols-sharp/LICENSE)'
   },
   {
     vendor:
@@ -128,7 +128,7 @@ module.exports.webfontRows = [
     extrasName: '`mdi-v7`',
     description: 'Extended Material Design icons font',
     notes: 'Requires: @quasar/extras 1.15+',
-    license: '[License](mdi-v7/LICENSE)'
+    license: '[License](exports/mdi-v7/LICENSE)'
   },
   {
     vendor: 'MDI v6 (Material Design Icons)',
@@ -136,7 +136,7 @@ module.exports.webfontRows = [
     extrasName: '`mdi-v6`',
     description: 'Extended Material Design icons font',
     notes: '',
-    license: '[License](mdi-v6/LICENSE)'
+    license: '[License](exports/mdi-v6/LICENSE)'
   },
   {
     vendor: 'MDI v5 (Material Design Icons)',
@@ -144,7 +144,7 @@ module.exports.webfontRows = [
     extrasName: '`mdi-v5`',
     description: 'Extended Material Design icons font',
     notes: '',
-    license: '[License](mdi-v5/LICENSE)'
+    license: '[License](exports/mdi-v5/LICENSE)'
   },
   {
     vendor: 'MDI v4 (Material Design Icons)',
@@ -152,7 +152,7 @@ module.exports.webfontRows = [
     extrasName: '`mdi-v4`',
     description: 'Extended Material Design icons font',
     notes: '',
-    license: '[License](mdi-v4/license.md)'
+    license: '[License](exports/mdi-v4/LICENSE)'
   },
   {
     vendor: 'MDI v3 (Material Design Icons)',
@@ -160,7 +160,7 @@ module.exports.webfontRows = [
     extrasName: '`mdi-v3`',
     description: 'Extended Material Design icons font',
     notes: '',
-    license: '[License](mdi-v3/LICENSE)'
+    license: '[License](exports/mdi-v3/LICENSE)'
   },
   {
     vendor: '[Font Awesome v7](https://fontawesome.com/icons)',
@@ -168,7 +168,7 @@ module.exports.webfontRows = [
     extrasName: '`fontawesome-v7`',
     description: 'Fontawesome icons font',
     notes: 'Requires: @quasar/extras 1.18+',
-    license: '[License](fontawesome-v7/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v7/LICENSE.txt)'
   },
   {
     vendor: 'Font Awesome v6',
@@ -176,7 +176,7 @@ module.exports.webfontRows = [
     extrasName: '`fontawesome-v6`',
     description: 'Fontawesome icons font',
     notes: 'Requires: @quasar/extras 1.13+',
-    license: '[License](fontawesome-v6/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v6/LICENSE.txt)'
   },
   {
     vendor: 'Font Awesome v5',
@@ -184,7 +184,7 @@ module.exports.webfontRows = [
     extrasName: '`fontawesome-v5`',
     description: 'Fontawesome icons font',
     notes: '',
-    license: '[License](fontawesome-v5/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v5/LICENSE.txt)'
   },
   {
     vendor: '[Ionicons](https://ionicons.com/v4)',
@@ -192,7 +192,7 @@ module.exports.webfontRows = [
     extrasName: '`ionicons-v4`',
     description: 'Ionicons font',
     notes: '',
-    license: '[License](ionicons-v4/LICENSE)'
+    license: '[License](exports/ionicons-v4/LICENSE)'
   },
   {
     vendor: '[Eva Icons](https://akveo.github.io/eva-icons)',
@@ -200,7 +200,7 @@ module.exports.webfontRows = [
     extrasName: '`eva-icons`',
     description: 'Eva Icons font',
     notes: '',
-    license: '[License](eva-icons/LICENSE)'
+    license: '[License](exports/eva-icons/LICENSE)'
   },
   {
     vendor: '[Themify Icons](https://themify.me/themify-icons)',
@@ -208,7 +208,7 @@ module.exports.webfontRows = [
     extrasName: '`themify`',
     description: 'Themify Icons font',
     notes: '',
-    license: '[License](themify/LICENSE)'
+    license: '[License](exports/themify/LICENSE)'
   },
   {
     vendor: '[Line Awesome](https://icons8.com/line-awesome)',
@@ -216,7 +216,7 @@ module.exports.webfontRows = [
     extrasName: '`line-awesome`',
     description: 'Line Awesome font',
     notes: 'Requires: @quasar/extras 1.5+',
-    license: '[License](line-awesome/LICENSE.md)'
+    license: '[License](exports/line-awesome/LICENSE.md)'
   },
   {
     vendor: '[Bootstrap Icons](https://icons.getbootstrap.com/)',
@@ -224,7 +224,7 @@ module.exports.webfontRows = [
     extrasName: '`bootstrap-icons`',
     description: 'Bootstrap Icons font',
     notes: 'Requires: @quasar/extras 1.10+',
-    license: '[License](bootstrap-icons/LICENSE)'
+    license: '[License](exports/bootstrap-icons/LICENSE)'
   },
   {
     vendor: '[Animate.css](https://animate.style/)',
@@ -232,11 +232,11 @@ module.exports.webfontRows = [
     extrasName: 'Use `animations` prop',
     description: 'Bundle of animations you can use in your website/app',
     notes: '',
-    license: '[License](animate/LICENSE)'
+    license: '[License](exports/animate/LICENSE)'
   }
 ]
 
-module.exports.svgRows = [
+export const svgRows = [
   {
     vendor:
       '[Material Icons](https://material.io/tools/icons/?style=baseline) (Google)',
@@ -244,7 +244,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-icons`',
     importFrom: '`@quasar/extras/material-icons`',
     notes: '',
-    license: '[License](material-icons/LICENSE)'
+    license: '[License](exports/material-icons/LICENSE)'
   },
   {
     vendor:
@@ -253,7 +253,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-icons-outlined`',
     importFrom: '`@quasar/extras/material-icons-outlined`',
     notes: 'Requires: @quasar/extras 1.9+',
-    license: '[License](material-icons-outlined/LICENSE)'
+    license: '[License](exports/material-icons-outlined/LICENSE)'
   },
   {
     vendor:
@@ -262,7 +262,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-icons-round`',
     importFrom: '`@quasar/extras/material-icons-round`',
     notes: 'Requires: @quasar/extras 1.9+',
-    license: '[License](material-icons-round/LICENSE)'
+    license: '[License](exports/material-icons-round/LICENSE)'
   },
   {
     vendor:
@@ -271,7 +271,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-icons-sharp`',
     importFrom: '`@quasar/extras/material-icons-sharp`',
     notes: 'Requires: @quasar/extras 1.9+',
-    license: '[License](material-icons-sharp/LICENSE)'
+    license: '[License](exports/material-icons-sharp/LICENSE)'
   },
   {
     vendor:
@@ -280,7 +280,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-symbols-outlined`',
     importFrom: '`@quasar/extras/material-symbols-outlined`',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-outlined/LICENSE)'
+    license: '[License](exports/material-symbols-outlined/LICENSE)'
   },
   {
     vendor:
@@ -289,7 +289,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-symbols-rounded`',
     importFrom: '`@quasar/extras/material-symbols-rounded`',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-rounded/LICENSE)'
+    license: '[License](exports/material-symbols-rounded/LICENSE)'
   },
   {
     vendor:
@@ -298,7 +298,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-material-symbols-sharp`',
     importFrom: '`@quasar/extras/material-symbols-sharp`',
     notes: 'Requires: @quasar/extras 1.14+',
-    license: '[License](material-symbols-sharp/LICENSE)'
+    license: '[License](exports/material-symbols-sharp/LICENSE)'
   },
   {
     vendor:
@@ -307,7 +307,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-mdi-v7`',
     importFrom: '`@quasar/extras/mdi-v7`',
     notes: '',
-    license: '[License](mdi-v7/LICENSE)'
+    license: '[License](exports/mdi-v7/LICENSE)'
   },
   {
     vendor: 'MDI v6 (Material Design Icons)',
@@ -315,7 +315,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-mdi-v6`',
     importFrom: '`@quasar/extras/mdi-v6`',
     notes: '',
-    license: '[License](mdi-v6/LICENSE)'
+    license: '[License](exports/mdi-v6/LICENSE)'
   },
   {
     vendor: 'MDI v5 (Material Design Icons)',
@@ -323,7 +323,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-mdi-v5`',
     importFrom: '`@quasar/extras/mdi-v5`',
     notes: '',
-    license: '[License](mdi-v5/LICENSE)'
+    license: '[License](exports/mdi-v5/LICENSE)'
   },
   {
     vendor: 'MDI v4 (Material Design Icons)',
@@ -331,7 +331,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-mdi-v4`',
     importFrom: '`@quasar/extras/mdi-v4`',
     notes: '',
-    license: '[License](mdi-v4/license.md)'
+    license: '[License](exports/mdi-v4/license.md)'
   },
   {
     vendor: '[Font Awesome v7](https://fontawesome.com/icons)',
@@ -339,7 +339,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-fontawesome-v7`',
     importFrom: '`@quasar/extras/fontawesome-v7`',
     notes: 'Requires: @quasar/extras 1.17+',
-    license: '[License](fontawesome-v7/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v7/LICENSE.txt)'
   },
   {
     vendor: 'Font Awesome v6',
@@ -347,7 +347,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-fontawesome-v6`',
     importFrom: '`@quasar/extras/fontawesome-v6`',
     notes: 'Requires: @quasar/extras 1.13+',
-    license: '[License](fontawesome-v6/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v6/LICENSE.txt)'
   },
   {
     vendor: 'Font Awesome v5',
@@ -355,7 +355,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-fontawesome-v5`',
     importFrom: '`@quasar/extras/fontawesome-v5`',
     notes: '',
-    license: '[License](fontawesome-v5/LICENSE.txt)'
+    license: '[License](exports/fontawesome-v5/LICENSE.txt)'
   },
   {
     vendor: '[Ionicons v8](https://ionicons.com/)',
@@ -363,7 +363,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-ionicons-v8`',
     importFrom: '`@quasar/extras/ionicons-v8`',
     notes: 'Requires: @quasar/extras 1.18+',
-    license: '[Icon License](ionicons-v8/LICENSE)'
+    license: '[Icon License](exports/ionicons-v8/LICENSE)'
   },
   {
     vendor: 'Ionicons v7',
@@ -371,7 +371,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-ionicons-v7`',
     importFrom: '`@quasar/extras/ionicons-v7`',
     notes: 'Requires: @quasar/extras 1.16+',
-    license: '[Icon License](ionicons-v7/LICENSE)'
+    license: '[Icon License](exports/ionicons-v7/LICENSE)'
   },
   {
     vendor: 'Ionicons v6',
@@ -379,7 +379,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-ionicons-v6`',
     importFrom: '`@quasar/extras/ionicons-v6`',
     notes: 'Requires: @quasar/extras 1.12+',
-    license: '[Icon License](ionicons-v6/LICENSE)'
+    license: '[Icon License](exports/ionicons-v6/LICENSE)'
   },
   {
     vendor: 'Ionicons v5',
@@ -387,7 +387,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-ionicons-v5`',
     importFrom: '`@quasar/extras/ionicons-v5`',
     notes: 'Requires: @quasar/extras 1.7+',
-    license: '[Icon License](ionicons-v5/LICENSE)'
+    license: '[Icon License](exports/ionicons-v5/LICENSE)'
   },
   {
     vendor: 'Ionicons v4',
@@ -395,7 +395,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-ionicons-v4`',
     importFrom: '`@quasar/extras/ionicons-v4`',
     notes: 'No icon font (woof) files for Ionicons since v4.6.3',
-    license: '[Icon License](ionicons-v4/LICENSE)'
+    license: '[Icon License](exports/ionicons-v4/LICENSE)'
   },
   {
     vendor: '[Eva Icons](https://akveo.github.io/eva-icons)',
@@ -403,7 +403,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-eva-icons`',
     importFrom: '`@quasar/extras/eva-icons`',
     notes: '',
-    license: '[License](eva-icons/LICENSE)'
+    license: '[License](exports/eva-icons/LICENSE)'
   },
   {
     vendor: '[Themify Icons](https://themify.me/themify-icons)',
@@ -411,7 +411,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-themify`',
     importFrom: '`@quasar/extras/themify`',
     notes: '',
-    license: '[License](themify/LICENSE)'
+    license: '[License](exports/themify/LICENSE)'
   },
   {
     vendor: '[Line Awesome](https://icons8.com/line-awesome)',
@@ -419,7 +419,7 @@ module.exports.svgRows = [
     iconSetName: '`svg-line-awesome`',
     importFrom: '`@quasar/extras/line-awesome`',
     notes: 'Requires: @quasar/extras 1.5+',
-    license: '[License](line-awesome/LICENSE.md)'
+    license: '[License](exports/line-awesome/LICENSE.md)'
   },
   {
     vendor: '[Bootstrap Icons](https://icons.getbootstrap.com/)',
@@ -427,6 +427,6 @@ module.exports.svgRows = [
     iconSetName: '`svg-bootstrap-icons`',
     importFrom: '`@quasar/extras/bootstrap-icons`',
     notes: 'Requires: @quasar/extras 1.10+',
-    license: '[License](bootstrap-icons/LICENSE)'
+    license: '[License](exports/bootstrap-icons/LICENSE)'
   }
 ]

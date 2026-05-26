@@ -2,7 +2,7 @@ import type {
   generalAnimations,
   inAnimations,
   outAnimations
-} from "./animate/animate-list.d.ts";
+} from "./exports/animate/animate-list.d.ts";
 
 export type QuasarFonts = "roboto-font" | "roboto-font-latin-ext";
 
