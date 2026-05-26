@@ -56,6 +56,9 @@
     "vue",
     "vuejs"
   ],
+  "overrides": {
+    "typescript": "npm:@typescript/native-preview@beta"
+  },
   "engines": {
     "node": ">= 26 || ^24 || ^22.12",
     "npm": ">= 6.13.4",

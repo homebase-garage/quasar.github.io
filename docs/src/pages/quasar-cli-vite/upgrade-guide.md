@@ -852,13 +852,22 @@ As of writing these lines, the support for `.vue` files is not yet fully ready, 
 
 ### Typescript 7
 
-You may also want to upgrade to Typescript 7, which is written in Go for extra speed! As of writing these lines and per Microsoft's own upgrade guide, you need to install:
+You may also want to upgrade to Typescript 7 (the default spawned projects use it already), which is written in Go for extra speed! As of writing these lines and per Microsoft's own upgrade guide, you need to install:
 
-```diff /package.json
+```tabs /package.json
+<<| diff PNPM/Yarn/Bun |>>
 "devDependencies": {
 -  "typescript": "...",
 +  "typescript": "npm:@typescript/native-preview@beta"
 }
+<<| diff NPM |>>
+"devDependencies": {
+-  "typescript": "...",
++  "typescript": "npm:@typescript/native-preview@beta"
+},
+"overrides": {
++  "typescript": "npm:@typescript/native-preview@beta"
+},
 ```
 
 Once the TS team releases TS 7 directly under the `typescript` package, this is what you may want to use.
