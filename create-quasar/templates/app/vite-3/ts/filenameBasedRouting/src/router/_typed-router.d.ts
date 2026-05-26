@@ -22,6 +22,7 @@ declare module 'vue-router' {
   interface TypesConfig {
     ParamParsers:
       | never
+    RouteNamedMap: import('vue-router/auto-routes').RouteNamedMap
   }
 }
 
@@ -36,8 +37,7 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '//(index)'
-      | '//test1'
-      | '//test2'
+      | '//second'
     >,
     '//(index)': RouteRecordInfo<
       '//(index)',
@@ -46,16 +46,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '//test1': RouteRecordInfo<
-      '//test1',
-      '/test1',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//test2': RouteRecordInfo<
-      '//test2',
-      '/test2',
+    '//second': RouteRecordInfo<
+      '//second',
+      '/second',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -84,8 +77,7 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/'
         | '//(index)'
-        | '//test1'
-        | '//test2'
+        | '//second'
       views:
         | 'default'
     }
@@ -95,15 +87,9 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'src/pages/index/test1.vue': {
+    'src/pages/index/second.vue': {
       routes:
-        | '//test1'
-      views:
-        | never
-    }
-    'src/pages/index/test2.vue': {
-      routes:
-        | '//test2'
+        | '//second'
       views:
         | never
     }

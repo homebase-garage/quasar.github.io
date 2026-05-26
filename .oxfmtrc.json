@@ -22,7 +22,8 @@
     "create-quasar/templates/",
     "!create-quasar/templates/**/create-quasar-script.js",
 
-    "utils/render-ssr-error/compiled-assets/"
+    "utils/render-ssr-error/compiled-assets/",
+    "**/*/typed-router.d.ts"
   ],
 
   "printWidth": 80,

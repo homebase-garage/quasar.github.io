@@ -27,7 +27,8 @@
     "ui/types/shim-icon-set.d.ts",
     "ui/types/shim-lang.d.ts",
 
-    "utils/render-ssr-error/compiled-assets/"
+    "utils/render-ssr-error/compiled-assets/",
+    "**/*/typed-router.d.ts"
   ],
 
   "options": {

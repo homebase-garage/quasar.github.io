@@ -9,7 +9,8 @@ export default defineConfig({
     'quasar.config.*.temporary.compiled*',
     '.quasar/',
     'src-cordova/',
-    'src-capacitor/'
+    'src-capacitor/',
+    'src/router/typed-router.d.ts'
   ],
 
   printWidth: 80,
