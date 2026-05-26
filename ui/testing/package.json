@@ -19,7 +19,7 @@
     "@vue/test-utils": "^2.4.10",
     "acorn": "^8.16.0",
     "fs-extra": "^11.3.5",
-    "jsdom": "29.0.1",
+    "jsdom": "29.1.1",
     "prompts": "^2.4.2",
     "tinyglobby": "^0.2.16",
     "vite": "^8.0.14",
