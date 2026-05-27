@@ -3,7 +3,7 @@ import { getArgv } from '../utils/get-argv.js'
 
 const argv = getArgv({
   silent: { type: 'boolean', short: 's', default: false },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -20,7 +20,7 @@ if (argv.help) {
 
   Options
     --silent, -s    Suppress the output
-    --nocolor       Disable colored output
+    --no-color      Disable colored output
     --help, -h      Displays this message
   `)
 

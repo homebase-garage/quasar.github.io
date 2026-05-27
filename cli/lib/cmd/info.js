@@ -2,7 +2,7 @@ import { green, red } from 'kolorist'
 import { getArgv } from '../get-argv.js'
 
 const argv = getArgv({
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -15,7 +15,7 @@ if (argv.help) {
     $ quasar info
 
   Options
-    --nocolor       Disable colored output
+    --no-color     Disable colored output
     --help, -h     Displays this message
   `)
 

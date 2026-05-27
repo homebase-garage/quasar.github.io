@@ -159,7 +159,7 @@ $ icongenie generate -h
                               "assets": [ /* list of custom assets */ ]
                             }
 
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 ```
 
@@ -217,7 +217,7 @@ $ icongenie -h
                         "assets": [ /* list of custom assets */ ]
                       }
 
-    --nocolor       Disable colored output
+    --no-color      Disable colored output
     --help, -h      Displays this message
 ```
 
@@ -339,6 +339,6 @@ $ icongenie profile -h
                                If 0 then it doesn't add the icon of top of background
                                Default: 40
 
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 ```

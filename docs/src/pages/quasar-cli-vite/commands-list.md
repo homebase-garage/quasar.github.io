@@ -19,7 +19,7 @@ $ quasar -h
     $ quasar <command> -h
 
   Options
-    --nocolor     Disable colored output (can be used with any command)
+    --no-color    Disable colored output (can be used with any command)
     --version, -v Print Quasar App CLI version
 
   Commands
@@ -93,7 +93,7 @@ $ quasar upgrade -h
     --registry, -r    NPM registry URL
                         * default is taken from your machine's npm config
                         * example: https://registry.npmjs.org/
-    --nocolor         Disable colored output
+    --no-color        Disable colored output
     --help, -h        Displays this message
 ```
 
@@ -145,7 +145,7 @@ $ quasar dev -h
     --port, -p       A port number on which to start the application
     --hostname, -H   A hostname to use for serving the application
     --devtools, -d   Open remote Vue Devtools
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 
     Only for Capacitor & Cordova modes:
@@ -197,7 +197,7 @@ $ quasar dev -h
                        - Capacitor & Cordova: [android|ios]
                        - Bex: [chrome|firefox]
     --devtools, -d   Open remote Vue Devtools
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 
     Only for Capacitor & Cordova modes:
@@ -276,8 +276,8 @@ $ quasar build -h
                       - Capacitor (it only fills in /src-capacitor/www folder with the UI code)
                       - Electron (it only creates the /dist/electron/UnPackaged folder)
                       - BEX (it only creates the /dist/bex-* folder)
-    --nosummary     Don't output build summary at the end of the process
-    --nocolor       Disable colored output
+    --no-summary    Don't output build summary at the end of the process
+    --no-color      Disable colored output
     --help, -h      Displays this message
 
     ONLY for Cordova and Capacitor mode:
@@ -394,7 +394,7 @@ $ quasar new -h
     $ quasar new store -f ts myStore
 
   Options
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 
     --format -f <option>  (optional) Use a supported format for the template.
@@ -421,7 +421,7 @@ $ quasar mode -h
   Options
     --yes, -y     Skips the "Are you sure?" question
                   when removing a Quasar mode
-    --nocolor     Disable colored output
+    --no-color    Disable colored output
     --help, -h    Displays this message
 ```
 
@@ -491,7 +491,7 @@ $ quasar describe -h
     --injection, -i       Displays the API injection
     --quasar, -q          Displays the API quasar conf options
     --docs, -d            Opens the docs API URL
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 ```
 
@@ -569,7 +569,7 @@ $ quasar inspect -h
                           -p module.rules
                           -p plugins
     --thread, -t     Display only one specific app mode config thread
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 ```
 
@@ -603,7 +603,7 @@ $ quasar ext -h
     $ quasar ext uninvoke <ext-id>
 
   Options
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 ```
 
@@ -630,7 +630,7 @@ $ quasar run -h
         # with "pic" argument and "-s --mark some_file" params
 
   Options
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 ```
 
@@ -668,7 +668,7 @@ $ quasar serve -h
     --cert, -C [path]       Path to SSL cert file (Optional)
     --key, -K [path]        Path to SSL key file (Optional)
 
-    --nocolor               Disable colored output
+    --no-color              Disable colored output
     --help, -h              Displays this message
 
     --proxy, -P [path]      Path to proxy definition file (Optional)

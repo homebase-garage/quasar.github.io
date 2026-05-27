@@ -13,7 +13,7 @@ const argv = getArgv({
   'splashscreen-color': { type: 'string' },
   'splashscreen-icon-ratio': { type: 'string' },
   'skip-trim': { type: 'boolean' },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -149,7 +149,7 @@ if (argv.help) {
                               "assets": [ /* list of custom assets */ ]
                             }
 
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
   `)
 

@@ -5,7 +5,7 @@ const argv = getArgv({
   prerelease: { type: 'boolean', short: 'p' },
   major: { type: 'boolean', short: 'm' },
   registry: { type: 'string', short: 'r' },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -42,7 +42,7 @@ if (argv.help) {
     --registry, -r    NPM registry URL
                         * default is taken from your machine's npm config
                         * example: https://registry.npmjs.org/
-    --nocolor         Disable colored output
+    --no-color        Disable colored output
     --help, -h        Displays this message
   `)
 

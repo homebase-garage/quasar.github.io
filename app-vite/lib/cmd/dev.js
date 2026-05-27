@@ -12,7 +12,7 @@ const argv = getArgv({
   hostname: { type: 'string', short: 'H' },
   devtools: { type: 'boolean', short: 'd' },
   ide: { type: 'boolean', short: 'i' },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -49,7 +49,7 @@ if (argv.help) {
                        - Capacitor & Cordova: [android|ios]
                        - Bex: [chrome|firefox]
     --devtools, -d   Open remote Vue Devtools
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
 
     Only for Capacitor & Cordova modes:

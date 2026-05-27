@@ -1,7 +1,7 @@
 import { getArgv } from '../utils/get-argv.js'
 
 const argv = getArgv({
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -30,8 +30,8 @@ function showHelp() {
     $ quasar ext uninvoke <ext-id>
 
   Options
-    --nocolor        Disable colored output
-    --help, -h       Displays this message
+    --no-color   Disable colored output
+    --help, -h   Displays this message
   `)
 }
 

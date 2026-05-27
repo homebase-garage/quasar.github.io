@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 if (
-  process.argv.includes('--nocolor') ||
+  process.argv.includes('--no-color') ||
   (await import('ci-info').then(({ isCI }) => isCI))
 ) {
   process.env.FORCE_COLOR = '0'

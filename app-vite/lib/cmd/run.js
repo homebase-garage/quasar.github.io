@@ -2,7 +2,7 @@ import { getArgv } from '../utils/get-argv.js'
 
 const argv = getArgv(
   {
-    nocolor: { type: 'boolean' }
+    'no-color': { type: 'boolean' }
   },
   { strict: false }
 )
@@ -26,7 +26,7 @@ if (!extId) {
         # with "pic" argument and "-s --mark some_file" params
 
   Options
-    --nocolor        Disable colored output
+    --no-color  Disable colored output
   `)
 
   process.exit(0)
@@ -78,7 +78,7 @@ log()
 
 process.argv = [
   ...process.argv.slice(0, 2),
-  ...process.argv.slice(4).filter(arg => arg !== '--nocolor')
+  ...process.argv.slice(4).filter(arg => arg !== '--no-color')
 ]
 
 await fn(process.argv)

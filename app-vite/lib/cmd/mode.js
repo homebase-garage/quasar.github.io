@@ -3,7 +3,7 @@ import { createPromptSession, fatal, log, warn } from '../utils/logger.js'
 
 const argv = getArgv({
   yes: { type: 'boolean', short: 'y', default: false },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -21,7 +21,7 @@ function showHelp() {
   Options
     --yes, -y     Skips the "Are you sure?" question
                   when removing a Quasar mode
-    --nocolor     Disable colored output
+    --no-color    Disable colored output
     --help, -h    Displays this message
   `)
 }

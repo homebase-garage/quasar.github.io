@@ -7,7 +7,7 @@ import { getArgv } from '../utils/get-argv.js'
 
 const argv = getArgv({
   format: { type: 'string', short: 'f' },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -41,7 +41,7 @@ function showHelp() {
     $ quasar new store -f ts myStore
 
   Options
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 
     --format -f <option>  (optional) Use a supported format for the template.

@@ -23,7 +23,7 @@ const partArgsKeys = Object.keys(partArgs)
 
 const argv = getArgv({
   filter: { type: 'string', short: 'f' },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' },
   ...partArgsKeys.reduce((acc, key) => {
     acc[key] = { type: 'boolean', short: partArgs[key] }
@@ -74,7 +74,7 @@ if (!item || argv.help) {
     --injection, -i       Displays the API injection
     --quasar, -q          Displays the API quasar conf options
     --docs, -d            Opens the docs API URL
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
   `)
 

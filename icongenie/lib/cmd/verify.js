@@ -5,7 +5,7 @@ const argv = getArgv({
   profile: { type: 'string', short: 'p' },
   filter: { type: 'string', short: 'f' },
 
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -64,7 +64,7 @@ if (argv.help) {
                         "assets": [ /* list of custom assets */ ]
                       }
 
-    --nocolor       Disable colored output
+    --no-color      Disable colored output
     --help, -h      Displays this message
   `)
 

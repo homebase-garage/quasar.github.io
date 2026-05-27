@@ -4,7 +4,7 @@ import { getArgv } from '../utils/get-argv.js'
 import { getPackageJson } from '../utils/get-package-json.js'
 
 const argv = getArgv({
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -17,8 +17,8 @@ if (argv.help) {
     $ quasar info
 
   Options
-    --nocolor      Disable colored output
-    --help, -h     Displays this message
+    --no-color  Disable colored output
+    --help, -h  Displays this message
   `)
 
   argv.__warn?.()

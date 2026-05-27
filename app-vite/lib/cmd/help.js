@@ -17,7 +17,7 @@ console.log(`
     $ quasar <command> -h
 
   Options
-    --nocolor     Disable colored output (can be used with any command)
+    --no-color    Disable colored output (can be used with any command)
     --version, -v Print Quasar App CLI version
 
   Commands

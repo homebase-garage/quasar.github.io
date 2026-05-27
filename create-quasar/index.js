@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { parseArgs } from 'node:util'
 
 if (
-  process.argv.includes('--nocolor') ||
+  process.argv.includes('--no-color') ||
   (await import('ci-info').then(({ isCI }) => isCI))
 ) {
   process.env.FORCE_COLOR = '0'
@@ -14,8 +14,8 @@ function getArgv() {
   try {
     return parseArgs({
       options: {
-        nogit: { type: 'boolean', alias: 'n', default: false },
-        nocolor: { type: 'boolean' }
+        'no-git': { type: 'boolean', alias: 'n', default: false },
+        'no-color': { type: 'boolean' }
       },
       strict: true,
       allowPositionals: true
@@ -36,8 +36,8 @@ const { values, positionals } = getArgv()
 
 const { createProjectFolder } = await import('./create-project-folder.js')
 const scope = {
-  // Usage: `pnpm create quasar --nogit`
-  nogit: values.nogit
+  // Usage: `pnpm create quasar --no-git`
+  nogit: values['no-git']
 }
 
 // Usage: `pnpm create quasar <project-folder>`

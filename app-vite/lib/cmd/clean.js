@@ -6,7 +6,7 @@ const argv = getArgv({
   cache: { type: 'boolean', short: 'c', default: false },
   dist: { type: 'boolean', short: 'd', default: false },
   qconf: { type: 'boolean', short: 'q', default: false },
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -25,7 +25,7 @@ if (argv.help) {
     --dist, -d     Cleans /dist folder only
     --qconf, -q    Cleans temporary compiled quasar.config files
                       (used for issue investigation)
-    --nocolor      Disable colored output
+    --no-color     Disable colored output
     --help, -h     Displays this message
   `)
 

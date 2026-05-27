@@ -878,16 +878,16 @@ We now have first-class support for Vue Router's filename-based routing. You mig
 
 ### New CLI command options
 
-#### For all commands: --nocolor
+#### For all commands: --no-color
 
-By default, all CLI commands output colored text in the terminal (when not running in a CI environment). Should you wish to avoid this, use the `--nocolor` when you run any of the CLI commands.
+By default, all CLI commands output colored text in the terminal (when not running in a CI environment). Should you wish to avoid this, use the `--no-color` when you run any of the CLI commands.
 
-#### For build command: --nosummary
+#### For build command: --no-summary
 
 Should you want your build to skip printing the build summary (and thus being slightly faster) after building your app:
 
 ```bash
-$ quasar build --nosummary
+$ quasar build --no-summary
 ```
 
 ### Running AE commands

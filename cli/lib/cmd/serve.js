@@ -21,6 +21,7 @@ const argv = getArgv({
   https: { type: 'boolean' },
   C: { type: 'string' },
   K: { type: 'string' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -53,7 +54,7 @@ if (argv.help) {
     --cert, -C [path]       Path to SSL cert file (Optional)
     --key, -K [path]        Path to SSL key file (Optional)
 
-    --nocolor               Disable colored output
+    --no-color              Disable colored output
     --help, -h              Displays this message
 
     --proxy, -P [path]      Path to proxy definition file (Optional)

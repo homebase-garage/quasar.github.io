@@ -15,7 +15,7 @@ const argv = getArgv({
   'splashscreen-icon-ratio': { type: 'string' },
   'skip-trim': { type: 'boolean' },
 
-  nocolor: { type: 'boolean' },
+  'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' }
 })
 
@@ -129,7 +129,7 @@ if (argv.help) {
                                If 0 then it doesn't add the icon of top of background
                                Default: ${defaultParams.splashscreenIconRatio}
 
-    --nocolor             Disable colored output
+    --no-color            Disable colored output
     --help, -h            Displays this message
 
   `)

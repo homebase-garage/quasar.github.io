@@ -7,7 +7,7 @@ const argv = getArgv({
   path: { type: 'string', short: 'p' },
   thread: { type: 'string', short: 't' },
   help: { type: 'boolean', short: 'h' },
-  nocolor: { type: 'boolean' }
+  'no-color': { type: 'boolean' }
 })
 
 if (argv.help) {
@@ -29,7 +29,7 @@ if (argv.help) {
                           -p module.rules
                           -p plugins
     --thread, -t     Display only one specific app mode config thread
-    --nocolor        Disable colored output
+    --no-color       Disable colored output
     --help, -h       Displays this message
   `)
 
