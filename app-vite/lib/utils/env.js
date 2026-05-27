@@ -138,8 +138,8 @@ export function getQuasarConfEnv({ ctx, envCfg, useSnapshot }) {
 
   const prefixLabel = Array.isArray(prefix) ? prefix.join(' | ') : prefix
   const prefixRE = Array.isArray(prefix)
-    ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-    : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+    ? new RegExp(`^(${prefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]*$`)
+    : new RegExp(`^${prefix}[a-zA-Z_$][a-zA-Z0-9_$]*$`)
 
   const envDefineList = parseEnvDefineList(rawFileEnv, prefixRE)
 
@@ -195,8 +195,8 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
     banner: 'App envClientPrefix'
   })
   const clientPrefixRE = Array.isArray(clientPrefix)
-    ? new RegExp(`^(${clientPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-    : new RegExp(`^${clientPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+    ? new RegExp(`^(${clientPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]*$`)
+    : new RegExp(`^${clientPrefix}[a-zA-Z_$][a-zA-Z0-9_$]*$`)
   const clientPrefixLabel = Array.isArray(clientPrefix)
     ? clientPrefix.join(' | ')
     : clientPrefix
@@ -211,8 +211,8 @@ export function getAppEnv({ ctx, envCfg, useSnapshot }) {
     banner: 'App envBackendPrefix'
   })
   const backendPrefixRE = Array.isArray(backendPrefix)
-    ? new RegExp(`^(${backendPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]+`)
-    : new RegExp(`^${backendPrefix}[a-zA-Z_$][a-zA-Z0-9_$]+`)
+    ? new RegExp(`^(${backendPrefix.join('|')})[a-zA-Z_$][a-zA-Z0-9_$]*$`)
+    : new RegExp(`^${backendPrefix}[a-zA-Z_$][a-zA-Z0-9_$]*$`)
   const backendPrefixLabel = Array.isArray(backendPrefix)
     ? backendPrefix.join(' | ')
     : backendPrefix
