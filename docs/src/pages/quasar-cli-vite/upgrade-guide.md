@@ -876,6 +876,10 @@ Once the TS team releases TS 7 directly under the `typescript` package, this is 
 
 We now have first-class support for Vue Router's filename-based routing. You might want to [give it a try](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
 
+### Upgrade to @quasar/extras v2
+
+Optionally (but highly recommended) also upgrade to the new `@quasar/extras` v2: [Release notes](https://github.com/quasarframework/quasar/releases/tag/%40quasar%2Fextras-v2.0.0).
+
 ### New CLI command options
 
 #### For all commands: --no-color
