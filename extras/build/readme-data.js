@@ -13,23 +13,8 @@ const versionSources = {
   materialSymbolsRounded: google('material-symbols-rounded'),
   materialSymbolsSharp: google('material-symbols-sharp'),
   mdiV7: file('mdi-v7/mdi-v7.css', /MaterialDesignIcons\.com v([0-9.]+)/),
-  mdiV6: file('mdi-v6/mdi-v6.css', /MaterialDesignIcons\.com v([0-9.]+)/),
-  mdiV5: file('mdi-v5/mdi-v5.css', /MaterialDesignIcons\.com v([0-9.]+)/),
-  mdiV4: file('mdi-v4/mdi-v4.css', /MaterialDesignIcons\.com v([0-9.]+)/),
-  mdiV3: file('mdi-v3/mdi-v3.css', /MaterialDesignIcons\.com\s+([0-9.]+)/),
   fontawesomeV7: file('fontawesome-v7/index.js', /Fontawesome Free v([0-9.]+)/),
-  fontawesomeV6: file(
-    'fontawesome-v6/fontawesome-v6.css',
-    /Font Awesome Free ([0-9.]+) by/
-  ),
-  fontawesomeV5: file(
-    'fontawesome-v5/fontawesome-v5.css',
-    /Font Awesome Free ([0-9.]+) by/
-  ),
   ioniconsV8: file('ionicons-v8/index.js', /Ionicons v([0-9.]+)/),
-  ioniconsV7: file('ionicons-v7/index.js', /Ionicons v([0-9.]+)/),
-  ioniconsV6: file('ionicons-v6/index.js', /Ionicons v([0-9.]+)/),
-  ioniconsV5: file('ionicons-v5/index.js', /Ionicons v([0-9.]+)/),
   ioniconsV4: file('ionicons-v4/index.js', /Ionicons v([0-9.]+)/),
   evaIcons: file('eva-icons/eva-icons.css', /Eva Icons v([0-9.]+)/),
   themify: file('themify/themify.css', /Themify Icons v([0-9.]+)/),
@@ -131,60 +116,12 @@ export const webfontRows = [
     license: '[License](exports/mdi-v7/LICENSE)'
   },
   {
-    vendor: 'MDI v6 (Material Design Icons)',
-    versionSource: versionSources.mdiV6,
-    extrasName: '`mdi-v6`',
-    description: 'Extended Material Design icons font',
-    notes: '',
-    license: '[License](exports/mdi-v6/LICENSE)'
-  },
-  {
-    vendor: 'MDI v5 (Material Design Icons)',
-    versionSource: versionSources.mdiV5,
-    extrasName: '`mdi-v5`',
-    description: 'Extended Material Design icons font',
-    notes: '',
-    license: '[License](exports/mdi-v5/LICENSE)'
-  },
-  {
-    vendor: 'MDI v4 (Material Design Icons)',
-    versionSource: versionSources.mdiV4,
-    extrasName: '`mdi-v4`',
-    description: 'Extended Material Design icons font',
-    notes: '',
-    license: '[License](exports/mdi-v4/LICENSE)'
-  },
-  {
-    vendor: 'MDI v3 (Material Design Icons)',
-    versionSource: versionSources.mdiV3,
-    extrasName: '`mdi-v3`',
-    description: 'Extended Material Design icons font',
-    notes: '',
-    license: '[License](exports/mdi-v3/LICENSE)'
-  },
-  {
     vendor: '[Font Awesome v7](https://fontawesome.com/icons)',
     versionSource: versionSources.fontawesomeV7,
     extrasName: '`fontawesome-v7`',
     description: 'Fontawesome icons font',
     notes: 'Requires: @quasar/extras 1.18+',
     license: '[License](exports/fontawesome-v7/LICENSE.txt)'
-  },
-  {
-    vendor: 'Font Awesome v6',
-    versionSource: versionSources.fontawesomeV6,
-    extrasName: '`fontawesome-v6`',
-    description: 'Fontawesome icons font',
-    notes: 'Requires: @quasar/extras 1.13+',
-    license: '[License](exports/fontawesome-v6/LICENSE.txt)'
-  },
-  {
-    vendor: 'Font Awesome v5',
-    versionSource: versionSources.fontawesomeV5,
-    extrasName: '`fontawesome-v5`',
-    description: 'Fontawesome icons font',
-    notes: '',
-    license: '[License](exports/fontawesome-v5/LICENSE.txt)'
   },
   {
     vendor: '[Ionicons](https://ionicons.com/v4)',
@@ -310,52 +247,12 @@ export const svgRows = [
     license: '[License](exports/mdi-v7/LICENSE)'
   },
   {
-    vendor: 'MDI v6 (Material Design Icons)',
-    versionSource: versionSources.mdiV6,
-    iconSetName: '`svg-mdi-v6`',
-    importFrom: '`@quasar/extras/mdi-v6`',
-    notes: '',
-    license: '[License](exports/mdi-v6/LICENSE)'
-  },
-  {
-    vendor: 'MDI v5 (Material Design Icons)',
-    versionSource: versionSources.mdiV5,
-    iconSetName: '`svg-mdi-v5`',
-    importFrom: '`@quasar/extras/mdi-v5`',
-    notes: '',
-    license: '[License](exports/mdi-v5/LICENSE)'
-  },
-  {
-    vendor: 'MDI v4 (Material Design Icons)',
-    versionSource: versionSources.mdiV4,
-    iconSetName: '`svg-mdi-v4`',
-    importFrom: '`@quasar/extras/mdi-v4`',
-    notes: '',
-    license: '[License](exports/mdi-v4/license.md)'
-  },
-  {
     vendor: '[Font Awesome v7](https://fontawesome.com/icons)',
     versionSource: versionSources.fontawesomeV7,
     iconSetName: '`svg-fontawesome-v7`',
     importFrom: '`@quasar/extras/fontawesome-v7`',
     notes: 'Requires: @quasar/extras 1.17+',
     license: '[License](exports/fontawesome-v7/LICENSE.txt)'
-  },
-  {
-    vendor: 'Font Awesome v6',
-    versionSource: versionSources.fontawesomeV6,
-    iconSetName: '`svg-fontawesome-v6`',
-    importFrom: '`@quasar/extras/fontawesome-v6`',
-    notes: 'Requires: @quasar/extras 1.13+',
-    license: '[License](exports/fontawesome-v6/LICENSE.txt)'
-  },
-  {
-    vendor: 'Font Awesome v5',
-    versionSource: versionSources.fontawesomeV5,
-    iconSetName: '`svg-fontawesome-v5`',
-    importFrom: '`@quasar/extras/fontawesome-v5`',
-    notes: '',
-    license: '[License](exports/fontawesome-v5/LICENSE.txt)'
   },
   {
     vendor: '[Ionicons v8](https://ionicons.com/)',
@@ -366,35 +263,11 @@ export const svgRows = [
     license: '[Icon License](exports/ionicons-v8/LICENSE)'
   },
   {
-    vendor: 'Ionicons v7',
-    versionSource: versionSources.ioniconsV7,
-    iconSetName: '`svg-ionicons-v7`',
-    importFrom: '`@quasar/extras/ionicons-v7`',
-    notes: 'Requires: @quasar/extras 1.16+',
-    license: '[Icon License](exports/ionicons-v7/LICENSE)'
-  },
-  {
-    vendor: 'Ionicons v6',
-    versionSource: versionSources.ioniconsV6,
-    iconSetName: '`svg-ionicons-v6`',
-    importFrom: '`@quasar/extras/ionicons-v6`',
-    notes: 'Requires: @quasar/extras 1.12+',
-    license: '[Icon License](exports/ionicons-v6/LICENSE)'
-  },
-  {
-    vendor: 'Ionicons v5',
-    versionSource: versionSources.ioniconsV5,
-    iconSetName: '`svg-ionicons-v5`',
-    importFrom: '`@quasar/extras/ionicons-v5`',
-    notes: 'Requires: @quasar/extras 1.7+',
-    license: '[Icon License](exports/ionicons-v5/LICENSE)'
-  },
-  {
     vendor: 'Ionicons v4',
     versionSource: versionSources.ioniconsV4,
     iconSetName: '`svg-ionicons-v4`',
     importFrom: '`@quasar/extras/ionicons-v4`',
-    notes: 'No icon font (woof) files for Ionicons since v4.6.3',
+    notes: 'No icon font (woff/woff2) files for Ionicons since v4.6.3',
     license: '[Icon License](exports/ionicons-v4/LICENSE)'
   },
   {

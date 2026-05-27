@@ -50,11 +50,6 @@ const iconTypes = [
     convert: str => materialConvert(str, 'sym_s_', 'sym_sharp_')
   },
   {
-    name: 'mdi-v6',
-    regex: /^mdi-/,
-    convert
-  },
-  {
     name: 'mdi-v7',
     regex: /^mdi-/,
     convert
@@ -64,11 +59,6 @@ const iconTypes = [
     regex: /^ion-/,
     convert: str =>
       convert(/ion-(md|ios)-/.test(str) ? str : str.replace(/ion-/, 'ion-md-'))
-  },
-  {
-    name: 'fontawesome-v6',
-    regex: /^fa[brs] fa-/,
-    convert: str => convert(str.replace(' fa-', '-'))
   },
   {
     name: 'fontawesome-v7',

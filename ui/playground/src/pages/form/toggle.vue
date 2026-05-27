@@ -470,7 +470,7 @@
 </template>
 
 <script>
-import { mdiEye, mdiEyeOff } from '@quasar/extras/mdi-v4'
+import { mdiEye, mdiEyeOff } from '@quasar/extras/mdi-v7'
 
 export default {
   created() {

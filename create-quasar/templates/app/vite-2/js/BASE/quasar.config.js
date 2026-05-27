@@ -29,7 +29,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
     extras: [
       // 'ionicons-v4',
       // 'mdi-v7',
-      // 'fontawesome-v6',
+      // 'fontawesome-v7',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',

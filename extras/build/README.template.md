@@ -49,7 +49,7 @@ Using `<script setup>`:
 
 <script setup>
   import { matMenu } from '@quasar/extras/material-icons'
-  import { mdiAbTesting } from '@quasar/extras/mdi-v5'
+  import { mdiAbTesting } from '@quasar/extras/mdi-v7'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Using the Options API:
 
 <script>
 import { matMenu } from '@quasar/extras/material-icons'
-import { mdiAbTesting } from '@quasar/extras/mdi-v5'
+import { mdiAbTesting } from '@quasar/extras/mdi-v7'
 
 export default {
   // ...

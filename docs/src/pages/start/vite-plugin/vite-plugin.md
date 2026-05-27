@@ -40,7 +40,8 @@ Navigate to your Vite project folder and install the necessary packages.
 - Also, if you want to use the Quasar Sass/SCSS variables then you need to add the Sass dependency, based on your version of Quasar UI:
   - For Quasar >= v2.14 then add `sass-embedded@^1.93.2`
   - For Quasar <= v2.13 add `sass@1.32.12` (**_notice the exact pinned version_**)
-    :::
+
+:::
 
 ```tabs
 <<| bash Yarn |>>

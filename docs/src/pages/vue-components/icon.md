@@ -57,10 +57,9 @@ If you are using webfont-based icons, make sure that you [installed the icon lib
 | material-symbols-rounded  | sym*r*                                           | sym_r_thumb_up                           | Notice the underline character instead of dash or space                                                                                       |
 | material-symbols-sharp    | sym*s*                                           | sym_s_thumb_up                           | Notice the underline character instead of dash or space                                                                                       |
 | ionicons-v4               | ion-, ion-md-, ion-ios-, ion-logo-               | ion-heart, ion-logo-npm, ion-md-airplane | Use QIcon instead of `<ion-icon>` component; Logo icons require 'ion-logo-' prefix                                                            |
-| fontawesome-v6            | fa-[solid,regular,brands] fa-                    | "fa-solid fa-ambulance"                  | QIcon "name" property is same as "class" attribute value in Fontawesome docs examples (where they show `<i>` tags)                            |
-| fontawesome-v6 Pro        | fa-[solid,regular,brands,thin,light,duotone] fa- | "fa-solid fa-ambulance"                  | Note: a license must be purchased from Fontawesome for this functionality)                                                                    |
-| fontawesome-v5            | fa[s,r,l,d,b] fa-                                | "fas fa-ambulance"                       | QIcon "name" property is same as "class" attribute value in Fontawesome docs examples (where they show `<i>` tags)                            |
-| mdi-v7/v6/v5/v4/v3        | mdi-                                             | mdi-alert-circle-outline                 | Notice the use of dash characters; Use only one of mdi-v7, mdi-v6, mdi-v5, mdi-v4 or mdi-v3                                                   |
+| fontawesome-v7            | fa-[solid,regular,brands] fa-                    | "fa-solid fa-ambulance"                  | QIcon "name" property is same as "class" attribute value in Fontawesome docs examples (where they show `<i>` tags)                            |
+| fontawesome-v7 Pro        | fa-[solid,regular,brands,thin,light,duotone] fa- | "fa-solid fa-ambulance"                  | Note: a license must be purchased from Fontawesome for this functionality)                                                                    |
+| mdi-v7                    | mdi-                                             | mdi-alert-circle-outline                 | Notice the use of dash characters                                                                                                             |
 | eva-icons                 | eva-                                             | eva-shield-outline, eva-activity-outline | Notice the use of dash characters                                                                                                             |
 | themify                   | ti-                                              | ti-hand-point-up                         | Notice the use of dash characters                                                                                                             |
 | line-awesome              | la[s,r,l,d,b] la-                                | "las la-atom"                            | QIcon "name" property is same as "class" attribute value in Line Awesome docs examples (where they show `<i>` tags); **@quasar/extras v1.5+** |
@@ -135,7 +134,7 @@ The current disadvantage is that it is more tedious to use these icons than thei
 <script setup>
   import { matMenu } from '@quasar/extras/material-icons'
   import { mdiAbTesting } from '@quasar/extras/mdi-v7'
-  import { fasFont } from '@quasar/extras/fontawesome-v5'
+  import { fasFont } from '@quasar/extras/fontawesome-v7'
 </script>
 ```
 
@@ -156,10 +155,7 @@ If you are only using svg icons (and have configured a [Quasar Icon Set](/option
 | Material Symbols Round (Google)    | svg-material-symbols-rounded  | @quasar/extras/material-symbols-rounded  | @quasar/extras v1.14+  |
 | MDI (Material Design Icons) v3-v7  | svg-mdi-v7                    | @quasar/extras/mdi-v7 etc                | @quasar/extras v1.11+  |
 | Font Awesome v7                    | svg-fontawesome-v7            | @quasar/extras/fontawesome-v7            | @quasar/extras v1.18+  |
-| Font Awesome v6                    | svg-fontawesome-v6            | @quasar/extras/fontawesome-v6            | @quasar/extras v1.13+  |
-| Font Awesome                       | svg-fontawesome-v5            | @quasar/extras/fontawesome-v5            |                        |
-| Ionicons v6                        | svg-ionicons-v6               | @quasar/extras/ionicons-v6               | @quasar/extras v1.12+  |
-| Ionicons v5                        | svg-ionicons-v5               | @quasar/extras/ionicons-v5               | @quasar/extras v1.7+   |
+| Ionicons v8                        | svg-ionicons-v8               | @quasar/extras/ionicons-v8               | @quasar/extras v1.12+  |
 | Ionicons v4                        | svg-ionicons-v4               | @quasar/extras/ionicons-v4               |                        |
 | Eva Icons                          | svg-eva-icons                 | @quasar/extras/eva-icons                 |                        |
 | Themify Icons                      | svg-themify                   | @quasar/extras/themify                   |                        |
@@ -223,17 +219,17 @@ Svg icons are supplied by `@quasar/extras` (although you can supply [your own sv
 - Icon names are in camel-case and always begin with "fas", "fab", "fal" or "far" prefixes.
 - Go to [FontAwesome](https://fontawesome.com/icons), look for your desired icon, click on it. You'll get to its page. Below the icon name (as title), you will see something like `<i class="fas fa-flag"></i>`. This would translate to `fasFlag`. The prefix from the tag is important.
 - Note that we cannot supply the "Pro" version of the icons in svg format because of the license.
-- Import statement example: `import { fasFlag } from '@quasar/extras/fontawesome-v6'`.
+- Import statement example: `import { fasFlag } from '@quasar/extras/fontawesome-v7'`.
 - The Quasar SVG form is still using `fas`, `far` and `fab`, instead of the newer `fa-solid`, `fa-regular` and `fa-brands`.
 
 #### SVG Ionicons
 
 - Ionicons v4: Icon names are in camel-case and always begin with "ionMd" or "ionIos" prefixes.
-- Ionicons v5/v6: Icon names are in camel-case and always begin with "ion" prefix.
+- Ionicons v8: Icon names are in camel-case and always begin with "ion" prefix.
 - Ionicons v4: Go to [Ionicons v4](https://ionicons.com/v4/), look for your desired icon, click on it. At the bottom of the page there will appear a popup. Notice something like `<ion-icon name="square-outline"></ion-icon>`. Remember the name (eg. "square-outline"). Camel-case this name and prefix it with either "ionMd" (for material variant) or "ionIos" (for iOS variant).
 - Ionicons v5/v6: Go to [Ionicons v6](https://ionicons.com/), look for your desired icon, click on it. At the bottom of the page there will appear a popup. Notice something like `<ion-icon name="square-outline"></ion-icon>`. Remember the name (eg. "square-outline"). Prefix it with "ion" and camel-case the result (eg. "ionSquareOutline").
 - Ionicons v4: Import statement example: `import { ionMdSquareOutline } from '@quasar/extras/ionicons-v4'`.
-- Ionicons v5/v6: Import statement example: `import { ionSquareOutline } from '@quasar/extras/ionicons-v5'`.
+- Ionicons v8: Import statement example: `import { ionSquareOutline } from '@quasar/extras/ionicons-v8'`.
 
 #### SVG Eva Icons
 

@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { fabTwitter } from '@quasar/extras/fontawesome-v5'
+import { fabTwitter } from '@quasar/extras/fontawesome-v7'
 import { mdiChevronLeft, mdiChevronRight } from '@quasar/extras/mdi-v7'
 
 const hiddenArrowClass = 'twitter-cards__arrow--hidden'

@@ -29,7 +29,7 @@ import {
   fasBatteryFull,
   fasSignal,
   fasWifi
-} from '@quasar/extras/fontawesome-v6'
+} from '@quasar/extras/fontawesome-v7'
 
 export default {
   setup() {

@@ -1,6 +1,6 @@
 {
   "name": "@quasar/extras",
-  "version": "1.18.0",
+  "version": "2.0.0-beta.1",
   "description": "Quasar Framework fonts, icons and animations",
   "keywords": [
     "animations",
@@ -42,129 +42,72 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "default": "./index.js"
     },
     "./package.json": "./package.json",
     "./animate/animate-list.common": {
       "types": "./exports/animate/animate-list.d.ts",
-      "import": "./exports/animate/animate-list.js",
-      "require": "./exports/animate/animate-list.cjs"
+      "default": "./exports/animate/animate-list.js"
     },
     "./bootstrap-icons": {
       "types": "./exports/bootstrap-icons/index.d.ts",
-      "import": "./exports/bootstrap-icons/index.js",
-      "require": "./exports/bootstrap-icons/index.cjs"
+      "default": "./exports/bootstrap-icons/index.js"
     },
     "./eva-icons": {
       "types": "./exports/eva-icons/index.d.ts",
-      "import": "./exports/eva-icons/index.js",
-      "require": "./exports/eva-icons/index.cjs"
-    },
-    "./fontawesome-v5": {
-      "types": "./exports/fontawesome-v5/index.d.ts",
-      "import": "./exports/fontawesome-v5/index.js",
-      "require": "./exports/fontawesome-v5/index.cjs"
-    },
-    "./fontawesome-v6": {
-      "types": "./exports/fontawesome-v6/index.d.ts",
-      "import": "./exports/fontawesome-v6/index.js",
-      "require": "./exports/fontawesome-v6/index.cjs"
+      "default": "./exports/eva-icons/index.js"
     },
     "./fontawesome-v7": {
       "types": "./exports/fontawesome-v7/index.d.ts",
-      "import": "./exports/fontawesome-v7/index.js",
-      "require": "./exports/fontawesome-v7/index.cjs"
+      "default": "./exports/fontawesome-v7/index.js"
     },
     "./ionicons-v4": {
       "types": "./exports/ionicons-v4/index.d.ts",
-      "import": "./exports/ionicons-v4/index.js",
-      "require": "./exports/ionicons-v4/index.cjs"
-    },
-    "./ionicons-v5": {
-      "types": "./exports/ionicons-v5/index.d.ts",
-      "import": "./exports/ionicons-v5/index.js",
-      "require": "./exports/ionicons-v5/index.cjs"
-    },
-    "./ionicons-v6": {
-      "types": "./exports/ionicons-v6/index.d.ts",
-      "import": "./exports/ionicons-v6/index.js",
-      "require": "./exports/ionicons-v6/index.cjs"
-    },
-    "./ionicons-v7": {
-      "types": "./exports/ionicons-v7/index.d.ts",
-      "import": "./exports/ionicons-v7/index.js",
-      "require": "./exports/ionicons-v7/index.cjs"
+      "default": "./exports/ionicons-v4/index.js"
     },
     "./ionicons-v8": {
       "types": "./exports/ionicons-v8/index.d.ts",
-      "import": "./exports/ionicons-v8/index.js",
-      "require": "./exports/ionicons-v8/index.cjs"
+      "default": "./exports/ionicons-v8/index.js"
     },
     "./line-awesome": {
       "types": "./exports/line-awesome/index.d.ts",
-      "import": "./exports/line-awesome/index.js",
-      "require": "./exports/line-awesome/index.cjs"
+      "default": "./exports/line-awesome/index.js"
     },
     "./material-icons": {
       "types": "./exports/material-icons/index.d.ts",
-      "import": "./exports/material-icons/index.js",
-      "require": "./exports/material-icons/index.cjs"
+      "default": "./exports/material-icons/index.js"
     },
     "./material-icons-outlined": {
       "types": "./exports/material-icons-outlined/index.d.ts",
-      "import": "./exports/material-icons-outlined/index.js",
-      "require": "./exports/material-icons-outlined/index.cjs"
+      "default": "./exports/material-icons-outlined/index.js"
     },
     "./material-icons-round": {
       "types": "./exports/material-icons-round/index.d.ts",
-      "import": "./exports/material-icons-round/index.js",
-      "require": "./exports/material-icons-round/index.cjs"
+      "default": "./exports/material-icons-round/index.js"
     },
     "./material-icons-sharp": {
       "types": "./exports/material-icons-sharp/index.d.ts",
-      "import": "./exports/material-icons-sharp/index.js",
-      "require": "./exports/material-icons-sharp/index.cjs"
+      "default": "./exports/material-icons-sharp/index.js"
     },
     "./material-symbols-outlined": {
       "types": "./exports/material-symbols-outlined/index.d.ts",
-      "import": "./exports/material-symbols-outlined/index.js",
-      "require": "./exports/material-symbols-outlined/index.cjs"
+      "default": "./exports/material-symbols-outlined/index.js"
     },
     "./material-symbols-rounded": {
       "types": "./exports/material-symbols-rounded/index.d.ts",
-      "import": "./exports/material-symbols-rounded/index.js",
-      "require": "./exports/material-symbols-rounded/index.cjs"
+      "default": "./exports/material-symbols-rounded/index.js"
     },
     "./material-symbols-sharp": {
       "types": "./exports/material-symbols-sharp/index.d.ts",
-      "import": "./exports/material-symbols-sharp/index.js",
-      "require": "./exports/material-symbols-sharp/index.cjs"
-    },
-    "./mdi-v4": {
-      "types": "./exports/mdi-v4/index.d.ts",
-      "import": "./exports/mdi-v4/index.js",
-      "require": "./exports/mdi-v4/index.cjs"
-    },
-    "./mdi-v5": {
-      "types": "./exports/mdi-v5/index.d.ts",
-      "import": "./exports/mdi-v5/index.js",
-      "require": "./exports/mdi-v5/index.cjs"
-    },
-    "./mdi-v6": {
-      "types": "./exports/mdi-v6/index.d.ts",
-      "import": "./exports/mdi-v6/index.js",
-      "require": "./exports/mdi-v6/index.cjs"
+      "default": "./exports/material-symbols-sharp/index.js"
     },
     "./mdi-v7": {
       "types": "./exports/mdi-v7/index.d.ts",
-      "import": "./exports/mdi-v7/index.js",
-      "require": "./exports/mdi-v7/index.cjs"
+      "default": "./exports/mdi-v7/index.js"
     },
     "./themify": {
       "types": "./exports/themify/index.d.ts",
-      "import": "./exports/themify/index.js",
-      "require": "./exports/themify/index.cjs"
+      "default": "./exports/themify/index.js"
     },
     "./*": "./exports/*"
   },

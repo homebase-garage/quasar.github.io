@@ -7,9 +7,8 @@ export async function createQuasarScript({ scope, utils }) {
         initialValue: 'vite-3',
         options: [
           {
-            label: '@quasar/app-vite v3 beta',
-            value: 'vite-3',
-            hint: 'recommended'
+            label: '@quasar/app-vite v3 beta (recommended)',
+            value: 'vite-3'
           },
           {
             label: '@quasar/app-vite v2',

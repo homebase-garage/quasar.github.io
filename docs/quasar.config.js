@@ -49,7 +49,7 @@ export default defineConfig(ctx => ({
   },
 
   framework: {
-    iconSet: 'svg-mdi-v6',
+    iconSet: 'svg-mdi-v7',
 
     devTreeshaking: true,
     autoImportVueExtensions: ['vue', 'md'],

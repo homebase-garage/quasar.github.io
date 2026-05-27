@@ -5,8 +5,7 @@ import path from 'node:path'
 const baseFolder = path.resolve(import.meta.dirname, '../exports')
 const extensionList = [
   { prop: 'types', ext: '.d.ts' },
-  { prop: 'import', ext: '.js' },
-  { prop: 'require', ext: '.cjs' }
+  { prop: 'default', ext: '.js' }
 ]
 
 /**
@@ -36,8 +35,7 @@ function generateExports(folders) {
   const exports = {
     '.': {
       types: './index.d.ts',
-      import: './index.js',
-      require: './index.cjs'
+      default: './index.js'
     },
     './package.json': './package.json'
   }
@@ -46,8 +44,7 @@ function generateExports(folders) {
     if (folder === 'animate') {
       exports['./animate/animate-list.common'] = {
         types: './exports/animate/animate-list.d.ts',
-        import: './exports/animate/animate-list.js',
-        require: './exports/animate/animate-list.cjs'
+        default: './exports/animate/animate-list.js'
       }
     } else {
       const exportDefinition = extensionList.reduce((acc, { prop, ext }) => {

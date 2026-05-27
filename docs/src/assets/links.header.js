@@ -1,6 +1,6 @@
 import { Quasar } from 'quasar'
 
-import { fasBolt, fasCubes } from '@quasar/extras/fontawesome-v5'
+import { fasBolt, fasCubes } from '@quasar/extras/fontawesome-v7'
 
 import {
   mdiBug,

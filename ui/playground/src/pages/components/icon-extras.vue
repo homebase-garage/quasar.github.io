@@ -8,6 +8,7 @@
         style="min-width: 300px"
         outlined
         dense
+        options-dense
       />
       <div>Count: {{ iconSelectedKeys.length }}</div>
       <q-input v-model="filter" placeholder="Filter" clearable outlined dense />
@@ -41,8 +42,8 @@ import * as svgMatSymSharpIcons from '@quasar/extras/material-symbols-sharp'
 
 import * as svgBootstrapIcons from '@quasar/extras/bootstrap-icons'
 import * as svgEvaIcons from '@quasar/extras/eva-icons'
-import * as svgFontawesomeIcons from '@quasar/extras/fontawesome-v6'
-import * as svgIonIcons from '@quasar/extras/ionicons-v7'
+import * as svgFontawesomeIcons from '@quasar/extras/fontawesome-v7'
+import * as svgIonIcons from '@quasar/extras/ionicons-v8'
 import * as svgLineAwesomeIcons from '@quasar/extras/line-awesome'
 import * as svgMdiIcons from '@quasar/extras/mdi-v7'
 import * as svgThemifyIcons from '@quasar/extras/themify'
@@ -87,11 +88,11 @@ const icons = ref([
     icons: svgEvaIcons
   },
   {
-    name: 'fontawesome-v6',
+    name: 'fontawesome-v7',
     icons: svgFontawesomeIcons
   },
   {
-    name: 'ionicons-v7',
+    name: 'ionicons-v8',
     icons: svgIonIcons
   },
   {

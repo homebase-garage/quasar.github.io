@@ -257,7 +257,7 @@
 </template>
 
 <script>
-import { ionAirplane } from '@quasar/extras/ionicons-v6'
+import { ionAirplane } from '@quasar/extras/ionicons-v8'
 
 export default {
   data() {

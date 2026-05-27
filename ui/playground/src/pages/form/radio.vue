@@ -472,7 +472,7 @@
 </template>
 
 <script>
-import { mdiCheckboxMarkedCircleOutline } from '@quasar/extras/mdi-v6'
+import { mdiCheckboxMarkedCircleOutline } from '@quasar/extras/mdi-v7'
 
 export default {
   created() {

@@ -82,7 +82,7 @@ import {
   mdiNumeric5Box,
   mdiNumeric6Box,
   mdiNumeric7Box
-} from '@quasar/extras/mdi-v6'
+} from '@quasar/extras/mdi-v7'
 
 
 

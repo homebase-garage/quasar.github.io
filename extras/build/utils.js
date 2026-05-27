@@ -3,8 +3,6 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import xmldom from '@xmldom/xmldom'
 
 const Parser = new xmldom.DOMParser()
-
-const cjsReplaceRE = /export const /g
 const typeExceptions = ['g', 'svg', 'defs', 'style', 'title']
 
 // --------------------------------------------------------
@@ -357,11 +355,6 @@ export function writeExports(
 
     const content = banner + svgExports.sort().join('\n')
 
-    writeFileSync(
-      `${distIndex}.cjs`,
-      content.replace(cjsReplaceRE, 'module.exports.'),
-      'utf8'
-    )
     writeFileSync(`${distIndex}.js`, content, 'utf8')
     writeFileSync(
       `${distIndex}.d.ts`,

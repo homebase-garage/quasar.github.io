@@ -179,33 +179,79 @@ async function convertExternalImports(content) {
   })
 }
 
-async function addUmdAssets(buildList, type, injectName, convertImports) {
-  const dirList = await fse.readdir(resolveToRoot(type))
-  const fileList = dirList.filter(file => umdTargetAssetRE.test(file))
-  const promiseList = []
+const umdDashRE = /-([a-zA-Z])/g
 
-  for (const file of fileList) {
+async function getUmdFiles(type) {
+  const dirList = await fse.readdir(resolveToRoot(type))
+
+  if (type === 'icon-set') {
+    const rawLegacyFiles = await fse.readdir(
+      resolveToRoot('build/legacy-assets/icon-set')
+    )
+    const legacyFiles = rawLegacyFiles.filter(file =>
+      umdTargetAssetRE.test(file)
+    )
+
+    const legacyIconSetFiles = new Set(
+      legacyFiles.map(
+        // replacing .umd.prod.js with .js
+        file => `${file.slice(0, -12)}.js`
+      )
+    )
+
+    return {
+      targetFiles: dirList.filter(
+        file => umdTargetAssetRE.test(file) && !legacyIconSetFiles.has(file)
+      ),
+      legacyFiles
+    }
+  }
+
+  if (type === 'lang') {
+    return {
+      targetFiles: dirList.filter(file => umdTargetAssetRE.test(file)),
+      legacyFiles: []
+    }
+  }
+
+  throw new Error(`Unsupported UMD asset type: ${type}`)
+}
+
+async function addUmdAssets(buildList, type, injectName, convertImports) {
+  const { targetFiles, legacyFiles } = await getUmdFiles(type)
+
+  for (const file of legacyFiles) {
+    const content = await fse.readFile(
+      resolveToRoot(`build/legacy-assets/${type}/${file}`),
+      'utf8'
+    )
+
+    await fse.writeFile(
+      resolveToRoot(`dist/${type}/${file}`),
+      banner + content,
+      'utf8'
+    )
+  }
+
+  for (const file of targetFiles) {
     const name = file
       .slice(0, -3)
-      .replaceAll(/-([a-zA-Z])/g, g => g[1].toUpperCase())
+      .replaceAll(umdDashRE, g => g[1].toUpperCase())
 
     const inputCode = await fse.readFile(
       resolveToRoot(`${type}/${file}`),
       'utf8'
     )
     const tempFile = resolveToRoot(`dist/${type}/temp.${file}`)
-
     umdTempFilesList.push(tempFile)
 
-    promiseList.push(
-      fse.writeFile(
-        tempFile,
-        (convertImports === true
-          ? await convertExternalImports(inputCode)
-          : inputCode
-        ).replace('export default ', `window.Quasar.${injectName}.${name} = `),
-        'utf8'
-      )
+    await fse.writeFile(
+      tempFile,
+      (convertImports === true
+        ? await convertExternalImports(inputCode)
+        : inputCode
+      ).replace('export default ', `window.Quasar.${injectName}.${name} = `),
+      'utf8'
     )
 
     buildList.push({
@@ -227,8 +273,6 @@ async function addUmdAssets(buildList, type, injectName, convertImports) {
       ]
     })
   }
-
-  await Promise.all(promiseList)
 }
 
 function addExtension(filename, ext = 'prod') {

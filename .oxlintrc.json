@@ -18,6 +18,7 @@
     "ui/lang/index.json",
     "ui/types/shim-icon-set.d.ts",
     "ui/types/shim-lang.d.ts",
+    "ui/build/legacy-assets/",
 
     "utils/render-ssr-error/compiled-assets/",
     "**/*/typed-router.d.ts"

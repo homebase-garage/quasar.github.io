@@ -3,7 +3,7 @@ import {
   fabFacebook,
   fabGithub,
   fabXTwitter
-} from '@quasar/extras/fontawesome-v6'
+} from '@quasar/extras/fontawesome-v7'
 import { mdiForum } from '@quasar/extras/mdi-v7'
 
 export const socialLinks = {

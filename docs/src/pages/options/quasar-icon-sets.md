@@ -58,10 +58,10 @@ Full example of including MDI & Fontawesome and telling Quasar to use Fontawesom
 ```js
 extras: [
   'mdi-v7',
-  'fontawesome-v6'
+  'fontawesome-v7'
 ],
 framework: {
-  iconSet: 'fontawesome-v6'
+  iconSet: 'fontawesome-v7'
 }
 ```
 
@@ -73,7 +73,7 @@ Include the Quasar Icon Set tag for your Quasar version and also tell Quasar to 
 
 ```html
 <!-- include this after Quasar JS tag -->
-<script src="https://cdn.jsdelivr.net/npm/quasar@v2/dist/icon-set/fontawesome-v6.umd.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quasar@v2/dist/icon-set/fontawesome-v7.umd.prod.js"></script>
 <script>
   Quasar.IconSet.set(Quasar.IconSet.fontawesomeV6)
 </script>
@@ -89,8 +89,8 @@ We edit your `main.js`:
 // ...
 import { Quasar } from 'quasar'
 // ...
-import iconSet from 'quasar/icon-set/fontawesome-v6'
-import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
+import iconSet from 'quasar/icon-set/fontawesome-v7'
+import '@quasar/extras/fontawesome-v7/fontawesome-v7.css'
 // ...
 app.use(Quasar, {
   // ...,
@@ -110,8 +110,8 @@ import { IconSet } from 'quasar'
 // relative path to your node_modules/quasar/..
 // change to YOUR path
 const iconSetList = import.meta.glob('../../node_modules/quasar/icon-set/*.js')
-// or just a select few (example below with only mdi-v7 and fontawesome-v6):
-// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v6}.js')
+// or just a select few (example below with only mdi-v7 and fontawesome-v7):
+// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v7}.js')
 
 export default defineBoot(async () => {
   const iconSetName = 'mdi-v7' // ... some logic to determine it (use Cookies Plugin?)
@@ -147,8 +147,8 @@ import { IconSet } from 'quasar'
 // relative path to your node_modules/quasar/..
 // change to YOUR path
 const iconSetList = import.meta.glob('../../node_modules/quasar/icon-set/*.js')
-// or just a select few (example below with only mdi-v7 and fontawesome-v6):
-// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v6}.js')
+// or just a select few (example below with only mdi-v7 and fontawesome-v7):
+// import.meta.glob('../../node_modules/quasar/icon-set/{mdi-v7,fontawesome-v7}.js')
 
 // ! NOTICE ssrContext param:
 export default defineBoot(async ({ ssrContext }) => {

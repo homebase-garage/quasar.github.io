@@ -34,8 +34,7 @@
         label="Material Symbols (Sharp)"
       />
       <q-toggle v-model="css['mdi-v7']" label="MDI v7" />
-      <q-toggle v-model="css['fontawesome-v6']" label="Fontawesome v6" />
-      <q-toggle v-model="css['fontawesome-v5']" label="Fontawesome v5" />
+      <q-toggle v-model="css['fontawesome-v7']" label="Fontawesome v7" />
       <q-toggle v-model="css['ionicons-v4']" label="Ionicons v4" />
       <q-toggle v-model="css['eva-icons']" label="Eva Icons" />
       <q-toggle v-model="css.themify" label="Themify" />
@@ -98,9 +97,7 @@ import DocCode from 'src/components/DocCode.vue'
 const cssMap = {
   'mdi-v7':
     'cdn.jsdelivr.net/npm/@mdi/font@^7.0.0/css/materialdesignicons.min.css',
-  'fontawesome-v5': 'use.fontawesome.com/releases/v5.15.4/css/all.css',
-  // must come after v5 if used together: https://fontawesome.com/v6/docs/web/setup/upgrade/#if-you-re-unable-to-remove-font-awesome-5
-  'fontawesome-v6': 'use.fontawesome.com/releases/v6.1.1/css/all.css',
+  'fontawesome-v7': 'use.fontawesome.com/releases/v7.0.0/css/all.css',
   'ionicons-v4':
     'cdn.jsdelivr.net/npm/ionicons@^4.0.0/dist/css/ionicons.min.css',
   'eva-icons': 'cdn.jsdelivr.net/npm/eva-icons@^1.0.0/style/eva-icons.css',
@@ -154,14 +151,11 @@ const iconSetOptions = [
   },
   { label: 'MDI v7 (webfont)', value: 'mdi-v7' },
   { label: 'MDI v7 (svg)', value: 'svg-mdi-v7' },
-  { label: 'Ionicons v6 (svg)', value: 'svg-ionicons-v6' },
-  { label: 'Ionicons v5 (svg)', value: 'svg-ionicons-v5' },
+  { label: 'Ionicons v8 (svg)', value: 'svg-ionicons-v8' },
   { label: 'Ionicons v4 (webfont)', value: 'ionicons-v4' },
   { label: 'Ionicons v4 (svg)', value: 'svg-ionicons-v4' },
-  { label: 'Fontawesome v6 (webfont)', value: 'fontawesome-v6' },
-  { label: 'Fontawesome v6 (svg)', value: 'svg-fontawesome-v6' },
-  { label: 'Fontawesome v5 (webfont)', value: 'fontawesome-v5' },
-  { label: 'Fontawesome v5 (svg)', value: 'svg-fontawesome-v5' },
+  { label: 'Fontawesome v7 (webfont)', value: 'fontawesome-v7' },
+  { label: 'Fontawesome v7 (svg)', value: 'svg-fontawesome-v7' },
   { label: 'Eva Icons (webfont)', value: 'eva-icons' },
   { label: 'Eva Icons (svg)', value: 'svg-eva-icons' },
   { label: 'Themify (webfont)', value: 'themify' },
@@ -185,8 +179,7 @@ const css = reactive({
   'material-symbols-sharp': false,
 
   'mdi-v7': false,
-  'fontawesome-v6': false,
-  'fontawesome-v5': false,
+  'fontawesome-v7': false,
   'ionicons-v4': false,
   'eva-icons': false,
   themify: false,
@@ -329,7 +322,7 @@ const body = computed(() => {
 })
 
 const output = computed(
-  () => `<!DOCTYPE html>
+  () => `<!doctype html>
 <html>
   <!--
     WARNING! Make sure that you match all Quasar related

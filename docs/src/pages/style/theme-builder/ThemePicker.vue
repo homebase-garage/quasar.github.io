@@ -174,7 +174,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { colors as quasarColors, setCssVar } from 'quasar'
 
-import { fasCircle, fasPlay, fasSquare } from '@quasar/extras/fontawesome-v6'
+import { fasCircle, fasPlay, fasSquare } from '@quasar/extras/fontawesome-v7'
 
 import {
   mdiArrowLeft,

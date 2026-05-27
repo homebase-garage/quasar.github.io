@@ -60,11 +60,6 @@ if (cssFiles.length === 0) {
   fse.copySync(join(pkgFolder, 'LICENSE'), join(distFolder, 'LICENSE'))
 
   writeFileSync(
-    join(distFolder, 'animate-list.cjs'),
-    getList('module.exports.').replaceAll('"', "'"),
-    'utf8'
-  )
-  writeFileSync(
     join(distFolder, 'animate-list.js'),
     getList('export const ').replaceAll('"', "'"),
     'utf8'

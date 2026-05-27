@@ -35,7 +35,7 @@ jobs:
           script: |
             const { mkdir, writeFile } = require('node:fs/promises');
             const { join } = require('node:path');
-            const { default: markdown } = await import('${{ github.workspace }}/docs/build/release-notes/md.mjs');
+            const { default: markdown } = await import('${{ github.workspace }}/docs/build/release-notes/md.js');
 
             /**
             * `/[\w/\-@]+/` is the name of the package. (e.g. @quasar/app-vite)

@@ -218,7 +218,7 @@
 import { computed, onBeforeUpdate, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { copyToClipboard, useQuasar } from 'quasar'
-import { fabCodepen } from '@quasar/extras/fontawesome-v6'
+import { fabCodepen } from '@quasar/extras/fontawesome-v7'
 import { mdiPlus, mdiShareVariant } from '@quasar/extras/mdi-v7'
 
 import FlexChild from './FlexChild.vue'
