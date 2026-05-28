@@ -1,6 +1,6 @@
 {
   "name": "@quasar/vite-plugin",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Vite plugin for Quasar Framework",
   "keywords": [
     "quasar",
@@ -49,7 +49,8 @@
     "test": "pnpm test:usage && pnpm test:runtime",
     "test:watch": "vitest run --watch --config ./testing/runtime/vitest.config.js",
     "test:usage": "vitest run --config ./testing/usage/vitest.config.js",
-    "test:runtime": "vitest run --config ./testing/runtime/vitest.config.js"
+    "test:runtime": "vitest run --config ./testing/runtime/vitest.config.js",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
     "@vue/test-utils": "^2.4.10",

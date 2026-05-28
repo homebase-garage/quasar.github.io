@@ -34,7 +34,7 @@ describe('Vue Transformations', () => {
         vi.spyOn(console, 'log').mockImplementation(() => {})
 
         const { default: TestComponent } = await import(
-          `playground/${flavour}-${folder}/${filename}.vue`
+          `@/components/${flavour}-${folder}/${filename}.vue`
         )
         const wrapper = mount(TestComponent)
 

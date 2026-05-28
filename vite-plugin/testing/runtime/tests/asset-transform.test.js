@@ -11,7 +11,7 @@ describe('Asset Transform', () => {
     ['ChatMessageWithAvatar']
   ])('transforms %s', async filename => {
     const { default: TestComponent } = await import(
-      `playground/asset-transform/${filename}.vue`
+      `@/components/asset-transform/${filename}.vue`
     )
     const wrapper = mount(TestComponent)
 

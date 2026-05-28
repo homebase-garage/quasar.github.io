@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
 import 'quasar/src/css/index.sass'
 
 import { QToolbar } from 'quasar'
-import PaddingTest from 'playground/sass-transform/PaddingTest.vue'
+import PaddingTest from '@/components/sass-transform/PaddingTest.vue'
 
 describe('Sass Transform', () => {
   test('variables file is taken into account', () => {

@@ -25,8 +25,7 @@ export default defineConfig(() => ({
 
   resolve: {
     alias: {
-      assets: resolve('src/assets'),
-      playground: resolve('src/components')
+      '@': resolve('src')
     }
   },
 

@@ -24,7 +24,7 @@ describe('Vue + Pug Transformations', () => {
     vi.spyOn(console, 'log').mockImplementation(() => {})
 
     const { default: TestComponent } = await import(
-      `playground/js-pug/${filename}.vue`
+      `@/components/js-pug/${filename}.vue`
     )
     const wrapper = mount(TestComponent)
 

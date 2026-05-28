@@ -24,7 +24,7 @@ export default defineConfig(() => ({
 
   resolve: {
     alias: {
-      assets: '/src/assets'
+      '@': resolve('src')
     }
   },
 
