@@ -9,17 +9,15 @@ const api = {
   v2: {
     versionRE: {
       quasar: /^2./,
-      '@quasar/app-webpack': /^(3|4)./,
-      '@quasar/app-vite': /^(1|2|3)./
+      '@quasar/app-vite': /^(2|3)./
     },
     packages: {
       quasar: [],
       '@quasar/app-vite': [],
-      '@quasar/app-webpack': [],
-      '@quasar/cli': [],
       '@quasar/extras': [],
-      '@quasar/icongenie': [],
-      '@quasar/vite-plugin': []
+      '@quasar/vite-plugin': [],
+      '@quasar/cli': [],
+      '@quasar/icongenie': []
     }
   }
 }

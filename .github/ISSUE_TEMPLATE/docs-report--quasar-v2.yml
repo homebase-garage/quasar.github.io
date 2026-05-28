@@ -54,7 +54,7 @@ body:
       description: Mark the areas in which you see the problem on. _The names between parentheses indicate the package names if applicable._
       multiple: true
       options:
-        - Quasar CLI Commands/Configuration (@quasar/cli | @quasar/app-webpack | @quasar/app-vite)
+        - Quasar CLI Commands/Configuration (@quasar/cli | @quasar/app-vite | @quasar/app-webpack)
 
         - Components (quasar)
         - Directives (quasar)

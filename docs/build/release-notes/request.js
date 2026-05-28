@@ -35,9 +35,7 @@ export default async function releaseNotesRequest(packages, versionRE) {
         continue
       }
 
-      if (packageName === '@quasar/app') {
-        packageName = '@quasar/app-webpack'
-      } else if (!packageNameList.includes(packageName)) {
+      if (!packageNameList.includes(packageName)) {
         continue
       }
 
