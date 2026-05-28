@@ -85,10 +85,10 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-import { quasarElements } from 'src/assets/links.components.js'
+import { quasarElements } from '@/assets/links.components.js'
 
-import DocStars from 'src/components/DocStars.vue'
-import DocCardLink from 'src/components/DocCardLink.vue'
+import DocStars from '@/components/DocStars.vue'
+import DocCardLink from '@/components/DocCardLink.vue'
 
 const filterChips = [
   { label: 'Buttons', value: 'button' },

@@ -25,8 +25,8 @@ function prodLoad(id) {
     const importStatements = importList
       .map(
         entry =>
-          `import ${entry} from 'app/src/examples/${exampleId}/${entry}.vue'` +
-          `\nimport Raw${entry} from 'app/src/examples/${exampleId}/${entry}.vue?raw'`
+          `import ${entry} from '@/examples/${exampleId}/${entry}.vue'` +
+          `\nimport Raw${entry} from '@/examples/${exampleId}/${entry}.vue?raw'`
       )
       .join('\n')
 

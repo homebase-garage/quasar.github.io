@@ -114,7 +114,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 import languages from 'quasar/lang/index.json'
 
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 
 const extrasOptions = [
   'roboto-font',

@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import smallTree from 'src/mock-data/tree/smallTree.json'
+import smallTree from '@/mock-data/tree/smallTree.json'
 
 const findNode = (key, nodes) => {
   for (let node of nodes) {
@@ -144,7 +144,7 @@ export default {
     async isBigTree(v) {
       if (v) {
         console.log('Loading big tree...')
-        const json = await import('src/mock-data/tree/bigTree.json')
+        const json = await import('@/mock-data/tree/bigTree.json')
         this.nodes = json.default
         console.log('Big tree loaded')
         return

@@ -119,7 +119,7 @@ import { openURL } from 'quasar'
 import { fabCodepen, fabGithub } from '@quasar/extras/fontawesome-v7'
 import { mdiCompare } from '@quasar/extras/mdi-v7'
 
-import { useDocStore } from 'src/layouts/doc-layout/store/index.js'
+import { useDocStore } from '@/layouts/doc-layout/store/index.js'
 
 import DocCode from './DocCode.vue'
 import DocCodepen from './DocCodepen.vue'

@@ -183,7 +183,7 @@ import {
   mdiMenu
 } from '@quasar/extras/mdi-v7'
 
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 
 const { luminosity } = quasarColors
 

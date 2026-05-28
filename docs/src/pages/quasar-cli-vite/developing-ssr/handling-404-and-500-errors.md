@@ -89,7 +89,7 @@ If you define an equivalent 404 route on your Vue Router `/src/router/routes.js`
 
 ```js
 // Example of route for catching 404 with Vue Router
-{ path: '/:catchAll(.*)*', component: () => import('pages/Error404.vue') }
+{ path: '/:catchAll(.*)*', component: () => import('@/pages/Error404.vue') }
 ```
 
 ### Error 500
@@ -101,7 +101,7 @@ However, if we want to show a nice page instead, either create a function to ret
 1. Add a specific route in `/src/router/routes.js`, like:
 
 ```js
-{ path: 'error500', component: () => import('pages/Error500.vue') }
+{ path: 'error500', component: () => import('@/pages/Error500.vue') }
 ```
 
 2. Write the Vue component to handle this page. In this example, we create `/src/pages/Error500.vue`

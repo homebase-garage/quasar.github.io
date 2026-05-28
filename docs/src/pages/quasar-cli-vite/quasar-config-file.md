@@ -768,7 +768,7 @@ interface QuasarStaticBuildConfiguration {
 
   /**
    * Build production assets with or without the hash part in filenames.
-   * Example: "454d87bd" in "assets/index.454d87bd.js"
+   * Example: "454d87bd" in "@/assets/index.454d87bd.js"
    *
    * When used, please be careful how you configure your web server cache strategy as
    * files will not change name so your client might get 304 (Not Modified) even when

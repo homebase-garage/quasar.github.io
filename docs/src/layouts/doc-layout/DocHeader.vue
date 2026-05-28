@@ -119,8 +119,8 @@ import {
   primaryToolbarLinks,
   secondaryToolbarLinks,
   versionLinks
-} from 'src/assets/links.header.js'
-import { socialLinks } from 'src/assets/links.social.js'
+} from '@/assets/links.header.js'
+import { socialLinks } from '@/assets/links.social.js'
 
 import DocSearch from './DocSearch.vue'
 import DocHeaderTextLinks from './DocHeaderTextLinks.vue'

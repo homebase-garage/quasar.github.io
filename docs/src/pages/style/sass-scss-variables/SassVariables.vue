@@ -5,6 +5,6 @@
 </template>
 
 <script setup>
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 import rawVariables from 'quasar/src/css/variables.sass?raw'
 </script>

@@ -42,7 +42,7 @@
       "transformAssetUrls": true,
       "examples": [
         "# (public folder) src=\"boy-avatar.png\"",
-        "# (assets folder) src=\"~assets/boy-avatar.png\"",
+        "# (assets folder) src=\"~@/assets/boy-avatar.png\"",
         "# (relative path format) :src=\"require('./my_img.jpg')\"",
         "# (URL) src=\"https://picsum.photos/500/300\""
       ],

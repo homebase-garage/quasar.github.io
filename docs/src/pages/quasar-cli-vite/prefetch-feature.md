@@ -100,7 +100,7 @@ Example below is when using Pinia:
 
 <script>
   import { useRoute } from 'vue-router'
-  import { useMyStore } from 'stores/myStore.js'
+  import { useMyStore } from '@/stores/myStore.js'
 
   export default {
     // our hook here
@@ -189,7 +189,7 @@ Below is an example of redirecting the user under some circumstances, like when 
 ```js
 // We assume here we already wrote the authentication logic
 // in one Pinia Store, so take as a high-level example only.
-import { useMyStore } from 'stores/myStore'
+import { useMyStore } from '@/stores/myStore'
 
 preFetch ({ store, redirect }) {
   const myStore = useMyStore() // useMyStore(store) for SSR
@@ -269,7 +269,7 @@ The `preFetch` hook runs only once, when the app boots up, so you can use this o
 // example with a store named "myStore"
 // placed in /src/stores/myStore.js|ts
 
-import { useMyStore } from 'stores/myStore.js'
+import { useMyStore } from '@/stores/myStore.js'
 
 export default {
   // ...
@@ -283,7 +283,7 @@ export default {
 // example with a store named "myStore"
 // placed in /src/stores/myStore.js|ts
 
-import { useMyStore } from 'stores/myStore.js'
+import { useMyStore } from '@/stores/myStore.js'
 
 export default {
   // ...

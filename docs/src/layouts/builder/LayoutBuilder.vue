@@ -527,8 +527,8 @@ import {
   mdiViewDashboard
 } from '@quasar/extras/mdi-v7'
 
-import getMeta from 'assets/get-meta.js'
-import DocCode from 'src/components/DocCode.vue'
+import getMeta from '@/assets/get-meta.js'
+import DocCode from '@/components/DocCode.vue'
 
 const drawerBehaviorOptions = [
   { label: 'Behave Normal', value: 'default' },

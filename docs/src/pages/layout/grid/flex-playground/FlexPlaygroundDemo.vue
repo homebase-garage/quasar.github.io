@@ -222,8 +222,8 @@ import { fabCodepen } from '@quasar/extras/fontawesome-v7'
 import { mdiPlus, mdiShareVariant } from '@quasar/extras/mdi-v7'
 
 import FlexChild from './FlexChild.vue'
-import DocCodepen from 'src/components/DocCodepen.vue'
-import CopyButton from 'src/components/CopyButton.vue'
+import DocCodepen from '@/components/DocCodepen.vue'
+import CopyButton from '@/components/CopyButton.vue'
 
 const queryParams = {
   containerGroup: 'string',

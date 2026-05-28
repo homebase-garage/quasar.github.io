@@ -15,7 +15,7 @@ import { LoadingBar } from 'quasar'
 <% } %>
 
 <% if (!quasarConf.ctx.mode.ssr || quasarConf.ctx.mode.pwa) { %>
-import App from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
+import App from '@/../<%= quasarConf.sourceFiles.rootComponent %>'
 let appPrefetch = typeof App.preFetch === 'function'
   ? App.preFetch
   : (

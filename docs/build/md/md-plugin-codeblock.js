@@ -264,10 +264,10 @@ export default function mdPluginCodeblock(md) {
     const attrs = parseDefinitionLine(token)
 
     md.$frontMatter.pageScripts.add(
-      "import DocPrerender from 'src/components/DocPrerender.js'"
+      "import DocPrerender from '@/components/DocPrerender.js'"
     )
     md.$frontMatter.pageScripts.add(
-      "import CopyButton from 'src/components/CopyButton.vue'"
+      "import CopyButton from '@/components/CopyButton.vue'"
     )
 
     return (

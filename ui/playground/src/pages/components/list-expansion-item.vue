@@ -881,7 +881,7 @@
 
         <q-expansion-item icon="shopping_cart" label="Fourth Card">
           <q-card class="q-ma-md" flat>
-            <img src="~assets/map.png" />
+            <img src="~@/assets/map.png" />
 
             <q-list>
               <q-item clickable>

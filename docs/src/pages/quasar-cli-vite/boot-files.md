@@ -318,7 +318,7 @@ export { axios, api }
 ```js
 import { defineBoot } from '#q-app'
 import { createI18n } from 'vue-i18n'
-import messages from 'src/i18n'
+import messages from '@/i18n'
 
 export default defineBoot(({ app }) => {
   // Create I18n instance
@@ -382,6 +382,6 @@ export { axios, api }
 In any JavaScript file, you'll be able to import the axios instance like this.
 
 ```js
-// we import one of the named exports from src/boot/axios.js
-import { api } from 'boot/axios'
+// we import one of the named exports from /src/boot/axios.js
+import { api } from '@/boot/axios'
 ```

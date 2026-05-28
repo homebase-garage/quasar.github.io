@@ -125,7 +125,7 @@ export default definePromptsScript(async (/* api */) => {
 
 ## The Install script
 
-The install script below is only rendering files into the hosted app. Notice the `src/templates` folder above, where we decided to keep these templates.
+The install script below is only rendering files into the hosted app. Notice the `/src/templates` folder above, where we decided to keep these templates.
 
 ```js File: /ae/src/install.js (or .ts)
 import { defineInstallScript } from '@quasar/app-vite'

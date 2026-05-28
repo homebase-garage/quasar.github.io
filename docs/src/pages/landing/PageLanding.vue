@@ -175,14 +175,14 @@
 <script setup>
 import { scroll, useMeta } from 'quasar'
 
-import DocStars from 'src/components/DocStars.vue'
+import DocStars from '@/components/DocStars.vue'
 import SponsorList from './SponsorList.vue'
 import TwitterCards from './TwitterCards.vue'
 import WhyQuasarCard from './WhyQuasarCard.vue'
 import SponsorTile from '../sponsors-and-backers/SponsorTile.vue'
 
-import { socialLinks } from 'src/assets/links.social.js'
-import { sponsors } from 'src/assets/sponsors.js'
+import { socialLinks } from '@/assets/links.social.js'
+import { sponsors } from '@/assets/sponsors.js'
 
 useMeta({
   title: 'Quasar Framework',

@@ -4,5 +4,5 @@
  * DO NOT EDIT.
  **/
 
-export * from 'app/src-ssr/server'
+export * from '@/../src-ssr/server'
 export { default as injectMiddlewares } from './ssr-middlewares'

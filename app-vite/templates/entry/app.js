@@ -28,12 +28,12 @@ import { bex } from './bex-app.js'
 
 import { Quasar } from 'quasar'
 import { markRaw } from 'vue'
-import <%= quasarConf.metaConf.needsAppMountHook ? 'AppComponent' : 'RootComponent' %> from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
+import <%= quasarConf.metaConf.needsAppMountHook ? 'AppComponent' : 'RootComponent' %> from '@/../<%= quasarConf.sourceFiles.rootComponent %>'
 
 <% if (quasarConf.metaConf.hasStore) { %>
-import createStore from 'app/<%= quasarConf.sourceFiles.store %>'
+import createStore from '@/../<%= quasarConf.sourceFiles.store %>'
 <% } %>
-import createRouter from 'app/<%= quasarConf.sourceFiles.router %>'
+import createRouter from '@/../<%= quasarConf.sourceFiles.router %>'
 
 <% if (quasarConf.metaConf.needsAppMountHook) { %>
 import { defineComponent, h, onMounted<%= quasarConf.ctx.mode.ssr && quasarConf.ssr.manualPostHydrationTrigger !== true ? ', getCurrentInstance' : '' %> } from 'vue'

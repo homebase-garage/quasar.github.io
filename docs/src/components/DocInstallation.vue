@@ -49,7 +49,7 @@ import { computed, ref } from 'vue'
 import DocCode from './DocCode.vue'
 import DocCardTitle from './DocCardTitle.vue'
 
-import { slugify } from 'src/assets/page-utils.js'
+import { slugify } from '@/assets/page-utils.js'
 
 const props = defineProps({
   components: [Array, String],

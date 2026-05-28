@@ -36,7 +36,7 @@ import createQuasarApp from './app.js'
 import quasarUserOptions from './quasar-user-options.js'
 
 <% if (quasarConf.preFetch) { %>
-import App from 'app/<%= quasarConf.sourceFiles.rootComponent %>'
+import App from '@/../<%= quasarConf.sourceFiles.rootComponent %>'
 const appPrefetch = typeof App.preFetch === 'function'
   ? App.preFetch
   : (

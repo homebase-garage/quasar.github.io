@@ -22,7 +22,7 @@ Quasar documentation assumes you are already familiar with [Vue Router](https://
 :::
 
 ```js
-import SomePage from 'pages/SomePage.vue'
+import SomePage from '@/pages/SomePage.vue'
 
 const routes = [
   {
@@ -38,7 +38,7 @@ Now let's change this and make the page be loaded on demand only, using dynamic 
 const routes = [
   {
     path: '/some-page',
-    component: () => import('pages/SomePage.vue')
+    component: () => import('@/pages/SomePage.vue')
   }
 ]
 ```
@@ -51,7 +51,7 @@ Normally you would import a component and then register it to the Page, Layout o
 
 ```html
 <script>
-  import SomeComponent from 'components/SomeComponent.vue'
+  import SomeComponent from '@/components/SomeComponent.vue'
 
   export default {
     components: {
@@ -69,7 +69,7 @@ Now let's change this and make the component be loaded on demand only, using dyn
   export default {
     components: {
       SomeComponent: defineAsyncComponent(
-        () => import('components/SomeComponent.vue')
+        () => import('@/components/SomeComponent.vue')
       )
     }
   }
@@ -95,7 +95,7 @@ import('./categories.json')
 One advantage of using dynamic imports as opposed to regular imports is that the import path can be determined at runtime:
 
 ```js
-import('pages/' + pageName + '/' + idWithExtension)
+import('@/pages/' + pageName + '/' + idWithExtension)
 ```
 
 ## Importing with Vite

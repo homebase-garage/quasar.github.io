@@ -24,17 +24,17 @@ const routes = [
   {
     path: '/tabs-router',
     redirect: { name: 'one' },
-    component: () => import('pages/web-tests/tabs-router/TabsLayout.vue'),
+    component: () => import('@/pages/web-tests/tabs-router/TabsLayout.vue'),
     children: [
       {
         path: 'one',
         name: 'one',
-        component: () => import('pages/web-tests/tabs-router/One.vue')
+        component: () => import('@/pages/web-tests/tabs-router/One.vue')
       },
       {
         path: 'two',
         name: 'two',
-        component: () => import('pages/web-tests/tabs-router/Two.vue')
+        component: () => import('@/pages/web-tests/tabs-router/Two.vue')
       }
     ]
   },
@@ -201,7 +201,7 @@ for (const key in pagesList) {
 // Always leave this as last one
 routes.push({
   path: '/:catchAll(.*)*',
-  component: () => import('pages/Error404.vue')
+  component: () => import('@/pages/Error404.vue')
 })
 
 export default routes

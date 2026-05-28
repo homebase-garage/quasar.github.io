@@ -35,7 +35,7 @@ We won't go into details on how to configure or use Pinia since it has great doc
 
 When you scaffold a Quasar project folder you can choose to add Pinia. It will create all the necessary configuration for you. Like for example the creation of `/src/stores` which handles all the Pinia related code that you need.
 
-If you don't choose the Pinia option during project creation but would like to add it later then all you need to do is to check the next section and create the `src/stores/index.js` file (it's automatically created when you run `quasar new store <name>`):
+If you don't choose the Pinia option during project creation but would like to add it later then all you need to do is to check the next section and create the `/src/stores/index.js` file (it's automatically created when you run `quasar new store <name>`):
 
 ```js /src/stores/index.js
 import { defineStore } from '#q-app'
@@ -143,8 +143,8 @@ We've created the new Pinia store, but we haven't yet used it in our app. In a V
 
 <script setup>
   import { computed } from 'vue'
-  import { useCounterStore } from 'stores/counter'
   import { storeToRefs } from 'pinia'
+  import { useCounterStore } from '@/stores/counter'
 
   const store = useCounterStore()
 

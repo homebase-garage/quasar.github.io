@@ -33,13 +33,13 @@ $ npm install --save vue-i18n
 $ bun add vue-i18n
 ```
 
-2. Create a file `src/boot/i18n.js` with following content:
+2. Create a file `/src/boot/i18n.js` with following content:
 
 ```tabs
 <<| js JS |>>
 import { defineBoot } from '#q-app'
 import { createI18n } from 'vue-i18n'
-import messages from 'src/i18n'
+import messages from '@/i18n'
 
 export default defineBoot(({ app }) => {
   const i18n = createI18n({
@@ -55,7 +55,7 @@ export default defineBoot(({ app }) => {
 import { defineBoot } from '#q-app';
 import { createI18n } from 'vue-i18n';
 
-import messages from 'src/i18n';
+import messages from '@/i18n';
 
 export type MessageLanguages = keyof typeof messages;
 // Type-define 'en-US' as the master schema for the resource
@@ -87,7 +87,7 @@ export default defineBoot(({ app }) => {
 });
 ```
 
-3. Create a folder (/src/i18n/) in your app which will hold the definitions for each language that you'll support. Example: [src/i18n](https://github.com/quasarframework/quasar-starter-kit/tree/master/template/src/i18n). Notice the "import messages from 'src/i18n'" from step 2. This is step where you write the content that gets imported.
+3. Create a folder (/src/i18n/) in your app which will hold the definitions for each language that you'll support. Example: [src/i18n](https://github.com/quasarframework/quasar-starter-kit/tree/master/template/src/i18n). Notice the "import messages from '@/i18n'" from step 2. This is step where you write the content that gets imported.
 
 4. Now reference this file in `quasar.config` one in the `boot` section:
 
@@ -199,8 +199,8 @@ Here is an example displaying the main use cases:
 
 Let's say you want to add new German language.
 
-1. Create the new file `src/i18n/de/index.js` and copy there the content of the file `src/i18n/en-US/index.js` then make changes to the language strings.
-2. Now change `src/i18n/index.js` and add the new `de` language there.
+1. Create the new file `/src/i18n/de/index.js` and copy there the content of the file `/src/i18n/en-US/index.js` then make changes to the language strings.
+2. Now change `/src/i18n/index.js` and add the new `de` language there.
 
 ```js
 import enUS from './en-US'

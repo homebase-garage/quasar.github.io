@@ -31,7 +31,7 @@
 <script setup>
 import { useMeta } from 'quasar'
 
-import DocStars from 'src/components/DocStars.vue'
+import DocStars from '@/components/DocStars.vue'
 
 useMeta({ title: 'Page not found' })
 </script>

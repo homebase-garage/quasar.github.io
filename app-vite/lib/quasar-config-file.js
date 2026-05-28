@@ -105,7 +105,7 @@ function parseAssetProperty(prefix) {
   return asset => {
     if (typeof asset === 'string') {
       return {
-        path: asset[0] === '~' ? asset.slice(1) : prefix + `/${asset}`
+        path: asset[0] === '~' ? asset.slice(1) : `${prefix}/${asset}`
       }
     }
 
@@ -115,7 +115,7 @@ function parseAssetProperty(prefix) {
         typeof asset.path === 'string'
           ? asset.path[0] === '~'
             ? asset.path.slice(1)
-            : prefix + `/${asset.path}`
+            : `${prefix}/${asset.path}`
           : asset.path
     }
   }
@@ -883,7 +883,7 @@ export class QuasarConfigFile {
     if (cfg.css.length !== 0) {
       cfg.css = cfg.css
         .filter(Boolean)
-        .map(parseAssetProperty('src/css'))
+        .map(parseAssetProperty('@/css'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
     }
@@ -891,7 +891,7 @@ export class QuasarConfigFile {
     if (cfg.boot.length !== 0) {
       cfg.boot = cfg.boot
         .filter(Boolean)
-        .map(parseAssetProperty('boot'))
+        .map(parseAssetProperty('@/boot'))
         .filter(asset => asset.path)
         .filter(uniquePathFilter)
     }
@@ -1004,14 +1004,7 @@ export class QuasarConfigFile {
 
         alias: {
           '#q-app': '@quasar/app-vite',
-          src: appPaths.srcDir,
-          app: appPaths.appDir,
-          components: appPaths.resolve.src('components'),
-          layouts: appPaths.resolve.src('layouts'),
-          pages: appPaths.resolve.src('pages'),
-          assets: appPaths.resolve.src('assets'),
-          boot: appPaths.resolve.src('boot'),
-          stores: appPaths.resolve.src('stores')
+          '@': appPaths.srcDir
         },
 
         typescript: {
@@ -1186,10 +1179,10 @@ export class QuasarConfigFile {
         cfg.ssr.middlewares.length !== 0
           ? cfg.ssr.middlewares
               .filter(Boolean)
-              .map(parseAssetProperty('app/src-ssr/middlewares'))
+              .map(parseAssetProperty('@/../src-ssr/middlewares'))
               .filter(asset => asset.path)
               .filter(uniquePathFilter)
-          : ['render'].map(parseAssetProperty('app/src-ssr/middlewares'))
+          : ['render'].map(parseAssetProperty('@/../src-ssr/middlewares'))
 
       if (cfg.ssr.pwa) {
         // install pwa mode if it's missing

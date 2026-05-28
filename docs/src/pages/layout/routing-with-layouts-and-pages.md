@@ -58,7 +58,7 @@ Example of `routes.js` using lazy-loading:
 const routes = [
   {
     path: '/',
-    component: () => import('pages/Landing')
+    component: () => import('@/pages/Landing')
   }
 ]
 
@@ -70,7 +70,7 @@ Example of `routes.js` using eager loading:
 ```js
 // we define our routes in this file
 
-import LandingPage from 'pages/Landing'
+import LandingPage from '@/pages/Landing'
 
 const routes = [
   {
@@ -132,10 +132,10 @@ Since User layout wraps inner pages, they need an injection point. This is suppl
 
 Our example has some routes specified (/user/profile and /user/posts). **So how can we put everything together now?** We edit the routes file. That's where we will configure routes, tell which components are Layouts and which are Pages and also reference/import them into our app:
 
-```js src/router/routes.js
-import User from 'layouts/User'
-import Profile from 'pages/Profile'
-import Posts from 'pages/Posts'
+```js /src/router/routes.js
+import User from '@/layouts/User'
+import Profile from '@/pages/Profile'
+import Posts from '@/pages/Posts'
 
 const routes = [
   {
@@ -178,7 +178,7 @@ export default [
 
     // We point it to our component
     // where we defined our QLayout
-    component: () => import('layouts/user'),
+    component: () => import('@/layouts/user'),
 
     // Now we define the sub-routes.
     // These are getting injected into
@@ -188,11 +188,11 @@ export default [
     children: [
       {
         path: 'feed',
-        component: () => import('pages/user-feed')
+        component: () => import('@/pages/user-feed')
       },
       {
         path: 'profile',
-        component: () => import('pages/user-profile')
+        component: () => import('@/pages/user-profile')
       }
     ]
   }
@@ -204,9 +204,9 @@ Please notice a few things:
 - We are using lazy loading of layouts and pages (`() => import(<path>)`). If your website/app is small, then you can skip the lazy loading benefits as they could add more overhead than what it's worth:
 
   ```js
-  import UserLayout from 'layouts/user'
-  import UserFeed from 'pages/user-feed'
-  import UserProfile from 'pages/user-profile'
+  import UserLayout from '@/layouts/user'
+  import UserFeed from '@/pages/user-feed'
+  import UserProfile from '@/pages/user-profile'
 
   export default [
     path: '/user',

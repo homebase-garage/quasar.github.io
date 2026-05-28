@@ -182,7 +182,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useLocalStorageConfig } from 'src/composables/useLocalStorageConfig.js'
+import { useLocalStorageConfig } from '@/composables/useLocalStorageConfig.js'
 
 const langs = [
   {

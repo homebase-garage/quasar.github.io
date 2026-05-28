@@ -14,7 +14,7 @@
       </div>
       <q-slide-transition @show="log('show')" @hide="log('hide')">
         <div v-show="visibleVShow" style="margin: 0">
-          <img class="responsive" src="~assets/quasar.jpg" />
+          <img class="responsive" src="~@/assets/quasar.jpg" />
         </div>
       </q-slide-transition>
 
@@ -23,7 +23,7 @@
       </div>
       <q-slide-transition @show="log('show')" @hide="log('hide')">
         <div v-if="visibleVIf" style="margin: 0">
-          <img class="responsive" src="~assets/quasar.jpg" />
+          <img class="responsive" src="~@/assets/quasar.jpg" />
         </div>
       </q-slide-transition>
 
@@ -45,7 +45,7 @@
             class="q-ma-lg"
             @click="visibleVShow2 = !visibleVShow2"
           />
-          <img class="responsive" src="~assets/quasar.jpg" />
+          <img class="responsive" src="~@/assets/quasar.jpg" />
         </div>
       </q-slide-transition>
 
@@ -67,7 +67,7 @@
             class="q-ma-lg"
             @click="visibleVIf2 = !visibleVIf2"
           />
-          <img class="responsive" src="~assets/quasar.jpg" />
+          <img class="responsive" src="~@/assets/quasar.jpg" />
         </div>
       </q-slide-transition>
 
@@ -82,7 +82,7 @@
           <div>Outer block</div>
           <q-slide-transition>
             <div v-show="innerCondition">
-              <img class="responsive" src="~assets/quasar.jpg" />
+              <img class="responsive" src="~@/assets/quasar.jpg" />
             </div>
           </q-slide-transition>
         </div>

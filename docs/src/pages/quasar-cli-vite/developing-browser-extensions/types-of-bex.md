@@ -15,9 +15,9 @@ These all follow the same pattern, set up a route and configure the `manifest.js
 
 ```js routes.js:
 const routes = [
-  { path: '/options', component: () => import('pages/OptionsPage.vue') },
-  { path: '/popup', component: () => import('pages/PopupPage.vue') },
-  { path: '/devtools', component: () => import('pages/DevToolsPage.vue') }
+  { path: '/options', component: () => import('@/pages/OptionsPage.vue') },
+  { path: '/popup', component: () => import('@/pages/PopupPage.vue') },
+  { path: '/devtools', component: () => import('@/pages/DevToolsPage.vue') }
 ]
 ```
 

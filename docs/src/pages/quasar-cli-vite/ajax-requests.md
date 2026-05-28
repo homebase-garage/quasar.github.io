@@ -39,8 +39,8 @@ Usage in your single file components methods will be like below. Notice that in 
 
 ```js
 import { ref } from 'vue'
-import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
+import { api } from '@/boot/axios'
 
 setup () {
   const $q = useQuasar()
@@ -68,7 +68,7 @@ setup () {
 Usage in Pinia Actions for globally adding headers to axios (such as during authentication):
 
 ```js
-import { api } from 'boot/axios'
+import { api } from '@/boot/axios'
 
 export const useAuthStore = defineStore('auth', {
   actions: {

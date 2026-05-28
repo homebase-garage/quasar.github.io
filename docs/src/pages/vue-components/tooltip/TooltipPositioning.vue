@@ -138,7 +138,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 
 const anchorOrigin = reactive({ vertical: 'bottom', horizontal: 'middle' })
 const selfOrigin = reactive({ vertical: 'top', horizontal: 'middle' })

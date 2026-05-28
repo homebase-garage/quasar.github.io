@@ -609,7 +609,7 @@ We should then add the newly created CSS file into our app:
 
   ```
   // in your main.js/main.ts
-  import 'src/css/my-app-icon.css'
+  import '@/css/my-app-icon.css'
 
   // or in the main css file
   @import url('./my-app-icon.css');

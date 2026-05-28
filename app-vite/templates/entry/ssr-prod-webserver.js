@@ -15,7 +15,7 @@ import renderTemplate from './render-template.js'
 import serverEntry from './server/server-entry.js'
 import clientManifest from './quasar.manifest.json' with { type: 'json' }
 
-import { create, listen, renderPreloadTag, serveStaticContent } from 'app/src-ssr/server'
+import { create, listen, renderPreloadTag, serveStaticContent } from '@/../src-ssr/server'
 import injectMiddlewares from './ssr-middlewares'
 
 const port = process.env.PORT || <%= quasarConf.ssr.prodPort %>

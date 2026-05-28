@@ -7,10 +7,11 @@ export function createInstance({ appPaths }) {
   }
 
   for (const ext of ['scss', 'sass']) {
-    const file = `src/css/quasar.variables.${ext}`
-    if (fs.existsSync(appPaths.resolve.app(file))) {
+    if (
+      fs.existsSync(appPaths.resolve.app(`src/css/quasar.variables.${ext}`))
+    ) {
       cssVariables.quasarSrcExt = 'sass'
-      cssVariables.variablesFile = file
+      cssVariables.variablesFile = `@/css/quasar.variables.${ext}`
       break
     }
   }

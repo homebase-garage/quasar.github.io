@@ -195,7 +195,7 @@
       </q-card>
 
       <q-card class="bigger">
-        <q-img src="~assets/donuts.png" />
+        <q-img src="~@/assets/donuts.png" />
 
         <q-card-section>
           <q-btn
@@ -235,7 +235,7 @@
       </q-card>
 
       <q-card flat bordered class="bigger">
-        <img src="~assets/donuts.png" />
+        <img src="~@/assets/donuts.png" />
 
         <q-card-section>
           <q-btn
@@ -456,7 +456,7 @@
       </q-card>
 
       <q-card>
-        <img src="~assets/mountains.jpg" />
+        <img src="~@/assets/mountains.jpg" />
 
         <q-card-section>
           <div class="text-h6">Our Changing Planet</div>
@@ -469,7 +469,7 @@
       </q-card>
 
       <q-card>
-        <q-img src="~assets/parallax2.jpg" basic>
+        <q-img src="~@/assets/parallax2.jpg" basic>
           <div class="absolute-bottom text-subtitle2 text-center">Title</div>
         </q-img>
       </q-card>
@@ -549,7 +549,7 @@
           </q-item-section>
         </q-item>
 
-        <img src="~assets/parallax2.jpg" />
+        <img src="~@/assets/parallax2.jpg" />
 
         <q-card-section>
           <div class="text-h6">Our Changing Planet</div>
@@ -563,7 +563,7 @@
       </q-card>
 
       <q-card>
-        <img src="~assets/parallax2.jpg" />
+        <img src="~@/assets/parallax2.jpg" />
 
         <q-list>
           <q-item clickable>
@@ -657,7 +657,7 @@
       </q-card>
 
       <q-card>
-        <img src="~assets/mountains.jpg" />
+        <img src="~@/assets/mountains.jpg" />
 
         <q-card-actions align="around">
           <q-btn flat round color="red" icon="favorite" />
@@ -667,7 +667,7 @@
       </q-card>
 
       <q-card>
-        <img src="~assets/mountains.jpg" />
+        <img src="~@/assets/mountains.jpg" />
 
         <q-card-section>
           <div class="text-h6">Our Changing Planet</div>

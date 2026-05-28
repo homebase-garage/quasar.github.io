@@ -57,7 +57,7 @@ import {
   version as vueVersion
 } from 'vue'
 
-import { pagesRoutes } from 'src/router/pages'
+import { pagesRoutes } from '@/router/pages'
 
 const STORAGE_KEY = 'index-filter'
 const list = {}

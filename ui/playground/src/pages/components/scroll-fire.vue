@@ -14,7 +14,7 @@
       <p class="text-center">
         <img
           v-scroll-fire="computedBounceImage"
-          src="~assets/quasar.jpg"
+          src="~@/assets/quasar.jpg"
           style="width: 200px"
         />
       </p>

@@ -46,7 +46,7 @@ export function getVueComponent({ frontMatter, mdContent, pageScripts }) {
     ${frontMatter.nav !== void 0 ? ':nav="nav"' : ''}>${mdContent}</doc-page>
 </template>
 <script setup>
-import { copyHeading } from 'assets/page-utils'
+import { copyHeading } from '@/assets/page-utils'
 ${
   frontMatter.examples !== void 0
     ? `

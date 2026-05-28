@@ -100,12 +100,12 @@
 </template>
 
 <script setup>
-import DocCardLink from 'components/DocCardLink.vue'
+import DocCardLink from '@/components/DocCardLink.vue'
 import {
   buildTargets,
   ecosystemParts,
   platformIcons
-} from 'src/assets/links.integrations.js'
+} from '@/assets/links.integrations.js'
 </script>
 
 <style lang="sass">

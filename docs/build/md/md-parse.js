@@ -37,27 +37,25 @@ export default function mdParse(code, id) {
   frontMatter.pageScripts = new Set()
 
   frontMatter.pageScripts.add(
-    "import DocPage from 'src/layouts/doc-layout/DocPage.vue'"
+    "import DocPage from '@/layouts/doc-layout/DocPage.vue'"
   )
 
   if (frontMatter.examples !== void 0) {
     frontMatter.pageScripts.add(
-      "import DocExample from 'src/components/DocExample.vue'"
+      "import DocExample from '@/components/DocExample.vue'"
     )
   }
   if (docApiRE.test(code)) {
-    frontMatter.pageScripts.add(
-      "import DocApi from 'src/components/DocApi.vue'"
-    )
+    frontMatter.pageScripts.add("import DocApi from '@/components/DocApi.vue'")
   }
   if (docInstallationRE.test(code)) {
     frontMatter.pageScripts.add(
-      "import DocInstallation from 'src/components/DocInstallation.vue'"
+      "import DocInstallation from '@/components/DocInstallation.vue'"
     )
   }
   if (docTreeRE.test(code)) {
     frontMatter.pageScripts.add(
-      "import DocTree from 'src/components/DocTree.vue'"
+      "import DocTree from '@/components/DocTree.vue'"
     )
   }
 

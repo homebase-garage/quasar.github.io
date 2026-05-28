@@ -172,7 +172,7 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
 
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 
 const fit = ref(false)
 const cover = ref(false)

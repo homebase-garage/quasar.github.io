@@ -47,7 +47,7 @@ import createQuasarApp<% if (quasarConf.ctx.mode.ssr && quasarConf.ctx.mode.pwa)
 import quasarUserOptions from './quasar-user-options.js'
 
 <% if (quasarConf.ctx.mode.pwa) { %>
-import 'app/<%= quasarConf.sourceFiles.pwaRegisterServiceWorker %>'
+import '@/../<%= quasarConf.sourceFiles.pwaRegisterServiceWorker %>'
 <% } %>
 
 <% if (quasarConf.preFetch) { %>

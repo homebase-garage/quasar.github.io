@@ -92,7 +92,7 @@ import { useQuasar } from 'quasar'
 import { computed, reactive, ref } from 'vue'
 import languages from 'quasar/lang/index.json'
 
-import DocCode from 'src/components/DocCode.vue'
+import DocCode from '@/components/DocCode.vue'
 
 const cssMap = {
   'mdi-v7':

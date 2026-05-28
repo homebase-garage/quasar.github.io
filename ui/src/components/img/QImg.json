@@ -12,7 +12,7 @@
       "transformAssetUrls": true,
       "examples": [
         "# (public folder) src=\"img/something.png\"",
-        "# (assets folder) src=\"~assets/my-img.gif\"",
+        "# (assets folder) src=\"~@/assets/my-img.gif\"",
         "# (relative path format) :src=\"require('./my_img.jpg')\"",
         "# (URL) src=\"https://picsum.photos/500/300\""
       ],
@@ -43,7 +43,7 @@
       "transformAssetUrls": true,
       "examples": [
         "# (public folder) placeholder-src=\"img/some-placeholder.png\"",
-        "# (assets folder) placeholder-src=\"~assets/my-placeholder.gif\"",
+        "# (assets folder) placeholder-src=\"~@/assets/my-placeholder.gif\"",
         "# (relative path format) :placeholder-src=\"require('./placeholder.jpg')\"",
         "# (URL) placeholder-src=\"https://picsum.photos/500/300\""
       ],
@@ -56,7 +56,7 @@
       "transformAssetUrls": true,
       "examples": [
         "# (public folder) error-src=\"img/some-placeholder.png\"",
-        "# (assets folder) error-src=\"~assets/my-placeholder.gif\"",
+        "# (assets folder) error-src=\"~@/assets/my-placeholder.gif\"",
         "# (relative path format) :error-src=\"require('./placeholder.jpg')\"",
         "# (URL) error-src=\"https://picsum.photos/500/300\""
       ],

@@ -95,8 +95,8 @@
 </template>
 
 <script setup>
-import DocCardLink from 'components/DocCardLink.vue'
-import { mostUsedPages, pagesToDiscover } from 'src/assets/docs-homepage.js'
+import DocCardLink from '@/components/DocCardLink.vue'
+import { mostUsedPages, pagesToDiscover } from '@/assets/docs-homepage.js'
 </script>
 
 <style lang="sass">

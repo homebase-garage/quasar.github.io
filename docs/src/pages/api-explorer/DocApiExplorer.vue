@@ -27,7 +27,7 @@
 import { ref } from 'vue'
 import apiList from 'quasar/dist/transforms/api-list.json'
 
-import DocApi from 'src/components/DocApi.vue'
+import DocApi from '@/components/DocApi.vue'
 
 const item = ref('')
 const options = ref(apiList)

@@ -120,7 +120,7 @@ Some Capacitor plugins, such as Camera, have a web-based UI available when not r
 $ npm install @ionic/pwa-elements
 ```
 
-Then create a boot file to initialize them, for example `src/boot/capacitor.js`:
+Then create a boot file to initialize them, for example `/src/boot/capacitor.js`:
 
 ```js
 import { defineCustomElements } from '@ionic/pwa-elements/loader'

@@ -39,7 +39,7 @@
 import { ref } from "vue";
 import EssentialLink, {
   type EssentialLinkProps
-} from "components/EssentialLink.vue";
+} from "@/components/EssentialLink.vue";
 
 const linksList: EssentialLinkProps[] = [
   {

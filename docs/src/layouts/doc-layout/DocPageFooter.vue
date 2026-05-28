@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import menu from 'assets/menu.js'
-import { footerLinks } from 'assets/links.footer.js'
+import menu from '@/assets/menu.js'
+import { footerLinks } from '@/assets/links.footer.js'
 
 /**
  * Loop through the menus and extract all menu items therein, including children to a flat array of menu items
