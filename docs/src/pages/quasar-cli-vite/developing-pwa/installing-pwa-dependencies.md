@@ -30,6 +30,12 @@ Notice the `/src-pwa/package.json` file in your generated `/src-pwa` folder. The
 Installing PWA specific packages:
 
 ```tabs
+<<| bash PNPM |>>
+# run in /src-pwa for deps used by /src-pwa/register-sw file:
+$ pnpm add <deps>
+
+# run in /src-pwa for deps used by the build system (eg. workbox-* suite)
+$ pnpm add -D <dev-deps>
 <<| bash Yarn |>>
 # run in /src-pwa for deps used by /src-pwa/register-sw file:
 $ yarn add <deps>
@@ -42,12 +48,6 @@ $ npm install --save <deps>
 
 # run in /src-pwa for deps used by the build system (eg. workbox-* suite)
 $ npm install --save-dev <dev-deps>
-<<| bash PNPM |>>
-# run in /src-pwa for deps used by /src-pwa/register-sw file:
-$ pnpm add <deps>
-
-# run in /src-pwa for deps used by the build system (eg. workbox-* suite)
-$ pnpm add -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-pwa for deps used by /src-pwa/register-sw file:
 $ bun add <deps>

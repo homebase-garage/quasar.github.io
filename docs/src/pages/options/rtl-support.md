@@ -51,12 +51,12 @@ export default {
 You first need to install `postcss-rtlcss` package:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -D postcss-rtlcss
 <<| bash Yarn |>>
 $ yarn add --dev postcss-rtlcss
 <<| bash NPM |>>
 $ npm install --save-dev postcss-rtlcss
-<<| bash PNPM |>>
-$ pnpm add -D postcss-rtlcss
 <<| bash Bun |>>
 $ bun add --dev postcss-rtlcss
 ```

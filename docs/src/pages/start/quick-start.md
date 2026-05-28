@@ -20,12 +20,12 @@ Navigate to the folder above where you want your project to be. Quasar will late
 Enter the following command:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm create quasar@latest
 <<| bash Yarn |>>
 $ yarn create quasar
 <<| bash NPM |>>
 $ npm init quasar@latest
-<<| bash PNPM |>>
-$ pnpm create quasar@latest
 <<| bash Bun |>>
 $ bun create quasar@latest
 ```
@@ -37,12 +37,12 @@ As the command above runs, you'll be prompted with some options. Depending on yo
 For doing more with Quasar, you should also install the global CLI. With it you can directly run Quasar commands in the terminal, run a local http server for testing or do upgrades on your project.
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -g @quasar/cli
 <<| bash Yarn |>>
 $ yarn global add @quasar/cli
 <<| bash NPM |>>
 $ npm i -g @quasar/cli
-<<| bash PNPM |>>
-$ pnpm add -g @quasar/cli
 <<| bash Bun |>>
 $ bun install -g @quasar/cli
 ```
@@ -52,6 +52,15 @@ $ bun install -g @quasar/cli
 For the second and last step, navigate into the newly created project folder and run the Quasar CLI command to start the dev server.
 
 ```tabs
+<<| bash PNPM |>>
+# if you have the global CLI:
+$ quasar dev
+
+# otherwise:
+
+$ pnpm run dev
+# to run a local Quasar CLI command:
+$ pnpm quasar dev
 <<| bash Yarn |>>
 # if you have the global CLI:
 $ quasar dev
@@ -70,15 +79,6 @@ $ quasar dev
 $ npm run dev
 # to run a local Quasar CLI command:
 $ npx quasar dev
-<<| bash PNPM |>>
-# if you have the global CLI:
-$ quasar dev
-
-# otherwise:
-
-$ pnpm run dev
-# to run a local Quasar CLI command:
-$ pnpm quasar dev
 <<| bash Bun |>>
 # if you have the global CLI:
 $ quasar dev

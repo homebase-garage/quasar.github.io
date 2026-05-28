@@ -16,12 +16,12 @@ cd src-capacitor
 Then, install the plugin:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add @capawesome/capacitor-live-update
 <<| bash Yarn |>>
 $ yarn add @capawesome/capacitor-live-update
 <<| bash NPM |>>
 $ npm install --save @capawesome/capacitor-live-update
-<<| bash PNPM |>>
-$ pnpm add @capawesome/capacitor-live-update
 <<| bash Bun |>>
 $ bun add @capawesome/capacitor-live-update
 ```
@@ -85,12 +85,12 @@ This will create a `src-capacitor/www` folder with the build output of your web 
 To install the Capawesome CLI, run the following command:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -g @capawesome/cli
 <<| bash Yarn |>>
 $ yarn global add @capawesome/cli
 <<| bash NPM |>>
 $ npm i -g @capawesome/cli
-<<| bash PNPM |>>
-$ pnpm add -g @capawesome/cli
 <<| bash Bun |>>
 $ bun install -g @capawesome/cli
 ```

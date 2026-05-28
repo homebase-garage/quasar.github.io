@@ -18,12 +18,12 @@ Tunnelmole will work on any machine with Node.js 16+ installed and has no non-Ja
 First, install `tunnelmole` package globally:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -g tunnelmole
 <<| bash Yarn |>>
 $ yarn global add tunnelmole
 <<| bash NPM |>>
 $ npm install -g tunnelmole
-<<| bash PNPM |>>
-$ pnpm add -g tunnelmole
 <<| bash Bun |>>
 $ bun add -g tunnelmole
 ```

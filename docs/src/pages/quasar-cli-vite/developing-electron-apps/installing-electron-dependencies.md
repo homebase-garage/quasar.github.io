@@ -22,6 +22,12 @@ Notice the `/src-electron/package.json` file in your generated `/src-electron` f
 Installing [Electron specific packages](https://zeke.github.io/electron.atom.io/userland/most_downloaded_packages):
 
 ```tabs
+<<| bash PNPM |>>
+# run in /src-electron for runtime deps (will be embedded to /dist):
+$ pnpm add <deps>
+
+# run in /src-electron for deps used by the build system (eg. "electron")
+$ pnpm add -D <dev-deps>
 <<| bash Yarn |>>
 # run in /src-electron for runtime deps (will be embedded to /dist):
 $ yarn add <deps>
@@ -34,12 +40,6 @@ $ npm install --save <deps>
 
 # run in /src-electron for deps used by the build system (eg. "electron")
 $ npm install --save-dev <dev-deps>
-<<| bash PNPM |>>
-# run in /src-electron for runtime deps (will be embedded to /dist):
-$ pnpm add <deps>
-
-# run in /src-electron for deps used by the build system (eg. "electron")
-$ pnpm add -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-electron for runtime deps (will be embedded to /dist):
 $ bun add <deps>

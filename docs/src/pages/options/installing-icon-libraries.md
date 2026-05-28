@@ -68,12 +68,12 @@ If you have a Fontawesome v6 Pro license and want to use it instead of the Fonta
 3. Install Fontawesome webfonts:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add @fortawesome/fontawesome-pro
 <<| bash Yarn |>>
 $ yarn add @fortawesome/fontawesome-pro
 <<| bash NPM |>>
 $ npm install --save @fortawesome/fontawesome-pro
-<<| bash PNPM |>>
-$ pnpm add @fortawesome/fontawesome-pro
 <<| bash Bun |>>
 $ bun add @fortawesome/fontawesome-pro
 ```

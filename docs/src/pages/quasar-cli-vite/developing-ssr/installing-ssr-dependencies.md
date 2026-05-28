@@ -85,6 +85,12 @@ If you import anything from node_modules in /src-ssr, then be aware that:
 Installing SSR specific packages, like the actual webserver & middlewares & plugins:
 
 ```tabs
+<<| bash PNPM |>>
+# run in /src-ssr for runtime deps (will be embedded into /dist):
+$ pnpm add <deps>
+
+# run in /src-ssr for deps used by the build system (if any)
+$ pnpm add -D <dev-deps>
 <<| bash Yarn |>>
 # run in /src-ssr for runtime deps (will be embedded into /dist):
 $ yarn add <deps>
@@ -97,12 +103,6 @@ $ npm install --save <deps>
 
 # run in /src-ssr for deps used by the build system (if any)
 $ npm install --save-dev <dev-deps>
-<<| bash PNPM |>>
-# run in /src-ssr for runtime deps (will be embedded into /dist):
-$ pnpm add <deps>
-
-# run in /src-ssr for deps used by the build system (if any)
-$ pnpm add -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-ssr for runtime deps (will be embedded into /dist):
 $ bun add <deps>

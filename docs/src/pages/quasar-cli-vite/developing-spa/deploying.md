@@ -100,12 +100,12 @@ Cloudflare Pages offers a powerful platform for deploying Quasar SPAs with built
 First, install the required dependencies:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -D @cloudflare/vite-plugin wrangler
 <<| bash Yarn |>>
 $ yarn add -D @cloudflare/vite-plugin wrangler
 <<| bash NPM |>>
 $ npm install -D @cloudflare/vite-plugin wrangler
-<<| bash PNPM |>>
-$ pnpm add -D @cloudflare/vite-plugin wrangler
 <<| bash Bun |>>
 $ bun add -D @cloudflare/vite-plugin wrangler
 ```
@@ -148,15 +148,15 @@ Add the deploy script to your `package.json`:
 Now you can build and deploy your application using:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm run build
+$ pnpm run deploy
 <<| bash Yarn |>>
 $ yarn build
 $ yarn deploy
 <<| bash NPM |>>
 $ npm run build
 $ npm run deploy
-<<| bash PNPM |>>
-$ pnpm run build
-$ pnpm run deploy
 <<| bash Bun |>>
 $ bun run build
 $ bun run deploy
@@ -230,12 +230,12 @@ In this example, we will use [Express](https://expressjs.com/) to create a minim
 First, we need to install the required dependencies to our project:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add express serve-static connect-history-api-fallback
 <<| bash Yarn |>>
 $ yarn add express serve-static connect-history-api-fallback
 <<| bash NPM |>>
 $ npm install --save express serve-static connect-history-api-fallback
-<<| bash PNPM |>>
-$ pnpm add express serve-static connect-history-api-fallback
 <<| bash Bun |>>
 $ bun add express serve-static connect-history-api-fallback
 ```
@@ -331,12 +331,12 @@ Manual copying all your files to your GitHub Pages repository can be a cumbersom
 First, install the package with:
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -D push-dir
 <<| bash Yarn |>>
 $ yarn add --dev push-dir
 <<| bash NPM |>>
 $ npm install --save-dev push-dir
-<<| bash PNPM |>>
-$ pnpm add -D push-dir
 <<| bash Bun |>>
 $ bun add --dev push-dir
 ```

@@ -30,6 +30,12 @@ Notice the `/src-bex/package.json` file in your generated `/src-bex` folder. The
 Installing BEX specific packages:
 
 ```tabs
+<<| bash PNPM |>>
+# run in /src-bex for deps:
+$ pnpm add <deps>
+
+# run in /src-bex for deps used by the build system (eg. @types/chrome)
+$ pnpm add -D <dev-deps>
 <<| bash Yarn |>>
 # run in /src-bex for deps:
 $ yarn add <deps>
@@ -42,12 +48,6 @@ $ npm install --save <deps>
 
 # run in /src-bex for deps used by the build system (eg. @types/chrome)
 $ npm install --save-dev <dev-deps>
-<<| bash PNPM |>>
-# run in /src-bex for deps:
-$ pnpm add <deps>
-
-# run in /src-bex for deps used by the build system (eg. @types/chrome)
-$ pnpm add -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-bex for deps:
 $ bun add <deps>

@@ -30,15 +30,15 @@ You will also be able to use the command line, so it will be almost identical to
   :::
 
 ```tabs
+<<| bash PNPM |>>
+$ pnpm add -g @quasar/cli
+$ pnpm create quasar@latest
 <<| bash Yarn |>>
 $ yarn global add @quasar/cli
 $ yarn create quasar
 <<| bash NPM |>>
 $ npm i -g @quasar/cli
 $ npm init quasar@latest
-<<| bash PNPM |>>
-$ pnpm add -g @quasar/cli
-$ pnpm create quasar@latest
 <<| bash Bun |>>
 $ bun install -g @quasar/cli
 $ bun create quasar@latest
@@ -59,12 +59,12 @@ Pick `App with Quasar CLI`.
 1. Let's create a Quasar app:
 
    ```tabs
+   <<| bash PNPM |>>
+   $ pnpm create quasar@latest
    <<| bash Yarn |>>
    $ yarn create quasar
    <<| bash NPM |>>
    $ npm init quasar@latest
-   <<| bash PNPM |>>
-   $ pnpm create quasar@latest
    <<| bash Bun |>>
    $ bun create quasar@latest
    ```
@@ -84,12 +84,12 @@ Pick `App with Quasar CLI`.
    We strongly recommend to pick the first choice and be able to run commands directly. Actually, you'll be able to do even more than just this (eg. "quasar upgrade" or "quasar serve" commands). For this, you'll need to globally install the `@quasar/cli` package:
 
    ```tabs
+   <<| bash PNPM |>>
+   $ pnpm add -g @quasar/cli
    <<| bash Yarn |>>
    $ yarn global add @quasar/cli
    <<| bash NPM |>>
    $ npm i -g @quasar/cli
-   <<| bash PNPM |>>
-   $ pnpm add -g @quasar/cli
    <<| bash Bun |>>
    $ bun install -g @quasar/cli
    ```

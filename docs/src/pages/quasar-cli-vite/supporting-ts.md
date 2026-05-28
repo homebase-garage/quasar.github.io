@@ -15,12 +15,12 @@ If you selected TypeScript support when creating your project, you can skip this
 ## Installation of TypeScript Support
 
 ```tabs Typescript 7
+<<| bash PNPM |>>
+$ pnpm add -D npm:@typescript/native-preview@beta
 <<| bash Yarn |>>
 $ yarn add --dev npm:@typescript/native-preview@beta
 <<| bash NPM |>>
 $ npm install --save-dev npm:@typescript/native-preview@beta
-<<| bash PNPM |>>
-$ pnpm add -D npm:@typescript/native-preview@beta
 <<| bash Bun |>>
 $ bun add --dev npm:@typescript/native-preview@beta
 ```

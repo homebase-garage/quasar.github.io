@@ -10,15 +10,15 @@ When you add the Electron mode in a Quasar project for the first time you will g
 Before upgrading Electron, please consult its release notes. Are there breaking changes?
 
 ```tabs
+<<| bash PNPM |>>
+# from /src-electron:
+$ pnpm add electron@latest
 <<| bash Yarn |>>
 # from /src-electron:
 $ yarn upgrade electron@latest
 <<| bash NPM |>>
 # from /src-electron:
 $ npm install electron@latest
-<<| bash PNPM |>>
-# from /src-electron:
-$ pnpm add electron@latest
 <<| bash Bun |>>
 # from /src-electron:
 $ bun add electron@latest
