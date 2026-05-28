@@ -26,7 +26,7 @@ You will also be able to use the command line, so it will be almost identical to
 ::: tip Requirements:
 
 - Node.js v22+
-- Yarn v1 (classic), PNPM, NPM or Bun
+- PNPM v11+ (recommended), Yarn v1 classic, NPM or Bun
 
 :::
 
@@ -54,7 +54,7 @@ Pick `App with Quasar CLI`.
 ::: tip Requirements:
 
 - Node.js v22+ for Quasar CLI.
-- Yarn v1 (classic), PNPM, NPM or Bun.
+- PNPM v11+ (recommended), Yarn v1 classic, NPM or Bun.
 
 :::
 
@@ -71,8 +71,6 @@ Pick `App with Quasar CLI`.
    $ bun create quasar@latest
    ```
 
-   <br>
-
    ::: tip
    You may be presented with a confirmation to install the `create-quasar` package, press the enter key to confirm.
    :::
@@ -81,7 +79,7 @@ Pick `App with Quasar CLI`.
 
 3. Answer the rest of the questions and you're almost done.
 
-4. Now, do you want to be able to run Quasar CLI commands directly (eg. `$ quasar dev/build`) or through yarn or npx (`$ yarn quasar dev/build` / `npx quasar dev/build`)?
+4. Now, do you want to be able to run Quasar CLI commands directly (eg. `$ quasar dev/build`) or through your package manager (`$ pnpm quasar dev/build` or `npx quasar dev/build`, etc)?
 
    We strongly recommend to pick the first choice and be able to run commands directly. Actually, you'll be able to do even more than just this (eg. "quasar upgrade" or "quasar serve" commands). For this, you'll need to globally install the `@quasar/cli` package:
 
@@ -139,12 +137,11 @@ However, should you want independence of the globally installed `@quasar/cli` pa
 
 Here are the options:
 
-1. You can write npm scripts (in your `package.json`) to run Quasar commands.
+1. You can write package.json scripts to run Quasar commands.
 
-   Example of adding a few npm scripts into your `package.json`:
+   Example of adding a few package.json scripts:
 
-   ```js
-   // package.json
+   ```js /package.json
    "scripts": {
      "dev": "quasar dev",
      "build": "quasar build",
@@ -152,23 +149,49 @@ Here are the options:
    }
    ```
 
-   The above will allow you to run `$ yarn dev` or `$ yarn build` without the need of a globally installed `@quasar/cli`, should you wish to do so.
+   <br>
 
-2. Alternatively, you can directly run the Quasar CLI commands through Yarn:
+   The above will allow you to run the scripts without the need of a globally installed `@quasar/cli`, should you wish to do so:
 
-   ```bash
-   $ yarn quasar dev
-   $ yarn quasar inspect
+   ```tabs Running scripts
+   <<| bash PNPM |>>
+   $ pnpm run dev
+   $ pnpm run build
+   # ..etc
+   <<| bash Yarn |>>
+   $ yarn run dev
+   $ yarn run build
+   # ..etc
+   <<| bash NPM |>>
+   $ npm run dev
+   $ npm run build
+   # ..etc
+   <<| bash Bun |>>
+   $ bun run dev
+   $ bun run build
    # ..etc
    ```
 
    <br>
 
-3. Or use [npx](https://github.com/npm/npx):
+2. Alternatively, you can directly run the Quasar CLI commands through your package manager:
 
-   ```bash
+   ```tabs
+   <<| bash PNPM |>>
+   $ pnpm quasar dev
+   $ pnpm quasar inspect
+   # ..etc
+   <<| bash Yarn |>>
+   $ yarn quasar dev
+   $ yarn quasar inspect
+   # ..etc
+   <<| bash NPM |>>
    $ npx quasar dev
    $ npx quasar inspect
+   # ..etc
+   <<| bash Bun |>>
+   $ bun quasar dev
+   $ bun quasar inspect
    # ..etc
    ```
 

@@ -13,7 +13,7 @@ RTL is referring to "right to left" UI for languages that need it.
 ### Quasar CLI with Vite
 
 - Edit `/postcss.config.js` file and uncomment the `import rtlcss from 'postcss-rtlcss'` line.
-- Yarn/npm/pnpm/bun install the `postcss-rtlcss` package.
+- PNPM/Yarn/NPM/Bun install the `postcss-rtlcss` package (to `devDependencies`).
 - If you are already running "quasar dev" command, restart it.
 
 ```js [highlight=2,25] /postcss.config.js

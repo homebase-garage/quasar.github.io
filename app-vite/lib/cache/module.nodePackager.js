@@ -231,5 +231,7 @@ export function createInstance({ appPaths }) {
     }
   }
 
-  fatal('Please install Yarn, PNPM, NPM or Bun before running this command.\n')
+  fatal(
+    'Please install PNPM (recommended), Yarn, NPM or Bun before running this command.\n'
+  )
 }
