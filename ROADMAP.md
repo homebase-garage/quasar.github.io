@@ -36,14 +36,12 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 
 - 🚧 (WIP) Gradually add more automated tests to Quasar UI. **We're searching for contributors**, get in touch with the team on our [Discord server](https://chat.quasar.dev/) if you're willing to help!
 
-### Q1 2026
-
-- ✌️ (DONE) Release of `@quasar/app-vite` with Vite 8.
-- ✌️ (DONE) Replace internal build system: esbuild with Rolldown, cssnano with lightningcss, eslint with oxfmt & oxlint.
-
 ### Q2 2026
 
-- Release of a new major version of `@quasar/app-vite` with rolldown replacing esbuild for all Quasar modes compilation threads & further modernize the tooling.
+- Release of a new major version of `@quasar/app-vite` (v3) with rolldown replacing esbuild for all Quasar modes compilation threads & further modernize the tooling.
+- ✌️ (DONE) Release of `@quasar/extras` v2
+- ✌️ (DONE) Release of `@quasar/cli` v5
+- ✌️ (DONE) Release of `@quasar/icongenie` v5
 - Plans for Quasar v3. We will need your input on some of the decisions that we will be taking for the new major version.
 
 ### Q3-Q4 2026
@@ -52,6 +50,11 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 - CLI SSG mode ([#2299](https://github.com/quasarframework/quasar/issues/2299)) ([community support](https://github.com/freddy38510/quasar-app-extension-ssg))
 
 ## Archive
+
+### Q1 2026
+
+- ✌️ (DONE) Release of `@quasar/app-vite` with Vite 8.
+- ✌️ (DONE) Replace internal build system: esbuild with Rolldown, cssnano with lightningcss, eslint with oxfmt & oxlint.
 
 ### Q1-Q4 2025
 
