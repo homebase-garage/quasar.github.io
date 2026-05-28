@@ -28,6 +28,6 @@ console.log(`
 
   --------------
   => IMPORTANT !
-  => ${italic('Trigger this inside of a Quasar project (and npm/yarn/pnpm/bun install) for more commands.')}
+  => ${italic('Trigger this inside of a Quasar project (and pnpm/yarn/npm/bun install) for more commands.')}
   --------------
 `)
