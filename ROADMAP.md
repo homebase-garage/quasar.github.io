@@ -16,15 +16,21 @@ Quasar is saving your company tens of thousands of development hours (quite lite
 
 ## Support policy and schedule
 
-All major releases are typically supported for at least 12 months.
+All major Quasar UI releases are typically supported for at least 12 months.
 LTS support ends 12 months after the release of a new major version.
 
-| Version | Status   | Released   | Active support ends | LTS support ends |
-| ------- | -------- | ---------- | ------------------- | ---------------- |
-| 2.x     | Active   | 2021-06-21 | Not planned yet     | Not planned yet  |
-| 1.x     | Inactive | 2019-03-07 | 2021-04-01          | 2023-06-30       |
-
-Quasar v0.x versions are no longer supported.
+| Packages              | Version | Status         | Released   | Active support ends | LTS support ends |
+| --------------------- | ------- | -------------- | ---------- | ------------------- | ---------------- |
+| Quasar UI (`quasar`)  | v3.x    | Planned        | -          | -                   | -                |
+| Quasar UI (`quasar`)  | v2.x    | Active         | 2021-06-21 | Not planned yet     | Not planned yet  |
+| `@quasar/app-vite`    | v3.x    | In development | -          | -                   | -                |
+| `@quasar/app-vite`    | v2.x    | Active         | 2024-02-08 | Not planned yet     | Not planned yet  |
+| `@quasar/extras`      | v2.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
+| `@quasar/extras`      | v1.x    | Inactive       | 2019-02-22 | 2026-05-28          | 2026-12-31       |
+| `@quasar/vite-plugin` | v1.x    | Active         | 2021-10-25 | Not planned yet     | Not planned yet  |
+| `@quasar/cli`         | v5.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
+| `@quasar/icongenie`   | v5.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
+| `@quasar/app-webpack` | v4.x    | Deprecated     | 2024-02-08 | 2026-12-31          | 2026-05-08       |
 
 ## Major milestones
 
@@ -38,7 +44,7 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 
 ### Q2 2026
 
-- Release of a new major version of `@quasar/app-vite` (v3) with rolldown replacing esbuild for all Quasar modes compilation threads & further modernize the tooling.
+- Release of a new major version of `@quasar/app-vite` (v3): [Announcement](https://github.com/quasarframework/quasar/discussions/18295)
 - ✌️ (DONE) Release of `@quasar/extras` v2
 - ✌️ (DONE) Release of `@quasar/cli` v5
 - ✌️ (DONE) Release of `@quasar/icongenie` v5
@@ -58,34 +64,34 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 
 ### Q1-Q4 2025
 
-- CLI Auto-routing -- our efforts are superseeded by Vue Router v5 having this out of the box
+- 🚫 (CANCELLED 😢) CLI Auto-routing -- our efforts are superseeded by Vue Router v5 having this out of the box
 
 ### Q2-Q4 2024
 
-- Release of the new major version of `@quasar/app-vite`
-- Release of the new major version of `@quasar/app-webpack`
-- Rewrite Quasar UI automation testing (switching to vitest included)
-- Rewrite internal build system for Quasar UI itself (q/app work included)
+- ✌️ (DONE) Release of the new major version of `@quasar/app-vite`
+- ✌️ (DONE) Release of the new major version of `@quasar/app-webpack`
+- ✌️ (DONE) Rewrite Quasar UI automation testing (switching to vitest included)
+- ✌️ (DONE) Rewrite internal build system for Quasar UI itself (q/app work included)
 
 ### Q1 2024
 
-- New `@quasar/app-vite` major version -- beta release
-- New `@quasar/app-webpack` major version -- beta release
+- ✌️ (DONE) New `@quasar/app-vite` major version -- beta release
+- ✌️ (DONE) New `@quasar/app-webpack` major version -- beta release
 
 ### Q2-4 2023
 
-- Support Capacitor 4 and related bugfixes ([#14226](https://github.com/quasarframework/quasar/pull/14226))
-- Add Quasar entry in [Vite ecosystem CI](https://github.com/vitejs/vite-ecosystem-ci)
+- ✌️ (DONE) Support Capacitor 4 and related bugfixes ([#14226](https://github.com/quasarframework/quasar/pull/14226))
+- ✌️ (DONE) Add Quasar entry in [Vite ecosystem CI](https://github.com/vitejs/vite-ecosystem-ci)
 - June 30th 2023 marks the end of life for Quasar v1. It will no longer receive updates. (postponed for the second time, previously reported EOL was 31th of December 2022)
 
 ### Q1 2023
 
-- Release new Quasar website
-- Porting Quasar packages to ESM
-- Support Vite 3 and 4 in `@quasar/app-vite` ([#14077](https://github.com/quasarframework/quasar/issues/14077)) (already supported via [workaround](https://github.com/quasarframework/quasar/issues/14077#issuecomment-1353213893))
-- Publish official Quasar Organizational chart
-- More triaging automation ([quasarframework/rfcs#10](https://github.com/quasarframework/rfcs/issues/10))
-- Website update community survey
+- ✌️ (DONE) Release new Quasar website
+- ✌️ (DONE) Porting Quasar packages to ESM
+- ✌️ (DONE) Support Vite 3 and 4 in `@quasar/app-vite` ([#14077](https://github.com/quasarframework/quasar/issues/14077)) (already supported via [workaround](https://github.com/quasarframework/quasar/issues/14077#issuecomment-1353213893))
+- ✌️ (DONE) Publish official Quasar Organizational chart
+- ✌️ (DONE) More triaging automation ([quasarframework/rfcs#10](https://github.com/quasarframework/rfcs/issues/10))
+- ✌️ (DONE) Website update community survey
 
 ### Q4 2022
 

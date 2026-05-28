@@ -5,6 +5,11 @@ export const sponsors = {
   gold: [],
   silver: [
     {
+      src: 'Dreamonkey.svg',
+      name: 'Dreamonkey Srl',
+      href: 'https://dreamonkey.com/'
+    },
+    {
       src: 'Qintil.svg',
       name: 'Qintil Technology Ltd',
       href: 'https://qintil.com/'

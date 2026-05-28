@@ -4,7 +4,7 @@
 
 > Build high-performance VueJS user interfaces in record time: responsive Single Page Apps, SSR Apps, PWAs, Browser extensions, Hybrid Mobile Apps and Electron Apps. If you want, all using the same codebase!
 
-<img src="https://img.shields.io/npm/v/quasar?label=quasar"> <img src="https://img.shields.io/npm/v/%40quasar/app-vite?label=@quasar/app-vite"> <img src="https://img.shields.io/npm/v/%40quasar/cli?label=@quasar/cli"> <img src="https://img.shields.io/npm/v/%40quasar/extras.svg?label=@quasar/extras"> <img src="https://img.shields.io/npm/v/%40quasar/icongenie.svg?label=@quasar/icongenie"> <img src="https://img.shields.io/npm/v/%40quasar/vite-plugin.svg?label=@quasar/vite-plugin">
+<img src="https://img.shields.io/npm/v/quasar?label=quasar"> <img src="https://img.shields.io/npm/v/%40quasar/app-vite?label=@quasar/app-vite"> <img src="https://img.shields.io/npm/v/%40quasar/extras.svg?label=@quasar/extras"> <img src="https://img.shields.io/npm/v/%40quasar/vite-plugin.svg?label=@quasar/vite-plugin"> <img src="https://img.shields.io/npm/v/%40quasar/cli?label=@quasar/cli"> <img src="https://img.shields.io/npm/v/%40quasar/icongenie.svg?label=@quasar/icongenie">
 
 [![Join the chat at https://chat.quasar.dev](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://chat.quasar.dev)
 <a href="https://forum.quasar.dev" target="_blank"><img src="https://img.shields.io/badge/community-forum-brightgreen.svg"></a>
@@ -16,9 +16,9 @@ Please submit a PR to https://github.com/quasarframework/quasar-awesome with you
 
 ## Supporting Quasar
 
-Quasar Framework is an MIT-licensed open source project. Its ongoing development is made possible thanks to the support by these awesome [backers](https://github.com/rstoenescu/quasar-framework/blob/dev/backers.md).
+Quasar Framework is an MIT-licensed open source project. Its ongoing development is made possible thanks to the support by our awesome sponsors and backers.
 
-**Please read our manifest on [Why donations are important](https://quasar.dev/why-donate)**. If you'd like to become a donator, check out [Quasar Framework's Donator campaign](https://donate.quasar.dev).
+Please consider supporting our efforts, too! If you use Quasar at work, drop a message to your management about sponsoring us at https://donate.quasar.dev/. Please also read [why donations are important](https://quasar.dev/why-donate).
 
 ### Proudly sponsored by:
 
@@ -26,24 +26,15 @@ Quasar Framework is an MIT-licensed open source project. Its ongoing development
   <tbody>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://dreamonkey.com/" target="_blank">
-          <img width="200px" height="100px" src="https://cdn.quasar.dev/logo-sponsors-v2/light/Dreamonkey.svg">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.hapag-lloyd.com/en/landingpage/quasar.html" target="_blank">
-          <img width="200px" height="100px" src="https://cdn.quasar.dev/logo-sponsors-v2/light/HapagLloyd.svg">
-        </a>
-      </td>
-    </tr>
-    <tr></tr>
-    <tr>
-      <td align="center" valign="middle">
         <a href="https://irewind.com" target="_blank">
           <img width="200px" height="100px" src="https://cdn.quasar.dev/logo-sponsors-v2/light/iRewind.svg">
         </a>
       </td>
-      <td>&nbsp;</td>
+      <td align="center" valign="middle">
+        <a href="https://dreamonkey.com/" target="_blank">
+          <img width="200px" height="100px" src="https://cdn.quasar.dev/logo-sponsors-v2/light/Dreamonkey.svg">
+        </a>
+      </td>
     </tr>
     <tr></tr>
     <tr>
