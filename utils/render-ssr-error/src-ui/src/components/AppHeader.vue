@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import data from 'src/assets/data.js'
+import data from '@/assets/data.js'
 </script>
 
 <style lang="sass">

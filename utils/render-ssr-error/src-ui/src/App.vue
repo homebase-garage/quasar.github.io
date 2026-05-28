@@ -10,10 +10,10 @@
 </template>
 
 <script setup>
-import AppHeader from 'src/components/AppHeader.vue'
-import AppStack from 'src/components/AppStack.vue'
-import AppCode from 'src/components/AppCode.vue'
-import AppEnvironment from 'src/components/AppEnvironment.vue'
+import AppHeader from '@/components/AppHeader.vue'
+import AppStack from '@/components/AppStack.vue'
+import AppCode from '@/components/AppCode.vue'
+import AppEnvironment from '@/components/AppEnvironment.vue'
 </script>
 
 <style lang="sass">

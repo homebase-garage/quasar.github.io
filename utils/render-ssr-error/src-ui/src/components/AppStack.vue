@@ -40,8 +40,8 @@
 <script setup>
 import { computed } from 'vue'
 
-import data from 'src/assets/data.js'
-import store from 'src/assets/store.js'
+import data from '@/assets/data.js'
+import store from '@/assets/store.js'
 
 const stackMeta = computed(() =>
   data.stack.map((_, index) => ({

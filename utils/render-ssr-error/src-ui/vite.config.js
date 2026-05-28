@@ -15,7 +15,7 @@ export default defineConfig(() => ({
     }),
 
     quasar({
-      sassVariables: 'src/quasar.variables.sass',
+      sassVariables: '@/quasar.variables.sass',
       autoImportComponentCase: 'pascal'
     }),
 
@@ -24,7 +24,7 @@ export default defineConfig(() => ({
 
   resolve: {
     alias: {
-      src: resolve('src')
+      '@': resolve('src')
     }
   },
 

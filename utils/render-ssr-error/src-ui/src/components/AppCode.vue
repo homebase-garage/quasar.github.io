@@ -28,8 +28,8 @@
 import Prism from 'prismjs'
 import { computed } from 'vue'
 
-import data from 'src/assets/data.js'
-import store from 'src/assets/store.js'
+import data from '@/assets/data.js'
+import store from '@/assets/store.js'
 
 // Protocols expect absolute paths, with forward slashes even on Windows
 const toAbsolutePath = path =>

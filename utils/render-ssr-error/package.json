@@ -1,6 +1,6 @@
 {
   "name": "@quasar/render-ssr-error",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Renders SSR errors for Quasar CLI",
   "homepage": "https://quasar.dev",
   "bugs": "https://github.com/quasarframework/quasar/issues",
@@ -28,7 +28,8 @@
     "dev": "cd src-ui && vite",
     "build": "pnpm build:ui && pnpm build:package",
     "build:ui": "cd src-ui && vite build",
-    "build:package": "node ./build/index.js"
+    "build:package": "node ./build/index.js",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "stack-trace": "^1.0.0"
