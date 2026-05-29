@@ -15,13 +15,11 @@ export async function createQuasarScript({ scope, utils }) {
         placeholder: 'eg. "my-ext", "@my-org/my-ext"',
         validate: val => {
           if (!val) return `ext-id is required!`
-          if (!utils.isValidPackageName(val)) {
+          if (!utils.definitions.name.isValid(val)) {
             return 'Invalid App Extension name'
           }
         }
       }),
-
-    author: utils.commonPrompts.author,
 
     preset: () =>
       utils.prompts.groupMultiselect({
@@ -88,5 +86,6 @@ export async function createQuasarScript({ scope, utils }) {
 
   log.success('App Extension scaffolded successfully!')
 
-  scope.meta.packageManagersList = ['pnpm']
+  // override with the only allowed package manager for AE
+  scope.packageManagerList = ['pnpm']
 }

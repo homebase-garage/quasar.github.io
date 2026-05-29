@@ -21,22 +21,21 @@ export async function createProject({
   process.env.SKIP_YARN_COREPACK_CHECK = "1";
 
   const scope = {
-    nogit: false,
-    projectType: "app",
+    template: "app",
     projectFolder: join(process.cwd(), "test-project"),
     projectFolderName: "test-project",
     overwrite: true,
-    packageManager,
+    install: packageManager,
 
     preset:
       scriptType === "ts"
         ? ["typescript", "sass", "linting"]
         : ["sass", "linting"],
     linter: appEngine === "vite-3" ? "oxlint" : "eslint",
-    engine: appEngine,
+    type: appEngine,
 
     name: "test-project",
-    productName: "Test Project",
+    product: "Test Project",
     author: "Quasar Team (info@quasar.dev)"
   };
 

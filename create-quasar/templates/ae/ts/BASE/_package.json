@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "description": "A Quasar App Extension Project",
+  <% if (scope.author) { %>
   "author": "<%= scope.author %>",
+  <% } %>
   "type": "module",
   "scripts": {
 <% if (scope.linter === 'oxlint') { %>

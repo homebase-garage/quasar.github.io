@@ -1,10 +1,9 @@
 export async function createQuasarScript({ scope, utils }) {
-  const packageName = utils.inferPackageName(scope.projectFolderName)
   await utils.promptUser(scope, {
-    engine: () =>
+    type: () =>
       utils.prompts.select({
         message: 'Pick Quasar App CLI variant:',
-        initialValue: 'vite-3',
+        initialValue: utils.definitions.type.default,
         options: [
           {
             label: '@quasar/app-vite v3 beta (recommended)',
@@ -23,22 +22,34 @@ export async function createQuasarScript({ scope, utils }) {
         ]
       }),
 
-    name: () =>
-      utils.prompts.text({
-        message: 'Package name:',
-        placeholder: packageName,
-        defaultValue: packageName,
-        validate: val => {
-          if (!utils.isValidPackageName(val)) return 'Invalid package.json name'
-        }
-      }),
+    name: () => {
+      const defaultName = utils.definitions.name.default(
+        scope.projectFolderName
+      )
 
-    productName: utils.commonPrompts.productName,
-    author: utils.commonPrompts.author
+      return utils.prompts.text({
+        message: 'Package name:',
+        placeholder: defaultName,
+        defaultValue: defaultName,
+        validate: val => {
+          if (!utils.definitions.name.isValid(val)) {
+            return 'Invalid package.json name'
+          }
+        }
+      })
+    },
+
+    product: () =>
+      utils.prompts.text({
+        message:
+          'Project product name: (must start with letter if building mobile apps)',
+        placeholder: utils.definitions.product.default,
+        defaultValue: utils.definitions.product.default
+      })
   })
 
   const { createQuasarScript: create } = await import(
-    `./${scope.engine}/create-quasar-script.js`
+    `./${scope.type}/create-quasar-script.js`
   )
   await create({ scope, utils })
 

@@ -14,24 +14,22 @@ export async function createProjectFolder(scope) {
     hasInstalledDeps: false,
     installDepsCmd: null,
     lintCmd: null,
-    runDevCmd: null,
-    packageManagersList: utils.runningPackageManager
-      ? [utils.runningPackageManager.name]
-      : ['pnpm', 'yarn', 'npm', 'bun']
+    runDevCmd: null
   }
 
   utils.prompts.intro('New Quasar Project')
 
-  const isPnpm =
-    // invoked directly, not through a package manager
-    !utils.runningPackageManager ||
-    // only available for pnpm
-    utils.runningPackageManager.name === 'pnpm'
-
   await utils.promptUser(scope, {
-    projectType: () =>
-      utils.prompts.select({
-        initialValue: 'app',
+    template: () => {
+      const isPnpm =
+        scope.install === 'pnpm' ||
+        // invoked directly, not through a package manager's "create" command
+        !process.env.npm_config_user_agent ||
+        // invoked through "pnpm create quasar@latest"
+        process.env.npm_config_user_agent === 'pnpm'
+
+      return utils.prompts.select({
+        initialValue: utils.definitions.template.default,
         message: 'What would you like to build?',
         options: [
           {
@@ -47,13 +45,14 @@ export async function createProjectFolder(scope) {
             disabled: !isPnpm
           }
         ]
-      }),
+      })
+    },
 
     projectFolder: async () => {
       const val = await utils.prompts.text({
         message: 'Project folder:',
-        placeholder: 'quasar-project',
-        defaultValue: 'quasar-project'
+        placeholder: utils.definitions.projectFolder.default,
+        defaultValue: utils.definitions.projectFolder.default
       })
 
       utils.exitOnCancel(val)
@@ -86,16 +85,16 @@ export async function createProjectFolder(scope) {
   }
 
   const { createQuasarScript } = await import(
-    `./templates/${scope.projectType}/create-quasar-script.js`
+    `./templates/${scope.template}/create-quasar-script.js`
   )
   await createQuasarScript({ scope, utils })
 
   await utils.promptUser(scope, {
-    packageManager: () =>
+    install: () =>
       utils.prompts.select({
         message: 'Install project dependencies? (recommended)',
         options: [
-          ...scope.meta.packageManagersList.map(pm => ({
+          ...scope.packageManagerList.map(pm => ({
             label: `Yes, use ${pm.toUpperCase()}`,
             value: pm,
             hint: pm === 'pnpm' || pm === 'yarn' ? 'recommended' : void 0
@@ -105,7 +104,7 @@ export async function createProjectFolder(scope) {
       })
   })
 
-  if (scope.packageManager !== false) {
+  if (scope.install !== false) {
     const hasInstalled = await utils.installDeps(scope)
     if (hasInstalled) {
       scope.meta.hasInstalledDeps = true
@@ -116,21 +115,18 @@ export async function createProjectFolder(scope) {
     }
   }
 
-  const pkgManager = scope.packageManager || scope.meta.packageManagersList[0]
+  const pkgManager = scope.install || scope.packageManagerList[0]
   if (!scope.meta.hasInstalledDeps) {
     scope.meta.installDepsCmd = `${pkgManager} install`
 
     if (scope.preset.linting) {
-      scope.meta.lintCmd =
-        `${pkgManager} run lint` +
-        // legacy eslint:
-        (scope.preset.eslint ? ' --fix' : '')
+      scope.meta.lintCmd = `${pkgManager} run lint`
     }
   }
 
-  if (scope.nogit) {
+  if (scope['no-git']) {
     utils.prompts.log.info(
-      'Skipping git initialization as --nogit flag was provided'
+      'Skipping git initialization as --no-git flag was provided'
     )
   } else {
     utils.initializeGit(scope.projectFolder)

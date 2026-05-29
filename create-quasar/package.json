@@ -1,7 +1,7 @@
 {
   "name": "create-quasar",
-  "version": "3.0.0",
-  "description": "Scaffolds Quasar Apps, AppExtensions or UI kits",
+  "version": "4.0.0",
+  "description": "Scaffolds Quasar Apps & App Extensions",
   "homepage": "https://quasar.dev",
   "bugs": "https://github.com/quasarframework/quasar/issues",
   "license": "MIT",

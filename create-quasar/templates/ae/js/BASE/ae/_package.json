@@ -2,7 +2,9 @@
   "name": "<%= scope.aeFullName %>",
   "version": "0.0.1",
   "description": "A Quasar App Extension",
+  <% if (scope.author) { %>
   "author": "<%= scope.author %>",
+  <% } %>
   "license": "MIT",
   "type": "module",
   "main": "src/index.js",

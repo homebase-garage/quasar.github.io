@@ -89,7 +89,7 @@ async function promptUser(
 ) {
   for (const key in questions) {
     // if it came pre-filled
-    if (scope[key]) continue
+    if (scope[key] !== void 0) continue
 
     scope[key] = await questions[key]()
     if (isCancel(scope[key])) {
@@ -111,14 +111,6 @@ function convertArrayToObject(arr) {
   })
   return acc
 }
-
-const runningPackageManager = (() => {
-  const userAgent = process.env.npm_config_user_agent
-  if (!userAgent) return
-
-  const [name, version] = userAgent.split(' ')[0].split('/')
-  return { name, version }
-})()
 
 function getCallerPath() {
   const _prepareStackTrace = Error.prepareStackTrace
@@ -165,36 +157,6 @@ function renderTemplate(relativePath, scope) {
       copySync(sourcePath, targetPath)
     }
   }
-}
-
-function isValidPackageName(projectName) {
-  return /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(
-    projectName
-  )
-}
-
-function inferPackageName(projectFolder) {
-  return projectFolder
-    .trim()
-    .toLowerCase()
-    .replaceAll(/\s+/g, '-')
-    .replace(/^[._]/, '')
-    .replaceAll(/[^a-z0-9-~]+/g, '-')
-}
-
-function getGitUser() {
-  let name
-  let email
-
-  try {
-    name = exec('git config --get user.name')
-    email = exec('git config --get user.email')
-  } catch {}
-
-  return (
-    (name ? JSON.stringify(name.toString().trim()).slice(1, -1) : '') +
-    (email ? ' <' + email.toString().trim() + '>' : '')
-  )
 }
 
 function waitForKey() {
@@ -294,17 +256,17 @@ async function runCommand({
 
 async function installDeps(scope) {
   const hadError = await runCommand({
-    cmd: scope.packageManager,
+    cmd: scope.install,
     args: ['install'],
     cwd: scope.projectFolder,
-    message: `Installing dependencies using ${scope.packageManager.toUpperCase()}...`,
+    message: `Installing dependencies using ${scope.install.toUpperCase()}...`,
     successMessage: 'Dependencies installed successfully!',
     errorMessage:
       'Could not auto install dependencies. Probably a temporary npm registry issue?'
   })
 
   if (hadError) {
-    scope.packageManager = false
+    scope.install = false
     return false
   }
 
@@ -312,9 +274,10 @@ async function installDeps(scope) {
 }
 
 // returns a Promise!
+// depends on install
 function lintFolder(scope) {
   return runCommand({
-    cmd: scope.packageManager,
+    cmd: scope.install,
     args: ['run', 'lint'],
     cwd: scope.projectFolder,
     message: 'Linting & Formatting the project folder...',
@@ -386,6 +349,25 @@ function initializeGit(projectFolder) {
   logTask.success('Initialized Git repository 🚀')
 }
 
+async function getGitUser() {
+  let name
+  let email
+
+  const { execSync } = await import('node:child_process')
+
+  try {
+    name = execSync('git config --get user.name')
+    email = execSync('git config --get user.email')
+  } catch {}
+
+  if (!name && !email) return // user will be prompted
+
+  return (
+    (name ? JSON.stringify(name.toString().trim()).slice(1, -1) : '') +
+    (email ? ' <' + email.toString().trim() + '>' : '')
+  )
+}
+
 const quasarConfigFilenameList = [
   'quasar.config.js',
   'quasar.config.mjs',
@@ -413,24 +395,34 @@ function ensureOutsideProject() {
   }
 }
 
-// to be used with promptUser() only
-const commonPrompts = {
-  productName: () =>
-    text({
-      message:
-        'Project product name: (must start with letter if building mobile apps)',
-      placeholder: 'Quasar App',
-      defaultValue: 'Quasar App'
-    }),
+const definitions = {
+  projectFolder: {
+    default: 'quasar-project'
+  },
 
-  author: () => {
-    const author = getGitUser()
-    if (author) return author
+  name: {
+    default: projectFolderName =>
+      projectFolderName
+        .trim()
+        .toLowerCase()
+        .replaceAll(/\s+/g, '-')
+        .replace(/^[._]/, '')
+        .replaceAll(/[^a-z0-9-~]+/g, '-'),
 
-    return () =>
-      text({
-        message: 'Author:'
-      })
+    isValid: name =>
+      /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
+  },
+
+  product: {
+    default: 'Quasar App'
+  },
+
+  template: {
+    default: 'app'
+  },
+
+  type: {
+    default: 'vite-3'
   }
 }
 
@@ -440,18 +432,15 @@ export default {
 
   promptUser,
   prompts,
+  definitions,
   convertArrayToObject,
 
   createTargetDir,
-  runningPackageManager,
   renderTemplate,
-  isValidPackageName,
-  inferPackageName,
 
   installDeps,
   lintFolder,
   ensureOutsideProject,
   initializeGit,
-
-  commonPrompts
+  getGitUser
 }

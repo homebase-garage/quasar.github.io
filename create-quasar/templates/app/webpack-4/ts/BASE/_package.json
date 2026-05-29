@@ -2,8 +2,10 @@
   "name": "<%= scope.name %>",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "<%= scope.productName %>",
+  "productName": "<%= scope.product %>",
+  <% if (scope.author) { %>
   "author": "<%= scope.author %>",
+  <% } %>
   "private": true,
   "type": "module",
   "scripts": {

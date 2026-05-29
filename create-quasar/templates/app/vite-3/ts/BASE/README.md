@@ -1,4 +1,4 @@
-# <%= scope.productName %> (<%= scope.name %>)
+# <%= scope.product %> (<%= scope.name %>)
 
 ## Install the dependencies
 
