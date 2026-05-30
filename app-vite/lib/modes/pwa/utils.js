@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { merge } from 'webpack-merge'
 
 import { aeLog, progress } from '../../utils/logger.js'
 

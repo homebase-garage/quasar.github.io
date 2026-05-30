@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { writeFileSync } from 'node:fs'
 import { stringifyJSON } from 'confbox'
+import { merge } from 'webpack-merge'
 
 import { aeLog } from '../../utils/logger.js'
 import { AppBuilder } from '../../app-builder.js'
