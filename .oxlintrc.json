@@ -169,7 +169,10 @@
     "unicorn/no-array-callback-reference": "off",
     "unicorn/prefer-query-selector": "off",
     "require-unicode-regexp": "off",
-    "unicorn/no-negated-condition": "off"
+    "unicorn/no-negated-condition": "off",
+
+    /** Nursery rule overrides */
+    "no-undef": "error"
   },
 
   "overrides": [
@@ -195,18 +198,69 @@
     },
 
     {
-      "files": ["ui/src/**"],
+      "files": ["ui/src/**", "ui/playground/**"],
+      "env": { "browser": true, "vue": true },
       "globals": {
         "__QUASAR_VERSION__": "readonly",
         "__QUASAR_SSR__": "readonly",
         "__QUASAR_SSR_SERVER__": "readonly",
         "__QUASAR_SSR_CLIENT__": "readonly",
-        "__QUASAR_SSR_PWA__": "readonly"
+        "__QUASAR_SSR_PWA__": "readonly",
+        "cordova": "readonly",
+        "process": "readonly",
+        "global": "readonly"
       }
     },
 
     {
-      "files": ["**/*.test.js"],
+      "files": [
+        "vite-plugin/playground/**",
+        "docs/src/**",
+        "app-vite/playground-ts/**",
+        "app-vite/playground-js/**"
+      ],
+      "env": { "browser": true, "vue": true },
+      "globals": {
+        "process": "readonly",
+        "gtag": "readonly"
+      }
+    },
+
+    {
+      "files": [
+        "ui/build/**",
+        "utils/**",
+        "vite-plugin/src/**",
+        "vite-plugin/build/**",
+        "docs/build/**",
+        "docs/src-ssr/**"
+      ],
+      "env": { "node": true }
+    },
+
+    {
+      "files": ["ui/testing/**", "vite-plugin/testing/**"],
+      "env": { "node": true, "browser": true }
+    },
+
+    {
+      "files": ["ui/wrappers/**"],
+      "env": { "commonjs": true, "node": true }
+    },
+
+    {
+      "files": ["app-vite/exports/bex/**"],
+      "env": { "browser": true, "webextensions": true, "serviceworker": true }
+    },
+
+    {
+      "files": ["docs/src-pwa/**"],
+      "env": { "browser": true, "serviceworker": true }
+    },
+
+    {
+      "files": ["**/*.{test,spec}.{js,ts,vue}"],
+      "env": { "vitest": true },
       "rules": {
         "unicorn/consistent-function-scoping": "off"
       }
