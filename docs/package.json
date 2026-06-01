@@ -18,8 +18,8 @@
     "@quasar/extras": "^2.0.0",
     "prismjs": "^1.29.0",
     "quasar": "^2.19.3",
-    "vue": "^3.5.34",
-    "vue-router": "^5.0.4"
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
     "@quasar/app-vite": "^3.0.0-beta.35",
@@ -28,7 +28,7 @@
     "markdown-ast": "^0.3.0",
     "markdown-it": "^14.2.0",
     "markdown-it-container": "^4.0.0",
-    "tinyglobby": "^0.2.10",
+    "tinyglobby": "^0.2.17",
     "toml": "^4.1.1",
     "workbox-build": "^7.4.1"
   },

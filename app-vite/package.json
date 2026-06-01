@@ -96,7 +96,7 @@
     "build:ts": "pnpm --filter app-vite-playground-ts build"
   },
   "dependencies": {
-    "@clack/prompts": "^1.4.0",
+    "@clack/prompts": "^1.5.0",
     "@quasar/art": "workspace:^",
     "@quasar/render-ssr-error": "workspace:^",
     "@quasar/ssl-certificate": "workspace:^",
@@ -117,12 +117,12 @@
     "kolorist": "^1.8.0",
     "mlly": "^1.8.2",
     "open": "^11.0.0",
-    "rolldown": "^1.0.2",
+    "rolldown": "^1.0.3",
     "sass-embedded": "^1.100.0",
     "semver": "^7.8.1",
     "serialize-javascript": "^7.0.5",
     "serve-static": "^2.2.1",
-    "tinyglobby": "^0.2.16",
+    "tinyglobby": "^0.2.17",
     "ts-essentials": "^10.2.0",
     "vite": "^8.0.14",
     "webpack-merge": "^6.0.1"
@@ -131,8 +131,8 @@
     "@quasar/extras": "workspace:*",
     "pinia": "^3.0.4",
     "quasar": "workspace:^",
-    "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue": "^3.5.35",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "@electron/packager": ">= 19",
