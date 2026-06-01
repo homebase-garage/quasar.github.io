@@ -83,16 +83,12 @@ jobs:
 
         exclude:
           - linter: oxlint
-            template: app
             engine: vite-2
           - linter: oxlint
-            template: app
             engine: webpack-4
           - fbr: true
-            template: app
             engine: vite-2
           - fbr: true
-            template: app
             engine: webpack-4
 
     name: Test ${{ matrix.install }}-app-${{ matrix.script }}${{ matrix.engine && format('-{0}', matrix.engine) || '' }}-${{ matrix.linter }}${{ matrix.fbr == true && '-fbr' || '' }}${{ matrix.allPresets == true && '-allPresets' || '' }}
@@ -249,7 +245,7 @@ jobs:
           key: pnpm-cache-ae-${{ matrix.script }}
 
       - name: Create the test project
-        run: node bin/create-quasar.js test-project --ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset oxlint${{ matrix.allPresets == true && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
+        run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset oxlint${{ matrix.allPresets == true && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project
