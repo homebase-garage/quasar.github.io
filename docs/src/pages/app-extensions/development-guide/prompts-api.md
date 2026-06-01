@@ -132,7 +132,7 @@ const finish = api.logger.progress({
 // ...later
 finish() // prints the DONE line with elapsed time
 
-api.logger.dot // the bullet character used in the formatted output
+api.logger.dot // the bullet character the helpers print
 ```
 
 ### api.hasTypescript

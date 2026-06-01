@@ -124,6 +124,40 @@ export default defineConfig((ctx) => {
 
 The possibilities are endless.
 
+### Logging via ctx
+
+The `ctx` object has a logger that prints in the same style as the Quasar CLI itself:
+
+```js /quasar.config file
+import { defineConfig } from '#q-app'
+
+export default defineConfig(ctx => {
+  ctx.logger.log('hello') // green-bannered line
+  ctx.logger.warn('careful') // yellow-bannered warning
+  ctx.logger.fatal('boom') // red-bannered error; exits with code 1
+  ctx.logger.tip('try foo') // TIP-pilled tip line
+  ctx.logger.info('synced') // INFO-pilled line
+  ctx.logger.info('synced', 'SYNC') // custom pill text instead of INFO
+  ctx.logger.success('built')
+  ctx.logger.error('oh no')
+  ctx.logger.warning('hmm')
+
+  const finish = ctx.logger.progress({
+    tool: 'fetch',
+    waitAction: 'reading',
+    doneAction: 'read'
+  })
+  // ...later
+  finish() // prints the DONE line with elapsed time
+
+  ctx.logger.dot // the bullet character the helpers print
+
+  return {
+    // ...
+  }
+})
+```
+
 ### IDE autocompletion
 
 Notice the `defineConfig` import from `#q-app`. This is essentially a no-op function but what it does is it helps with the IDE autocomplete experience. Every option you set is type-checked, every value gets completion, and hovering a key reveals its JSDoc.

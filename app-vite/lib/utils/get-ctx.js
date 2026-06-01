@@ -1,7 +1,32 @@
 import { getAppPaths } from './get-app-paths.js'
 import { getPkg } from './get-pkg.js'
+import {
+  dot,
+  error,
+  fatal,
+  info,
+  log,
+  progress,
+  success,
+  tip,
+  warn,
+  warning
+} from './logger.js'
 import { createCacheProxy } from '../cache/create-cache-proxy.js'
 import { createAppExt } from '../app-extension/create-app-ext.js'
+
+const publicLogger = Object.freeze({
+  dot,
+  log,
+  warn,
+  fatal,
+  info,
+  success,
+  error,
+  warning,
+  tip,
+  progress
+})
 
 function defineHiddenProp(target, propName, value) {
   Object.defineProperty(target, propName, {
@@ -55,6 +80,8 @@ export function getCtx(opts = {}) {
     ctx,
     defineHiddenProp
   })
+
+  ctx.logger = publicLogger
 
   defineHiddenProp(ctx, 'pkg', getPkg(ctx.appPaths))
   defineHiddenProp(ctx, 'cacheProxy', createCacheProxy(ctx))

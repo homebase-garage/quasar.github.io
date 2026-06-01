@@ -1,4 +1,5 @@
 import { QuasarAppPaths } from "../app-paths";
+import { QuasarLogger } from "../logger";
 import * as ElectronBuilder from "electron-builder";
 import { QuasarCapacitorTargets } from "./capacitor-conf";
 import {
@@ -36,6 +37,11 @@ interface BaseQuasarContext {
    * @type paths {@link QuasarAppPaths}
    */
   readonly appPaths: QuasarAppPaths;
+  /**
+   * Logging helpers matching the Quasar CLI output style.
+   * @type logger {@link QuasarLogger}
+   */
+  readonly logger: QuasarLogger;
 }
 
 interface CapacitorQuasarContext extends BaseQuasarContext {
