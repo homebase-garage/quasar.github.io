@@ -161,7 +161,7 @@ jobs:
             npm-cache-
 
       - name: Create the test project
-        run: node bin/create-quasar.js test-project --template ${{ matrix.template }}${{ matrix.engine && format('--engine {0}', matrix.engine) || '' }} --install ${{ matrix.install }}${{ matrix.script === 'ts' && ' --preset typescript' || '' }} --preset ${{ matrix.linter }}${{ matrix.filenameBasedRouting == true && ' --preset filenameBasedRouting' || '' }}${{ matrix.allPresets == true && ' --preset sass --preset i18n --preset pinia' || matrix.template === 'ae' && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
+        run: node bin/create-quasar.js test-project --template ${{ matrix.template }}${{ matrix.engine && format('--engine {0}', matrix.engine) || '' }} --install ${{ matrix.install }}${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset ${{ matrix.linter }}${{ matrix.filenameBasedRouting == true && ' --preset filenameBasedRouting' || '' }}${{ matrix.allPresets == true && ' --preset sass --preset i18n --preset pinia' || matrix.template == 'ae' && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project
