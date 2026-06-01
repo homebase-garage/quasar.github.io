@@ -20,7 +20,7 @@ export async function createQuasarScript({ scope, utils }) {
           },
           {
             label: 'Vue Router filename-based routing',
-            value: 'filenameBasedRouting',
+            value: 'fbr',
             hint: 'https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing'
           },
           {
@@ -86,9 +86,7 @@ export async function createQuasarScript({ scope, utils }) {
   }
 
   utils.renderTemplate(
-    scope.preset.filenameBasedRouting
-      ? `${dir}/filenameBasedRouting`
-      : `${dir}/manualRouting`,
+    scope.preset.fbr ? `${dir}/filenameBasedRouting` : `${dir}/manualRouting`,
     scope
   )
 

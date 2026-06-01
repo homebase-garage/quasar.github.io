@@ -158,7 +158,7 @@ jobs:
             npm-cache-app-
 
       - name: Create the test project
-        run: node bin/create-quasar.js test-project --template app${{ matrix.engine && format(' --engine {0}', matrix.engine) || '' }} --install ${{ matrix.install }}${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset ${{ matrix.linter }}${{ matrix.fbr == true && ' --preset filenameBasedRouting' || '' }}${{ matrix.allPresets == true && ' --preset sass --preset i18n --preset pinia' || '' }} --defaults
+        run: node bin/create-quasar.js test-project --template app${{ matrix.engine && format(' --engine {0}', matrix.engine) || '' }} --install ${{ matrix.install }}${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset ${{ matrix.linter }}${{ matrix.fbr == true && ' --preset fbr' || '' }}${{ matrix.allPresets == true && ' --preset fbr --preset sass --preset i18n --preset pinia' || '' }} --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project

@@ -53,7 +53,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
       },
 
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
-      <% if (!scope.preset.filenameBasedRouting) { %>// <% } %>filenameBasedRouting: true,
+      <% if (!scope.preset.fbr) { %>// <% } %>filenameBasedRouting: true,
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,

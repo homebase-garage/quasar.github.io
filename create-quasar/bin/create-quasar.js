@@ -53,7 +53,7 @@ function showHelp(warn) {
     --overwrite, -o Overwrite existing dir if it exists
     --preset        Preset to apply (can be used multiple times)
                     - template "app" presets:
-                      typescript, sass, oxlint, eslint, filenameBasedRouting, i18n, pinia
+                      typescript, sass, oxlint, eslint, i18n, pinia, fbr (filename-based routing)
                     - template "ae" presets:
                       typescript, oxlint, prompts, install, uninstall
     --name          Name of the project for package.json (must be a valid npm package name)
@@ -265,7 +265,7 @@ async function getArgv() {
               'sass',
               'oxlint',
               'eslint',
-              'filenameBasedRouting',
+              'fbr',
               'i18n',
               'pinia'
             ]
@@ -274,7 +274,7 @@ async function getArgv() {
               return argvError(
                 'Invalid preset specified: ' +
                   preset.join(', ') +
-                  '. Allowed values are "typescript", "sass", "oxlint", "eslint", "filenameBasedRouting", "i18n", "pinia".'
+                  '. Allowed values are "typescript", "sass", "oxlint", "eslint", "fbr", "i18n", "pinia".'
               )
             }
 
