@@ -1,20 +1,31 @@
-import { highlighter } from '#md/highlight/build-highlighter.js'
-import { supportedLangs } from '#md/highlight/build-langs.js'
-import { buildBareTransformers, themeOptions } from '#md/highlight/shared.js'
+import prism from 'prismjs'
+import loadLanguages from 'prismjs/components/index.js'
 
-const supportedLangSet = new Set(supportedLangs)
+loadLanguages([
+  'markup',
+  'bash',
+  'javascript',
+  'typescript',
+  'sass',
+  'scss',
+  'css',
+  'json',
+  'xml',
+  'nginx',
+  'diff'
+])
 
 export default function highlight(str, lang) {
-  const resolved = lang === '' ? 'js' : lang
-  if (supportedLangSet.has(resolved) === false) {
-    return ''
+  if (lang === '') {
+    lang = 'js'
+  } else if (lang === 'vue' || lang === 'html') {
+    lang = 'html'
   }
 
-  return highlighter
-    .codeToHtml(str, {
-      lang: resolved,
-      ...themeOptions,
-      transformers: buildBareTransformers()
-    })
-    .replace('<pre ', '<pre v-pre ')
+  if (prism.languages[lang] !== void 0) {
+    const html = prism.highlight(str, prism.languages[lang], lang)
+    return `<pre v-pre class="doc-code language-${lang}"><code>${html}</code></pre>`
+  }
+
+  return ''
 }
