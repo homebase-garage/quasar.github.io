@@ -38,7 +38,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item tag="label" v-ripple>
         <q-item-section side top>
           <q-checkbox v-model="check2" />
@@ -64,7 +63,6 @@
           </q-item-label>
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
 
       <q-separator spaced />
       <q-item-label header>Notifications</q-item-label>
@@ -88,7 +86,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item tag="label" v-ripple>
         <q-item-section>
           <q-item-label>Picture uploaded</q-item-label>
@@ -100,7 +97,6 @@
           <q-toggle color="red" v-model="notif3" val="picture" />
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
 
       <q-separator spaced />
       <q-item-label header>Other settings</q-item-label>
@@ -132,7 +128,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item>
         <q-item-section side>
           <q-icon color="primary" name="mic" />
@@ -141,7 +136,6 @@
           <q-slider v-model="mic" :min="0" :max="50" label />
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
     </q-list>
   </div>
 </template>

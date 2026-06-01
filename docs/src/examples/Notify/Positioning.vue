@@ -75,7 +75,6 @@
 import { useQuasar } from 'quasar'
 
 const alerts = [
-  // #region
   {
     color: 'negative',
     message: 'Woah! Danger! You are getting good at this!',
@@ -94,7 +93,6 @@ const alerts = [
     message:
       'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic quisquam non ad sit assumenda consequuntur esse inventore officia. Corrupti reiciendis impedit vel, fugit odit quisquam quae porro exercitationem eveniet quasi.'
   }
-  // #endregion
 ]
 
 export default {

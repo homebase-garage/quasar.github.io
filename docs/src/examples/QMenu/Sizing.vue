@@ -7,7 +7,6 @@
             <q-item clickable>
               <q-item-section>New tab</q-item-section>
             </q-item>
-            <!-- #region -->
             <q-item clickable>
               <q-item-section>New incognito tab</q-item-section>
             </q-item>
@@ -29,7 +28,6 @@
             <q-item clickable>
               <q-item-section>Help &amp; Feedback</q-item-section>
             </q-item>
-            <!-- #endregion -->
           </q-list>
         </q-menu>
       </q-btn>
@@ -40,7 +38,6 @@
             <q-item clickable>
               <q-item-section>New tab</q-item-section>
             </q-item>
-            <!-- #region -->
             <q-item clickable>
               <q-item-section>New incognito tab</q-item-section>
             </q-item>
@@ -62,7 +59,6 @@
             <q-item clickable>
               <q-item-section>Help &amp; Feedback</q-item-section>
             </q-item>
-            <!-- #endregion -->
           </q-list>
         </q-menu>
       </q-btn>
@@ -75,7 +71,6 @@
                 <q-item-label lines="1">New tab</q-item-label>
               </q-item-section>
             </q-item>
-            <!-- #region -->
             <q-item clickable>
               <q-item-section>
                 <q-item-label lines="1">New incognito tab</q-item-label>
@@ -109,7 +104,6 @@
                 <q-item-label lines="1">Help & Feedback</q-item-label>
               </q-item-section>
             </q-item>
-            <!-- #endregion -->
           </q-list>
         </q-menu>
       </q-btn>

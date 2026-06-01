@@ -67,7 +67,6 @@ const columns = [
 ]
 
 const rows = [
-  // #region
   {
     name: 'Frozen Yogurt',
     calories: 159,
@@ -138,7 +137,6 @@ const rows = [
     carbs: 65,
     protein: 7
   }
-  // #endregion
 ]
 
 export default {

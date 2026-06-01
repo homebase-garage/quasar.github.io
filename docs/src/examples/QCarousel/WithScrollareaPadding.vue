@@ -17,7 +17,6 @@
           <div class="q-mt-md">
             {{ lorem }}
           </div>
-          <!-- #region -->
           <div class="q-mt-md">
             {{ lorem }}
           </div>
@@ -27,14 +26,21 @@
           <div class="q-mt-md">
             {{ lorem }}
           </div>
-          <!-- #endregion -->
         </q-scroll-area>
       </q-carousel-slide>
 
-      <!-- #region -->
       <q-carousel-slide name="tv" class="text-center">
         <q-scroll-area class="fit">
           <q-icon name="live_tv" size="56px" />
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
           <div class="q-mt-md">
             {{ lorem }}
           </div>
@@ -47,6 +53,15 @@
           <div class="q-mt-md">
             {{ lorem }}
           </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
         </q-scroll-area>
       </q-carousel-slide>
 
@@ -56,9 +71,17 @@
           <div class="q-mt-md">
             {{ lorem }}
           </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
+          <div class="q-mt-md">
+            {{ lorem }}
+          </div>
         </q-scroll-area>
       </q-carousel-slide>
-      <!-- #endregion -->
     </q-carousel>
   </div>
 </template>

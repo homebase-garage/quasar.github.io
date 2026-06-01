@@ -27,7 +27,6 @@
           />
         </div>
       </q-carousel-slide>
-      <!-- #region -->
       <q-carousel-slide :name="2" class="column no-wrap">
         <div
           class="row fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
@@ -70,7 +69,6 @@
           />
         </div>
       </q-carousel-slide>
-      <!-- #endregion -->
     </q-carousel>
   </div>
 </template>

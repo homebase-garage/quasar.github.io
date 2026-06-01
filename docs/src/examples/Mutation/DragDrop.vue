@@ -15,7 +15,6 @@
           @dragstart="onDragStart"
           class="box navy"
         />
-        <!-- #region -->
         <div
           id="box2"
           draggable="true"
@@ -58,7 +57,6 @@
           @dragstart="onDragStart"
           class="box orange"
         />
-        <!-- #endregion -->
       </div>
 
       <div

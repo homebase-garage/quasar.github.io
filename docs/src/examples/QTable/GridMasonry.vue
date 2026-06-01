@@ -55,7 +55,6 @@ import { useQuasar } from 'quasar'
 import { computed, ref, watch } from 'vue'
 
 const deserts = [
-  // #region
   'Frozen Yogurt',
   'Ice cream sandwich',
   'Eclair',
@@ -66,7 +65,6 @@ const deserts = [
   'Honeycomb',
   'Donut',
   'KitKat'
-  // #endregion
 ]
 
 const rows = []

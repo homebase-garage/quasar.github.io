@@ -11,7 +11,6 @@
       >
         Ice cream
       </q-chip>
-      <!-- #region -->
       <q-chip
         removable
         v-model="eclair"
@@ -32,7 +31,6 @@
       >
         Cupcake
       </q-chip>
-      <!-- #endregion -->
       <q-chip
         disable
         removable

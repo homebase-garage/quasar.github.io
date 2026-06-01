@@ -63,7 +63,6 @@ const columns = [
 ]
 
 const rows = [
-  // #region
   {
     name: 'Frozen Yogurt',
     comment: `It's cold but great and tastes different than normal ice cream, but it's great too!
@@ -134,7 +133,6 @@ Have a section to perfection!`,
     calories: 518,
     fat: 26
   }
-  // #endregion
 ]
 
 export default {

@@ -34,7 +34,6 @@
             >
           </q-tab-panel>
 
-          <!-- #region -->
           <q-tab-panel name="alarms">
             <div class="text-h4 q-mb-md">Alarms</div>
             <p
@@ -72,7 +71,6 @@
               nulla ullam. In, libero.</p
             >
           </q-tab-panel>
-          <!-- #endregion -->
         </q-tab-panels>
       </template>
     </q-splitter>

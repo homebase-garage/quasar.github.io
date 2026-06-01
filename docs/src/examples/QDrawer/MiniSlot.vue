@@ -31,11 +31,9 @@
             <div class="q-py-lg">
               <div class="column items-start">
                 <q-icon name="inbox" color="blue" class="mini-icon" />
-                <!-- #region -->
                 <q-icon name="star" color="orange" class="mini-icon" />
                 <q-icon name="send" color="purple" class="mini-icon" />
                 <q-icon name="drafts" color="teal" class="mini-icon" />
-                <!-- #endregion -->
               </div>
             </div>
           </q-scroll-area>
@@ -47,7 +45,6 @@
               <q-item-section> Inbox </q-item-section>
             </q-item>
 
-            <!-- #region -->
             <q-item active clickable v-ripple>
               <q-item-section> Star </q-item-section>
             </q-item>
@@ -59,7 +56,6 @@
             <q-item clickable v-ripple>
               <q-item-section> Drafts </q-item-section>
             </q-item>
-            <!-- #endregion -->
           </q-list>
         </q-scroll-area>
 

@@ -15,7 +15,6 @@
         <q-item-section>Inbox</q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item
         clickable
         v-ripple
@@ -73,7 +72,6 @@
 
         <q-item-section>Help</q-item-section>
       </q-item>
-      <!-- #endregion -->
     </q-list>
   </div>
 </template>

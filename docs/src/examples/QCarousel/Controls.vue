@@ -12,7 +12,6 @@
         :name="1"
         img-src="https://cdn.quasar.dev/img/mountains.jpg"
       />
-      <!-- #region -->
       <q-carousel-slide
         :name="2"
         img-src="https://cdn.quasar.dev/img/parallax1.jpg"
@@ -25,7 +24,6 @@
         :name="4"
         img-src="https://cdn.quasar.dev/img/quasar.jpg"
       />
-      <!-- #endregion -->
 
       <template v-slot:control>
         <q-carousel-control

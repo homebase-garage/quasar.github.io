@@ -80,7 +80,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-separator spaced />
 
       <q-item>
@@ -116,7 +115,6 @@
           </div>
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
     </q-list>
   </div>
 </template>

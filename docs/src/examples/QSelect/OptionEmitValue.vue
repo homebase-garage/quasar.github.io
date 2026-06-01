@@ -29,7 +29,6 @@ export default {
           description: 'Search engine',
           icon: 'mail'
         },
-        // #region
         {
           label: 'Facebook',
           value: 'fb',
@@ -48,7 +47,6 @@ export default {
           description: 'iStuff',
           icon: 'golf_course'
         },
-        // #endregion
         {
           label: 'Oracle',
           value: 'ora',

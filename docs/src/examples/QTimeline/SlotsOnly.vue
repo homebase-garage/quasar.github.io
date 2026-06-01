@@ -18,7 +18,6 @@
         </div>
       </q-timeline-entry>
 
-      <!-- #region -->
       <q-timeline-entry icon="delete">
         <template v-slot:title> Event Title </template>
         <template v-slot:subtitle> February 21, 1986 </template>
@@ -110,7 +109,6 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </div>
       </q-timeline-entry>
-      <!-- #endregion -->
     </q-timeline>
   </div>
 </template>

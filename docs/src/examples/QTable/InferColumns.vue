@@ -6,7 +6,6 @@
 
 <script>
 const rows = [
-  // #region
   {
     name: 'Frozen Yogurt',
     calories: 159,
@@ -107,7 +106,6 @@ const rows = [
     calcium: '12%',
     iron: '6%'
   }
-  // #endregion
 ]
 export default {
   setup() {

@@ -20,7 +20,6 @@
 import { ref } from 'vue'
 
 const columns = [
-  // #region
   {
     name: 'index',
     label: '#',
@@ -60,11 +59,9 @@ const columns = [
     sortable: true,
     sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
   }
-  // #endregion
 ]
 
 const seed = [
-  // #region
   {
     name: 'Frozen Yogurt',
     calories: 159,
@@ -165,7 +162,6 @@ const seed = [
     calcium: '12%',
     iron: '6%'
   }
-  // #endregion
 ]
 
 // we generate lots of rows here

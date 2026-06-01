@@ -43,7 +43,6 @@ export default {
           label: 'Google',
           value: 1
         },
-        // #region
         {
           label: 'Facebook',
           value: 2
@@ -60,7 +59,6 @@ export default {
           label: 'Oracle',
           value: 5
         }
-        // #endregion
       ]
     }
   }

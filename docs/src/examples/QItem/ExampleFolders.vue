@@ -18,7 +18,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item clickable v-ripple>
         <q-item-section avatar top>
           <q-avatar icon="folder" color="orange" text-color="white" />
@@ -48,7 +47,6 @@
           <q-icon name="info" />
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
 
       <q-separator spaced />
       <q-item-label header>Files</q-item-label>
@@ -68,7 +66,6 @@
         </q-item-section>
       </q-item>
 
-      <!-- #region -->
       <q-item clickable v-ripple>
         <q-item-section avatar top>
           <q-avatar icon="place" color="grey" text-color="white" />
@@ -98,7 +95,6 @@
           <q-icon name="info" />
         </q-item-section>
       </q-item>
-      <!-- #endregion -->
     </q-list>
   </div>
 </template>

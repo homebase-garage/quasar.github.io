@@ -20,7 +20,6 @@
           icon="mail"
           label="Email"
         />
-        <!-- #region -->
         <q-fab-action
           label-class="bg-grey-3 text-grey-8"
           external-label
@@ -48,7 +47,6 @@
           icon="room"
           label="Map"
         />
-        <!-- #endregion -->
       </q-fab>
     </div>
 
@@ -71,7 +69,6 @@
           icon="mail"
           label="Email"
         />
-        <!-- #region -->
         <q-fab-action
           label-class="bg-grey-3 text-grey-8"
           external-label
@@ -96,7 +93,6 @@
           icon="room"
           label="Map"
         />
-        <!-- #endregion -->
       </q-fab>
     </div>
   </div>

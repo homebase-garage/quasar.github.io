@@ -19,7 +19,6 @@
         </div>
       </q-timeline-entry>
 
-      <!-- #region -->
       <q-timeline-entry
         title="Event Title"
         subtitle="February 21, 1986"
@@ -102,7 +101,6 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </div>
       </q-timeline-entry>
-      <!-- #endregion -->
     </q-timeline>
   </div>
 </template>

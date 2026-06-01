@@ -32,7 +32,6 @@
 import { ref } from 'vue'
 
 const columns = [
-  // #region
   {
     name: 'name',
     required: true,
@@ -67,11 +66,9 @@ const columns = [
     sortable: true,
     sort: (a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10)
   }
-  // #endregion
 ]
 
 const rows = [
-  // #region
   {
     name: 'Frozen Yogurt',
     calories: 159,
@@ -172,7 +169,6 @@ const rows = [
     calcium: '12%',
     iron: '6%'
   }
-  // #endregion
 ]
 
 export default {

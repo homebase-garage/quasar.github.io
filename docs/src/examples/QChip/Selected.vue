@@ -9,7 +9,6 @@
       >
         Ice cream
       </q-chip>
-      <!-- #region -->
       <q-chip
         v-model:selected="desert.Eclair"
         color="teal"
@@ -34,7 +33,6 @@
       >
         Gingerbread
       </q-chip>
-      <!-- #endregion -->
     </div>
 
     <div class="q-mt-sm"> Your pick: {{ selection }} </div>
