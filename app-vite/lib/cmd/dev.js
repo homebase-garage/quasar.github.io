@@ -3,7 +3,7 @@ if (process.env.NODE_ENV === void 0) {
 }
 
 import { getArgv } from '../utils/get-argv.js'
-import { aeLog, log } from '../utils/logger.js'
+import { log } from '../utils/logger.js'
 
 const argv = getArgv({
   mode: { type: 'string', short: 'm', default: 'spa' },
@@ -147,7 +147,7 @@ if (typeof quasarConf.build.beforeDev === 'function') {
 
 // run possible beforeDev hooks
 await ctx.appExt.runAppExtensionHook('beforeDev', async hook => {
-  aeLog(hook.api.extId, `Running beforeDev hook...`)
+  hook.api.logger.log(`Running beforeDev hook...`)
   await hook.fn(hook.api, { quasarConf })
 })
 
@@ -164,7 +164,7 @@ if (typeof quasarConf.build.afterDev === 'function') {
 
 // run possible afterDev hooks
 await ctx.appExt.runAppExtensionHook('afterDev', async hook => {
-  aeLog(hook.api.extId, `Running afterDev hook...`)
+  hook.api.logger.log(`Running afterDev hook...`)
   await hook.fn(hook.api, { quasarConf })
 })
 

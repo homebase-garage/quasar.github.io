@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { merge } from 'webpack-merge'
 
-import { aeLog, progress } from '../../utils/logger.js'
+import { progress } from '../../utils/logger.js'
 
 const workboxMethodMap = {
   GenerateSW: 'generateSW',
@@ -72,7 +72,7 @@ export async function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
   await quasarConf.ctx.appExt.runAppExtensionHook(
     'extendPWAManifestJson',
     async hook => {
-      aeLog(hook.api.extId, `Running "extendPWAManifestJson(pwaManifest)"`)
+      hook.api.logger.log(`Running "extendPWAManifestJson(pwaManifest)"`)
       const overrides = await hook.fn(pwaManifest, hook.api)
       if (Object(overrides) === overrides) {
         pwaManifest = merge({}, pwaManifest, overrides)

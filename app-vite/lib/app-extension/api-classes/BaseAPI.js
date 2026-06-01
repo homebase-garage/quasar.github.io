@@ -1,16 +1,19 @@
 import { getPackagePath } from '../../utils/get-package-path.js'
+import { getExtensionLogger } from '../logger.js'
 
 export class BaseAPI {
   ctx
   extId
   resolve
   appDir
+  logger
 
   constructor({ ctx, extId }) {
     this.ctx = ctx
     this.extId = extId
     this.resolve = ctx.appPaths.resolve
     this.appDir = ctx.appPaths.appDir
+    this.logger = getExtensionLogger(extId)
   }
 
   /**

@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { merge } from 'webpack-merge'
 
-import { aeLog } from '../../utils/logger.js'
 import { escapeRegexString } from '../../utils/escape-regex-string.js'
 import {
   createBrowserRolldownConfig,
@@ -114,7 +113,7 @@ export const quasarPwaConfig = {
       await ctx.appExt.runAppExtensionHook(
         'extendPWAGenerateSWOptions',
         async hook => {
-          aeLog(hook.api.extId, `Running "extendPWAGenerateSWOptions(opts)"`)
+          hook.api.logger.log(`Running "extendPWAGenerateSWOptions(opts)"`)
           const overrides = await hook.fn(opts, hook.api)
           if (Object(overrides) === overrides) {
             opts = merge({}, opts, overrides)
@@ -134,7 +133,7 @@ export const quasarPwaConfig = {
         await ctx.appExt.runAppExtensionHook(
           'extendSSRGenerateSWOptions',
           async hook => {
-            aeLog(hook.api.extId, `Running "extendSSRGenerateSWOptions(opts)"`)
+            hook.api.logger.log(`Running "extendSSRGenerateSWOptions(opts)"`)
             const overrides = await hook.fn(opts, hook.api)
             if (Object(overrides) === overrides) {
               opts = merge({}, opts, overrides)
@@ -166,10 +165,7 @@ export const quasarPwaConfig = {
       await ctx.appExt.runAppExtensionHook(
         'extendPWAInjectManifestOptions',
         async hook => {
-          aeLog(
-            hook.api.extId,
-            `Running "extendPWAInjectManifestOptions(opts)"`
-          )
+          hook.api.logger.log(`Running "extendPWAInjectManifestOptions(opts)"`)
           const overrides = await hook.fn(opts, hook.api)
           if (Object(overrides) === overrides) {
             opts = merge({}, opts, overrides)
@@ -192,8 +188,7 @@ export const quasarPwaConfig = {
         await ctx.appExt.runAppExtensionHook(
           'extendSSRInjectManifestOptions',
           async hook => {
-            aeLog(
-              hook.api.extId,
+            hook.api.logger.log(
               `Running "extendSSRInjectManifestOptions(opts)"`
             )
             const overrides = await hook.fn(opts, hook.api)

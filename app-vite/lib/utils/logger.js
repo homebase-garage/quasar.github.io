@@ -121,23 +121,6 @@ export function getWarning(msg, title = 'WARNING') {
 }
 
 /**
- * AE related
- */
-
-export function aeLog(extId, message) {
-  if (isSuppressed) return
-  log(message, `AE (${extId})`)
-}
-export function aeWarn(extId, message) {
-  if (isSuppressed) return
-  warn(message, `AE (${extId})`)
-}
-export function aeFatal(extId, message) {
-  if (isSuppressed) return
-  fatal(message, `AE (${extId})`)
-}
-
-/**
  * Progress related
  */
 

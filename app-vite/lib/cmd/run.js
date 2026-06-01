@@ -32,17 +32,17 @@ if (!extId) {
   process.exit(0)
 }
 
-import { log, warn, aeWarn, aeLog } from '../utils/logger.js'
+import { log, warn } from '../utils/logger.js'
+import { getExtensionLogger } from '../app-extension/logger.js'
 
 import { getCtx } from '../utils/get-ctx.js'
 
 const { appExt } = getCtx()
 
 const ext = appExt.getInstance(extId)
-
 if (ext === void 0) {
   warn()
-  aeWarn(extId, 'No such App Extension is installed')
+  getExtensionLogger(extId).warn('No such App Extension is installed')
   warn()
   process.exit(1)
 }
@@ -51,12 +51,12 @@ const hooks = await ext.run()
 
 const list = () => {
   if (Object.keys(hooks.commands).length === 0) {
-    aeWarn(extId, `App Extension has no commands registered`)
+    ext.logger.warn(`App Extension has no commands registered`)
     return
   }
 
   const cmdList = Object.keys(hooks.commands).join(' | ')
-  aeLog(extId, `Command list: ${cmdList}`)
+  ext.logger.log(`Command list: ${cmdList}`)
 }
 
 if (!cmd) {
@@ -68,12 +68,12 @@ const fn = hooks.commands[cmd]
 if (!fn) {
   list()
   warn()
-  aeWarn(extId, `App Extension has no command called "${cmd}"`)
+  ext.logger.warn(`App Extension has no command called "${cmd}"`)
   warn()
   process.exit(1)
 }
 
-aeLog(extId, `Running App Extension command "${cmd}"`)
+ext.logger.log(`Running App Extension command "${cmd}"`)
 log()
 
 process.argv = [

@@ -4,7 +4,7 @@ import { merge } from 'webpack-merge'
 import semver from 'semver'
 import { parseJSON, stringifyJSON } from 'confbox'
 
-import { aeFatal, aeWarn, warn } from '../../utils/logger.js'
+import { warn } from '../../utils/logger.js'
 import { getPackageJson } from '../../utils/get-package-json.js'
 import { getCallerPath } from '../../utils/get-caller-path.js'
 import { BaseAPI } from './BaseAPI.js'
@@ -72,15 +72,13 @@ export class InstallAPI extends BaseAPI {
     const json = getPackageJson(packageName, this.appDir)
 
     if (json === void 0) {
-      aeFatal(
-        this.extId,
+      this.logger.fatal(
         `Dependency not found - ${packageName}. Please install it.`
       )
     }
 
     if (!semver.satisfies(json.version, semverCondition)) {
-      aeFatal(
-        this.extId,
+      this.logger.fatal(
         `Not compatible with ${packageName} v${json.version}. Required version: ${semverCondition}`
       )
     }
@@ -145,15 +143,13 @@ export class InstallAPI extends BaseAPI {
       const source = path.resolve(dir, extPkg)
 
       if (!fs.existsSync(source)) {
-        aeWarn(
-          this.extId,
+        this.logger.warn(
           `extendPackageJson() - cannot locate ${extPkg}. Skipping...`
         )
         return
       }
       if (fs.lstatSync(source).isDirectory()) {
-        aeWarn(
-          this.extId,
+        this.logger.warn(
           `extendPackageJson() - "${extPkg}" is a folder instead of file. Skipping...`
         )
         return
@@ -162,8 +158,7 @@ export class InstallAPI extends BaseAPI {
       try {
         extPkg = JSON.parse(fs.readFileSync(source, 'utf8'))
       } catch {
-        aeWarn(
-          this.extId,
+        this.logger.warn(
           `extendPackageJson() - "${extPkg}" is malformed. Exiting...`
         )
         warn()
@@ -229,12 +224,10 @@ export class InstallAPI extends BaseAPI {
         )
       } catch {
         warn()
-        aeWarn(
-          this.extId,
+        this.logger.warn(
           `extendJsonFile() - "${filePath}" doesn't conform to JSON format: this could happen if you are trying to update flavoured JSON files (eg. JSON with Comments or JSON5). Skipping...`
         )
-        aeWarn(
-          this.extId,
+        this.logger.warn(
           `extendJsonFile() - The extension tried to apply these updates to "${filePath}" file: ${JSON.stringify(newData)}`
         )
         warn()
@@ -255,15 +248,11 @@ export class InstallAPI extends BaseAPI {
     const rawCopy = !scope || Object.keys(scope).length === 0
 
     if (!fs.existsSync(source)) {
-      aeWarn(
-        this.extId,
-        `render() - cannot locate ${templatePath}. Skipping...`
-      )
+      this.logger.warn(`render() - cannot locate ${templatePath}. Skipping...`)
       return
     }
     if (!fs.lstatSync(source).isDirectory()) {
-      aeWarn(
-        this.extId,
+      this.logger.warn(
         `render() - "${templatePath}" is a file instead of folder. Skipping...`
       )
       return
@@ -291,15 +280,13 @@ export class InstallAPI extends BaseAPI {
     const rawCopy = !scope || Object.keys(scope).length === 0
 
     if (!fs.existsSync(sourcePath)) {
-      aeWarn(
-        this.extId,
+      this.logger.warn(
         `renderFile() - cannot locate ${relativeSourcePath}. Skipping...`
       )
       return
     }
     if (fs.lstatSync(sourcePath).isDirectory()) {
-      aeWarn(
-        this.extId,
+      this.logger.warn(
         `renderFile() - "${relativeSourcePath}" is a folder instead of a file. Skipping...`
       )
       return

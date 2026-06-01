@@ -8,14 +8,8 @@ import { InstallAPI } from './api-classes/InstallAPI.js'
 import { UninstallAPI } from './api-classes/UninstallAPI.js'
 import { PromptsAPI } from './api-classes/PromptsAPI.js'
 
-import {
-  aeFatal,
-  aeLog,
-  aeWarn,
-  createPromptSession,
-  fatal,
-  log
-} from '../utils/logger.js'
+import { createPromptSession, fatal, log } from '../utils/logger.js'
+import { getExtensionLogger } from './logger.js'
 import { getPackagePath } from '../utils/get-package-path.js'
 import { renderTemplate } from '../utils/template.js'
 
@@ -143,6 +137,10 @@ export class AppExtensionInstance {
 
   #isInstalled = null
 
+  get logger() {
+    return getExtensionLogger(this.extId)
+  }
+
   constructor({ extName, ctx, appExtJson }) {
     this.#ctx = ctx
     this.#appExtJson = appExtJson
@@ -207,13 +205,12 @@ export class AppExtensionInstance {
       )
     }
 
-    aeLog(this.extId, skipPkgInstall ? 'Invoking...' : 'Installing...')
+    this.logger.log(skipPkgInstall ? 'Invoking...' : 'Installing...')
 
     if (skipPkgInstall !== true) {
       await this.#installPackage()
     } else if (!this.isInstalled) {
-      aeFatal(
-        this.extId,
+      this.logger.fatal(
         `Tried to invoke App Extension but its npm package is not installed`
       )
     }
@@ -225,7 +222,7 @@ export class AppExtensionInstance {
     // run extension install
     const hooks = await this.#runInstallScript(prompts)
 
-    aeLog(this.extId, `Installed App Extension`)
+    this.logger.log(`Installed App Extension`)
 
     if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
@@ -236,18 +233,17 @@ export class AppExtensionInstance {
   }
 
   async uninstall(skipPkgUninstall) {
-    aeLog(this.extId, skipPkgUninstall ? 'Uninvoking...' : 'Uninstalling...')
+    this.logger.log(skipPkgUninstall ? 'Uninvoking...' : 'Uninstalling...')
 
     // verify if already installed
     if (skipPkgUninstall) {
       if (!this.isInstalled) {
-        aeFatal(
-          this.extId,
+        this.logger.fatal(
           `Tried to uninvoke App Extension but there's no npm package installed for it.`
         )
       }
     } else if (!this.isInstalled) {
-      aeWarn(this.extId, `Quasar App Extension is not installed...`)
+      this.logger.warn(`Quasar App Extension is not installed...`)
       return
     }
 
@@ -259,7 +255,7 @@ export class AppExtensionInstance {
       await this.#uninstallPackage()
     }
 
-    aeLog(this.extId, 'Removed App Extension')
+    this.logger.log('Removed App Extension')
 
     if (hooks && hooks.exitLog.length !== 0) {
       hooks.exitLog.forEach(msg => {
@@ -271,7 +267,7 @@ export class AppExtensionInstance {
 
   async run() {
     if (!this.isInstalled) {
-      aeWarn(this.extId, 'Quasar App Extension is missing...')
+      this.logger.warn('Quasar App Extension is missing...')
       process.exit(1)
     }
 
@@ -286,7 +282,7 @@ export class AppExtensionInstance {
       this.#appExtJson
     )
 
-    aeLog(this.extId, 'Running...')
+    this.logger.log('Running...')
     await script(api)
 
     return api.__getHooks(this.#appExtJson)
@@ -306,7 +302,7 @@ export class AppExtensionInstance {
 
     if (typeof getPromptsObject !== 'function') return {}
 
-    aeLog(this.extId, 'Running prompts script...')
+    this.logger.log('Running prompts script...')
     log()
 
     const api = new PromptsAPI(
@@ -369,7 +365,7 @@ export class AppExtensionInstance {
     const scriptPath = this.#getScriptPath(scriptName)
     if (!scriptPath) {
       if (fatalError) {
-        aeFatal(this.extId, `App Extension has missing ${scriptName} script...`)
+        this.logger.fatal(`App Extension has missing ${scriptName} script...`)
       }
 
       return
@@ -385,8 +381,7 @@ export class AppExtensionInstance {
       console.error(err)
 
       if (fatalError) {
-        aeFatal(
-          this.extId,
+        this.logger.fatal(
           `${scriptName} script has thrown the error from above.`
         )
       }
@@ -394,8 +389,7 @@ export class AppExtensionInstance {
 
     if (typeof fn !== 'function') {
       if (fatalError) {
-        aeFatal(
-          this.extId,
+        this.logger.fatal(
           `${scriptName} script does not have a default export as a function...`
         )
       }
@@ -411,7 +405,7 @@ export class AppExtensionInstance {
 
     if (typeof script !== 'function') return
 
-    aeLog(this.extId, 'Running install script...')
+    this.logger.log('Running install script...')
 
     const api = new InstallAPI(
       {
@@ -451,7 +445,7 @@ export class AppExtensionInstance {
 
     if (typeof script !== 'function') return
 
-    aeLog(this.extId, 'Running uninstall script...')
+    this.logger.log('Running uninstall script...')
 
     const api = new UninstallAPI(
       {

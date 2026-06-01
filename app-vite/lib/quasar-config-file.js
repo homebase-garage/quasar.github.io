@@ -7,7 +7,7 @@ import { rolldown, watch as rolldownWatch } from 'rolldown'
 import { transformAssetUrls } from '@quasar/vite-plugin'
 import { isCI } from 'ci-info'
 
-import { aeLog, error, fatal, log, tip, warn } from './utils/logger.js'
+import { error, fatal, log, tip, warn } from './utils/logger.js'
 import { appFilesValidations } from './utils/app-files-validations.js'
 import { getPackageMajorVersion } from './utils/get-package-major-version.js'
 import { resolveExtension } from './utils/resolve-extension.js'
@@ -773,7 +773,7 @@ export class QuasarConfigFile {
       await this.#ctx.appExt.runAppExtensionHook(
         'extendQuasarConf',
         async hook => {
-          aeLog(hook.api.extId, 'Extending quasar.config file configuration...')
+          hook.api.logger.log('Extending quasar.config file configuration...')
           const overrides = await hook.fn(rawQuasarConf, hook.api)
           if (Object(overrides) === overrides) {
             rawQuasarConf = merge(rawQuasarConf, overrides)

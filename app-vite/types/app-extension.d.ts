@@ -5,6 +5,7 @@ import { QuasarAppPathsResolve } from "./app-paths";
 import { QuasarConf, ResolvedQuasarConfValue } from "./configuration/conf";
 import { QuasarContext } from "./configuration/context";
 import { PwaManifestOptions } from "./configuration/pwa-conf";
+import { QuasarLogger } from "./logger";
 
 type ExtendViteConfHandler = (
   fn: (
@@ -31,6 +32,12 @@ interface BaseAPI {
    */
   readonly resolve: QuasarAppPathsResolve;
   readonly appDir: string;
+  /**
+   * Logging helpers matching the Quasar CLI output style.
+   * `log`, `warn` and `fatal` are auto-prefixed with the extension id.
+   * @type logger {@link QuasarLogger}
+   */
+  readonly logger: QuasarLogger;
 
   /**
    * Does the host app have TypeScript support?

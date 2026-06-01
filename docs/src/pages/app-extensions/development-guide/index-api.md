@@ -126,6 +126,32 @@ api.resolve.bex('some-file.js')
 
 Contains the full path (String) to the root of the app on which this App Extension is running.
 
+### api.logger
+
+A logger scoped to this App Extension. Every method tags its output with `AE (<extId>)`, so users can see which extension printed which line.
+
+```js
+api.logger.log('hello') // green-bannered line
+api.logger.warn('careful') // yellow-bannered warning
+api.logger.fatal('boom') // red-bannered error; exits with code 1
+api.logger.tip('try foo') // TIP-pilled tip line
+api.logger.info('synced') // INFO-pilled line
+api.logger.info('synced', 'SYNC') // custom pill text instead of INFO
+api.logger.success('built')
+api.logger.error('oh no')
+api.logger.warning('hmm')
+
+const finish = api.logger.progress({
+  tool: 'ssg',
+  waitAction: 'building',
+  doneAction: 'built'
+})
+// ...later
+finish() // prints the DONE line with elapsed time
+
+api.logger.dot // the bullet character used in the formatted output
+```
+
 ### api.hasTypescript
 
 ```js
