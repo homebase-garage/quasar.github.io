@@ -79,28 +79,30 @@ jobs:
         script: [js, ts]
         linter: [oxlint]
         include:
-          - template: app
+          - engine: vite-3
+            template: app
+          - engine: vite-2
+            template: app
+          - engine: webpack-4
+            template: app
+          - fbr: true
+            template: app
             engine: vite-3
-            fbr: true
-          - template: app
+          - fbr: false
+            template: app
             engine: vite-3
-            fbr: false
-          - template: app
+          - allPresets: true
+            template: app
             engine: vite-3
-            allPresets: true
-          - template: app
+          - allPresets: false
+            template: app
             engine: vite-3
-            allPresets: false
-          - template: app
-            engine: vite-2
-          - template: app
-            engine: webpack-4
-          - template: app
-            install: npm
-          - template: app
-            install: yarn
-          - template: app
-            linter: eslint
+          - linter: eslint
+            template: app
+          - install: npm
+            template: app
+          - install: yarn
+            template: app
 
     name: Test ${{ matrix.install }}-${{ matrix.template }}-${{ matrix.script }}${{ matrix.engine && format('-{0}', matrix.engine) || '' }}-${{ matrix.linter }}${{ matrix.fbr == true && '-fbr' || '' }}${{ matrix.allPresets == true && '-allPresets' || '' }}
 
