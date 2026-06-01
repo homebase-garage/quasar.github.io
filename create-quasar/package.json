@@ -24,7 +24,7 @@
   "type": "module",
   "main": "bin/create-quasar.js",
   "scripts": {
-    "create-test-project": "tsx scripts/create-test-project.ts"
+    "test": "node bin/create-quasar.js"
   },
   "dependencies": {
     "@clack/prompts": "^1.4.0",

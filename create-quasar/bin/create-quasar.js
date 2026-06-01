@@ -66,7 +66,9 @@ function showHelp(warn) {
                       --install npm
                       --install bun
 
-    --engine, -e    (ONLY for template "app") Quasar App Local CLI to use:
+    --engine, -e    (ONLY for template "app") Quasar App Local CLI to use (and please note
+                      that these do NOT refer to the version of Vite or Webpack, but rather
+                      to the @quasar/app-* version to use):
                       vite-3, vite-2, webpack-4
     --product       (ONLY for template "app") Product name for the app
 

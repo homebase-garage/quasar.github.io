@@ -74,12 +74,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        script-type: [js, ts]
-        app-engine: [vite-2, vite-3]
-        node-version: [22, 24, 26]
-        package-manager: [yarn, npm, pnpm]
+        install: [yarn, npm, pnpm]
+        template: [app, ae]
+        script: [js, ts]
+        linter: [oxlint]
+        include:
+          - engine: vite-3
+            template: app
+          - engine: vite-2
+            template: app
+          - engine: webpack-4
+            template: app
+          - linter: eslint
+            template: app
+          - fbr: true
+            template: app
+            engine: vite-3
+          - allPresets: true
+            template: app
+            engine: vite-3
 
-    name: Test ${{ matrix.script-type }}-${{ matrix.app-engine }} (Node v${{ matrix.node-version }} - ${{ matrix.package-manager }})
+    name: Test ${{ matrix.install }}-${{ matrix.template }}-${{ matrix.script }}${{ matrix.engine && format('-{0}', matrix.engine) || '' }}-${{ matrix.linter }}${{ matrix.fbr == true && '-fbr' || '' }}${{ matrix.allPresets == true && '-allPresets' || '' }}
 
     steps:
       - name: Checkout code
@@ -91,7 +106,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -99,62 +114,62 @@ jobs:
 
       # pnpm
       - name: Get pnpm store directory
-        if: ${{ matrix.package-manager == 'pnpm' }}
+        if: ${{ matrix.install == 'pnpm' }}
         id: pnpm-cache
         run: |
           echo "PNPM_CACHE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
       - name: Setup pnpm cache
-        if: ${{ matrix.package-manager == 'pnpm' }}
+        if: ${{ matrix.install == 'pnpm' }}
         uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_PATH }}
-          key: pnpm-cache-${{ matrix.app-engine }}-${{ matrix.script-type }}
+          key: pnpm-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-${{ matrix.linter }}
           restore-keys: |
-            pnpm-cache-${{ matrix.app-engine }}-
+            pnpm-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-
             pnpm-cache-
 
       # yarn
       - name: Get yarn cache directory
-        if: ${{ matrix.package-manager == 'yarn' }}
+        if: ${{ matrix.install == 'yarn' }}
         id: yarn-cache
         run: |
           echo "YARN_CACHE_PATH=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Setup yarn cache
-        if: ${{ matrix.package-manager == 'yarn' }}
+        if: ${{ matrix.install == 'yarn' }}
         uses: actions/cache@v5
         with:
           path: ${{ steps.yarn-cache.outputs.YARN_CACHE_PATH }}
-          key: yarn-cache-${{ matrix.app-engine }}-${{ matrix.script-type }}
+          key: yarn-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-${{ matrix.linter }}
           restore-keys: |
-            yarn-cache-${{ matrix.app-engine }}-
+            yarn-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-
             yarn-cache-
 
       # npm
       - name: Get npm cache directory
-        if: ${{ matrix.package-manager == 'npm' }}
+        if: ${{ matrix.install == 'npm' }}
         id: npm-cache
         run: |
           echo "NPM_CACHE_PATH=$(npm config get cache)" >> $GITHUB_OUTPUT
       - name: Setup npm cache
-        if: ${{ matrix.package-manager == 'npm' }}
+        if: ${{ matrix.install == 'npm' }}
         uses: actions/cache@v5
         with:
           path: ${{ steps.npm-cache.outputs.NPM_CACHE_PATH }}
-          key: npm-cache-${{ matrix.app-engine }}-${{ matrix.script-type }}
+          key: npm-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-${{ matrix.linter }}
           restore-keys: |
-            npm-cache-${{ matrix.app-engine }}-
+            npm-cache-${{ matrix.template }}-${{ matrix.script }}-${{ matrix.engine || '' }}-
             npm-cache-
 
       - name: Create the test project
-        run: pnpm create-test-project ${{ matrix.script-type }} ${{ matrix.app-engine }} ${{ matrix.package-manager }}
+        run: node bin/create-quasar.js test-project --template ${{ matrix.template }}${{ matrix.engine && format('--engine {0}', matrix.engine) || '' }} --install ${{ matrix.install }}${{ matrix.script === 'ts' && ' --preset typescript' || '' }} --preset ${{ matrix.linter }}${{ matrix.filenameBasedRouting == true && ' --preset filenameBasedRouting' || '' }}${{ matrix.allPresets == true && ' --preset sass --preset i18n --preset pinia' || matrix.template === 'ae' && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project
-        run: ${{ matrix.package-manager }} run lint
+        run: ${{ matrix.install }} run lint
 
       - name: Test the build
         working-directory: create-quasar/test-project
-        run: ${{ matrix.package-manager }} run build
+        run: ${{ matrix.install }} run build
 
       - name: Test the development server
         working-directory: create-quasar/test-project
@@ -169,13 +184,13 @@ jobs:
 
         # wait-on is pinned for stability and safety reasons, it can be updated manually after testing a new version
         run: |
-          ${{ matrix.package-manager }} run dev &
+          ${{ matrix.install }} run dev &
 
-          if [[ '${{ matrix.app-engine }}' == vite* ]]; then
+          if [[ '${{ matrix.engine }}' == vite* || '${{ matrix.template }}' == 'ae' ]]; then
             echo $WAIT_ON_CONFIG > wait-on.json
             npx wait-on@7.2.0 --config wait-on.json --timeout 5000 http-get://127.0.0.1:9000
           else
-            PORT=$([[ '${{ matrix.app-engine }}' == 'webpack-4' ]] && echo '9000' || echo '8080')
+            PORT=$([[ '${{ matrix.engine }}' == 'webpack-4' ]] && echo '9000' || echo '8080')
             # 15s is almost enough, but due to possible fluctuations in the CI environment, we set it higher than that
             npx wait-on@7.2.0 --timeout 20000 http-get://127.0.0.1:$PORT
           fi
