@@ -92,6 +92,10 @@ jobs:
             engine: vite-3
             allPresets: false
           - template: app
+            engine: vite-2
+          - template: app
+            engine: webpack-4
+          - template: app
             install: npm
           - template: app
             install: yarn
