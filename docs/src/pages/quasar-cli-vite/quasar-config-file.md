@@ -103,7 +103,7 @@ You can also do async work before returning the quasar configuration:
 ```js /quasar.config file
 import { defineConfig } from '#q-app'
 
-export default defineConfig(async (ctx) => {
+export default async defineConfig((ctx) => {
   const data = await someAsyncFunction()
   return {
     // ... use "data"
@@ -160,31 +160,14 @@ export default defineConfig(ctx => {
 
 ### IDE autocompletion
 
-Notice the `defineConfig` import from `#q-app`. This is essentially a no-op function but what it does is it helps with the IDE autocomplete experience. Every option you set is type-checked, every value gets completion, and hovering a key reveals its JSDoc.
+Notice the `defineConfig` import from `#q-app`. This is essentially a no-op function but what it does is it helps with the IDE autocomplete experience.
 
-<!-- prettier-ignore -->
-```ts [twoslash] /quasar.config file
-// @noErrors
+```js /quasar.config file
 import { defineConfig } from '#q-app'
 
-export default defineConfig(ctx => ({
-  boot: ['axios', 'i18n'],
-
-  css: ['app.sass'],
-
-  extras: ['material-symbols-outlined', 'roboto-font'],
-
-  framework: {
-    lang: 'en-US',
-    plugins: ['Notify', 'Dialog'],
-    iconSet: 'material-'
-    //                 ^|
-  },
-
-  build: {
-    vueRouterMode: 'history'
-  }
-}))
+export default defineConfig(ctx => {
+  /* configuration options */
+})
 ```
 
 ## Options to Configure

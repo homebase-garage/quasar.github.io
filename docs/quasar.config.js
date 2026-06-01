@@ -8,7 +8,7 @@ import { codeSplitting } from './build/chunks.js'
 export default defineConfig(ctx => ({
   boot: [{ path: 'gdpr', server: false }],
 
-  css: ['~@shikijs/twoslash/style-rich.css', 'app.sass'],
+  css: ['app.sass'],
 
   build: {
     vueRouterMode: 'history',
