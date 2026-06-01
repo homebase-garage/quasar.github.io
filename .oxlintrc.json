@@ -239,7 +239,7 @@
     },
 
     {
-      "files": ["ui/testing/**", "vite-plugin/testing/**"],
+      "files": ["**/testing/**"],
       "env": { "node": true, "browser": true }
     },
 
@@ -254,12 +254,12 @@
     },
 
     {
-      "files": ["docs/src-pwa/**"],
+      "files": ["**/src-pwa/**"],
       "env": { "browser": true, "serviceworker": true }
     },
 
     {
-      "files": ["**/*.{test,spec}.{js,ts,vue}"],
+      "files": ["**/*.test.{js,ts,vue}"],
       "env": { "vitest": true },
       "rules": {
         "unicorn/consistent-function-scoping": "off"
