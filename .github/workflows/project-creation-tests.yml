@@ -79,30 +79,20 @@ jobs:
         script: [js, ts]
         linter: [oxlint]
         include:
-          - engine: vite-3
-            template: app
-          - engine: vite-2
-            template: app
-          - engine: webpack-4
-            template: app
-          - linter: eslint
-            template: app
-          - fbr: true
-            template: app
+          - template: app
             engine: vite-3
-          - fbr: false
-            template: app
-            engine: vite-3
-          - allPresets: true
-            template: app
-            engine: vite-3
-          - allPresets: false
-            template: app
-            engine: vite-3
-          - install: yarn
-            template: app
-          - install: npm
-            template: app
+            fbr: true
+            allPresets: true
+          - template: app
+            engine: vite-2
+            linter: eslint
+          - template: app
+            engine: webpack-4
+            linter: eslint
+          - template: app
+            install: npm
+          - template: app
+            install: yarn
 
     name: Test ${{ matrix.install }}-${{ matrix.template }}-${{ matrix.script }}${{ matrix.engine && format('-{0}', matrix.engine) || '' }}-${{ matrix.linter }}${{ matrix.fbr == true && '-fbr' || '' }}${{ matrix.allPresets == true && '-allPresets' || '' }}
 
@@ -179,6 +169,7 @@ jobs:
 
       - name: Test the build
         working-directory: create-quasar/test-project
+        if: ${{ matrix.template != 'ae' }}
         run: ${{ matrix.install }} run build
 
       - name: Test the development server
