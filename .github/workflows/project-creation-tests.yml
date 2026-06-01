@@ -82,17 +82,21 @@ jobs:
           - template: app
             engine: vite-3
             fbr: true
+          - template: app
+            engine: vite-3
+            fbr: false
+          - template: app
+            engine: vite-3
             allPresets: true
           - template: app
-            engine: vite-2
-            linter: eslint
-          - template: app
-            engine: webpack-4
-            linter: eslint
+            engine: vite-3
+            allPresets: false
           - template: app
             install: npm
           - template: app
             install: yarn
+          - template: app
+            linter: eslint
 
     name: Test ${{ matrix.install }}-${{ matrix.template }}-${{ matrix.script }}${{ matrix.engine && format('-{0}', matrix.engine) || '' }}-${{ matrix.linter }}${{ matrix.fbr == true && '-fbr' || '' }}${{ matrix.allPresets == true && '-allPresets' || '' }}
 
