@@ -2,7 +2,6 @@ import { defineConfig } from '#q-app'
 
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
-import highlightRawPlugin from './build/highlight-raw.js'
 import { codeSplitting } from './build/chunks.js'
 
 export default defineConfig(ctx => ({
@@ -24,7 +23,7 @@ export default defineConfig(ctx => ({
       include: [/\.(vue|md)$/]
     },
 
-    vitePlugins: [mdPlugin, examplesPlugin(ctx.prod), highlightRawPlugin()],
+    vitePlugins: [mdPlugin, examplesPlugin(ctx.prod)],
 
     extendViteConf(_viteConf, { isClient }) {
       if (ctx.prod && isClient) {
