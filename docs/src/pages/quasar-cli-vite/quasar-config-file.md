@@ -103,7 +103,7 @@ You can also do async work before returning the quasar configuration:
 ```js /quasar.config file
 import { defineConfig } from '#q-app'
 
-export default async defineConfig((ctx) => {
+export default defineConfig(async (ctx) => {
   const data = await someAsyncFunction()
   return {
     // ... use "data"

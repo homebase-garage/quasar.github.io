@@ -222,7 +222,8 @@
       "env": { "browser": true, "vue": true },
       "globals": {
         "process": "readonly",
-        "gtag": "readonly"
+        "gtag": "readonly",
+        "Prism": "readonly"
       }
     },
 
