@@ -19,7 +19,6 @@ packages:
 # - icongenie
 
 catalog:
-  typescript: npm:@typescript/typescript6@^6.0.0
   vue: ^3.5.35
   vue-router: ^5.1.0
 

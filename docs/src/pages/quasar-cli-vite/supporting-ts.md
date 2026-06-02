@@ -16,18 +16,14 @@ If you selected TypeScript support when creating your project, you can skip this
 
 ```tabs Typescript 7
 <<| bash PNPM |>>
-$ pnpm add -D @typescript/native-preview@beta npm:@typescript/typescript6@^6
+$ pnpm add -D typescript
 <<| bash Yarn |>>
-$ yarn add --dev @typescript/native-preview@beta npm:@typescript/typescript6@^6
+$ yarn add --dev typescript
 <<| bash NPM |>>
-$ npm install --save-dev @typescript/native-preview@beta npm:@typescript/typescript6@^6
+$ npm install --save-dev typescript
 <<| bash Bun |>>
-$ bun add --dev @typescript/native-preview@beta npm:@typescript/typescript6@^6
+$ bun add --dev typescript
 ```
-
-::: tip
-Notice that the package name is not directly `typescript`, as per the TS team release notes on TS 7. Once the TS team releases TS 7 directly under the `typescript` package, replace it with that.
-:::
 
 Then, create `/tsconfig.json` file at the root of you project with this content:
 
