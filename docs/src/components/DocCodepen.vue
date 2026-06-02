@@ -168,8 +168,20 @@ ${html.value}
   return JSON.stringify(data)
 })
 
+// `// #region [label]`, `/* #region */`, `<!-- #region -->` and the matching
+// `#endregion` markers. Each form is matched on a line on its own, including
+// the trailing newline so removal doesn't leave a blank line behind.
+const REGION_LINE_RE =
+  /^[ \t]*(?:\/\/|\/\*|<!--)\s*#(?:end)?region\b[^\n]*\n?/gm
+
+const stripRegions = text => (text ?? '').replace(REGION_LINE_RE, '')
+
 function open(whichParts) {
-  def.parts = whichParts
+  const stripped = {}
+  for (const key in whichParts) {
+    stripped[key] = stripRegions(whichParts[key])
+  }
+  def.parts = stripped
 
   if (active.value) {
     formRef.value.submit()
