@@ -1,6 +1,6 @@
-import { highlighter } from '#md/highlight/build-highlighter.js'
-import { supportedLangs } from '#md/highlight/build-langs.js'
-import { buildBareTransformers, themeOptions } from '#md/highlight/shared.js'
+import { highlighter } from '../md/highlight/build-highlighter.js'
+import { supportedLangs } from '../md/highlight/build-langs.js'
+import { buildBareTransformers, themeOptions } from '../md/highlight/shared.js'
 
 const supportedLangSet = new Set(supportedLangs)
 

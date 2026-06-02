@@ -1,8 +1,11 @@
 import { h } from 'vue'
 
-import { getBrowserHighlighter } from '#md/highlight/browser-highlighter.js'
-import { supportedLangs } from '#md/highlight/browser-langs.js'
-import { buildBrowserTransformers, themeOptions } from '#md/highlight/shared.js'
+import { getBrowserHighlighter } from '../../build/md/highlight/browser-highlighter.js'
+import { supportedLangs } from '../../build/md/highlight/browser-langs.js'
+import {
+  buildBrowserTransformers,
+  themeOptions
+} from '../../build/md/highlight/shared.js'
 
 const supportedLangSet = new Set(supportedLangs)
 

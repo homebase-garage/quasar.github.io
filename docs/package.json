@@ -5,9 +5,6 @@
   "description": "Official Quasar Docs Website",
   "author": "Razvan Stoenescu <razvan.stoenescu@gmail.com>",
   "type": "module",
-  "imports": {
-    "#md/*": "./build/md/*"
-  },
   "scripts": {
     "prepare:types": "quasar prepare --silent",
     "prepare:docs": "node build/copy-quasar-api.js",

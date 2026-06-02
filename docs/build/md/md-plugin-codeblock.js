@@ -1,7 +1,7 @@
-import { highlighter } from '#md/highlight/build-highlighter.js'
-import { langMatch } from '#md/highlight/build-langs.js'
-import { buildFenceTransformers, themeOptions } from '#md/highlight/shared.js'
-import { getFenceBuildOnlyTransformers } from '#md/highlight/twoslash.js'
+import { highlighter } from './highlight/build-highlighter.js'
+import { langMatch } from './highlight/build-langs.js'
+import { buildFenceTransformers, themeOptions } from './highlight/shared.js'
+import { getFenceBuildOnlyTransformers } from './highlight/twoslash.js'
 import { getSharedStyleToClasses } from '../shiki-css-stash.js'
 
 /**
