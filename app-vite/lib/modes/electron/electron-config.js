@@ -39,9 +39,9 @@ async function preloadScript(quasarConf, name) {
      * The order of aliases also matters, as '#q-app' needs to be defined
      * only after the more specific ones.
      */
-    cfg.alias = {
+    cfg.resolve.alias = {
       '#q-app/electron/preload': '@quasar/app-vite/electron/preload',
-      ...cfg.alias
+      ...cfg.resolve.alias
     }
   }
 
@@ -116,9 +116,9 @@ export const quasarElectronConfig = {
        * The order of aliases also matters, as '#q-app' needs to be defined
        * only after the more specific ones.
        */
-      cfg.alias = {
+      cfg.resolve.alias = {
         '#q-app/electron/main': '@quasar/app-vite/electron/main',
-        ...cfg.alias
+        ...cfg.resolve.alias
       }
     }
 
