@@ -1013,14 +1013,20 @@ export class QuasarConfigFile {
     // User-defined aliases take precedence over framework defaults.
     // We preserve the user insertion order for consumers (e.g. Vite, tsconfig `paths`)
     // Framework defaults come last if not already defined by the user.
-    cfg.build.alias ||= {}
+    const { alias } = cfg.build
     const defaultAliases = {
       '@': appPaths.srcDir,
       '#q-app': '@quasar/app-vite'
     }
     for (const aliasKey in defaultAliases) {
-      if (!(aliasKey in cfg.build.alias)) {
-        cfg.build.alias[aliasKey] = defaultAliases[aliasKey]
+      if (!(aliasKey in alias)) {
+        alias[aliasKey] = defaultAliases[aliasKey]
+      }
+    }
+    if (process.platform === 'win32') {
+      cfg.metaConf.rawAlias = { ...alias }
+      for (const aliasKey in alias) {
+        alias[aliasKey] = alias[aliasKey].replaceAll('\\', '/')
       }
     }
 

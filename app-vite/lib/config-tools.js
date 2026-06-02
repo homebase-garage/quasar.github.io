@@ -254,7 +254,10 @@ export async function createViteConfig(
     // are installed in /src-{modeName} and not in root
     // so it breaks Vite
     Object.keys(deps).forEach(depName => {
-      viteConf.resolve.alias[depName] = join(target, depName)
+      viteConf.resolve.alias[depName] = join(target, depName).replaceAll(
+        '\\', // windows
+        '/'
+      )
     })
   })
 
