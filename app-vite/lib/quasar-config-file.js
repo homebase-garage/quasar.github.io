@@ -388,7 +388,7 @@ export class QuasarConfigFile {
     try {
       // cache busting it, hence the ?t= param
       const fnResult = await import(
-        pathToFileURL(this.#tempFile) + '?t=' + Date.now()
+        pathToFileURL(this.#tempFile).href + '?t=' + Date.now()
       )
       quasarConfigFn = fnResult.default || fnResult
     } catch (err) {
