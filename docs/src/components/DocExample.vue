@@ -56,7 +56,7 @@
     </div>
 
     <q-slide-transition>
-      <div v-show="expanded">
+      <div v-if="expanded">
         <q-tabs
           class="header-tabs"
           v-model="currentTab"
@@ -90,7 +90,7 @@
             :key="`pane-${tab}`"
             :name="tab"
           >
-            <DocCode lang="markup" :code="def.parts[tab]" />
+            <DocCode lang="vue" :code="def.parts[tab]" />
           </q-tab-panel>
         </q-tab-panels>
       </div>

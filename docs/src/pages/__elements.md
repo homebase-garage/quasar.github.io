@@ -161,7 +161,7 @@ export default function (ctx) { // can be async too
   // Example output on console:
   {
     dev: true,
-    prod: false [[! highlight]]
+    prod: false // [!code highlight]
   }
 
   const { FOO } = process.env // ❌ It doesn't allow destructuring or similar
@@ -263,28 +263,28 @@ export default function (ctx) { // can be async too
 }
 ```
 
-```json [rem=1]
+```json [rem=1,3 add=4]
 {
   "min": 0,
-  "super": false, [[! rem]]
-  "super": true, [[! add]]
+  "super": false,
+  "super": true,
   "max": 100
 }
 ```
 
-```json [numbered]
+```json [numbered rem=3 add=4]
 {
   "min": 0,
-  "super": false, [[! rem]]
-  "super": true, [[! add]]
+  "super": false,
+  "super": true,
   "max": 100
 }
 ```
 
-```json [numbered]
+```json [numbered highlight=3]
 {
   "min": 0,
-  "super": false, [[! highlight]]
+  "super": false,
   "max": 100
 }
 ```
@@ -402,6 +402,61 @@ const x = {
 + super: true
   max: 100
 }
+```
+
+### Collapsible regions
+
+Wrap a block in `// #region <label>` and `// #endregion` markers and it renders folded by default. Users can expand it on demand. This is useful for hiding repetitive scaffolding (data arrays, boilerplate) that are needed to make the example run, but not so important when understanding the code. This way, the interesting parts are easier to spot. Supports all languages which uses `//`, `/* */` or `<!-- -->` as comment markers, e.g., JavaScript, CSS, HTML, etc.
+
+```js
+function heavySetup() {
+  // #region boilerplate
+  const a = 1
+  const b = 2
+  const c = 3
+  // #endregion
+
+  return a + b + c
+}
+```
+
+### Twoslash (TypeScript intelligence)
+
+Tag a fence with `ts [twoslash]` to run it through the TypeScript compiler at build time. Readers can then **hover any token** for its type and JSDoc. Use it only when it teaches something (a typed union, an inferred shape, a caught mistake). Here are the special markers:
+
+- `// ^?` on the line below a token shows its inferred type.
+- `// ^|` (caret under the cursor column) previews IDE autocompletion for a typed union at the given place.
+- `// @errors: <code>` acknowledges a deliberate compile error so it renders inline instead of failing the build.
+- `// @noErrors` silences all errors (handy when a `^|` value is intentionally partial).
+
+Using `^?` and `^|` will create an overlay. It can cover important code below, or cause a scrollbar to appear if used near the bottom. To avoid this, add a few comment lines with enough leading spaces under it so that the `//` part gets behind the overlay and is not visible. Pair it with a `<!-- prettier-ignore -->` comment before the fence to prevent the formatter from removing the leading spaces.
+
+Imports from `quasar` and `#q-app` resolve. Bare Vue `setup () {}` won't compile, wrap it in `defineComponent({ setup() {} })`.
+
+<!-- prettier-ignore -->
+```ts [twoslash]
+// @errors: 2561
+import { Notify } from 'quasar'
+
+// '^?' pins an inferred type below the marked token:
+const handle = Notify.create({ message: 'Hello' })
+//    ^?
+           //
+
+// '@errors' renders a deliberate compile error inline:
+Notify.create({ mesage: 'typo' })
+
+// '^|' previews autocompletion. The indented `//` lines sit behind the
+// dropdown and reserve room for it (placed last so it covers nothing else):
+Notify.setDefaults({
+  position: 'top-right'
+  //         ^|
+})
+                  //
+                  //
+                  //
+                  //
+                  //
 ```
 
 ## Tree
