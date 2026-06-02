@@ -28,35 +28,68 @@ const { proxy } = getCurrentInstance()
 let timer
 const copied = ref(false)
 
+// Drop the whole line. Hiding just the content would still leave a blank line.
+const SKIP_LINE_SELECTOR = [
+  '.diff.remove',
+  '.doc-code-fold__placeholder' // "▸ …" summary row of a folded region
+].join(', ')
+
+// Skip these subtrees inside lines we keep.
+const SKIP_INLINE_SELECTOR = [
+  '.c-lpref', // line number / diff marker prefix
+  '.twoslash-popup-container', // hover popup
+  '.twoslash-error-line',
+  '.twoslash-tag-line',
+  '.twoslash-query-line',
+  '.twoslash-meta-line',
+  '.twoslash-completion-list', // autocomplete dropdown
+  '.twoslash-completion-cursor' // "|" cursor marker
+].join(', ')
+
+// Empty `//` lines authors add to make room for Twoslash autocomplete.
+const FILLER_LINE_RE = /^\s*\/\/\s*$/
+const LEADING_DIFF_RE = /^\+\s?/
+const BASH_PROMPT_RE = /^\$ /
+
+function lineText(line) {
+  const clone = line.cloneNode(true)
+  clone.querySelectorAll(SKIP_INLINE_SELECTOR).forEach(el => el.remove())
+  return clone.textContent
+}
+
+function extractCode(root, lang) {
+  const out = []
+  for (const line of root.querySelectorAll('.line')) {
+    if (line.matches(SKIP_LINE_SELECTOR)) continue
+
+    let text = lineText(line)
+    if (lang === 'diff' && line.matches('.diff.add')) {
+      text = text.replace(LEADING_DIFF_RE, '')
+    } else if (lang === 'bash') {
+      text = text.replace(BASH_PROMPT_RE, '')
+    }
+    if (FILLER_LINE_RE.test(text)) continue
+
+    out.push(text)
+  }
+  return out.join('\n')
+}
+
 function copy() {
   const target = proxy.$el.previousSibling
 
-  // We need to remove artifacts (like line numbers) and reveal any folded
-  // #region blocks before reading text. The doc-code--copying class hides
-  // line-number/diff/fold-placeholder noise; opening every <details>
-  // ensures their inner code is included in innerText.
+  // Folds must be open or `querySelectorAll('.line')` won't reach their contents.
   const folds = target.querySelectorAll('.doc-code-fold')
   const previousOpen = Array.from(folds, fold => fold.open)
   folds.forEach(fold => {
     fold.open = true
   })
 
-  target.classList.add('doc-code--copying')
-  // oxlint-disable-next-line unicorn/prefer-dom-node-text-content
-  let text = target.innerText
-  target.classList.remove('doc-code--copying')
+  const text = extractCode(target, props.lang)
 
   folds.forEach((fold, index) => {
     fold.open = previousOpen[index]
   })
-
-  if (props.lang === 'bash') {
-    const bashStartRE = /^\$ /
-    text = text
-      .split('\n')
-      .map(line => line.replace(bashStartRE, ''))
-      .join('\n')
-  }
 
   copyToClipboard(text)
     .then(() => {

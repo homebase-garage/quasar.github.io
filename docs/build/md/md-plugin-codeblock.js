@@ -33,7 +33,10 @@ const tabsLineRE = new RegExp(
     String.raw`\s*\|>>$` // then any number of space chars + the ending "|>>"
 )
 
-const customCopyLangs = new Set(['bash'])
+// Langs the CopyButton needs to know about so it can post-process the text:
+//   - bash: strip the leading `$ ` shell prompt
+//   - diff: strip the leading `+ ` from add-lines (remove-lines are already dropped by the line walker)
+const customCopyLangs = new Set(['bash', 'diff'])
 
 function extractTabs(content) {
   const list = []
