@@ -63,7 +63,7 @@ When you are ready, upload the APK for the release build and publish the listing
 
 As you develop your app, you’ll want to update it periodically.
 
-In order for the Google Play Store to accept updated APKs, you’ll need to bump the app version (from `/package.json` or from `/quasar.config file > capacitor > version`, then rebuild the app for release.
+In order for the Google Play Store to accept updated APKs, you'll need to bump the app version directly in `/src-capacitor/android/app/build.gradle`: `versionCode` (integer, must increment for each upload) and `versionName` (display string). Capacitor's CLI does not propagate any JS-side version into the native project, so editing these gradle values is the only mechanism the Play Store sees. Then rebuild the app for release.
 
 ## iOS Publishing
 
@@ -153,6 +153,6 @@ Apple prides itself with a manual review process, which basically means it can t
 
 ### Updating the app
 
-Since you’ll probably want to update your app at some point you’ll first need to bump the app version (from `/package.json`), then rebuild the app for release. Once Xcode opens, follow the same steps all over again.
+Since you'll probably want to update your app at some point you'll first need to bump the app version directly in `/src-capacitor/ios/App/App/Info.plist`: `CFBundleShortVersionString` (the user-visible version) and `CFBundleVersion` (the build number, must increase on each App Store upload). Capacitor's CLI does not propagate any JS-side version into the native project, so editing the plist is the only mechanism App Store Connect sees. Then rebuild the app for release. Once Xcode opens, follow the same steps all over again.
 
 Once you submit for the review, you’ll have to wait for the review process again.
