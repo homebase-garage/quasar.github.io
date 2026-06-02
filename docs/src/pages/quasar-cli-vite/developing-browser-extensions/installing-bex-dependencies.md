@@ -14,7 +14,7 @@ Notice the `/src-bex/package.json` file in your generated `/src-bex` folder. The
   "private": true,
   "type": "module"
 }
-<<| json Typescript |>>
+<<| json TypeScript |>>
 {
   "name": "quasar-bex-app",
   "version": "1.0.0",

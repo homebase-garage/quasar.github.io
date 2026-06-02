@@ -29,7 +29,7 @@ scope:
       role: Senior Developer
       avatar: paolo_caleffi.jpg
       github: IlCallo
-      desc: Typescript support
+      desc: TypeScript support
     - name: Yusuf Kandemir
       role: Senior Developer
       avatar: yusuf_kandemir.jpg
@@ -66,7 +66,7 @@ scope:
       role: Senior Developer
       avatar: kerry_huguet.jpeg
       github: outofmemoryagain
-      desc: Typescript support
+      desc: TypeScript support
     - name: Noah Klayman
       role: Developer / Community Staff
       avatar: noah_klayman.jpeg

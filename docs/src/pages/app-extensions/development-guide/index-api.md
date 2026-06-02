@@ -156,7 +156,7 @@ api.logger.dot // the bullet character the helpers print
 
 ```js
 /**
- * @return {Promise<boolean>} host project has Typescript active or not
+ * @return {Promise<boolean>} host project has TypeScript active or not
  */
 await api.hasTypescript()
 ```

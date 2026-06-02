@@ -1,5 +1,5 @@
 ---
-title: Supporting TypeScript
+title: TypeScript Support
 desc: (@quasar/app-vite) How to enable support for TypeScript in a Quasar app.
 related:
   - /quasar-cli-vite/quasar-config-file
@@ -14,7 +14,7 @@ If you selected TypeScript support when creating your project, you can skip this
 
 ## Installation of TypeScript Support
 
-```tabs Typescript 7
+```tabs
 <<| bash PNPM |>>
 $ pnpm add -D typescript
 <<| bash Yarn |>>
@@ -99,10 +99,10 @@ declare module 'pinia' {
 
 Please refer to:
 
-- [PWA with Typescript](/quasar-cli-vite/developing-pwa/pwa-with-typescript) page.
-- [Electron with Typescript](/quasar-cli-vite/developing-electron-apps/electron-with-typescript) page.
-- [BEX with Typescript](/quasar-cli-vite/developing-browser-extensions/bex-with-typescript) page.
-- [SSR with Typescript](/quasar-cli-vite/developing-ssr/ssr-with-typescript) page.
+- [PWA with TypeScript](/quasar-cli-vite/developing-pwa/pwa-with-typescript) page.
+- [Electron with TypeScript](/quasar-cli-vite/developing-electron-apps/electron-with-typescript) page.
+- [BEX with TypeScript](/quasar-cli-vite/developing-browser-extensions/bex-with-typescript) page.
+- [SSR with TypeScript](/quasar-cli-vite/developing-ssr/ssr-with-typescript) page.
 
 ## Configuring TypeScript
 

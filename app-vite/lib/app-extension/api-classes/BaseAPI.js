@@ -17,7 +17,7 @@ export class BaseAPI {
   }
 
   /**
-   * Is the host project using Typescript?
+   * Is the host project using TypeScript?
    *
    * @return {Promise<boolean>}
    */

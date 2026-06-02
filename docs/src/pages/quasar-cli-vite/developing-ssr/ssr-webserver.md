@@ -7,13 +7,13 @@ Notice that your generated `/src-ssr` contains a file named `server.js`. This fi
 
 ## Anatomy
 
-The `/src-ssr/server.js` file is a simple JavaScript/Typescript file which boots up your SSR webserver and defines what how your webserver starts & handles requests and what it exports (if exporting anything).
+The `/src-ssr/server.js` file is a simple JavaScript/TypeScript file which boots up your SSR webserver and defines what how your webserver starts & handles requests and what it exports (if exporting anything).
 
 ::: danger
 The `/src-ssr/server.js` file is used for both DEV and PROD, so please be careful on how you configure it. To differentiate between the two states you can use `import.meta.env.QUASAR_DEV` and `import.meta.env.QUASAR_PROD`.
 :::
 
-Now let's see what it contains, for JS projects first and then for Typescript. Pick the one you want to use based on the webserver of your choice:
+Now let's see what it contains, for JS projects first and then for TypeScript. Pick the one you want to use based on the webserver of your choice:
 
 ::: details Javascript
 
@@ -759,7 +759,7 @@ export const renderPreloadTag = defineSsrRenderPreloadTag(
 
 :::
 
-::: details Typescript
+::: details TypeScript
 
 ```tabs /src-ssr/server.ts
 <<| ts Hono |>>

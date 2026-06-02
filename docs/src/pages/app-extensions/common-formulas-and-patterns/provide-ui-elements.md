@@ -100,5 +100,5 @@ export default defineBoot(({ app }) => {
 ```
 
 ::: warning
-You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required if you want IDE auto-completion or Typescript compliance.
+You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required if you want IDE auto-completion or TypeScript compliance.
 :::

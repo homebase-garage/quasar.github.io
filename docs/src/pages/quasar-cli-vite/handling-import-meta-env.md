@@ -446,12 +446,12 @@ console.log(
 ```
 
 ::: warning
-Arrays will be typed as `unknown[]`. Should you wish, in a Typescript project, you can use `as ....` to enhance its type wherever you reference the respective variable. Example: `import.meta.MY_ARR as number[]`.
+Arrays will be typed as `unknown[]`. Should you wish, in a TypeScript project, you can use `as ....` to enhance its type wherever you reference the respective variable. Example: `import.meta.MY_ARR as number[]`.
 
 Alternatively, you can declare it yourself in `/env.d.ts` and use /quasar.config > build > env > ignoreType to instruct Quasar CLI to skip declaring it.
 :::
 
-## IntelliSense with Typescript
+## IntelliSense with TypeScript
 
 Quasar CLI takes into account process.env (terminal variables), dotenv files and /quasar.config > build.define & build.defineEnv to automatically inject the types for it. No `env.d.ts` needed in your project folder.
 

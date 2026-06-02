@@ -20,15 +20,15 @@ $ npm install --save-dev oxlint oxfmt
 $ bun add --dev oxlint oxfmt
 ```
 
-```tabs Typescript projects
+```tabs TypeScript projects
 <<| bash PNPM |>>
-$ pnpm add -D oxlint oxfmt oxlint-tsgolint typescript@^6
+$ pnpm add -D oxlint oxfmt oxlint-tsgolint typescript
 <<| bash Yarn |>>
-$ yarn add --dev oxlint oxfmt oxlint-tsgolint typescript@^6
+$ yarn add --dev oxlint oxfmt oxlint-tsgolint typescript
 <<| bash NPM |>>
-$ npm install --save-dev oxlint oxfmt oxlint-tsgolint typescript@^6
+$ npm install --save-dev oxlint oxfmt oxlint-tsgolint typescript
 <<| bash Bun |>>
-$ bun add --dev oxlint oxfmt oxlint-tsgolint typescript@^6
+$ bun add --dev oxlint oxfmt oxlint-tsgolint typescript
 ```
 
 ### Package.json scripts
@@ -79,7 +79,7 @@ Create the following files:
     "builtin": true
   }
 }
-<<| ts Typescript projects: /oxlint.config.ts |>>
+<<| ts TypeScript projects: /oxlint.config.ts |>>
 import { defineConfig } from 'oxlint'
 
 export default defineConfig({
@@ -145,7 +145,7 @@ export default defineConfig({
   "useTabs": false,
   "vueIndentScriptAndStyle": false
 }
-<<| ts Typescript projects: /oxfmt.config.ts |>>
+<<| ts TypeScript projects: /oxfmt.config.ts |>>
 import { defineConfig } from 'oxfmt'
 
 export default defineConfig({
@@ -186,7 +186,7 @@ export default defineConfig({
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true
 }
-<<| json Typescript |>>
+<<| json TypeScript |>>
 {
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"

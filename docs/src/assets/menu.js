@@ -729,8 +729,8 @@ export default [
         path: 'browser-compatibility'
       },
       {
-        name: 'Supporting TypeScript',
-        path: 'supporting-ts'
+        name: 'TypeScript Support',
+        path: 'typescript-support'
       },
       {
         name: 'Directory Structure',
@@ -855,7 +855,7 @@ export default [
             path: 'handling-404-and-500-errors'
           },
           {
-            name: 'SSR with Typescript',
+            name: 'SSR with TypeScript',
             path: 'ssr-with-typescript'
           },
           {
@@ -925,7 +925,7 @@ export default [
             path: 'handling-service-worker'
           },
           {
-            name: 'PWA with Typescript',
+            name: 'PWA with TypeScript',
             path: 'pwa-with-typescript'
           }
         ]
@@ -1071,7 +1071,7 @@ export default [
             path: 'frameless-electron-window'
           },
           {
-            name: 'Electron with Typescript',
+            name: 'Electron with TypeScript',
             path: 'electron-with-typescript'
           },
           {
@@ -1129,7 +1129,7 @@ export default [
             path: 'content-scripts'
           },
           {
-            name: 'BEX with Typescript',
+            name: 'BEX with TypeScript',
             path: 'bex-with-typescript'
           }
         ]

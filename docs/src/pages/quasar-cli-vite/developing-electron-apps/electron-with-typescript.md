@@ -1,9 +1,9 @@
 ---
-title: Electron with Typescript
-desc: (@quasar/app-vite) How to use Typescript with Electron in Quasar
+title: Electron with TypeScript
+desc: (@quasar/app-vite) How to use TypeScript with Electron in Quasar
 ---
 
-In order to support Electron with Typescript, you will need to rename the extension for your files in /src-electron from `.js` to `.ts` and make the necessary TS code changes.
+In order to support Electron with TypeScript, you will need to rename the extension for your files in /src-electron from `.js` to `.ts` and make the necessary TS code changes.
 
 ::: tip
 `@electron/packager` and `electron-builder` export their configuration types from their own packages.

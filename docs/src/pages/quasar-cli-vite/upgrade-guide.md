@@ -585,7 +585,7 @@ export default defineConfig(ctx => {
 
 The `ctx` object now includes a logger that prints in the Quasar CLI's own output style. See [Logging via ctx](/quasar-cli-vite/quasar-config-file#logging-via-ctx).
 
-### Typescript changes
+### TypeScript changes
 
 The only `.d.ts` file that you need will be in the root of your project folder:
 
@@ -804,7 +804,7 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-<<| ts Full (Typescript) |>>
+<<| ts Full (TypeScript) |>>
 import { BrowserWindow, app } from "electron";
 import path from "node:path";
 import os from "node:os";

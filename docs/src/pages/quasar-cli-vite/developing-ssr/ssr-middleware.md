@@ -271,7 +271,7 @@ ssr: {
 }
 ```
 
-Now let's see what it contains, for JS projects first and then for Typescript. Pick the one you want to use based on the webserver of your choice:
+Now let's see what it contains, for JS projects first and then for TypeScript. Pick the one you want to use based on the webserver of your choice:
 
 ::: details Javascript
 
@@ -571,7 +571,7 @@ export default defineSsrMiddleware(({ app, publicPath, render, serve }) => {
 
 :::
 
-::: details Typescript
+::: details TypeScript
 
 ```tabs src-ssr/middlewares/render.ts
 <<| ts Hono |>>
