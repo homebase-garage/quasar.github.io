@@ -48,7 +48,9 @@ const SKIP_INLINE_SELECTOR = [
 
 // Empty `//` lines authors add to make room for Twoslash autocomplete.
 const FILLER_LINE_RE = /^\s*\/\/\s*$/
-const LEADING_DIFF_RE = /^\+\s?/
+// In diff blocks, we write `+ content` (one space less than the aimed indent, as + takes a space)
+// Swapping the + for a space restores the real indent. Remove-lines are already dropped elsewhere.
+const LEADING_PLUS_RE = /^\+/
 const BASH_PROMPT_RE = /^\$ /
 
 function lineText(line) {
@@ -63,8 +65,8 @@ function extractCode(root, lang) {
     if (line.matches(SKIP_LINE_SELECTOR)) continue
 
     let text = lineText(line)
-    if (lang === 'diff' && line.matches('.diff.add')) {
-      text = text.replace(LEADING_DIFF_RE, '')
+    if (lang === 'diff') {
+      text = text.replace(LEADING_PLUS_RE, ' ')
     } else if (lang === 'bash') {
       text = text.replace(BASH_PROMPT_RE, '')
     }
