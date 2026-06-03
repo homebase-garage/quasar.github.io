@@ -285,43 +285,57 @@ As you may have noticed, the `import.meta.env` gets constructed from multiple in
 
 Quasar CLI automatically infers and maintains the type for process.env (terminal variables), dotenv files, /quasar.config > define & defineEnv.
 
+| Example value | Inferred type | Replaced with  |
+| ------------- | ------------- | -------------- |
+| true          | boolean       | `true`         |
+| 42            | number        | `42`           |
+| null          | null          | `null`         |
+| hello         | string        | `"hello"`      |
+| [1,2,3]       | string        | `"[1,2,3]"`    |
+| {some:'obj'}  | string        | `"{some:obj}"` |
+
 Here is an example with the input/config and output (your code):
 
 ```tabs Input/config
 <<| bash Terminal |>>
-$ FLAG_BOOL=true FLAG_STR=HelloWorld FLAG_ARR=[1,2,3] quasar dev
+# we declare some process env variables when invoking a quasar cmd:
+$ FLAG_BOOL=true FLAG_STR=HelloWorld FLAG_NULL=null FLAG_ARR=[1,2,3] FLAG_OBJ={key:'val'} quasar dev
 <<| js /quasar.config file |>>
 build: {
   define: {
     DEFINE_BOOL: JSON.stringify(true),
-    DEFINE_STRING: JSON.stringify("hello"),
+    DEFINE_STR: JSON.stringify("hello"),
     DEFINE_NUMBER: JSON.stringify(42),
-    DEFINE_ARRAY: JSON.stringify([1, 2, 3]),
-    DEFINE_OBJECT: JSON.stringify({ key: "value" })
+    DEFINE_NULL: JSON.stringify(null),
+    DEFINE_ARR: JSON.stringify([1,2,3]),
+    DEFINE_OBJ: JSON.stringify({key: "val"})
   },
 
   defineEnv: {
     DEFINE_ENV_BOOL: true,
-    DEFINE_ENV_STRING: "hello",
+    DEFINE_ENV_STR: "hello",
     DEFINE_ENV_NUMBER: 42,
-    DEFINE_ENV_ARRAY: [1, 2, 3],
-    DEFINE_ENV_OBJECT: { key: "value" }
+    DEFINE_ENV_NULL: null,
+    DEFINE_ENV_ARR: [1,2,3],
+    DEFINE_ENV_OBJ: {key:"val"}
   }
 }
 <<| bash /.env |>>
 # backend only:
 DOTENV_BOOL=true
-DOTENV_STRING=hello
+DOTENV_STR=hello
 DOTENV_NUMBER=42
-DOTENV_ARRAY=[1,2,3]
-DOTENV_OBJECT={"key":"value"}
+DOTENV_NULL=null
+DOTENV_ARR=[1,2,3]
+DOTENV_OBJ={"key":"val"}
 
 # client (with default QCLI_ prefix) & backend:
 QCLI_DOTENV_BOOL=true
-QCLI_DOTENV_STRING=hello
+QCLI_DOTENV_STR=hello
 QCLI_DOTENV_NUMBER=42
-QCLI_DOTENV_ARRAY=[1,2,3]
-QCLI_DOTENV_OBJECT={"key":"value"}
+QCLI_DOTENV_NULL=null
+QCLI_DOTENV_ARR=[1,2,3]
+QCLI_DOTENV_OBJ={"key":"val"}
 ```
 
 ```tabs In your code
@@ -335,35 +349,48 @@ console.log(
   typeof import.meta.env.FLAG_STR // string
 );
 console.log(
-  import.meta.env.FLAG_ARR, // [1, 2, 3]
-  Array.isArray(import.meta.env.FLAG_ARR) // true
+  import.meta.env.FLAG_NULL, // null
+  import.meta.env.FLAG_NULL === null // is true
+);
+console.log(
+  import.meta.env.FLAG_ARR, // "[1,2,3]"
+  typeof import.meta.env.FLAG_ARR // string
+);
+console.log(
+  import.meta.env.FLAG_OBJ, // "{key:'val'}"
+  typeof import.meta.env.FLAG_OBJ // string
 );
 <<| js From build.define |>>
 console.log(DEFINE_BOOL, typeof DEFINE_BOOL); // true boolean
-console.log(DEFINE_STRING, typeof DEFINE_STRING); // "hello" string
+console.log(DEFINE_STR, typeof DEFINE_STR); // "hello" string
 console.log(DEFINE_NUMBER, typeof DEFINE_NUMBER); // 42 number
-console.log(DEFINE_ARRAY, Array.isArray(DEFINE_ARRAY)); // [1, 2, 3] true
-console.log(DEFINE_OBJECT, typeof DEFINE_OBJECT); // { key: "value" } object
+console.log(DEFINE_NULL, DEFINE_NULL === null); // null true
+console.log(DEFINE_ARR, typeof DEFINE_ARR); // "[1,2,3]" string
+console.log(DEFINE_OBJ, typeof DEFINE_OBJ); // "{key: "value" } string
 <<| js From build.defineEnv |>>
 console.log(
   import.meta.env.DEFINE_ENV_BOOL, // true
   typeof import.meta.env.DEFINE_ENV_BOOL // boolean
 );
 console.log(
-  import.meta.env.DEFINE_ENV_STRING, // "hello"
-  typeof import.meta.env.DEFINE_ENV_STRING // string
+  import.meta.env.DEFINE_ENV_STR, // "hello"
+  typeof import.meta.env.DEFINE_ENV_STR // string
 );
 console.log(
   import.meta.env.DEFINE_ENV_NUMBER, // 42
   typeof import.meta.env.DEFINE_ENV_NUMBER // number
 );
 console.log(
-  import.meta.env.DEFINE_ENV_ARRAY, // [1, 2, 3]
-  Array.isArray(import.meta.env.DEFINE_ENV_ARRAY) // true
+  import.meta.env.DEFINE_ENV_NULL, // null
+  import.meta.env.DEFINE_ENV_NULL === null // true
 );
 console.log(
-  import.meta.env.DEFINE_ENV_OBJECT, // { key: "value" }
-  typeof import.meta.env.DEFINE_ENV_OBJECT // object
+  import.meta.env.DEFINE_ENV_ARR, // "[1,2,3]"
+  typeof import.meta.env.DEFINE_ENV_ARR // string
+);
+console.log(
+  import.meta.env.DEFINE_ENV_OBJ, // "{key:'val'}"
+  typeof import.meta.env.DEFINE_ENV_OBJ // string
 );
 <<| js From dotenv (client code) |>>
 /**
@@ -374,29 +401,34 @@ console.log(
   typeof import.meta.env.QCLI_DOTENV_BOOL // boolean
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_STRING, // "hello"
-  typeof import.meta.env.QCLI_DOTENV_STRING // string
+  import.meta.env.QCLI_DOTENV_STR, // "hello"
+  typeof import.meta.env.QCLI_DOTENV_STR // string
 );
 console.log(
   import.meta.env.QCLI_DOTENV_NUMBER, // 42
   typeof import.meta.env.QCLI_DOTENV_NUMBER // number
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_ARRAY, // [1, 2, 3]
-  Array.isArray(import.meta.env.QCLI_DOTENV_ARRAY) // true
+  import.meta.env.QCLI_DOTENV_NULL, // null
+  import.meta.env.QCLI_DOTENV_NULL === null // true
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_OBJECT, // { key: "value" }
-  typeof import.meta.env.QCLI_DOTENV_OBJECT // object
+  import.meta.env.QCLI_DOTENV_ARR, // "[1,2,3]"
+  typeof import.meta.env.QCLI_DOTENV_ARR // string
+);
+console.log(
+  import.meta.env.QCLI_DOTENV_OBJ, // "{key:'val'}"
+  typeof import.meta.env.QCLI_DOTENV_OBJ // string
 );
 
-// Not exposed to client code due to missing QCLI_ prefix:
+// Not exposed to client code due to missing QCLI_ configurable prefix:
 console.log(
   import.meta.env.DOTENV_BOOL, // undefined
-  import.meta.env.DOTENV_STRING, // undefined
+  import.meta.env.DOTENV_STR, // undefined
   import.meta.env.DOTENV_NUMBER, // undefined
-  import.meta.env.DOTENV_ARRAY, // undefined
-  import.meta.env.DOTENV_OBJECT, // undefined
+  import.meta.env.DOTENV_NULL // undefined
+  import.meta.env.DOTENV_ARR, // undefined
+  import.meta.env.DOTENV_OBJ, // undefined
 );
 <<| js From dotenv (backend code) |>>
 /**
@@ -407,20 +439,24 @@ console.log(
   typeof import.meta.env.QCLI_DOTENV_BOOL // boolean
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_STRING, // "hello"
-  typeof import.meta.env.QCLI_DOTENV_STRING // string
+  import.meta.env.QCLI_DOTENV_STR, // "hello"
+  typeof import.meta.env.QCLI_DOTENV_STR // string
 );
 console.log(
   import.meta.env.QCLI_DOTENV_NUMBER, // 42
   typeof import.meta.env.QCLI_DOTENV_NUMBER // number
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_ARRAY, // [1, 2, 3]
-  Array.isArray(import.meta.env.QCLI_DOTENV_ARRAY) // true
+  import.meta.env.QCLI_DOTENV_NULL, // null
+  import.meta.env.QCLI_DOTENV_NULL === null // true
 );
 console.log(
-  import.meta.env.QCLI_DOTENV_OBJECT, // { key: "value" }
-  typeof import.meta.env.QCLI_DOTENV_OBJECT // object
+  import.meta.env.QCLI_DOTENV_ARR, // "[1,2,3]"
+  typeof import.meta.env.QCLI_DOTENV_ARR // string
+);
+console.log(
+  import.meta.env.QCLI_DOTENV_OBJ, // "{key:'val'}"
+  typeof import.meta.env.QCLI_DOTENV_OBJ // string
 );
 
 console.log(
@@ -428,32 +464,34 @@ console.log(
   typeof import.meta.env.DOTENV_BOOL // boolean
 );
 console.log(
-  import.meta.env.DOTENV_STRING, // "hello"
-  typeof import.meta.env.DOTENV_STRING // string
+  import.meta.env.DOTENV_STR, // "hello"
+  typeof import.meta.env.DOTENV_STR // string
 );
 console.log(
   import.meta.env.DOTENV_NUMBER, // 42
   typeof import.meta.env.DOTENV_NUMBER // number
 );
 console.log(
-  import.meta.env.DOTENV_ARRAY, // [1, 2, 3]
-  Array.isArray(import.meta.env.DOTENV_ARRAY) // true
+  import.meta.env.DOTENV_NULL, // null
+  import.meta.env.DOTENV_NULL === null // true
 );
 console.log(
-  import.meta.env.DOTENV_OBJECT, // { key: "value" }
-  typeof import.meta.env.DOTENV_OBJECT // object
+  import.meta.env.DOTENV_ARR, // "[1,2,3]"
+  typeof import.meta.env.DOTENV_ARR // string
+);
+console.log(
+  import.meta.env.DOTENV_OBJ, // "{key:'val'}"
+  typeof import.meta.env.DOTENV_OBJ // string
 );
 ```
-
-::: warning
-Arrays will be typed as `unknown[]`. Should you wish, in a TypeScript project, you can use `as ....` to enhance its type wherever you reference the respective variable. Example: `import.meta.MY_ARR as number[]`.
-
-Alternatively, you can declare it yourself in `/env.d.ts` and use /quasar.config > build > env > ignoreType to instruct Quasar CLI to skip declaring it.
-:::
 
 ## IntelliSense with TypeScript
 
 Quasar CLI takes into account process.env (terminal variables), dotenv files and /quasar.config > build.define & build.defineEnv to automatically inject the types for it. No `env.d.ts` needed in your project folder.
+
+::: tip
+You can inspect the auto-injected types from the `/.quasar/quasar.d.ts` file. This file is auto-generated, so do not manually change it as it will get overwritten on next quasar command call.
+:::
 
 However, there are cases which are not auto-handled by Quasar CLI:
 
@@ -706,7 +744,7 @@ Quasar CLI detects dotenv files and uses them for the /quasar.config file itself
 }
 ```
 
-Usage in the `/quasar.config` file, given that you defined `MY_VAR=true` in `/.env`:
+Usage in the `/quasar.config` file, given that you defined `MY_BOOL=true` in `/.env`:
 
 ```js /quasar.config file example
 import { defineConfig } from '#q-app'
@@ -714,7 +752,7 @@ import { defineConfig } from '#q-app'
 export default defineConfig(ctx => {
   return {
     build: {
-      filenameBasedRouting: import.meta.env.MY_VAR // inferred as boolean already
+      filenameBasedRouting: import.meta.env.MY_BOOL // inferred as boolean already
     }
   }
 })
