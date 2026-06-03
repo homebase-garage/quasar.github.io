@@ -214,9 +214,8 @@ jobs:
       fail-fast: false
       matrix:
         script: [js, ts]
-        allPresets: [true, false]
 
-    name: Test ae-${{ matrix.script }}${{ matrix.allPresets == true && '-allPresets' || '' }}
+    name: Test ae-${{ matrix.script }}
 
     steps:
       - name: Checkout code
@@ -245,7 +244,7 @@ jobs:
           key: pnpm-cache-ae-${{ matrix.script }}
 
       - name: Create the test project
-        run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset oxlint${{ matrix.allPresets == true && ' --preset prompts --preset install --preset uninstall' || '' }} --defaults
+        run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset oxlint --preset prompts --preset install --preset uninstall' --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project
