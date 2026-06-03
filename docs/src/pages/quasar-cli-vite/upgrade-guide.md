@@ -887,6 +887,73 @@ Instead of diffing here, you might want to check the next pages (even if you sti
 - You might also want to use thew new `/src-ssr/server-assets` folder (create it). This is copied as-is to dist and can be used in dev too, through `resolve.serverAssets()` or `folders.serverAssets`.
 - One more thing to note, for SSR middlewares: `serve.error()` has been changed to `serve.devError()` (with new params).
 
+## PWA mode changes
+
+### `/src-pwa/sw/` subfolder for the service worker
+
+The service worker and the PWA-specific `tsconfig.json` (for TypeScript projects) now lives inside `/src-pwa/sw/`. The main-thread file `register-sw.{js,ts}` stays at the `/src-pwa/` root.
+
+Background: TypeScript does NOT pick up nested `tsconfig.json` files when running `tsc`/`vue-tsc` from the project root, so the previous flat layout (`src-pwa/custom-sw.ts` + sibling `tsconfig.json`) produced false errors like `Property 'skipWaiting' does not exist on type 'ServiceWorkerGlobalScope'`. Also, you could not use DOM types (e.g., `location.reload()`) inside the register service worker script when it works perfectly in runtime. Quasar's generated `.quasar/tsconfig.json` now auto-excludes `/src-pwa/sw/` so root tsc/vue-tsc skip it, it is checked separately, and the nested tsconfig handles SW typing in the IDE as before.
+
+Migration steps:
+
+1. Create `/src-pwa/sw/`.
+2. Move `/src-pwa/custom-sw.{js,ts}` -> `/src-pwa/sw/custom-sw.{js,ts}`.
+3. TS only: move `/src-pwa/tsconfig.json` -> `/src-pwa/sw/tsconfig.json` then replace the contents with a thin pointer to the Quasar-generated SW config:
+
+   ```json /src-pwa/sw/tsconfig.json
+   {
+     "extends": "../../.quasar/tsconfig.pwa-sw.json"
+   }
+   ```
+
+   The generated `.quasar/tsconfig.pwa-sw.json` handles the WebWorker lib swap and the scoped include/exclude. If you had custom settings in your old `src-pwa/tsconfig.json`, you can use `quasar.config file > pwa > extendPWASwTsConfig` to customize the generated one. See [PWA with TypeScript](/quasar-cli-vite/developing-pwa/pwa-with-typescript) for more information.
+
+4. Update your ESLint config glob:
+
+   ```diff
+   {
+   - files: ['src-pwa/custom-service-worker.ts'],
+   + files: ['src-pwa/sw/**/*.ts'],
+     languageOptions: {
+       globals: {
+         ...globals.serviceworker
+       }
+     }
+   }
+   ```
+
+5. If you set `sourceFiles.pwaServiceWorker` explicitly in `quasar.config`, update it:
+
+   ```diff
+   sourceFiles: {
+   - pwaServiceWorker: 'src-pwa/custom-service-worker',
+   + pwaServiceWorker: 'src-pwa/sw/custom-sw',
+   }
+   ```
+
+   If you don't set it, the new default kicks in automatically.
+
+6. (Optional) TypeScript only: to type-check the SW during dev/build, add a `typescript` entry to your `vite-plugin-checker` options (alongside `vueTsc: true`):
+
+   ```diff /quasar.config.ts
+   ['vite-plugin-checker', {
+     vueTsc: true,
+   + typescript: {
+   +   tsconfigPath: './src-pwa/sw/tsconfig.json'
+   + },
+     // ...
+   }, { server: false }]
+   ```
+
+7. (Optional) TypeScript only: add a `package.json` script to check both root and SW types:
+   ```diff /package.json
+   "scripts": {
+   + "typecheck": "vue-tsc --noEmit && tsc --project src-pwa/sw/tsconfig.json --noEmit",
+     // ...
+   }
+   ```
+
 ## Capacitor mode changes
 
 ### `.js` / `.ts` capacitor.config
