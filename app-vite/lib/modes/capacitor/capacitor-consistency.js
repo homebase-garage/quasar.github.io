@@ -15,10 +15,7 @@ export async function ensureDeps({ appPaths, cacheProxy }) {
   if (existsSync(appPaths.resolve.capacitor('node_modules'))) return
 
   const nodePackager = await cacheProxy.getModule('nodePackager')
-  await nodePackager.install({
-    cwd: appPaths.capacitorDir,
-    params: nodePackager.name === 'pnpm' ? ['i', '--ignore-workspace'] : void 0
-  })
+  await nodePackager.install({ cwd: appPaths.capacitorDir })
 }
 
 export async function ensureConsistency(opts) {
