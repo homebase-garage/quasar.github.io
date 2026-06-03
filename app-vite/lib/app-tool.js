@@ -90,7 +90,7 @@ export class AppTool {
 
       fse.emptyDirSync(dir)
       fse.copySync(
-        appPaths.resolve.cli('templates/capacitor/www'),
+        appPaths.resolve.cli('templates/capacitor/common/www'),
         appPaths.resolve.capacitor('www')
       )
     } else {

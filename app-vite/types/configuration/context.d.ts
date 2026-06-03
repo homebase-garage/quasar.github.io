@@ -183,7 +183,7 @@ type CacheProxyModuleKey =
   | "nodePackager"
   | "storeProvider"
   | "workboxBuild";
-interface CacheProxy {
+export interface CacheProxy {
   readonly getRuntime: (key: string, getInitialValue: () => any) => any;
   readonly getAsyncRuntime: (
     key: string,
