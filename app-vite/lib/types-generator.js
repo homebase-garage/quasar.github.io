@@ -1,4 +1,4 @@
-import { isAbsolute, join, relative } from 'node:path'
+import { dirname, isAbsolute, join, relative } from 'node:path'
 import { statSync } from 'node:fs'
 import fse from 'fs-extra'
 
@@ -52,8 +52,65 @@ export function generateTypes(quasarConf) {
   fse.ensureDirSync(tsConfigDir)
 
   generateTsConfig(quasarConf, fsUtils)
+  generatePwaSwTsConfig(quasarConf, fsUtils)
   writeFeatureFlags(quasarConf, fsUtils)
   writeDeclarations(quasarConf, fsUtils)
+}
+
+/**
+ * Returns the SW folder path relative to `.quasar/` in POSIX form
+ * (no leading `./`). Derived from `sourceFiles.pwaServiceWorker`.
+ */
+function getPwaSwFolderPath(quasarConf, tsConfigDir) {
+  const { appPaths } = quasarConf.ctx
+  const swSourceFile = quasarConf.sourceFiles.pwaServiceWorker
+  const swSourceAbs = isAbsolute(swSourceFile)
+    ? swSourceFile
+    : appPaths.resolve.app(swSourceFile)
+
+  return relative(tsConfigDir, dirname(swSourceAbs)).replaceAll('\\', '/')
+}
+
+/**
+ * Generates `.quasar/tsconfig.pwa-sw.json` when PWA mode is installed.
+ *
+ * The user-facing `src-pwa/sw/tsconfig.json` (or equivalent in a custom
+ * SW folder) extends this generated file, so the override boilerplate
+ * (lib swap, include/exclude scoping) lives in the generated output
+ * rather than in a user-managed file. This also keeps the SW project
+ * picking up generated `.quasar/*.d.ts` augmentations (e.g. ImportMetaEnv).
+ *
+ * Respects a user-overridden `sourceFiles.pwaServiceWorker` path and the
+ * `pwa.extendPWASwTsConfig` hook.
+ *
+ * @param {import('../types/configuration/conf').ResolvedQuasarConf} quasarConf
+ */
+function generatePwaSwTsConfig(quasarConf, fsUtils) {
+  const { appPaths } = quasarConf.ctx
+
+  if (!isModeInstalled(appPaths, 'pwa')) {
+    return
+  }
+
+  const swFolderRelPath = getPwaSwFolderPath(quasarConf, fsUtils.tsConfigDir)
+
+  const pwaSwTsConfig = {
+    extends: './tsconfig.json',
+    compilerOptions: {
+      lib: ['WebWorker', 'ESNext']
+    },
+    // include/exclude are anchored to .quasar/, so these resolve to
+    // <project>/<swFolder>/**/* and <project>/.quasar/*.d.ts
+    include: [`./${swFolderRelPath}/**/*`, './*.d.ts'],
+    exclude: []
+  }
+
+  quasarConf.pwa?.extendPWASwTsConfig?.(pwaSwTsConfig)
+
+  fsUtils.writeFileSync(
+    'tsconfig.pwa-sw.json',
+    JSON.stringify(pwaSwTsConfig, null, 2)
+  )
 }
 
 /**
@@ -201,15 +258,18 @@ function generateTsConfig(quasarConf, fsUtils) {
   }
 
   // The service worker runs in a WebWorker context (no DOM) and has its own
-  // tsconfig.json under src-pwa/sw/. Nested tsconfigs are not picked up by
-  // tsc/vue-tsc when type-checking from the project root, so we exclude the
-  // folder here and rely on the nested tsconfig (handled by the IDE language
-  // server) plus a separate tsc invocation in vite-plugin-checker or a
-  // package.json script for type-checking the service worker.
-  // Excluding it from here doesn't have any downside since it's only for
-  // type-checking, not for transpilation.
+  // tsconfig.json. Nested tsconfigs are not picked up by tsc/vue-tsc when
+  // type-checking from the project root, so we exclude the SW folder here
+  // and rely on the nested tsconfig (handled by the IDE language server)
+  // plus a separate tsc invocation in vite-plugin-checker or a package.json
+  // script for type-checking the service worker. Excluding it from here
+  // doesn't have any downside since it's only for type-checking, not for
+  // transpilation. The folder is derived from sourceFiles.pwaServiceWorker
+  // so we respect user-overridden paths.
   if (isModeInstalled(appPaths, 'pwa')) {
-    tsConfig.exclude.push('./../src-pwa/sw')
+    tsConfig.exclude.push(
+      `./${getPwaSwFolderPath(quasarConf, fsUtils.tsConfigDir)}`
+    )
   }
 
   if (quasarConf.build.filenameBasedRouting) {

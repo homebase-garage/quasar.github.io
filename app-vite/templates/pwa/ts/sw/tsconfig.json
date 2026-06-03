@@ -1,8 +1,3 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "lib": ["WebWorker", "ESNext"]
-  },
-  "include": ["../../.quasar/*.d.ts", "./**/*"],
-  "exclude": []
+  "extends": "../../.quasar/tsconfig.pwa-sw.json"
 }

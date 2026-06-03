@@ -1,5 +1,6 @@
 import { RolldownOptions } from "rolldown";
 import { GenerateSWOptions, InjectManifestOptions } from "workbox-build";
+import { TSConfig } from "./build";
 
 // Derived from https://developer.mozilla.org/en-US/docs/Web/Manifest
 type PwaManifestDirection = "ltr" | "rtl" | "auto";
@@ -156,4 +157,9 @@ export interface QuasarPwaConfiguration {
   extendPWAInjectManifestOptions?: (
     config: InjectManifestOptions
   ) => void | InjectManifestOptions | Promise<void | InjectManifestOptions>;
+
+  /**
+   * Extend the generated `.quasar/tsconfig.pwa-sw.json` file.
+   */
+  extendPWASwTsConfig?: (tsConfig: TSConfig) => void;
 }

@@ -5,16 +5,21 @@ desc: (@quasar/app-vite) How to use TypeScript with Quasar PWA
 
 When you add PWA mode to a TypeScript project (`quasar mode add pwa`), Quasar scaffolds the service worker inside `/src-pwa/sw/` with its own `tsconfig.json` so the WebWorker context is type-checked independently from the rest of the app.
 
-The `/src-pwa/sw/tsconfig.json` looks like this:
+The `/src-pwa/sw/tsconfig.json` is a thin pointer to a generated config in `.quasar/`:
 
 ```json /src-pwa/sw/tsconfig.json
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "lib": ["WebWorker", "ESNext"]
-  },
-  "include": ["../../.quasar/*.d.ts", "./**/*"],
-  "exclude": []
+  "extends": "../../.quasar/tsconfig.pwa-sw.json"
+}
+```
+
+The generated `.quasar/tsconfig.pwa-sw.json` handles the WebWorker lib swap and scopes `include`/`exclude` to the SW folder. To customize it, it's recommended to use the `pwa.extendPWASwTsConfig` hook in `quasar.config.ts` instead of editing `src-pwa/sw/tsconfig.json` directly:
+
+```ts /quasar.config.ts
+pwa: {
+  extendPWASwTsConfig (tsConfig) {
+    tsConfig.compilerOptions!.lib!.push('WebWorker.AsyncIterable')
+  }
 }
 ```
 

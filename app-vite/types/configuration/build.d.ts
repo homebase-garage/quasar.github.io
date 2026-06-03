@@ -60,6 +60,16 @@ type StripEnums<T extends Record<string, any>> = {
             : any;
 };
 
+export interface TSConfig {
+  compilerOptions?: StripEnums<CompilerOptions>;
+  exclude?: string[];
+  compileOnSave?: boolean;
+  extends?: string | string[];
+  files?: string[];
+  include?: string[];
+  typeAcquisition?: TypeAcquisition;
+}
+
 interface PluginEntryRunOptions {
   readonly server?: boolean;
   readonly client?: boolean;
@@ -291,15 +301,7 @@ interface QuasarStaticBuildConfiguration {
      *
      * If you don't have dynamic logic, you can directly modify your `tsconfig.json` file instead.
      */
-    extendTsConfig?: (tsConfig: {
-      compilerOptions?: StripEnums<CompilerOptions>;
-      exclude?: string[];
-      compileOnSave?: boolean;
-      extends?: string | string[];
-      files?: string[];
-      include?: string[];
-      typeAcquisition?: TypeAcquisition;
-    }) => void;
+    extendTsConfig?: (tsConfig: TSConfig) => void;
 
     /**
      * Generate a shim file for `*.vue` files to process them as plain Vue component instances.
