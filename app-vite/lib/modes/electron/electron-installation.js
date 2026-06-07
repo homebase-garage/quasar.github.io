@@ -2,8 +2,12 @@ import fse from 'fs-extra'
 
 import { createPromptSession, warn } from '../../utils/logger.js'
 import { getPackageJson } from '../../utils/get-package-json.js'
-import { isModeInstalled } from '../modes-utils.js'
-import { ensureConsistency } from './electron-consistency.js'
+import {
+  copyModeWorkspace,
+  ensureModeDeps,
+  ensureModePackageJsonAndWorkspace,
+  isModeInstalled
+} from '../modes-utils.js'
 
 /**
  * @param {{
@@ -11,9 +15,15 @@ import { ensureConsistency } from './electron-consistency.js'
  *   silent: boolean
  * }} options
  */
-export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
+export async function addMode({ ctx, silent }) {
+  const { appPaths, cacheProxy } = ctx
+
   if (isModeInstalled(appPaths, 'electron')) {
-    await ensureConsistency({ appPaths, cacheProxy })
+    const forceInstall = await ensureModePackageJsonAndWorkspace(
+      'electron',
+      ctx
+    )
+    await ensureModeDeps('electron', ctx, forceInstall)
 
     if (silent !== true) {
       warn('Electron support detected already. Aborting.')
@@ -25,6 +35,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
 
   const copyTask = promptSession.taskLog({ title: 'Creating /src-electron...' })
 
+  await copyModeWorkspace('electron', ctx)
   fse.copySync(
     appPaths.resolve.cli(`templates/electron/common`),
     appPaths.electronDir
@@ -38,8 +49,7 @@ export async function addMode({ ctx: { appPaths, cacheProxy }, silent }) {
   )
 
   copyTask.success('Created /src-electron')
-
-  await ensureConsistency({ appPaths, cacheProxy })
+  await ensureModeDeps('electron', ctx, true)
 
   const modePkgPath = appPaths.resolve.electron('package.json')
   const electronPkg = getPackageJson('electron', appPaths.electronDir)

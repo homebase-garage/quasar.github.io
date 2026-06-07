@@ -3,10 +3,13 @@ import { globSync } from 'tinyglobby'
 
 import { createPromptSession, warn } from '../../utils/logger.js'
 import { spawnSync } from '../../utils/spawn.js'
-
-import { ensureConsistency, ensureDeps } from './capacitor-consistency.js'
-import { isModeInstalled } from '../modes-utils.js'
 import { renderTemplate } from '../../utils/template.js'
+import {
+  copyModeWorkspace,
+  ensureModeDeps,
+  ensureModePackageJsonAndWorkspace,
+  isModeInstalled
+} from '../modes-utils.js'
 
 /**
  * @param {{
@@ -15,18 +18,24 @@ import { renderTemplate } from '../../utils/template.js'
  *   target: 'android' | 'ios' | undefined
  * }} options
  */
-export async function addMode({
-  ctx: {
+export async function addMode({ ctx, silent, target }) {
+  const {
     appPaths,
     cacheProxy,
     pkg: { appPkg }
-  },
-  silent,
-  target
-}) {
+  } = ctx
+
   if (isModeInstalled(appPaths, 'capacitor')) {
+    ensureWWW(ctx)
+
+    const forceInstall = await ensureModePackageJsonAndWorkspace(
+      'capacitor',
+      ctx
+    )
+    await ensureModeDeps('capacitor', ctx, forceInstall)
+
     if (target) {
-      await addPlatform(target, appPaths, cacheProxy)
+      await addPlatform(target, ctx)
     } else if (silent !== true) {
       warn('Capacitor support detected already. Aborting.')
     }
@@ -65,7 +74,12 @@ export async function addMode({
   const copyTask = promptSession.taskLog({
     title: 'Creating /src-capacitor...'
   })
-  fse.ensureDirSync(appPaths.capacitorDir)
+
+  await copyModeWorkspace('capacitor', ctx)
+  fse.copySync(
+    appPaths.resolve.cli('templates/capacitor/common'),
+    appPaths.capacitorDir
+  )
 
   const nodePackager = await cacheProxy.getModule('nodePackager')
   const scope = {
@@ -76,27 +90,23 @@ export async function addMode({
 
   const hasTypescript = await cacheProxy.getModule('hasTypescript')
   const format = hasTypescript ? 'ts' : 'js'
-
-  for (const subdir of ['common', format]) {
-    const cwd = appPaths.resolve.cli(`templates/capacitor/${subdir}`)
-    globSync(['**/*'], { cwd }).forEach(filePath => {
-      const dest = appPaths.resolve.capacitor(filePath)
-      const content = fse.readFileSync(`${cwd}/${filePath}`, 'utf8')
-      fse.ensureFileSync(dest)
-      fse.writeFileSync(dest, renderTemplate(content, scope), 'utf8')
-    })
-  }
+  const cwd = appPaths.resolve.cli(`templates/capacitor/${format}`)
+  globSync(['**/*'], { cwd }).forEach(filePath => {
+    const dest = appPaths.resolve.capacitor(filePath)
+    const content = fse.readFileSync(`${cwd}/${filePath}`, 'utf8')
+    fse.writeFileSync(dest, renderTemplate(content, scope), 'utf8')
+  })
 
   copyTask.success('Created /src-capacitor')
-
-  await ensureDeps({ appPaths, cacheProxy })
 
   // `cap init` refuses to run when a non-JSON config exists (e.g., js or ts).
   // The scaffolded capacitor.config.{ts,js} already declares appId / appName,
   // which is the only thing `cap init` would write. So, we don't run `cap init`.
 
+  await ensureModeDeps('capacitor', ctx, true)
+
   if (target) {
-    await addPlatform(target, appPaths, cacheProxy)
+    await addPlatform(target, ctx)
   } else {
     promptSession.note(
       'Capacitor support was added without any platform. ' +
@@ -110,8 +120,8 @@ export async function addMode({
   promptSession.end('Capacitor support was added')
 }
 
-async function addPlatform(target, appPaths, cacheProxy) {
-  await ensureConsistency({ appPaths, cacheProxy })
+async function addPlatform(target, ctx) {
+  const { appPaths, cacheProxy } = ctx
 
   // if it has the platform
   if (fse.existsSync(appPaths.resolve.capacitor(target))) return
@@ -124,4 +134,12 @@ async function addPlatform(target, appPaths, cacheProxy) {
   })
 
   await spawnSync(capBin, ['add', target], { cwd: appPaths.capacitorDir })
+}
+
+function ensureWWW({ appPaths }) {
+  const www = appPaths.resolve.capacitor('www')
+
+  if (!fse.existsSync(www)) {
+    fse.copySync(appPaths.resolve.cli('templates/capacitor/common/www'), www)
+  }
 }

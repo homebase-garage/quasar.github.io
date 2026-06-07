@@ -88,9 +88,7 @@ function getPwaSwFolderPath(quasarConf, tsConfigDir) {
 function generatePwaSwTsConfig(quasarConf, fsUtils) {
   const { appPaths } = quasarConf.ctx
 
-  if (!isModeInstalled(appPaths, 'pwa')) {
-    return
-  }
+  if (!isModeInstalled(appPaths, 'pwa')) return
 
   const swFolderRelPath = getPwaSwFolderPath(quasarConf, fsUtils.tsConfigDir)
 

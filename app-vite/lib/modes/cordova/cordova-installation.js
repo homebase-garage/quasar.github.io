@@ -1,11 +1,9 @@
 import fse from 'fs-extra'
 import { green } from 'kolorist'
 
-import { createPromptSession, fatal, log, warn } from '../../utils/logger.js'
-
+import { createPromptSession, warn } from '../../utils/logger.js'
 import { spawnSync } from '../../utils/spawn.js'
-import { ensureConsistency, ensureWWW } from './cordova-consistency.js'
-import { isModeInstalled } from '../modes-utils.js'
+import { ensureModeDeps, isModeInstalled } from '../modes-utils.js'
 
 /**
  * @param {{
@@ -14,16 +12,25 @@ import { isModeInstalled } from '../modes-utils.js'
  *   target: 'android' | 'ios' | undefined
  * }} options
  */
-export async function addMode({
-  ctx: {
+export async function addMode({ ctx, silent, target }) {
+  const {
     appPaths,
     pkg: { appPkg }
-  },
-  silent,
-  target
-}) {
+  } = ctx
+
   if (isModeInstalled(appPaths, 'cordova')) {
+    ensureWWW({ appPaths, forced: true })
+
+    if (!fse.existsSync(appPaths.resolve.cordova('package.json'))) {
+      warn(
+        '/src-cordova/package.json not found. Your setup seems broken. Please remove Cordova support and add it again.'
+      )
+      warn()
+      process.exit(1)
+    }
+
     if (target) {
+      await ensureModeDeps('cordova', ctx)
       await addPlatform(appPaths, target)
     } else if (silent !== true) {
       warn('Cordova support detected already. Aborting.')
@@ -55,14 +62,9 @@ export async function addMode({
       })
   })
 
-  await spawnSync(
-    'cordova',
-    ['create', 'src-cordova', answer.appId, appName],
-    { cwd: appPaths.appDir },
-    () => {
-      fatal('There was an error trying to install Cordova support')
-    }
-  )
+  await spawnSync('cordova', ['create', 'src-cordova', answer.appId, appName], {
+    cwd: appPaths.appDir
+  })
 
   ensureWWW({ appPaths, forced: true })
 
@@ -87,8 +89,8 @@ export async function addMode({
     promptSession.note(
       'Cordova support was added without any platform. ' +
         '\nYou can add Android or iOS platforms by running: ' +
-        '\n "quasar dev -m capacitor -T android" or ' +
-        '\n "quasar dev -m capacitor -T ios".',
+        '\n "quasar dev -m cordova -T android" or ' +
+        '\n "quasar dev -m cordova -T ios".',
       'Next step:'
     )
   }
@@ -97,19 +99,20 @@ export async function addMode({
 }
 
 async function addPlatform(appPaths, target) {
-  await ensureConsistency({ appPaths })
-
   // if it has the platform
   if (fse.existsSync(appPaths.resolve.cordova(`platforms/${target}`))) return
 
-  log(`Adding Cordova platform "${target}"`)
-  await spawnSync(
-    'cordova',
-    ['platform', 'add', target],
-    { cwd: appPaths.cordovaDir },
-    () => {
-      warn(`There was an error trying to install Cordova platform "${target}"`)
-      process.exit(1)
-    }
-  )
+  await spawnSync('cordova', ['platform', 'add', target], {
+    cwd: appPaths.cordovaDir
+  })
+}
+
+function ensureWWW({ appPaths, forced }) {
+  const www = appPaths.resolve.cordova('www')
+
+  if (forced) fse.removeSync(www)
+
+  if (!fse.existsSync(www)) {
+    fse.copySync(appPaths.resolve.cli('templates/cordova/www'), www)
+  }
 }
