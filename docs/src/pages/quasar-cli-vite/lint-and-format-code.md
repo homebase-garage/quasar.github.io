@@ -22,13 +22,13 @@ bun add --dev oxlint oxfmt
 
 ```tabs TypeScript projects
 <<| bash PNPM |>>
-pnpm add -D oxlint oxfmt oxlint-tsgolint typescript
+pnpm add -D oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash Yarn |>>
-yarn add --dev oxlint oxfmt oxlint-tsgolint typescript
+yarn add --dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash NPM |>>
-npm install --save-dev oxlint oxfmt oxlint-tsgolint typescript
+npm install --save-dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash Bun |>>
-bun add --dev oxlint oxfmt oxlint-tsgolint typescript
+bun add --dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 ```
 
 ### Package.json scripts
@@ -37,6 +37,7 @@ bun add --dev oxlint oxfmt oxlint-tsgolint typescript
 "scripts": {
   "lint": "oxfmt && oxlint --fix",
   "lint:check": "oxfmt --check && oxlint",
+  "typecheck": "vue-tsc --noEmit"
 }
 ```
 

@@ -12,6 +12,7 @@
     "lint": "oxfmt && oxlint --fix",
     "lint:check": "oxfmt --check && oxlint",
 <% } %>
+    "typecheck": "vue-tsc --noEmit",
     "dev": "pnpm --filter playground dev",
     "invoke": "pnpm --filter playground invoke",
     "cycle": "pnpm --filter playground cycle",
@@ -23,7 +24,8 @@
     "oxlint": "^1.x",
     "oxlint-tsgolint": "^0.x",
 <% } %>
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "vue-tsc": "^3.3.3"
   },
   "engines": {
     "node": ">= 26 || ^24 || ^22.12"

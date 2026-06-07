@@ -958,7 +958,7 @@ vitePlugins: [
 ]
 ```
 
-7. (Optional) TypeScript + ESLint only: add a `package.json` script to check both root and SW types:
+7. (Optional) TypeScript: add a `package.json` script to check both root and SW types:
    ```json /package.json
    "scripts": {
     "typecheck": "vue-tsc --noEmit && tsc --project src-pwa/sw/tsconfig.json --noEmit", // [!code ++]

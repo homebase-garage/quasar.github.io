@@ -203,8 +203,9 @@ jobs:
       fail-fast: false
       matrix:
         script: [js, ts]
+        lint: [true, false]
 
-    name: Test ae-${{ matrix.script }}
+    name: Test ae-${{ matrix.script }}${{ matrix.lint == true && '-lint' || '' }}
 
     steps:
       - name: Checkout code
@@ -230,10 +231,10 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-cache.outputs.PNPM_CACHE_PATH }}
-          key: pnpm-cache-ae-${{ matrix.script }}
+          key: pnpm-cache-ae-${{ matrix.script }}-${{ matrix.lint }}
 
       - name: Create the test project
-        run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }} --preset oxlint --preset prompts --preset install --preset uninstall --defaults
+        run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }}${{ matrix.lint == true && ' --preset oxlint' || '' }} --preset prompts --preset install --preset uninstall --defaults
 
       - name: Lint the project
         working-directory: create-quasar/test-project
