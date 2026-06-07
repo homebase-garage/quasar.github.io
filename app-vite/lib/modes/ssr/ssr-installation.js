@@ -24,6 +24,7 @@ export async function addMode({ ctx, silent }) {
     if (silent !== true) {
       warn('SSR support detected already. Aborting.')
     }
+
     return
   }
 

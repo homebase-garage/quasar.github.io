@@ -26,15 +26,14 @@ export async function addMode({ ctx, silent, target }) {
   } = ctx
 
   if (isModeInstalled(appPaths, 'capacitor')) {
-    ensureWWW(ctx)
-
-    const forceInstall = await ensureModePackageJsonAndWorkspace(
-      'capacitor',
-      ctx
-    )
-    await ensureModeDeps('capacitor', ctx, forceInstall)
-
     if (target) {
+      ensureWWW(ctx)
+
+      const forceInstall = await ensureModePackageJsonAndWorkspace(
+        'capacitor',
+        ctx
+      )
+      await ensureModeDeps('capacitor', ctx, forceInstall)
       await addPlatform(target, ctx)
     } else if (silent !== true) {
       warn('Capacitor support detected already. Aborting.')

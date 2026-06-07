@@ -28,6 +28,7 @@ export async function addMode({ ctx, silent }) {
     if (silent !== true) {
       warn('Electron support detected already. Aborting.')
     }
+
     return
   }
 
