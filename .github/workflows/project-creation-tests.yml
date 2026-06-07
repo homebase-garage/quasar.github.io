@@ -237,7 +237,7 @@ jobs:
         run: node bin/create-quasar.js test-project --template ae --install pnpm${{ matrix.script == 'ts' && ' --preset typescript' || '' }}${{ matrix.lint == true && ' --preset oxlint' || '' }} --preset prompts --preset install --preset uninstall --defaults
 
       - name: Lint the project
-        if: ${{ matrix.lint === true }}
+        if: ${{ matrix.lint == true }}
         working-directory: create-quasar/test-project
         run: pnpm run lint
 
