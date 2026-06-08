@@ -128,14 +128,20 @@ function isBinaryFile(sourcePath) {
 }
 
 export class AppExtensionInstance {
-  #ctx
-  #appExtJson
-
   extId
   packageFullName
   packageName
 
+  #ctx
+  #appExtJson
+
+  /** @type {boolean | null} */
   #isInstalled = null
+
+  /** @type {import('jiti').Jiti | null} */
+  #jiti = null
+  /** @type {string | null} */
+  #packageParentUrl = null
 
   get logger() {
     return getExtensionLogger(this.extId)
@@ -187,6 +193,7 @@ export class AppExtensionInstance {
         this.#getScriptPath('index')
 
       if (resolvedPath !== void 0) {
+        this.#packageParentUrl = pathToFileURL(resolvedPath).href
         this.#isInstalled = true
         return
       }
@@ -338,13 +345,14 @@ export class AppExtensionInstance {
    * Returns the absolute path to the script file.
    *
    * It uses Node import resolution rather than filesystem-based resolution, so `package.json > exports` will affect the result, if exists.
-   * It will try to resolve the file with no extension, then with `.js`, `.mjs` and `.cjs`.
+   * It will try to resolve the file with no extension, then with the ones defined above.
    * For each extension, it will first check the `dist` directory, then the `src` directory.
    * To give some examples to the import resolution:
    * - `quasar-app-extension-foo/dist/index`
    * - `quasar-app-extension-foo/dist/index.js`
+   * - `quasar-app-extension-foo/src/index.ts`
    *
-   * This allows to use preprocessors (e.g. TypeScript) for all AE files (including index, install, uninstall, etc. AE scripts)
+   * `.ts` AE scripts are loaded via `jiti` at runtime; other formats use native ESM `import()`.
    */
   #getScriptPath(scriptName) {
     if (!this.isInstalled) return
@@ -361,6 +369,15 @@ export class AppExtensionInstance {
     }
   }
 
+  async #getJiti() {
+    if (this.#jiti === null) {
+      const { createJiti } = await import('jiti')
+      this.#jiti = createJiti(this.#packageParentUrl, { tsconfigPaths: true })
+    }
+
+    return this.#jiti
+  }
+
   async #getScript(scriptName, fatalError) {
     const scriptPath = this.#getScriptPath(scriptName)
     if (!scriptPath) {
@@ -374,9 +391,11 @@ export class AppExtensionInstance {
     let fn
 
     try {
-      const { default: defaultFn } = await import(pathToFileURL(scriptPath))
+      const module = scriptPath.endsWith('.ts')
+        ? await this.#getJiti().then(jiti => jiti.import(scriptPath))
+        : await import(pathToFileURL(scriptPath))
 
-      fn = defaultFn
+      fn = module.default ?? module
     } catch (err) {
       console.error(err)
 

@@ -92,6 +92,9 @@ importers:
       html-minifier-terser:
         specifier: ^7.2.0
         version: 7.2.0
+      jiti:
+        specifier: ^2.7.0
+        version: 2.7.0
       kolorist:
         specifier: ^1.8.0
         version: 1.8.0
