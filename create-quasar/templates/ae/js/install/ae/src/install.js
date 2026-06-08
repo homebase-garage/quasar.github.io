@@ -3,7 +3,7 @@
  * https://quasar.dev/app-extensions/development-guide/install-api
  */
 
-import { defineInstallScript } from '@quasar/app-vite'
+import { defineInstallScript } from '#q-app'
 
 // can be async
 export default defineInstallScript((/* api */) => {})

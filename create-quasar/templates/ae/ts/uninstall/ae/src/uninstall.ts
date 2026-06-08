@@ -3,7 +3,7 @@
  * https://quasar.dev/app-extensions/development-guide/uninstall-api
  */
 
-import { defineUninstallScript } from "@quasar/app-vite";
+import { defineUninstallScript } from "#q-app";
 
 // can be async
 export default defineUninstallScript((/* api */) => {});
