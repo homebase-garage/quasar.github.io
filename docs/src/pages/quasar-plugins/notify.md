@@ -187,8 +187,7 @@ export default (ctx) => {
 
 We then edit the newly created `/src/boot/notify-defaults.js`:
 
-<!-- prettier-ignore -->
-```ts [twoslash]
+```ts
 import { Notify } from 'quasar'
 
 Notify.setDefaults({
@@ -196,13 +195,7 @@ Notify.setDefaults({
   textColor: 'white',
   actions: [{ icon: 'close', color: 'white' }],
   position: 'top-right'
-  //         ^|
 })
-
-                  //
-                  //
-                  //
-                  //
 ```
 
 ::: warning

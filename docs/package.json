@@ -26,7 +26,6 @@
   "devDependencies": {
     "@quasar/app-vite": "^3.0.0-beta.41",
     "@rolldown/pluginutils": "^1.0.1",
-    "@shikijs/twoslash": "^4.1.0",
     "fs-extra": "^11.3.5",
     "gray-matter": "^4.0.3",
     "markdown-ast": "^0.3.0",

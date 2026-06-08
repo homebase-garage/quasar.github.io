@@ -30,23 +30,11 @@ const SKIP_LINE_SELECTOR = [
   '.doc-code-fold__placeholder' // "▸ …" summary row of a folded region
 ].join(', ')
 
-// Skip these subtrees inside lines we keep.
-const SKIP_INLINE_SELECTOR = [
-  '.twoslash-popup-container', // hover popup
-  '.twoslash-error-line',
-  '.twoslash-tag-line',
-  '.twoslash-query-line',
-  '.twoslash-meta-line',
-  '.twoslash-completion-list', // autocomplete dropdown
-  '.twoslash-completion-cursor' // "|" cursor marker
-].join(', ')
-
 // Empty `//` lines authors add to make room for Twoslash autocomplete.
 const FILLER_LINE_RE = /^\s*\/\/\s*$/
 
 function lineText(line) {
   const clone = line.cloneNode(true)
-  clone.querySelectorAll(SKIP_INLINE_SELECTOR).forEach(el => el.remove())
   return clone.textContent
 }
 

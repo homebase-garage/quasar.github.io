@@ -1,40 +1,49 @@
-import { highlighter } from './highlight/build-highlighter.js'
 import { langMatch } from './highlight/build-langs.js'
-import { buildFenceTransformers, themeOptions } from './highlight/shared.js'
-import { getFenceBuildOnlyTransformers } from './highlight/twoslash.js'
-import { getSharedStyleToClasses } from '../shiki-css-stash.js'
 import { encodeForAttr } from './md-parse-utils.js'
+// import { highlighter } from './highlight/build-highlighter.js'
+// import { buildFenceTransformers, themeOptions } from './highlight/shared.js'
+// import { getFenceBuildOnlyTransformers } from './highlight/twoslash.js'
+// import { getSharedStyleToClasses } from '../shiki-css-stash.js'
+
+// function getHighlightedContent(rawContent, attrs) {
+//   const { lang } = attrs
+//   const content = rawContent.trim()
+
+//   const html = highlighter
+//     .codeToHtml(content, {
+//       lang,
+//       ...themeOptions,
+//       transformers: [
+//         ...buildFenceTransformers(getFenceBuildOnlyTransformers(attrs)),
+//         ...getSharedStyleToClasses()
+//       ]
+//     })
+//     .replace('<pre ', '<pre v-pre ')
+
+//   return `<div class="relative-position copybtn-hover">${html}<DocCopyBtn /></div>`
+// }
 
 /**
  * lang -> one of the supported languages
- * [modifier] -> optional modifier, e.g. "twoslash"
  * title -> optional card title
  */
 const definitionLineRE = new RegExp(
   '^' +
     `(?<lang>(tabs|${langMatch}))` + // then a language name
-    String.raw`(\s+\[(?<modifier>[^\]]+)\])?` + // then optional modifier
     String.raw`(\s+(?<title>.+))?` + // then optional title
     '$'
 )
 
 /**
- * <<| lang [modifier] title |>>
+ * <<| lang title |>>
  * ...content...
  */
 const tabsLineRE = new RegExp(
   String.raw`^<<\|\s+` + // starts with "<<|" + at least one space char
     `(?<lang>${langMatch})` + // then a language name
-    String.raw`(\s+\[(?<modifier>[^\]]+)\])?` + // then optional modifier
     String.raw`(\s+(?<title>.+))?` + // then optional title
     String.raw`\s*\|>>$` // then any number of space chars + the ending "|>>"
 )
-
-function renderSection(tabContent, attrs) {
-  return attrs.twoslash
-    ? getHighlightedContent(tabContent, attrs)
-    : getDocCode(tabContent, attrs)
-}
 
 function extractTabs(content) {
   const list = []
@@ -47,14 +56,14 @@ function extractTabs(content) {
 
     if (tabsMatch !== null) {
       const {
-        groups: { lang, modifier, title }
+        groups: { lang, title }
       } = tabsMatch
 
       currentTabName = title?.trim() || `Tab ${list.length + 1}`
 
       list.push(currentTabName)
       tabMap[currentTabName] = {
-        attrs: { lang, ...parseModifier(modifier) },
+        attrs: { lang },
         content: []
       }
     } else if (currentTabName !== null) {
@@ -72,34 +81,12 @@ function extractTabs(content) {
         const tabContent = props.content.join('\n')
         return (
           `<q-tab-panel class="q-pa-none" name="${tabName}">` +
-          renderSection(tabContent, props.attrs) +
+          getDocCode(tabContent, props.attrs) +
           '</q-tab-panel>'
         )
       })
       .join('\n')
   }
-}
-
-function getHighlightedContent(rawContent, attrs) {
-  const { lang } = attrs
-  const content = rawContent.trim()
-
-  const html = highlighter
-    .codeToHtml(content, {
-      lang,
-      ...themeOptions,
-      transformers: [
-        ...buildFenceTransformers(getFenceBuildOnlyTransformers(attrs)),
-        ...getSharedStyleToClasses()
-      ]
-    })
-    .replace('<pre ', '<pre v-pre ')
-
-  return `<div class="relative-position copybtn-hover">${html}<DocCopyBtn /></div>`
-}
-
-function parseModifier(modifierStr) {
-  return modifierStr ? { [modifierStr.trim()]: true } : {}
 }
 
 export function parseDefinitionLine(token) {
@@ -113,13 +100,12 @@ export function parseDefinitionLine(token) {
   }
 
   const {
-    groups: { lang, modifier, title }
+    groups: { lang, title }
   } = match
 
   return {
     lang,
     title: title?.trim() || null,
-    ...parseModifier(modifier),
     ...(lang === 'tabs' ? { tabs: extractTabs(token.content) } : {})
   }
 }
@@ -148,7 +134,7 @@ export default function mdPluginCodeblock(md) {
       `${attrs.tabs !== void 0 ? ` :tabs="${attrs.tabs.param}"` : ''}>` +
       (attrs.tabs !== void 0
         ? attrs.tabs.content
-        : renderSection(token.content, attrs)) +
+        : getDocCode(token.content, attrs)) +
       '</DocPrerender>'
     )
   }

@@ -24,7 +24,7 @@ const docCodePreTransformer = {
   }
 }
 
-// Build-only transformers (twoslash) are injected via this hook so
+// Build-only transformers (eg. twoslash) are injected via this hook so
 // they don't leak Node imports into the browser bundle. `md-plugin-codeblock.js`
 // passes them in but `DocCode` does not.
 export function buildFenceTransformers(buildOnly = []) {
@@ -38,8 +38,7 @@ export function buildFenceTransformers(buildOnly = []) {
   ]
 }
 
-// Used by the release-notes pipeline (build-only). Includes bash-prompt
-// since release notes show CLI commands.
+// Used by the release-notes pipeline (build-only).
 export function buildBareTransformers() {
   return [docCodePreTransformer]
 }

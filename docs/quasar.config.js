@@ -1,18 +1,14 @@
 import { defineConfig } from '#q-app'
 
+// import shikiCssStashPlugin from './build/shiki-css-stash.js'
 import { mdVitePlugin } from './build/md/md-vite-plugin.js'
-import shikiCssStashPlugin from './build/shiki-css-stash.js'
 import { quasarApiVitePlugin } from './build/quasar-api.js'
 import { codeSplitting, examplesVitePlugin } from './build/prod-chunks.js'
 
 export default defineConfig(ctx => ({
   boot: [{ path: 'gdpr', server: false }],
 
-  css: [
-    '~@shikijs/twoslash/style-rich.css',
-    'app.sass',
-    '~virtual:shiki-tokens.css'
-  ],
+  css: ['app.sass' /* '~virtual:shiki-tokens.css' */],
 
   build: {
     vueRouterMode: 'history',
@@ -31,8 +27,8 @@ export default defineConfig(ctx => ({
     vitePlugins: [
       quasarApiVitePlugin(),
       mdVitePlugin(ctx.prod),
-      examplesVitePlugin(ctx.prod),
-      shikiCssStashPlugin()
+      examplesVitePlugin(ctx.prod)
+      // shikiCssStashPlugin()
     ],
 
     extendViteConf(_viteConf, { isClient }) {
@@ -40,6 +36,7 @@ export default defineConfig(ctx => ({
         return {
           build: {
             assetsDir: 'a',
+            chunkSizeWarningLimit: 600,
             rolldownOptions: {
               output: {
                 codeSplitting

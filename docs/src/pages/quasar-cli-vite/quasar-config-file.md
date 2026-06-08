@@ -162,31 +162,6 @@ export default defineConfig(ctx => {
 
 Notice the `defineConfig` import from `#q-app`. This is essentially a no-op function but what it does is it helps with the IDE autocomplete experience. Every option you set is type-checked, every value gets completion, and hovering a key reveals its JSDoc.
 
-<!-- prettier-ignore -->
-```ts [twoslash] /quasar.config file
-// @noErrors
-import { defineConfig } from '#q-app'
-
-export default defineConfig(ctx => ({
-  boot: ['axios', 'i18n'],
-
-  css: ['app.sass'],
-
-  extras: ['material-symbols-outlined', 'roboto-font'],
-
-  framework: {
-    lang: 'en-US',
-    plugins: ['Notify', 'Dialog'],
-    iconSet: 'material-'
-    //                 ^|
-  },
-
-  build: {
-    vueRouterMode: 'history'
-  }
-}))
-```
-
 ## Options to Configure
 
 ### css
