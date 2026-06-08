@@ -235,7 +235,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Run hook after Quasar dev server is started ($ quasar dev).
+   * Run hook after Quasar dev server is started ("quasar dev").
    * At this point, the dev server has been started and is available
    * should you wish to do something with it.
    *
@@ -247,7 +247,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Run hook before Quasar builds app for production ($ quasar build).
+   * Run hook before Quasar builds app for production ("quasar build").
    * At this point, the distributables folder hasn't been created yet.
    *
    * @param {function} fn
@@ -258,7 +258,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Run hook after Quasar built app for production ($ quasar build).
+   * Run hook after Quasar built app for production ("quasar build").
    * At this point, the distributables folder has been created and is available
    * should you wish to do something with it.
    *
@@ -270,7 +270,7 @@ export class IndexAPI extends BaseAPI {
   }
 
   /**
-   * Run hook if publishing was requested ("$ quasar build -P"),
+   * Run hook if publishing was requested ("quasar build -P"),
    * after Quasar built app for production and the afterBuild
    * hook (if specified) was executed.
    *

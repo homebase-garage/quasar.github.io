@@ -21,7 +21,18 @@ type ExtendViteConfHandler = (
 ) => void;
 
 type GetPersistentConfHandler = () => Record<string, unknown>;
+type AssignPersistentConfHandler = (cfg: Record<string, unknown>) => void;
+
+type CompatibleWithHandler = (
+  packageName: string,
+  semverCondition?: string
+) => void;
+type HasPackageHandler = (
+  packageName: string,
+  semverCondition?: string
+) => boolean;
 type HasExtensionHandler = (extId: string) => boolean;
+type GetPackageVersionHandler = (packageName: string) => string | undefined;
 
 interface BaseAPI {
   /**
@@ -52,19 +63,45 @@ interface BaseAPI {
 }
 
 interface SharedIndexInstallAPI {
+  /**
+   * Get the extension's persistent configuration object.
+   * @type getPersistentConf {@link GetPersistentConfHandler}
+   */
   readonly getPersistentConf: GetPersistentConfHandler;
-  readonly setPersistentConf: (cfg: Record<string, unknown>) => void;
-  readonly mergePersistentConf: (cfg: Record<string, unknown>) => void;
-  readonly compatibleWith: (
-    packageName: string,
-    semverCondition?: string
-  ) => void;
-  readonly hasPackage: (
-    packageName: string,
-    semverCondition?: string
-  ) => boolean;
+  /**
+   * Set the extension's persistent configuration object.
+   * @type setPersistentConf {@link AssignPersistentConfHandler}
+   */
+  readonly setPersistentConf: AssignPersistentConfHandler;
+  /**
+   * Merge the extension's persistent configuration object.
+   * @type mergePersistentConf {@link AssignPersistentConfHandler}
+   */
+  readonly mergePersistentConf: AssignPersistentConfHandler;
+
+  /**
+   * Ensure compatibility with a specific package and optionally a semver condition.
+   * @type compatibleWith {@link CompatibleWithHandler}
+   */
+  readonly compatibleWith: CompatibleWithHandler;
+
+  /**
+   * Check if the host app has a specific package installed,
+   * and optionally if it satisfies a semver condition.
+   * @type hasPackage {@link HasPackageHandler}
+   */
+  readonly hasPackage: HasPackageHandler;
+
+  /**
+   * Check if the host app has a specific extension installed.
+   * @type hasExtension {@link HasExtensionHandler}
+   */
   readonly hasExtension: HasExtensionHandler;
-  readonly getPackageVersion: (packageName: string) => string | undefined;
+  /**
+   * Get the version of a package installed in the host app.
+   * @type getPackageVersion {@link GetPackageVersionHandler}
+   */
+  readonly getPackageVersion: GetPackageVersionHandler;
 }
 
 type Callback<T> = (callback: T) => void;
@@ -356,18 +393,54 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    */
   readonly registerDescribeApi: (name: string, relativePath: string) => void;
 
+  /**
+   * Register a callback to be called before the "quasar dev" command.
+   *
+   * @param api {@link IndexAPI}
+   * @param payload The payload containing the Quasar configuration object
+   */
   readonly beforeDev: Callback<
     (api: IndexAPI, payload: { quasarConf: QuasarConf }) => Promise<void> | void
   >;
+  /**
+   * Register a callback to be called after the "quasar dev" command.
+   *
+   * @param api {@link IndexAPI}
+   * @param payload The payload containing the Quasar configuration object
+   */
   readonly afterDev: Callback<
     (api: IndexAPI, payload: { quasarConf: QuasarConf }) => Promise<void> | void
   >;
+  /**
+   * Run hook before Quasar builds app for production ("quasar build").
+   * At this point, the distributables folder hasn't been created yet.
+   *
+   * @param {function} fn
+   *   (api, { quasarConf }) => ?Promise
+   */
   readonly beforeBuild: Callback<
     (api: IndexAPI, payload: { quasarConf: QuasarConf }) => Promise<void> | void
   >;
+  /**
+   * Register a callback to be called after the "quasar build" command.
+   *
+   * @param api {@link IndexAPI}
+   * @param payload The payload containing the Quasar configuration object
+   */
   readonly afterBuild: Callback<
     (api: IndexAPI, payload: { quasarConf: QuasarConf }) => Promise<void> | void
   >;
+  /**
+   * Run hook if publishing was requested ("quasar build -P"),
+   * after Quasar built app for production and the afterBuild
+   * hook (if specified) was executed.
+   *
+   * @param {function} fn
+   *   ({ arg, ...}) => ?Promise
+   *      * arg - argument supplied to "--publish"/"-P" parameter
+   *      * quasarConf - quasar.config file config object
+   *      * distDir - folder where distributables were built
+   */
   readonly onPublish: Callback<
     (
       api: IndexAPI,
@@ -386,14 +459,50 @@ export interface InstallAPI extends BaseAPI, SharedIndexInstallAPI {
    */
   readonly prompts: PromptsScriptAnswers;
 
+  /**
+   * Extend package.json with new props.
+   * If specifying existing props, it will override them.
+   *
+   * @param {object|string} extPkg - Object to extend with or relative path to a JSON file
+   */
   readonly extendPackageJson: (extPkg: object | string) => void;
+  /**
+   * Extend a JSON file with new props (deep merge).
+   * If specifying existing props, it will override them.
+   *
+   * @param {string} file (relative path to app root folder)
+   * @param {object} newData (Object to merge in)
+   */
   readonly extendJsonFile: (file: string, newData: object) => void;
+
+  /**
+   * Render a folder from extension templates into devland.
+   * Needs a path (to a folder) relative to the path of the file where render() is called
+   *
+   * @param {string} templatePath (relative path to folder to render in app)
+   * @param {object} scope (optional; rendering scope variables)
+   */
   readonly render: (templatePath: string, scope?: object) => void;
+  /**
+   * Render a file from extension template into devland
+   * Needs a path (to a file) relative to the path of the file where renderFile() is called
+   *
+   * @param {string} relativeSourcePath (file path relative to the folder from which the install script is called)
+   * @param {string} relativeTargetPath (file path relative to the root of the app -- including filename!)
+   * @param {object} scope (optional; rendering scope variables)
+   */
   readonly renderFile: (
     relativeSourcePath: string,
     relativeTargetPath: string,
     scope?: object
   ) => void;
+
+  /**
+   * Add a message to be printed after App CLI finishes up install.
+   *
+   * @type onExitLog {@link ExitLogHandler}
+   * @param {string} msg
+   */
   readonly onExitLog: ExitLogHandler;
 }
 
@@ -406,25 +515,67 @@ export interface UninstallAPI extends BaseAPI {
    */
   readonly prompts: PromptsScriptAnswers;
 
+  /**
+   * Get the extension's persistent configuration object.
+   * @type getPersistentConf {@link GetPersistentConfHandler}
+   */
   readonly getPersistentConf: GetPersistentConfHandler;
+
+  /**
+   * Check if the host app has a specific extension installed.
+   * @type hasExtension {@link HasExtensionHandler}
+   */
   readonly hasExtension: HasExtensionHandler;
+
+  /**
+   * Remove a file or folder from devland which the
+   * extension has installed and is no longer needed.
+   *
+   * Be careful about it and do not delete the files
+   * that would break developer's app.
+   *
+   * The __path (file or folder) needs to be relative
+   * to project's root folder.
+   *
+   * @param {string} __path
+   */
   readonly removePath: (__path: string) => void;
+
+  /**
+   * Add a message to be printed after App CLI finishes up install.
+   *
+   * @type onExitLog {@link ExitLogHandler}
+   * @param {string} msg
+   */
   readonly onExitLog: ExitLogHandler;
 }
 
 export type UninstallAPICallback = (api: UninstallAPI) => void | Promise<void>;
 
 export interface PromptsAPI extends BaseAPI {
-  readonly compatibleWith: (
-    packageName: string,
-    semverCondition?: string
-  ) => void;
-  readonly hasPackage: (
-    packageName: string,
-    semverCondition?: string
-  ) => boolean;
+  /**
+   * Ensure compatibility with a specific package and optionally a semver condition.
+   * @type compatibleWith {@link CompatibleWithHandler}
+   */
+  readonly compatibleWith: CompatibleWithHandler;
+
+  /**
+   * Check if the host app has a specific package installed,
+   * and optionally if it satisfies a semver condition.
+   * @type hasPackage {@link HasPackageHandler}
+   */
+  readonly hasPackage: HasPackageHandler;
+
+  /**
+   * Check if the host app has a specific extension installed.
+   * @type hasExtension {@link HasExtensionHandler}
+   */
   readonly hasExtension: HasExtensionHandler;
-  readonly getPackageVersion: (packageName: string) => string | undefined;
+  /**
+   * Get the version of a package installed in the host app.
+   * @type getPackageVersion {@link GetPackageVersionHandler}
+   */
+  readonly getPackageVersion: GetPackageVersionHandler;
 }
 
 export type PromptsAPICallback = (

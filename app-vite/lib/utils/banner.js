@@ -68,14 +68,14 @@ export async function displayBanner({ argv, ctx, cmd, details }) {
       banner += `
 
  Tip: The dependencies must be installed before running the app. You can do
-      this by running "$ ${packager.name} install" inside the output folder.
+      this by running "${packager.name} install" inside the output folder.
       If you are running the app from your project folder where dependencies
       are already installed, then you can skip this step.
 
  Tip: Notice the package.json generated, where there's a script defined:
         "start": "node index.js"
-      Running "$ ${packager.name === 'npm' ? 'npm run' : packager.name} start" from the output folder will
-      start the webserver. Alternatively you can call "$ node index.js"
+      Running "${packager.name === 'npm' ? 'npm run' : packager.name} start" from the output folder will
+      start the webserver. Alternatively you can call "node index.js"
       yourself.`
     } else if (argv.mode === 'cordova') {
       banner += `
@@ -105,12 +105,12 @@ export async function displayBanner({ argv, ctx, cmd, details }) {
  Tip: Built files are meant to be served over an HTTP server
       Opening index.html over file:// won't work
 
- Tip: You can use "$ quasar serve" command to create a web server,
-      both for testing or production. Type "$ quasar serve -h" for
+ Tip: You can use "quasar serve" command to create a web server,
+      both for testing or production. Type "quasar serve -h" for
       parameters. Also, an npm script (usually named "start") can
       be added for deployment environments.
       If you're using Vue Router "history" mode, don't forget to
-      specify the "--history" parameter: "$ quasar serve --history"`
+      specify the "--history" parameter: "quasar serve --history"`
     }
   }
 
