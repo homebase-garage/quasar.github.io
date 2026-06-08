@@ -186,6 +186,14 @@ build: {
      * will generate a shim file for `*.vue` files
      */
     vueShim: true,
+    /**
+     * Extend the generated `.quasar/tsconfig.json` file.
+     *
+     * If you don't have dynamic logic, you can directly modify your `tsconfig.json` file instead.
+     *
+     * NOT async! Can directly modify the "tsConfig" parameter or
+     * return a new one that will be merged with the default one.
+     */
     extendTsConfig (tsConfig) {
       // You can use this hook to extend tsConfig dynamically
       // For basic use cases, you can still update

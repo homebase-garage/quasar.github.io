@@ -50,7 +50,7 @@ return {
      *
      * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
      *
-     * Can directly modify the "config" parameter or
+     * Can be async. Can directly modify the "config" parameter or
      * return a new one that will be merged with the default one.
      */
     extendSSRGenerateSWOptions?: (
@@ -64,7 +64,7 @@ return {
      *
      * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
      *
-     * Can directly modify the "config" parameter or
+     * Can be async. Can directly modify the "config" parameter or
      * return a new one that will be merged with the default one.
      */
     extendSSRInjectManifestOptions?: (
@@ -116,7 +116,7 @@ return {
     /**
      * Add/remove/change properties of SSR production generated package.json
      *
-     * Can directly modify the "pkgJson" parameter or
+     * Can be async. Can directly modify the "pkgJson" parameter or
      * return a new one that will be merged with the default one.
      */
     extendSSRPackageJson?: (pkgJson: { [index in string]: any }) =>
@@ -128,7 +128,7 @@ return {
      * Extend the Rolldown config that is used for the SSR webserver
      * (which includes the SSR middlewares).
      *
-     * Can directly modify the "config" parameter or
+     * Can be async. Can directly modify the "config" parameter or
      * return a new one that will be merged with the default one.
      */
     extendSSRWebserverConf?: (

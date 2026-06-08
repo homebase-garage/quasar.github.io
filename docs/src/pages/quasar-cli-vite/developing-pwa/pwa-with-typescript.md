@@ -17,6 +17,12 @@ The generated `.quasar/tsconfig.pwa-sw.json` handles the WebWorker lib swap and 
 
 ```ts /quasar.config.ts
 pwa: {
+  /**
+   * Extend the generated `.quasar/tsconfig.pwa-sw.json` file.
+   *
+   * NOT async! Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
+   */
   extendPWASwTsConfig (tsConfig) {
     tsConfig.compilerOptions!.lib!.push('WebWorker.AsyncIterable')
   }

@@ -97,7 +97,7 @@ export interface QuasarPwaConfiguration {
    * Should you need some dynamic changes to the /src-pwa/manifest.json,
    * use this method to do it.
    *
-   * Can directly modify the "json" parameter or
+   * Can be async. Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
    *
    * @param json {@link PwaManifestOptions}
@@ -126,7 +126,7 @@ export interface QuasarPwaConfiguration {
    * Extend the Rolldown config that is used for the custom service worker
    * (if using it through workboxMode: 'InjectManifest').
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * @type config {@link RolldownOptions}
@@ -138,7 +138,7 @@ export interface QuasarPwaConfiguration {
   /**
    * Extend/configure the Workbox GenerateSW options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * @type config {@link GenerateSWOptions}
@@ -150,7 +150,7 @@ export interface QuasarPwaConfiguration {
   /**
    * Extend/configure the Workbox InjectManifest options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * @type config {@link InjectManifestOptions}
@@ -161,6 +161,11 @@ export interface QuasarPwaConfiguration {
 
   /**
    * Extend the generated `.quasar/tsconfig.pwa-sw.json` file.
+   *
+   * NOT async! Can directly modify the "tsConfig" parameter or
+   * return a new one that will be merged with the default one.
+   *
+   * @type tsConfig {@link TSConfig}
    */
-  extendPWASwTsConfig?: (tsConfig: TSConfig) => void;
+  extendPWASwTsConfig?: (tsConfig: TSConfig) => void | TSConfig;
 }

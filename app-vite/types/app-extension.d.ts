@@ -141,7 +141,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * Extend the Rolldown config that is used for the bex scripts
    * (background, content scripts, dom script).
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > bex > extendBexScriptsConf
@@ -160,7 +160,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * Should you need some dynamic changes to the Browser Extension manifest file
    * (/src-bex/manifest.json) then use this method to do it.
    *
-   * Can directly modify the "json" parameter or
+   * Can be async. Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > bex > extendBexManifestJson
@@ -176,7 +176,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Extend the Rolldown config that is used for the electron-main thread.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronMainConf
@@ -194,7 +194,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Extend the Rolldown config that is used for the electron-preload thread.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronPreloadConf
@@ -212,7 +212,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Add/remove/change properties of Electron production generated package.json
    *
-   * Can directly modify the "pkgJson" parameter or
+   * Can be async. Can directly modify the "pkgJson" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > electron > extendElectronPackageJson
@@ -232,7 +232,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * Should you need some dynamic changes to the /src-pwa/manifest.json,
    * use this method to do it.
    *
-   * Can directly modify the "json" parameter or
+   * Can be async. Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAManifestJson
@@ -249,7 +249,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * Extend the Rolldown config that is used for the custom service worker
    * (if using it through workboxMode: 'InjectManifest').
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWACustomSWConf
@@ -267,7 +267,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Extend/configure the Workbox GenerateSW options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAGenerateSWOptions
@@ -283,7 +283,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Extend/configure the Workbox InjectManifest options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > pwa > extendPWAInjectManifestOptions
@@ -300,7 +300,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    * Extend the Rolldown config that is used for the SSR webserver
    * (which includes the SSR middlewares).
    *
-   * Can directly modify the "rolldownConf" parameter or
+   * Can be async. Can directly modify the "rolldownConf" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRWebserverConf
@@ -318,7 +318,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
   /**
    * Add/remove/change properties of SSR production generated package.json
    *
-   * Can directly modify the "pkgJson" parameter or
+   * Can be async. Can directly modify the "pkgJson" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRPackageJson
@@ -341,7 +341,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRGenerateSWOptions
@@ -361,7 +361,7 @@ export interface IndexAPI extends BaseAPI, SharedIndexInstallAPI {
    *
    * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    *
    * Similar in use to /quasar.config > ssr > extendSSRInjectManifestOptions

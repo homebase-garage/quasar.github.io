@@ -1,6 +1,7 @@
 import { dirname, isAbsolute, join, relative } from 'node:path'
 import { statSync } from 'node:fs'
 import fse from 'fs-extra'
+import { merge } from 'webpack-merge'
 
 import { cliPkg, resolveToCliDir } from './utils/cli-runtime.js'
 import { isModeInstalled } from './modes/modes-utils.js'
@@ -52,7 +53,11 @@ export function generateTypes(quasarConf) {
   fse.ensureDirSync(tsConfigDir)
 
   generateTsConfig(quasarConf, fsUtils)
-  generatePwaSwTsConfig(quasarConf, fsUtils)
+
+  if (isModeInstalled(appPaths, 'pwa')) {
+    generatePwaSwTsConfig(quasarConf, fsUtils)
+  }
+
   writeFeatureFlags(quasarConf, fsUtils)
   writeDeclarations(quasarConf, fsUtils)
 }
@@ -86,13 +91,9 @@ function getPwaSwFolderPath(quasarConf, tsConfigDir) {
  * @param {import('../types/configuration/conf').ResolvedQuasarConf} quasarConf
  */
 function generatePwaSwTsConfig(quasarConf, fsUtils) {
-  const { appPaths } = quasarConf.ctx
-
-  if (!isModeInstalled(appPaths, 'pwa')) return
-
   const swFolderRelPath = getPwaSwFolderPath(quasarConf, fsUtils.tsConfigDir)
 
-  const pwaSwTsConfig = {
+  let pwaSwTsConfig = {
     extends: './tsconfig.json',
     compilerOptions: {
       lib: ['WebWorker', 'ESNext']
@@ -103,7 +104,12 @@ function generatePwaSwTsConfig(quasarConf, fsUtils) {
     exclude: []
   }
 
-  quasarConf.pwa?.extendPWASwTsConfig?.(pwaSwTsConfig)
+  if (typeof quasarConf.pwa.extendPWASwTsConfig === 'function') {
+    const overrides = quasarConf.pwa.extendPWASwTsConfig(pwaSwTsConfig)
+    if (Object(overrides) === overrides) {
+      pwaSwTsConfig = merge(pwaSwTsConfig, overrides)
+    }
+  }
 
   fsUtils.writeFileSync(
     'tsconfig.pwa-sw.json',
@@ -212,7 +218,7 @@ function generateTsConfig(quasarConf, fsUtils) {
   // See https://www.totaltypescript.com/tsconfig-cheat-sheet
   // We use ESNext since we are transpiling and pretty much everything should work
   // We recommend `@typescript-eslint/consistent-type-imports` instead of `verbatimModuleSyntax`, if using linting (using both can cause conflicts)
-  const tsConfig = {
+  let tsConfig = {
     compilerOptions: {
       esModuleInterop: true,
       skipLibCheck: true,
@@ -280,7 +286,12 @@ function generateTsConfig(quasarConf, fsUtils) {
     }
   }
 
-  quasarConf.build.typescript.extendTsConfig?.(tsConfig)
+  if (typeof quasarConf.build.typescript.extendTsConfig === 'function') {
+    const overrides = quasarConf.build.typescript.extendTsConfig(tsConfig)
+    if (Object(overrides) === overrides) {
+      tsConfig = merge(tsConfig, overrides)
+    }
+  }
 
   fsUtils.writeFileSync('tsconfig.json', JSON.stringify(tsConfig, null, 2))
 }

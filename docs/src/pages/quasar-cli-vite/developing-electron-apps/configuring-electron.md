@@ -33,7 +33,7 @@ electron: {
   /**
    * Add/remove/change properties of Electron production generated package.json
    *
-   * Can directly modify the "pkgJson" parameter or
+   * Can be async. Can directly modify the "pkgJson" parameter or
    * return a new one that will be merged with the default one.
    */
   extendElectronPackageJson?: (pkgJson: { [index in string]: any }) =>
@@ -44,7 +44,7 @@ electron: {
   /**
    * Extend the Rolldown config that is used for the electron-main thread.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendElectronMainConf?: (
@@ -54,7 +54,7 @@ electron: {
   /**
    * Extend the Rolldown config that is used for the electron-preload thread.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendElectronPreloadConf?: (

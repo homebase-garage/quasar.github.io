@@ -38,7 +38,7 @@ bex: {
    * Extend the Rolldown config that is used for the bex scripts
    * (background, content scripts, dom script).
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendBexScriptsConf?: (
@@ -49,7 +49,7 @@ bex: {
    * Should you need some dynamic changes to the Browser Extension manifest file
    * (/src-bex/manifest.json) then use this method to do it.
    *
-   * Can directly modify the "json" parameter or
+   * Can be async. Can directly modify the "json" parameter or
    * return a new one that will be merged with the default one.
    */
   extendBexManifestJson?: (

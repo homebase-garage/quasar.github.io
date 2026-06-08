@@ -49,7 +49,7 @@ Many new Index API methods:
 /**
  * Add/remove/change properties of SSR production generated package.json
  *
- * Can directly modify the "pkgJson" parameter or
+ * Can be async. Can directly modify the "pkgJson" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendSSRPackageJson: (
@@ -67,7 +67,7 @@ api.extendSSRPackageJson: (
  *
  * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
  *
- * Can directly modify the "config" parameter or
+ * Can be async. Can directly modify the "config" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendSSRGenerateSWOptions: (
@@ -82,7 +82,7 @@ api.extendSSRGenerateSWOptions: (
  *
  * https://developer.chrome.com/docs/workbox/the-ways-of-workbox/
  *
- * Can directly modify the "config" parameter or
+ * Can be async. Can directly modify the "config" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendSSRInjectManifestOptions: (
@@ -93,7 +93,7 @@ api.extendSSRInjectManifestOptions: (
 /**
  * Add/remove/change properties of Electron production generated package.json
  *
- * Can directly modify the "pkgJson" parameter or
+ * Can be async. Can directly modify the "pkgJson" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendElectronPackageJson: (
@@ -108,7 +108,7 @@ api.extendElectronPackageJson: (
  * Should you need some dynamic changes to the /src-pwa/manifest.json,
  * use this method to do it.
  *
- * Can directly modify the "json" parameter or
+ * Can be async. Can directly modify the "json" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendPWAManifestJson: (
@@ -119,7 +119,7 @@ api.extendPWAManifestJson: (
 /**
  * Extend/configure the Workbox GenerateSW options.
  *
- * Can directly modify the "config" parameter or
+ * Can be async. Can directly modify the "config" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendPWAGenerateSWOptions: (
@@ -130,7 +130,7 @@ api.extendPWAGenerateSWOptions: (
 /**
  * Extend/configure the Workbox InjectManifest options.
  *
- * Can directly modify the "config" parameter or
+ * Can be async. Can directly modify the "config" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendPWAInjectManifestOptions: (
@@ -142,7 +142,7 @@ api.extendPWAInjectManifestOptions: (
  * Should you need some dynamic changes to the Browser Extension manifest file
  * (/src-bex/manifest.json) then use this method to do it.
  *
- * Can directly modify the "json" parameter or
+ * Can be async. Can directly modify the "json" parameter or
  * return a new one that will be merged with the default one.
  */
 api.extendBexManifestJson: (

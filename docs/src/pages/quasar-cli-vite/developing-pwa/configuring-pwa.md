@@ -81,7 +81,7 @@ pwa: {
    * Extend the Rolldown config that is used for the custom service worker
    * (if using it through workboxMode: 'InjectManifest').
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendPWACustomSWConf?: (
@@ -91,7 +91,7 @@ pwa: {
   /**
    * Extend/configure the Workbox GenerateSW options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendPWAGenerateSWOptions?: (
@@ -101,12 +101,22 @@ pwa: {
   /**
    * Extend/configure the Workbox InjectManifest options.
    *
-   * Can directly modify the "config" parameter or
+   * Can be async. Can directly modify the "config" parameter or
    * return a new one that will be merged with the default one.
    */
   extendPWAInjectManifestOptions?: (
     config: InjectManifestOptions
   ) => void | InjectManifestOptions | Promise<void | InjectManifestOptions>;
+
+  /**
+   * Extend the generated `.quasar/tsconfig.pwa-sw.json` file.
+   *
+   * NOT async! Can directly modify the "config" parameter or
+   * return a new one that will be merged with the default one.
+   */
+  extendPWASwTsConfig (tsConfig) {
+    tsConfig.compilerOptions!.lib!.push('WebWorker.AsyncIterable')
+  }
 }
 
 sourceFiles: {
