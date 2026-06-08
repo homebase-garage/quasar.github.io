@@ -4,14 +4,14 @@
 
 import "./globals";
 
-export type * from "./bex/index.d.ts";
-export type * from "./ssr/index.d.ts";
+export * from "./bex/index";
+export * from "./ssr/index";
 
-export type * from "./store.d.ts";
-export type * from "./prefetch.d.ts";
-export type * from "./boot.d.ts";
-export type * from "./configuration.d.ts";
-export type * from "./route.d.ts";
-export type * from "./app-extension.d.ts";
-export type * from "./app-wrappers.d.ts";
-export type * from "./logger.d.ts";
+export * from "./store";
+export * from "./prefetch";
+export * from "./boot";
+export * from "./configuration";
+export * from "./route";
+export * from "./app-extension";
+export * from "./app-wrappers";
+export * from "./logger";
