@@ -717,6 +717,10 @@ export default [
         path: 'upgrade-guide'
       },
       {
+        name: 'Creating a New Project',
+        path: 'creating-a-quasar-app-vite-project-folder'
+      },
+      {
         name: 'The /quasar.config File',
         path: 'quasar-config-file'
       },
