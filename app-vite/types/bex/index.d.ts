@@ -1,1 +1,1 @@
-export type * from "./bridge.d.ts";
+export * from "./bridge";
