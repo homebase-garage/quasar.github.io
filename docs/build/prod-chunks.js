@@ -4,8 +4,14 @@ import { globSync } from 'tinyglobby'
 export const codeSplitting = {
   groups: [
     {
-      test: /node_modules[\\/](vue|@vue|quasar|vue-router)[\\/](.*)\.(m?js|css|sass)$/,
-      name: 'vendor',
+      test: /node_modules[\\/](vue|@vue|vue-router)[\\/](.*)\.(m?js|css|sass)$/,
+      name: 'v',
+      priority: 20
+    },
+
+    {
+      test: /node_modules[\\/]quasar[\\/](.*)\.(m?js|css|sass)$/,
+      name: 'q',
       priority: 20
     },
 
