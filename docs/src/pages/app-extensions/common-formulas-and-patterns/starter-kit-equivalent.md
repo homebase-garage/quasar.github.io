@@ -81,7 +81,7 @@ This script will be called upon AE installation/invoking procedure.
  * https://quasar.dev/app-extensions/development-guide/prompts-api
  */
 
-import { definePromptsScript } from '@quasar/app-vite'
+import { definePromptsScript } from '#q-app'
 import { intro, outro, confirm, text, group, cancel } from '@clack/prompts'
 
 export default definePromptsScript(async (/* api */) => {
@@ -128,7 +128,7 @@ export default definePromptsScript(async (/* api */) => {
 The install script below is only rendering files into the hosted app. Notice the `/src/templates` folder above, where we decided to keep these templates.
 
 ```js File: /ae/src/install.js (or .ts)
-import { defineInstallScript } from '@quasar/app-vite'
+import { defineInstallScript } from '#q-app'
 
 export default defineInstallScript(api => {
   // (Optional!)
@@ -164,7 +164,7 @@ Notice that we use the prompts to decide what to render into the hosting project
 We do a few things in the index script, like extending the /quasar.config file, hooking into one of the many Index API hooks (onPublish in this case):
 
 ```js File: /ae/src/index.js (or .ts)
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 export default defineIndexScript(api => {
   // (Optional!)
@@ -239,7 +239,7 @@ function extendVite(viteConf, { isClient, isServer }, api) {
 When the App Extension gets uninstall, we need to do some cleanup. But beware what you delete from the app-space! Some files might still be needed. Proceed with extreme care, if you decide to have an uninstall script.
 
 ```js
-import { defineUninstallScript } from '@quasar/app-vite'
+import { defineUninstallScript } from '#q-app'
 
 // we PNPM added it to our App Extension,
 // so we can import the following:

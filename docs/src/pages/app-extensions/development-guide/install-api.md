@@ -8,17 +8,11 @@ This page refers to `/ae/src/install.js|ts` file which is executed on the instal
 Example of basic structure of the file:
 
 ```js /ae/src/install.js (or .ts)
-import { defineInstallScript } from '@quasar/app-vite'
+import { defineInstallScript } from '#q-app'
 
 // can be async
 export default defineInstallScript((/* api */) => {})
 ```
-
-::: warning
-You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
-
-On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite`. However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
-:::
 
 ## The API param
 

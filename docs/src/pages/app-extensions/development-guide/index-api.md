@@ -8,17 +8,11 @@ This page refers to `/ae/src/index.js|ts` file, which is executed on `quasar dev
 Example of basic structure of the file:
 
 ```js /ae/src/index.js (or .ts)
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 // can be async
 export default defineIndexScript(api => {})
 ```
-
-::: warning
-You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
-
-On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite`. However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
-:::
 
 ## The API param
 
@@ -273,7 +267,7 @@ api.extendQuasarConf((conf, api) => {
 #### Registering boot and css files
 
 ```js
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 export default defineIndexScript(api => {
   api.extendQuasarConf((conf, api) => {

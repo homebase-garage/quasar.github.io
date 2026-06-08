@@ -11,7 +11,7 @@ This guide is for when you want to ensure that a [Quasar Plugin](/quasar-plugins
 We will only need to touch the Index script for this, because we can use the [Index API](/app-extensions/development-guide/index-api) to configure the /quasar.config file from the host app to include our required Quasar Plugin.
 
 ```js File: /ae/src/index.js (or .ts)
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 export default defineIndexScript((api) => {
   // ...

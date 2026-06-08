@@ -144,7 +144,7 @@ Learn more about what you can do with the [Index API](/app-extensions/developmen
 A common use-case of what you can do with your Index script is to extend the host app's Vite config as follows:
 
 ```js File: /ae/src/index.js (or .ts)
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 export default defineIndexScript(api => {
   api.extendViteConf (viteConf, { isClient, isServer }, api) {

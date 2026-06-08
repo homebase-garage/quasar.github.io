@@ -10,7 +10,7 @@ The user's answers are stored into `/quasar.extensions.json` (root of project fo
 Example of basic structure of the file:
 
 ```js /ae/src/prompts.js (or .ts)
-import { definePromptsScript } from '@quasar/app-vite'
+import { definePromptsScript } from '#q-app'
 
 export default definePromptsScript(async (/* api */) => {
   /**
@@ -25,12 +25,6 @@ export default definePromptsScript(async (/* api */) => {
   return answers
 })
 ```
-
-::: warning
-You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required.<br><br>
-
-On a Quasar CLI project's own code, the `#q-app` is just an alias to `@quasar/app-vite`. However, since the AE scripts are imported as-is from within the Node.js context, no such alias can be registered.
-:::
 
 You will have access to `api.prompts` (which holds your App Extension's answers) in [Install](/app-extensions/development-guide/install-api), [Index](/app-extensions/development-guide/index-api) and [Uninstall](/app-extensions/development-guide/uninstall-api).
 

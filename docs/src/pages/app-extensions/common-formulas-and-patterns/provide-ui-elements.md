@@ -48,7 +48,7 @@ You need to handle registering your component. You do this with the `/index.js` 
 Let's break it down.
 
 ```js File: /ae/src/index.js (or .ts)
-import { defineIndexScript } from '@quasar/app-vite'
+import { defineIndexScript } from '#q-app'
 
 export default defineIndexScript(api => {
   // (Optional!)
@@ -90,7 +90,7 @@ function extendConf(conf, api) {
 Finally, let's see how the boot file would look like. Make sure that you read the [@quasar/app-vite Boot files](/quasar-cli-vite/boot-files) documentation and understand what a Boot file is first.
 
 ```js File: /ae/src/runtime/boot.register.js (or .ts)
-import { defineBoot } from '@quasar/app-vite'
+import { defineBoot } from '#q-app'
 import MyComponent from './MyComponent.vue'
 
 // we globally register our component with Vue
@@ -98,7 +98,3 @@ export default defineBoot(({ app }) => {
   app.component('my-component', MyComponent)
 })
 ```
-
-::: warning
-You may be used to importing defineX() functions from `#q-app`. When writing an App Extension, import from `@quasar/app-vite` instead. This is not a mistake and is actually required if you want IDE auto-completion or TypeScript compliance.
-:::
