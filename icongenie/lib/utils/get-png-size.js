@@ -15,7 +15,9 @@ function getSize(buffer) {
 }
 
 export function getPngSize(file) {
-  const buffer = readChunkSync(file, { startPosition: 0, length: 40 })
+  const buffer = Buffer.from(
+    readChunkSync(file, { startPosition: 0, length: 40 })
+  )
 
   return isPng(buffer) !== true ? { width: 0, height: 0 } : getSize(buffer)
 }
