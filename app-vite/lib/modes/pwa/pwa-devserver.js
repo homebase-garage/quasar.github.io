@@ -4,7 +4,7 @@ import { watch as chokidarWatch } from 'chokidar'
 import { AppDevserver } from '../../app-devserver.js'
 import { openBrowser } from '../../utils/open-browser.js'
 import { quasarPwaConfig } from './pwa-config.js'
-import { buildPwaServiceWorker, injectPwaManifest } from './utils.js'
+import { buildPwaServiceWorker, injectPwaManifest } from './pwa-utils.js'
 import { log } from '../../utils/logger.js'
 import { debounce } from '../../utils/rate-limit.js'
 
@@ -14,44 +14,6 @@ export class QuasarModeDevserver extends AppDevserver {
   // also update ssr-devserver.js when changing here
   #pwaManifestWatcher = null
   #pwaServiceWorkerWatcher = null
-
-  constructor(opts) {
-    super(opts)
-
-    // also update ssr-devserver.js when changing here
-    this.registerDiff('pwaManifest', quasarConf => [
-      quasarConf.pwa.manifestFilename,
-      quasarConf.pwa.extendPWAManifestJson
-    ])
-
-    // also update ssr-devserver.js when changing here
-    this.registerDiff('vitePWA', (quasarConf, diffMap) => [
-      quasarConf.pwa.manifestFilename,
-      quasarConf.pwa.injectPWAMetaTags,
-      quasarConf.pwa.extendPWAManifestJson,
-      quasarConf.pwa.useCredentialsForManifestTag,
-      quasarConf.pwa.swFilename,
-
-      // extends 'vite' diff
-      ...diffMap.vite(quasarConf)
-    ])
-
-    // also update ssr-devserver.js when changing here
-    this.registerDiff('pwaServiceWorker', quasarConf => [
-      quasarConf.pwa.workboxMode,
-      quasarConf.pwa.swFilename,
-      quasarConf.build,
-      quasarConf.pwa.workboxMode === 'GenerateSW'
-        ? quasarConf.pwa.extendPWAGenerateSWOptions
-        : [
-            quasarConf.pwa.extendPWAInjectManifestOptions,
-            quasarConf.pwa.swFilename,
-            quasarConf.pwa.extendPWACustomSWConf,
-            quasarConf.sourceFiles.pwaServiceWorker,
-            quasarConf.metaConf.clientEnvDefineList
-          ]
-    ])
-  }
 
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
@@ -66,8 +28,12 @@ export class QuasarModeDevserver extends AppDevserver {
       return queue(() => this.#compilePwaServiceWorker(quasarConf, queue))
     }
 
+    if (diff('htmlTemplate', quasarConf)) {
+      return queue(() => this.updateHtmlVariables(quasarConf, this.#server))
+    }
+
     // also update ssr-devserver.js when changing here
-    if (diff('vitePWA', quasarConf)) {
+    if (diff('vite', quasarConf)) {
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
   }
@@ -78,8 +44,6 @@ export class QuasarModeDevserver extends AppDevserver {
       this.#server = null
       await watcher.close()
     }
-
-    await injectPwaManifest(quasarConf, true)
 
     this.#server = await createServer(await quasarPwaConfig.vite(quasarConf))
     await this.#server.listen()
@@ -104,7 +68,13 @@ export class QuasarModeDevserver extends AppDevserver {
     }
 
     async function inject() {
-      await injectPwaManifest(quasarConf)
+      await injectPwaManifest(
+        quasarConf,
+        quasarConf.ctx.appPaths.resolve.entry(
+          `service-worker/${quasarConf.pwa.manifestFilename}`
+        )
+      )
+
       log(
         `Generated the PWA manifest file (${quasarConf.pwa.manifestFilename})`
       )
@@ -119,7 +89,7 @@ export class QuasarModeDevserver extends AppDevserver {
       'change',
       debounce(async () => {
         await inject()
-        this.#server?.ws.send({ type: 'full-reload' })
+        this.updateHtmlVariables(quasarConf, this.#server)
       }, 550)
     )
 

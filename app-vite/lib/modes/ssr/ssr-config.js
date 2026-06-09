@@ -11,7 +11,7 @@ import {
 import { cliPkg } from '../../utils/cli-runtime.js'
 
 import { quasarPwaConfig } from '../pwa/pwa-config.js'
-import { quasarVitePluginPwaResources } from '../pwa/vite-plugin.pwa-resources.js'
+import { quasarVitePluginPwaResources } from '../pwa/pwa-utils.js'
 
 /**
  * Warning!

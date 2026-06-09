@@ -3,6 +3,7 @@ import { printDevRunningBanner } from './utils/banner.js'
 import { encodeForDiff } from './utils/encode-for-diff.js'
 import { EntryFilesGenerator } from './entry-files-generator.js'
 import { generateTypes } from './types-generator.js'
+import { updateHtmlVariables as fillHtmlVariables } from './plugins/vite.index-html-transform.js'
 
 function getConfSnapshot(extractFn, quasarConf, diffExtractFnMap) {
   return extractFn(quasarConf, diffExtractFnMap).map(item =>
@@ -50,8 +51,18 @@ export class AppDevserver extends AppTool {
 
     this.registerDiff('viteUrl', quasarConf => [quasarConf.metaConf.APP_URL])
 
-    this.registerDiff('vite', quasarConf => [
+    /**
+     * To call this.updateHtmlVariables() if it matches.
+     * Run diff BEFORE the 'vite' one!
+     */
+    this.registerDiff('htmlTemplate', quasarConf => [
       quasarConf.htmlVariables,
+      quasarConf.build.define,
+      quasarConf.metaConf.clientEnvDefineList,
+      quasarConf.metaConf.backendEnvDefineList
+    ])
+
+    this.registerDiff('vite', quasarConf => [
       quasarConf.devServer,
       quasarConf.build,
       quasarConf.framework.autoImportComponentCase,
@@ -68,7 +79,8 @@ export class AppDevserver extends AppTool {
     ])
 
     /**
-     * To be extended only, depending on if it's shipped to client or backend
+     * To be extended only, depending on if it's shipped
+     * to client or backend.
      */
     this.registerDiff('rolldown', quasarConf => [
       quasarConf.build.define,
@@ -82,6 +94,41 @@ export class AppDevserver extends AppTool {
        * quasarConf.metaConf.clientEnvDefineList and quasarConf.metaConf.backendEnvDefineList
        * if they become relevant to the respective use-case
        */
+    ])
+
+    /**
+     * Warning! Used by both PWA and SSR,
+     * so be careful when changing.
+     */
+    this.registerDiff('pwaManifest', quasarConf => [
+      quasarConf.build.publicPath,
+      quasarConf.pwa.manifestFilename,
+      quasarConf.pwa.extendPWAManifestJson,
+      quasarConf.pwa.useCredentialsForManifestTag,
+      quasarConf.pwa.injectPWAMetaTags
+    ])
+
+    /**
+     * Warning! Used by both PWA and SSR,
+     * so be careful when changing.
+     */
+    this.registerDiff('pwaServiceWorker', quasarConf => [
+      quasarConf.pwa.workboxMode,
+      quasarConf.pwa.swFilename,
+      quasarConf.build,
+      quasarConf.pwa.workboxMode === 'GenerateSW'
+        ? [
+            quasarConf.pwa.extendPWAGenerateSWOptions,
+            quasarConf.ssr.extendSSRGenerateSWOptions
+          ]
+        : [
+            quasarConf.pwa.extendPWAInjectManifestOptions,
+            quasarConf.ssr.extendSSRInjectManifestOptions,
+            quasarConf.pwa.extendPWACustomSWConf,
+            quasarConf.sourceFiles.pwaServiceWorker,
+            quasarConf.ssr.pwaOfflineHtmlFilename,
+            quasarConf.metaConf.clientEnvDefineList
+          ]
     ])
   }
 
@@ -158,6 +205,10 @@ export class AppDevserver extends AppTool {
     }
 
     return false
+  }
+
+  updateHtmlVariables(...args) {
+    fillHtmlVariables(...args)
   }
 
   clearWatcherList([...watcherList], clearFn) {

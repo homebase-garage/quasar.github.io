@@ -1,20 +1,18 @@
-import { readFileSync } from 'node:fs'
+import { dirname } from 'node:path'
+import fse from 'fs-extra'
+import serveStatic from 'serve-static'
 import { merge } from 'webpack-merge'
 
 import { progress } from '../../utils/logger.js'
 
-const workboxMethodMap = {
-  GenerateSW: 'generateSW',
-  InjectManifest: 'injectManifest'
-}
+let headTags = ''
 
-export function createHeadTags(quasarConf) {
+function updateHeadTags(quasarConf, pwaManifest) {
   const { publicPath } = quasarConf.build
-  const { pwaManifest } = quasarConf.htmlVariables
   const { useCredentialsForManifestTag, injectPWAMetaTags, manifestFilename } =
     quasarConf.pwa
 
-  let headTags = `<link rel="manifest" href="${publicPath}${manifestFilename}"${useCredentialsForManifestTag ? ' crossorigin="use-credentials"' : ''}>`
+  headTags = `<link rel="manifest" href="${publicPath}${manifestFilename}"${useCredentialsForManifestTag ? ' crossorigin="use-credentials"' : ''}>`
 
   if (injectPWAMetaTags) {
     headTags +=
@@ -34,20 +32,14 @@ export function createHeadTags(quasarConf) {
       `<link rel="apple-touch-icon" sizes="167x167" href="${publicPath}icons/apple-icon-167x167.png">` +
       `<link rel="apple-touch-icon" sizes="180x180" href="${publicPath}icons/apple-icon-180x180.png">`
   } else if (typeof injectPWAMetaTags === 'function') {
-    headTags += injectPWAMetaTags({ publicPath, pwaManifest })
+    headTags += injectPWAMetaTags({
+      publicPath,
+      pwaManifest
+    })
   }
-
-  return headTags
 }
 
-export async function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
-  if (
-    ifNotAlreadyGenerated &&
-    quasarConf.htmlVariables.pwaManifest !== void 0
-  ) {
-    return
-  }
-
+export async function injectPwaManifest(quasarConf, outputManifestPath) {
   const { appPkg } = quasarConf.ctx.pkg
 
   const id = appPkg.name || 'quasar-pwa'
@@ -59,7 +51,7 @@ export async function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
     display_override: ['fullscreen', 'minimal-ui'],
     display: 'standalone',
     start_url: quasarConf.build.publicPath,
-    ...JSON.parse(readFileSync(quasarConf.metaConf.pwaManifestFile, 'utf8'))
+    ...JSON.parse(fse.readFileSync(quasarConf.metaConf.pwaManifestFile, 'utf8'))
   }
 
   if (typeof quasarConf.pwa.extendPWAManifestJson === 'function') {
@@ -81,6 +73,46 @@ export async function injectPwaManifest(quasarConf, ifNotAlreadyGenerated) {
   )
 
   quasarConf.htmlVariables.pwaManifest = pwaManifest
+
+  updateHeadTags(quasarConf, pwaManifest)
+
+  fse.ensureDirSync(dirname(outputManifestPath))
+  fse.writeFileSync(
+    outputManifestPath,
+    JSON.stringify(
+      pwaManifest,
+      null,
+      quasarConf.build.minify !== false ? void 0 : 2
+    ),
+    'utf8'
+  )
+}
+
+export function quasarVitePluginPwaResources(quasarConf) {
+  return {
+    name: 'quasar:pwa-resources',
+    enforce: 'pre',
+
+    transformIndexHtml: {
+      handler: html =>
+        html.replace(/(<\/head>)/i, (_, tag) => `${headTags}${tag}`)
+    },
+
+    // runs for dev only to serve manifest and service-worker
+    configureServer(server) {
+      server.middlewares.use(
+        quasarConf.build.publicPath,
+        serveStatic(quasarConf.ctx.appPaths.resolve.entry('service-worker'), {
+          maxAge: 0
+        })
+      )
+    }
+  }
+}
+
+const workboxMethodMap = {
+  GenerateSW: 'generateSW',
+  InjectManifest: 'injectManifest'
 }
 
 export async function buildPwaServiceWorker(quasarConf, workboxConfig) {

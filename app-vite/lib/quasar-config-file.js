@@ -1047,6 +1047,11 @@ export class QuasarConfigFile {
         return acc
       }, {})
     )
+    /**
+     * Now free up the memory taken by the original defineEnv object,
+     * as it's not needed anymore
+     */
+    cfg.build.defineEnv = null
 
     /**
      * Avoid Rolldown failing to build with "undefined" value in define.
@@ -1495,13 +1500,16 @@ export class QuasarConfigFile {
     }
     cfg.htmlVariables = merge(
       {
-        ctx: cfg.ctx,
         productName: escapeHTMLTagContent(this.#ctx.pkg.appPkg.productName),
         productDescription: escapeHTMLAttribute(
           this.#ctx.pkg.appPkg.description
         )
       },
-      cfg.htmlVariables
+      cfg.htmlVariables,
+      /**
+       * We protect the ctx from user modifications
+       */
+      { ctx: cfg.ctx }
     )
 
     if (

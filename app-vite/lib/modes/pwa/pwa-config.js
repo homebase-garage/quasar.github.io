@@ -9,7 +9,7 @@ import {
   extendViteConfig
 } from '../../config-tools.js'
 
-import { quasarVitePluginPwaResources } from './vite-plugin.pwa-resources.js'
+import { quasarVitePluginPwaResources } from './pwa-utils.js'
 
 /**
  * Warning!

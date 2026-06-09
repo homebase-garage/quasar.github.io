@@ -61,6 +61,10 @@ export class QuasarModeDevserver extends AppDevserver {
       return queue(() => this.#compileBexScripts(quasarConf))
     }
 
+    if (diff('htmlTemplate', quasarConf)) {
+      return queue(() => this.updateHtmlVariables(quasarConf, this.#viteServer))
+    }
+
     if (diff('vite', quasarConf)) {
       return queue(() => this.#runVite(quasarConf, queue))
     }

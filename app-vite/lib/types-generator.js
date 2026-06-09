@@ -418,26 +418,26 @@ function getImportMetaEnvDeclaration(quasarConf) {
     .difference(defineSet)
     .difference(clientSet)
 
+  const prefix = 'import.meta.env.'
   const importMetaEnv = [
     ...defineKeys
       .filter(
         key =>
-          key.startsWith('import.meta.env.') &&
-          !key.startsWith('import.meta.env.QUASAR_')
+          key.startsWith(prefix) && !key.startsWith('import.meta.env.QUASAR_')
       )
       .map(
         key =>
-          `  readonly ${key.replace('import.meta.env.', '')}: ${getStrDefineType(define[key])};`
+          `  readonly ${key.replace(prefix, '')}: ${getStrDefineType(define[key])};`
       ),
 
     ...[...clientSet].map(
       key =>
-        `  readonly ${key.replace('import.meta.env.', '')}: ${getStrDefineType(clientEnvDefineList[key])};`
+        `  readonly ${key.replace(prefix, '')}: ${getStrDefineType(clientEnvDefineList[key])};`
     ),
 
     ...[...backendSet].map(
       key =>
-        `  readonly ${key.replace('import.meta.env.', '')}?: ${getStrDefineType(backendEnvDefineList[key])};`
+        `  readonly ${key.replace(prefix, '')}?: ${getStrDefineType(backendEnvDefineList[key])};`
     )
   ].join('\n')
 

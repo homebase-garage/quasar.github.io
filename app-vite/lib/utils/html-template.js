@@ -84,12 +84,8 @@ function injectVueDevtools(html, { host, port }, nonce = '') {
   return html.replace(headEndRE, (_, tag) => `${scripts}${tag}`)
 }
 
-export async function transformHtml(template, quasarConf) {
-  let html = renderTemplate(
-    template,
-    quasarConf.htmlVariables,
-    templateCompileOpts
-  )
+export async function transformHtml(template, htmlVariables, quasarConf) {
+  let html = renderTemplate(template, htmlVariables, templateCompileOpts)
 
   // should be dev only
   if (quasarConf.metaConf.vueDevtools) {
@@ -132,19 +128,13 @@ export async function transformProdSsrPwaOfflineHtml(html, quasarConf) {
 /**
  * Used by dev SSR only
  *
- * const fn = getDevSsrTemplateFn(indexHtmlFileContent, quasarConf)
- *
  * // ...at runtime:
  * let html = fn(ssrContext)
  * html = await vite.transformIndexHtml(html)
  * html = html.replace('<!-- quasar:entry-point -->', '<div id="q-app">...</div>')
  */
-export function getDevSsrTemplateFn(template, quasarConf) {
-  let html = renderTemplate(
-    template,
-    quasarConf.htmlVariables,
-    templateCompileOpts
-  )
+export function getDevSsrTemplateFn(template, htmlVariables, quasarConf) {
+  let html = renderTemplate(template, htmlVariables, templateCompileOpts)
 
   // publicPath will be handled by Vite middleware
   // if src/href are not relative, which is what we need

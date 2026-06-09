@@ -1,28 +1,19 @@
-import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { AppBuilder } from '../../app-builder.js'
 import { quasarPwaConfig } from './pwa-config.js'
-import { buildPwaServiceWorker, injectPwaManifest } from './utils.js'
+import { buildPwaServiceWorker, injectPwaManifest } from './pwa-utils.js'
 
 export class QuasarModeBuilder extends AppBuilder {
   async build() {
     this.cleanArtifacts()
 
-    await injectPwaManifest(this.quasarConf)
-    await this.#buildUI()
-
-    // also update ssr-builder.js when changing here
-    writeFileSync(
-      join(this.quasarConf.build.distDir, this.quasarConf.pwa.manifestFilename),
-      JSON.stringify(
-        this.quasarConf.htmlVariables.pwaManifest,
-        null,
-        this.quasarConf.build.minify !== false ? void 0 : 2
-      ),
-      'utf8'
+    await injectPwaManifest(
+      this.quasarConf,
+      join(this.quasarConf.build.distDir, this.quasarConf.pwa.manifestFilename)
     )
 
+    await this.#buildUI()
     await this.#buildPWA()
 
     this.printSummary(this.quasarConf.build.distDir, true)

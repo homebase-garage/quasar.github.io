@@ -52,6 +52,10 @@ export class QuasarModeDevserver extends AppDevserver {
   run(quasarConf, __isRetry) {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
+    if (diff('htmlTemplate', quasarConf)) {
+      return queue(() => this.updateHtmlVariables(quasarConf, this.#server))
+    }
+
     if (diff('vite', quasarConf)) {
       return queue(() => this.#runVite(quasarConf))
     }

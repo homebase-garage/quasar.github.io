@@ -1,5 +1,4 @@
 import { join } from 'node:path'
-import { writeFileSync } from 'node:fs'
 import { stringifyJSON } from 'confbox'
 import { merge } from 'webpack-merge'
 
@@ -12,7 +11,7 @@ import {
   transformProdSsrPwaOfflineHtml
 } from '../../utils/html-template.js'
 
-import { buildPwaServiceWorker, injectPwaManifest } from '../pwa/utils.js'
+import { buildPwaServiceWorker, injectPwaManifest } from '../pwa/pwa-utils.js'
 
 const ssrManifestIdQueryRE = /vue\?vue/
 const ssrManifestIdQueryReplaceRE = /vue\?vue.*$/
@@ -26,7 +25,14 @@ export class QuasarModeBuilder extends AppBuilder {
 
     if (this.quasarConf.ssr.pwa) {
       // also update pwa-builder.js when changing here
-      await injectPwaManifest(this.quasarConf)
+      await injectPwaManifest(
+        this.quasarConf,
+        join(
+          this.quasarConf.build.distDir,
+          'client',
+          this.quasarConf.pwa.manifestFilename
+        )
+      )
     }
 
     await Promise.all([
@@ -143,17 +149,6 @@ export class QuasarModeBuilder extends AppBuilder {
         distDir
       }
     }
-
-    // also update pwa-builder.js when changing here
-    writeFileSync(
-      join(distDir, this.quasarConf.pwa.manifestFilename),
-      JSON.stringify(
-        this.quasarConf.htmlVariables.pwaManifest,
-        null,
-        this.quasarConf.build.minify !== false ? void 0 : 2
-      ),
-      'utf8'
-    )
 
     // also update pwa-builder.js when changing here
     if (this.quasarConf.pwa.workboxMode === 'InjectManifest') {
