@@ -14,12 +14,14 @@ const defaultParseOptions = {
 }
 
 const newlineRE = /\n/
+const multipleNewlineRE = /\r\n|\n|\r/g
 const newlineTrimRE = /^(?:\r\n|\n|\r)/
 const escapeRegexpRE = /[.*+\-?^${}()|[\]\\]/g
 const templateLitReg =
   /`(?:\\[\s\S]|\${(?:[^{}]|{(?:[^{}]|{[^}]*})*})*}|(?!\${)[^\\`])*`/g
 const singleQuoteReg = /'(?:\\[\s\w"'\\`]|[^\n\r'\\])*?'/g
 const doubleQuoteReg = /"(?:\\[\s\w"'\\`]|[^\n\r"\\])*?"/g
+const strEscapeRE = /\\|'/g
 
 function throwParseError(message, str, index) {
   const whitespace = str.slice(0, index).split(newlineRE)
@@ -103,8 +105,8 @@ function getAST(str, opts) {
         // we're going to convert all CRLF to LF so it doesn't take more than one replace
 
         strng = strng
-          .replaceAll(/\\|'/g, String.raw`\$&`)
-          .replaceAll(/\r\n|\n|\r/g, String.raw`\n`)
+          .replaceAll(strEscapeRE, String.raw`\$&`)
+          .replaceAll(multipleNewlineRE, String.raw`\n`)
 
         ast.push(strng)
       }
@@ -138,8 +140,14 @@ function getAST(str, opts) {
     'g'
   )
 
-  let m
+  const parseRawCloseReg = opts.raw
+    ? new RegExp(
+        String.raw`(\s*(-|_)?` + escapeRegExp(opts.raw + opts.tagEnd) + ')',
+        'g'
+      )
+    : parseCloseReg
 
+  let m
   while ((m = parseOpenReg.exec(str))) {
     const precedingString = str.slice(lastIndex, m.index)
 
@@ -150,15 +158,17 @@ function getAST(str, opts) {
 
     pushString(precedingString, wsLeft)
 
-    parseCloseReg.lastIndex = lastIndex
+    const endReg = prefix === opts.raw ? parseRawCloseReg : parseCloseReg
+    endReg.lastIndex = lastIndex
+
     let closeTag
     let currentObj = false
 
-    while ((closeTag = parseCloseReg.exec(str))) {
+    while ((closeTag = endReg.exec(str))) {
       if (closeTag[1]) {
         const content = str.slice(lastIndex, closeTag.index)
 
-        parseOpenReg.lastIndex = lastIndex = parseCloseReg.lastIndex
+        parseOpenReg.lastIndex = lastIndex = endReg.lastIndex
 
         trimLeftOfNextStr = closeTag[2]
 
@@ -176,18 +186,18 @@ function getAST(str, opts) {
       } else {
         const char = closeTag[0]
         if (char === '/*') {
-          const commentCloseInd = str.indexOf('*/', parseCloseReg.lastIndex)
+          const commentCloseInd = str.indexOf('*/', endReg.lastIndex)
 
           if (commentCloseInd === -1) {
             throwParseError('unclosed comment', str, closeTag.index)
           }
-          parseCloseReg.lastIndex = commentCloseInd
+          endReg.lastIndex = commentCloseInd
         } else if (char === "'") {
           singleQuoteReg.lastIndex = closeTag.index
 
           const singleQuoteMatch = singleQuoteReg.exec(str)
           if (singleQuoteMatch) {
-            parseCloseReg.lastIndex = singleQuoteReg.lastIndex
+            endReg.lastIndex = singleQuoteReg.lastIndex
           } else {
             throwParseError('unclosed string', str, closeTag.index)
           }
@@ -196,7 +206,7 @@ function getAST(str, opts) {
           const doubleQuoteMatch = doubleQuoteReg.exec(str)
 
           if (doubleQuoteMatch) {
-            parseCloseReg.lastIndex = doubleQuoteReg.lastIndex
+            endReg.lastIndex = doubleQuoteReg.lastIndex
           } else {
             throwParseError('unclosed string', str, closeTag.index)
           }
@@ -204,7 +214,7 @@ function getAST(str, opts) {
           templateLitReg.lastIndex = closeTag.index
           const templateLitMatch = templateLitReg.exec(str)
           if (templateLitMatch) {
-            parseCloseReg.lastIndex = templateLitReg.lastIndex
+            endReg.lastIndex = templateLitReg.lastIndex
           } else {
             throwParseError('unclosed string', str, closeTag.index)
           }
@@ -226,32 +236,31 @@ function getAST(str, opts) {
 function compileBody(ast, opts) {
   let i = 0
   const astLength = ast.length
-  let returnStr = `${opts.header}\nlet ${fnAccumulator} = '';\n`
+  let returnStr = `${opts.header}\nlet ${fnAccumulator} = ''\n`
 
   for (; i < astLength; i++) {
     const currentBlock = ast[i]
 
     if (typeof currentBlock === 'string') {
-      returnStr += `${fnAccumulator}+='${currentBlock}';\n`
+      returnStr += `${fnAccumulator}+='${currentBlock}'\n`
       continue
     }
 
-    const type = currentBlock.t // "r", "e", or "i"
-    const content = currentBlock.val || ''
+    const content = currentBlock.val ?? ''
+    if (content !== '') {
+      const type = currentBlock.t // "r", "e", or "i"
 
-    if (type === 'r') {
-      // raw
-      returnStr += `${fnAccumulator}+=${content};\n`
-    } else if (type === 'i') {
-      // interpolate
-      returnStr += `${fnAccumulator}+=${content};\n`
-    } else if (type === 'e') {
-      // execute
-      returnStr += content + '\n'
+      if (type === 'e') {
+        // execute
+        returnStr += content + '\n'
+      } else if (type === 'r' || type === 'i') {
+        // raw or interpolate
+        returnStr += `${fnAccumulator}+=${content}\n`
+      }
     }
   }
 
-  return returnStr + `\nreturn ${fnAccumulator};`
+  return `${returnStr}\nreturn ${fnAccumulator}`
 }
 
 export function compileTemplateToFile(str, rawOpts = {}) {
@@ -265,6 +274,7 @@ export function compileTemplateToFn(str, rawOpts = {}) {
   const opts = { ...defaultParseOptions, ...rawOpts }
   const ast = getAST(str, opts)
   const body = compileBody(ast, opts)
+
   // oxlint-disable-next-line no-new-func
   return new Function(opts.varName, body)
 }
