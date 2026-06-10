@@ -4,25 +4,23 @@ import { watch as chokidarWatch } from 'chokidar'
 import { createServer } from 'vite'
 
 import { AppDevserver } from '../../app-devserver.js'
-import { quasarBexConfig } from './bex-config.js'
 import { copyBexAssets, createManifest } from './bex-utils.js'
 import { debounce } from '../../utils/rate-limit.js'
+import { updateHtmlVariables } from '../../plugins/vite.html.js'
+import { quasarBexConfig } from './bex-config.js'
 
 export class QuasarModeDevserver extends AppDevserver {
   #viteWatcherList = []
   #manifestWatcher = null
   #scriptWatcherList = []
-
-  #viteServer = null
   #scriptList = []
-
   #reloadExtension = () => {}
 
   constructor(opts) {
     super(opts)
 
     this.#reloadExtension = debounce(() => {
-      this.#viteServer?.ws.send({ type: 'custom', event: 'qbex:hmr:reload' })
+      this.clientServer?.ws.send({ type: 'custom', event: 'qbex:hmr:reload' })
     }, 200)
 
     this.registerDiff('distDir', quasarConf => [quasarConf.build.distDir])
@@ -62,12 +60,16 @@ export class QuasarModeDevserver extends AppDevserver {
     }
 
     if (diff('htmlTemplate', quasarConf)) {
-      return queue(() => this.updateHtmlVariables(quasarConf, this.#viteServer))
+      this.clientNeedsReload = true
+      updateHtmlVariables(quasarConf)
     }
 
     if (diff('vite', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runVite(quasarConf, queue))
     }
+
+    if (this.clientNeedsReload) this.reloadClient()
   }
 
   async #onDistDir(quasarConf) {
@@ -174,14 +176,13 @@ export class QuasarModeDevserver extends AppDevserver {
         this.#getPublicDirWatcher(quasarConf)
       )
     } else {
-      this.#viteServer = await createServer(viteConfig)
-
-      await this.#viteServer.listen()
+      this.clientServer = await createServer(viteConfig)
+      await this.clientServer.listen()
 
       this.#viteWatcherList.push({
         close: () => {
-          const server = this.#viteServer
-          this.#viteServer = null
+          const server = this.clientServer
+          this.clientServer = null
           return server.close()
         }
       })

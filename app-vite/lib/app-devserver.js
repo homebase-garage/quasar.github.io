@@ -3,7 +3,6 @@ import { printDevRunningBanner } from './utils/banner.js'
 import { encodeForDiff } from './utils/encode-for-diff.js'
 import { EntryFilesGenerator } from './entry-files-generator.js'
 import { generateTypes } from './types-generator.js'
-import { updateHtmlVariables as fillHtmlVariables } from './plugins/vite.index-html-transform.js'
 
 function getConfSnapshot(extractFn, quasarConf, diffExtractFnMap) {
   return extractFn(quasarConf, diffExtractFnMap).map(item =>
@@ -17,6 +16,9 @@ export class AppDevserver extends AppTool {
   #entryFiles
   #runQueue = Promise.resolve()
   #runId = 0
+
+  clientNeedsReload = false
+  clientServer = null
 
   constructor(opts) {
     super(opts)
@@ -207,8 +209,22 @@ export class AppDevserver extends AppTool {
     return false
   }
 
-  updateHtmlVariables(...args) {
-    fillHtmlVariables(...args)
+  reloadClient() {
+    this.clientNeedsReload = false
+    this.clientServer?.ws.send({ type: 'full-reload' })
+  }
+
+  async rebootClient(newServer) {
+    this.clientNeedsReload = false
+
+    if (this.clientServer !== null) {
+      const watcher = this.clientServer
+      this.clientServer = null
+      await watcher.close()
+    }
+
+    this.clientServer = newServer
+    await this.clientServer.listen()
   }
 
   clearWatcherList([...watcherList], clearFn) {

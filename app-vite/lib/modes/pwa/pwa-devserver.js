@@ -5,12 +5,11 @@ import { AppDevserver } from '../../app-devserver.js'
 import { openBrowser } from '../../utils/open-browser.js'
 import { quasarPwaConfig } from './pwa-config.js'
 import { buildPwaServiceWorker, injectPwaManifest } from './pwa-utils.js'
+import { updateHtmlVariables } from '../../plugins/vite.html.js'
 import { log } from '../../utils/logger.js'
 import { debounce } from '../../utils/rate-limit.js'
 
 export class QuasarModeDevserver extends AppDevserver {
-  #server = null
-
   // also update ssr-devserver.js when changing here
   #pwaManifestWatcher = null
   #pwaServiceWorkerWatcher = null
@@ -20,33 +19,35 @@ export class QuasarModeDevserver extends AppDevserver {
 
     // also update ssr-devserver.js when changing here
     if (diff('pwaManifest', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#compilePwaManifest(quasarConf))
     }
 
     // also update ssr-devserver.js when changing here
     if (diff('pwaServiceWorker', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#compilePwaServiceWorker(quasarConf, queue))
     }
 
     if (diff('htmlTemplate', quasarConf)) {
-      return queue(() => this.updateHtmlVariables(quasarConf, this.#server))
+      this.clientNeedsReload = true
+      updateHtmlVariables(quasarConf)
     }
 
     // also update ssr-devserver.js when changing here
     if (diff('vite', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
+
+    if (this.clientNeedsReload) this.reloadClient()
   }
 
   async #runVite(quasarConf, urlDiffers) {
-    if (this.#server !== null) {
-      const watcher = this.#server
-      this.#server = null
-      await watcher.close()
-    }
+    const viteConfig = await quasarPwaConfig.vite(quasarConf)
+    const server = await createServer(viteConfig)
 
-    this.#server = await createServer(await quasarPwaConfig.vite(quasarConf))
-    await this.#server.listen()
+    await this.rebootClient(server)
 
     this.printBanner(quasarConf)
 
@@ -89,7 +90,8 @@ export class QuasarModeDevserver extends AppDevserver {
       'change',
       debounce(async () => {
         await inject()
-        this.updateHtmlVariables(quasarConf, this.#server)
+        updateHtmlVariables(quasarConf)
+        this.reloadClient()
       }, 550)
     )
 

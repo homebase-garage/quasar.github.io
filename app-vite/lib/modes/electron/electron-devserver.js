@@ -6,6 +6,7 @@ import { AppDevserver } from '../../app-devserver.js'
 import { fatal, log, warn } from '../../utils/logger.js'
 import { spawn } from '../../utils/spawn.js'
 import { getPackagePath } from '../../utils/get-package-path.js'
+import { updateHtmlVariables } from '../../plugins/vite.html.js'
 import { quasarElectronConfig } from './electron-config.js'
 
 function delay(time) {
@@ -16,7 +17,6 @@ function delay(time) {
 
 export class QuasarModeDevserver extends AppDevserver {
   #pid = 0
-  #server = null
   #watcherList = []
   #killedPid = false
   #electronExecutable
@@ -53,29 +53,28 @@ export class QuasarModeDevserver extends AppDevserver {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
     if (diff('htmlTemplate', quasarConf)) {
-      return queue(() => this.updateHtmlVariables(quasarConf, this.#server))
+      this.clientNeedsReload = true
+      updateHtmlVariables(quasarConf)
     }
 
     if (diff('vite', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runVite(quasarConf))
     }
 
     if (diff('electron', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runElectronFiles(quasarConf))
     }
+
+    if (this.clientNeedsReload) this.reloadClient()
   }
 
   async #runVite(quasarConf) {
-    if (this.#server !== null) {
-      const watcher = this.#server
-      this.#server = null
-      await watcher.close()
-    }
-
     const viteConfig = await quasarElectronConfig.vite(quasarConf)
+    const server = await createServer(viteConfig)
 
-    this.#server = await createServer(viteConfig)
-    await this.#server.listen()
+    await this.rebootClient(server)
   }
 
   async #runElectronFiles(quasarConf) {

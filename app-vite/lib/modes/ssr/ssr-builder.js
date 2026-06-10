@@ -9,7 +9,7 @@ import { getPackageJson } from '../../utils/get-package-json.js'
 import {
   getProdSsrRenderTemplateFileContent,
   transformProdSsrPwaOfflineHtml
-} from '../../utils/html-template.js'
+} from '../../plugins/vite.html.js'
 
 import { buildPwaServiceWorker, injectPwaManifest } from '../pwa/pwa-utils.js'
 

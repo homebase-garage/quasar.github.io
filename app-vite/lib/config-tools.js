@@ -11,7 +11,7 @@ import {
   BASELINE_WIDELY_AVAILABLE_TARGET_STRING
 } from './utils/build-targets.js'
 
-import { quasarViteIndexHtmlTransformPlugin } from './plugins/vite.index-html-transform.js'
+import { quasarViteIndexHtmlTransformPlugin } from './plugins/vite.html.js'
 import { quasarViteStripFilenameHashesPlugin } from './plugins/vite.strip-filename-hashes.js'
 
 async function parseVitePlugins(entries, appDir, compileId) {
@@ -154,6 +154,16 @@ export async function createViteConfig(
     logLevel: 'warn',
     mode: ctx.dev ? 'development' : 'production',
     cacheDir,
+
+    /**
+     * Important! Avoid Vite looking for .env files and loading them,
+     * since we already handle them ourselves. But the main problem is that
+     * it forces client reloads before our server is ready to react,
+     * or even mid server rebuild, which causes browser refresh with page
+     * unavailable and errors and is not a good DX.
+     */
+    envDir: false,
+
     define: {
       ...metaConf[
         shippedToClient ? 'clientEnvDefineList' : 'backendEnvDefineList'

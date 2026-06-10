@@ -1,6 +1,6 @@
 import serveStatic from 'serve-static'
 
-import { entryPointMarkup } from '../../utils/html-template.js'
+import { entryPointMarkup } from '../../plugins/vite.html.js'
 
 /**
  * It is applied for dev only!

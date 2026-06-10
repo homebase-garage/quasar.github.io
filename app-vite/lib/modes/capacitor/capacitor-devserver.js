@@ -6,11 +6,11 @@ import { fatal, log } from '../../utils/logger.js'
 import { spawn } from '../../utils/spawn.js'
 import { onShutdown } from '../../utils/on-shutdown.js'
 import { openIDE } from '../../utils/open-ide.js'
+import { updateHtmlVariables } from '../../plugins/vite.html.js'
 import { quasarCapacitorConfig } from './capacitor-config.js'
 
 export class QuasarModeDevserver extends AppDevserver {
   #pid = 0
-  #server = null
   #target
   #capacitorConfigFile = new CapacitorConfigFile()
 
@@ -33,29 +33,28 @@ export class QuasarModeDevserver extends AppDevserver {
     const { diff, queue } = super.run(quasarConf, __isRetry)
 
     if (diff('htmlTemplate', quasarConf)) {
-      return queue(() => this.updateHtmlVariables(quasarConf, this.#server))
+      this.clientNeedsReload = true
+      updateHtmlVariables(quasarConf)
     }
 
     if (diff('vite', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runVite(quasarConf))
     }
 
     if (diff('capacitor', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runCapacitor(quasarConf))
     }
+
+    if (this.clientNeedsReload) this.reloadClient()
   }
 
   async #runVite(quasarConf) {
-    if (this.#server !== null) {
-      const watcher = this.#server
-      this.#server = null
-      await watcher.close()
-    }
-
     const viteConfig = await quasarCapacitorConfig.vite(quasarConf)
+    const server = await createServer(viteConfig)
 
-    this.#server = await createServer(viteConfig)
-    await this.#server.listen()
+    await this.rebootClient(server)
   }
 
   async #runCapacitor(quasarConf) {

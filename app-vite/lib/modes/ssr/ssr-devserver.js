@@ -13,11 +13,12 @@ import { dot, info, log, progress, warn } from '../../utils/logger.js'
 import { debounce } from '../../utils/rate-limit.js'
 import {
   entryPointMarkup,
-  getDevSsrTemplateFn
-} from '../../utils/html-template.js'
+  getDevSsrTemplateFn,
+  updateHtmlVariables
+} from '../../plugins/vite.html.js'
 
-import { quasarSsrConfig } from './ssr-config.js'
 import { buildPwaServiceWorker, injectPwaManifest } from '../pwa/pwa-utils.js'
+import { quasarSsrConfig } from './ssr-config.js'
 
 const doubleSlashRE = /\/\//g
 const autoRemove = 'document.currentScript.remove()'
@@ -45,7 +46,6 @@ function renderStoreState(ssrContext) {
 export class QuasarModeDevserver extends AppDevserver {
   #webserver = null
   /** @type {import('vite').ViteDevServer|null} */
-  #viteClient = null
   #viteWatcherList = []
   #webserverWatcher = null
   #renderTemplate = null
@@ -110,32 +110,35 @@ export class QuasarModeDevserver extends AppDevserver {
     if (quasarConf.ssr.pwa) {
       // also update pwa-devserver.js when changing here
       if (diff('pwaManifest', quasarConf)) {
+        this.clientNeedsReload = false
         return queue(() => this.#compilePwaManifest(quasarConf))
       }
 
       // also update pwa-devserver.js when changing here
       if (diff('pwaServiceWorker', quasarConf)) {
+        this.clientNeedsReload = false
         return queue(() => this.#compilePwaServiceWorker(quasarConf, queue))
       }
     }
 
-    // also update pwa-devserver.js when changing here
-    if (diff('webserver', quasarConf)) {
-      return queue(() => this.#compileWebserver(quasarConf, queue))
+    if (diff('htmlTemplate', quasarConf)) {
+      this.clientNeedsReload = true
+      const htmlStore = updateHtmlVariables(quasarConf)
+      this.#updateTemplate(htmlStore, quasarConf)
     }
 
-    if (diff('htmlTemplate', quasarConf)) {
-      return queue(() =>
-        this.updateHtmlVariables(quasarConf, this.#viteClient, htmlStore =>
-          this.#updateTemplate(htmlStore, quasarConf)
-        )
-      )
+    if (diff('webserver', quasarConf)) {
+      this.clientNeedsReload = false
+      return queue(() => this.#compileWebserver(quasarConf, queue))
     }
 
     // also update pwa-devserver.js when changing here
     if (diff('viteSSR', quasarConf)) {
+      this.clientNeedsReload = false
       return queue(() => this.#runVite(quasarConf, diff('viteUrl', quasarConf)))
     }
+
+    if (this.clientNeedsReload) this.reloadClient()
   }
 
   #updateTemplate(htmlStore, quasarConf) {
@@ -147,6 +150,8 @@ export class QuasarModeDevserver extends AppDevserver {
   }
 
   async #compileWebserver(quasarConf, queue) {
+    this.clientNeedsReload = false
+
     if (this.#webserverWatcher !== null) {
       const watcher = this.#webserverWatcher
       this.#webserverWatcher = null
@@ -156,6 +161,7 @@ export class QuasarModeDevserver extends AppDevserver {
     const rolldownConfig = await quasarSsrConfig.webserver(quasarConf)
 
     await this.watchWithRolldown('SSR Webserver', rolldownConfig, () => {
+      this.clientNeedsReload = false
       queue(() => this.#bootWebserver(quasarConf))
     }).then(watcher => {
       this.#webserverWatcher = watcher
@@ -163,6 +169,8 @@ export class QuasarModeDevserver extends AppDevserver {
   }
 
   async #runVite(quasarConf, urlDiffers) {
+    this.clientNeedsReload = false
+
     await this.clearWatcherList(this.#viteWatcherList, () => {
       this.#viteWatcherList.length = 0
     })
@@ -191,12 +199,12 @@ export class QuasarModeDevserver extends AppDevserver {
         : url =>
             url ? (publicPath + url).replace(doubleSlashRE, '/') : publicPath
 
-    const viteClient = (this.#viteClient = await createServer(
+    const viteClient = (this.clientServer = await createServer(
       await quasarSsrConfig.viteClient(quasarConf)
     ))
     this.#viteWatcherList.push({
       close: () => {
-        this.#viteClient = null
+        this.clientServer = null
         return viteClient.close()
       }
     })
@@ -212,17 +220,13 @@ export class QuasarModeDevserver extends AppDevserver {
     this.#viteWatcherList.push(
       viteServer,
       viteModuleRunner,
-      chokidarWatch(this.#pathMap.templatePath).on(
-        'change',
-        () => {
-          this.updateHtmlVariables(quasarConf, this.#viteClient, htmlStore =>
-            this.#updateTemplate(htmlStore, quasarConf)
-          )
-        },
-        {
-          ignoreInitial: true
-        }
-      )
+      chokidarWatch(this.#pathMap.templatePath, {
+        ignoreInitial: true
+      }).on('change', () => {
+        const htmlStore = updateHtmlVariables(quasarConf)
+        this.#updateTemplate(htmlStore, quasarConf)
+        this.reloadClient()
+      })
     )
 
     this.#appOptions.render = async ssrContext => {
@@ -291,15 +295,13 @@ export class QuasarModeDevserver extends AppDevserver {
   }
 
   async #bootWebserver(quasarConf) {
+    this.clientNeedsReload = false
+
     const done = progress({
       tool: 'Webserver',
       waitAction: 'Starting',
       doneAction: 'Started'
     })
-
-    if (this.#webserver !== null) {
-      await this.#webserver.close()
-    }
 
     const {
       create,
@@ -355,7 +357,7 @@ export class QuasarModeDevserver extends AppDevserver {
     const registerDevMiddleware = await injectDevMiddleware(middlewareParams)
 
     await registerDevMiddleware((req, res, next) => {
-      if (this.#viteClient === null) {
+      if (this.clientServer === null) {
         next()
         return
       }
@@ -363,13 +365,18 @@ export class QuasarModeDevserver extends AppDevserver {
       // Vite dev middleware modifies req.url to account for publicPath
       // but we'll break usage in the webserver if we do so
       const { url } = req
-      this.#viteClient.middlewares.handle(req, res, err => {
+      this.clientServer.middlewares.handle(req, res, err => {
         req.url = url
         next(err)
       })
     })
 
     await injectMiddlewares(middlewareParams)
+
+    this.clientNeedsReload = false
+    if (this.#webserver !== null) {
+      await this.#webserver.close()
+    }
 
     middlewareParams.listenResult = await listen(middlewareParams)
 
@@ -383,7 +390,6 @@ export class QuasarModeDevserver extends AppDevserver {
     done()
 
     this.printBanner(quasarConf)
-    this.#viteClient?.ws.send({ type: 'full-reload' })
   }
 
   // also update pwa-devserver.js when changing here
@@ -416,9 +422,9 @@ export class QuasarModeDevserver extends AppDevserver {
       'change',
       debounce(async () => {
         await inject()
-        this.updateHtmlVariables(quasarConf, this.#viteClient, htmlStore =>
-          this.#updateTemplate(htmlStore, quasarConf)
-        )
+        const htmlStore = updateHtmlVariables(quasarConf)
+        this.#updateTemplate(htmlStore, quasarConf)
+        this.reloadClient()
       }, 550)
     )
 

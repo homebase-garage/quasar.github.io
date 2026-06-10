@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 
 import { warn } from './logger.js'
-import { attachMarkup, entryPointMarkup } from '../utils/html-template.js'
+import { attachMarkup, entryPointMarkup } from '../plugins/vite.html.js'
 
 export function appFilesValidations(appPaths) {
   let valid = true

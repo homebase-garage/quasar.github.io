@@ -3,7 +3,71 @@ import {
   compileTemplateToFile,
   compileTemplateToFn,
   renderTemplate
-} from './template.js'
+} from '../utils/template.js'
+
+let htmlStore = null
+
+const importMetaEnv = new Proxy(
+  {},
+  {
+    get(target, propName, receiver) {
+      if (typeof propName !== 'string' || Object.hasOwn(target, propName)) {
+        return Reflect.get(target, propName, receiver)
+      }
+
+      const key = `import.meta.env.${propName}`
+      const { define, clientEnvDefineList, backendEnvDefineList } = htmlStore
+
+      if (Object.hasOwn(define, key)) {
+        const val = define[key]
+        return val.charAt(0) === '"' ? val.slice(1, -1) : val
+      }
+
+      if (Object.hasOwn(clientEnvDefineList, key)) {
+        const val = clientEnvDefineList[key]
+        return val.charAt(0) === '"' ? val.slice(1, -1) : val
+      }
+
+      if (Object.hasOwn(backendEnvDefineList, key)) {
+        const val = backendEnvDefineList[key]
+        return val.charAt(0) === '"' ? val.slice(1, -1) : val
+      }
+    }
+  }
+)
+
+export function updateHtmlVariables({
+  htmlVariables,
+  build: { define },
+  metaConf: { clientEnvDefineList, backendEnvDefineList }
+}) {
+  return (htmlStore = {
+    define,
+    clientEnvDefineList,
+    backendEnvDefineList,
+    htmlVariables: {
+      ...htmlVariables,
+      importMetaEnv
+    }
+  })
+}
+
+export function quasarViteIndexHtmlTransformPlugin(quasarConf) {
+  /**
+   * The following is mainly for production so we don't have
+   * to worry about calling updateHtmlVariables():
+   */
+  if (htmlStore === null) updateHtmlVariables(quasarConf)
+
+  return {
+    name: 'quasar:html',
+    enforce: 'pre',
+    transformIndexHtml: {
+      order: 'pre',
+      handler: html => transformHtml(html, htmlStore.htmlVariables, quasarConf)
+    }
+  }
+}
 
 const absoluteUrlRE = /^(https?:\/\/|\/|data:)/i
 const ssrInterpolations = [/{{([\s\S]+?)}}/g]
@@ -84,7 +148,7 @@ function injectVueDevtools(html, { host, port }, nonce = '') {
   return html.replace(headEndRE, (_, tag) => `${scripts}${tag}`)
 }
 
-export async function transformHtml(template, htmlVariables, quasarConf) {
+async function transformHtml(template, htmlVariables, quasarConf) {
   let html = renderTemplate(template, htmlVariables, templateCompileOpts)
 
   // should be dev only
