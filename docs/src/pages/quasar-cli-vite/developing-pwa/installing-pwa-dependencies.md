@@ -44,14 +44,14 @@ yarn add <deps>
 yarn add -D <dev-deps>
 <<| bash NPM |>>
 # run in /src-pwa for deps used by /src-pwa/register-sw file:
-npm install --save <deps>
+npm install <deps>
 
 # run in /src-pwa for deps used by the build system (eg. workbox-* suite)
-npm install --save-dev <dev-deps>
+npm install -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-pwa for deps used by /src-pwa/register-sw file:
 bun add <deps>
 
 # run in /src-pwa for deps used by the build system (eg. workbox-* suite)
-bun add --dev <dev-deps>
+bun add -D <dev-deps>
 ```

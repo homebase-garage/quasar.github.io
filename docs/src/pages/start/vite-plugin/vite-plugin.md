@@ -50,13 +50,13 @@ pnpm add quasar @quasar/extras
 pnpm add -D @quasar/vite-plugin sass-embedded@^1.93.2
 <<| bash Yarn |>>
 yarn add quasar @quasar/extras
-yarn add --dev @quasar/vite-plugin sass-embedded@^1.93.2
+yarn add -D @quasar/vite-plugin sass-embedded@^1.93.2
 <<| bash NPM |>>
-npm install --save quasar @quasar/extras
-npm install --save-dev @quasar/vite-plugin sass-embedded@^1.93.2
+npm install quasar @quasar/extras
+npm install -D @quasar/vite-plugin sass-embedded@^1.93.2
 <<| bash Bun |>>
 bun add quasar @quasar/extras
-bun add --dev @quasar/vite-plugin sass-embedded@^1.93.2
+bun add -D @quasar/vite-plugin sass-embedded@^1.93.2
 ```
 
 ## Using Quasar

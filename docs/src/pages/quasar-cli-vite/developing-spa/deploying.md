@@ -235,7 +235,7 @@ pnpm add express serve-static connect-history-api-fallback
 <<| bash Yarn |>>
 yarn add express serve-static connect-history-api-fallback
 <<| bash NPM |>>
-npm install --save express serve-static connect-history-api-fallback
+npm install express serve-static connect-history-api-fallback
 <<| bash Bun |>>
 bun add express serve-static connect-history-api-fallback
 ```
@@ -335,11 +335,11 @@ First, install the package with:
 <<| bash PNPM |>>
 pnpm add -D push-dir
 <<| bash Yarn |>>
-yarn add --dev push-dir
+yarn add -D push-dir
 <<| bash NPM |>>
-npm install --save-dev push-dir
+npm install -D push-dir
 <<| bash Bun |>>
-bun add --dev push-dir
+bun add -D push-dir
 ```
 
 Then add a `deploy` script command to your `package.json`:

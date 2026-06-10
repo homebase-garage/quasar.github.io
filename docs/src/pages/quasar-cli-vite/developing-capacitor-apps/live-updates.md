@@ -21,7 +21,7 @@ pnpm add @capawesome/capacitor-live-update
 <<| bash Yarn |>>
 yarn add @capawesome/capacitor-live-update
 <<| bash NPM |>>
-npm install --save @capawesome/capacitor-live-update
+npm install @capawesome/capacitor-live-update
 <<| bash Bun |>>
 bun add @capawesome/capacitor-live-update
 ```

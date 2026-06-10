@@ -73,7 +73,7 @@ pnpm add @fortawesome/fontawesome-pro
 <<| bash Yarn |>>
 yarn add @fortawesome/fontawesome-pro
 <<| bash NPM |>>
-npm install --save @fortawesome/fontawesome-pro
+npm install @fortawesome/fontawesome-pro
 <<| bash Bun |>>
 bun add @fortawesome/fontawesome-pro
 ```

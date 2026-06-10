@@ -36,14 +36,14 @@ yarn add <deps>
 yarn add -D <dev-deps>
 <<| bash NPM |>>
 # run in /src-electron for runtime deps (will be embedded to /dist):
-npm install --save <deps>
+npm install <deps>
 
 # run in /src-electron for deps used by the build system (eg. "electron")
-npm install --save-dev <dev-deps>
+npm install -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-electron for runtime deps (will be embedded to /dist):
 bun add <deps>
 
 # run in /src-electron for deps used by the build system (eg. "electron")
-bun add --dev <dev-deps>
+bun add -D <dev-deps>
 ```

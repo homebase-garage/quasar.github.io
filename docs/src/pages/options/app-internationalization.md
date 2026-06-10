@@ -28,7 +28,7 @@ pnpm add vue-i18n
 <<| bash Yarn |>>
 yarn add vue-i18n
 <<| bash NPM |>>
-npm install --save vue-i18n
+npm install vue-i18n
 <<| bash Bun |>>
 bun add vue-i18n
 ```
@@ -118,11 +118,11 @@ We first install the `@intlify/unplugin-vue-i18n` package:
 <<| bash PNPM |>>
 pnpm add -D @intlify/unplugin-vue-i18n
 <<| bash Yarn |>>
-yarn add --dev @intlify/unplugin-vue-i18n
+yarn add -D @intlify/unplugin-vue-i18n
 <<| bash NPM |>>
-npm install --save-dev @intlify/unplugin-vue-i18n
+npm install -D @intlify/unplugin-vue-i18n
 <<| bash Bun |>>
-bun add --dev @intlify/unplugin-vue-i18n
+bun add -D @intlify/unplugin-vue-i18n
 ```
 
 Then we edit the /quasar.config file:

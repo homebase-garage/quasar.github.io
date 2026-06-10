@@ -19,7 +19,7 @@ cd src-electron
 yarn add @capgo/electron-updater
 <<| bash NPM |>>
 cd src-electron
-npm install --save @capgo/electron-updater
+npm install @capgo/electron-updater
 <<| bash PNPM |>>
 cd src-electron
 pnpm add @capgo/electron-updater

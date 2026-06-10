@@ -13,22 +13,22 @@ desc: (@quasar/app-vite) How to configure a code linter and a formatter in a Qua
 <<| bash PNPM |>>
 pnpm add -D oxlint oxfmt
 <<| bash Yarn |>>
-yarn add --dev oxlint oxfmt
+yarn add -D oxlint oxfmt
 <<| bash NPM |>>
-npm install --save-dev oxlint oxfmt
+npm install -D oxlint oxfmt
 <<| bash Bun |>>
-bun add --dev oxlint oxfmt
+bun add -D oxlint oxfmt
 ```
 
 ```tabs TypeScript projects
 <<| bash PNPM |>>
 pnpm add -D oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash Yarn |>>
-yarn add --dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
+yarn add -D oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash NPM |>>
-npm install --save-dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
+npm install -D oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 <<| bash Bun |>>
-bun add --dev oxlint oxfmt oxlint-tsgolint typescript vue-tsc
+bun add -D oxlint oxfmt oxlint-tsgolint typescript vue-tsc
 ```
 
 ### Package.json scripts
@@ -220,11 +220,11 @@ When you scaffold a Quasar project folder it will ask you if you want ESLint (al
 <<| bash PNPM |>>
 pnpm add -D @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
 <<| bash Yarn |>>
-yarn add --dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
+yarn add -D @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
 <<| bash NPM |>>
-npm install --save-dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
+npm install -D @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
 <<| bash Bun |>>
-bun add --dev @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
+bun add -D @eslint/js eslint@9 eslint-plugin-vue vue-eslint-parser globals vite-plugin-checker
 ```
 
 If you want `prettier` as a code formatter, then install these too:
@@ -233,11 +233,11 @@ If you want `prettier` as a code formatter, then install these too:
 <<| bash PNPM |>>
 pnpm add -D prettier@3 @vue/eslint-config-prettier
 <<| bash Yarn |>>
-yarn add --dev prettier@3 @vue/eslint-config-prettier
+yarn add -D prettier@3 @vue/eslint-config-prettier
 <<| bash NPM |>>
-npm install --save-dev prettier@3 @vue/eslint-config-prettier
+npm install -D prettier@3 @vue/eslint-config-prettier
 <<| bash Bun |>>
-bun add --dev prettier@3 @vue/eslint-config-prettier
+bun add -D prettier@3 @vue/eslint-config-prettier
 ```
 
 #### The quasar.config file settings
@@ -347,11 +347,11 @@ export default [
 <<| bash PNPM |>>
 pnpm add -D vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
 <<| bash Yarn |>>
-yarn add --dev vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
+yarn add -D vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
 <<| bash NPM |>>
-npm install --save-dev vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
+npm install -D vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
 <<| bash Bun |>>
-bun add --dev vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
+bun add -D vue-tsc @vue/eslint-config-typescript @eslint/js eslint@9 eslint-plugin-vue globals vite-plugin-checker
 ```
 
 If you want `prettier` as a code formatter, then install these too:
@@ -360,11 +360,11 @@ If you want `prettier` as a code formatter, then install these too:
 <<| bash PNPM |>>
 pnpm add -D prettier@3 @vue/eslint-config-prettier
 <<| bash Yarn |>>
-yarn add --dev prettier@3 @vue/eslint-config-prettier
+yarn add -D prettier@3 @vue/eslint-config-prettier
 <<| bash NPM |>>
-npm install --save-dev prettier@3 @vue/eslint-config-prettier
+npm install -D prettier@3 @vue/eslint-config-prettier
 <<| bash Bun |>>
-bun add --dev prettier@3 @vue/eslint-config-prettier
+bun add -D prettier@3 @vue/eslint-config-prettier
 ```
 
 #### The quasar.config settings

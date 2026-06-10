@@ -14,11 +14,11 @@ If you didn't select TypeScript support when creating your project, you can stil
 <<| bash PNPM |>>
 pnpm add -D typescript
 <<| bash Yarn |>>
-yarn add --dev typescript
+yarn add -D typescript
 <<| bash NPM |>>
-npm install --save-dev typescript
+npm install -D typescript
 <<| bash Bun |>>
-bun add --dev typescript
+bun add -D typescript
 ```
 
 Then, create `/tsconfig.json` file at the root of you project with this content:

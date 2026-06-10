@@ -50,7 +50,7 @@ If you are self hosting your own Tunnelmole service or you have a set an API key
 tmole 80 as mysubdomain.tunnelmole.com
 ```
 
-Its also possible to launch tunnelmole from code if you add it as a dependency to your project (`yarn add --dev tunnelmole` or `npm i --save-dev tunnelmole` or pnpm/bun equivalents)
+Its also possible to launch tunnelmole from code if you add it as a dependency to your project (`yarn add -D tunnelmole` or `npm i -D tunnelmole` or pnpm/bun equivalents)
 
 First import tunnelmole. Both ES and CommonJS modules are supported.
 

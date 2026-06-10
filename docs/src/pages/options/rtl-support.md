@@ -54,11 +54,11 @@ You first need to install `postcss-rtlcss` package:
 <<| bash PNPM |>>
 pnpm add -D postcss-rtlcss
 <<| bash Yarn |>>
-yarn add --dev postcss-rtlcss
+yarn add -D postcss-rtlcss
 <<| bash NPM |>>
-npm install --save-dev postcss-rtlcss
+npm install -D postcss-rtlcss
 <<| bash Bun |>>
-bun add --dev postcss-rtlcss
+bun add -D postcss-rtlcss
 ```
 
 Then create `/postcss.config.js` file if you don't have it already, and add this to it:

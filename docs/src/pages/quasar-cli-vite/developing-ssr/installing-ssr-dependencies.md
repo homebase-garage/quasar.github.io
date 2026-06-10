@@ -99,14 +99,14 @@ yarn add <deps>
 yarn add -D <dev-deps>
 <<| bash NPM |>>
 # run in /src-ssr for runtime deps (will be embedded into /dist):
-npm install --save <deps>
+npm install <deps>
 
 # run in /src-ssr for deps used by the build system (if any)
-npm install --save-dev <dev-deps>
+npm install -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-ssr for runtime deps (will be embedded into /dist):
 bun add <deps>
 
 # run in /src-ssr for deps used by the build system (if any)
-bun add --dev <dev-deps>
+bun add -D <dev-deps>
 ```

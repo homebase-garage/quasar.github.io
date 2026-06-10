@@ -44,14 +44,14 @@ yarn add <deps>
 yarn add -D <dev-deps>
 <<| bash NPM |>>
 # run in /src-bex for deps:
-npm install --save <deps>
+npm install <deps>
 
 # run in /src-bex for deps used by the build system (eg. @types/chrome)
-npm install --save-dev <dev-deps>
+npm install -D <dev-deps>
 <<| bash Bun |>>
 # run in /src-bex for deps:
 bun add <deps>
 
 # run in /src-bex for deps used by the build system (eg. @types/chrome)
-bun add --dev <dev-deps>
+bun add -D <dev-deps>
 ```
