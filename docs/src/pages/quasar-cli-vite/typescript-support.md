@@ -8,10 +8,6 @@ related:
 
 If you didn't select TypeScript support when creating your project, you can still add it later. This guide will show you how to add TypeScript support to your existing JavaScript-based Quasar project.
 
-::: tip
-If you selected TypeScript support when creating your project, you can skip this guide.
-:::
-
 ## Installation of TypeScript Support
 
 ```tabs
@@ -60,8 +56,6 @@ If you chose TypeScript support when scaffolding the project, the following decl
  * process.env variables or definitions in dotenv files configured ONLY
  * for the /quasar.config file itself.
  *
- * https://quasar.dev/quasar-cli-vite/handling-import-meta-env#type-inference
- *
  * @example
  * interface ImportMetaEnv {
  *   readonly MY_VAR: string;
@@ -75,7 +69,7 @@ See the following sections for the features and build modes you are using.
 
 ### Pinia
 
-If you are using Pinia, Quasar CLI augments the `router` property inside `.quasar/pinia.d.ts` automatically. So, don't manually add the `router` property from the `PiniaCustomProperties` interface in the `/src/stores/index.ts` file.
+If you are using Pinia, Quasar CLI augments the `router` property inside `.quasar/pinia.d.ts` automatically. So, don't manually add the "router" property from the PiniaCustomProperties interface in the /src/stores/index.ts file.
 
 ```ts /src/stores/index.ts
 import { defineStore } from '#q-app'
@@ -110,7 +104,7 @@ Please refer to:
 
 Notice the `/tsconfig.json` file in your project folder. This file is used by the Quasar CLI to detect if you want TypeScript support or not. Its content should look like this:
 
-```json /tsconfig.json
+```json /tsconfig.json (How it should look like)
 {
   "extends": "./.quasar/tsconfig.json"
 }
@@ -118,7 +112,7 @@ Notice the `/tsconfig.json` file in your project folder. This file is used by th
 
 For reviewing purposes, here is an example of the generated tsconfig (non strict) that your `/tsconfig.json` is extending:
 
-```json /.quasar/tsconfig.json
+```json Example /.quasar/tsconfig.json
 {
   "compilerOptions": {
     "esModuleInterop": true,
@@ -127,6 +121,7 @@ For reviewing purposes, here is an example of the generated tsconfig (non strict
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "module": "preserve",
     "noEmit": true,
@@ -141,7 +136,7 @@ For reviewing purposes, here is an example of the generated tsconfig (non strict
 }
 ```
 
-Properly running typechecking and linting requires the `.quasar/tsconfig.json` to be present. The file will be auto-generated when running `quasar dev` or `quasar build` commands. But, as a lightweight alternative, there is the CLI command `quasar prepare` that will generate the `.quasar/tsconfig.json` file and some types files. It is especially useful for CI/CD pipelines.
+Properly running typechecking and linting requires the `.quasar/tsconfig.json` to be present. The file will be auto-generated when running "quasar dev" or "quasar build" commands. But, as a lightweight alternative, there is the CLI command "quasar prepare" that will generate the .quasar/tsconfig.json file and some types files. It is especially useful for CI/CD pipelines.
 
 ```bash
 quasar prepare
@@ -157,9 +152,9 @@ You can add it as a `postinstall` script to make sure it's run after installing 
 }
 ```
 
-Another benefit of this is that folder aliases (`quasar.config file > build > alias`) are automatically recognized by TypeScript. So, you can remove `tsconfig.json > compilerOptions > paths`. If you are using a plugin like `vite-tsconfig-paths`, you can uninstall it and use `quasar.config file > build > alias` as the source of truth.
+Another benefit of this is that folder aliases (quasar.config file > build > alias) are automatically recognized by TypeScript. So, you can remove tsconfig.json > compilerOptions > paths. If you are using a plugin like `vite-tsconfig-paths`, you can uninstall it and use quasar.config file > build > alias as the source of truth.
 
-If you are using ESLint, we recommend enabling `@typescript-eslint/consistent-type-imports` rules in your ESLint configuration. If you don't have linting set up, we recommend using `verbatimModuleSyntax` in your `tsconfig.json` file as an alternative (_unlike ESLint rules, it's not auto-fixable_). These changes will help you unify your imports regarding regular and type-only imports. Please read [typescript-eslint Blog - Consistent Type Imports and Exports: Why and How](https://typescript-eslint.io/blog/consistent-type-imports-and-exports-why-and-how) for more information about this and how to set it up. Here is an example:
+If you are using ESLint, we recommend enabling `@typescript-eslint/consistent-type-imports` rules in your ESLint configuration. If you don't have linting set up, we recommend using `verbatimModuleSyntax` in your tsconfig.json file as an alternative (_unlike ESLint rules, it's not auto-fixable_). These changes will help you unify your imports regarding regular and type-only imports. Please read [typescript-eslint Blog - Consistent Type Imports and Exports: Why and How](https://typescript-eslint.io/blog/consistent-type-imports-and-exports-why-and-how) for more information about this and how to set it up. Here is an example:
 
 ```js /eslint.config.js
 rules: {

@@ -24,11 +24,12 @@ Newer mobile browsers have the ability to specify a color for the addressbar, li
 We create boot file to initialize its usage: `quasar new boot addressbar-color [--format ts]`. A file is created (`/src/boot/addressbar-color.js`). We edit it:
 
 ```js /src/boot/addressbar-color.js
+import { defineBoot } from '#q-app'
 import { AddressbarColor } from 'quasar'
 
-export default () => {
+export default defineBoot(() => {
   AddressbarColor.set('#a2e3fa')
-}
+})
 ```
 
 We then have to tell quasar to use this boot file we just created. To do this we edit the boot section of the quasar config:

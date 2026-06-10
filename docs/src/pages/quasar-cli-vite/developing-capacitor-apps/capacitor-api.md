@@ -123,11 +123,12 @@ npm install @ionic/pwa-elements
 Then create a boot file to initialize them, for example `/src/boot/capacitor.js`:
 
 ```js
+import { defineBoot } from '#q-app'
 import { defineCustomElements } from '@ionic/pwa-elements/loader'
 
-export default () => {
+export default defineBoot(() => {
   defineCustomElements(window)
-}
+})
 ```
 
 Don't forget to call the boot script in the `quasar.config` file:

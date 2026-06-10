@@ -128,30 +128,28 @@ bun add --dev @intlify/unplugin-vue-i18n
 Then we edit the /quasar.config file:
 
 ```js /quasar.config file
-import { join } from 'node:path'
+export default defineConfig(ctx => {
+  build: {
+    vitePlugins: [
+      [
+        '@intlify/unplugin-vue-i18n/vite',
+        {
+          // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
+          // compositionOnly: false,
 
-// ...
+          // if you want to use named tokens in your Vue I18n messages, such as 'Hello {name}',
+          // you need to set `runtimeOnly: false`
+          // runtimeOnly: false,
 
-build: {
-  vitePlugins: [
-    [
-      '@intlify/unplugin-vue-i18n/vite',
-      {
-        // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
-        // compositionOnly: false,
+          ssr: ctx.modeName === 'ssr',
 
-        // if you want to use named tokens in your Vue I18n messages, such as 'Hello {name}',
-        // you need to set `runtimeOnly: false`
-        // runtimeOnly: false,
-
-        ssr: ctx.modeName === 'ssr',
-
-        // you need to set i18n resource including paths !
-        include: [join(import.meta.dirname, 'src/i18n')]
-      }
+          // you need to set i18n resource including paths !
+          include: [ctx.appPaths.resolve.src('i18n')]
+        }
+      ]
     ]
-  ]
-}
+  }
+})
 ```
 
 ## How to use

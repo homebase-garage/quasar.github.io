@@ -317,11 +317,13 @@ Just make sure that your app is consistent, though.
 When a boot file runs on the server, you will have access to one more parameter (called [ssrContext](/quasar-cli-vite/developing-ssr/ssr-context)) on the default exported function:
 
 ```js Some boot file
-export default ({ app, ..., ssrContext }) => {
+import { defineBoot } from '#q-app'
+
+export default defineBoot(({ app, ..., ssrContext }) => {
   // You can add props to the ssrContext then use them in the /index.html.
   // Example - let's say we ssrContext.someProp = 'some value', then in index template we can reference it:
   // {{ ssrContext.someProp }}
-}
+})
 ```
 
 When you add such references into your `/index.html`, make sure you tell Quasar it's only valid for SSR builds:

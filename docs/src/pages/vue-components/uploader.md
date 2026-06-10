@@ -428,11 +428,12 @@ Then you register this component globally with Vue or you import it and add it t
 
 ```js
 // globally registering your component in a boot file
+import { defineBoot } from '#q-app'
 import MyUploader from '../../path/to/MyUploader' // the file from above
 
-export default ({ app }) {
+export default defineBoot(({ app }) {
   app.component('MyUploader', MyUploader)
-}
+})
 
 // or declaring it in a .vue file
 import MyUploader from '../../path/to/MyUploader' // the file from above

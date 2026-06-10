@@ -37,22 +37,28 @@ You'll notice that the `/quasar.config` file exports a function that takes a `ct
 ```js /quasar.config file
 import { defineConfig } from '#q-app'
 
+// can be async too:
 export default defineConfig(ctx => {
-  // can be async too
   console.log(ctx)
 
-  // Example output on console:
   /*
   {
-    dev: true,
-    prod: false,
+    dev: boolean,
+    prod: boolean,
     mode: { spa: true },
-    modeName: 'spa',
+    modeName: 'spa' | 'pwa' | ...,
     target: {},
-    targetName: undefined,
+    targetName: string,
     arch: {},
-    archName: undefined,
-    debug: undefined
+    archName: string | undefined,
+    bundler: {},
+    bundlerName: string | undefined,
+    debug: boolean,
+    publish: boolean,
+    vueDevtools: boolean,
+
+    appPaths: {...},
+    logger: {...}
   }
   */
 
@@ -70,8 +76,9 @@ What this means is that, as an example, you can load a font when building for a 
 ```js /quasar.config file
 {
   extras: [
-    ctx.mode.pwa // we're adding only if working on a PWA
-      ? 'roboto-font'
+    ctx.mode.pwa
+      ? // we're adding only if working on a PWA
+        'roboto-font'
       : null
   ]
 }
@@ -82,8 +89,11 @@ Or you can use a global CSS file for SPA mode and another one for Cordova mode w
 ```js /quasar.config file
 {
   css: [
-    ctx.mode.spa ? 'app-spa.sass' : null, // looks for /src/css/app-spa.sass
-    ctx.mode.cordova ? 'app-cordova.sass' : null // looks for /src/css/app-cordova.sass
+    // looks for /src/css/app-spa.sass
+    ctx.mode.spa ? 'app-spa.sass' : null,
+
+    // looks for /src/css/app-cordova.sass
+    ctx.mode.cordova ? 'app-cordova.sass' : null
   ]
 }
 ```
@@ -179,8 +189,11 @@ Example:
 ```js /quasar.config file
 {
   css: [
-    'app.sass', // referring to /src/css/app.sass
-    '~some-library/style.css' // referring to node_modules/some-library/style.css
+    // referring to /src/css/app.sass
+    'app.sass',
+
+    // referring to node_modules/some-library/style.css
+    '~some-library/style.css'
   ]
 }
 ```
@@ -215,7 +228,7 @@ preFetch?: boolean;
 
 ```ts
 /**
- * What to import from [@quasar/extras](https://github.com/quasarframework/quasar/tree/dev/extras) package.
+ * What to import from @quasar/extras package.
  * @example ['material-icons', 'roboto-font', 'ionicons-v4']
  */
 extras?: (QuasarIconSets | QuasarFonts)[];

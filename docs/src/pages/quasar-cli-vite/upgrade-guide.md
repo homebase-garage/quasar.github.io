@@ -4,7 +4,7 @@ desc: (@quasar/app-vite) How to upgrade Quasar CLI with Vite from older versions
 ---
 
 ::: warning Important!
-This guide refers to upgrading a `@quasar/app-vite` v2 project to `@quasar/app-vite` v3.
+This guide refers to upgrading a @quasar/app-vite v2 project to @quasar/app-vite v3.
 For older versions, please refer to [https://legacy-app.quasar.dev](https://legacy-app.quasar.dev).
 :::
 
@@ -185,9 +185,11 @@ We've also massively upgraded the dev setup for AEs. You might want to do a top 
 
 - 🚀 Paving the Way for SSG: This new SSR architecture lays the necessary groundwork for us to finally release Static Site Generation (SSG) mode in the future.
 
-- 🖥️ Revamped Electron Mode: We’ve added lots of new features to make desktop development smoother. Similar to SSR, we've introduced a /src-electron/electron-assets folder. Referencing files from here (or from the /public folder) is now much easier via new utility methods available in both /src-electron and /src.
+- 🖥️ Revamped Electron Mode: We've added lots of new features to make desktop development smoother. Similar to SSR, we've introduced a /src-electron/electron-assets folder. Referencing files from here (or from the /public folder) is now much easier via new utility methods available in both /src-electron and /src.
 
 - 🛣️ Vue Router: First-class support for the [filename-based routing](/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing).
+
+- 🚀 Smarter reloads (when absolutely needed): You'll notice the DX on dev has improved significantly, with even smarter heuristics when changing the quasar.config file or the dotenv files.
 
 - 🛠️ Modernized Core: The codebase has been updated to take full advantage of Node.js v22+ features, alongside countless other small but significant improvements across all Quasar modes to boost your productivity. The CLI uses significantly less dependencies.
 
@@ -299,6 +301,15 @@ export default defineConfig(ctx => ({
 Do a global search for `process.env` and replace with `import.meta.env`. For the Quasar supplied constants, you will need to prefix them with `QUASAR_` too. Here's a list:
 
 ```js process.env -> import.meta.env
+// new boolean ones!
+import.meta.env.QUASAR_SPA_MODE
+import.meta.env.QUASAR_PWA_MODE
+import.meta.env.QUASAR_SSR_MODE
+import.meta.env.QUASAR_ELECTRON_MODE
+import.meta.env.QUASAR_BEX_MODE
+import.meta.env.QUASAR_CAPACITOR_MODE
+import.meta.env.QUASAR_CORDOVA_MODE
+
 process.env.DEV // [!code --]
 process.env.PROD // [!code --]
 import.meta.env.QUASAR_DEV
@@ -332,15 +343,21 @@ import.meta.env.QUASAR_APP_URL
 
 // removed; use ".cjs" instead: // [!code --]
 process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION // [!code --]
+```
 
-// new boolean ones!
-import.meta.env.QUASAR_SPA_MODE
-import.meta.env.QUASAR_PWA_MODE
-import.meta.env.QUASAR_SSR_MODE
-import.meta.env.QUASAR_ELECTRON_MODE
-import.meta.env.QUASAR_BEX_MODE
-import.meta.env.QUASAR_CAPACITOR_MODE
-import.meta.env.QUASAR_CORDOVA_MODE
+For the `/index.html` file, instead of relying on the previous "process.env.X", you can now use:
+
+<!-- prettier-ignore -->
+```html
+<!-- old way, REPLACE! -->
+<%= process.env.MY_ENV_VAR_OR_DEFINE %> // [!code --]
+
+<!-- new way: -->
+<%= importMetaEnv.MY_ENV_VAR_OR_DEFINE %> // [!code ++]
+<!-- or shorthand: -->
+%MY_ENV_VAR_OR_DEFINE% // [!code ++]
+
+<% if (importMetaEnv.MY_ENV_VAR_OR_DEFINE) { %>Wow!<% } %>
 ```
 
 ### Quasar mode package.json
@@ -349,7 +366,7 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
 
 ```tabs /package.json to new /src-<mode>/package.json
 <<| js BEX |>>
-// create /src-bex/package.json:
+// create /src-bex/package.json: // [!code ++]
 {
   "name": "quasar-bex-app",
   "version": "1.0.0",
@@ -361,7 +378,7 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
   }
 }
 <<| js PWA |>>
-// remove from /package.json
+// remove from /package.json // [!code --]
 {
   "dependencies": {
     "register-service-worker": "^1.7.2"
@@ -377,7 +394,7 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
   }
 }
 
-// create /src-pwa/package.json:
+// create /src-pwa/package.json: // [!code ++]
 {
   "name": "quasar-pwa-app",
   "version": "1.0.0",
@@ -398,14 +415,14 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
   }
 }
 <<| js Electron |>>
-// remove from /package.json
+// remove from /package.json // [!code --]
 {
   "devDependencies": {
     "electron": "^42.0.0"
   }
 }
 
-// create /src-electron/package.json:
+// create /src-electron/package.json: // [!code ++]
 {
   "name": "quasar-electron-app",
   "version": "1.0.0",
@@ -417,7 +434,7 @@ Edit your /package.json file to remove Quasar mode specific dependencies and mov
   }
 }
 <<| js SSR |>>
-// create /src-ssr/package.json:
+// create /src-ssr/package.json: // [!code ++]
 {
   "name": "quasar-ssr-app-express",
   "version": "1.0.0",
@@ -457,6 +474,10 @@ build: {
   // new! Vue Router v5+ filename-based routing
   filenameBasedRouting: boolean | VueRouterVitePluginOptions,
 
+  // NOT async, but it can now also return a new config
+  // that will be merged with the default one
+  extendTsConfig: (tsConfig: TSConfig) => void | TSConfig,
+
   // removed; add your preferred analyzer yourself; // [!code --]
   // example available below // [!code --]
   analyze, // [!code --]
@@ -495,6 +516,10 @@ ssr: {
 },
 
 pwa: {
+  // new! NOT async, but it can now also return a new config
+  // that will be merged with the default one
+  extendPWASwTsConfig: (tsConfig: TSConfig) => void | TSConfig,
+
   extendManifestJson (json) {}, // [!code --]
   // can now be async and optionally return object to be merged with default one
   extendPWAManifestJson (json) {},
@@ -601,8 +626,6 @@ The only `.d.ts` file that you need will be in the root of your project folder:
  * process.env variables or definitions in dotenv files configured ONLY
  * for the /quasar.config file itself.
  *
- * https://quasar.dev/quasar-cli-vite/handling-import-meta-env#type-inference
- *
  * @example
  * interface ImportMetaEnv {
  *   readonly MY_VAR: string;
@@ -629,11 +652,11 @@ declare namespace NodeJS {
 }
 ```
 
-You can read about [Handling import.meta.env](/quasar-cli-vite/handling-import-meta-env).
+You can read about [Handling import.meta.env](/quasar-cli-vite/handling-import-meta-env). Highly recommended as it will show you all the new goodies.
 
 ### Install new deps
 
-Then yarn/npm/pnpm/bun install in the root folder and run `quasar prepare`. Restart your IDE to make sure the new dependencies have been correctly picked up.
+Then pnpm/yarn/npm/bun install in the root folder and run `quasar prepare`. Restart your IDE to make sure the new dependencies have been correctly picked up.
 
 Make sure to update your `/quasar.config` file with the newest specs in order to satisfy the types. Check all following sections.
 
@@ -912,7 +935,9 @@ Migration steps:
    }
    ```
 
+   <br>
    The generated `.quasar/tsconfig.pwa-sw.json` handles the WebWorker lib swap and the scoped include/exclude. If you had custom settings in your old `src-pwa/tsconfig.json`, you can use `quasar.config file > pwa > extendPWASwTsConfig` to customize the generated one. See [PWA with TypeScript](/quasar-cli-vite/developing-pwa/pwa-with-typescript) for more information.
+   <br><br>
 
 4. Update your ESLint config glob:
 
@@ -928,6 +953,8 @@ Migration steps:
    }
    ```
 
+   <br>
+
 5. If you set `sourceFiles.pwaServiceWorker` explicitly in `quasar.config`, update it:
 
    ```js
@@ -937,7 +964,9 @@ Migration steps:
    }
    ```
 
+   <br>
    If you don't set it, the new default kicks in automatically.
+   <br><br>
 
 6. (Optional) TypeScript + ESLint only: to type-check the SW during dev/build, add a `typescript` entry to your `vite-plugin-checker` options (alongside `vueTsc: true`):
 
@@ -959,6 +988,7 @@ vitePlugins: [
 ```
 
 7. (Optional) TypeScript: add a `package.json` script to check both root and SW types:
+
    ```json /package.json
    "scripts": {
     "typecheck": "vue-tsc --noEmit && tsc --project src-pwa/sw/tsconfig.json --noEmit", // [!code ++]
@@ -970,9 +1000,9 @@ vitePlugins: [
 
 ### capacitor.config in js/ts form
 
-`@quasar/app-vite` adds support for `capacitor.config.js` and `capacitor.config.ts` files, and drops support for `capacitor.config.json`. `.js` and `.ts` variants are much more flexible and do not have the git noise of the `.json` one, which was being rewritten on every `quasar dev` / `quasar build` with relevant fields. You must migrate to `capacitor.config.ts` (for TypeScript projects) or `capacitor.config.js` (for JS projects) before upgrading, more details below.
+The new @quasar/app-vite adds support for `capacitor.config.js` and `capacitor.config.ts` files, and drops support for `capacitor.config.json`. The .js and .ts variants are much more flexible and do not have the git noise of the .json one, which was being rewritten on every "quasar dev" / "quasar build" with relevant fields. You must migrate to `capacitor.config.ts` (for TypeScript projects) or `capacitor.config.js` (for JS projects) before upgrading, more details below.
 
-`quasar mode add capacitor` now scaffolds `capacitor.config.js` for JS projects, or a `capacitor.config.ts` for TypeScript projects. See [Configuring Capacitor](/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor) for more information. Config files use the new `defineCapacitorConfig` helper from `@quasar/app-vite/capacitor`:
+The "quasar mode add capacitor" command now scaffolds `capacitor.config.js` for JS projects, or a `capacitor.config.ts` for TypeScript projects. See [Configuring Capacitor](/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor) for more information. Config files use the new `defineCapacitorConfig` helper from "@quasar/app-vite/capacitor":
 
 ```tabs
 <<| js /src-capacitor/capacitor.config.js |>>
@@ -991,9 +1021,9 @@ export default defineCapacitorConfig({
 });
 ```
 
-The helper defaults `webDir` to `'www'`, injects `server.url` (and `server.cleartext: true` on Android) in dev mode, and types your input against `CapacitorConfig` from `@capacitor/cli`. Your own values always win, and the source file isn't mutated. Inside the config, `process.env.QUASAR_DEV`, `QUASAR_TARGET`, `QUASAR_APP_URL`, and your own `.env` / `build.env` values are available. Read [Configuring Capacitor](/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor#reading-env-values) for more information.
+The helper defaults `webDir` to `'www'`, injects `server.url` (and `server.cleartext: true` on Android) in dev mode, and types your input against CapacitorConfig from "@capacitor/cli". Your own values always win, and the source file isn't mutated. Inside the config, `import.meta.env.QUASAR_DEV`, `QUASAR_TARGET`, `QUASAR_APP_URL`, and your own `.env` / `build.env` values are available. Read [Configuring Capacitor](/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor#reading-env-values) for more information.
 
-To migrate from `.json`, replace the file with a `defineCapacitorConfig({...})` call carrying the same fields. `webDir` can be dropped:
+To migrate from ".json", replace the file with a `defineCapacitorConfig({...})` call carrying the same fields. `webDir` can be dropped:
 
 ```tabs Migrating from capacitor.config.json
 <<| json capacitor.config.js (JS projects) |>>
@@ -1022,13 +1052,13 @@ export default defineCapacitorConfig({
 });
 ```
 
-### Removed: `quasar.config > capacitor.{appName, version, description}`
+### Removed: quasar.config > capacitor.{appName, version, description}
 
-Three fields under `quasar.config > capacitor` are gone. None of them did what they appeared to.
+Three fields under quasar.config > capacitor are gone. None of them did what they appeared to.
 
-`version` and `description` were never read by the Capacitor CLI, neither from `capacitor.config.*` nor from `src-capacitor/package.json`. iOS and Android take their versions from `android/app/build.gradle` (`versionName` / `versionCode`) and `ios/App/App/Info.plist` (`CFBundleShortVersionString` / `CFBundleVersion`). Edit those directly when bumping for a store release. See [Publishing to Store](/quasar-cli-vite/developing-capacitor-apps/publishing-to-store).
+The `version` and `description` were never read by the Capacitor CLI, neither from capacitor.config.\* nor from src-capacitor/package.json. iOS and Android take their versions from android/app/build.gradle (`versionName` / `versionCode`) and ios/App/App/Info.plist (CFBundleShortVersionString / CFBundleVersion). Edit those directly when bumping for a store release. See [Publishing to Store](/quasar-cli-vite/developing-capacitor-apps/publishing-to-store).
 
-`appName` had some effect, but it was limited. Capacitor writes it into Info.plist's `CFBundleDisplayName` (iOS) and `strings.xml`'s `app_name` (Android), but only at `cap add` time. `cap sync` and `cap copy` don't re-run that step, so a `quasar.config` field suggested a live setting it wasn't. It's now captured via a prompt during `quasar mode add capacitor`, written into the scaffolded `capacitor.config.*`, and applied to the native projects when you add the platform. Later renames happen by editing `Info.plist` and `strings.xml` directly, or by removing and re-adding the platform.
+The `appName` had some effect, but it was limited. Capacitor writes it into Info.plist's "CFBundleDisplayName" (iOS) and "strings.xml" > app_name (Android), but only at "cap add" time. The "cap sync" and "cap copy" commands don't re-run that step, so a quasar.config file field suggested a live setting it wasn't. It's now captured via a prompt during "quasar mode add capacitor", written into the scaffolded capacitor.config.\*, and applied to the native projects when you add the platform. Later renames happen by editing Info.plist and strings.xml directly, or by removing and re-adding the platform.
 
 If you were setting any of these, remove them:
 
@@ -1041,9 +1071,9 @@ capacitor: {
 }
 ```
 
-### `src-capacitor/package.json` no longer rewritten
+### src-capacitor/package.json no longer rewritten
 
-Quasar used to overwrite `name`, `version`, `description`, and `author` in `src-capacitor/package.json` on every `quasar dev` / `quasar build`. Capacitor's CLI doesn't read most of that, so the rewrites were churn for no benefit (and noise in git). New projects scaffold a static `quasar-capacitor-app` / `1.0.0` template. Existing projects can update theirs to match, or leave it alone. Quasar won't touch it either way.
+Quasar used to overwrite "name", "version", "description", and "author" in src-capacitor/package.json on every "quasar dev/build" command. Capacitor's CLI doesn't read most of that, so the rewrites were churn for no benefit (and noise in git). New projects scaffold a static `quasar-capacitor-app` / `1.0.0` template. Existing projects can update theirs to match, or leave it alone. Quasar won't touch it either way.
 
 ## Other considerations
 

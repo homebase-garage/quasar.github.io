@@ -30,7 +30,9 @@ We will be using `client code` and `backend code` on this page:
 | `QUASAR_<MODE>_MODE`     | Boolean | Code runs in `<MODE>` Quasar mode. Example: QUASAR_ELECTRON_MODE                             |
 | `QUASAR_TARGET`          | String  | Can be `ios` or `android` for Cordova/Capacitor modes and `chrome` or `firefox` for BEX mode |
 
-## Basic Usage
+## Usage
+
+### Javascript / Typescript
 
 ```js Basic example
 if (import.meta.env.QUASAR_DEV) {
@@ -83,6 +85,17 @@ if (import.meta.env.QUASAR_MODE === 'electron') {
 if (import.meta.env.QUASAR_ELECTRON_MODE) {
   // ...
 }
+```
+
+### The /index.html file
+
+<!-- prettier-ignore -->
+```
+<%= importMetaEnv.MY_ENV_VAR_OR_DEFINE %>
+<!-- or shorthand: -->
+%MY_ENV_VAR_OR_DEFINE%
+
+<% if (importMetaEnv.MY_ENV_VAR_OR_DEFINE) { %>Wow!<% } %>
 ```
 
 ## Adding to import.meta.env
