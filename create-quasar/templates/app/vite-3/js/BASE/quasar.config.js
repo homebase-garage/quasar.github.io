@@ -2,9 +2,6 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app'
-<% if (scope.preset.i18n) { %>
-import { join } from 'node:path'
-<% } %>
 
 export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* ctx */<% } %>) => {
   return {
@@ -77,7 +74,7 @@ export default defineConfig((<% if (scope.preset.i18n) { %>ctx<% } else { %>/* c
           ssr: ctx.modeName === 'ssr',
 
           // you need to set i18n resource including paths !
-          include: [ join(import.meta.dirname, 'src/i18n') ]
+          include: [ ctx.appPaths.resolve.app('src/i18n') ]
         }]<% if (scope.linter === 'eslint') { %>,<% } %>
 
 <% } %>
