@@ -1,8 +1,11 @@
 import { minify } from 'html-minifier-terser'
+
+import { fatal, warn } from '../utils/logger.js'
 import {
   compileTemplateToFile,
   compileTemplateToFn,
-  renderTemplate
+  renderTemplate,
+  templateRenderError
 } from '../utils/template.js'
 
 let htmlStore = null
@@ -148,8 +151,47 @@ function injectVueDevtools(html, { host, port }, nonce = '') {
   return html.replace(headEndRE, (_, tag) => `${scripts}${tag}`)
 }
 
+const templareErrorHtmlPage = `
+  <!doctype html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>HTML template compilation error</title>
+    </head>
+    <body>
+      <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;height: 100vh;">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #000;padding:20px;border-radius:4px;">
+          <h1>HTML template compilation error</h1>
+          <p>
+            Please check the source around "&lt;%" and "%&gt;" for invalid usage.
+          </p>
+        </div>
+    </body>
+  </html>
+`
+
+function handleTemplateError(isProd) {
+  if (isProd) {
+    fatal(
+      `HTML template compilation failed. Please check the source around "<%" and "%>" for invalid usage.`
+    )
+  }
+
+  warn()
+  warn(
+    `Please check the source around "<%" and "%>" for invalid usage.`,
+    'HTML template compilation failed'
+  )
+  warn()
+
+  return templareErrorHtmlPage
+}
+
 async function transformHtml(template, htmlVariables, quasarConf) {
   let html = renderTemplate(template, htmlVariables, templateCompileOpts)
+  if (html === templateRenderError) {
+    return handleTemplateError(quasarConf.ctx.prod)
+  }
 
   // should be dev only
   if (quasarConf.metaConf.vueDevtools) {
@@ -199,6 +241,9 @@ export async function transformProdSsrPwaOfflineHtml(html, quasarConf) {
  */
 export function getDevSsrTemplateFn(template, htmlVariables, quasarConf) {
   let html = renderTemplate(template, htmlVariables, templateCompileOpts)
+  if (html === templateRenderError) {
+    return () => handleTemplateError(false)
+  }
 
   // publicPath will be handled by Vite middleware
   // if src/href are not relative, which is what we need

@@ -11,8 +11,9 @@ import { PromptsAPI } from './api-classes/PromptsAPI.js'
 import { createPromptSession, fatal, log } from '../utils/logger.js'
 import { getExtensionLogger } from './logger.js'
 import { getPackagePath } from '../utils/get-package-path.js'
-import { renderTemplate } from '../utils/template.js'
+import { renderTemplate, templateRenderError } from '../utils/template.js'
 
+const renderTemplateCompileOpts = { varName: false }
 const overWriteOptions = [
   { label: 'Overwrite', value: 'overwrite' },
   { label: 'Overwrite all', value: 'overwriteAll' },
@@ -43,7 +44,8 @@ async function promptOverwrite({ targetPath, options, ctx }) {
 
 async function renderFile(
   { sourcePath, targetPath, rawCopy, scope, overwritePrompt },
-  ctx
+  ctx,
+  logger
 ) {
   if (overwritePrompt && fse.existsSync(targetPath)) {
     const action = await promptOverwrite({
@@ -61,15 +63,19 @@ async function renderFile(
     fse.copyFileSync(sourcePath, targetPath)
   } else {
     const rawContent = fse.readFileSync(sourcePath, 'utf8')
-    fse.writeFileSync(
-      targetPath,
-      renderTemplate(rawContent, scope, { varName: false }),
-      'utf8'
-    )
+    const content = renderTemplate(rawContent, scope, renderTemplateCompileOpts)
+
+    if (content === templateRenderError) {
+      logger.warn(
+        `Failed to render template "${sourcePath}". This may break the App Extension...`
+      )
+    } else {
+      fse.writeFileSync(targetPath, content, 'utf8')
+    }
   }
 }
 
-async function renderFolders({ source, rawCopy, scope }, ctx) {
+async function renderFolders({ source, rawCopy, scope }, ctx, logger) {
   let overwrite
   const { globSync } = await import('tinyglobby')
   const files = globSync(['**/*'], { cwd: source })
@@ -110,7 +116,7 @@ async function renderFolders({ source, rawCopy, scope }, ctx) {
       }
     }
 
-    await renderFile({ sourcePath, targetPath, rawCopy, scope }, ctx)
+    await renderFile({ sourcePath, targetPath, rawCopy, scope }, ctx, logger)
   }
 }
 
@@ -441,13 +447,13 @@ export class AppExtensionInstance {
 
     if (hooks.renderFolders.length !== 0) {
       for (const entry of hooks.renderFolders) {
-        await renderFolders(entry, this.#ctx)
+        await renderFolders(entry, this.#ctx, this.logger)
       }
     }
 
     if (hooks.renderFiles.length !== 0) {
       for (const entry of hooks.renderFiles) {
-        await renderFile(entry, this.#ctx)
+        await renderFile(entry, this.#ctx, this.logger)
       }
     }
 
