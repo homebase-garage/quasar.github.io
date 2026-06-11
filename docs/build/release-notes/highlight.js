@@ -6,7 +6,7 @@ const supportedLangSet = new Set(supportedLangs)
 
 export default function highlight(str, lang) {
   const resolved = lang === '' ? 'js' : lang
-  if (supportedLangSet.has(resolved) === false) {
+  if (!supportedLangSet.has(resolved)) {
     return ''
   }
 
