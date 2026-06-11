@@ -19,18 +19,18 @@ Quasar is saving your company tens of thousands of development hours (quite lite
 All major Quasar UI releases are typically supported for at least 12 months.
 LTS support ends 12 months after the release of a new major version.
 
-| Packages              | Version | Status         | Released   | Active support ends | LTS support ends |
-| --------------------- | ------- | -------------- | ---------- | ------------------- | ---------------- |
-| Quasar UI (`quasar`)  | v3.x    | Planned        | -          | -                   | -                |
-| Quasar UI (`quasar`)  | v2.x    | Active         | 2021-06-21 | Not planned yet     | Not planned yet  |
-| `@quasar/app-vite`    | v3.x    | In development | -          | -                   | -                |
-| `@quasar/app-vite`    | v2.x    | Active         | 2024-02-08 | Not planned yet     | Not planned yet  |
-| `@quasar/extras`      | v2.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
-| `@quasar/extras`      | v1.x    | Inactive       | 2019-02-22 | 2026-05-28          | 2026-12-31       |
-| `@quasar/vite-plugin` | v1.x    | Active         | 2021-10-25 | Not planned yet     | Not planned yet  |
-| `@quasar/cli`         | v5.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
-| `@quasar/icongenie`   | v5.x    | Active         | 2026-05-28 | Not planned yet     | Not planned yet  |
-| `@quasar/app-webpack` | v4.x    | Deprecated     | 2024-02-08 | 2026-12-31          | 2026-05-08       |
+| Packages              | Version | Status      | Released   | Active support ends | LTS support ends |
+| --------------------- | ------- | ----------- | ---------- | ------------------- | ---------------- |
+| Quasar UI (`quasar`)  | v3.x    | Planned     | -          | -                   | -                |
+| Quasar UI (`quasar`)  | v2.x    | Active      | 2021-06-21 | Not planned yet     | Not planned yet  |
+| `@quasar/app-vite`    | v3.x    | Active      | 2026-06-11 | Not planned yet     | Not planned yet  |
+| `@quasar/app-vite`    | v2.x    | Maintenance | 2024-02-08 | 2027-06-11          | 2027-06-11       |
+| `@quasar/extras`      | v2.x    | Active      | 2026-05-28 | Not planned yet     | Not planned yet  |
+| `@quasar/extras`      | v1.x    | Inactive    | 2019-02-22 | 2026-05-28          | 2026-12-31       |
+| `@quasar/vite-plugin` | v1.x    | Active      | 2021-10-25 | Not planned yet     | Not planned yet  |
+| `@quasar/cli`         | v5.x    | Active      | 2026-05-28 | Never               | Never            |
+| `@quasar/icongenie`   | v5.x    | Active      | 2026-05-28 | Never               | Never            |
+| `@quasar/app-webpack` | v4.x    | Deprecated  | 2024-02-08 | 2026-12-31          | 2026-05-08       |
 
 ## Major milestones
 
@@ -42,20 +42,27 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 
 - 🚧 (WIP) Gradually add more automated tests to Quasar UI. **We're searching for contributors**, get in touch with the team on our [Discord server](https://chat.quasar.dev/) if you're willing to help!
 
-### Q2 2026
+### Q3 2026
 
-- Release of a new major version of `@quasar/app-vite` (v3): [Announcement](https://github.com/quasarframework/quasar/discussions/18295)
-- ✌️ (DONE) Release of `@quasar/extras` v2
-- ✌️ (DONE) Release of `@quasar/cli` v5
-- ✌️ (DONE) Release of `@quasar/icongenie` v5
-- Plans for Quasar v3. We will need your input on some of the decisions that we will be taking for the new major version.
+- ✌️ (DONE) Release of a new major version of `@quasar/app-vite` (v3): [Announcement](https://github.com/quasarframework/quasar/discussions/18295)
+- An important update to `@quasar/icongenie` to handle all edge cases.
 
 ### Q3-Q4 2026
 
-- Quasar v3 release, hopefully in Q4.
+- Plans for Quasar v3. We will need your input on some of the decisions that we will be taking for the new major version.
 - CLI SSG mode ([#2299](https://github.com/quasarframework/quasar/issues/2299)) ([community support](https://github.com/freddy38510/quasar-app-extension-ssg))
 
+### Q1 2027
+
+- Quasar v3 release, hopefully.
+
 ## Archive
+
+### Q2 2026
+
+- ✌️ (DONE) Release of `@quasar/extras` v2
+- ✌️ (DONE) Release of `@quasar/cli` v5
+- ✌️ (DONE) Release of `@quasar/icongenie` v5
 
 ### Q1 2026
 
