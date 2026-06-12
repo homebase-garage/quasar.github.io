@@ -277,9 +277,6 @@ $support-quasar-background-padding: 35vw
   .sponsors-section
     margin-top: 200px
 
-    @media screen and (min-width: $breakpoint-md-max)
-      height: calc(100vh - $header-height)
-
   .intro-section
     margin-top: 60px
     margin-bottom: 208px
