@@ -114,9 +114,7 @@ async function generateFromProfile(profile) {
   printBanner(assetsOf, params)
 
   return Promise.all(uniqueFiles.map(file => generateFile(file, fileOptions)))
-    .then(() => {
-      mount(uniqueFiles)
-    })
+    .then(() => mount(uniqueFiles))
     .then(() => uniqueFiles.length)
 }
 

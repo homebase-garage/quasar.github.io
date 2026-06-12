@@ -1,8 +1,10 @@
+import { mountCapacitor } from './mount-capacitor.js'
 import { isCordovaFile, mountCordova, verifyCordova } from './mount-cordova.js'
 import { mountTag } from './mount-tag.js'
 
-export function mount(files) {
-  mountCordova(files)
+export async function mount(files) {
+  await mountCapacitor(files)
+  await mountCordova(files)
   mountTag(files)
 }
 

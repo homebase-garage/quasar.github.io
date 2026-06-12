@@ -128,7 +128,7 @@ function hasDeepProp(target, ...args) {
   return true
 }
 
-function installSplashscreenPlugin() {
+async function installSplashscreenPlugin() {
   const pkgPath = resolveDir('src-cordova/package.json')
 
   // malformed /src-cordova...
@@ -144,29 +144,26 @@ function installSplashscreenPlugin() {
     return
   }
 
-  log(`Installing cordova-plugin-splashscreen...`)
-
-  spawnSync(
+  const hasInstalled = await spawnSync(
     'cordova',
     ['plugin', 'add', 'cordova-plugin-splashscreen'],
     {
       cwd: srcCordovaDir
-    },
-    () => {
-      warn()
-      warn(
-        'Failed to install cordova-plugin-splashscreen. Please do it manually.'
-      )
-      console.log(
-        ' -> /src-cordova: $ cordova plugin add cordova-plugin-splashscreen\n'
-      )
     }
   )
 
-  console.log()
+  if (!hasInstalled) {
+    warn()
+    warn(
+      'Failed to install cordova-plugin-splashscreen. Please do it manually.'
+    )
+    console.log(
+      ' -> /src-cordova: $ cordova plugin add cordova-plugin-splashscreen\n'
+    )
+  }
 }
 
-export function mountCordova(files) {
+export async function mountCordova(files) {
   if (existsSync(cordovaConfigXml)) {
     const cordovaFiles = getCordovaFiles(files)
 
@@ -176,7 +173,7 @@ export function mountCordova(files) {
       )
 
       if (hasSplashscreen) {
-        installSplashscreenPlugin()
+        await installSplashscreenPlugin()
       }
 
       updateConfigXml(cordovaFiles, hasSplashscreen)
