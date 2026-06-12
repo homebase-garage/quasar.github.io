@@ -29,7 +29,7 @@ LTS support ends 12 months after the release of a new major version.
 | `@quasar/extras`      | v1.x    | Inactive    | 2019-02-22 | 2026-05-28          | 2026-12-31       |
 | `@quasar/vite-plugin` | v1.x    | Active      | 2021-10-25 | Not planned yet     | Not planned yet  |
 | `@quasar/cli`         | v5.x    | Active      | 2026-05-28 | Never               | Never            |
-| `@quasar/icongenie`   | v5.x    | Active      | 2026-05-28 | Never               | Never            |
+| `@quasar/icongenie`   | v6.x    | Active      | 2026-06-12 | Never               | Never            |
 | `@quasar/app-webpack` | v4.x    | Deprecated  | 2024-02-08 | 2026-12-31          | 2026-05-08       |
 
 ## Major milestones
@@ -45,7 +45,7 @@ _The schedule may change based on unforeseen and/or out of the ordinary circumst
 ### Q3 2026
 
 - ✌️ (DONE) Release of a new major version of `@quasar/app-vite` (v3): [Announcement](https://github.com/quasarframework/quasar/discussions/18295)
-- An important update to `@quasar/icongenie` to handle all edge cases.
+- ✌️ (DONE) Release of `@quasar/icongenie` v6. An important update to handle all edge cases and add support for more iPhones & iPads.
 
 ### Q3-Q4 2026
 
