@@ -124,9 +124,9 @@
     "kolorist": "^1.8.0",
     "mlly": "^1.8.2",
     "open": "^11.0.0",
-    "rolldown": "^1.0.3",
+    "rolldown": "^1.1.1",
     "sass-embedded": "^1.100.0",
-    "semver": "^7.8.3",
+    "semver": "^7.8.4",
     "serialize-javascript": "^7.0.5",
     "serve-static": "^2.2.1",
     "tinyglobby": "^0.2.17",
@@ -139,7 +139,7 @@
     "@quasar/extras": "workspace:*",
     "pinia": "^3.0.4",
     "quasar": "workspace:^",
-    "vue": "^3.5.35",
+    "vue": "^3.5.38",
     "vue-router": "^5.1.0"
   },
   "peerDependencies": {
