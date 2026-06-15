@@ -100,7 +100,7 @@ export default defineConfig(ctx => ({
     injectPWAMetaTags: false,
     swFilename: 'service-worker.js',
 
-    extendPWAGenerateSWOptions(cfg) {
+    async extendPWAGenerateSWOptions(cfg) {
       Object.assign(cfg, {
         cleanupOutdatedCaches: true,
         skipWaiting: true,
@@ -110,8 +110,39 @@ export default defineConfig(ctx => ({
             urlPattern: /^https:\/\/cdn/,
             handler: 'StaleWhileRevalidate'
           }
+        ],
+        additionalManifestEntries: [
+          ...(await getSponsors()),
+          ...(await getTeam())
         ]
       })
     }
   }
 }))
+
+async function getSponsors() {
+  const {
+    sponsors: { platinum, gold, silver }
+  } = await import('./src/assets/sponsors.js')
+
+  const list = [...platinum, ...gold, ...silver].map(({ src }) => src)
+  return [
+    ...list.map(src => ({
+      url: `https://cdn.quasar.dev/logo-sponsors-v2/light/${src}`,
+      revision: null
+    })),
+    ...list.map(src => ({
+      url: `https://cdn.quasar.dev/logo-sponsors-v2/dark/${src}`,
+      revision: null
+    }))
+  ]
+}
+
+async function getTeam() {
+  const { coreTeam, honorableTeamMentions } =
+    await import('./src/assets/team.js')
+  return [...coreTeam, ...honorableTeamMentions].map(({ avatar }) => ({
+    url: `https://cdn.quasar.dev/team/${avatar}`,
+    revision: null
+  }))
+}

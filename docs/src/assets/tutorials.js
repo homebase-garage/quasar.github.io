@@ -46,7 +46,7 @@ export default {
       t: 'Chinese quasar-v2 tutorial',
       d: 'Quasar introductory tutorial includes ts+vue3+quasar2+pinia (quasar 中文入门教程)',
       u: 'https://www.bilibili.com/video/BV1pA4y197Zc/',
-      i: 'https://cdn.quasar.dev/logo-v2/svg/logo-vertical.svg'
+      i: '/logo/logo-vertical.svg'
     }
   ],
 

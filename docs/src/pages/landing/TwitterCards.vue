@@ -245,7 +245,7 @@ const tweetsList = [
   }
 ].map(entry => ({
   ...entry,
-  avatar: `https://cdn.quasar.dev/img/tweets/${entry.avatar}`,
+  avatar: `/landing/tweets/${entry.avatar}`,
   link: `https://twitter.com/${entry.handle}/status/${entry.id}`
 }))
 </script>

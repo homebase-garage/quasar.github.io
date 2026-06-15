@@ -22,7 +22,7 @@ import {
 } from '@quasar/extras/mdi-v7'
 
 export const platformIcons = [
-  'img:https://cdn.quasar.dev/img/custom-svg-icons/chrome.svg',
+  'img:/svg/chrome.svg',
   mdiAppleSafari,
   mdiFirefox,
   mdiMicrosoftEdge,

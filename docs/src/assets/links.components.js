@@ -551,7 +551,7 @@ export const quasarElements = [
     const kebab = componentNameToKebabCase(entry.name)
     return {
       ...entry,
-      img: `https://cdn.quasar.dev/img/components/${kebab}.jpg`,
+      img: `/components/${kebab}.jpg`,
       to: `/vue-components/${entry.path || kebab}`
     }
   }),
