@@ -7,7 +7,7 @@
         </template>
       </q-input>
 
-      <q-input outlined v-model="number" type="number" prefix="$">
+      <q-input outlined v-model.number="number" type="number" prefix="$">
         <template v-slot:append>
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" />

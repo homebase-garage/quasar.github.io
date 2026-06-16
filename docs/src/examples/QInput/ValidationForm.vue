@@ -19,7 +19,7 @@
         ref="ageRef"
         filled
         type="number"
-        v-model="age"
+        v-model.number="age"
         label="Your age *"
         lazy-rules
         :rules="ageRules"

@@ -451,7 +451,8 @@ export default createComponent({
       floatingLabel: computed(
         () =>
           (hasValue.value &&
-            (props.type !== 'number' || Number.isFinite(innerValue.value))) ||
+            (props.type !== 'number' ||
+              Number.isFinite(Number(innerValue.value)))) ||
           fieldValueIsFilled(props.displayValue)
       ),
 

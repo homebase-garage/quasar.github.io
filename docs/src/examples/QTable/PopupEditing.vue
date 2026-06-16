@@ -31,7 +31,12 @@
               buttons
               v-slot="scope"
             >
-              <q-input type="number" v-model="scope.value" dense autofocus />
+              <q-input
+                type="number"
+                v-model.number="scope.value"
+                dense
+                autofocus
+              />
             </q-popup-edit>
           </q-td>
           <q-td key="fat" :props="props">
@@ -51,7 +56,7 @@
             >
               <q-input
                 type="number"
-                v-model="scope.value"
+                v-model.number="scope.value"
                 dense
                 autofocus
                 hint="Use buttons to close"
