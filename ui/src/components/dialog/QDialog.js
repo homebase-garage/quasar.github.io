@@ -440,7 +440,6 @@ export default createComponent({
                     class: 'q-dialog__backdrop fixed-full',
                     style: backdropStyle.value,
                     'aria-hidden': 'true',
-                    tabindex: -1,
                     onClick: onBackdropClick
                   })
                 : null
