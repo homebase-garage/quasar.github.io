@@ -79,7 +79,7 @@ export async function addMode({ ctx, silent, target }) {
   promptSession.note(
     'If developing for iOS, it is HIGHLY recommended that you' +
       '\ninstall the Ionic Webview Plugin.' +
-      `\n\n${green('https://quasar.dev/quasar-cli/developing-cordova-apps/preparation')}`,
+      `\n\n${green('https://quasar.dev/quasar-cli-vite/developing-cordova-apps/preparation')}`,
     'WARNING!'
   )
 

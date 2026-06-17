@@ -217,7 +217,7 @@ Electron is a very special case, because XSS and remote code injection can actua
 
 - **DON'T** disable `websecurity`
 - **DON'T** enable remote code execution
-- **DO** read our guidelines for enhanced [Electron Safety](/quasar-cli/developing-electron-apps/electron-security-concerns).
+- **DO** read our guidelines for enhanced [Electron Safety](/quasar-cli-vite/developing-electron-apps/electron-security-concerns).
 
 ### SSR
 
