@@ -521,7 +521,7 @@ export default createComponent({
     function onOpenPan(evt) {
       // some browsers might capture and trigger this
       // even if Drawer has just been opened (but animation is still pending)
-      if (!showing.value) return
+      if (showing.value) return
 
       const width = size.value,
         position = between(evt.distance.x, 0, width)
