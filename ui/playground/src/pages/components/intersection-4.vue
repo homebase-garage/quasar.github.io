@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     sortedItems() {
-      return this.items.sort((a, b) => {
+      return this.items.toSorted((a, b) => {
         a = new Date(a.date)
         b = new Date(b.date)
         return a > b ? -1 : a < b ? 1 : 0
