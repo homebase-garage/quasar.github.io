@@ -101,9 +101,7 @@ export async function ensureModePackageJsonAndWorkspace(
     // re-creating could be annoying. So, we only create it if using pnpm.
     if (nodePackager.name === 'pnpm') {
       fse.copySync(
-        appPaths.resolve.cli(
-          `templates/${modeName}/common/pnpm-workspace.yaml`
-        ),
+        appPaths.resolve.cli(`templates/workspace/pnpm-workspace.yaml`),
         pnpmWorkspaceYamlPath
       )
 
