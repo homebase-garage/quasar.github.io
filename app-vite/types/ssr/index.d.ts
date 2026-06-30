@@ -1,4 +1,5 @@
 import type { HasSsr } from "quasar";
+// oxlint-disable-next-line unicorn/prefer-export-from
 import type { QSsrContext } from "./context.d.ts";
 
 export type HasSsrParam = HasSsr<{ ssrContext?: QSsrContext | null }>;
