@@ -24,10 +24,6 @@ export function addFocusFn(fn) {
   if (waitFlags.length === 0) {
     fn()
   } else {
-    /**
-     * While in the wait state, do not let focus be set on any element.
-     */
-    document.activeElement?.blur?.()
     queue.push(fn)
   }
 }
