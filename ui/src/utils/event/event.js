@@ -65,8 +65,7 @@ export function getEventPath(e) {
     path.push(el)
 
     if (el.tagName === 'HTML') {
-      path.push(document)
-      path.push(window)
+      path.push(document, window)
       return path
     }
 

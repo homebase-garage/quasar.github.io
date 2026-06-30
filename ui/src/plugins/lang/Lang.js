@@ -1,5 +1,6 @@
 import { createReactivePlugin } from '../../utils/private.create/create.js'
 
+// oxlint-disable-next-line unicorn/prefer-export-from
 import defaultLang from '../../../lang/en-US.js'
 
 function getLocale() {

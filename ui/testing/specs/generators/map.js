@@ -2,6 +2,7 @@ import component from './generator.component.js'
 import composable from './generator.composable.js'
 import directive from './generator.directive.js'
 import plugin from './generator.plugin.js'
+// oxlint-disable-next-line unicorn/prefer-export-from
 import generic from './generator.generic.js'
 
 const useRE = /use-[^\\/]+\.js$/

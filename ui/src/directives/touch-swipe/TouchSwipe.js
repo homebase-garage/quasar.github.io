@@ -196,8 +196,10 @@ export default createDirective(
                 stopAndPrevent(evt)
 
                 if (ctx.event.mouse) {
-                  document.body.classList.add('no-pointer-events--children')
-                  document.body.classList.add('non-selectable')
+                  document.body.classList.add(
+                    'no-pointer-events--children',
+                    'non-selectable'
+                  )
                   clearSelection()
 
                   ctx.styleCleanup = withDelay => {

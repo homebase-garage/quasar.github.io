@@ -680,8 +680,8 @@ export default createComponent({
       }
 
       if (topRight !== void 0) {
-        child.push(h('div', { class: 'q-table__separator col' }))
         child.push(
+          h('div', { class: 'q-table__separator col' }),
           h('div', { class: 'q-table__control' }, [
             topRight(marginalsScope.value)
           ])

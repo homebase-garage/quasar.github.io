@@ -168,9 +168,11 @@ function apply(action) {
       }
     }
 
-    body.classList.remove('q-body--prevent-scroll')
-    body.classList.remove('q-body--force-scrollbar-x')
-    body.classList.remove('q-body--force-scrollbar-y')
+    body.classList.remove(
+      'q-body--prevent-scroll',
+      'q-body--force-scrollbar-x',
+      'q-body--force-scrollbar-y'
+    )
 
     document.qScrollPrevented = false
 

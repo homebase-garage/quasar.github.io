@@ -23,8 +23,7 @@ function getBodyClasses({ is, has, within }, cfg) {
   if (is.nativeMobile) {
     const type = is.nativeMobileWrapper
 
-    cls.push(type)
-    cls.push('native-mobile')
+    cls.push(type, 'native-mobile')
 
     if (is.ios && (cfg[type] === void 0 || cfg[type].iosStatusBarPadding)) {
       cls.push('q-ios-padding')
