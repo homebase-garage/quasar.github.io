@@ -22,6 +22,11 @@ export const quasarPwaConfig = {
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-pwa',
       shippedToClient: true,
+      /**
+       * We specify modeDeps because the SW register file
+       * is part of the /src build and it uses dependencies
+       * from /src-pwa.
+       */
       modeDeps: [
         { dir: 'src-pwa', deps: quasarConf.ctx.pkg.pwaPkg.dependencies }
       ]

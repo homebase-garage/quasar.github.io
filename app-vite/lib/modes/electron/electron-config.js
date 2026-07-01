@@ -79,13 +79,7 @@ export const quasarElectronConfig = {
   vite: async quasarConf => {
     const cfg = await createViteConfig(quasarConf, {
       compileId: 'vite-electron',
-      shippedToClient: true,
-      modeDeps: [
-        {
-          dir: 'src-electron',
-          deps: quasarConf.ctx.pkg.electronPkg.dependencies
-        }
-      ]
+      shippedToClient: true
     })
 
     cfg.optimizeDeps.exclude = ['electron']

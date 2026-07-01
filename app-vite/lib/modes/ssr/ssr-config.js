@@ -25,7 +25,12 @@ export const quasarSsrConfig = {
       compileId: 'vite-ssr-client',
       shippedToClient: true,
       modeDeps: quasarConf.ssr.pwa
-        ? [{ dir: 'src-pwa', deps: quasarConf.ctx.pkg.pwaPkg.dependencies }]
+        ? /**
+           * We specify modeDeps because the SW register file
+           * is part of the /src build and it uses dependencies
+           * from /src-pwa.
+           */
+          [{ dir: 'src-pwa', deps: quasarConf.ctx.pkg.pwaPkg.dependencies }]
         : void 0
     })
     const { appPaths } = quasarConf.ctx
@@ -66,7 +71,12 @@ export const quasarSsrConfig = {
       compileId: 'vite-ssr-server',
       shippedToClient: false,
       modeDeps: quasarConf.ssr.pwa
-        ? [{ dir: 'src-pwa', deps: quasarConf.ctx.pkg.pwaPkg.dependencies }]
+        ? /**
+           * We specify modeDeps because the SW register file
+           * is part of the /src build and it uses dependencies
+           * from /src-pwa.
+           */
+          [{ dir: 'src-pwa', deps: quasarConf.ctx.pkg.pwaPkg.dependencies }]
         : void 0
     })
 
