@@ -1450,7 +1450,11 @@ export class QuasarConfigFile {
           }
         } else {
           cfg.electron.builder = {
-            config: cfg.electron.builder
+            config: cfg.electron.builder,
+            /**
+             * Needed to determine the Electron version:
+             */
+            projectDir: appPaths.electronDir
           }
 
           if (
