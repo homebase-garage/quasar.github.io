@@ -154,25 +154,20 @@ function generateTsConfig(quasarConf, fsUtils) {
 
   if (isModeInstalled(appPaths, 'capacitor')) {
     const target = appPaths.resolve.capacitor('node_modules')
-    const { dependencies } = pkg.capacitorPkg
+    const { dependencies, devDependencies = {} } = pkg.capacitorPkg
     if (dependencies) {
       Object.keys(dependencies).forEach(dep => {
-        aliasMap[dep] = join(target, dep)
-      })
-    }
-  }
+        // Avoid user error (incorrectly declaring dependency instead of devDependency)
+        // including @types packages as these are not used directly
+        if (dep.startsWith('@types/')) return
 
-  if (isModeInstalled(appPaths, 'electron')) {
-    const target = appPaths.resolve.electron('node_modules')
-
-    // We alias `electron` itself because it's a runtime dep
-    // (and specified in devDependencies)
-    aliasMap['electron'] = join(target, 'electron')
-
-    const { dependencies } = pkg.electronPkg
-    if (dependencies) {
-      Object.keys(dependencies).forEach(dep => {
-        aliasMap[dep] = join(target, dep)
+        const typesName = `@types/${dep.replace(/^@/, '').replaceAll(/\//, '__')}`
+        aliasMap[dep] = devDependencies[typesName]
+          ? join(target, typesName)
+          : // Handle user error too (incorrectly declaring dependency instead of devDependency)
+            dependencies[typesName]
+            ? join(target, typesName)
+            : join(target, dep)
       })
     }
   }
