@@ -172,26 +172,6 @@ function generateTsConfig(quasarConf, fsUtils) {
     }
   }
 
-  if (isModeInstalled(appPaths, 'pwa')) {
-    const target = appPaths.resolve.pwa('node_modules')
-    const { dependencies } = pkg.pwaPkg
-    if (dependencies) {
-      Object.keys(dependencies).forEach(dep => {
-        aliasMap[dep] = join(target, dep)
-      })
-    }
-  }
-
-  if (isModeInstalled(appPaths, 'bex')) {
-    const target = appPaths.resolve.bex('node_modules')
-    const { dependencies } = pkg.bexPkg
-    if (dependencies) {
-      Object.keys(dependencies).forEach(dep => {
-        aliasMap[dep] = join(target, dep)
-      })
-    }
-  }
-
   const paths = {}
   Object.keys(aliasMap).forEach(alias => {
     const rawPath = aliasMap[alias]
