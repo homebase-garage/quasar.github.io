@@ -1,4 +1,5 @@
 import { join } from 'node:path'
+import fse from 'fs-extra'
 import { merge } from 'webpack-merge'
 
 import { log, progress, warn } from '../../utils/logger.js'
@@ -116,6 +117,30 @@ export class QuasarModeBuilder extends AppBuilder {
     }))
 
     this.copyFiles(patterns)
+
+    const pnpmWorkspaceFile = join(
+      this.quasarConf.build.distDir,
+      'UnPackaged',
+      'pnpm-workspace.yaml'
+    )
+    /**
+     * If there's a pnpm-workspace.yaml file, we need to add the "shamefullyHoist" option
+     * so that the packager can find the dependencies in the node_modules folder.
+     * Otherwise, it will fail with "Cannot find module" errors.
+     */
+    if (fse.existsSync(pnpmWorkspaceFile)) {
+      const content = fse.readFileSync(pnpmWorkspaceFile, 'utf8')
+      if (
+        !content.includes('shamefullyHoist') &&
+        !content.includes('shamefully-hoist')
+      ) {
+        fse.writeFileSync(
+          pnpmWorkspaceFile,
+          `${content}\n\n# needed by the build packaging tool\nshamefullyHoist: true`,
+          'utf8'
+        )
+      }
+    }
   }
 
   async #packageFiles() {
