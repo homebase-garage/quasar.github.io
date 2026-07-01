@@ -133,7 +133,7 @@ export const quasarElectronConfig = {
       )
 
       cfg.input = inputFile
-      cfg.external.unshift('electron')
+      cfg.external = ['electron', /node_modules[\\/](?!.*@quasar[+/]app-vite)/]
     } else {
       cfg.input = quasarConf.sourceFiles.electronMain
       cfg.external = [

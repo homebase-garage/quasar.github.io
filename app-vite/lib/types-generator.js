@@ -161,7 +161,8 @@ function generateTsConfig(quasarConf, fsUtils) {
         // including @types packages as these are not used directly
         if (dep.startsWith('@types/')) return
 
-        const typesName = `@types/${dep.replace(/^@/, '').replaceAll(/\//, '__')}`
+        // oxlint-disable-next-line unicorn/prefer-string-replace-all
+        const typesName = `@types/${dep.replace(/^@/, '').replaceAll(/\//g, '__')}`
         aliasMap[dep] = devDependencies[typesName]
           ? join(target, typesName)
           : // Handle user error too (incorrectly declaring dependency instead of devDependency)
