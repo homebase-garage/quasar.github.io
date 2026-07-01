@@ -7,6 +7,8 @@ import {
   extendViteConfig
 } from '../../config-tools.js'
 
+import { quasarRolldownVirtualEntry } from '../../plugins/rolldown.virtual-entry.js'
+
 /**
  * Warning!
  *
@@ -45,17 +47,13 @@ async function preloadScript(quasarConf, name) {
     }
   }
 
-  cfg.input = appPaths.resolve.electron(name)
+  cfg.external = ['electron']
   cfg.resolve.modules = [
-    'node_modules',
-    appPaths.resolve.electron('node_modules')
+    appPaths.resolve.electron('node_modules'),
+    'node_modules'
   ]
 
-  cfg.external = [
-    'electron',
-    ...Object.keys(quasarConf.ctx.pkg.electronPkg.dependencies || {})
-  ]
-
+  cfg.input = appPaths.resolve.electron(name)
   cfg.output.file = quasarConf.ctx.dev
     ? appPaths.resolve.entry(`electron/${scriptName}.cjs`)
     : join(quasarConf.build.distDir, `UnPackaged/${scriptName}.cjs`)
@@ -122,19 +120,41 @@ export const quasarElectronConfig = {
       }
     }
 
-    cfg.input = quasarConf.sourceFiles.electronMain
+    if (quasarConf.ctx.dev) {
+      const inputFile = appPaths.resolve.entry('electron/q.entry.main.js')
+
+      cfg.plugins ||= []
+      cfg.plugins.push(
+        /**
+         * We need to create a virtual entry file that imports the actual main file.
+         * This is for Rolldown to correctly handle the relative import paths.
+         * Related:
+         *    makeAbsoluteExternalsRelative: true,
+         *    external: [...]
+         */
+        quasarRolldownVirtualEntry({
+          inputFile,
+          targetFile: quasarConf.sourceFiles.electronMain
+        })
+      )
+
+      cfg.input = inputFile
+      cfg.external.unshift('electron')
+    } else {
+      cfg.input = quasarConf.sourceFiles.electronMain
+      cfg.external = [
+        'electron',
+        ...Object.keys(quasarConf.ctx.pkg.electronPkg.dependencies || {})
+      ]
+    }
+
     cfg.output.file = quasarConf.ctx.dev
       ? appPaths.resolve.entry('electron/electron-main.js')
       : join(quasarConf.build.distDir, 'UnPackaged/electron-main.js')
 
     cfg.resolve.modules = [
-      'node_modules',
-      appPaths.resolve.electron('node_modules')
-    ]
-
-    cfg.external = [
-      'electron',
-      ...Object.keys(quasarConf.ctx.pkg.electronPkg.dependencies || {})
+      appPaths.resolve.electron('node_modules'),
+      'node_modules'
     ]
 
     return extendRolldownConfig(
